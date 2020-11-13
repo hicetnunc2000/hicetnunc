@@ -50,6 +50,9 @@ export default class About extends Component {
                             <div style={{ animation: "fadeMe 1.2s" }}>
 
                                 <div style={{ 'padding': '25% 0', border: 0 , textAlign:'justify'}}>
+                                    <p style={{'fontWeight' : 'bold'}}>
+
+                                    </p>
                                     <p>
                                         1 ꜩ address = ∞ hicetnuncDAOs
                                     </p>
@@ -58,7 +61,7 @@ export default class About extends Component {
                                         serving as a public, open source and sustainable smart contract infrastructure on Tezos.
                                     </p>
                                     <p>
-                                        a variety of smart contracts and distributed systems are intended to be designed in collaboration decentralized communities. one should manage and care for social and economical traction and strategies for it's own DAO. 
+                                        a variety of smart contracts and distributed systems are intended to be designed in collaboration with ecentralized communities. one should manage and care for social and economical traction and strategies for it's own DAO. 
                                     </p>
                                     <p>we're concerned about your security and autonomy. please verify informations while making transactions.</p>
                                     <p>for consulting, networking or questions:</p>
