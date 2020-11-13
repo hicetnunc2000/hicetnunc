@@ -107,7 +107,7 @@ export default class KTDisplay extends Component {
                                         :
                                         <div style={{ 'padding': '10% 0', border: 0, animation: "fadeMe 1.2s" }}>
                                             <Card style={{ border: 0 }}>
-                                                <CardTitle><div style={{fontWeight:"bold"}}>{this.state.kt.title}//</div><a rel="noopener noreferrer" href={`https://better-call.dev/mainnet/${this.state.kt.address}`}>{`${this.state.kt.address}`}</a></CardTitle>
+                                                <CardTitle style={{fontWeight:"bold"}}>{this.state.kt.title}//<a rel="noopener noreferrer" href={`https://better-call.dev/mainnet/${this.state.kt.address}`}>{`${this.state.kt.address}`}</a></CardTitle>
                                                 <CardText>{this.state.kt.description}</CardText>
                                             </Card>
                                             <Row xs="2" style={{ padding: '2% 0', fontSize: '12px' }}>
