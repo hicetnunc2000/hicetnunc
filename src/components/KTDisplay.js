@@ -12,10 +12,14 @@ export default class KTDisplay extends Component {
         this.state = {
             loading: true,
             auth: '',
-            contribution: '',
             kt: {},
             kt_addr: '',
-            contribute: false
+            contributeToogle: false,
+            contribution: 0,
+            withdraw: 0,
+            withdrawToogle: false,
+            linktreeToogle: false
+
         }
 
     }
@@ -43,6 +47,49 @@ export default class KTDisplay extends Component {
 
     }
 
+    submitContribution = async () => {
+
+        await axios.post(process.env.REACT_APP_UNGRUND_CONTRIBUTE, {
+            kt: window.location.pathname.split('/')[2],
+            tz: this.context.getAuth(),
+            amount: this.state.contribution
+        }).then(res => {
+            console.log(res)
+            this.context.operationRequest(res.data)
+        })
+
+    }
+
+    submitWithdraw = async () => {
+
+        await axios.post(process.env.REACT_APP_UNGRUND_WITHDRAW, {
+            kt: window.location.pathname.split('/')[2],
+            tz: this.context.getAuth(),
+            amount: this.state.withdraw
+        }).then(res => {
+            this.context.operationRequest(res.data)
+        })
+
+    }
+
+    withdraw = () => {
+        this.setState({
+            withdrawToogle: !this.state.withdrawToogle
+        })
+    }
+
+    contribute = () => {
+        this.setState({
+            contributeToogle: !this.state.contributeToogle
+        })
+    }
+
+    linktree = () => {
+        this.setState({
+            linktreeToogle : !this.state.linktreeToogle
+        })
+    }
+
     render() {
 
         return (
@@ -60,7 +107,7 @@ export default class KTDisplay extends Component {
                                         :
                                         <div style={{ 'padding': '10% 0', border: 0, animation: "fadeMe 1.2s" }}>
                                             <Card style={{ border: 0 }}>
-                                                <CardTitle><a rel="noopener noreferrer" href={`https://better-call.dev/mainnet/${this.state.kt.address}`}>{`${this.state.kt.title}`}</a></CardTitle>
+                                                <CardTitle><div style={{fontWeight:"bold"}}>{this.state.kt.title}//</div><a rel="noopener noreferrer" href={`https://better-call.dev/mainnet/${this.state.kt.address}`}>{`${this.state.kt.address}`}</a></CardTitle>
                                                 <CardText>{this.state.kt.description}</CardText>
                                             </Card>
                                             <Row xs="2" style={{ padding: '2% 0', fontSize: '12px' }}>
@@ -78,45 +125,55 @@ export default class KTDisplay extends Component {
                                                 <Col style={{ fontSize: '20px' }}>{this.state.kt.percentage} %</Col>
                                             </Row>
                                             <div style={{ backgroundColor: 'black', width: this.state.kt.percentage, height: "5px" }}></div>
-                                            {this.state.kt.links.length > 0 ? 
+                                            {this.state.kt.links.length > 0 ?
 
-                                            <Card style={{ 'padding': '10% 0', border: 0 }}>
-                                                <Col>linktree</Col>
-                                                {this.state.kt.links.map(e => {
-                                                    return (
-                                                        <Col style={{ marginTop: '3%', backgroundColor: 'black', fontSize: '20px', textAlign: 'center' }}><a style={{ color: 'white' }} href={e.url}>{e.placeholder}</a></Col>
-                                                    )
-                                                })}
-                                            </Card>
-                                            :
-                                            null
+                                                <Card style={{ 'padding': '10% 0', border: 0 }}>
+                                                    <Col onClick={this.contribute}>+contribute</Col>
+                                                    {
+                                                        this.state.contributeToogle ?
+                                                            <Card style={{ border: 0, marginTop: '3%' }}>
+                                                                <input type="text" name="contribution" onChange={this.handleChange} placeholder="ꜩ amount"></input>
+                                                                <button onClick={this.submitContribution}>contribute</button>
+                                                            </Card> : null
+                                                    }
+                                                    <Col onClick={this.withdraw}>+withdraw</Col>
+                                                    {
+                                                        this.state.withdrawToogle ?
+                                                            <Card style={{ border: 0, marginTop: '3%' }}>
+                                                                <input type="text" name="withdraw" onChange={this.handleChange} placeholder="ꜩ amount"></input>
+                                                                <button onClick={this.submitWithdraw}>withdraw</button>
+                                                            </Card> : null
+                                                    }
+                                                    <Col onClick={this.linktree}>+linktree</Col>
+                                                    {
+                                                    this.state.linktreeToogle ?
+                                                    this.state.kt.links.map(e => {
+                                                        return (
+                                                            <Col style={{ marginTop: '3%', backgroundColor: 'black', fontSize: '20px', textAlign: 'center' }}><a style={{ color: 'white' }} href={e.url}>{e.placeholder}</a></Col>
+                                                        )
+                                                    }) : null
+                                                    }
+                                                </Card>
+                                                :
+                                                null
                                             }
                                         </div>
                                 }
 
                             </Card>
                             :
-                            <ul style={this.context.menu}> 
+                            <ul style={this.context.menu}>
                                 <li><a style={{
                                     color: "#000",
+                                    fontStyle: "italic",
                                     "&:hover": {
                                         color: "#000"
                                     }
-                                }} href='/feed'>feed</a></li>
-                                <li><a style={{
-                                    color: "#000",
-                                    "&:hover": {
-                                        color: "#000"
-                                    }
-                                }} href={'/contribute/' + this.context.lastPath}>contribute</a></li>
+                                }} href='/feed'>smartfeed</a></li>
                                 <li style={{
                                     color: "#000",
                                     textDecoration: "line-through"
-                                }} >withdraw</li>
-                                <li style={{
-                                    color: "#000",
-                                    textDecoration: "line-through"
-                                }} >update</li>
+                                }} >update metadata</li>
                                 <li><a style={{
                                     color: "#000",
                                     "&:hover": {

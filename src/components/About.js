@@ -28,10 +28,11 @@ export default class About extends Component {
                             <ul style={style}> {/* style={drodiv} */}
                                 <li><a style={{
                                     color: "#000",
+                                    fontStyle: "italic",
                                     "&:hover": {
                                         color: "#000"
                                     }
-                                }} href="/feed">feed</a></li>
+                                }} href="/feed">smartfeed</a></li>
                                 <li><a style={{
                                     color: "#000",
                                     "&:hover": {
