@@ -32,7 +32,7 @@ export default class About extends Component {
             listStyle: "none",
             right: "0",
             top: "0",
-            marginTop: "20%",
+            marginTop: "15%",
             marginRight: "25px",
             fontFamiliy: "Roboto",
             textAlign: "right",
@@ -95,7 +95,7 @@ export default class About extends Component {
                             :
                             <div style={{ animation: "fadeMe 1.2s" }}>
 
-                                <div style={{ 'padding': '25% 0', border: 0, textAlign: 'justify' }}>
+                                <div style={{ 'padding': '15% 0', border: 0, textAlign: 'justify' }}>
                                     <p style={{ 'fontWeight': 'bold' }}>
 
                                     </p>

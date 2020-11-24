@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { HicetnuncContext } from '../context/HicetnuncContext'
 import { Card, Col, Row } from 'reactstrap'
+import hic from '../media/hicetnuncfinal20202.png'
 
 export default class Home extends Component {
 
@@ -107,9 +108,11 @@ export default class Home extends Component {
                                 </ul>
                                 :
                                 <Card style={cardStyle}>
-                                    <div style={{ fontSize: "60px", left: 0 }}>
+                                    <div style={{fontWeight:'bold', fontStyle:'italic', fontSize:'45px'}}>hicetnunc</div>
+                                    <div style={{ fontSize: "45px", left: 0 }}>
                                         terraforming virtual realities
-                                </div></Card>
+                                </div>
+                                </Card>
                         }
                     </Card>
                 </Col>

@@ -4,6 +4,8 @@ import React, { useState, Component } from 'react';
 import { Collapse, Navbar, NavbarToggler, NavbarBrand, Nav, NavItem, NavLink } from 'reactstrap';
 import { HicetnuncContext } from '../context/HicetnuncContext';
 import { Card, Col, Row } from 'reactstrap'
+import { keyframes } from "styled-components";
+import {hic} from '../media/hicetnuncfinal20202.png'
 const axios = require('axios')
 
 
@@ -25,6 +27,11 @@ export default class AppNavbar extends Component {
 
         }
 
+        var grow = keyframes`
+        from { transform: scale(0.25); }
+        to { transform: scale1; }
+    `;
+
         let dot = {
             height: "30px",
             width: "30px",
@@ -35,7 +42,8 @@ export default class AppNavbar extends Component {
             marginRight : "25px",
             right : "0",
             top: "0",
-            position : "absolute"
+            position : "absolute",
+            animation : `${grow} 3s infinite`
         }
 
         let logo = {
@@ -53,8 +61,8 @@ export default class AppNavbar extends Component {
             <div>
                 <Row>
                     <Col sm="12" md={{ size: 6, offset: 3 }}>
-                        <Card body style={{border:"0"}}> {/* { border: "none" } */}
-                            <a href="/" style={logo}>hicetnunc</a> <div onClick={this.context.toogleNavbar} style={dot}></div>
+                        <Card body style={{border:"0", marginTop : '5px'}}> {/* { border: "none" } */}
+                            <a href="/" style={logo}> /// </a><div onClick={this.context.toogleNavbar} style={dot}></div>
                         </Card>
                     </Col>
                 </Row>
