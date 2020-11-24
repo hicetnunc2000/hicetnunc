@@ -94,6 +94,14 @@ export default class IPFS extends Component {
                             }
                             </p>
                                 <button style={{ lenght: '100%' }} onClick={this.onFileUpload}>Submit</button>
+                                {
+                                    this.state.cid != '' ? <a style={{
+                                        color: "#000",
+                                        "&:hover": {
+                                            color: "#000"
+                                        }
+                                    }} href={`https://ipfs.io/ipfs/${this.state.cid}`}>{this.state.cid}</a> : null
+                                }
                             </Card>
                             :
                             <ul style={this.context.menu}>
@@ -122,6 +130,7 @@ export default class IPFS extends Component {
                                             <li style={{ textDecoration: "line-through" }}>hicetnuncNFTs</li>
                                             <li style={{ textDecoration: "line-through" }}>FA1.2</li>
                                         </ul>
+                                        
                                         :
                                         null
                                 }

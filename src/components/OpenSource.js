@@ -184,8 +184,8 @@ export default class OpenSource extends Component {
                                                 {this.state.links.map( (e, i) => {
                                                     return (
                                                         <div key={i}>
-                                                        <input type="text" name='url' onChange={this.handleListChange.bind(this, i)} placeholder='url' />
-                                                        <input type='text' name='placeholder' onChange={this.handleListChange.bind(this, i)} placeholder='placeholder' />
+                                                        <input type="text" name='url' style={{width:'100%'}} onChange={this.handleListChange.bind(this, i)} placeholder='url' /><br />
+                                                        <input type='text' name='placeholder' style={{width:'100%'}} onChange={this.handleListChange.bind(this, i)} placeholder='placeholder' />
                                                     </div>      
                                                     )
                                                 })}
