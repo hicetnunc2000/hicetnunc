@@ -15,7 +15,8 @@ export default class OpenSource extends Component {
             links: [],
             goal: "",
             auth: "",
-            count: 0
+            count: 0,
+            reveal : false
         }
     }
 
@@ -89,6 +90,12 @@ export default class OpenSource extends Component {
 
     }
 
+    reveal = () => {
+        this.setState({
+            reveal: !this.state.reveal
+        })
+    }
+
     render() {
 
         let style = {
@@ -104,6 +111,11 @@ export default class OpenSource extends Component {
             animation: "fadeMe 1.2s"
         }
 
+        let subList = {
+            listStyle: "none",
+            fontSize: "26px"
+        }
+
         return (
             <div>
                 <Row>
@@ -117,7 +129,33 @@ export default class OpenSource extends Component {
                                         "&:hover": {
                                             color: "#000"
                                         }
-                                    }} href="/feed">smartfeed</a></li>
+                                    }} href="/feed">feed</a></li>
+                                    <li><a style={{
+                                        color: "#000",
+                                        "&:hover": {
+                                            color: "#000"
+                                        }
+                                    }} href="#" onClick={this.reveal}>smart contracts</a></li>
+                                    {
+                                        this.state.reveal ?
+                                            <ul style={subList}>
+                                                <li><a style={{
+                                                    color: "#000",
+                                                    "&:hover": {
+                                                        color: "#000"
+                                                    }
+                                                }} href="/opensource" onClick={this.reveal}>hicetnuncDAO</a></li>
+                                                <li style={{ textDecoration: "line-through" }}>hicetnuncNFTs</li>
+                                            </ul>
+                                            :
+                                            null
+                                    }
+                                    <li><a style={{
+                                        color: "#000",
+                                        "&:hover": {
+                                            color: "#000"
+                                        }
+                                    }} href="/ipfs">IPFS</a></li>
                                     <li><a style={{
                                         color: "#000",
                                         "&:hover": {

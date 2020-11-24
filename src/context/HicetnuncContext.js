@@ -113,13 +113,18 @@ export default class HicetnuncContextProvider extends Component {
                     lastPath: path
                 })
             },
-
+            title : '',
+            setTitle : (title) => {
+                this.setState({
+                    title : title
+                })
+            },
             menu: {
                 position: "absolute",
                 listStyle: "none",
                 right: "0",
                 top: "0",
-                marginTop: "20%",
+                marginTop: "15%",
                 marginRight: "25px",
                 fontFamiliy: "Roboto",
                 textAlign: "right",

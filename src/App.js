@@ -18,6 +18,7 @@ import Feed from './components/Feed';
 import KTDisplay from './components/KTDisplay';
 import Contribution from './components/Contribution';
 import Withdraw from './components/Withdraw';
+import IPFS from './components/IPFS';
 
 function App() {
   return (
@@ -51,6 +52,9 @@ function App() {
           </Route>
           <Route exact path="/withdraw/:id">
             <Withdraw />
+          </Route>
+          <Route exact path="/ipfs">
+            <IPFS />
           </Route>
         </Switch>
       </Router>

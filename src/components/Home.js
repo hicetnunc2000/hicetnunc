@@ -48,20 +48,23 @@ export default class Home extends Component {
             border: "0"
         }
 
+
+
         return (
+            
             <Row>
                 <Col sm="12" md={{ size: 6, offset: 3 }}>
                     <Card style={{ border: 0 }}> {/* { border: "none" } */}
                         {
                             !this.context.collapsed & this.context.address === "" ?
-                                <ul style={style}> {/* style={drodiv} */}
+                                <ul style={this.context.menu}> {/* style={drodiv} */}
                                     <li><a style={{
                                         color: "#000",
                                         fontStyle: "italic",
                                         "&:hover": {
                                             color: "#000"
                                         }
-                                    }} href="/feed">smartfeed</a></li>
+                                    }} href="/feed">feed</a></li>
                                     <li><a style={{
                                         color: "#000",
                                         "&:hover": {
@@ -78,11 +81,17 @@ export default class Home extends Component {
                                                     }
                                                 }} href="/opensource" onClick={this.reveal}>hicetnuncDAO</a></li>
                                                 <li style={{ textDecoration: "line-through" }}>hicetnuncNFTs</li>
-                                                <li style={{ textDecoration: "line-through" }}>FA1.2</li>
                                             </ul>
                                             :
                                             null
                                     }
+                                    <li><a style={{
+                                                color: "#000",
+                                                "&:hover": {
+                                                    color: "#000"
+                                                }
+                                            }} href='/ipfs'>IPFS
+                                            </a></li>
                                     <li><a style={{
                                         color: "#000",
                                         "&:hover": {

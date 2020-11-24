@@ -84,11 +84,11 @@ export default class KTDisplay extends Component {
         })
     }
 
-    linktree = () => {
-        this.setState({
-            linktreeToogle : !this.state.linktreeToogle
-        })
-    }
+    /*     linktree = () => {
+            this.setState({
+                linktreeToogle: !this.state.linktreeToogle
+            })
+        } */
 
     render() {
 
@@ -107,7 +107,7 @@ export default class KTDisplay extends Component {
                                         :
                                         <div style={{ 'padding': '10% 0', border: 0, animation: "fadeMe 1.2s" }}>
                                             <Card style={{ border: 0 }}>
-                                                <CardTitle style={{fontWeight:"bold"}}>{this.state.kt.title}//<a rel="noopener noreferrer" href={`https://better-call.dev/mainnet/${this.state.kt.address}`}>{`${this.state.kt.address}`}</a></CardTitle>
+                                                <CardTitle style={{ fontWeight: "bold" }}>{this.state.kt.title}//<a rel="noopener noreferrer" href={`https://better-call.dev/mainnet/${this.state.kt.address}`}>{`${this.state.kt.address}`}</a></CardTitle>
                                                 <CardText>{this.state.kt.description}</CardText>
                                             </Card>
                                             <Row xs="2" style={{ padding: '2% 0', fontSize: '12px' }}>
@@ -128,7 +128,7 @@ export default class KTDisplay extends Component {
                                             {this.state.kt.links.length > 0 ?
 
                                                 <Card style={{ 'padding': '10% 0', border: 0 }}>
-                                                    <Col onClick={this.contribute}>+contribute</Col>
+                                                    <Col style={{ 'paddingBottom': '2%' }} onClick={this.contribute}>+contribute</Col>
                                                     {
                                                         this.state.contributeToogle ?
                                                             <Card style={{ border: 0, marginTop: '3%' }}>
@@ -136,22 +136,31 @@ export default class KTDisplay extends Component {
                                                                 <button onClick={this.submitContribution}>contribute</button>
                                                             </Card> : null
                                                     }
-                                                    <Col onClick={this.withdraw}>+withdraw</Col>
                                                     {
-                                                        this.state.withdrawToogle ?
-                                                            <Card style={{ border: 0, marginTop: '3%' }}>
-                                                                <input type="text" name="withdraw" onChange={this.handleChange} placeholder="ꜩ amount"></input>
-                                                                <button onClick={this.submitWithdraw}>withdraw</button>
-                                                            </Card> : null
+                                                        this.context.address == this.state.kt.storage.admin ?
+                                                            <div>
+                                                                <Col onClick={this.withdraw}>+withdraw</Col>
+
+                                                                {
+                                                                    this.state.withdrawToogle ?
+                                                                        <Card style={{ border: 0, marginTop: '3%' }}>
+                                                                            <input type="text" name="withdraw" onChange={this.handleChange} placeholder="ꜩ amount"></input>
+                                                                            <button onClick={this.submitWithdraw}>withdraw</button>
+                                                                        </Card> : null
+                                                                }
+                                                            </div>
+                                                            :
+                                                            null
                                                     }
-                                                    <Col onClick={this.linktree}>+linktree</Col>
+
+                                                    <Col >linktree</Col>
                                                     {
-                                                    this.state.linktreeToogle ?
-                                                    this.state.kt.links.map(e => {
-                                                        return (
-                                                            <Col style={{ marginTop: '3%', backgroundColor: 'black', fontSize: '20px', textAlign: 'center' }}><a style={{ color: 'white' }} href={e.url}>{e.placeholder}</a></Col>
-                                                        )
-                                                    }) : null
+
+                                                        this.state.kt.links.map(e => {
+                                                            return (
+                                                                <Col style={{ marginTop: '3%', backgroundColor: 'black', fontSize: '20px', textAlign: 'center' }}><a style={{ color: 'white' }} href={e.url}>{e.placeholder}</a></Col>
+                                                            )
+                                                        })
                                                     }
                                                 </Card>
                                                 :
@@ -169,7 +178,7 @@ export default class KTDisplay extends Component {
                                     "&:hover": {
                                         color: "#000"
                                     }
-                                }} href='/feed'>smartfeed</a></li>
+                                }} href='/feed'>feed</a></li>
                                 <li style={{
                                     color: "#000",
                                     textDecoration: "line-through"

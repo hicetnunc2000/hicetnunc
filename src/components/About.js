@@ -4,8 +4,28 @@ import { HicetnuncContext } from '../context/HicetnuncContext'
 
 
 export default class About extends Component {
+    constructor(props) {
+        super(props)
+
+        this.state = {
+            reveal: false
+        }
+    }
+
     static contextType = HicetnuncContext
+
+    reveal = () => {
+        this.setState({
+            reveal: !this.state.reveal
+        })
+    }
+
     render() {
+
+        let subList = {
+            listStyle: "none",
+            fontSize: "26px"
+        }
 
         let style = {
             position: "absolute",
@@ -32,7 +52,33 @@ export default class About extends Component {
                                     "&:hover": {
                                         color: "#000"
                                     }
-                                }} href="/feed">smartfeed</a></li>
+                                }} href="/feed">feed</a></li>
+                                <li><a style={{
+                                    color: "#000",
+                                    "&:hover": {
+                                        color: "#000"
+                                    }
+                                }} href="#" onClick={this.reveal}>smart contracts</a></li>
+                                {
+                                    this.state.reveal ?
+                                        <ul style={subList}>
+                                            <li><a style={{
+                                                color: "#000",
+                                                "&:hover": {
+                                                    color: "#000"
+                                                }
+                                            }} href="/opensource" onClick={this.reveal}>hicetnuncDAO</a></li>
+                                            <li style={{ textDecoration: "line-through" }}>hicetnuncNFTs</li>
+                                        </ul>
+                                        :
+                                        null
+                                }
+                                <li><a style={{
+                                    color: "#000",
+                                    "&:hover": {
+                                        color: "#000"
+                                    }
+                                }} href="/ipfs">IPFS</a></li>
                                 <li><a style={{
                                     color: "#000",
                                     "&:hover": {
@@ -44,28 +90,35 @@ export default class About extends Component {
                                     "&:hover": {
                                         color: "#000"
                                     }
-                                }} href="https://github.com/hicetnunc2000">github</a></li>
+                                }} href="/about">about</a></li>
                             </ul>
                             :
                             <div style={{ animation: "fadeMe 1.2s" }}>
 
-                                <div style={{ 'padding': '25% 0', border: 0 , textAlign:'justify'}}>
-                                    <p style={{'fontWeight' : 'bold'}}>
+                                <div style={{ 'padding': '25% 0', border: 0, textAlign: 'justify' }}>
+                                    <p style={{ 'fontWeight': 'bold' }}>
 
                                     </p>
-                                    <p>
-                                        1 ꜩ address = ∞ hicetnuncDAOs
+                                    <p style={{ fontWeight: 'bold' }}>
+                                        hicetnuncDAOs//hicetnuncNFTs//ungrund//hesychasm stack
                                     </p>
                                     <p>
-                                        this decentralized application allows its users to originate micro fundings as DAOs (Decentralized Autonomous Organisations)
+                                        this decentralized application allows it's users to originate micro fundings as DAOs (Decentralized Autonomous Organisations)
                                         serving as a public, open source and sustainable smart contract infrastructure on Tezos.
                                     </p>
                                     <p>
-                                        a variety of smart contracts and distributed systems are intended to be designed in collaboration with ecentralized communities. one should manage and care for social and economical traction and strategies for it's own DAO. 
+                                        in this experiment a variety of smart contracts and distributed systems are intended to be designed in collaboration with decentralized communities. one should manage and care for the social and economical strategies for it's own DAO.
                                     </p>
                                     <p>we're concerned about your security and autonomy. please verify informations while making transactions.</p>
                                     <p>for consulting, networking or questions:</p>
                                     <p>hicetnunc2000@protonmail.com</p>
+                                    <a style={{
+                                        color: "#000",
+                                        "&:hover": {
+                                            color: "#000"
+                                        }
+                                    }}
+                                        href='https://github.com/hicetnunc2000'>github.com/hicetnunc2000</a>
                                 </div>
 
                             </div>

@@ -65,7 +65,7 @@ export default class Feed extends Component {
                                                 return (
                                                     <div >
                                                         <Card style={{ border: 0 }}>
-                                                            <CardTitle style={{fontWeight:'bold'}}>{e.meta.title.toLowerCase()}//<a rel="noopener noreferrer" href={'/kt/' + e.address}>{e.address}</a></CardTitle>
+                                                            <CardTitle style={{ fontWeight: 'bold' }}>{e.meta.title.toLowerCase()}//<a rel="noopener noreferrer" href={'/kt/' + e.address}>{e.address}</a></CardTitle>
                                                             <Row xs="2" style={{ fontSize: '12px' }}>
                                                                 <Col></Col>
                                                                 <Col style={{ fontSize: '20px' }}>{e.percentage} %</Col>
@@ -95,17 +95,37 @@ export default class Feed extends Component {
                                                         }
                                                     }} href="/opensource" onClick={this.reveal}>hicetnuncDAO</a></li>
                                                     <li style={{ textDecoration: "line-through" }}>hicetnuncNFTs</li>
-                                                    <li style={{ textDecoration: "line-through" }}>FA1.2</li>
                                                 </ul>
                                                 :
                                                 null
                                         }
-                                        <li><a style={{
-                                            color: "#000",
-                                            "&:hover": {
-                                                color: "#000"
-                                            }
-                                        }} href='/about'>about</a></li>
+                                        <li>
+                                            <a style={{
+                                                color: "#000",
+                                                "&:hover": {
+                                                    color: "#000"
+                                                }
+                                            }} href='/ipfs'>IPFS
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a style={{
+                                                color: "#000",
+                                                "&:hover": {
+                                                    color: "#000"
+                                                }
+                                            }} href="/sync">sync
+                                    </a>
+                                        </li>
+                                        <li>
+                                            <a style={{
+                                                color: "#000",
+                                                "&:hover": {
+                                                    color: "#000"
+                                                }
+                                            }} href='/about'>about
+                                            </a>
+                                        </li>
                                     </ul>
                             }
                         </Card>

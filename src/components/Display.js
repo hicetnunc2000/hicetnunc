@@ -12,9 +12,10 @@ export default class Display extends Component {
         this.state = {
             render: false,
             token_meta: [],
-            balance : 0,
+            balance: 0,
             loading: true,
-            results: []
+            results: [],
+            reveal : false
         }
         this.handleSubmit = this.handleSubmit.bind(this)
     }
@@ -35,7 +36,7 @@ export default class Display extends Component {
             this.setState({
                 results: res.data.results,
                 token_meta: res.data.token_meta,
-                balance : res.data.balance,
+                balance: res.data.balance,
                 loading: false
             })
         })
@@ -52,6 +53,12 @@ export default class Display extends Component {
     /* 
         verify cookies auth <-> redis    
     */
+
+   reveal = () => {
+    this.setState({
+        reveal: !this.state.reveal
+    })
+}
 
     render() {
 
@@ -113,6 +120,11 @@ export default class Display extends Component {
             fontFamiliy: "Roboto",
         }
 
+        let subList = {
+            listStyle: "none",
+            fontSize: "26px"
+        }
+
         const addr = window.location.pathname.split('/')[2]
 
         return (
@@ -126,24 +138,44 @@ export default class Display extends Component {
                                 !this.context.collapsed ?
                                     <ul style={style}> {/* style={drodiv} */}
                                         <li><a style={{
-                                        color: "#000",
-                                        fontStyle: "italic",
-                                        "&:hover": {
-                                            color: "#000"
-                                        }
-                                    }} href="/feed">smartfeed</a></li>
+                                            color: "#000",
+                                            fontStyle: "italic",
+                                            "&:hover": {
+                                                color: "#000"
+                                            }
+                                        }} href="/feed">feed</a></li>
                                         <li><a style={{
-                                        color: "#000",
-                                        "&:hover": {
-                                            color: "#000"
+                                            color: "#000",
+                                            "&:hover": {
+                                                color: "#000"
+                                            }
+                                        }} href="#" onClick={this.reveal}>smart contracts</a></li>
+                                        {
+                                            this.state.reveal ?
+                                                <ul style={subList}>
+                                                    <li><a style={{
+                                                        color: "#000",
+                                                        "&:hover": {
+                                                            color: "#000"
+                                                        }
+                                                    }} href="/opensource" onClick={this.reveal}>hicetnuncDAO</a></li>
+                                                    <li style={{ textDecoration: "line-through" }}>hicetnuncNFTs</li>
+                                                </ul>
+                                                :
+                                                null
                                         }
-                                    }} href="/opensource">hicetnuncDAO</a></li>
                                         <li><a style={{
-                                        color: "#000",
-                                        "&:hover": {
-                                            color: "#000"
-                                        }
-                                    }} href="/search">search</a></li>
+                                            color: "#000",
+                                            "&:hover": {
+                                                color: "#000"
+                                            }
+                                        }} href="/sync">sync</a></li>
+                                        <li><a style={{
+                                            color: "#000",
+                                            "&:hover": {
+                                                color: "#000"
+                                            }
+                                        }} href="/about">about</a></li>
                                     </ul>
                                     :
                                     <div>
@@ -160,7 +192,7 @@ export default class Display extends Component {
                                                 <Col>
                                                     <div style={styleDisplay}>
                                                         <a href={`https://tzkt.io/${addr}`}>{addr}</a><br />
-                                            {this.state.balance} ꜩ
+                                                        {this.state.balance} ꜩ
                                         </div>
                                                 </Col>
 
@@ -171,7 +203,7 @@ export default class Display extends Component {
                                                 Resources
                                                             </p>
                                         </Card>
-                                        <Card style={{ border: 0 , marginLeft : '2%', marginTop : '3%'}}>
+                                        <Card style={{ border: 0, marginLeft: '2%', marginTop: '3%' }}>
                                             {
                                                 !this.state.loading ? this.state.results.length != 0 ?
                                                     this.state.results.map(e => {
@@ -210,18 +242,18 @@ export default class Display extends Component {
                                                     </div>
                                             }
                                         </Card>
-                                        <Card style={{ border: 0, marginTop: '3%', marginLeft : '2%' }}>
+                                        <Card style={{ border: 0, marginTop: '3%', marginLeft: '2%' }}>
                                             {this.state.token_meta.map(e => {
                                                 if (e != null)
-                                                return (
-                                                    <div>
-                                                        <div style={dot1}></div>
-                                                        <div style={dot2}></div>
-                                                        <div style={dao}>
-                                                            {e.balance} hicetnuncDAO#{e.id}
+                                                    return (
+                                                        <div>
+                                                            <div style={dot1}></div>
+                                                            <div style={dot2}></div>
+                                                            <div style={dao}>
+                                                                {e.balance} hicetnuncDAO#{e.id}
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                )
+                                                    )
                                             })}
                                         </Card>
                                     </div>
