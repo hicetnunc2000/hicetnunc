@@ -114,7 +114,7 @@ export default class Home extends Component {
                                         <img style={{width:'50%'}} src={hic} />
                                     </div>
                                     <div style={{ fontSize: "45px", left: 0 }}>
-                                        decentralized digital assets management
+                                        terraforming virtual realities
                                 </div>
                                 </Card>
                         }

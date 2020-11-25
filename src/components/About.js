@@ -10,6 +10,7 @@ export default class About extends Component {
         this.state = {
             reveal: false
         }
+
     }
 
     static contextType = HicetnuncContext
@@ -104,7 +105,7 @@ export default class About extends Component {
                                         hicetnuncDAOs//hicetnuncNFTs//ungrund//hesychasm stack
                                     </p>
                                     <p>
-                                        this decentralized application allows it's users to originate micro fundings as DAOs (Decentralized Autonomous Organisations)
+                                        this decentralized application allows it's users to manage decentralized digital assets, originate micro fundings as DAOs (Decentralized Autonomous Organisations), minting NFTs, taking part on prediticion markets.
                                         serving as a public, open source and sustainable smart contract infrastructure on Tezos.
                                     </p>
                                     <p>
