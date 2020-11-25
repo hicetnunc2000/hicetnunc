@@ -87,7 +87,7 @@ export default class IPFS extends Component {
                     <Col sm="12" md={{ size: 6, offset: 3 }}>
                         {this.context.collapsed ?
                             <Card style={{ border: 0 }}>
-                                <label style={{ marginTop: '25%', paddingTop: '2%', paddingBottom: '2%', borderStyle: 'dashed', textAlign: 'center' }}>Upload file
+                                <label style={{ marginTop: '25%', paddingTop: '1.5%', paddingBottom: '1.5%', borderStyle: 'dashed', textAlign: 'center' }}>Upload file
                                 <input style={{ display: 'none' }} type="file" name="file" onChange={this.onFileChange} /></label><br />
                         <p>{
                             this.state.title
@@ -128,7 +128,7 @@ export default class IPFS extends Component {
                                                 }
                                             }} href="/opensource" onClick={this.reveal}>hicetnuncDAO</a></li>
                                             <li style={{ textDecoration: "line-through" }}>hicetnuncNFTs</li>
-                                            <li style={{ textDecoration: "line-through" }}>FA1.2</li>
+                                            <li style={{ textDecoration: "line-through" }}>$OBJK</li>
                                         </ul>
                                         
                                         :

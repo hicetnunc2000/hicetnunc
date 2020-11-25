@@ -69,6 +69,7 @@ export default class About extends Component {
                                                 }
                                             }} href="/opensource" onClick={this.reveal}>hicetnuncDAO</a></li>
                                             <li style={{ textDecoration: "line-through" }}>hicetnuncNFTs</li>
+                                            <li style={{ textDecoration: "line-through" }}>$OBJK</li>
                                         </ul>
                                         :
                                         null

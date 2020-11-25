@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { HicetnuncContext } from '../context/HicetnuncContext'
 import { Card, Col, Row } from 'reactstrap'
-import hic from '../media/hicetnuncfinal20202.png'
+import hic from '../media/hicetnuncfinal202022.png'
 
 export default class Home extends Component {
 
@@ -11,6 +11,7 @@ export default class Home extends Component {
         this.state = {
             reveal: false
         }
+
     }
 
     static contextType = HicetnuncContext
@@ -44,7 +45,7 @@ export default class Home extends Component {
             position: "absolute",
             listStyle: "none",
             top: "0",
-            marginTop: "25%",
+            marginTop: "22.5%",
             fontFamiliy: "Roboto",
             border: "0"
         }
@@ -82,6 +83,7 @@ export default class Home extends Component {
                                                     }
                                                 }} href="/opensource" onClick={this.reveal}>hicetnuncDAO</a></li>
                                                 <li style={{ textDecoration: "line-through" }}>hicetnuncNFTs</li>
+                                                <li style={{ textDecoration: "line-through" }}>$OBJK</li>
                                             </ul>
                                             :
                                             null
@@ -108,9 +110,11 @@ export default class Home extends Component {
                                 </ul>
                                 :
                                 <Card style={cardStyle}>
-                                    <div style={{fontWeight:'bold', fontStyle:'italic', fontSize:'45px'}}>hicetnunc</div>
+                                    <div style={{fontWeight:'bold', fontStyle:'italic', fontSize:'45px'}}>
+                                        <img style={{width:'50%'}} src={hic} />
+                                    </div>
                                     <div style={{ fontSize: "45px", left: 0 }}>
-                                        terraforming virtual realities
+                                        decentralized digital assets management
                                 </div>
                                 </Card>
                         }

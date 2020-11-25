@@ -28,8 +28,8 @@ export default class AppNavbar extends Component {
         }
 
         var grow = keyframes`
-        from { transform: scale(0.25); }
-        to { transform: scale1; }
+        from { transform: scale(0.225); }
+        to { transform: scale(1); }
     `;
 
         let dot = {
@@ -43,7 +43,7 @@ export default class AppNavbar extends Component {
             right : "0",
             top: "0",
             position : "absolute",
-            animation : `${grow} 3s infinite`
+            animation : `${grow} 3.5s infinite`
         }
 
         let logo = {
@@ -55,14 +55,15 @@ export default class AppNavbar extends Component {
             color : "#000",
             "&:hover" : {
                 color : "#000"
-            }
+            },
+            fontStyle : 'italic'
         }
         return (
             <div>
                 <Row>
                     <Col sm="12" md={{ size: 6, offset: 3 }}>
                         <Card body style={{border:"0", marginTop : '5px'}}> {/* { border: "none" } */}
-                            <a href="/" style={logo}> /// </a><div onClick={this.context.toogleNavbar} style={dot}></div>
+                            <a href="/" style={logo}> hicetnunc2000 </a><div onClick={this.context.toogleNavbar} style={dot}></div>
                         </Card>
                     </Col>
                 </Row>

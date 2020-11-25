@@ -123,7 +123,7 @@ export default class Display extends Component {
         let subList = {
             listStyle: "none",
             fontSize: "26px"
-        }
+        }   
 
         const addr = window.location.pathname.split('/')[2]
 
@@ -160,6 +160,7 @@ export default class Display extends Component {
                                                         }
                                                     }} href="/opensource" onClick={this.reveal}>hicetnuncDAO</a></li>
                                                     <li style={{ textDecoration: "line-through" }}>hicetnuncNFTs</li>
+                                                    <li style={{ textDecoration: "line-through" }}>$OBJK</li>
                                                 </ul>
                                                 :
                                                 null

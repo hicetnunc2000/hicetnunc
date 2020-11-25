@@ -128,7 +128,7 @@ export default class HicetnuncContextProvider extends Component {
                 marginRight: "25px",
                 fontFamiliy: "Roboto",
                 textAlign: "right",
-                fontSize: "40px",
+                fontSize: "36px",
                 animation: "fadeMe 1.2s"
             }
 
