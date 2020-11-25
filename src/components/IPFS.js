@@ -87,7 +87,7 @@ export default class IPFS extends Component {
                     <Col sm="12" md={{ size: 6, offset: 3 }}>
                         {this.context.collapsed ?
                             <Card style={{ border: 0 }}>
-                                <label style={{ marginTop: '25%', paddingTop: '1.5%', paddingBottom: '1.5%', borderStyle: 'dashed', textAlign: 'center' }}>Upload file
+                                <label style={{ marginTop: '25%', paddingTop: '1.5%', paddingBottom: '1.5%', borderStyle: 'dashed', textAlign: 'center' }}>Upload document
                                 <input style={{ display: 'none' }} type="file" name="file" onChange={this.onFileChange} /></label><br />
                         <p>{
                             this.state.title
