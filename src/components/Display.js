@@ -31,8 +31,11 @@ export default class Display extends Component {
         console.log(this.context.getAuth())
         await axios.post(process.env.REACT_APP_UNGRUND_TZ, { // 3.129.20.231
             tz: this.context.getAuth()
-        }).then(res => {
+        }).then(async res => {
             console.log(res)
+            await axios.post('http://localhost:5000/objk/tz', {
+                tz: this.context.getAuth()
+            }).then(async res => console.log(res))
             this.setState({
                 results: res.data.results,
                 token_meta: res.data.token_meta,
@@ -158,9 +161,8 @@ export default class Display extends Component {
                                                         "&:hover": {
                                                             color: "#000"
                                                         }
-                                                    }} href="/opensource" onClick={this.reveal}>hicetnuncDAO</a></li>
-                                                    <li style={{ textDecoration: "line-through" }}>hicetnuncNFTs</li>
-                                                    <li style={{ textDecoration: "line-through" }}>$OBJK</li>
+                                                    }} href="/opensource" onClick={this.reveal}>micro funding</a></li>
+                                                    <li style={{ textDecoration: "line-through" }}>NFTs</li>
                                                 </ul>
                                                 :
                                                 null
@@ -170,7 +172,7 @@ export default class Display extends Component {
                                             "&:hover": {
                                                 color: "#000"
                                             }
-                                        }} href="/sync">sync</a></li>
+                                        }} href="/sync">manage assets</a></li>
                                         <li><a style={{
                                             color: "#000",
                                             "&:hover": {
@@ -251,7 +253,7 @@ export default class Display extends Component {
                                                             <div style={dot1}></div>
                                                             <div style={dot2}></div>
                                                             <div style={dao}>
-                                                                {e.balance} hicetnuncDAO#{e.id}
+                                                                {e.balance} rewards#{e.id}
                                                             </div>
                                                         </div>
                                                     )

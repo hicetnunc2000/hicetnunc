@@ -1,11 +1,11 @@
 
 import 'bootstrap/dist/css/bootstrap.css';
 import React, { useState, Component } from 'react';
+import  { Redirect } from 'react-router-dom'
 import { Collapse, Navbar, NavbarToggler, NavbarBrand, Nav, NavItem, NavLink } from 'reactstrap';
 import { HicetnuncContext } from '../context/HicetnuncContext';
 import { Card, Col, Row } from 'reactstrap'
 import { keyframes } from "styled-components";
-import {hic} from '../media/hicetnuncfinal20202.png'
 const axios = require('axios')
 
 
@@ -24,7 +24,6 @@ export default class AppNavbar extends Component {
             marginTop: "150%",
             marginRight: "35px",
             textAlign: "right"
-
         }
 
         var grow = keyframes`
@@ -32,38 +31,55 @@ export default class AppNavbar extends Component {
         to { transform: scale(1); }
     `;
 
-        let dot = {
+        let left = {
             height: "30px",
             width: "30px",
-            backgroundColor: "black",
-            borderRadius: "50%",
+            //borderRadius: "50%",
             display: "inline-block",
-            marginTop : "10px",
-            marginRight : "25px",
-            right : "0",
+            marginTop: "10px",
+            marginRight: "25px",
+            right: "0",
             top: "0",
-            position : "absolute",
-            animation : `${grow} 3.5s infinite`
+            position: "absolute"
+            //animation: `${grow} 3.5s infinite`
+        }
+
+        let dot = {
+            height: "25px",
+            width: "25px",
+            borderRadius: "50%",
+            backgroundColor: 'black',
+            display: "inline-block",
+            top: '0',
+            marginTop : '13px',
+            position: 'absolute'
+
+            //animation: `${grow} 3.5s infinite`
         }
 
         let logo = {
-            right : "0",
-            position : "absolute",
-            top : "0",
-            marginTop : "13px",
-            marginRight : "70px",
-            color : "#000",
-            "&:hover" : {
-                color : "#000"
+            right: "0",
+            position: "absolute",
+            top: "0",
+            marginTop: "13px",
+            marginRight: "70px",
+            color: "#000",
+            "&:hover": {
+                color: "#000"
             },
-            fontStyle : 'italic'
+            fontStyle: 'italic'
         }
         return (
             <div>
                 <Row>
                     <Col sm="12" md={{ size: 6, offset: 3 }}>
-                        <Card body style={{border:"0", marginTop : '5px'}}> {/* { border: "none" } */}
-                            <a href="/" style={logo}> hicetnunc2000 </a><div onClick={this.context.toogleNavbar} style={dot}></div>
+                        <Card body style={{ border: "0", marginTop: '5px' }}> {/* { border: "none" } */}
+                            <div style={dot}></div>
+                            <a style={dot} href='/'></a>
+                            <a href="#" style={logo} onClick={this.context.dAppClient}>sync</a>
+                            <div onClick={this.context.toogleNavbar}>
+                                    <a href='#'><img style={left} src={require('../media/menu-black-18dp.svg')} /></a>
+                            </div>
                         </Card>
                     </Col>
                 </Row>

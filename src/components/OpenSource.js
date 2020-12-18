@@ -144,9 +144,8 @@ export default class OpenSource extends Component {
                                                     "&:hover": {
                                                         color: "#000"
                                                     }
-                                                }} href="/opensource" onClick={this.reveal}>hicetnuncDAO</a></li>
-                                                <li style={{ textDecoration: "line-through" }}>hicetnuncNFTs</li>
-                                                <li style={{ textDecoration: "line-through" }}>$OBJK</li>
+                                                }} href="/opensource" onClick={this.reveal}>micro funding</a></li>
+                                                <li style={{ textDecoration: "line-through" }}>NFTs</li>
                                             </ul>
                                             :
                                             null
@@ -162,7 +161,7 @@ export default class OpenSource extends Component {
                                         "&:hover": {
                                             color: "#000"
                                         }
-                                    }} href="/sync">sync</a></li>
+                                    }} href="/sync">manage assets</a></li>
                                     <li><a style={{
                                         color: "#000",
                                         "&:hover": {
@@ -172,8 +171,8 @@ export default class OpenSource extends Component {
                                 </ul>
                                 :
                                 <Card style={{ 'padding': '15% 0', border: 0, animation: "fadeMe 1.2s" }}>
-                                    <input type="text" name="title" onChange={this.handleChange} placeholder="DAO name"></input>
-                                    <input type="text" name="description" onChange={this.handleChange} placeholder="DAO description"></input>
+                                    <input type="text" name="title" onChange={this.handleChange} placeholder="micro fund title"></input>
+                                    <input type="text" name="description" onChange={this.handleChange} placeholder="micro fund description"></input>
                                     <p style={{ padding: '12px' }} onClick={this.linkCollapse}>+ links</p>
 
                                     {
@@ -195,7 +194,7 @@ export default class OpenSource extends Component {
                                     <input tpe="text" name="goal" onChange={this.handleChange} placeholder="goal ꜩ > 1"></input>
                                     {/* tags */}
                                     <button onClick={this.submitForm}>open source</button>
-                            This operations costs 2 ꜩ~
+                            This operations costs 0.5 ꜩ~
 
                         </Card>
                         }

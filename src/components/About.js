@@ -68,9 +68,8 @@ export default class About extends Component {
                                                 "&:hover": {
                                                     color: "#000"
                                                 }
-                                            }} href="/opensource" onClick={this.reveal}>hicetnuncDAO</a></li>
-                                            <li style={{ textDecoration: "line-through" }}>hicetnuncNFTs</li>
-                                            <li style={{ textDecoration: "line-through" }}>$OBJK</li>
+                                            }} href="/opensource" onClick={this.reveal}>micro funding</a></li>
+                                            <li style={{ textDecoration: "line-through" }}>NFTs</li>
                                         </ul>
                                         :
                                         null
@@ -86,7 +85,7 @@ export default class About extends Component {
                                     "&:hover": {
                                         color: "#000"
                                     }
-                                }} href="/sync">sync</a></li>
+                                }} href="/sync">manage assets</a></li>
                                 <li><a style={{
                                     color: "#000",
                                     "&:hover": {

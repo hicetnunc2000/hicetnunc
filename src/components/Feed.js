@@ -57,26 +57,32 @@ export default class Feed extends Component {
                         <Card body style={{ border: 0, animation: "fadeMe 1.2s" }}>
                             {
                                 this.context.collapsed ?
-                                    <div style={{ animation: "fadeMe 1.2s" }}>
-                                        <p style={{ 'padding': '5% 0', border: 0 }}>{this.state.results.length} hicetnuncDAOs</p>
-                                        {
-                                            this.state.results.map((e) => {
-
-                                                return (
-                                                    <div >
-                                                        <Card style={{ border: 0 }}>
-                                                            <CardTitle style={{ fontWeight: 'bold' }}>{e.meta.title.toLowerCase()}//<a rel="noopener noreferrer" href={'/kt/' + e.address}>{e.address}</a></CardTitle>
-                                                            <Row xs="2" style={{ fontSize: '12px' }}>
-                                                                <Col></Col>
-                                                                <Col style={{ fontSize: '20px' }}>{e.percentage} %</Col>
-                                                            </Row>
-                                                            <div style={{ backgroundColor: 'black', width: e.percentage, height: "5px" }}></div>
-                                                        </Card>
-                                                    </div>
-                                                )
-                                            })
+                                <div>
+                                            <div style={{ animation: "fadeMe 1.2s" }}>
+                                                <p style={{ 'padding': '5% 0', border: 0 }}>{this.state.results.length} micro fundings</p>
+                                                {
+                                            this.state.loading ? <p style={{ border: 0, animation: "fadeMe 1.2s" }}>loading...</p> : this.state.results.length == 0 ? <p>none</p> : undefined
                                         }
-                                    </div>
+                                                {
+                                                    this.state.results.map((e) => {
+
+                                                        return (
+                                                            <div >
+                                                                <Card style={{ border: 0 }}>
+                                                                    <CardTitle style={{ fontWeight: 'bold' }}>{e.meta.title.toLowerCase()}//<a rel="noopener noreferrer" href={'/kt/' + e.address}>{e.address}</a></CardTitle>
+                                                                    <Row xs="2" style={{ fontSize: '12px' }}>
+                                                                        <Col></Col>
+                                                                        <Col style={{ fontSize: '20px' }}>{e.percentage} %</Col>
+                                                                    </Row>
+                                                                    <div style={{ backgroundColor: 'black', width: e.percentage, height: "5px" }}></div>
+                                                                </Card>
+                                                            </div>
+                                                        )
+                                                    })
+                                                }
+                                            </div>
+                                            </div>
+                                    
                                     :
                                     <ul style={this.context.menu}> {/* style={drodiv} */}
                                         <li><a style={{
@@ -93,9 +99,8 @@ export default class Feed extends Component {
                                                         "&:hover": {
                                                             color: "#000"
                                                         }
-                                                    }} href="/opensource" onClick={this.reveal}>hicetnuncDAO</a></li>
-                                                    <li style={{ textDecoration: "line-through" }}>hicetnuncNFTs</li>
-                                                    <li style={{ textDecoration: "line-through" }}>$OBJK</li>
+                                                    }} href="/opensource" onClick={this.reveal}>micro funding</a></li>
+                                                    <li style={{ textDecoration: "line-through" }}>NFTs</li>
                                                 </ul>
                                                 :
                                                 null
@@ -115,7 +120,7 @@ export default class Feed extends Component {
                                                 "&:hover": {
                                                     color: "#000"
                                                 }
-                                            }} href="/sync">sync
+                                            }} href="/sync">manage assets
                                     </a>
                                         </li>
                                         <li>
@@ -130,9 +135,6 @@ export default class Feed extends Component {
                                     </ul>
                             }
                         </Card>
-                        {
-                            this.state.loading ? <p style={{ border: 0, animation: "fadeMe 1.2s" }}>loading...</p> : this.state.results.length == 0 ? <p>none</p> : undefined
-                        }
                     </Col>
                 </Row>
             </div>

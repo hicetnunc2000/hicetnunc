@@ -9,11 +9,14 @@ export default class IPFS extends Component {
     constructor(props) {
         super(props)
         this.state = {
+            fileTitle: '',
             title: '',
             description: '',
             tags: '',
+            amount: 0,
             selectedFile: null,
-            cid: '',
+            imgCid: '',
+            jsonCid : '',
             uploaded: false,
             reveal: false
         }
@@ -37,7 +40,7 @@ export default class IPFS extends Component {
     onFileChange = event => {
 
         // Update the state 
-        this.setState({ selectedFile: event.target.files, title: event.target.files[0].name });
+        this.setState({ selectedFile: event.target.files, fileTitle: event.target.files[0].name });
 
     };
 
@@ -47,22 +50,40 @@ export default class IPFS extends Component {
 
         const files = this.state.selectedFile
         console.log(files[0])
-        if (files[0].size < 10000000) {
 
-            //console.log(await ipfs.files.add(buffer))
+        // 30mb limit
+        if (files[0].size < 30000000) {
 
             formData.append('file', files[0])
             axios.defaults.headers.post['Access-Control-Allow-Origin'] = '*';
-            axios.post(process.env.REACT_APP_UNGRUND_POST_FILE, formData)
+            await axios.post(process.env.REACT_APP_UNGRUND_POST_FILE, formData)
                 .then(resp => {
                     console.log(resp.data)
                     this.setState({
-                        cid: resp.data
+                        imgCid: resp.data
                     })
                 })
                 .catch(error => {
                     console.log(error);
                 })
+
+            await axios.post(process.env.REACT_APP_UNGRUND_POST_IPFS, {
+                title : this.state.title,
+                description : this.state.description,
+                sig : '',
+                tags : [],
+                imgCid : this.state.imgCid
+            }).then(res => this.setState({ jsonCid : res.data.hash }))
+
+            await axios.post('http://localhost:5000/objk/mint', {
+                tz : this.context.getAuth(),
+                amount : this.state.amount,
+                ipfs : this.state.jsonCid
+            }).then(res => {
+                console.log(res.data)
+                this.context.operationRequest(res.data)
+            })
+
             this.setState({
                 uploaded: true
             })
@@ -86,21 +107,24 @@ export default class IPFS extends Component {
                 <Row>
                     <Col sm="12" md={{ size: 6, offset: 3 }}>
                         {this.context.collapsed ?
-                            <Card style={{ border: 0 }}>
-                                <label style={{ marginTop: '25%', paddingTop: '1.5%', paddingBottom: '1.5%', borderStyle: 'dashed', textAlign: 'center' }}>Upload document
+                            <Card style={{ border: 0 , marginTop : '20%'}}>
+                                    <input type="text" name="title" onChange={this.handleChange} placeholder="OBJKT title"></input>
+                                    <input type="text" name="description" onChange={this.handleChange} placeholder="OBJKT description"></input>
+                                    <input type="text" name="amount" onChange={this.handleChange} placeholder="amount of OBJKTs"></input>
+                                <label style={{ marginTop: '5%', paddingTop: '1.25%', paddingBottom: '1.25%', borderStyle: 'dashed', textAlign: 'center' }}>Upload OBJKT
                                 <input style={{ display: 'none' }} type="file" name="file" onChange={this.onFileChange} /></label><br />
                         <p>{
-                            this.state.title
+                            this.state.fileTitle
                             }
                             </p>
-                                <button style={{ lenght: '100%' }} onClick={this.onFileUpload}>Submit</button>
+                                <button style={{ lenght: '100%' }} onClick={this.onFileUpload}>Mint</button>
                                 {
-                                    this.state.cid != '' ? <a style={{
+                                    this.state.imgCid != '' ? <a style={{
                                         color: "#000",
                                         "&:hover": {
                                             color: "#000"
                                         }
-                                    }} href={`https://ipfs.io/ipfs/${this.state.cid}`}>{this.state.cid}</a> : null
+                                    }} href={`https://ipfs.io/ipfs/${this.state.imgCid}`}>{this.state.imgCid}</a> : null
                                 }
                             </Card>
                             :
@@ -127,8 +151,7 @@ export default class IPFS extends Component {
                                                     color: "#000"
                                                 }
                                             }} href="/opensource" onClick={this.reveal}>hicetnuncDAO</a></li>
-                                            <li style={{ textDecoration: "line-through" }}>hicetnuncNFTs</li>
-                                            <li style={{ textDecoration: "line-through" }}>$OBJK</li>
+                                            <li style={{ textDecoration: "line-through" }}>OBJKT</li>
                                         </ul>
                                         
                                         :
@@ -140,7 +163,7 @@ export default class IPFS extends Component {
                                         "&:hover": {
                                             color: "#000"
                                         }
-                                    }} href="/sync">sync
+                                    }} href="/sync">manage assets
                                     </a>
                                 </li>
                                 <li>

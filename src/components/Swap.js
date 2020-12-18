@@ -1,65 +1,25 @@
 import React, { Component } from 'react'
-import { HicetnuncContext } from '../context/HicetnuncContext'
 import { Card, Col, Row } from 'reactstrap'
-import hic from '../media/hicetnuncfinal202022.png'
 
-export default class Home extends Component {
+export default class Swap extends Component {
 
     constructor(props) {
         super(props)
 
         this.state = {
-            reveal: false
+
         }
-
-    }
-
-    static contextType = HicetnuncContext
-
-    reveal = () => {
-        this.setState({
-            reveal: !this.state.reveal
-        })
     }
 
     render() {
-
-        let style = {
-            position: "absolute",
-            listStyle: "none",
-            right: "0",
-            top: "0",
-            marginTop: "20%",
-            marginRight: "25px",
-            fontFamiliy: "Roboto",
-            textAlign: "right",
-            fontSize: "40px"
-        }
-
-        let subList = {
-            listStyle: "none",
-            fontSize: "26px"
-        }
-
-        let cardStyle = {
-            position: "absolute",
-            listStyle: "none",
-            top: "0",
-            marginTop: "22.5%",
-            fontFamiliy: "Roboto",
-            border: "0"
-        }
-
-
-
         return (
+            <div>
 
-            <Row>
-                <Col sm="12" md={{ size: 6, offset: 3 }}>
-                    <Card style={{ border: 0 }}> {/* { border: "none" } */}
+                <Row>
+                    <Col sm="12" md={{ size: 6, offset: 3 }}>
                         {
-                            !this.context.collapsed & this.context.address === "" ?
-                                <ul style={this.context.menu}> {/* style={drodiv} */}
+                            !this.context.collapsed ?
+                                <ul style={style}> {/* style={drodiv} */}
                                     <li><a style={{
                                         color: "#000",
                                         fontStyle: "italic",
@@ -82,13 +42,7 @@ export default class Home extends Component {
                                                         color: "#000"
                                                     }
                                                 }} href="/opensource" onClick={this.reveal}>micro funding</a></li>
-                                                <li><a style={{
-                                                    color: "#000",
-                                                    "&:hover": {
-                                                        color: "#000"
-                                                    }
-                                                }} href="/ipfs">NFTs
-                                                </a></li>
+                                                <li style={{ textDecoration: "line-through" }}>NFTs</li>
                                             </ul>
                                             :
                                             null
@@ -98,8 +52,7 @@ export default class Home extends Component {
                                         "&:hover": {
                                             color: "#000"
                                         }
-                                    }} href='/ipfs'>IPFS
-                                            </a></li>
+                                    }} href="/ipfs">IPFS</a></li>
                                     <li><a style={{
                                         color: "#000",
                                         "&:hover": {
@@ -114,18 +67,19 @@ export default class Home extends Component {
                                     }} href="/about">about</a></li>
                                 </ul>
                                 :
-                                <Card style={cardStyle}>
-                                    <div style={{ fontWeight: 'bold', fontStyle: 'italic', fontSize: '45px' }}>
-                                        <img style={{ width: '50%' }} src={hic} />
-                                    </div>
-                                    <div style={{ fontSize: "45px", left: 0 }}>
-                                        terraforming virtual realities
-                                </div>
-                                </Card>
+                                <Card style={{ 'padding': '15% 0', border: 0, animation: "fadeMe 1.2s" }}>
+
+                                    <input tpe="text" name="price_per_tk" onChange={this.handleChange} placeholder="ꜩ per token"></input>
+                                    {/* tags */}
+                                    <button onClick={this.submitForm}>swap offer</button>
+                            This operations costs 0.5 ꜩ~
+
+                        </Card>
                         }
-                    </Card>
-                </Col>
-            </Row >
+                    </Col>
+                </Row>
+
+            </div>
         )
     }
 }

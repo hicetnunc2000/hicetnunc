@@ -19,6 +19,7 @@ import KTDisplay from './components/KTDisplay';
 import Contribution from './components/Contribution';
 import Withdraw from './components/Withdraw';
 import IPFS from './components/IPFS';
+import IPFSimg from './components/IPFSimg';
 
 function App() {
   return (
@@ -55,6 +56,9 @@ function App() {
           </Route>
           <Route exact path="/ipfs">
             <IPFS />
+          </Route>
+          <Route exact path="/cid">
+            <IPFSimg />
           </Route>
         </Switch>
       </Router>
