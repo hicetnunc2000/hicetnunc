@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Card, Col, Row } from 'reactstrap'
 import { HicetnuncContext } from '../context/HicetnuncContext'
+import Menu from './Menu'
 
 const axios = require('axios')
 
@@ -16,7 +17,7 @@ export default class OpenSource extends Component {
             goal: "",
             auth: "",
             count: 0,
-            reveal : false
+            reveal: false
         }
     }
 
@@ -34,40 +35,33 @@ export default class OpenSource extends Component {
 
     submitForm = async () => {
 
-        let headers = {
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*'
+        if (this.context.client == null) {
+            alert('sync')
+        } else {
+            let ipfs = await axios.post(process.env.REACT_APP_UNGRUND_POST_IPFS, { // process.env.REACT_APP_POST_IPFS
+                title: this.state.title,
+                description: this.state.description,
+                links: this.state.links
+            }).then((async res => res.data))
+
+            console.log(ipfs)
+            let payload = await axios.post(process.env.REACT_APP_UNGRUND_ORIGINATE, { // process.env.UNGRUND_ORIGINATE //3.129.20.231
+                tz: this.context.getAuth(),
+                meta: ipfs,
+                goal: this.state.goal
+            }).then(res => res)
+            console.log(payload)
+
+            /*         const signature = this.context.signPayload(payload)
+                    console.log(this.context.signature) */
+            this.context.operationRequest(payload)
         }
-
-        /* await axios.post('https://fmn11y0q17.execute-api.us-east-2.amazonaws.com/py-ipfslambda', { */
-        let ipfs = await axios.post(process.env.REACT_APP_UNGRUND_POST_IPFS, { // process.env.REACT_APP_POST_IPFS
-            title: this.state.title,
-            description: this.state.description,
-            links : this.state.links
-        }, {
-            headers: headers
-        })
-            .then((async res => res.data))
-
-        console.log(ipfs)
-        let payload = await axios.post(process.env.REACT_APP_UNGRUND_ORIGINATE, { // process.env.UNGRUND_ORIGINATE //3.129.20.231
-            tz: this.context.getAuth(),
-            meta: ipfs,
-            goal: this.state.goal
-        }, {
-            headers: headers
-        }).then(res => res.data)
-        console.log(payload)
-
-/*         const signature = this.context.signPayload(payload)
-        console.log(this.context.signature) */
-        this.context.operationRequest(payload)
     }
 
     linkCollapse = () => {
 
         let links = [...this.state.links]
-        let link =  { url : '', placeholder : ''}
+        let link = { url: '', placeholder: '' }
 
         links[this.state.count] = link
         this.setState({ links })
@@ -105,7 +99,6 @@ export default class OpenSource extends Component {
             top: "0",
             marginTop: "20%",
             marginRight: "25px",
-            fontFamiliy: "Roboto",
             textAlign: "right",
             fontSize: "40px",
             animation: "fadeMe 1.2s"
@@ -122,55 +115,13 @@ export default class OpenSource extends Component {
                     <Col sm="12" md={{ size: 6, offset: 3 }}>
                         {
                             !this.context.collapsed ?
-                                <ul style={style}> {/* style={drodiv} */}
-                                    <li><a style={{
-                                        color: "#000",
-                                        fontStyle: "italic",
-                                        "&:hover": {
-                                            color: "#000"
-                                        }
-                                    }} href="/feed">feed</a></li>
-                                    <li><a style={{
-                                        color: "#000",
-                                        "&:hover": {
-                                            color: "#000"
-                                        }
-                                    }} href="#" onClick={this.reveal}>smart contracts</a></li>
-                                    {
-                                        this.state.reveal ?
-                                            <ul style={subList}>
-                                                <li><a style={{
-                                                    color: "#000",
-                                                    "&:hover": {
-                                                        color: "#000"
-                                                    }
-                                                }} href="/opensource" onClick={this.reveal}>micro funding</a></li>
-                                                <li style={{ textDecoration: "line-through" }}>NFTs</li>
-                                            </ul>
-                                            :
-                                            null
-                                    }
-                                    <li><a style={{
-                                        color: "#000",
-                                        "&:hover": {
-                                            color: "#000"
-                                        }
-                                    }} href="/ipfs">IPFS</a></li>
-                                    <li><a style={{
-                                        color: "#000",
-                                        "&:hover": {
-                                            color: "#000"
-                                        }
-                                    }} href="/sync">manage assets</a></li>
-                                    <li><a style={{
-                                        color: "#000",
-                                        "&:hover": {
-                                            color: "#000"
-                                        }
-                                    }} href="/about">about</a></li>
-                                </ul>
+                                <Menu />
                                 :
-                                <Card style={{ 'padding': '15% 0', border: 0, animation: "fadeMe 1.2s" }}>
+                                <Card style={{ 'padding': '10% 0', border: 0, animation: "fadeMe 1.2s" }}>
+                                    <p style={{ textAlign: 'justify', paddingBottom: '25px', fontSize: "15px" }}>
+                                        >>> this smart contract allows one to publish a crowd funding by decentralized means.
+                                        it has a 38 days timelock for withdrawing funds.
+                                    </p>
                                     <input type="text" name="title" onChange={this.handleChange} placeholder="micro fund title"></input>
                                     <input type="text" name="description" onChange={this.handleChange} placeholder="micro fund description"></input>
                                     <p style={{ padding: '12px' }} onClick={this.linkCollapse}>+ links</p>
@@ -181,12 +132,12 @@ export default class OpenSource extends Component {
                                             :
 
                                             <Card style={{ border: 0 }}>
-                                                {this.state.links.map( (e, i) => {
+                                                {this.state.links.map((e, i) => {
                                                     return (
                                                         <div key={i}>
-                                                        <input type="text" name='url' style={{width:'100%'}} onChange={this.handleListChange.bind(this, i)} placeholder='url' /><br />
-                                                        <input type='text' name='placeholder' style={{width:'100%'}} onChange={this.handleListChange.bind(this, i)} placeholder='placeholder' />
-                                                    </div>      
+                                                            <input type="text" name='url' style={{ width: '100%' }} onChange={this.handleListChange.bind(this, i)} placeholder='url' /><br />
+                                                            <input type='text' name='placeholder' style={{ width: '100%' }} onChange={this.handleListChange.bind(this, i)} placeholder='placeholder' />
+                                                        </div>
                                                     )
                                                 })}
                                             </Card>
@@ -194,9 +145,8 @@ export default class OpenSource extends Component {
                                     <input tpe="text" name="goal" onChange={this.handleChange} placeholder="goal ꜩ > 1"></input>
                                     {/* tags */}
                                     <button onClick={this.submitForm}>open source</button>
-                            This operations costs 0.5 ꜩ~
-
-                        </Card>
+                                    <p style={{ textAlign: 'justify', paddingBottom: '25px', fontSize: "15px" }}>This operation costs 0.5 ꜩ~</p>
+                                </Card>
                         }
                     </Col>
                 </Row>

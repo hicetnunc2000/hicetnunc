@@ -42,8 +42,7 @@ export default class Contribution extends Component {
             tz: this.context.getAuth(),
             amount: this.state.contribution
         }).then(res => {
-            console.log(res)
-            this.context.operationRequest(res.data)
+            this.context.operationRequest(res)
         })
 
     }

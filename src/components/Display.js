@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { HicetnuncContext } from '../context/HicetnuncContext'
 import { Card, Button, CardTitle, CardText, Row, Col } from 'reactstrap';
 import '../App.css';
+import Menu from './Menu'
 
 const axios = require('axios')
 const QRCode = require('@qrcode/react')
@@ -32,10 +33,10 @@ export default class Display extends Component {
         await axios.post(process.env.REACT_APP_UNGRUND_TZ, { // 3.129.20.231
             tz: this.context.getAuth()
         }).then(async res => {
-            console.log(res)
-            await axios.post('http://localhost:5000/objk/tz', {
+            console.log(res.data)
+/*             await axios.post('http://localhost:5000/objk/tz', {
                 tz: this.context.getAuth()
-            }).then(async res => console.log(res))
+            }).then(async res => console.log(res)) */
             this.setState({
                 results: res.data.results,
                 token_meta: res.data.token_meta,
@@ -73,7 +74,6 @@ export default class Display extends Component {
             position: "absolute",
             marginTop: "20%",
             marginRight: "25px",
-            fontFamiliy: "Roboto",
             textAlign: "right",
             fontSize: "40px"
         }
@@ -119,8 +119,7 @@ export default class Display extends Component {
             position: "absolute",
             listStyle: "none",
             top: "0",
-            marginTop: "25%",
-            fontFamiliy: "Roboto",
+            marginTop: "25%"
         }
 
         let subList = {
@@ -139,47 +138,7 @@ export default class Display extends Component {
                         <Card style={{ paddingTop: "45px", border: 0 }}>
                             {
                                 !this.context.collapsed ?
-                                    <ul style={style}> {/* style={drodiv} */}
-                                        <li><a style={{
-                                            color: "#000",
-                                            fontStyle: "italic",
-                                            "&:hover": {
-                                                color: "#000"
-                                            }
-                                        }} href="/feed">feed</a></li>
-                                        <li><a style={{
-                                            color: "#000",
-                                            "&:hover": {
-                                                color: "#000"
-                                            }
-                                        }} href="#" onClick={this.reveal}>smart contracts</a></li>
-                                        {
-                                            this.state.reveal ?
-                                                <ul style={subList}>
-                                                    <li><a style={{
-                                                        color: "#000",
-                                                        "&:hover": {
-                                                            color: "#000"
-                                                        }
-                                                    }} href="/opensource" onClick={this.reveal}>micro funding</a></li>
-                                                    <li style={{ textDecoration: "line-through" }}>NFTs</li>
-                                                </ul>
-                                                :
-                                                null
-                                        }
-                                        <li><a style={{
-                                            color: "#000",
-                                            "&:hover": {
-                                                color: "#000"
-                                            }
-                                        }} href="/sync">manage assets</a></li>
-                                        <li><a style={{
-                                            color: "#000",
-                                            "&:hover": {
-                                                color: "#000"
-                                            }
-                                        }} href="/about">about</a></li>
-                                    </ul>
+                                    <Menu />
                                     :
                                     <div>
                                         <Card style={{ border: 0 }}>
@@ -195,7 +154,7 @@ export default class Display extends Component {
                                                 <Col>
                                                     <div style={styleDisplay}>
                                                         <a href={`https://tzkt.io/${addr}`}>{addr}</a><br />
-                                                        {this.state.balance} ꜩ
+                                                        {Math.round(this.state.balance / 1000000)} ꜩ
                                         </div>
                                                 </Col>
 
@@ -213,13 +172,13 @@ export default class Display extends Component {
                                                         return (
                                                             <div >
                                                                 <Card style={{ border: 0 }}>
-                                                                    <CardTitle><a rel="noopener noreferrer" href={`http://localhost:3000/kt/${e.address}`}>{`${e.address}`}</a></CardTitle>
+                                                                    <CardTitle><a rel="noopener noreferrer" href={`https://hicetnunc.xyz/kt/${e.address}`}>{`${e.address}`}</a></CardTitle>
 
                                                                     <Row xs="2" style={{ fontSize: '12px' }}>
                                                                         <Col>min</Col>
                                                                         <Col>{e.storage.time_lock}</Col>
                                                                         <Col>goal</Col>
-                                                                        <Col>{e.storage.goal} ꜩ</Col>
+                                                                        <Col>{Math.round(e.storage.goal/1000000)} ꜩ</Col>
                                                                         <Col>contributions</Col>
                                                                         <Col>{e.balance / 1000000} ꜩ</Col>
 
@@ -253,7 +212,7 @@ export default class Display extends Component {
                                                             <div style={dot1}></div>
                                                             <div style={dot2}></div>
                                                             <div style={dao}>
-                                                                {e.balance} rewards#{e.id}
+                                                                {e.balance} OS#{e.id}
                                                             </div>
                                                         </div>
                                                     )

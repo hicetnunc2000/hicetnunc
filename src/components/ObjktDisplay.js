@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
+import Menu from './Menu'
 
-export default class IPFSimg extends Component {
+export default class ObjktDisplay extends Component {
 
     constructor(props) {
         super(props)
@@ -19,6 +20,9 @@ export default class IPFSimg extends Component {
                 <div style={{ marginTop : '2.5%', display : 'table', margin : '0 auto'}}>
                     <img style = {{height : '80vh'}} src="https://ipfs.io/ipfs/QmdsBhfZFjWugDi531Bs7h19TCmp6zA1EXfoDkjx4D5QPR" />
                 </div>
+{/*                 <video controls>
+                    <source src="https://ipfs.io/ipfs/QmNWTszpFbLRzt5EnaT7SKZz3GvpszvKyDR6Uj5rEL77hu"/>
+                </video> */}
             </div>
         )
     }

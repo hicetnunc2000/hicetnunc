@@ -10,7 +10,7 @@
 
 # production
 /build
-
+/amplify
 # misc
 .DS_Store
 .env.local

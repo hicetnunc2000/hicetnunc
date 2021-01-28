@@ -51,8 +51,8 @@ export default class Withdraw extends Component {
                 <Col sm="12" md={{ size: 6, offset: 3 }}>
                     <div style={{ 'padding': '10% 0', animation: "fadeMe 1.2s" }}>
                         {this.state.loading ? <p>loading...</p> : <div>
-                            {window.location.pathname.split('/')[2]}
-                balance {this.state.kt.balance} µꜩ
+                            {window.location.pathname.split('/')[2]}<br/>
+                balance {this.state.kt.balance / 1000000} ꜩ
                 <Card style={{ border: 0, 'padding': '10% 0', animation: "fadeMe 1.2s" }}>
                                 <input type="text" name="amount" onChange={this.handleChange} placeholder="ꜩ amount"></input>
                                 <button onClick={this.submitForm}>withdraw</button>

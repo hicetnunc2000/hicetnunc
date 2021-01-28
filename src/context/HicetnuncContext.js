@@ -1,5 +1,5 @@
 import React, { createContext, Component } from 'react'
-import { AccountInfo, DAppClient, TezosOperationType, NetworkType, PermissionScope } from '@airgap/beacon-sdk'
+const { DAppClient, NetworkType } = require('@airgap/beacon-sdk')
 var ls = require('local-storage');
 const axios = require('axios')
 
@@ -15,21 +15,39 @@ export default class HicetnuncContextProvider extends Component {
 
             address: "",
 
+            contract: "",
+
             setAddress: (address) => this.setState({ address: address }),
 
             setAuth: (address) => {
                 ls.set('auth', address)
             },
 
+            updateLs : (key, value) => {
+                ls.set(key, value)
+            },
+
+            getLs : (key) => {
+                return ls.get(key)
+            },
+
             getAuth: () => {
                 return ls.get('auth')
             },
 
+            client : null,
+
+            setClient : (client) => {
+                this.setState({
+                    client : client
+                })
+            },
+
             dAppClient: async () => {
 
-                const client = new DAppClient({ name: 'hicetnunc' })
+                this.state.client = await new DAppClient({ name: 'hicetnunc' })
 
-                await client
+                this.state.client
                     .requestPermissions({
                         network: {
                             type: NetworkType.MAINNET,
@@ -44,23 +62,37 @@ export default class HicetnuncContextProvider extends Component {
                         this.setState({
                             address: permissions.address
                         })
+
                         this.state.setAuth(permissions.address)
 
                     })
                     .catch((error) => console.log(error))
 
+    
             },
+
 
             /* 
                 airgap/thanos interop methods
             */
             operationRequest: async (obj) => {
 
-                const client = new DAppClient({ name: 'hicetnunc' })
-                await client.requestOperation({
-                    operationDetails: obj.contents
-                }).then(res => console.log(res))
+                var op = obj.result
+                delete op.mutez
+                op.destination = op.to
+                op.kind = 'transaction'
+                delete op.to
 
+                console.log(obj.result)
+
+                this.state.client.requestOperation({
+                    operationDetails: [obj.result]
+                }).then(res => console.log(res)).catch(err => console.log(err))
+
+            },
+
+            timeout : (delay) => {
+                return new Promise( res => setTimeout(res, delay) );
             },
 
             signPayload: async (obj) => {
@@ -126,10 +158,13 @@ export default class HicetnuncContextProvider extends Component {
                 top: "0",
                 marginTop: "15%",
                 marginRight: "25px",
-                fontFamiliy: "Courier New",
                 textAlign: "right",
-                fontSize: "36px",
+                fontSize: "30px",
                 animation: "fadeMe 1.2s"
+            },
+            subList: {
+                listStyle: "none",
+                fontSize: "26px"
             }
 
         }

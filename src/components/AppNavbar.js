@@ -1,7 +1,7 @@
 
 import 'bootstrap/dist/css/bootstrap.css';
 import React, { useState, Component } from 'react';
-import  { Redirect } from 'react-router-dom'
+import { Redirect } from 'react-router-dom'
 import { Collapse, Navbar, NavbarToggler, NavbarBrand, Nav, NavItem, NavLink } from 'reactstrap';
 import { HicetnuncContext } from '../context/HicetnuncContext';
 import { Card, Col, Row } from 'reactstrap'
@@ -16,6 +16,10 @@ export default class AppNavbar extends Component {
         super(props)
     }
     static contextType = HicetnuncContext
+
+    componentWillMount = () => {
+        console.log(window.location.pathname)
+    }
 
     render() {
 
@@ -51,34 +55,48 @@ export default class AppNavbar extends Component {
             backgroundColor: 'black',
             display: "inline-block",
             top: '0',
-            marginTop : '13px',
+            marginTop: '13px',
             position: 'absolute'
 
-            //animation: `${grow} 3.5s infinite`
+            /* animation: `${grow} 6s infinite` */
+        }
+
+        let logoLetters = {
+            fontSize: "20px",
+            top: '0',
+            marginLeft: '40px',
+            marginTop: '13px',
+            position: 'absolute',
+            color: "#000",
+            fontStyle: "normal",
+            "&:hover": {
+                color: "#000"
+            }
         }
 
         let logo = {
             right: "0",
             position: "absolute",
+            fontFamily: 'courier',
             top: "0",
-            marginTop: "13px",
+            marginTop: "15px",
             marginRight: "70px",
             color: "#000",
             "&:hover": {
                 color: "#000"
-            },
-            fontStyle: 'italic'
+            }
         }
         return (
             <div>
                 <Row>
                     <Col sm="12" md={{ size: 6, offset: 3 }}>
                         <Card body style={{ border: "0", marginTop: '5px' }}> {/* { border: "none" } */}
-                            <div style={dot}></div>
                             <a style={dot} href='/'></a>
+                            {!this.context.collapsed || window.location.pathname != '/' ? <a href="/" style={logoLetters}>hicetnunc</a> : null}
+
                             <a href="#" style={logo} onClick={this.context.dAppClient}>sync</a>
                             <div onClick={this.context.toogleNavbar}>
-                                    <a href='#'><img style={left} src={require('../media/menu-black-18dp.svg')} /></a>
+                                <a href='#'><img style={left} src={require('../media/menu-black-18dp.svg')} /></a>
                             </div>
                         </Card>
                     </Col>

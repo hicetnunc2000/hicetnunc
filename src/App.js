@@ -1,25 +1,26 @@
-import React from 'react';
 import './App.css';
-import Sync from './components/Sync'
-import HicetnuncContextProvider from './context/HicetnuncContext'
-import About from './components/About'
-import AppNavbar from './components/AppNavbar'
-import Home from './components/Home';
+import React from 'react';
 import {
   BrowserRouter as Router,
   ContextRouter,
   Switch,
   Route,
   Link
-} from "react-router-dom"
+} from "react-router-dom";
+import Sync from './components/Sync'
+import HicetnuncContextProvider from './context/HicetnuncContext'
+import About from './components/About'
+import AppNavbar from './components/AppNavbar'
+import Home from './components/Home';
 import Display from './components/Display';
 import OpenSource from './components/OpenSource';
 import Feed from './components/Feed';
 import KTDisplay from './components/KTDisplay';
 import Contribution from './components/Contribution';
 import Withdraw from './components/Withdraw';
-import IPFS from './components/IPFS';
-import IPFSimg from './components/IPFSimg';
+import Mint from './components/Mint';
+import ObjktDisplay from './components/ObjktDisplay';
+import UpdateMetadata from './components/microfunding/UpdateMetadata';
 
 function App() {
   return (
@@ -54,11 +55,16 @@ function App() {
           <Route exact path="/withdraw/:id">
             <Withdraw />
           </Route>
-          <Route exact path="/ipfs">
-            <IPFS />
+          <Route exact path="/mint">
+            <Mint />
           </Route>
-          <Route exact path="/cid">
-            <IPFSimg />
+          <Route exact path="/objkt">
+            <ObjktDisplay />
+          </Route>
+          <Route exact path="/view/:tz">
+          </Route>
+          <Route exact path="/update_metadata/:id">
+            <UpdateMetadata />
           </Route>
         </Switch>
       </Router>

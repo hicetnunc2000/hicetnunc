@@ -36,7 +36,6 @@ export default class Sync extends Component {
             listStyle: "none",
             top: "0",
             marginTop: "20%",
-            fontFamiliy: "Roboto",
             border: "0"
         }
 
@@ -50,7 +49,7 @@ export default class Sync extends Component {
                             <Col sm="12" md={{ size: 6, offset: 3 }}>
                                 <Card style={style}>
                                     <div style={{ fontSize: "25px" }} >
-                                        requesting permission <a href='/sync'>try again?</a>
+                                        requesting permissions <a href='/sync'>try again?</a>
                                     </div>
                                     <div style={load}>
                                     </div>

@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import { HicetnuncContext } from '../context/HicetnuncContext'
 import { Card, Col, Row } from 'reactstrap'
+import '../index'
+import Menu from './Menu'
 import hic from '../media/hicetnuncfinal202022.png'
 
 export default class Home extends Component {
@@ -31,7 +33,6 @@ export default class Home extends Component {
             top: "0",
             marginTop: "20%",
             marginRight: "25px",
-            fontFamiliy: "Roboto",
             textAlign: "right",
             fontSize: "40px"
         }
@@ -46,7 +47,6 @@ export default class Home extends Component {
             listStyle: "none",
             top: "0",
             marginTop: "22.5%",
-            fontFamiliy: "Roboto",
             border: "0"
         }
 
@@ -58,69 +58,18 @@ export default class Home extends Component {
                 <Col sm="12" md={{ size: 6, offset: 3 }}>
                     <Card style={{ border: 0 }}> {/* { border: "none" } */}
                         {
-                            !this.context.collapsed & this.context.address === "" ?
-                                <ul style={this.context.menu}> {/* style={drodiv} */}
-                                    <li><a style={{
-                                        color: "#000",
-                                        fontStyle: "italic",
-                                        "&:hover": {
-                                            color: "#000"
-                                        }
-                                    }} href="/feed">feed</a></li>
-                                    <li><a style={{
-                                        color: "#000",
-                                        "&:hover": {
-                                            color: "#000"
-                                        }
-                                    }} href="#" onClick={this.reveal}>smart contracts</a></li>
-                                    {
-                                        this.state.reveal ?
-                                            <ul style={subList}>
-                                                <li><a style={{
-                                                    color: "#000",
-                                                    "&:hover": {
-                                                        color: "#000"
-                                                    }
-                                                }} href="/opensource" onClick={this.reveal}>micro funding</a></li>
-                                                <li><a style={{
-                                                    color: "#000",
-                                                    "&:hover": {
-                                                        color: "#000"
-                                                    }
-                                                }} href="/ipfs">NFTs
-                                                </a></li>
-                                            </ul>
-                                            :
-                                            null
-                                    }
-                                    <li><a style={{
-                                        color: "#000",
-                                        "&:hover": {
-                                            color: "#000"
-                                        }
-                                    }} href='/ipfs'>IPFS
-                                            </a></li>
-                                    <li><a style={{
-                                        color: "#000",
-                                        "&:hover": {
-                                            color: "#000"
-                                        }
-                                    }} href="/sync">manage assets</a></li>
-                                    <li><a style={{
-                                        color: "#000",
-                                        "&:hover": {
-                                            color: "#000"
-                                        }
-                                    }} href="/about">about</a></li>
-                                </ul>
+                            !this.context.collapsed ?
+                                <Menu />
                                 :
                                 <Card style={cardStyle}>
-                                    <div style={{ fontWeight: 'bold', fontStyle: 'italic', fontSize: '45px' }}>
-                                        <img style={{ width: '50%' }} src={hic} />
+                                    <div>
+                                        <div style={{ fontFamily: "Courier New", fontSize: "38px", left: 0, marginTop: '5%' }}>
+                                            hicetnunc
                                     </div>
-                                    <div style={{ fontSize: "45px", left: 0 }}>
-                                        terraforming virtual realities
+                                        <div style={{ fontFamily: "Courier New", fontSize: "18px", left: 0, marginTop: '-2%' }}>
+                                            decentralized digital assets
                                 </div>
+                                    </div>
                                 </Card>
                         }
                     </Card>

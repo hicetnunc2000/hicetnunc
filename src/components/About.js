@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Card, Button, CardTitle, CardText, Row, Col } from 'reactstrap';
 import { HicetnuncContext } from '../context/HicetnuncContext'
+import Menu from './Menu'
 
 
 export default class About extends Component {
@@ -35,7 +36,7 @@ export default class About extends Component {
             top: "0",
             marginTop: "15%",
             marginRight: "25px",
-            fontFamiliy: "Roboto",
+            fontFamiliy: "roboto",
             textAlign: "right",
             fontSize: "40px",
             animation: "fadeMe 1.2s"
@@ -46,53 +47,7 @@ export default class About extends Component {
                 <Col sm="12" md={{ size: 6, offset: 3 }}>
                     {
                         !this.context.collapsed ?
-                            <ul style={style}> {/* style={drodiv} */}
-                                <li><a style={{
-                                    color: "#000",
-                                    fontStyle: "italic",
-                                    "&:hover": {
-                                        color: "#000"
-                                    }
-                                }} href="/feed">feed</a></li>
-                                <li><a style={{
-                                    color: "#000",
-                                    "&:hover": {
-                                        color: "#000"
-                                    }
-                                }} href="#" onClick={this.reveal}>smart contracts</a></li>
-                                {
-                                    this.state.reveal ?
-                                        <ul style={subList}>
-                                            <li><a style={{
-                                                color: "#000",
-                                                "&:hover": {
-                                                    color: "#000"
-                                                }
-                                            }} href="/opensource" onClick={this.reveal}>micro funding</a></li>
-                                            <li style={{ textDecoration: "line-through" }}>NFTs</li>
-                                        </ul>
-                                        :
-                                        null
-                                }
-                                <li><a style={{
-                                    color: "#000",
-                                    "&:hover": {
-                                        color: "#000"
-                                    }
-                                }} href="/ipfs">IPFS</a></li>
-                                <li><a style={{
-                                    color: "#000",
-                                    "&:hover": {
-                                        color: "#000"
-                                    }
-                                }} href="/sync">manage assets</a></li>
-                                <li><a style={{
-                                    color: "#000",
-                                    "&:hover": {
-                                        color: "#000"
-                                    }
-                                }} href="/about">about</a></li>
-                            </ul>
+                            <Menu />
                             :
                             <div style={{ animation: "fadeMe 1.2s" }}>
 
@@ -104,7 +59,7 @@ export default class About extends Component {
                                         hicetnuncDAOs//hicetnuncNFTs//ungrund//hesychasm stack
                                     </p>
                                     <p>
-                                        this decentralized application allows it's users to manage decentralized digital assets, originate micro fundings as DAOs (Decentralized Autonomous Organisations), minting NFTs, taking part on prediticion markets.
+                                        this decentralized application allows it's users to manage decentralized digital assets, originate micro fundings as DAOs (Decentralized Autonomous Organizations), minting and exchaning NFTs.
                                         serving as a public, open source and sustainable smart contract infrastructure on Tezos.
                                     </p>
                                     <p>
