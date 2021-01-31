@@ -4,6 +4,7 @@ import { HicetnuncContext } from '../context/HicetnuncContext'
 import { CustomInput, Form, FormGroup, Label, Input, FormText, Button } from 'reactstrap'
 import Menu from './Menu'
 const axios = require('axios')
+const IPFS = require('ipfs-api');
 
 export default class Mint extends Component {
 
@@ -55,22 +56,22 @@ export default class Mint extends Component {
             const formData = new FormData();
 
             const files = this.state.selectedFile
-            console.log(files[0].type)
-
+            const ipfss = new IPFS({
+                host: 'ipfs.infura.io',
+                port: 5001, 
+                protocol: 'https'
+              });
             // 30mb limit
-            if (files[0].size < 30000000) {
+            if (files[0].size < 10000000) {
 
                 formData.append('file', files[0])
-
-                await axios.post(process.env.REACT_APP_UNGRUND_POST_FILE, formData)
+                //console.log(ipfss.add(files))
+                await axios.post(process.env.REACT_APP_UNGRUND_POST_FILE2, formData)
                     .then(resp => {
                         console.log(resp.data.result)
                         this.setState({
-                            media: ipfs + resp.data.result
+                            media: ipfs + resp.data.result[0].hash
                         })
-                    })
-                    .catch(error => {
-                        console.log(error);
                     })
 
                 await axios.post(process.env.REACT_APP_UNGRUND_POST_IPFS, {
@@ -78,7 +79,8 @@ export default class Mint extends Component {
                     description: this.state.description,
                     mediaType: files[0].type,
                     tags: [],
-                    media: this.state.media
+                    media: this.state.media,
+                    issuer: this.context.address
                 }).then(res => this.setState({ json: ipfs + res.data.result }))
 
                 const cid = await axios.post(process.env.REACT_APP_UNGRUND_POST_IPFS, {
@@ -86,8 +88,9 @@ export default class Mint extends Component {
                     symbol: 'OBJKT',
                     decimals: 0,
                     icon: icon,
-                    metadata: this.state.json
+                    NFT: this.state.json
                 }).then(res => res.data.result)
+                console.log(this.state)
 
                 console.log(cid)
                 await axios.post(process.env.REACT_APP_UNGRUND_MINT, {
@@ -102,6 +105,7 @@ export default class Mint extends Component {
                 this.setState({
                     uploaded: true
                 })
+
             }
         }
     }
@@ -144,7 +148,7 @@ export default class Mint extends Component {
                                 }
                             </Card>
                             :
-                           <Menu />
+                            <Menu />
                         }
                     </Col>
                 </Row>

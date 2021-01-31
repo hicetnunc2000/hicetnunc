@@ -160,10 +160,9 @@ export default class KTDisplay extends Component {
                                                 <Col style={{ fontSize: '20px' }}>{this.state.kt.percentage} %</Col>
                                             </Row>
                                             <div style={{ backgroundColor: 'black', width: this.state.kt.percentage, height: "5px" }}></div>
-                                            {this.state.kt.meta.result.links.length > 0 ?
+                                            { this.state.kt.meta.result.links.length > 0 ?
 
                                                 <Card style={{ 'padding': '10% 0', border: 0 }}>
-
 
                                                     <Col style={{ display: 'inline' }}>
                                                         <span onClick={this.linktree}>linktree</span>

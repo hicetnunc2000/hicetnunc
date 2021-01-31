@@ -21,6 +21,7 @@ import Withdraw from './components/Withdraw';
 import Mint from './components/Mint';
 import ObjktDisplay from './components/ObjktDisplay';
 import UpdateMetadata from './components/microfunding/UpdateMetadata';
+import Curate from './components/Curate'
 
 function App() {
   return (
@@ -58,13 +59,16 @@ function App() {
           <Route exact path="/mint">
             <Mint />
           </Route>
-          <Route exact path="/objkt">
+          <Route exact path="/objkt/:id">
             <ObjktDisplay />
           </Route>
           <Route exact path="/view/:tz">
           </Route>
           <Route exact path="/update_metadata/:id">
             <UpdateMetadata />
+          </Route>
+          <Route exact path="/swap/:kt">
+            <Curate />
           </Route>
         </Switch>
       </Router>

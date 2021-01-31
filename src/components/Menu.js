@@ -47,7 +47,13 @@ export default class Menu extends Component {
                                     "&:hover": {
                                         color: "#000"
                                     }
-                                }} href="/mint">NFTs </a></li>
+                                }} href="/mint">NFTs</a></li>
+                                <li><a style={{
+                                    color: "#000",
+                                    "&:hover": {
+                                        color: "#000"
+                                    }
+                                }} href="/curation">curation</a></li>
                             </ul>
                             :
                             null

@@ -1,6 +1,10 @@
 import React, { Component } from 'react'
 import { HicetnuncContext } from '../context/HicetnuncContext'
 import { Card, Button, CardTitle, CardText, Row, Col } from 'reactstrap';
+import {
+    CardImg, CardGroup,
+    CardSubtitle, CardBody
+} from 'reactstrap';
 import '../App.css';
 import Menu from './Menu'
 
@@ -16,7 +20,8 @@ export default class Display extends Component {
             balance: 0,
             loading: true,
             results: [],
-            reveal : false
+            reveal: false,
+            objkts: []
         }
         this.handleSubmit = this.handleSubmit.bind(this)
     }
@@ -34,9 +39,9 @@ export default class Display extends Component {
             tz: this.context.getAuth()
         }).then(async res => {
             console.log(res.data)
-/*             await axios.post('http://localhost:5000/objk/tz', {
-                tz: this.context.getAuth()
-            }).then(async res => console.log(res)) */
+            /*             await axios.post('http://localhost:5000/objk/tz', {
+                            tz: this.context.getAuth()
+                        }).then(async res => console.log(res)) */
             this.setState({
                 results: res.data.results,
                 token_meta: res.data.token_meta,
@@ -44,6 +49,18 @@ export default class Display extends Component {
                 loading: false
             })
         })
+
+        await axios.post(process.env.REACT_APP_UNGRUND_OBJKT_TZ_LEDGER, {
+            tz: this.context.getAuth()
+        }).then(res => {
+            this.setState({
+                objkts: res.data.result
+            })
+        })
+        console.log(this.state)
+        await axios.post(process.env.REACT_APP_UNGRUND_OBJKT_TZ_SWAPS, {
+            tz: this.context.getAuth()
+        }).then(res => console.log(res.data))
     }
 
     handleSubmit = () => {
@@ -58,11 +75,11 @@ export default class Display extends Component {
         verify cookies auth <-> redis    
     */
 
-   reveal = () => {
-    this.setState({
-        reveal: !this.state.reveal
-    })
-}
+    reveal = () => {
+        this.setState({
+            reveal: !this.state.reveal
+        })
+    }
 
     render() {
 
@@ -125,7 +142,7 @@ export default class Display extends Component {
         let subList = {
             listStyle: "none",
             fontSize: "26px"
-        }   
+        }
 
         const addr = window.location.pathname.split('/')[2]
 
@@ -154,7 +171,7 @@ export default class Display extends Component {
                                                 <Col>
                                                     <div style={styleDisplay}>
                                                         <a href={`https://tzkt.io/${addr}`}>{addr}</a><br />
-                                                        {Math.round(this.state.balance / 1000000)} ꜩ
+                                                        {Math.round(this.state.balance / 1000000)} $xtz
                                         </div>
                                                 </Col>
 
@@ -178,9 +195,9 @@ export default class Display extends Component {
                                                                         <Col>min</Col>
                                                                         <Col>{e.storage.time_lock}</Col>
                                                                         <Col>goal</Col>
-                                                                        <Col>{Math.round(e.storage.goal/1000000)} ꜩ</Col>
+                                                                        <Col>{Math.round(e.storage.goal / 1000000)} $xtz</Col>
                                                                         <Col>contributions</Col>
-                                                                        <Col>{e.balance / 1000000} ꜩ</Col>
+                                                                        <Col>{e.balance / 1000000} $xtz</Col>
 
                                                                     </Row>
                                                                     <Row xs="2" style={{ fontSize: '12px' }}>
@@ -218,6 +235,24 @@ export default class Display extends Component {
                                                     )
                                             })}
                                         </Card>
+                                        {
+                                            <CardGroup>
+
+                                                {this.state.objkts.length > 0 ?
+                                                    this.state.objkts.map(e => {
+                                                        return (<Card style={{ backgroundColor: 'black', margin: '5px' }}>
+                                                            {/*                                                             <CardImg top width="100%" src={e.view.media} alt="Card image cap" />
+ */}                                                            <CardBody>
+                                                                <CardTitle tag="h5" style={{ color: "white", backgroundColor: "black" }}><a style={{
+                                                                    color: "white",
+                                                                    "&:hover": {
+                                                                        color: "white"
+                                                                    }}} href={ '/objkt/' + e.tk_id } > OBJKT#{ e.tk_id }</a></CardTitle>
+                                                            </CardBody>
+                                                        </Card>)
+                                                    }) : null}
+                                            </CardGroup>
+                                        }
                                     </div>
                             }
                         </Card>

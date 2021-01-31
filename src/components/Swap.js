@@ -11,6 +11,10 @@ export default class Swap extends Component {
         }
     }
 
+    componentDidMount = () => {
+        console.log()
+    }
+
     render() {
         return (
             <div>
@@ -43,6 +47,7 @@ export default class Swap extends Component {
                                                     }
                                                 }} href="/opensource" onClick={this.reveal}>micro funding</a></li>
                                                 <li style={{ textDecoration: "line-through" }}>NFTs</li>
+                                                
                                             </ul>
                                             :
                                             null

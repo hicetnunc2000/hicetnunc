@@ -82,13 +82,11 @@ export default class HicetnuncContextProvider extends Component {
                 op.destination = op.to
                 op.kind = 'transaction'
                 delete op.to
-
                 console.log(obj.result)
 
                 this.state.client.requestOperation({
                     operationDetails: [obj.result]
-                }).then(res => console.log(res)).catch(err => console.log(err))
-
+                })
             },
 
             timeout : (delay) => {

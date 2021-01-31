@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { HicetnuncContext } from '../context/HicetnuncContext'
 import { Card, Button, CardTitle, CardText, Row, Col } from 'reactstrap';
 import { Redirect } from 'react-router-dom'
+import Menu from './Menu'
 
 const axios = require('axios')
 
@@ -44,6 +45,12 @@ export default class Sync extends Component {
                 {
                     this.context.address != "" ?
                         <Redirect to={`/tz/${this.context.address}`} />
+                        :
+                        !this.context.collapsed ?
+                        <Row>
+                        <Col sm="12" md={{ size: 6, offset: 3 }}>
+                        <Menu /> 
+                        </Col></Row>
                         :
                         <Row>
                             <Col sm="12" md={{ size: 6, offset: 3 }}>
