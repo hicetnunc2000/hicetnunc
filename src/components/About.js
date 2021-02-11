@@ -56,25 +56,36 @@ export default class About extends Component {
 
                                     </p>
                                     <p style={{ fontWeight: 'bold' }}>
-                                        hicetnuncDAOs//hicetnuncNFTs//ungrund//hesychasm stack
-                                    </p>
-                                    <p>
-                                        this decentralized application allows it's users to manage decentralized digital assets, originate micro fundings as DAOs (Decentralized Autonomous Organizations), minting and exchaning NFTs.
-                                        serving as a public, open source and sustainable smart contract infrastructure on Tezos.
-                                    </p>
-                                    <p>
-                                        in this experiment a variety of smart contracts and distributed systems are intended to be designed in collaboration with decentralized communities. one should manage and care for the social and economical strategies for it's own DAO.
-                                    </p>
-                                    <p>we're concerned about your security and autonomy. please verify informations while making transactions.</p>
-                                    <p>for consulting, networking or questions:</p>
-                                    <p>hicetnunc2000@protonmail.com</p>
                                     <a style={{
                                         color: "#000",
                                         "&:hover": {
                                             color: "#000"
                                         }
                                     }}
-                                        href='https://github.com/hicetnunc2000'>github.com/hicetnunc2000</a>
+                                        href='https://github.com/hicetnunc2000'>hicetnunc stack</a>
+                                    </p>
+                                    <p>
+                                        the present decentralized application allows it's users to manage decentralized digital assets, serving as a public smart contract infrastructure on Tezos Blockchain.
+                                    </p>
+                                    <p>
+                                        IPFS NFTs can be minted and traded by permissionless means. such experiment was designed intending to imagine alternative crypto economies.
+                                    </p>
+                                    <p>we're concerned about your security and autonomy. please verify informations while making transactions.</p>
+                                    <p>for consulting, networking or questions:</p>
+                                    <a style={{
+                                        color: "#000",
+                                        "&:hover": {
+                                            color: "#000"
+                                        }
+                                    }}
+                                        href="https://discord.gg/sM3txCeA">discord</a><br />
+                                    <a style={{
+                                        color: "#000",
+                                        "&:hover": {
+                                            color: "#000"
+                                        }
+                                    }}
+                                        href="mailto:hicetnunc2000@protonmail.com">hicetnunc2000@protonmail.com</a><br />
                                 </div>
 
                             </div>

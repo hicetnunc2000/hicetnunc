@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
 import { Card, Col, Row, CardTitle, CardText } from 'reactstrap'
 import { HicetnuncContext } from '../context/HicetnuncContext'
-import { CustomInput, Form, FormGroup, Label, Input, FormText, Button } from 'reactstrap'
 import Menu from './Menu'
 const axios = require('axios')
-const IPFS = require('ipfs-api');
+const IPFS = require('ipfs-api')
+const Buffer = require('buffer').Buffer
+
 
 export default class Mint extends Component {
 
@@ -60,43 +61,33 @@ export default class Mint extends Component {
                 host: 'ipfs.infura.io',
                 port: 5001, 
                 protocol: 'https'
-              });
+            });
+
+            console.log(files)
+            console.log(Buffer.from(await files[0].arrayBuffer()))
             // 30mb limit
-            if (files[0].size < 10000000) {
+            if (files[0].size < 60000000) {
 
-                formData.append('file', files[0])
-                //console.log(ipfss.add(files))
-                await axios.post(process.env.REACT_APP_UNGRUND_POST_FILE2, formData)
-                    .then(resp => {
-                        console.log(resp.data.result)
-                        this.setState({
-                            media: ipfs + resp.data.result[0].hash
-                        })
-                    })
-
-                await axios.post(process.env.REACT_APP_UNGRUND_POST_IPFS, {
-                    title: this.state.title,
+                const cid = ipfs + (await ipfss.files.add(Buffer.from(await files[0].arrayBuffer())))[0].hash
+                const cid2 = await axios.post(process.env.REACT_APP_UNGRUND_POST_IPFS, {
+                    name: this.state.title,
                     description: this.state.description,
-                    mediaType: files[0].type,
                     tags: [],
-                    media: this.state.media,
-                    issuer: this.context.address
-                }).then(res => this.setState({ json: ipfs + res.data.result }))
-
-                const cid = await axios.post(process.env.REACT_APP_UNGRUND_POST_IPFS, {
-                    name: 'OBJKT',
                     symbol: 'OBJKT',
-                    decimals: 0,
-                    icon: icon,
-                    NFT: this.state.json
+                    artifactUri: cid,
+                    creator: this.context.address,
+                    formats: [{uri : cid, mimeType : files[0].type}],
+                    thumbnailUri: icon,
+                    booleanAmount : parseInt(this.state.amount) > 1 ? true : false, 
+                    decimals: 0
                 }).then(res => res.data.result)
+
                 console.log(this.state)
 
-                console.log(cid)
                 await axios.post(process.env.REACT_APP_UNGRUND_MINT, {
                     tz: this.context.getAuth(),
                     amount: this.state.amount,
-                    cid: cid
+                    cid: cid2
                 }).then(res => {
                     console.log(res.data)
                     this.context.operationRequest(res.data)
@@ -115,6 +106,7 @@ export default class Mint extends Component {
             reveal: !this.state.reveal
         })
     }
+    
     render() {
 
         let subList = {
@@ -138,14 +130,7 @@ export default class Mint extends Component {
                                 }
                                 </p>
                                 <button style={{ lenght: '100%' }} onClick={this.onFileUpload}>Mint</button>
-                                {
-                                    this.state.imgCid != '' ? <a style={{
-                                        color: "#000",
-                                        "&:hover": {
-                                            color: "#000"
-                                        }
-                                    }} href={`https://ipfs.io/ipfs/${this.state.imgCid}`}>{this.state.imgCid}</a> : null
-                                }
+                                this operation costs 0.05~ TEZ
                             </Card>
                             :
                             <Menu />

@@ -32,32 +32,7 @@ export default class Menu extends Component {
                         "&:hover": {
                             color: "#000"
                         }
-                    }} href="#" onClick={this.reveal}>smart contracts</a></li>
-                    {
-                        this.state.reveal ?
-                            <ul style={this.context.subList}>
-                                <li><a style={{
-                                    color: "#000",
-                                    "&:hover": {
-                                        color: "#000"
-                                    }
-                                }} href="/opensource" onClick={this.reveal}>micro funding</a></li>
-                                <li><a style={{
-                                    color: "#000",
-                                    "&:hover": {
-                                        color: "#000"
-                                    }
-                                }} href="/mint">NFTs</a></li>
-                                <li><a style={{
-                                    color: "#000",
-                                    "&:hover": {
-                                        color: "#000"
-                                    }
-                                }} href="/curation">curation</a></li>
-                            </ul>
-                            :
-                            null
-                    }
+                    }} href="/mint">OBJKTs</a></li>
                     <li><a style={{
                         color: "#000",
                         "&:hover": {

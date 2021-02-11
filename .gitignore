@@ -2,18 +2,12 @@
 
 # dependencies
 /node_modules
-/.pnp
-.pnp.js
-
-# testing
-/coverage
 
 # production
 /build
 /amplify
 # misc
-.DS_Store
-.env.local
+.env_prod
 .env.development.local
 .env.test.local
 .env.production.local

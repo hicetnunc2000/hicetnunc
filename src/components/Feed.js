@@ -18,7 +18,6 @@ export default class Feed extends Component {
             loading: true,
             back: '',
             curations: true,
-            fundings: false,
             curations_arr: [],
             objkts_arr: []
         }
@@ -35,19 +34,14 @@ export default class Feed extends Component {
 
         const sample = 'KT1UMJwse4X8pXjSX1THZCNTDYCCiVLi5Gdv'
         //process.env.REACT_APP_UNGRUND_FEED
-        await axios.get(process.env.REACT_APP_UNGRUND_FEED).then(res => {
-            console.log(res.data.result)
-            res.data.result.map(e => console.log(e))
-            this.setState({
-                results: res.data.result
-            })
-        })
 
         //await axios.get(process.env.REACT_APP_UNGRUND_OBJKT_FEED).then(res => this.setState({ objkts_arr: res.data.result }))
-        await axios.get(process.env.REACT_APP_UNGRUND_OBJKT_SWAPS).then(res => {
+        //'http://localhost:5000/objkt/ledger'
+        await axios.post(process.env.REACT_APP_UNGRUND_OBJKT_LEDGER).then(res => {
             console.log(res.data.result)
             console.log(res.data)
-            this.setState({ curations_arr: res.data.result, loading: false })
+            this.setState({ curations_arr: res.data.result, loading : false })
+            //this.setState({ curations_arr: res.data.result, loading: false })
         })
 
         console.log(this.state)
@@ -58,9 +52,6 @@ export default class Feed extends Component {
             reveal: !this.state.reveal
         })
     }
-
-    curations = () => { this.setState({ curations: true, fundings: false }) }
-    fundings = () => { this.setState({ curations: false, fundings: true }) }
 
     render() {
 
@@ -79,53 +70,38 @@ export default class Feed extends Component {
                                     <div>
                                         <div style={{ animation: "fadeMe 1.2s", paddingTop: '5%' }}>
                                             <div style={{ display: 'inline' }}>
-                                                <span onClick={this.curations}>curations</span>
-                                                <span onClick={this.fundings} style={{ paddingLeft: '25px' }}>micro fundings</span>
+                                                <span>curations</span>
                                             </div>
                                             {
-                                                this.state.loading ? <p style={{ border: 0, animation: "fadeMe 1.2s", paddingTop: '5%' }}>loading...</p> : this.state.results.length == 0 ? <p>none</p> : undefined
+                                                this.state.loading ? <p style={{ border: 0, animation: "fadeMe 1.2s", paddingTop: '5%' }}>loading...</p> : null 
                                             }
-
-                                            {
-                                                this.state.fundings ?
-                                                    <div>
-                                                        <p style={{ 'padding': '5% 0', border: 0 }}>{this.state.results.length} micro fundings</p>
-
-                                                        {this.state.results.map((e) => {
-
-                                                            return (
-                                                                <div >
-                                                                    <Card style={{ border: 0 }}>
-                                                                        <CardTitle style={{ fontWeight: 'bold' }}>{e.meta.result.title.toLowerCase()}//<a rel="noopener noreferrer" href={'/kt/' + e.address}>{e.address}</a></CardTitle>
-                                                                        <Row xs="2" style={{ fontSize: '12px' }}>
-                                                                            <Col></Col>
-                                                                            <Col style={{ fontSize: '20px' }}>{e.percentage} %</Col>
-                                                                        </Row>
-                                                                        <div style={{ backgroundColor: 'black', width: e.percentage, height: "5px" }}></div>
-                                                                    </Card>
-                                                                </div>
-                                                            )
-                                                        })}
-                                                    </div>
-                                                    : null
-                                            }
-                                            <div>
-                                                {
-                                                    this.state.curations ?
                                                         <div>
-                                                            {!this.state.loading ? <p style={{ paddingTop: '5%' }}>{this.state.curations_arr.length} curations</p> : null}
+                                                            {!this.state.loading ?
+                                                            <div>
                                                             {this.state.curations_arr.map(e => {
                                                                 return (
                                                                     <div style={{ border: 0, paddingTop: '5%' }}>
                                                                         <div style={{ display: 'inline' }}>
-                                                                            <span style={{ paddingTop: '5%' }}>{e.objkt_amount}x {e.tz_per_objkt / 1000000} $xtz/OBJKT#{e.objkt_id}//</span>
-                                                                            <a href={'/swap/' + e.address}>{e.address}</a>
+                                                                            {e.metadata.formats[0].mimeType == 'video/mp4' ?
+                                                                                <div style={{ paddingTop: '2%', display: 'table', margin: '0 auto' }}>
+                                                                                    <video style={{ height: '60vh' }} src={e.metadata.artifactUri} controls></video>
+                                                                                </div>
+                                                                                :
+                                                                                <div style={{ paddingTop: '2%', display: 'table', margin: '0 auto' }}>
+                                                                                    <img style={{ height: '60vh' }} src={e.metadata.artifactUri} />
+                                                                                </div>
+                                                                            }<a style={{
+                                                                                color: "#000",
+                                                                                fontStyle: "italic",
+                                                                                "&:hover": {
+                                                                                    color: "#000"
+                                                                                }
+                                                                            }} href={'/objkt/' + e.tk_id}>OBJKT#{e.tk_id}</a>
                                                                         </div>
                                                                     </div>
                                                                 )
-                                                            })}
-                                                        </div> : null
-                                                }
+                                                            })}</div> : null}
+
                                             </div>
                                         </div>
                                     </div>
