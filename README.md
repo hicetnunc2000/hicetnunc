@@ -17,7 +17,7 @@ npm start
 docker
 ```
 docker image build -t hicetnunc:1.0 .
-docker run -it -p 80:3000 hicetnunc:1.0
+docker run -it -p 3000:3000 hicetnunc:1.0
 ---remove
 docker container rm --force hicetnunc
 ```
