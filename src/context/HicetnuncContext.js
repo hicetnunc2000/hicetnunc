@@ -97,9 +97,9 @@ export default class HicetnuncContextProvider extends Component {
                     rpcUrl: 'https://mainnet.smartpy.io'
                 };
 
-                await wallet.requestPermissions({ network })
-
                 await Tezos.setWalletProvider(wallet)
+
+                await wallet.requestPermissions({ network })
 
                 this.setState({
                     Tezos : Tezos,
@@ -110,7 +110,6 @@ export default class HicetnuncContextProvider extends Component {
                 console.log(this.state)
             },
 
-            
             /* 
                 airgap/thanos interop methods
             */
@@ -165,16 +164,6 @@ export default class HicetnuncContextProvider extends Component {
 
             getStyle: (style) => style ? { background: "white" } : { display: "none" },
 
-            getNavbar: (pathname) => {
-
-                switch (pathname) {
-                    case "/sync":
-                    case "/about":
-                    default:
-                }
-
-            },
-
             lastPath: '',
 
             setPath: (path) => {
@@ -203,9 +192,7 @@ export default class HicetnuncContextProvider extends Component {
                 listStyle: "none",
                 fontSize: "26px"
             }
-
         }
-
     }
 
     render() {
