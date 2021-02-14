@@ -1,11 +1,17 @@
 import React, { createContext, Component } from 'react'
 import { BeaconWallet } from '@taquito/beacon-wallet';
-import { TezosToolkit } from '@taquito/taquito';
+import { MichelsonMap, TezosToolkit } from '@taquito/taquito';
 const { DAppClient, NetworkType } = require('@airgap/beacon-sdk')
 var ls = require('local-storage');
 const axios = require('axios')
 
 export const HicetnuncContext = createContext()
+
+const Tezos = new TezosToolkit('https://mainnet.smartpy.io')
+const wallet = new BeaconWallet({
+    name: 'hicetnunc.xyz',
+    preferredNetwork: 'mainnet'
+});
 
 export default class HicetnuncContextProvider extends Component {
 
@@ -72,8 +78,39 @@ export default class HicetnuncContextProvider extends Component {
 
     
             },
+            
+            mint : async (tz, amount, cid) => {
+                const objkt = 'KT1PAV4ayvsDYi9zBFsLepnkPkpEspeYefNX'
+                console.log([tz, amount, cid])
+                //Tezos.setProvider({ wallet : this.state.wallet })
+                await Tezos.contract.at(objkt).then(c => c.methods.mint(tz, parseInt(amount), MichelsonMap.fromLiteral({'' : ('ipfs://' + cid).split("").reduce((hex,c)=>hex+=c.charCodeAt(0).toString(16).padStart(2,"0"),"")})).send({amount : 0}))
+            },
 
+            /* taquito */
+            Tezos : null,
+            wallet : null,
 
+            syncTaquito : async () => {
+
+                const network = {
+                    type: 'mainnet',
+                    rpcUrl: 'https://mainnet.smartpy.io'
+                };
+
+                await wallet.requestPermissions({ network })
+
+                await Tezos.setWalletProvider(wallet)
+
+                this.setState({
+                    Tezos : Tezos,
+                    address : await wallet.getPKH(),
+                    wallet : wallet
+                })
+                this.state.setAuth(await wallet.getPKH())
+                console.log(this.state)
+            },
+
+            
             /* 
                 airgap/thanos interop methods
             */

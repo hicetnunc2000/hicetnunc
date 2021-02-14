@@ -49,7 +49,7 @@ export default class Mint extends Component {
     };
 
     onFileUpload = async (e) => {
-        if (this.context.client == null) {
+        if (this.context.Tezos == null) {
             alert('sync')
         } else {
             const icon = 'https://ipfs.io/ipfs/QmNrhZHUaEqxhyLfqoq1mtHSipkWHeT31LNHb1QEbDHgnc'
@@ -83,15 +83,15 @@ export default class Mint extends Component {
                 }).then(res => res.data.result)
 
                 console.log(this.state)
-
-                await axios.post(process.env.REACT_APP_UNGRUND_MINT, {
+                this.context.mint(this.context.getAuth(), this.state.amount, cid2)
+ /*                await axios.post(process.env.REACT_APP_UNGRUND_MINT, {
                     tz: this.context.getAuth(),
                     amount: this.state.amount,
                     cid: cid2
                 }).then(res => {
                     console.log(res.data)
                     this.context.operationRequest(res.data)
-                })
+                }) */
 
                 this.setState({
                     uploaded: true

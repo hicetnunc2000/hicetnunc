@@ -99,12 +99,12 @@ export default class ObjktDisplay extends Component {
                     { this.state.loaded ?
                         <div style={{ backgroundColor: 'white' }}>
                             {this.state.objkt.metadata.formats[0].mimeType == 'video/mp4' ?
-                                <div style={{ paddingTop: '2%', display: 'table', margin: '0 auto' }}>
-                                    <video style={{ height: '80vh' }} src={this.state.objkt.metadata.artifactUri} controls></video>
+                                <div style={{ paddingTop: '5%', display: 'table', margin: '0 auto' }}>
+                                    <video className='media' src={this.state.objkt.metadata.artifactUri} controls></video>
                                 </div>
                                 :
-                                <div style={{ paddingTop: '2%', display: 'table', margin: '0 auto' }}>
-                                    <img style={{ height: '65vh' }} src={this.state.objkt.metadata.artifactUri} />
+                                <div style={{ paddingTop: '5%', display: 'table', margin: '0 auto' }}>
+                                    <img className='media' src={this.state.objkt.metadata.artifactUri} />
                                 </div>
                             }
                             {/*                 <video controls>

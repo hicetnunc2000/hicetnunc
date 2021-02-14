@@ -35,3 +35,13 @@ a:hover {
 div {
   font-family:'Courier New'
 }
+
+.media {
+  width: 100vh;
+}
+
+@media (max-width: 600px) {
+  .media {
+    width: 50vh;
+  }
+}

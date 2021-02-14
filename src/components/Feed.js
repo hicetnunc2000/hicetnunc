@@ -84,34 +84,31 @@ export default class Feed extends Component {
                                             <div>
                                                 {!this.state.loading ?
                                                     <div>
-                                                        <Row>
-                                                            <Col sm="12" md={{ size: 6, offset: 3 }}>
-                                                                {this.state.curations_arr.map(e => {
-                                                                    return (
-                                                                        <div style={{ border: 0, paddingTop: '5%' }}>
-                                                                            <div style={{ display: 'inline' }}>
-                                                                                {e.metadata.formats[0].mimeType == 'video/mp4' ?
-                                                                                    <div style={{ paddingTop: '2%', display: 'table', margin: '0 auto' }}>
-                                                                                        <video style={{ height: '60vh' }} src={e.metadata.artifactUri} controls></video>
-                                                                                    </div>
-                                                                                    :
-                                                                                    <div style={{ paddingTop: '2%', display: 'table', margin: '0 auto' }}>
-                                                                                        <img style={{ height: '60vh' }} src={e.metadata.artifactUri} />
-                                                                                    </div>
-                                                                                }<a style={{
-                                                                                    color: "#000",
-                                                                                    fontStyle: "italic",
-                                                                                    "&:hover": {
-                                                                                        color: "#000"
-                                                                                    }
-                                                                                }} href={'/objkt/' + e.tk_id}>OBJKT#{e.tk_id}</a>
+                                                                <Card style={{border : 0}}>
+                                                                    {this.state.curations_arr.map(e => {
+                                                                        return (
+                                                                            <div style={{ border: 0, paddingTop: '5%' }}>
+                                                                                <div style={{ display: 'inline'}}>
+                                                                                    {e.metadata.formats[0].mimeType == 'video/mp4' ?
+                                                                                        <div style={{ paddingTop: '2%', display: 'table', margin: '0 auto' }}>
+                                                                                            <video className='media' src={e.metadata.artifactUri} controls></video>
+                                                                                        </div>
+                                                                                        :
+                                                                                        <div style={{ paddingTop: '2%', display: 'table', margin: '0 auto' }}>
+                                                                                            <img className='media'  src={e.metadata.artifactUri} />
+                                                                                        </div>
+                                                                                    }<a style={{
+                                                                                        color: "#000",
+                                                                                        fontStyle: "italic",
+                                                                                        "&:hover": {
+                                                                                            color: "#000"
+                                                                                        }
+                                                                                    }} href={'/objkt/' + e.tk_id}>OBJKT#{e.tk_id}</a>
+                                                                                </div>
                                                                             </div>
-                                                                        </div>
-                                                                    )
-                                                                })}
-                                                            </Col>
-                                                            </Row>
-
+                                                                        )
+                                                                    })}
+                                                                </Card>
                                                     </div> : null}
 
                                             </div>

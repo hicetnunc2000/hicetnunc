@@ -94,7 +94,8 @@ export default class AppNavbar extends Component {
                             <a style={dot} href='/'></a>
                             {!this.context.collapsed || window.location.pathname != '/' ? <a href="/" style={logoLetters}>hicetnunc</a> : null}
 
-                            <a href="#" style={logo} onClick={this.context.dAppClient}>sync</a>
+                            <a href="#" style={logo} onClick={this.context.syncTaquito}>sync</a>
+                            {/* <a href="#" style={logo} onClick={this.context.dAppClient}>sync</a> */}
                             <div onClick={this.context.toogleNavbar}>
                                 <a href='#'><img style={left} src={require('../media/menu-black-18dp.svg')} /></a>
                             </div>
