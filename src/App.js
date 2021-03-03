@@ -16,6 +16,10 @@ import Display from './components/Display';
 import Feed from './components/Feed';
 import Mint from './components/Mint';
 import ObjktDisplay from './components/ObjktDisplay';
+import Loading from './components/Loading';
+import Disclaimer from './components/Disclaimer';
+import { Element } from "react-scroll";
+
 
 function App() {
   return (
@@ -24,7 +28,7 @@ function App() {
       <Router>
         <Switch>
           <Route exact path="/">
-            <Home />
+            <Feed />
           </Route>
           <Route exact path="/tz/:id">
             <Display />
@@ -46,8 +50,12 @@ function App() {
           </Route>
           <Route exact path="/view/:tz">
           </Route>
+          <Route exact path="/load">
+            <Loading />
+          </Route>
         </Switch>
       </Router>
+      <Disclaimer />
     </HicetnuncContextProvider>
   );
 }

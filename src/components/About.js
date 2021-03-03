@@ -62,7 +62,7 @@ export default class About extends Component {
                                             color: "#000"
                                         }
                                     }}
-                                        href='https://github.com/hicetnunc2000'>hicetnunc stack</a>
+                                        href='https://github.com/hicetnunc2000'><i>hic et nunc</i> stack</a>
                                     </p>
                                     <p>
                                         the present decentralized application allows it's users to manage decentralized digital assets, serving as a public smart contract infrastructure on Tezos Blockchain.
@@ -78,7 +78,7 @@ export default class About extends Component {
                                             color: "#000"
                                         }
                                     }}
-                                        href="https://discord.gg/sM3txCeA">discord</a><br />
+                                        href="https://discord.gg/jKNy6PynPK">discord</a><br />
                                     <a style={{
                                         color: "#000",
                                         "&:hover": {

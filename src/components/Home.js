@@ -64,7 +64,7 @@ export default class Home extends Component {
                                 <Card style={cardStyle}>
                                     <div>
                                         <div style={{ fontFamily: "Courier New", fontSize: "38px", left: 0, marginTop: '5%' }}>
-                                            hicetnunc
+                                            <i>hic et nunc</i>
                                     </div>
                                         <div style={{ fontFamily: "Courier New", fontSize: "18px", left: 0, marginTop: '-2%' }}>
                                             decentralized digital assets

@@ -23,6 +23,8 @@ export default class HicetnuncContextProvider extends Component {
 
             address: "",
 
+            op : undefined,
+
             contract: "",
 
             setAddress: (address) => this.setState({ address: address }),
@@ -79,13 +81,35 @@ export default class HicetnuncContextProvider extends Component {
     
             },
             
-            mint : async (tz, amount, cid) => {
-                const objkt = 'KT1PAV4ayvsDYi9zBFsLepnkPkpEspeYefNX'
-                console.log([tz, amount, cid])
+            objkt : 'KT1Hkg5qeNhfwpKW4fXvq7HGZB9z2EnmCCA9',
+
+            op : undefined,
+
+            mint : async (tz, amount, cid, royalties) => {
+                console.log([tz, amount, cid, royalties])
                 //Tezos.setProvider({ wallet : this.state.wallet })
-                await Tezos.contract.at(objkt).then(c => c.methods.mint(tz, parseInt(amount), MichelsonMap.fromLiteral({'' : ('ipfs://' + cid).split("").reduce((hex,c)=>hex+=c.charCodeAt(0).toString(16).padStart(2,"0"),"")})).send({amount : 0}))
+                try {
+                var result = await Tezos.wallet.at(this.state.objkt).then(c => c.methods.mint_OBJKT(tz, parseInt(amount), ('ipfs://' + cid).split("").reduce((hex,c)=>hex+=c.charCodeAt(0).toString(16).padStart(2,"0"),""), parseInt(royalties) * 10).send({amount : 0}))
+                console.log(result)
+                result.then(op => op.confirmation(1).then(() => {
+                    console.log(op.hash)
+                    this.setState({ op : op.hash, load : !this.state.load})})
+                )} catch (e) {
+                    this.setState({ load : !this.state.load })
+                }
+
             },
 
+            collect : async (objkt_amount, swap_id, amount) => {
+                await Tezos.wallet.at(this.state.objkt).then(c => c.methods.collect(parseInt(objkt_amount), parseInt(swap_id)).send({amount : parseInt(amount), mutez : true}))
+            },
+
+            swap : async (objkt_amount, objkt_id, xtz_per_objkt) => {
+                await Tezos.wallet.at(this.state.objkt).then(c => c.methods.swap(parseInt(objkt_amount), parseInt(objkt_id), parseInt(xtz_per_objkt)).send({amount : 0}))
+            },
+
+            load : false,
+            loading : () => this.setState({ load : !this.state.load }),
             /* taquito */
             Tezos : null,
             wallet : null,
@@ -97,7 +121,7 @@ export default class HicetnuncContextProvider extends Component {
                     rpcUrl: 'https://mainnet.smartpy.io'
                 };
 
-                await Tezos.setWalletProvider(wallet)
+                Tezos.setWalletProvider(wallet)
 
                 await wallet.requestPermissions({ network })
 
@@ -181,8 +205,7 @@ export default class HicetnuncContextProvider extends Component {
                 position: "absolute",
                 listStyle: "none",
                 right: "0",
-                top: "0",
-                marginTop: "15%",
+                marginTop: "20%",
                 marginRight: "25px",
                 textAlign: "right",
                 fontSize: "30px",
