@@ -6,9 +6,9 @@ import { Collapse, Navbar, NavbarToggler, NavbarBrand, Nav, NavItem, NavLink } f
 import { HicetnuncContext } from '../context/HicetnuncContext';
 import { Card, Col, Row } from 'reactstrap'
 import { keyframes } from "styled-components";
+import '../App.css'
+
 const axios = require('axios')
-
-
 
 export default class AppNavbar extends Component {
 
@@ -40,7 +40,7 @@ export default class AppNavbar extends Component {
             width: "30px",
             //borderRadius: "50%",
             display: "inline-block",
-            marginTop: "10px",
+            marginTop: "13px",
             marginRight: "25px",
             right: "0",
             top: "0",
@@ -49,14 +49,17 @@ export default class AppNavbar extends Component {
         }
 
         let dot = {
-            height: "25px",
-            width: "25px",
-            borderRadius: "50%",
-            backgroundColor: 'black',
+
             display: "inline-block",
+            position: 'absolute',
+            fontSize: "20px",
             top: '0',
-            marginTop: '13px',
-            position: 'absolute'
+            marginTop: '17px',
+            color: "#000",
+            "&:hover": {
+                color: "#000",
+            },
+            textDecoration : 'none'
 
             /* animation: `${grow} 6s infinite` */
         }
@@ -65,37 +68,42 @@ export default class AppNavbar extends Component {
             fontSize: "20px",
             top: '0',
             marginLeft: '40px',
-            marginTop: '13px',
+            marginTop: '17px',
             position: 'absolute',
             color: "#000",
             fontStyle: "normal",
             "&:hover": {
-                color: "#000"
-            }
+                color: "#000",
+            },
+            textDecoration : 'none'
         }
 
         let logo = {
             right: "0",
             position: "absolute",
-            fontFamily: 'courier',
             top: "0",
-            marginTop: "15px",
+            marginTop: "17px",
             marginRight: "70px",
             color: "#000",
             "&:hover": {
-                color: "#000"
-            }
+                color: "#000",
+            },
+            textDecoration : 'none'
+
         }
         return (
-            <div>
+            <div style={{ position: 'fixed',
+            top: 0,
+            width: '100%',
+            zIndex : 100
+            }}>
                 <Row>
                     <Col sm="12" md={{ size: 6, offset: 3 }}>
-                        <Card body style={{ border: "0", marginTop: '5px' }}> {/* { border: "none" } */}
-                            <a style={dot} href='/'></a>
-                            {!this.context.collapsed || window.location.pathname != '/' ? <a href="/" style={logoLetters}>hicetnunc</a> : null}
-
+                        <Card className='nav' body style={{ border: "0" , paddingBottom : '35px'}}> {/* { border: "none" } */}
+                            <a href='/' style={dot}>〇</a>
+                            {/* {!this.context.collapsed || window.location.pathname != '/' ? <a href="/" style={logoLetters}><i>hic et nunc</i></a> : null} */}
+                            <a href="/" style={logoLetters}>hic et nunc</a> 
                             <a href="#" style={logo} onClick={this.context.syncTaquito}>sync</a>
-                            {/* <a href="#" style={logo} onClick={this.context.dAppClient}>sync</a> */}
                             <div onClick={this.context.toogleNavbar}>
                                 <a href='#'><img style={left} src={require('../media/menu-black-18dp.svg')} /></a>
                             </div>

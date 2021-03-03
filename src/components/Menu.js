@@ -20,19 +20,13 @@ export default class Menu extends Component {
         return (
             <div>
                 <ul style={this.context.menu}>
-                    <li><a style={{
-                        color: "#000",
-                        fontStyle: "italic",
-                        "&:hover": {
-                            color: "#000"
-                        }
-                    }} href="/feed">feed</a></li>
+                    <li style={{textDecoration : 'line-through'}}>○</li>
                     <li><a style={{
                         color: "#000",
                         "&:hover": {
                             color: "#000"
                         }
-                    }} href="/mint">OBJKTs</a></li>
+                    }} href="/mint">OBJKTs<i style={{fontSize : '15px'}}>(mint NFTs)</i></a></li>
                     <li><a style={{
                         color: "#000",
                         "&:hover": {

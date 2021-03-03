@@ -4,8 +4,8 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-
 @font-face {
   font-family: 'mini-kaliber';
   src: local('mini-kaliber'), url(fonts/mini-kaliber.ttf) format('truetype');
 }
+

@@ -1,7 +1,10 @@
 import React, { Component } from 'react'
 import { Card, Col, Row, CardTitle, CardText } from 'reactstrap'
 import { HicetnuncContext } from '../context/HicetnuncContext'
+import Loading from './Loading'
 import Menu from './Menu'
+import { BabelLoading } from 'react-loadingg';
+
 const axios = require('axios')
 const IPFS = require('ipfs-api')
 const Buffer = require('buffer').Buffer
@@ -21,7 +24,10 @@ export default class Mint extends Component {
             media: '',
             json: '',
             uploaded: false,
-            reveal: false
+            reveal: false,
+            loading: false,
+            royalties: 0
+
         }
         this.handleChange = this.handleChange.bind(this)
         this.onFileUpload = this.onFileUpload.bind(this)
@@ -33,7 +39,6 @@ export default class Mint extends Component {
     //state = {
     //    selectedFile: null
     //};
-
 
     handleChange = (event) => {
 
@@ -52,50 +57,40 @@ export default class Mint extends Component {
         if (this.context.Tezos == null) {
             alert('sync')
         } else {
-            const icon = 'https://ipfs.io/ipfs/QmNrhZHUaEqxhyLfqoq1mtHSipkWHeT31LNHb1QEbDHgnc'
-            const ipfs = 'https://ipfs.io/ipfs/'
-            const formData = new FormData();
+            this.context.loading()
+
+            const icon = 'ipfs://QmNrhZHUaEqxhyLfqoq1mtHSipkWHeT31LNHb1QEbDHgnc'
+            const host = 'https://cloudflare-ipfs.com/ipfs/'
 
             const files = this.state.selectedFile
-            const ipfss = new IPFS({
+            const ipfs = new IPFS({
                 host: 'ipfs.infura.io',
-                port: 5001, 
+                port: 5001,
                 protocol: 'https'
             });
 
             console.log(files)
             console.log(Buffer.from(await files[0].arrayBuffer()))
-            // 30mb limit
-            if (files[0].size < 60000000) {
 
-                const cid = ipfs + (await ipfss.files.add(Buffer.from(await files[0].arrayBuffer())))[0].hash
-                const cid2 = await axios.post(process.env.REACT_APP_UNGRUND_POST_IPFS, {
+            // 40mb limit
+            if (files[0].size < 40000000) {
+
+                const fileCid = 'ipfs://' + (await ipfs.files.add(Buffer.from(await files[0].arrayBuffer())))[0].hash
+                const nftCid = (await ipfs.files.add(Buffer.from(JSON.stringify({
                     name: this.state.title,
                     description: this.state.description,
                     tags: [],
                     symbol: 'OBJKT',
-                    artifactUri: cid,
-                    creator: this.context.address,
-                    formats: [{uri : cid, mimeType : files[0].type}],
+                    artifactUri: fileCid,
+                    creators: [this.context.address],
+                    formats: [{ uri: fileCid, mimeType: files[0].type }],
                     thumbnailUri: icon,
-                    booleanAmount : parseInt(this.state.amount) > 1 ? true : false, 
-                    decimals: 0
-                }).then(res => res.data.result)
+                    decimals: 0,
+                    isBooleanAmount: false,
+                    shouldPreferSymbol : false
+                }))))[0].hash
 
-                console.log(this.state)
-                this.context.mint(this.context.getAuth(), this.state.amount, cid2)
- /*                await axios.post(process.env.REACT_APP_UNGRUND_MINT, {
-                    tz: this.context.getAuth(),
-                    amount: this.state.amount,
-                    cid: cid2
-                }).then(res => {
-                    console.log(res.data)
-                    this.context.operationRequest(res.data)
-                }) */
-
-                this.setState({
-                    uploaded: true
-                })
+                this.context.mint(this.context.getAuth(), this.state.amount, nftCid, this.state.royalties)
 
             }
         }
@@ -106,7 +101,7 @@ export default class Mint extends Component {
             reveal: !this.state.reveal
         })
     }
-    
+
     render() {
 
         let subList = {
@@ -116,27 +111,51 @@ export default class Mint extends Component {
 
         return (
             <div>
-                <Row>
-                    <Col sm="12" md={{ size: 6, offset: 3 }}>
-                        {this.context.collapsed ?
-                            <Card style={{ border: 0, marginTop: '20%' }}>
-                                <input type="text" name="title" onChange={this.handleChange} placeholder="OBJKT title"></input>
-                                <input type="text" name="description" onChange={this.handleChange} placeholder="OBJKT description"></input>
-                                <input type="text" name="amount" onChange={this.handleChange} placeholder="amount of OBJKTs"></input>
-                                <label style={{ marginTop: '5%', paddingTop: '1.25%', paddingBottom: '1.25%', borderStyle: 'dashed', textAlign: 'center' }}>Upload OBJKT
+
+
+                {this.context.load ?
+                    <div style={{ marginTop: '35vh', verticalAlign: 'middle' }}>
+                        <Row>
+                            <Col sm="12" md={{ position: 'fixed', size: 6, offset: 3 }}>
+                                <p  style={{margin : 'auto', display : 'table'}}>preparing NFT</p>
+                            </Col>
+                        </Row>
+                        <BabelLoading style={{ 
+                                            backgroundColor : 'black', 
+                                            position : 'absolute', 
+                                            left : '49%'
+                                        }} />
+                    </div>
+                    :
+                    <Row>
+                        <Col sm="12" md={{ position: 'fixed', size: 6, offset: 3 }}>
+                            {
+                                this.context.collapsed ?
+                                    <div>
+                                        <Card style={{ border: 0, marginTop: '17%' }}>
+                                            <input type="text" name="title" onChange={this.handleChange} placeholder="OBJKT title"></input>
+                                            <input type="text" name="description" onChange={this.handleChange} placeholder="OBJKT description"></input>
+                                            <input type="text" name="amount" onChange={this.handleChange} placeholder="amount of OBJKTs"></input>
+                                            <input type="text" name="royalties" onChange={this.handleChange} placeholder="0-25% creator share"></input>
+                                            <label style={{ marginTop: '5%', paddingTop: '1.25%', paddingBottom: '1.25%', borderStyle: 'dashed', textAlign: 'center' }}>Upload OBJKT
                                 <input style={{ display: 'none' }} type="file" name="file" onChange={this.onFileChange} /></label><br />
-                                <p>{
-                                    this.state.fileTitle
-                                }
-                                </p>
-                                <button style={{ lenght: '100%' }} onClick={this.onFileUpload}>Mint</button>
-                                this operation costs 0.05~ TEZ
+                                            <p>{
+                                                this.state.fileTitle
+                                            }
+                                            </p>
+                                            <button style={{ lenght: '100%', cursor: 'pointer' }} onClick={this.onFileUpload}>Mint</button>
+                                this operation costs 0.08~ TEZ
+
+                                {/* redirect to objkt id */}
+                                {/* {this.context.op != undefined ? <p>injected operation {this.context.op}</p> : undefined} */}
                             </Card>
-                            :
-                            <Menu />
-                        }
-                    </Col>
-                </Row>
+                                    </div>
+                                    :
+                                    <Menu />
+                            }
+                        </Col>
+                    </Row>
+                }
             </div>
         )
     }

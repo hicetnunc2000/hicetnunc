@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@airgap/beacon-sdk": "^2.2.0",
+    "@material-ui/core": "^4.11.3",
     "@qrcode/react": "^1.0.0-beta.2",
     "@taquito/beacon-wallet": "^8.0.1-beta.1",
     "@taquito/taquito": "^8.0.1-beta.1",
@@ -18,10 +19,15 @@
     "local-storage": "^2.0.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-error-boundary": "^3.1.0",
+    "react-infinite-scroll-component": "^6.0.0",
+    "react-lazy-load-image-component": "^1.5.1",
+    "react-loadingg": "^1.7.2",
     "react-player": "^2.8.2",
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "^3.4.3",
+    "react-scroll": "^1.8.1",
     "reactstrap": "^8.5.1",
     "styled-components": "^3.4.10"
   },
