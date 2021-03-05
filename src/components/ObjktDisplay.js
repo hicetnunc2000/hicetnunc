@@ -25,6 +25,7 @@ export default class ObjktDisplay extends Component {
             owners: false,
             curate: false,
             loaded: false,
+            cancel: false,
             test: false,
             value: 0,
             xtz_per_objkt: 0,
@@ -73,13 +74,10 @@ export default class ObjktDisplay extends Component {
         }
     }
 
-    info = () => this.setState({ info: true, owners: false, curate: false, test: false })
-    owners = () => this.setState({ info: false, owners: true, curate: false, test: false })
-    curate = () => this.setState({ info: false, owners: false, curate: true, test: false })
-    swap = () => {
-        console.log('oi')
-        this.setState({ info: false, owners: false, curate: false, test: true })
-    }
+    info = () => this.setState({ info: true, owners: false, curate: false, cancel: false })
+    owners = () => this.setState({ info: false, owners: true, curate: false, cancel: false })
+    curate = () => this.setState({ info: false, owners: false, curate: true, cancel: false })
+    cancel = () => this.context.cancel(this.state.objkt.swaps[0].swap_id)
     render() {
         let cardStyle = {
             position: "absolute",
@@ -93,15 +91,15 @@ export default class ObjktDisplay extends Component {
             <div>
                 { this.context.collapsed ? <div>
                     {this.state.loaded ?
-                        <div style={{ backgroundColor: 'white' }}>
+                        <div className='cel' style={{ backgroundColor: 'white' }}>
                             {this.state.objkt.metadata.formats[0].mimeType == 'video/mp4' ?
-                                <div style={{ paddingTop: '4%', display: 'table', margin: '0 auto' }}>
+                                <div style={{ paddingTop: '5%', display: 'table', margin: '0 auto' }}>
                                     <video className='media' style={{ maxHeight: '60vh', height: 'auto', width: 'auto' }} controls autoPlay muted loop>
                                         <source src={'https://ipfs.io/ipfs/' + (this.state.objkt.metadata.artifactUri).split('//')[1]} alt='💥' type="video/mp4"></source>
                                     </video>
                                 </div>
                                 :
-                                <div style={{ paddingTop: '4%', display: 'table', margin: '0 auto' }}>
+                                <div style={{ paddingTop: '5%', display: 'table', margin: '0 auto' }}>
                                     <img className='media' style={{ maxHeight: '60vh', height: 'auto', width: 'auto' }} src={'https://cloudflare-ipfs.com/ipfs/' + (this.state.objkt.metadata.artifactUri).split('//')[1]} alt='💥' />
                                 </div>
                             }
@@ -112,12 +110,46 @@ export default class ObjktDisplay extends Component {
                                 <Col sm="12" md={{ size: 6, offset: 3 }}>
                                     <Card style={{ paddingTop: '5%', border: 0 }}>
                                         <div style={{ diplay: 'inline' }}>
-                                            <span onClick={this.info}>info</span>
+                                            <span><a style={{
+                                                paddingLeft: '25px',
+                                                cursor: 'pointer',
+                                                paddingLeft: '15px',
+                                                color: "#000",
+                                                "&:hover": {
+                                                    color: "#000"
+                                                }
+                                            }} onClick={this.info}>info</a></span>
                                             {/* <span onClick={this.owners} style={{ paddingLeft: '25px' }}>owners</span> */}
                                             {/* <span onClick={this.swap} style={{ paddingLeft: '25px' }}>+swaps</span> */}
                                             {
                                                 this.state.objkt.metadata.creators[0] == this.context.address ?
-                                                    <span onClick={this.curate} style={{ paddingLeft: '25px' }}>+curate</span>
+                                                    <div style={{ display: 'inline' }}>
+                                                        <span><a onClick={this.curate} style={{
+                                                            paddingLeft: '25px',
+                                                            cursor: 'pointer',
+                                                            paddingLeft: '15px',
+                                                            color: "#000",
+                                                            "&:hover": {
+                                                                color: "#000"
+                                                            }
+                                                        }}>+curate</a></span>
+                                                        {
+                                                            (this.state.objkt.swaps).length != 0 ?
+                                                                <span>
+                                                                    <a onClick={this.cancel} style={{
+                                                                        paddingLeft: '25px',
+                                                                        cursor: 'pointer',
+                                                                        paddingLeft: '15px',
+                                                                        color: "#000",
+                                                                        "&:hover": {
+                                                                            color: "#000"
+                                                                        }
+                                                                    }}>-cancel curation</a>
+                                                                </span>
+                                                                :
+                                                                null
+                                                        }
+                                                    </div>
                                                     :
                                                     null
                                             }
@@ -126,7 +158,7 @@ export default class ObjktDisplay extends Component {
                                             {
                                                 this.state.info ?
                                                     <span>
-                                                        {this.state.objkt.total_amount}x OBJKT#{this.state.objkt.tk_id}<br />
+                                                        OBJKT#{this.state.objkt.tk_id}<br />
                                                         issuer <span><a style={{
                                                             color: "#000",
                                                             "&:hover": {
@@ -148,13 +180,11 @@ export default class ObjktDisplay extends Component {
                                                     </div>
                                                     : null
                                             }
-                                            {
-                                                this.state.test ? <div>oi</div> : null
-                                            }
-                                            {
-                                                this.state.collect ? <div></div> : null
-                                            }
-                                            <button onClick={this.collect} style={{ backgroundColor: 'white', float: 'right' }}>collect {this.state.objkt.swaps.length != 0 ? parseInt(this.state.objkt.swaps[0].xtz_per_objkt / 1000000) : <span>-</span>} TEZ</button>
+
+                                            <div style={{ display: 'inline', float: 'right' }} >
+                                                {this.state.objkt.swaps.length != 0 ? <span style={{ float: 'left', marginTop: '4px' }}>{this.state.objkt.swaps[0].objkt_amount}/{this.state.objkt.total_amount}</span> : <span style={{ float: 'left', marginTop: '5px' }}>{this.state.objkt.total_amount} </span>}
+                                                <span><button onClick={this.collect} style={{ backgroundColor: 'white', float: 'right' }}>{this.state.objkt.swaps.length != 0 ? <span>collect for {parseInt(this.state.objkt.swaps[0].xtz_per_objkt / 1000000)} TEZ</span> : <span>not on sale</span>}</button></span>
+                                            </div>
 
                                         </div>
                                     </Card>
@@ -164,7 +194,9 @@ export default class ObjktDisplay extends Component {
                         </div>
                         :
                         <div style={{ marginTop: '35vh', verticalAlign: 'middle' }}>
-                            <BabelLoading style={{
+                            <BabelLoading 
+                            className="celLoad"
+                            style={{
                                 backgroundColor: 'black',
                                 display: 'inline-block',
                                 position: 'absolute',
