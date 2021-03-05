@@ -7,7 +7,7 @@ const axios = require('axios')
 
 export const HicetnuncContext = createContext()
 
-const Tezos = new TezosToolkit('https://mainnet.smartpy.io')
+const Tezos = new TezosToolkit('https://mainnet-tezos.giganode.io/')
 const wallet = new BeaconWallet({
     name: 'hicetnunc.xyz',
     preferredNetwork: 'mainnet'
@@ -106,6 +106,10 @@ export default class HicetnuncContextProvider extends Component {
 
             swap : async (objkt_amount, objkt_id, xtz_per_objkt) => {
                 await Tezos.wallet.at(this.state.objkt).then(c => c.methods.swap(parseInt(objkt_amount), parseInt(objkt_id), parseInt(xtz_per_objkt)).send({amount : 0}))
+            },
+
+            cancel : async (swap_id) => {
+                await Tezos.wallet.at(this.state.objkt).then(c => c.methods.cancel_swap(parseInt(swap_id)).send({amount : 0}))
             },
 
             load : false,

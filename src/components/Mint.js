@@ -87,7 +87,7 @@ export default class Mint extends Component {
                     thumbnailUri: icon,
                     decimals: 0,
                     isBooleanAmount: false,
-                    shouldPreferSymbol : false
+                    shouldPreferSymbol: false
                 }))))[0].hash
 
                 this.context.mint(this.context.getAuth(), this.state.amount, nftCid, this.state.royalties)
@@ -117,14 +117,14 @@ export default class Mint extends Component {
                     <div style={{ marginTop: '35vh', verticalAlign: 'middle' }}>
                         <Row>
                             <Col sm="12" md={{ position: 'fixed', size: 6, offset: 3 }}>
-                                <p  style={{margin : 'auto', display : 'table'}}>preparing NFT</p>
+                                <p style={{ margin: 'auto', display: 'table' }}>preparing NFT</p>
                             </Col>
                         </Row>
-                        <BabelLoading style={{ 
-                                            backgroundColor : 'black', 
-                                            position : 'absolute', 
-                                            left : '49%'
-                                        }} />
+                        <BabelLoading style={{
+                            backgroundColor: 'black',
+                            position: 'absolute',
+                            left: '49%'
+                        }} />
                     </div>
                     :
                     <Row>
@@ -136,7 +136,7 @@ export default class Mint extends Component {
                                             <input type="text" name="title" onChange={this.handleChange} placeholder="OBJKT title"></input>
                                             <input type="text" name="description" onChange={this.handleChange} placeholder="OBJKT description"></input>
                                             <input type="text" name="amount" onChange={this.handleChange} placeholder="amount of OBJKTs"></input>
-                                            <input type="text" name="royalties" onChange={this.handleChange} placeholder="0-25% creator share"></input>
+                                            <input type="text" name="royalties" onChange={this.handleChange} placeholder="0-25% royalties from future resales"></input>
                                             <label style={{ marginTop: '5%', paddingTop: '1.25%', paddingBottom: '1.25%', borderStyle: 'dashed', textAlign: 'center' }}>Upload OBJKT
                                 <input style={{ display: 'none' }} type="file" name="file" onChange={this.onFileChange} /></label><br />
                                             <p>{
@@ -144,11 +144,11 @@ export default class Mint extends Component {
                                             }
                                             </p>
                                             <button style={{ lenght: '100%', cursor: 'pointer' }} onClick={this.onFileUpload}>Mint</button>
-                                this operation costs 0.08~ TEZ
+                                this operation costs 0.08~ tez
 
                                 {/* redirect to objkt id */}
-                                {/* {this.context.op != undefined ? <p>injected operation {this.context.op}</p> : undefined} */}
-                            </Card>
+                                            {/* {this.context.op != undefined ? <p>injected operation {this.context.op}</p> : undefined} */}
+                                        </Card>
                                     </div>
                                     :
                                     <Menu />

@@ -48,6 +48,15 @@ div {
 }
 
 @media (max-width: 600px) {
+
+  .celLoad {
+    left : 45% !important
+  }
+
+  .cel {
+    padding-top: 15% !important;
+  }
+
   .media {
     max-width: 65vw;
   }

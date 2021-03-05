@@ -55,8 +55,10 @@ export default class Feed extends Component {
         //await axios.get('http://localhost:3000/feed').then(res => console.log(res))
 
         await axios.post(process.env.REACT_APP_FEED, { counter: this.state.counter + 1 }).then(res => {
+
+            const filtered = (res.data.result).filter(e => parseInt(e.tk_id) != 641)
             this.setState({
-                items: this.state.items.concat(res.data.result),
+                items: this.state.items.concat(filtered),
                 counter: this.state.counter + 1
             })
 
@@ -89,7 +91,7 @@ export default class Feed extends Component {
                     "&:hover": {
                         color: "#000",
                     }
-                }} href={`/objkt/${this.state.items[index].tk_id}`}>{this.state.items[index].total_amount}x OBJKT#{this.state.items[index].tk_id}</a>
+                }} href={`/objkt/${this.state.items[index].tk_id}`}>OBJKT#{this.state.items[index].tk_id}</a>
             </div>
         )
         const image = (index) => (
@@ -114,6 +116,7 @@ export default class Feed extends Component {
                             {
                                 this.context.collapsed ?
                                     <InfiniteScroll
+                                        className='cel'
                                         style={{ overflow: 'hidden' }}
                                         dataLength={this.state.items.length} //This is important field to render the next data
                                         next={this.fetchData}
@@ -123,7 +126,7 @@ export default class Feed extends Component {
                                             display: 'inline-block',
                                             position: 'absolute',
                                             right: '50%',
-                                            left: '50%',
+                                            left: '45%',
                                             marginTop: '35vh'
                                         }} />}
                                         endMessage={
@@ -139,7 +142,10 @@ export default class Feed extends Component {
                                                         <div style={{ display: 'inline', width: '75%', margin: '0 auto' }}>
                                                             <span>
                                                                 {info(index)}
-                                                                <button onClick={(event) => this.collect(event, index)} style={{ backgroundColor: 'white', float: 'right' }}>collect {this.state.items[index].swaps.length != 0 ? parseInt(this.state.items[index].swaps[0].xtz_per_objkt / 1000000) : <span>-</span>} TEZ</button>
+                                                                <div style={{ display: 'inline', float: 'right' }} >
+                                                                    {this.state.items[index].swaps.length != 0 ? <span style={{ float: 'left', marginTop : '5px' }}>{this.state.items[index].swaps[0].objkt_amount}/{this.state.items[index].total_amount}</span> : <span style={{ float: 'left', marginTop : '5px' }}>{this.state.items[index].total_amount} </span>}
+                                                                    <span><button onClick={(event) => this.collect(event, index)} style={{ backgroundColor: 'white', float: 'right' }}>{this.state.items[index].swaps.length != 0 ? <span>collect for {parseInt(this.state.items[index].swaps[0].xtz_per_objkt / 1000000)} tez</span>: <span>not on sale</span>}</button></span>
+                                                                </div>
                                                             </span>
                                                         </div>
                                                     </Card>
