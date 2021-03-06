@@ -1,17 +1,16 @@
-
 input {
-  border : 0;
-  padding : 12px;
+  border: 0;
+  padding: 12px;
   outline: 0;
 }
 
 .page-wrap {
-  display: -webkit-box;      /* OLD - iOS 6-, Safari 3.1-6 */
-  display: -moz-box;         /* OLD - Firefox 19- (buggy but mostly works) */
-  display: -ms-flexbox;      /* TWEENER - IE 10 */
-  display: -webkit-flex;     /* NEW - Chrome */
-  display: flex;             /* NEW, Spec - Opera 12.1, Firefox 20+ */
- }
+  display: -webkit-box; /* OLD - iOS 6-, Safari 3.1-6 */
+  display: -moz-box; /* OLD - Firefox 19- (buggy but mostly works) */
+  display: -ms-flexbox; /* TWEENER - IE 10 */
+  display: -webkit-flex; /* NEW - Chrome */
+  display: flex; /* NEW, Spec - Opera 12.1, Firefox 20+ */
+}
 
 button {
   border-top: 0;
@@ -33,14 +32,13 @@ a:hover {
   }
 }
 
-
 @font-face {
   font-family: 'mini-kaliber';
   src: local('mini-kaliber'), url(fonts/mini-kaliber.ttf) format('truetype');
 }
 
 div {
-  font-family:'Courier New'
+  font-family: 'Courier New';
 }
 
 .media {
@@ -48,9 +46,8 @@ div {
 }
 
 @media (max-width: 600px) {
-
   .celLoad {
-    left : 45% !important
+    left: 45% !important;
   }
 
   .cel {
@@ -62,25 +59,24 @@ div {
   }
 }
 
-
 .loading {
   animation: opacityOn 5s infinite;
 }
 
 @keyframes opacityOn {
   0% {
-      opacity: 1;
+    opacity: 1;
   }
   25% {
-      opacity: 0;
+    opacity: 0;
   }
   50% {
-      opacity: 1;
+    opacity: 1;
   }
   75% {
-      opacity: 0;
+    opacity: 0;
   }
   100% {
-      opacity: 1;
+    opacity: 1;
   }
 }
