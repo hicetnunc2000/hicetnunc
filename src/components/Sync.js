@@ -71,6 +71,7 @@ export default class Sync extends Component {
               </Col>
             </Row>
             <BabelLoading
+            className='celLoad'
               style={{
                 backgroundColor: 'black',
                 display: 'inline-block',
