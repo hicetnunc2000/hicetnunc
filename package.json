@@ -36,7 +36,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "eb:prod": "npm run build && npm run start:prod"
+    "eb:prod": "npm run build && npm run start:prod",
+    "prettier": "prettier --write \"./src/**/*.{js,jsx}\""
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -52,5 +53,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "prettier": "^2.2.1"
   }
 }
