@@ -51,6 +51,16 @@ export default class Mint extends Component {
     })
   }
 
+  fileToArrayBuffer = (file) => {
+    return new Promise((resolve, reject) => {
+      const fileReader = new FileReader()
+      const arrayBuffer = (fileReader.onload = (evt) => {
+        resolve(evt.target.result)
+      })
+      fileReader.readAsArrayBuffer(file)
+    })
+  }
+
   onFileUpload = async (e) => {
     if (this.context.Tezos == null) {
       alert('sync')
@@ -67,15 +77,12 @@ export default class Mint extends Component {
         protocol: 'https',
       })
 
-      console.log(files)
-      console.log(Buffer.from(await files[0].arrayBuffer()))
-
       // 40mb limit
       if (files[0].size < 40000000) {
+        const arrayBuffer = await this.fileToArrayBuffer(files[0])
+        console.log(arrayBuffer)
         const fileCid =
-          'ipfs://' +
-          (await ipfs.files.add(Buffer.from(await files[0].arrayBuffer())))[0]
-            .hash
+          'ipfs://' + (await ipfs.files.add(Buffer.from(arrayBuffer)))[0].hash
         const nftCid = (
           await ipfs.files.add(
             Buffer.from(
