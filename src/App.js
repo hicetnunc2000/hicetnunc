@@ -1,25 +1,24 @@
-import './App.css';
-import React from 'react';
+import './App.css'
+import React from 'react'
 import {
   BrowserRouter as Router,
   ContextRouter,
   Switch,
   Route,
-  Link
-} from "react-router-dom";
+  Link,
+} from 'react-router-dom'
 import Sync from './components/Sync'
 import HicetnuncContextProvider from './context/HicetnuncContext'
 import About from './components/About'
 import AppNavbar from './components/AppNavbar'
-import Home from './components/Home';
-import Display from './components/Display';
-import Feed from './components/Feed';
-import Mint from './components/Mint';
-import ObjktDisplay from './components/ObjktDisplay';
-import Loading from './components/Loading';
-import Disclaimer from './components/Disclaimer';
-import { Element } from "react-scroll";
-
+import Home from './components/Home'
+import Display from './components/Display'
+import Feed from './components/Feed'
+import Mint from './components/Mint'
+import ObjktDisplay from './components/ObjktDisplay'
+import Loading from './components/Loading'
+import Disclaimer from './components/Disclaimer'
+import { Element } from 'react-scroll'
 
 function App() {
   return (
@@ -48,8 +47,7 @@ function App() {
           <Route exact path="/objkt/:id">
             <ObjktDisplay />
           </Route>
-          <Route exact path="/view/:tz">
-          </Route>
+          <Route exact path="/view/:tz"></Route>
           <Route exact path="/load">
             <Loading />
           </Route>
@@ -57,7 +55,7 @@ function App() {
       </Router>
       <Disclaimer />
     </HicetnuncContextProvider>
-  );
+  )
 }
 
-export default App;
+export default App
