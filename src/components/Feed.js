@@ -239,8 +239,8 @@ export default class Feed extends Component {
                                       collect for{' '}
                                       {parseInt(
                                         this.state.items[index].swaps[0]
-                                          .xtz_per_objkt / 1000000
-                                      )}{' '}
+                                          .xtz_per_objkt
+                                      ) / 1000000}{' '}
                                       tez
                                     </span>
                                   ) : (
