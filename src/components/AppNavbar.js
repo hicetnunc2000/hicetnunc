@@ -10,9 +10,10 @@ import {
   NavItem,
   NavLink,
 } from 'reactstrap'
-import { HicetnuncContext } from '../context/HicetnuncContext'
 import { Card, Col, Row } from 'reactstrap'
 import { keyframes } from 'styled-components'
+import { HicetnuncContext } from '../context/HicetnuncContext'
+import Button from './Button'
 import '../App.css'
 
 const axios = require('axios')
@@ -82,18 +83,14 @@ export default class AppNavbar extends Component {
       textDecoration: 'none',
     }
 
-    let logo = {
+    let sync = {
       right: '0',
       position: 'absolute',
       top: '0',
       marginTop: '17px',
       marginRight: '70px',
-      color: '#000',
-      '&:hover': {
-        color: '#000',
-      },
-      textDecoration: 'none',
     }
+
     return (
       <div style={{ position: 'fixed', top: 0, width: '100%', zIndex: 100 }}>
         <Row>
@@ -112,9 +109,13 @@ export default class AppNavbar extends Component {
               <a href="/" style={logoLetters}>
                 hic et nunc
               </a>
-              <a href="#" style={logo} onClick={this.context.syncTaquito}>
+              <Button
+                style={sync}
+                onClick={this.context.syncTaquito}
+                label="sync"
+              >
                 sync
-              </a>
+              </Button>
               <div onClick={this.context.toogleNavbar}>
                 <a href="#">
                   <img
