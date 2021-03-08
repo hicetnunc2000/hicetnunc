@@ -42,7 +42,7 @@ export default class Feed extends Component {
       .post(process.env.REACT_APP_FEED, { counter: this.state.counter + 1 })
       .then((res) => {
         const filtered = res.data.result.filter((e) => {
-          if (
+          return (
             e.token_id !== 1130 &&
             e.token_id !== 1131 &&
             e.token_id !== 1417 &&
@@ -50,9 +50,7 @@ export default class Feed extends Component {
             e.token_id !== 1419 &&
             e.token_id !== 641 &&
             e.token_id !== 1547
-          ) {
-            return e
-          }
+          )
         })
 
         this.setState({
@@ -158,7 +156,12 @@ export default class Feed extends Component {
                     />
                   }
                   endMessage={
-                    <p style={{ textAlign: 'center' }}>mint mint mint ✨</p>
+                    <p style={{ textAlign: 'center' }}>
+                      mint mint mint{' '}
+                      <span role="img" aria-label="mint">
+                        ✨
+                      </span>
+                    </p>
                   }
                 >
                   {this.state.items.map((i, index) => {
@@ -179,15 +182,19 @@ export default class Feed extends Component {
                           }}
                           key={index}
                         >
-                          {this.state.items[index].token_info != undefined ? (
+                          {this.state.items[index].token_info !== undefined ? (
                             this.state.items[index].token_info.formats[0]
-                              .mimeType == 'video/mp4' ? (
+                              .mimeType === 'video/mp4' ? (
                               video(index)
                             ) : (
                               image(index)
                             )
                           ) : (
-                            <p>💥</p>
+                            <p>
+                              <span role="img" aria-label="unrenderable">
+                                💥
+                              </span>
+                            </p>
                           )}
                         </div>
                         <div
@@ -200,7 +207,7 @@ export default class Feed extends Component {
                           <span>
                             {info(index)}
                             <div style={{ display: 'inline', float: 'right' }}>
-                              {this.state.items[index].swaps.length != 0 ? (
+                              {this.state.items[index].swaps.length ? (
                                 <span
                                   style={{ float: 'left', marginTop: '5px' }}
                                 >
@@ -228,7 +235,8 @@ export default class Feed extends Component {
                                     float: 'right',
                                   }}
                                 >
-                                  {this.state.items[index].swaps.length != 0 ? (
+                                  {this.state.items[index].swaps.length !==
+                                  0 ? (
                                     <span>
                                       collect for{' '}
                                       {parseInt(

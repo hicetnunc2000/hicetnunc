@@ -22,23 +22,23 @@ export default class About extends Component {
 
   render() {
     console.log(this.state)
-    let subList = {
-      listStyle: 'none',
-      fontSize: '26px',
-    }
+    // let subList = {
+    //   listStyle: 'none',
+    //   fontSize: '26px',
+    // }
 
-    let style = {
-      position: 'absolute',
-      listStyle: 'none',
-      right: '0',
-      top: '0',
-      marginTop: '15%',
-      marginRight: '25px',
-      fontFamiliy: 'roboto',
-      textAlign: 'right',
-      fontSize: '40px',
-      animation: 'fadeMe 1.2s',
-    }
+    // let style = {
+    //   position: 'absolute',
+    //   listStyle: 'none',
+    //   right: '0',
+    //   top: '0',
+    //   marginTop: '15%',
+    //   marginRight: '25px',
+    //   fontFamiliy: 'roboto',
+    //   textAlign: 'right',
+    //   fontSize: '40px',
+    //   animation: 'fadeMe 1.2s',
+    // }
 
     return (
       <Row>

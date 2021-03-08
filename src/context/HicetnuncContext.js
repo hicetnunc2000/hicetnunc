@@ -1,6 +1,6 @@
 import React, { createContext, Component } from 'react'
 import { BeaconWallet } from '@taquito/beacon-wallet'
-import { MichelsonMap, TezosToolkit } from '@taquito/taquito'
+import { /*MichelsonMap,*/ TezosToolkit } from '@taquito/taquito'
 const { DAppClient, NetworkType } = require('@airgap/beacon-sdk')
 var ls = require('local-storage')
 const axios = require('axios')
@@ -21,8 +21,6 @@ export default class HicetnuncContextProvider extends Component {
       pathname: '',
 
       address: '',
-
-      op: undefined,
 
       contract: '',
 
@@ -190,7 +188,7 @@ export default class HicetnuncContextProvider extends Component {
 
       signPayload: async (obj) => {
         const client = new DAppClient({ name: 'hicetnunc' })
-        const signature = await client
+        await client
           .requestSignPayload({
             payload: obj.payload,
           })

@@ -161,7 +161,7 @@ export default class ObjktDisplay extends Component {
                         this.context.address && (
                         <>
                           <Button onClick={this.curate}>+curate</Button>
-                          {objkt.swaps.length !== 0 && (
+                          {objkt.swaps.length && (
                             <Button onClick={this.cancel}>
                               -cancel curation
                             </Button>
@@ -194,7 +194,7 @@ export default class ObjktDisplay extends Component {
                           </a>
                         </span>
                       </span>
-          
+
                       {owners
                         ? owners_arr.map((e) => (
                             <div>
@@ -231,7 +231,7 @@ export default class ObjktDisplay extends Component {
                         </div>
                       ) : null}
                       <div style={{ display: 'inline', float: 'right' }}>
-                        {objkt.swaps.length != 0 ? (
+                        {objkt.swaps.length ? (
                           <span style={{ float: 'left', marginTop: '4px' }}>
                             {objkt.swaps[0].objkt_amount} left
                             {objkt.total_amount}
@@ -249,7 +249,7 @@ export default class ObjktDisplay extends Component {
                               float: 'right',
                             }}
                           >
-                            {objkt.swaps.length !== 0 ? (
+                            {objkt.swaps.length ? (
                               <span>
                                 collect for{' '}
                                 {parseInt(

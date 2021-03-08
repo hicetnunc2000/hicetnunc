@@ -203,6 +203,7 @@ export default class Display extends Component {
                     <div style={{ display: 'inline' }}>
                       <span onClick={this.creations}>
                         <a
+                          href="#creations"
                           style={{
                             cursor: 'pointer',
                             color: '#000',
@@ -216,6 +217,7 @@ export default class Display extends Component {
                       </span>
                       <span onClick={this.collection}>
                         <a
+                          href="#collection"
                           style={{
                             cursor: 'pointer',
                             paddingLeft: '15px',
