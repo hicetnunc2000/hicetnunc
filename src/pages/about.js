@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
-import { Card, Button, CardTitle, CardText, Row, Col } from 'reactstrap'
+import { Row, Col } from 'reactstrap'
 import { HicetnuncContext } from '../context/HicetnuncContext'
-import Menu from './Menu'
+import Menu from '../components/Menu'
 
 export default class About extends Component {
   constructor(props) {
@@ -21,6 +21,7 @@ export default class About extends Component {
   }
 
   render() {
+    console.log(this.state)
     let subList = {
       listStyle: 'none',
       fontSize: '26px',

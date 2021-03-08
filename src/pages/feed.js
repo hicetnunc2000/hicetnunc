@@ -1,50 +1,29 @@
 import React, { Component } from 'react'
-import {
-  Card,
-  Col,
-  Row,
-  CardTitle,
-  CardText,
-  CardBody,
-  CardImg,
-} from 'reactstrap'
+import { Card, Col, Row } from 'reactstrap'
 import { HicetnuncContext } from '../context/HicetnuncContext'
-import { ErrorBoundary } from 'react-error-boundary'
-import Loading from './Loading'
-import Menu from './Menu'
+import Menu from '../components/Menu'
 import { LazyLoadImage } from 'react-lazy-load-image-component'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { BabelLoading } from 'react-loadingg'
 
-import LazyImage from './LazyImage'
-
-var Router = require('react-router')
-
 const axios = require('axios')
-function preloader() {
-  return <div>oi</div>
-}
+
 export default class Feed extends Component {
-  constructor(props) {
-    super(props)
-
-    this.state = {
-      results: [],
-      loading: true,
-      back: '',
-      curations: true,
-      curations_arr: [],
-      objkts_arr: [],
-      mounted: false,
-      blob: null,
-      items: [],
-      hasMore: true,
-      counter: 0,
-    }
-    this.collect = this.collect.bind(this)
-  }
-
   static contextType = HicetnuncContext
+
+  state = {
+    results: [],
+    loading: true,
+    back: '',
+    curations: true,
+    curations_arr: [],
+    objkts_arr: [],
+    mounted: false,
+    blob: null,
+    items: [],
+    hasMore: true,
+    counter: 0,
+  }
 
   componentWillMount = async () => {
     await axios
@@ -62,17 +41,16 @@ export default class Feed extends Component {
     await axios
       .post(process.env.REACT_APP_FEED, { counter: this.state.counter + 1 })
       .then((res) => {
-
-        const filtered = (res.data.result).filter(e => {
+        const filtered = res.data.result.filter((e) => {
           if (
-            e.token_id != 1130 && 
-            e.token_id != 1131 && 
-            e.token_id != 1417 && 
-            e.token_id != 1418 && 
-            e.token_id != 1419 && 
-            e.token_id != 641 &&
-            e.token_id != 1547
-            ) {
+            e.token_id !== 1130 &&
+            e.token_id !== 1131 &&
+            e.token_id !== 1417 &&
+            e.token_id !== 1418 &&
+            e.token_id !== 1419 &&
+            e.token_id !== 641 &&
+            e.token_id !== 1547
+          ) {
             return e
           }
         })
@@ -125,8 +103,9 @@ export default class Feed extends Component {
         <LazyLoadImage
           className="media"
           style={{ maxHeight: '50vh', height: 'auto', width: 'auto' }}
-          src={`https://ipfs.io/ipfs/${this.state.items[index].token_info.artifactUri.split('//')[1]
-            }`}
+          src={`https://ipfs.io/ipfs/${
+            this.state.items[index].token_info.artifactUri.split('//')[1]
+          }`}
           alt="💥"
         />
       </div>
@@ -185,6 +164,7 @@ export default class Feed extends Component {
                   {this.state.items.map((i, index) => {
                     return (
                       <Card
+                        key={i.token_id}
                         style={{
                           paddingTop: '4%',
                           border: 0,
@@ -227,7 +207,8 @@ export default class Feed extends Component {
                                   {
                                     this.state.items[index].swaps[0]
                                       .objkt_amount
-                                  } left
+                                  }{' '}
+                                  left
                                   {/* this.state.items[index].total_amount */}
                                 </span>
                               ) : (

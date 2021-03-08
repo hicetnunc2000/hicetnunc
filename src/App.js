@@ -1,23 +1,16 @@
-import './App.css'
 import React from 'react'
-import {
-  BrowserRouter as Router,
-  ContextRouter,
-  Switch,
-  Route,
-  Link,
-} from 'react-router-dom'
-import Sync from './components/Sync'
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import HicetnuncContextProvider from './context/HicetnuncContext'
-import About from './components/About'
+import Sync from './pages/sync'
+import About from './pages/about'
+import Display from './pages/display'
+import Feed from './pages/feed'
+import Mint from './pages/mint'
+import ObjktDisplay from './pages/objkt-display'
+import Loading from './pages/loading'
 import AppNavbar from './components/AppNavbar'
-import Display from './components/Display'
-import Feed from './components/Feed'
-import Mint from './components/Mint'
-import ObjktDisplay from './components/ObjktDisplay'
-import Loading from './components/Loading'
 import Disclaimer from './components/Disclaimer'
-import { Element } from 'react-scroll'
+import './App.css'
 
 function App() {
   return (
@@ -25,31 +18,14 @@ function App() {
       <AppNavbar />
       <Router>
         <Switch>
-          <Route exact path="/">
-            <Feed />
-          </Route>
-          <Route exact path="/tz/:id">
-            <Display />
-          </Route>
-          <Route exact path="/feed">
-            <Feed />
-          </Route>
-          <Route exact path="/about">
-            <About />
-          </Route>
-          <Route exact path="/sync">
-            <Sync />
-          </Route>
-          <Route exact path="/mint">
-            <Mint />
-          </Route>
-          <Route exact path="/objkt/:id">
-            <ObjktDisplay />
-          </Route>
-          <Route exact path="/view/:tz"></Route>
-          <Route exact path="/load">
-            <Loading />
-          </Route>
+          <Route exact path="/" component={Feed} />
+          <Route exact path="/tz/:id" component={Display} />
+          <Route exact path="/feed" component={Feed} />
+          <Route exact path="/about" component={About} />
+          <Route exact path="/sync" component={Sync} />
+          <Route exact path="/mint" component={Mint} />
+          <Route exact path="/objkt/:id" component={ObjktDisplay} />
+          <Route exact path="/load" component={Loading} />
         </Switch>
       </Router>
       <Disclaimer />

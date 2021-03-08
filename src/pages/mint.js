@@ -1,41 +1,29 @@
 import React, { Component } from 'react'
-import { Card, Col, Row, CardTitle, CardText } from 'reactstrap'
-import { HicetnuncContext } from '../context/HicetnuncContext'
-import Loading from './Loading'
-import Menu from './Menu'
+import { Card, Col, Row } from 'reactstrap'
 import { BabelLoading } from 'react-loadingg'
+import { HicetnuncContext } from '../context/HicetnuncContext'
+import Menu from '../components/Menu'
 
-const axios = require('axios')
 const IPFS = require('ipfs-api')
 const Buffer = require('buffer').Buffer
 
 export default class Mint extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      fileTitle: '',
-      title: '',
-      description: '',
-      tags: '',
-      amount: 0,
-      selectedFile: null,
-      media: '',
-      json: '',
-      uploaded: false,
-      reveal: false,
-      loading: false,
-      royalties: 10,
-    }
-    this.handleChange = this.handleChange.bind(this)
-    this.onFileUpload = this.onFileUpload.bind(this)
-    this.onFileChange = this.onFileChange.bind(this)
-  }
-
   static contextType = HicetnuncContext
 
-  //state = {
-  //    selectedFile: null
-  //};
+  state = {
+    fileTitle: '',
+    title: '',
+    description: '',
+    tags: '',
+    amount: 0,
+    selectedFile: null,
+    media: '',
+    json: '',
+    uploaded: false,
+    reveal: false,
+    loading: false,
+    royalties: 10,
+  }
 
   handleChange = (event) => {
     this.setState({ [event.target.name]: event.target.value }, () =>
@@ -44,7 +32,6 @@ export default class Mint extends Component {
   }
 
   onFileChange = (event) => {
-    // Update the state
     this.setState({
       selectedFile: event.target.files,
       fileTitle: event.target.files[0].name,
@@ -58,7 +45,6 @@ export default class Mint extends Component {
       this.context.loading()
 
       const icon = 'ipfs://QmNrhZHUaEqxhyLfqoq1mtHSipkWHeT31LNHb1QEbDHgnc'
-      const host = 'https://cloudflare-ipfs.com/ipfs/'
 
       const files = this.state.selectedFile
       const ipfs = new IPFS({
@@ -82,7 +68,7 @@ export default class Mint extends Component {
               JSON.stringify({
                 name: this.state.title,
                 description: this.state.description,
-                tags: [],
+                tags: this.state.tags.replace(/\s/g, '').split(','),
                 symbol: 'OBJKT',
                 artifactUri: fileCid,
                 creators: [this.context.address],
@@ -113,11 +99,6 @@ export default class Mint extends Component {
   }
 
   render() {
-    let subList = {
-      listStyle: 'none',
-      fontSize: '26px',
-    }
-
     return (
       <div>
         {this.context.load ? (
@@ -154,6 +135,12 @@ export default class Mint extends Component {
                       name="description"
                       onChange={this.handleChange}
                       placeholder="OBJKT description"
+                    ></input>
+                    <input
+                      type="text"
+                      name="tags"
+                      onChange={this.handleChange}
+                      placeholder="tags (separated by commas)"
                     ></input>
                     <input
                       type="text"

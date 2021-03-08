@@ -1,37 +1,30 @@
 import React, { Component } from 'react'
-import { Col, Row, Card, ListGroupItemHeading } from 'reactstrap'
-import Menu from './Menu'
-import { HicetnuncContext } from '../context/HicetnuncContext'
-import { InputDecimal } from './InputDecimal'
-import Loading from './Loading'
+import { Col, Row, Card } from 'reactstrap'
 import { BabelLoading } from 'react-loadingg'
+import Menu from '../components/Menu'
+import { HicetnuncContext } from '../context/HicetnuncContext'
 
-import ReactPlayer from 'react-player'
 const axios = require('axios')
 
 export default class ObjktDisplay extends Component {
-  constructor(props) {
-    super(props)
-
-    this.state = {
-      objkt_id: 0,
-      objkt: {},
-      balance: 0,
-      info: true,
-      owners_arr: [],
-      owners: false,
-      curate: false,
-      loaded: false,
-      cancel: false,
-      test: false,
-      value: 0,
-      xtz_per_objkt: 0,
-      objkt_amount: 0,
-      royalties: 0,
-    }
-  }
-
   static contextType = HicetnuncContext
+
+  state = {
+    objkt_id: 0,
+    objkt: {},
+    balance: 0,
+    info: true,
+    owners_arr: [],
+    owners: false,
+    curate: false,
+    loaded: false,
+    cancel: false,
+    test: false,
+    value: 0,
+    xtz_per_objkt: 0,
+    objkt_amount: 0,
+    royalties: 0,
+  }
 
   componentWillMount = async () => {
     await axios
@@ -83,20 +76,16 @@ export default class ObjktDisplay extends Component {
 
   info = () =>
     this.setState({ info: true, owners: false, curate: false, cancel: false })
+
   owners = () =>
     this.setState({ info: false, owners: true, curate: false, cancel: false })
+
   curate = () =>
     this.setState({ info: false, owners: false, curate: true, cancel: false })
-  cancel = () => this.context.cancel(this.state.objkt.swaps[0].swap_id)
-  render() {
-    let cardStyle = {
-      position: 'absolute',
-      listStyle: 'none',
-      top: '0',
-      marginTop: '22.5%',
-      border: '0',
-    }
 
+  cancel = () => this.context.cancel(this.state.objkt.swaps[0].swap_id)
+
+  render() {
     return (
       <div>
         {this.context.collapsed ? (
@@ -182,7 +171,7 @@ export default class ObjktDisplay extends Component {
                         </span>
                         {/* <span onClick={this.owners} style={{ paddingLeft: '25px' }}>owners</span> */}
                         {/* <span onClick={this.swap} style={{ paddingLeft: '25px' }}>+swaps</span> */}
-                        {this.state.objkt.token_info.creators[0] ==
+                        {this.state.objkt.token_info.creators[0] ===
                         this.context.address ? (
                           <div style={{ display: 'inline' }}>
                             <span>
@@ -246,7 +235,8 @@ export default class ObjktDisplay extends Component {
                                   this.state.objkt.token_info.creators[0].slice(
                                     this.state.objkt.token_info.creators[0]
                                       .length - 5,
-                                    this.state.objkt.token_info.creators[0].length
+                                    this.state.objkt.token_info.creators[0]
+                                      .length
                                   )}
                               </a>
                             </span>
