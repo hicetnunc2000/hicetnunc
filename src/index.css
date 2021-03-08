@@ -1,0 +1,10 @@
+body {
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@font-face {
+  font-family: 'mini-kaliber';
+  src: local('mini-kaliber'), url(fonts/mini-kaliber.ttf) format('truetype');
+}
