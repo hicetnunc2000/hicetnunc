@@ -14,7 +14,7 @@ export default class ObjktDisplay extends Component {
     objkt_id: 0,
     objkt: {},
     balance: 0,
-    info: false,
+    info: true,
     owners_arr: [],
     owners: false,
     curate: false,
@@ -75,7 +75,7 @@ export default class ObjktDisplay extends Component {
     }
   }
 
-  toggleInfo = () => this.setState({ info: !this.state.info })
+  info = () => ({ info: true, owners: false, curate: false, cancel: false })
 
   owners = () =>
     this.setState({ info: false, owners: true, curate: false, cancel: false })
@@ -152,7 +152,7 @@ export default class ObjktDisplay extends Component {
                 <Col sm="12" md={{ size: 6, offset: 3 }}>
                   <div style={{ paddingTop: '5%', border: 0 }}>
                     <div className={styles.menu}>
-                      <Button onClick={this.toggleInfo} selected={info}>
+                      <Button onClick={this.info} selected={info}>
                         info
                       </Button>
                       {/* <Button onClick={this.owners}>owners</Button> */}
@@ -194,7 +194,7 @@ export default class ObjktDisplay extends Component {
                           </a>
                         </span>
                       </span>
-
+          
                       {owners
                         ? owners_arr.map((e) => (
                             <div>
