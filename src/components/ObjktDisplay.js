@@ -311,9 +311,8 @@ export default class ObjktDisplay extends Component {
                                 <span>
                                   collect for{' '}
                                   {parseInt(
-                                    this.state.objkt.swaps[0].xtz_per_objkt /
-                                      1000000
-                                  )}{' '}
+                                    this.state.objkt.swaps[0].xtz_per_objkt
+                                  ) / 1000000}{' '}
                                   TEZ
                                 </span>
                               ) : (
