@@ -74,8 +74,7 @@ export default class ObjktDisplay extends Component {
     }
   }
 
-  info = () =>
-    this.setState({ info: true, owners: false, curate: false, cancel: false })
+  toggleInfo = () => this.setState({ info: !this.state.info })
 
   owners = () =>
     this.setState({ info: false, owners: true, curate: false, cancel: false })
@@ -86,14 +85,15 @@ export default class ObjktDisplay extends Component {
   cancel = () => this.context.cancel(this.state.objkt.swaps[0].swap_id)
 
   render() {
+    console.log('render', this.state)
+    const { objkt } = this.state
     return (
       <div>
         {this.context.collapsed ? (
           <div>
             {this.state.loaded ? (
               <div className="cel" style={{ backgroundColor: 'white' }}>
-                {this.state.objkt.token_info.formats[0].mimeType ==
-                'video/mp4' ? (
+                {objkt.token_info.formats[0].mimeType === 'video/mp4' ? (
                   <div
                     style={{
                       paddingTop: '5%',
@@ -116,7 +116,7 @@ export default class ObjktDisplay extends Component {
                       <source
                         src={
                           'https://dweb.link/ipfs/' +
-                          this.state.objkt.token_info.artifactUri.split('//')[1]
+                          objkt.token_info.artifactUri.split('//')[1]
                         }
                         alt="💥"
                         type="video/mp4"
@@ -140,7 +140,7 @@ export default class ObjktDisplay extends Component {
                       }}
                       src={
                         'https://cloudflare-ipfs.com/ipfs/' +
-                        this.state.objkt.token_info.artifactUri.split('//')[1]
+                        objkt.token_info.artifactUri.split('//')[1]
                       }
                       alt="💥"
                     />
@@ -164,14 +164,14 @@ export default class ObjktDisplay extends Component {
                                 color: '#000',
                               },
                             }}
-                            onClick={this.info}
+                            onClick={this.toggleInfo}
                           >
                             info
                           </a>
                         </span>
                         {/* <span onClick={this.owners} style={{ paddingLeft: '25px' }}>owners</span> */}
                         {/* <span onClick={this.swap} style={{ paddingLeft: '25px' }}>+swaps</span> */}
-                        {this.state.objkt.token_info.creators[0] ===
+                        {objkt.token_info.creators[0] ===
                         this.context.address ? (
                           <div style={{ display: 'inline' }}>
                             <span>
@@ -190,7 +190,7 @@ export default class ObjktDisplay extends Component {
                                 +curate
                               </a>
                             </span>
-                            {this.state.objkt.swaps.length != 0 ? (
+                            {objkt.swaps.length !== 0 ? (
                               <span>
                                 <a
                                   onClick={this.cancel}
@@ -211,37 +211,36 @@ export default class ObjktDisplay extends Component {
                           </div>
                         ) : null}
                       </div>
+
                       <div style={{ paddingTop: '2.5%', display: 'inline' }}>
-                        {this.state.info ? (
+                        <span>
+                          OBJKT#{this.state.objkt.token_id}
+                          <br />
+                          issuer{' '}
                           <span>
-                            OBJKT#{this.state.objkt.token_id}
-                            <br />
-                            issuer{' '}
-                            <span>
-                              <a
-                                style={{
+                            <a
+                              style={{
+                                color: '#000',
+                                '&:hover': {
                                   color: '#000',
-                                  '&:hover': {
-                                    color: '#000',
-                                  },
-                                }}
-                                href={`/tz/${this.state.objkt.token_info.creators[0]}`}
-                              >
-                                {this.state.objkt.token_info.creators[0].slice(
-                                  0,
-                                  5
-                                ) +
-                                  '...' +
-                                  this.state.objkt.token_info.creators[0].slice(
-                                    this.state.objkt.token_info.creators[0]
-                                      .length - 5,
-                                    this.state.objkt.token_info.creators[0]
-                                      .length
-                                  )}
-                              </a>
-                            </span>
+                                },
+                              }}
+                              href={`/tz/${this.state.objkt.token_info.creators[0]}`}
+                            >
+                              {this.state.objkt.token_info.creators[0].slice(
+                                0,
+                                5
+                              ) +
+                                '...' +
+                                this.state.objkt.token_info.creators[0].slice(
+                                  this.state.objkt.token_info.creators[0]
+                                    .length - 5,
+                                  this.state.objkt.token_info.creators[0].length
+                                )}
+                            </a>
                           </span>
-                        ) : null}
+                        </span>
+                        )
                         {this.state.owners
                           ? this.state.owners_arr.map((e) => (
                               <div>
@@ -277,7 +276,6 @@ export default class ObjktDisplay extends Component {
                             </button>
                           </div>
                         ) : null}
-
                         <div style={{ display: 'inline', float: 'right' }}>
                           {this.state.objkt.swaps.length != 0 ? (
                             <span style={{ float: 'left', marginTop: '4px' }}>
@@ -313,6 +311,35 @@ export default class ObjktDisplay extends Component {
                           </span>
                         </div>
                       </div>
+
+                      {this.state.info && (
+                        <div
+                          style={{
+                            marginTop: '1em',
+                            padding: '1em',
+                            border: '1px dashed grey',
+                          }}
+                        >
+                          <div>
+                            <strong>title:</strong>
+                            {objkt.name}
+                          </div>
+                          <div>
+                            <strong>description:</strong>
+                            {objkt.token_info.description}
+                          </div>
+                          {objkt.token_info.tags.length > 0 && (
+                            <div>
+                              <strong>tags:</strong>
+                              {objkt.token_info.tags.map((tag, index) => {
+                                return (
+                                  <div key={`tag${tag}${index}`}>{tag}</div>
+                                )
+                              })}
+                            </div>
+                          )}
+                        </div>
+                      )}
                     </Card>
                   </Col>
                 </Row>
