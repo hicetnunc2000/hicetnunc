@@ -1,47 +1,21 @@
 import React, { Component } from 'react'
-import { HicetnuncContext } from '../context/HicetnuncContext'
-import { Card, Button, CardTitle, CardText, Row, Col } from 'reactstrap'
+import { Row, Col } from 'reactstrap'
 import { Redirect } from 'react-router-dom'
-import Menu from './Menu'
 import { BabelLoading } from 'react-loadingg'
-
-const axios = require('axios')
+import Menu from '../components/Menu'
+import { HicetnuncContext } from '../context/HicetnuncContext'
 
 export default class Sync extends Component {
-  constructor(props) {
-    super(props)
-  }
-
   static contextType = HicetnuncContext
-
-  /* 
-    initializes session
-    */
 
   componentWillMount = async () => {
     this.context.dAppClient()
   }
 
-  refresh = async () => {
-    window.location.reload()
-  }
-
   render() {
-    let load = {
-      border: 'black',
-    }
-
-    let style = {
-      position: 'absolute',
-      listStyle: 'none',
-      top: '0',
-      marginTop: '20%',
-      border: '0',
-    }
-
     return (
       <div>
-        {this.context.address != '' ? (
+        {this.context.address !== '' ? (
           <Redirect to={`/tz/${this.context.address}`} />
         ) : !this.context.collapsed ? (
           <Row>
@@ -71,7 +45,7 @@ export default class Sync extends Component {
               </Col>
             </Row>
             <BabelLoading
-            className='celLoad'
+              className="celLoad"
               style={{
                 backgroundColor: 'black',
                 display: 'inline-block',

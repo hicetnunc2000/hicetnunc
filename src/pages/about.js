@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
-import { Card, Button, CardTitle, CardText, Row, Col } from 'reactstrap'
+import { Row, Col } from 'reactstrap'
 import { HicetnuncContext } from '../context/HicetnuncContext'
-import Menu from './Menu'
+import Menu from '../components/Menu'
 
 export default class About extends Component {
   constructor(props) {
@@ -21,6 +21,7 @@ export default class About extends Component {
   }
 
   render() {
+    console.log(this.state)
     let subList = {
       listStyle: 'none',
       fontSize: '26px',
@@ -64,7 +65,7 @@ export default class About extends Component {
                   </a>
                 </p>
                 <p>
-                  the present decentralized application allows it's users to
+                  the present decentralized application allows its users to
                   manage decentralized digital assets, serving as a public smart
                   contract infrastructure on Tezos Blockchain.
                 </p>

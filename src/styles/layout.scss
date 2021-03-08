@@ -1,0 +1,15 @@
+// breakpoints
+$DESKTOP: 600px;
+
+$breakpoints: (
+  'desktop': $DESKTOP,
+  'phone': 0px,
+) !default;
+
+@mixin respond-to($breakpoint) {
+  @if map-has-key($breakpoints, $breakpoint) {
+    @media (min-width: map-get($breakpoints, $breakpoint)) {
+      @content;
+    }
+  }
+}
