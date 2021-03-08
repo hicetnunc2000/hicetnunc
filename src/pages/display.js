@@ -1,37 +1,29 @@
 import React, { Component } from 'react'
 import { HicetnuncContext } from '../context/HicetnuncContext'
-import { Card, Button, CardTitle, CardText, Row, Col } from 'reactstrap'
-import { CardImg, CardGroup, CardSubtitle, CardBody } from 'reactstrap'
+import { Card, Row, Col } from 'reactstrap'
+import { CardGroup, CardBody } from 'reactstrap'
+import Grid from '@material-ui/core/Grid'
 import { BabelLoading } from 'react-loadingg'
 import { LazyLoadImage } from 'react-lazy-load-image-component'
-
-import Grid from '@material-ui/core/Grid'
-import Paper from '@material-ui/core/Paper'
-
-import '../App.css'
-import Menu from './Menu'
+import Menu from '../components/Menu'
 import x from '../media/xt.png'
 
 const axios = require('axios')
-const QRCode = require('@qrcode/react')
 
 export default class Display extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      render: false,
-      balance: 0,
-      loading: true,
-      results: [],
-      objkts: [],
-      creations: [],
-      collection: [],
-      collectionState: false,
-      creationsState: true,
-    }
-  }
-
   static contextType = HicetnuncContext
+
+  state = {
+    render: false,
+    balance: 0,
+    loading: true,
+    results: [],
+    objkts: [],
+    creations: [],
+    collection: [],
+    collectionState: false,
+    creationsState: true,
+  }
 
   componentWillMount = async () => {
     this.context.setPath(window.location.pathname)
@@ -47,13 +39,13 @@ export default class Display extends Component {
         this.setState({
           objkts: res.data.result,
           creations: res.data.result.filter(
-            (e) => e.tz == e.metadata.creators[0]
+            (e) => e.tz === e.token_info.creators[0]
           ),
           collection: res.data.result.filter(
             (e) =>
-              e.tz != e.metadata.creators[0] &&
-              e.tz != 'KT1Hkg5qeNhfwpKW4fXvq7HGZB9z2EnmCCA9' &&
-              e.amount != 0
+              e.tz !== e.token_info.creators[0] &&
+              e.tz !== 'KT1Hkg5qeNhfwpKW4fXvq7HGZB9z2EnmCCA9' &&
+              e.amount !== 0
           ),
           loading: false,
         })
@@ -66,75 +58,13 @@ export default class Display extends Component {
     this.setState({ collectionState: true, creationsState: false })
 
   render() {
-    let style = {
-      position: 'absolute',
-      listStyle: 'none',
-      right: '0',
-      top: '0',
-      position: 'absolute',
-      marginTop: '20%',
-      marginRight: '25px',
-      textAlign: 'right',
-      fontSize: '40px',
-    }
-
-    let styleDisplay = {
-      textAlign: 'right',
-      padding: '20% 0',
-    }
-
-    let dot1 = {
-      height: '3px',
-      width: '3px',
-      backgroundColor: 'black',
-      borderRadius: '50%',
-      display: 'inline-block',
-      marginTop: '15px',
-      marginLeft: '0px',
-      left: '0',
-      position: 'absolute',
-    }
-
-    let dot2 = {
-      height: '8px',
-      width: '8px',
-      backgroundColor: 'black',
-      borderRadius: '50%',
-      display: 'inline-block',
-      marginTop: '7px',
-      marginLeft: '7px',
-      left: '0',
-      position: 'absolute',
-    }
-
-    let dao = {
-      marginLeft: '25px',
-    }
-
-    let load = {
-      backgroundColor: 'black',
-    }
-
-    let cardStyle = {
-      position: 'absolute',
-      listStyle: 'none',
-      top: '0',
-      marginTop: '25%',
-    }
-
-    let subList = {
-      listStyle: 'none',
-      fontSize: '26px',
-    }
-
-    let c = 0
     const addr = window.location.pathname.split('/')[2]
     const imageCreations = (i) => (
       <div>
         <LazyLoadImage
           style={{ maxHeight: '240px', maxWidth: '240px' }}
           src={`https://cloudflare-ipfs.com/ipfs/${
-            this.state.creations[i].metadata.formats[0].uri.split('//')[1]
+            this.state.creations[i].token_info.formats[0].uri.split('//')[1]
           }`}
           alt="💥"
         />
@@ -155,7 +85,7 @@ export default class Display extends Component {
           >
             <source
               src={`https://ipfs.io/ipfs/${
-                this.state.creations[i].metadata.formats[0].uri.split('//')[1]
+                this.state.creations[i].token_info.formats[0].uri.split('//')[1]
               }`}
               alt="💥"
               type="video/mp4"
@@ -170,7 +100,7 @@ export default class Display extends Component {
         <LazyLoadImage
           style={{ maxHeight: '240px', maxWidth: '240px' }}
           src={`https://cloudflare-ipfs.com/ipfs/${
-            this.state.collection[i].metadata.formats[0].uri.split('//')[1]
+            this.state.collection[i].token_info.formats[0].uri.split('//')[1]
           }`}
           alt="💥"
         />
@@ -191,7 +121,9 @@ export default class Display extends Component {
           >
             <source
               src={`https://ipfs.io/ipfs/${
-                this.state.collection[i].metadata.formats[0].uri.split('//')[1]
+                this.state.collection[i].token_info.formats[0].uri.split(
+                  '//'
+                )[1]
               }`}
               alt="💥"
               type="video/mp4"
@@ -233,6 +165,7 @@ export default class Display extends Component {
                             width: '150px',
                           }}
                           src={x}
+                          alt=""
                         />
                       </div>
                       {/* this.context.getBalance(addr) */}
@@ -317,10 +250,9 @@ export default class Display extends Component {
                                       >
                                         <CardBody>
                                           <a href={'/objkt/' + e.tk_id}>
-                                            {/*                                                                                     <img style={{ maxHeight: '240px', maxWidth: '240px', display: 'block' }} src={`https://ipfs.io/ipfs/${(this.state.creations[i].metadata.formats[0].uri).split('//')[1]}`} />
-                                             */}{' '}
-                                            {this.state.creations[i].metadata
-                                              .formats[0].mimeType ==
+                                            {/*<img style={{ maxHeight: '240px', maxWidth: '240px', display: 'block' }} src={`https://ipfs.io/ipfs/${(this.state.creations[i].token_info.formats[0].uri).split('//')[1]}`} />*/}{' '}
+                                            {this.state.creations[i].token_info
+                                              .formats[0].mimeType ===
                                             'video/mp4'
                                               ? videoCreations(i)
                                               : imageCreations(i)}
@@ -361,10 +293,10 @@ export default class Display extends Component {
                                       >
                                         <CardBody>
                                           <a href={'/objkt/' + e.tk_id}>
-                                            {/*                                                                                     <img style={{ maxHeight: '240px', maxWidth: '240px', display: 'block' }} src={`https://ipfs.io/ipfs/${(this.state.collection[i].metadata.formats[0].uri).split('//')[1]}`} />
+                                            {/*                                                                                     <img style={{ maxHeight: '240px', maxWidth: '240px', display: 'block' }} src={`https://ipfs.io/ipfs/${(this.state.collection[i].token_info.formats[0].uri).split('//')[1]}`} />
                                              */}{' '}
-                                            {this.state.collection[i].metadata
-                                              .formats[0].mimeType ==
+                                            {this.state.collection[i].token_info
+                                              .formats[0].mimeType ===
                                             'video/mp4'
                                               ? videoCollection(i)
                                               : imageCollection(i)}

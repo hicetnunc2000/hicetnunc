@@ -17,6 +17,7 @@
     "filereader": "^0.10.3",
     "ipfs-api": "^26.1.2",
     "local-storage": "^2.0.0",
+    "node-sass": "^4.14.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-error-boundary": "^3.1.0",

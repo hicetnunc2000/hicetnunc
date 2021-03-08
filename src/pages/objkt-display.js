@@ -1,42 +1,35 @@
 import React, { Component } from 'react'
-import { Col, Row, Card, ListGroupItemHeading } from 'reactstrap'
-import Menu from './Menu'
-import { HicetnuncContext } from '../context/HicetnuncContext'
-import { InputDecimal } from './InputDecimal'
-import Loading from './Loading'
+import { Col, Row, Card } from 'reactstrap'
 import { BabelLoading } from 'react-loadingg'
+import Menu from '../components/Menu'
+import { HicetnuncContext } from '../context/HicetnuncContext'
 
-import ReactPlayer from 'react-player'
 const axios = require('axios')
 
 export default class ObjktDisplay extends Component {
-  constructor(props) {
-    super(props)
-
-    this.state = {
-      objkt_id: 0,
-      objkt: {},
-      balance: 0,
-      info: true,
-      owners_arr: [],
-      owners: false,
-      curate: false,
-      loaded: false,
-      cancel: false,
-      test: false,
-      value: 0,
-      xtz_per_objkt: 0,
-      objkt_amount: 0,
-      royalties: 0,
-    }
-  }
-
   static contextType = HicetnuncContext
+
+  state = {
+    objkt_id: 0,
+    objkt: {},
+    balance: 0,
+    info: true,
+    owners_arr: [],
+    owners: false,
+    curate: false,
+    loaded: false,
+    cancel: false,
+    test: false,
+    value: 0,
+    xtz_per_objkt: 0,
+    objkt_amount: 0,
+    royalties: 0,
+  }
 
   componentWillMount = async () => {
     await axios
       .post(process.env.REACT_APP_OBJKT, {
-        id: window.location.pathname.split('/')[2],
+        objkt_id: window.location.pathname.split('/')[2],
       })
       .then((res) => {
         console.log(res.data)
@@ -83,27 +76,23 @@ export default class ObjktDisplay extends Component {
 
   info = () =>
     this.setState({ info: true, owners: false, curate: false, cancel: false })
+
   owners = () =>
     this.setState({ info: false, owners: true, curate: false, cancel: false })
+
   curate = () =>
     this.setState({ info: false, owners: false, curate: true, cancel: false })
-  cancel = () => this.context.cancel(this.state.objkt.swaps[0].swap_id)
-  render() {
-    let cardStyle = {
-      position: 'absolute',
-      listStyle: 'none',
-      top: '0',
-      marginTop: '22.5%',
-      border: '0',
-    }
 
+  cancel = () => this.context.cancel(this.state.objkt.swaps[0].swap_id)
+
+  render() {
     return (
       <div>
         {this.context.collapsed ? (
           <div>
             {this.state.loaded ? (
               <div className="cel" style={{ backgroundColor: 'white' }}>
-                {this.state.objkt.metadata.formats[0].mimeType ==
+                {this.state.objkt.token_info.formats[0].mimeType ==
                 'video/mp4' ? (
                   <div
                     style={{
@@ -126,8 +115,8 @@ export default class ObjktDisplay extends Component {
                     >
                       <source
                         src={
-                          'https://ipfs.io/ipfs/' +
-                          this.state.objkt.metadata.artifactUri.split('//')[1]
+                          'https://dweb.link/ipfs/' +
+                          this.state.objkt.token_info.artifactUri.split('//')[1]
                         }
                         alt="💥"
                         type="video/mp4"
@@ -151,7 +140,7 @@ export default class ObjktDisplay extends Component {
                       }}
                       src={
                         'https://cloudflare-ipfs.com/ipfs/' +
-                        this.state.objkt.metadata.artifactUri.split('//')[1]
+                        this.state.objkt.token_info.artifactUri.split('//')[1]
                       }
                       alt="💥"
                     />
@@ -182,7 +171,7 @@ export default class ObjktDisplay extends Component {
                         </span>
                         {/* <span onClick={this.owners} style={{ paddingLeft: '25px' }}>owners</span> */}
                         {/* <span onClick={this.swap} style={{ paddingLeft: '25px' }}>+swaps</span> */}
-                        {this.state.objkt.metadata.creators[0] ==
+                        {this.state.objkt.token_info.creators[0] ===
                         this.context.address ? (
                           <div style={{ display: 'inline' }}>
                             <span>
@@ -225,7 +214,7 @@ export default class ObjktDisplay extends Component {
                       <div style={{ paddingTop: '2.5%', display: 'inline' }}>
                         {this.state.info ? (
                           <span>
-                            OBJKT#{this.state.objkt.tk_id}
+                            OBJKT#{this.state.objkt.token_id}
                             <br />
                             issuer{' '}
                             <span>
@@ -236,17 +225,18 @@ export default class ObjktDisplay extends Component {
                                     color: '#000',
                                   },
                                 }}
-                                href={`/tz/${this.state.objkt.metadata.creators[0]}`}
+                                href={`/tz/${this.state.objkt.token_info.creators[0]}`}
                               >
-                                {this.state.objkt.metadata.creators[0].slice(
+                                {this.state.objkt.token_info.creators[0].slice(
                                   0,
                                   5
                                 ) +
                                   '...' +
-                                  this.state.objkt.metadata.creators[0].slice(
-                                    this.state.objkt.metadata.creators[0]
+                                  this.state.objkt.token_info.creators[0].slice(
+                                    this.state.objkt.token_info.creators[0]
                                       .length - 5,
-                                    this.state.objkt.metadata.creators[0].length
+                                    this.state.objkt.token_info.creators[0]
+                                      .length
                                   )}
                               </a>
                             </span>
@@ -275,7 +265,7 @@ export default class ObjktDisplay extends Component {
                               style={{ width: '100%' }}
                               type="text"
                               name="xtz_per_objkt"
-                              placeholder="MUTEZ per OBJKT (1 TEZ = 1000000 MUTEZ)"
+                              placeholder="µtez per OBJKT (1 tez = 1000000 µtez)"
                               onChange={this.handleChange}
                             ></input>
                             <br />
@@ -291,7 +281,7 @@ export default class ObjktDisplay extends Component {
                         <div style={{ display: 'inline', float: 'right' }}>
                           {this.state.objkt.swaps.length != 0 ? (
                             <span style={{ float: 'left', marginTop: '4px' }}>
-                              {this.state.objkt.swaps[0].objkt_amount}/
+                              {this.state.objkt.swaps[0].objkt_amount} left
                               {this.state.objkt.total_amount}
                             </span>
                           ) : (
@@ -311,12 +301,13 @@ export default class ObjktDisplay extends Component {
                                 <span>
                                   collect for{' '}
                                   {parseInt(
-                                    this.state.objkt.swaps[0].xtz_per_objkt
-                                  ) / 1000000}{' '}
-                                  TEZ
+                                    this.state.objkt.swaps[0].xtz_per_objkt /
+                                      1000000
+                                  )}{' '}
+                                  tez
                                 </span>
                               ) : (
-                                <span>not on sale</span>
+                                <span>not for sale</span>
                               )}
                             </button>
                           </span>

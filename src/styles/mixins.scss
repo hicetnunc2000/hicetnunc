@@ -1,0 +1,37 @@
+// mixin to reset <button>
+@mixin resetButton() {
+  border: 0;
+  padding: 0;
+  user-select: none;
+  background-color: transparent;
+  cursor: pointer;
+
+  &:focus {
+    outline: 0;
+  }
+}
+
+// mixins for touch hover state on press
+@mixin media-pointer {
+  @media (pointer: fine) {
+    @content;
+  }
+}
+@mixin media-touch {
+  @media (any-pointer: coarse) {
+    @content;
+  }
+}
+
+@mixin hover {
+  @include media-touch {
+    &:active {
+      @content;
+    }
+  }
+  @include media-pointer {
+    &:hover {
+      @content;
+    }
+  }
+}

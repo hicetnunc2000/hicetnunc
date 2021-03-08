@@ -1,50 +1,29 @@
 import React, { Component } from 'react'
-import {
-  Card,
-  Col,
-  Row,
-  CardTitle,
-  CardText,
-  CardBody,
-  CardImg,
-} from 'reactstrap'
+import { Card, Col, Row } from 'reactstrap'
 import { HicetnuncContext } from '../context/HicetnuncContext'
-import { ErrorBoundary } from 'react-error-boundary'
-import Loading from './Loading'
-import Menu from './Menu'
+import Menu from '../components/Menu'
 import { LazyLoadImage } from 'react-lazy-load-image-component'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { BabelLoading } from 'react-loadingg'
 
-import LazyImage from './LazyImage'
-
-var Router = require('react-router')
-
 const axios = require('axios')
-function preloader() {
-  return <div>oi</div>
-}
+
 export default class Feed extends Component {
-  constructor(props) {
-    super(props)
-
-    this.state = {
-      results: [],
-      loading: true,
-      back: '',
-      curations: true,
-      curations_arr: [],
-      objkts_arr: [],
-      mounted: false,
-      blob: null,
-      items: [],
-      hasMore: true,
-      counter: 0,
-    }
-    this.collect = this.collect.bind(this)
-  }
-
   static contextType = HicetnuncContext
+
+  state = {
+    results: [],
+    loading: true,
+    back: '',
+    curations: true,
+    curations_arr: [],
+    objkts_arr: [],
+    mounted: false,
+    blob: null,
+    items: [],
+    hasMore: true,
+    counter: 0,
+  }
 
   componentWillMount = async () => {
     await axios
@@ -62,13 +41,26 @@ export default class Feed extends Component {
     await axios
       .post(process.env.REACT_APP_FEED, { counter: this.state.counter + 1 })
       .then((res) => {
-        const filtered = res.data.result.filter((e) => parseInt(e.tk_id) != 641)
+        const filtered = res.data.result.filter((e) => {
+          if (
+            e.token_id !== 1130 &&
+            e.token_id !== 1131 &&
+            e.token_id !== 1417 &&
+            e.token_id !== 1418 &&
+            e.token_id !== 1419 &&
+            e.token_id !== 641 &&
+            e.token_id !== 1547
+          ) {
+            return e
+          }
+        })
+
         this.setState({
           items: this.state.items.concat(filtered),
           counter: this.state.counter + 1,
         })
 
-        if (res.data.result.length < 5) {
+        if (res.data.result.length < 10) {
           this.setState({ hasMore: false })
           return
         }
@@ -100,9 +92,9 @@ export default class Feed extends Component {
               color: '#000',
             },
           }}
-          href={`/objkt/${this.state.items[index].tk_id}`}
+          href={`/objkt/${this.state.items[index].token_id}`}
         >
-          OBJKT#{this.state.items[index].tk_id}
+          OBJKT#{this.state.items[index].token_id}
         </a>
       </div>
     )
@@ -112,7 +104,7 @@ export default class Feed extends Component {
           className="media"
           style={{ maxHeight: '50vh', height: 'auto', width: 'auto' }}
           src={`https://ipfs.io/ipfs/${
-            this.state.items[index].metadata.artifactUri.split('//')[1]
+            this.state.items[index].token_info.artifactUri.split('//')[1]
           }`}
           alt="💥"
         />
@@ -131,8 +123,8 @@ export default class Feed extends Component {
         >
           <source
             src={
-              'https://ipfs.io/ipfs/' +
-              this.state.items[index].metadata.artifactUri.split('//')[1]
+              'https://dweb.link/ipfs/' +
+              this.state.items[index].token_info.artifactUri.split('//')[1]
             }
             alt="💥"
             type="video/mp4"
@@ -172,6 +164,7 @@ export default class Feed extends Component {
                   {this.state.items.map((i, index) => {
                     return (
                       <Card
+                        key={i.token_id}
                         style={{
                           paddingTop: '4%',
                           border: 0,
@@ -186,8 +179,8 @@ export default class Feed extends Component {
                           }}
                           key={index}
                         >
-                          {this.state.items[index].metadata != undefined ? (
-                            this.state.items[index].metadata.formats[0]
+                          {this.state.items[index].token_info != undefined ? (
+                            this.state.items[index].token_info.formats[0]
                               .mimeType == 'video/mp4' ? (
                               video(index)
                             ) : (
@@ -214,14 +207,15 @@ export default class Feed extends Component {
                                   {
                                     this.state.items[index].swaps[0]
                                       .objkt_amount
-                                  }
-                                  /{this.state.items[index].total_amount}
+                                  }{' '}
+                                  left
+                                  {/* this.state.items[index].total_amount */}
                                 </span>
                               ) : (
                                 <span
                                   style={{ float: 'left', marginTop: '5px' }}
                                 >
-                                  {this.state.items[index].total_amount}{' '}
+                                  {/* this.state.items[index].total_amount */}{' '}
                                 </span>
                               )}
                               <span>
@@ -239,12 +233,12 @@ export default class Feed extends Component {
                                       collect for{' '}
                                       {parseInt(
                                         this.state.items[index].swaps[0]
-                                          .xtz_per_objkt
-                                      ) / 1000000}{' '}
+                                          .xtz_per_objkt / 1000000
+                                      )}{' '}
                                       tez
                                     </span>
                                   ) : (
-                                    <span>not on sale</span>
+                                    <span>not for sale</span>
                                   )}
                                 </button>
                               </span>
@@ -263,24 +257,5 @@ export default class Feed extends Component {
         </Row>
       </div>
     )
-
-    /*         let subList = {
-                    listStyle: "none",
-                    fontSize: "26px"
-                }
-        
-                return (
-                    <div>
-                        {
-                            this.state.loading ? <div style={{ marginTop: '35vh', verticalAlign: 'middle' }}>
-                                <Row>
-                                    <Col sm="12" md={{ position: 'fixed', size: 6, offset: 3 }}>
-                                        <span>03.01.2021 OBJKT Swap</span>
-                                    </Col>
-                                </Row>
-                                <Loading style={{ position: 'absolute' }} /></div> : null
-                        }
-                    </div>
-                ) */
   }
 }

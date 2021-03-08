@@ -1,59 +1,32 @@
-import './App.css'
 import React from 'react'
-import {
-  BrowserRouter as Router,
-  ContextRouter,
-  Switch,
-  Route,
-  Link,
-} from 'react-router-dom'
-import Sync from './components/Sync'
+import { Switch, Route } from 'react-router-dom'
 import HicetnuncContextProvider from './context/HicetnuncContext'
-import About from './components/About'
-import AppNavbar from './components/AppNavbar'
-import Home from './components/Home'
-import Display from './components/Display'
-import Feed from './components/Feed'
-import Mint from './components/Mint'
-import ObjktDisplay from './components/ObjktDisplay'
-import Loading from './components/Loading'
-import Disclaimer from './components/Disclaimer'
-import { Element } from 'react-scroll'
+import Sync from './pages/sync'
+import About from './pages/about'
+import Display from './pages/display'
+import Feed from './pages/feed'
+import Mint from './pages/mint'
+import ObjktDisplay from './pages/objkt-display'
+import Loading from './pages/loading'
+import Header from './components/Header'
+import Footer from './components/Footer'
+import './App.css'
 
 function App() {
   return (
     <HicetnuncContextProvider>
-      <AppNavbar />
-      <Router>
-        <Switch>
-          <Route exact path="/">
-            <Feed />
-          </Route>
-          <Route exact path="/tz/:id">
-            <Display />
-          </Route>
-          <Route exact path="/feed">
-            <Feed />
-          </Route>
-          <Route exact path="/about">
-            <About />
-          </Route>
-          <Route exact path="/sync">
-            <Sync />
-          </Route>
-          <Route exact path="/mint">
-            <Mint />
-          </Route>
-          <Route exact path="/objkt/:id">
-            <ObjktDisplay />
-          </Route>
-          <Route exact path="/view/:tz"></Route>
-          <Route exact path="/load">
-            <Loading />
-          </Route>
-        </Switch>
-      </Router>
-      <Disclaimer />
+      <Header />
+      <Switch>
+        <Route exact path="/" component={Feed} />
+        <Route path="/tz/:id" component={Display} />
+        <Route path="/feed" component={Feed} />
+        <Route path="/about" component={About} />
+        <Route path="/sync" component={Sync} />
+        <Route path="/mint" component={Mint} />
+        <Route path="/objkt/:id" component={ObjktDisplay} />
+        <Route path="/load" component={Loading} />
+      </Switch>
+      <Footer />
     </HicetnuncContextProvider>
   )
 }
