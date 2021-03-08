@@ -16,6 +16,11 @@ button {
   border-top: 0;
   border-left: 0;
 }
+
+.nav button:focus {
+  outline: thin dotted;
+}
+
 /* a {
   color : #000
 }
