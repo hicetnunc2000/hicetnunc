@@ -206,7 +206,12 @@ export default class ObjktDisplay extends Component {
                           ))
                         : null}
                       {curate ? (
-                        <div style={{ display: 'inline' }}>
+                        <div
+                          style={{
+                            display: 'inline',
+                            border: '1px dashed red',
+                          }}
+                        >
                           <input
                             type="text"
                             name="objkt_amount"
