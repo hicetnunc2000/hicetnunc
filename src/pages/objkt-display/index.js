@@ -194,7 +194,7 @@ export default class ObjktDisplay extends Component {
                           </a>
                         </span>
                       </span>
-          
+
                       {owners
                         ? owners_arr.map((e) => (
                             <div>
@@ -279,7 +279,11 @@ export default class ObjktDisplay extends Component {
                           <div>
                             <strong>tags:</strong>
                             {objkt.token_info.tags.map((tag, index) => {
-                              return <div key={`tag${tag}${index}`}>{tag}</div>
+                              return (
+                                <span key={`tag${tag}${index}`}>
+                                  {index !== 0 ? `, ${tag}` : tag}
+                                </span>
+                              )
                             })}
                           </div>
                         )}
