@@ -40,5 +40,3 @@ REACT_APP_UNGRUND_OBJKT_LEDGER='http://0.0.0.0:5000/objkt/ledger'
 in the present version you must have ungrund running accessing hicetnunc's module https://github.com/hicetnunc2000/ungrund
 
 check the issues for contributing
-
-`MIT license`
