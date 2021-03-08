@@ -14,6 +14,7 @@
     "axios": "^0.21.1",
     "bootstrap": "^4.5.2",
     "buffer": "^6.0.3",
+    "classnames": "^2.2.6",
     "filereader": "^0.10.3",
     "ipfs-api": "^26.1.2",
     "local-storage": "^2.0.0",
