@@ -1,0 +1,36 @@
+@import '../../styles/variables.scss';
+
+.loader {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 1000;
+  transform: translateX(-50%) translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .circle {
+    display: inline-block;
+    background-color: $color;
+    width: 30px;
+    height: 30px;
+    border-radius: 1000px;
+    animation: circle 2s linear infinite;
+  }
+}
+
+@keyframes circle {
+  0% {
+    transform: scale(0.1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(1.5);
+    opacity: 0.1;
+  }
+}

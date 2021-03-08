@@ -1,0 +1,15 @@
+@import '../../styles/mixins.scss';
+
+.container {
+  @include resetButton();
+
+  &.selected {
+    font-weight: bold;
+  }
+
+  @include hover {
+    &:not(.selected) {
+      text-decoration: underline;
+    }
+  }
+}

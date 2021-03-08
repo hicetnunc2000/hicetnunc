@@ -1,5 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import classnames from 'classnames'
+import styles from './index.module.scss'
 
 /**
  * Button component renders a button based on the type of prop received
@@ -13,17 +15,16 @@ export const Button = ({
   href = null,
   onClick = () => null,
   children,
+  selected = false,
 }) => {
-  const style = {
-    color: '#000',
-    '&:hover': {
-      color: '#f00',
-    },
-  }
+  const classes = classnames({
+    [styles.container]: true,
+    [styles.selected]: selected,
+  })
 
   if (to) {
     return (
-      <Link to={to} style={style}>
+      <Link to={to} className={classes}>
         {children}
       </Link>
     )
@@ -31,13 +32,18 @@ export const Button = ({
 
   if (href) {
     return (
-      <a href={href} target="_blank" rel="noopener noreferrer" style={style}>
+      <a
+        href={href}
+        target="_blank"
+        rel="noopener noreferrer"
+        className={classes}
+      >
         {children}
       </a>
     )
   }
   return (
-    <button onClick={onClick} style={style}>
+    <button onClick={onClick} className={classes}>
       {children}
     </button>
   )
