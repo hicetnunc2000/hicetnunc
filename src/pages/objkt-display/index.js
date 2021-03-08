@@ -194,7 +194,7 @@ export default class ObjktDisplay extends Component {
                           </a>
                         </span>
                       </span>
-          
+
                       {owners
                         ? owners_arr.map((e) => (
                             <div>
@@ -268,16 +268,16 @@ export default class ObjktDisplay extends Component {
                     {info && (
                       <div className={styles.info}>
                         <div>
-                          <strong>title:</strong>
+                          <strong>title: </strong>
                           {objkt.name}
                         </div>
                         <div>
-                          <strong>description:</strong>
+                          <strong>description: </strong>
                           {objkt.token_info.description}
                         </div>
                         {objkt.token_info.tags.length > 0 && (
                           <div>
-                            <strong>tags:</strong>
+                            <strong>tags: </strong>
                             {objkt.token_info.tags.map((tag, index) => {
                               return <div key={`tag${tag}${index}`}>{tag}</div>
                             })}
