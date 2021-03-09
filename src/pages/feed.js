@@ -1,5 +1,14 @@
 import React, { Component } from 'react'
-import { Card, Col, Row, Button } from 'reactstrap'
+import {
+  Card,
+  Col,
+  Row,
+  TabContent,
+  TabPane,
+  Nav,
+  NavItem,
+  NavLink,
+} from 'reactstrap'
 import { HicetnuncContext } from '../context/HicetnuncContext'
 import Menu from '../components/Menu'
 import ItemsForSale from '../components/ItemsForSale'
@@ -73,10 +82,10 @@ export default class Feed extends Component {
   }
 
   toggleItemsToShow = (buttonTitle) => {
-    if (buttonTitle === 'showNotForSale') {
-      return this.setState({ showItemsForSale: false })
+    if (buttonTitle === '2') {
+      return this.setState({ showItemsForSale: false, activeTab: '2' })
     }
-    return this.setState({ showItemsForSale: true })
+    return this.setState({ showItemsForSale: true, activeTab: '1' })
   }
 
   render() {
@@ -86,30 +95,40 @@ export default class Feed extends Component {
           <Col sm="12" md={{ size: 6, offset: 3 }}>
             <Card body style={{ border: 0, animation: 'fadeMe 1.2s' }}>
               <Row style={{ margin: '0 auto', marginTop: '50px' }}>
-                <Button
-                  onClick={() => this.toggleItemsToShow('showForSale')}
-                  disabled={this.state.showItemsForSale}
-                  style={{
-                    width: '150px',
-                    marginLeft: '10px',
-                    backgroundColor: !this.state.showItemsForSale
-                      ? 'green'
-                      : null,
-                  }}
-                >
-                  For Sale
-                </Button>
-                <Button
-                  onClick={() => this.toggleItemsToShow('showNotForSale')}
-                  disabled={!this.state.showItemsForSale}
-                  style={{
-                    width: '150px',
-                    marginLeft: '10px',
-                    backgroundColor: this.state.showItemsForSale ? 'red' : null,
-                  }}
-                >
-                  Not For Sale
-                </Button>
+                <div>
+                  <Nav tabs>
+                    <NavItem>
+                      <NavLink
+                        style={{ cursor: 'pointer' }}
+                        className={
+                          this.state.activeTab === '1' ? 'active' : null
+                        }
+                        onClick={() => {
+                          this.toggleItemsToShow('1')
+                        }}
+                      >
+                        For Sale
+                      </NavLink>
+                    </NavItem>
+                    <NavItem>
+                      <NavLink
+                        style={{ cursor: 'pointer' }}
+                        className={
+                          this.state.activeTab === '2' ? 'active' : null
+                        }
+                        onClick={() => {
+                          this.toggleItemsToShow('2')
+                        }}
+                      >
+                        Not For Sale
+                      </NavLink>
+                    </NavItem>
+                  </Nav>
+                  <TabContent activeTab={this.state.activeTab}>
+                    <TabPane tabId="1"></TabPane>
+                    <TabPane tabId="2"></TabPane>
+                  </TabContent>
+                </div>
               </Row>
               {this.context.collapsed ? (
                 <InfiniteScroll
