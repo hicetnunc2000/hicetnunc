@@ -72,11 +72,6 @@ export default class Feed extends Component {
     }
   }
 
-  setActiveTab = (tab) => {
-    console.log('yoo')
-    if (this.state.activeTab !== tab) this.setState({ activeTab: tab })
-  }
-
   toggleItemsToShow = (buttonTitle) => {
     if (buttonTitle === 'showNotForSale') {
       return this.setState({ showItemsForSale: false })

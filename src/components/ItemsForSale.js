@@ -72,7 +72,7 @@ export default class ItemsForSale extends Component {
         </video>
       </div>
     )
-    console.log(this.props.items)
+
     return (
       <div>
         <Row>
