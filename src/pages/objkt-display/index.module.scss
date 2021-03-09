@@ -1,27 +1,58 @@
 @import '../../styles/layout.scss';
+@import '../../styles/variables.scss';
 
 .container {
   width: 100%;
   height: 100%;
   min-height: 100vh;
-  padding: 55px 10px 100px 10px;
-  background: white;
+  padding: 55px 0;
 
-  @include respond-to('tablet') {
-    padding: 55px 0 100px 0;
+  .edition {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 50px;
+
+    @include respond-to('desktop') {
+      flex-direction: initial;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
   }
 
   .menu {
-    padding: 1em;
-
     & > * {
       margin-right: 1em;
     }
   }
 
   .info {
-    margin-top: 1em;
-    padding: 1em;
-    border: 1px dashed grey;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+
+    .item {
+      display: flex;
+      flex-direction: column;
+      margin-top: 1em;
+    }
+
+    .tag {
+      display: inline-flex;
+      background-color: rgba(0, 0, 0, 0.1);
+      color: grey;
+      border-radius: 4px;
+      padding: 3px 6px;
+      margin-right: 6px;
+      margin-bottom: 6px;
+      font-size: 80%;
+      text-transform: uppercase;
+      font-size: 10px;
+    }
+  }
+
+  .curate {
+    input {
+      padding: 12px 0;
+    }
   }
 }
