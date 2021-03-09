@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
-import { Card, Col, Row } from 'reactstrap'
+import { Card, Col, Row, Button } from 'reactstrap'
 import { HicetnuncContext } from '../context/HicetnuncContext'
 import Menu from '../components/Menu'
-import { LazyLoadImage } from 'react-lazy-load-image-component'
+import ItemsForSale from '../components/ItemsForSale'
+import ItemsNotForSale from '../components/ItemsNotForSale'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { BabelLoading } from 'react-loadingg'
 
@@ -12,6 +13,8 @@ export default class Feed extends Component {
   static contextType = HicetnuncContext
 
   state = {
+    showItemsForSale: true,
+    activeTab: '1',
     results: [],
     loading: true,
     back: '',
@@ -41,18 +44,9 @@ export default class Feed extends Component {
     await axios
       .post(process.env.REACT_APP_FEED, { counter: this.state.counter + 1 })
       .then((res) => {
+        const invalidIds = [1130, 1131, 1417, 1418, 1419, 641, 1547]
         const filtered = res.data.result.filter((e) => {
-          if (
-            e.token_id !== 1130 &&
-            e.token_id !== 1131 &&
-            e.token_id !== 1417 &&
-            e.token_id !== 1418 &&
-            e.token_id !== 1419 &&
-            e.token_id !== 641 &&
-            e.token_id !== 1547
-          ) {
-            return e
-          }
+          if (!invalidIds.includes(e.token_id)) return e
         })
 
         this.setState({
@@ -61,16 +55,12 @@ export default class Feed extends Component {
         })
 
         if (res.data.result.length < 10) {
-          this.setState({ hasMore: false })
-          return
+          return this.setState({ hasMore: false })
         }
       })
-
-    console.log(this.state)
   }
 
   collect = (event, index) => {
-    console.log(index)
     if (this.context.Tezos == null) {
       alert('sync')
     } else {
@@ -82,62 +72,50 @@ export default class Feed extends Component {
     }
   }
 
+  setActiveTab = (tab) => {
+    console.log('yoo')
+    if (this.state.activeTab !== tab) this.setState({ activeTab: tab })
+  }
+
+  toggleItemsToShow = (buttonTitle) => {
+    if (buttonTitle === 'showNotForSale') {
+      return this.setState({ showItemsForSale: false })
+    }
+    return this.setState({ showItemsForSale: true })
+  }
+
   render() {
-    const info = (index) => (
-      <div style={{ display: 'inline' }}>
-        <a
-          style={{
-            color: '#000',
-            '&:hover': {
-              color: '#000',
-            },
-          }}
-          href={`/objkt/${this.state.items[index].token_id}`}
-        >
-          OBJKT#{this.state.items[index].token_id}
-        </a>
-      </div>
-    )
-    const image = (index) => (
-      <div>
-        <LazyLoadImage
-          className="media"
-          style={{ maxHeight: '50vh', height: 'auto', width: 'auto' }}
-          src={`https://ipfs.io/ipfs/${
-            this.state.items[index].token_info.artifactUri.split('//')[1]
-          }`}
-          alt="💥"
-        />
-      </div>
-    )
-
-    const video = (index) => (
-      <div style={{ paddingTop: '4%', display: 'table', margin: '0 auto' }}>
-        <video
-          className="media"
-          style={{ maxHeight: '60vh', height: 'auto', width: 'auto' }}
-          controls
-          autoPlay
-          muted
-          loop
-        >
-          <source
-            src={
-              'https://dweb.link/ipfs/' +
-              this.state.items[index].token_info.artifactUri.split('//')[1]
-            }
-            alt="💥"
-            type="video/mp4"
-          ></source>
-        </video>
-      </div>
-    )
-
     return (
       <div>
         <Row>
           <Col sm="12" md={{ size: 6, offset: 3 }}>
             <Card body style={{ border: 0, animation: 'fadeMe 1.2s' }}>
+              <Row style={{ margin: '0 auto', marginTop: '50px' }}>
+                <Button
+                  onClick={() => this.toggleItemsToShow('showForSale')}
+                  disabled={this.state.showItemsForSale}
+                  style={{
+                    width: '150px',
+                    marginLeft: '10px',
+                    backgroundColor: !this.state.showItemsForSale
+                      ? 'green'
+                      : null,
+                  }}
+                >
+                  For Sale
+                </Button>
+                <Button
+                  onClick={() => this.toggleItemsToShow('showNotForSale')}
+                  disabled={!this.state.showItemsForSale}
+                  style={{
+                    width: '150px',
+                    marginLeft: '10px',
+                    backgroundColor: this.state.showItemsForSale ? 'red' : null,
+                  }}
+                >
+                  Not For Sale
+                </Button>
+              </Row>
               {this.context.collapsed ? (
                 <InfiniteScroll
                   className="cel"
@@ -161,91 +139,23 @@ export default class Feed extends Component {
                     <p style={{ textAlign: 'center' }}>mint mint mint ✨</p>
                   }
                 >
-                  {this.state.items.map((i, index) => {
-                    return (
-                      <Card
-                        key={i.token_id}
-                        style={{
-                          paddingTop: '4%',
-                          border: 0,
-                          animation: 'fadeMe 1.2s',
-                        }}
-                      >
-                        <div
-                          style={{
-                            paddingTop: '3%',
-                            display: 'table',
-                            margin: '0 auto',
-                          }}
-                          key={index}
-                        >
-                          {this.state.items[index].token_info != undefined ? (
-                            this.state.items[index].token_info.formats[0]
-                              .mimeType == 'video/mp4' ? (
-                              video(index)
-                            ) : (
-                              image(index)
-                            )
-                          ) : (
-                            <p>💥</p>
-                          )}
-                        </div>
-                        <div
-                          style={{
-                            display: 'inline',
-                            width: '75%',
-                            margin: '0 auto',
-                          }}
-                        >
-                          <span>
-                            {info(index)}
-                            <div style={{ display: 'inline', float: 'right' }}>
-                              {this.state.items[index].swaps.length != 0 ? (
-                                <span
-                                  style={{ float: 'left', marginTop: '5px' }}
-                                >
-                                  {
-                                    this.state.items[index].swaps[0]
-                                      .objkt_amount
-                                  }{' '}
-                                  left
-                                  {/* this.state.items[index].total_amount */}
-                                </span>
-                              ) : (
-                                <span
-                                  style={{ float: 'left', marginTop: '5px' }}
-                                >
-                                  {/* this.state.items[index].total_amount */}{' '}
-                                </span>
-                              )}
-                              <span>
-                                <button
-                                  onClick={(event) =>
-                                    this.collect(event, index)
-                                  }
-                                  style={{
-                                    backgroundColor: 'white',
-                                    float: 'right',
-                                  }}
-                                >
-                                  {this.state.items[index].swaps.length != 0 ? (
-                                    <span>
-                                      collect for{' '}
-                                      {parseInt(
-                                        this.state.items[index].swaps[0]
-                                          .xtz_per_objkt / 1000000
-                                      )}{' '}
-                                      tez
-                                    </span>
-                                  ) : (
-                                    <span>not for sale</span>
-                                  )}
-                                </button>
-                              </span>
-                            </div>
-                          </span>
-                        </div>
-                      </Card>
+                  {this.state.items.map((item, index) => {
+                    const { items, hasMore, showItemsForSale } = this.state
+                    return this.state.items[index].swaps.length === 0 &&
+                      !showItemsForSale ? (
+                      <ItemsNotForSale
+                        item={item}
+                        index={index}
+                        items={items}
+                        hasMore={hasMore}
+                      />
+                    ) : (
+                      <ItemsForSale
+                        item={item}
+                        index={index}
+                        items={items}
+                        hasMore={hasMore}
+                      />
                     )
                   })}
                 </InfiniteScroll>
