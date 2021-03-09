@@ -42,7 +42,7 @@ export default class Feed extends Component {
       .post(process.env.REACT_APP_FEED, { counter: this.state.counter + 1 })
       .then((res) => {
         const filtered = res.data.result.filter((e) => {
-          if (
+          return (
             e.token_id !== 1130 &&
             e.token_id !== 1131 &&
             e.token_id !== 1417 &&
@@ -50,9 +50,7 @@ export default class Feed extends Component {
             e.token_id !== 1419 &&
             e.token_id !== 641 &&
             e.token_id !== 1547
-          ) {
-            return e
-          }
+          )
         })
 
         console.log(res.data)
