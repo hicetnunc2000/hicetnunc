@@ -104,8 +104,9 @@ export default class Feed extends Component {
         <LazyLoadImage
           className="media"
           style={{ maxHeight: '50vh', height: 'auto', width: 'auto' }}
-          src={`https://ipfs.io/ipfs/${this.state.items[index].token_info.artifactUri.split('//')[1]
-            }`}
+          src={`https://ipfs.io/ipfs/${
+            this.state.items[index].token_info.artifactUri.split('//')[1]
+          }`}
           alt="💥"
         />
       </div>
@@ -179,9 +180,9 @@ export default class Feed extends Component {
                           }}
                           key={index}
                         >
-                          {this.state.items[index].token_info != undefined ? (
+                          {this.state.items[index].token_info !== undefined ? (
                             this.state.items[index].token_info.formats[0]
-                              .mimeType == 'video/mp4' ? (
+                              .mimeType === 'video/mp4' ? (
                               video(index)
                             ) : (
                               image(index)
@@ -200,17 +201,16 @@ export default class Feed extends Component {
                           <span>
                             {info(index)}
                             <div style={{ display: 'inline', float: 'right' }}>
-                              {this.state.items[index].swaps.length != 0 ? (
+                              {this.state.items[index].swaps.length ? (
                                 <span
                                   style={{ float: 'left', marginTop: '5px' }}
                                 >
                                   {
                                     this.state.items[index].swaps[0]
                                       .objkt_amount
-                                  }{'/'}
-                                  {
-                                    this.state.items[index].total_amount
                                   }
+                                  {'/'}
+                                  {this.state.items[index].total_amount}
                                   {/* this.state.items[index].total_amount */}
                                 </span>
                               ) : (
@@ -230,7 +230,7 @@ export default class Feed extends Component {
                                     float: 'right',
                                   }}
                                 >
-                                  {this.state.items[index].swaps.length != 0 ? (
+                                  {this.state.items[index].swaps.length ? (
                                     <span>
                                       collect for{' '}
                                       {parseInt(
