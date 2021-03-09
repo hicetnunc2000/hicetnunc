@@ -14,6 +14,7 @@ export const renderMediaType = (token_info) => {
       return <ImageComponent src={url} />
     case 'video/mp4':
     case 'video/ogg':
+    case 'video/quicktime':
       url = `https://dweb.link/ipfs/${uri.split('//')[1]}`
       return <VideoComponent src={url} />
     default:
