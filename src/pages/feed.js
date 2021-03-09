@@ -56,6 +56,7 @@ export default class Feed extends Component {
           }
         })
 
+        console.log(res.data)
         this.setState({
           items: this.state.items.concat(filtered),
           counter: this.state.counter + 1,
@@ -212,8 +213,10 @@ export default class Feed extends Component {
                                   {
                                     this.state.items[index].swaps[0]
                                       .objkt_amount
-                                  }{' '}
-                                  left
+                                  }{'/'}
+                                  {
+                                    this.state.items[index].total_amount
+                                  }
                                   {/* this.state.items[index].total_amount */}
                                 </span>
                               ) : (
