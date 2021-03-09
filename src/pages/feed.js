@@ -55,6 +55,7 @@ export default class Feed extends Component {
           }
         })
 
+        console.log(res.data)
         this.setState({
           items: this.state.items.concat(filtered),
           counter: this.state.counter + 1,
@@ -103,9 +104,8 @@ export default class Feed extends Component {
         <LazyLoadImage
           className="media"
           style={{ maxHeight: '50vh', height: 'auto', width: 'auto' }}
-          src={`https://ipfs.io/ipfs/${
-            this.state.items[index].token_info.artifactUri.split('//')[1]
-          }`}
+          src={`https://ipfs.io/ipfs/${this.state.items[index].token_info.artifactUri.split('//')[1]
+            }`}
           alt="💥"
         />
       </div>
@@ -207,8 +207,10 @@ export default class Feed extends Component {
                                   {
                                     this.state.items[index].swaps[0]
                                       .objkt_amount
-                                  }{' '}
-                                  left
+                                  }{'/'}
+                                  {
+                                    this.state.items[index].total_amount
+                                  }
                                   {/* this.state.items[index].total_amount */}
                                 </span>
                               ) : (
