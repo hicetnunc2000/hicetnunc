@@ -136,7 +136,6 @@ export default class Feed extends Component {
                 >
                   {this.state.items.map((item, index) => {
                     const { items, hasMore } = this.state
-
                     return item.swaps.length === 0 &&
                       !this.state.showItemsForSale ? (
                       <ItemsNotForSale
