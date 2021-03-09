@@ -120,7 +120,7 @@ export default class ObjktDisplay extends Component {
                     <div>
                       {objkt.swaps.length !== 0 ? (
                         <span>
-                          {objkt.swaps[0].objkt_amount} left
+                          {objkt.swaps[0].objkt_amount}/
                           {objkt.total_amount}
                         </span>
                       ) : (

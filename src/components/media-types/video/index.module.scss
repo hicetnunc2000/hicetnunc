@@ -1,4 +1,19 @@
+@import '../../../styles/layout.scss';
+
 .container {
   width: 100%;
-  height: auto;
+
+  .video {
+    display: block;
+    width: 100%;
+    height: auto;
+    margin: 0 auto;
+
+    @include respond-to('desktop') {
+      max-height: 80vh;
+      width: auto;
+      height: initial;
+      max-width: 100%;
+    }
+  }
 }
