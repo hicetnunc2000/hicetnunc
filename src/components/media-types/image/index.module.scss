@@ -1,4 +1,11 @@
 .container {
+  display: flex;
   width: 100%;
-  height: auto;
+
+  .image {
+    max-height: 80vh;
+    width: auto;
+    margin: 0 auto;
+    max-width: 100%;
+  }
 }
