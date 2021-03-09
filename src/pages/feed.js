@@ -158,7 +158,12 @@ export default class Feed extends Component {
                     />
                   }
                   endMessage={
-                    <p style={{ textAlign: 'center' }}>mint mint mint ✨</p>
+                    <p style={{ textAlign: 'center' }}>
+                       mint mint mint{' '}
+                       <span role="img" aria-label="mint">
+                         ✨
+                       </span>
+                     </p>
                   }
                 >
                   {this.state.items.map((i, index) => {
@@ -187,7 +192,11 @@ export default class Feed extends Component {
                               image(index)
                             )
                           ) : (
-                            <p>💥</p>
+                            <p>
+                               <span role="img" aria-label="unrenderable">
+                                 💥
+                               </span>
+                             </p>
                           )}
                         </div>
                         <div
