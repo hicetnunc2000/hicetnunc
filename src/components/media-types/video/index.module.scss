@@ -1,11 +1,19 @@
+@import '../../../styles/layout.scss';
+
 .container {
-  display: flex;
   width: 100%;
 
   .video {
-    max-height: 80vh;
-    width: auto;
+    display: block;
+    width: 100%;
+    height: auto;
     margin: 0 auto;
-    max-width: 100%;
+
+    @include respond-to('desktop') {
+      max-height: 80vh;
+      width: auto;
+      height: initial;
+      max-width: 100%;
+    }
   }
 }
