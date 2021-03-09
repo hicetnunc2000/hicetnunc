@@ -16,7 +16,7 @@ export const renderMediaType = (token_info) => {
     case 'video/mp4':
     case 'video/ogg':
     case 'video/quicktime':
-      url = `https://dweb.link/ipfs/${uri.split('//')[1]}`
+      url = `https://ipfs.io/ipfs/${uri.split('//')[1]}`
       return <VideoComponent src={url} />
     default:
       console.warn('non supported mimeType', mimeType)

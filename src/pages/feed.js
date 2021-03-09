@@ -123,7 +123,7 @@ export default class Feed extends Component {
         >
           <source
             src={
-              'https://dweb.link/ipfs/' +
+              'https://ipfs.io/ipfs/' +
               this.state.items[index].token_info.artifactUri.split('//')[1]
             }
             alt="💥"
