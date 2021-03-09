@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { Link } from 'react-router-dom'
 import { Card, Col, Row } from 'reactstrap'
 import { HicetnuncContext } from '../context/HicetnuncContext'
 import Menu from '../components/Menu'
@@ -100,7 +101,7 @@ export default class Feed extends Component {
     )
     const image = (index) => (
       <div>
-        <a href={`/objkt/${this.state.items[index].token_id}`}>
+        <Link href={`/objkt/${this.state.items[index].token_id}`}>
           <LazyLoadImage
             className="media"
             style={{ maxHeight: '50vh', height: 'auto', width: 'auto' }}
@@ -109,7 +110,7 @@ export default class Feed extends Component {
             }`}
             alt="💥"
           />
-        </a>
+        </Link>
       </div>
     )
 
