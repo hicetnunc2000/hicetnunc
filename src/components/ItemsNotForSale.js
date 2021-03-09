@@ -73,6 +73,7 @@ export default class ItemsForSale extends Component {
       </div>
     )
 
+    if (this.props.item.swaps.length > 0) return null
     return (
       <div>
         <Row>

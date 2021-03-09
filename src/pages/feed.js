@@ -135,23 +135,24 @@ export default class Feed extends Component {
                   }
                 >
                   {this.state.items.map((item, index) => {
-                    const { items, hasMore, showItemsForSale } = this.state
-                    return this.state.items[index].swaps.length === 0 &&
-                      !showItemsForSale ? (
+                    const { items, hasMore } = this.state
+
+                    return item.swaps.length === 0 &&
+                      !this.state.showItemsForSale ? (
                       <ItemsNotForSale
                         item={item}
                         index={index}
                         items={items}
                         hasMore={hasMore}
                       />
-                    ) : (
+                    ) : item.swaps.length > 0 && this.state.showItemsForSale ? (
                       <ItemsForSale
                         item={item}
                         index={index}
                         items={items}
                         hasMore={hasMore}
                       />
-                    )
+                    ) : null
                   })}
                 </InfiniteScroll>
               ) : (
