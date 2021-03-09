@@ -100,36 +100,40 @@ export default class Feed extends Component {
     )
     const image = (index) => (
       <div>
-        <LazyLoadImage
-          className="media"
-          style={{ maxHeight: '50vh', height: 'auto', width: 'auto' }}
-          src={`https://ipfs.io/ipfs/${
-            this.state.items[index].token_info.artifactUri.split('//')[1]
-          }`}
-          alt="💥"
-        />
+        <a href={`/objkt/${this.state.items[index].token_id}`}>
+          <LazyLoadImage
+            className="media"
+            style={{ maxHeight: '50vh', height: 'auto', width: 'auto' }}
+            src={`https://ipfs.io/ipfs/${
+              this.state.items[index].token_info.artifactUri.split('//')[1]
+            }`}
+            alt="💥"
+          />
+        </a>
       </div>
     )
 
     const video = (index) => (
       <div style={{ paddingTop: '4%', display: 'table', margin: '0 auto' }}>
-        <video
-          className="media"
-          style={{ maxHeight: '60vh', height: 'auto', width: 'auto' }}
-          controls
-          autoPlay
-          muted
-          loop
-        >
-          <source
-            src={
-              'https://dweb.link/ipfs/' +
-              this.state.items[index].token_info.artifactUri.split('//')[1]
-            }
-            alt="💥"
-            type="video/mp4"
-          ></source>
-        </video>
+        <a href={`/objkt/${this.state.items[index].token_id}`}>
+          <video
+            className="media"
+            style={{ maxHeight: '60vh', height: 'auto', width: 'auto' }}
+            controls
+            autoPlay
+            muted
+            loop
+          >
+            <source
+              src={
+                'https://dweb.link/ipfs/' +
+                this.state.items[index].token_info.artifactUri.split('//')[1]
+              }
+              alt="💥"
+              type="video/mp4"
+            ></source>
+          </video>
+        </a>
       </div>
     )
 
