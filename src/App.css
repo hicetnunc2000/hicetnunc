@@ -1,3 +1,7 @@
+body {
+  overflow-x: hidden;
+}
+
 input {
   border: 0;
   padding: 12px;
