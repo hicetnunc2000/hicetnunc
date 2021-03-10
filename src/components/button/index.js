@@ -42,10 +42,10 @@ export const Button = ({
   )
 }
 
-export const primary = ({ children = null }) => (
+export const Primary = ({ children = null }) => (
   <div className={styles.primary}>{children}</div>
 )
 
-export const secondary = ({ children = null }) => (
+export const Secondary = ({ children = null }) => (
   <div className={styles.secondary}>{children}</div>
 )
