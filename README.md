@@ -37,8 +37,6 @@ check the issues for contributing
 
 `MIT license`
 
-# Development
+# Contributins
 
-We're slowly migrating to a more stable source code.
-
-Components should use sass and should be mobile first when defining the styles
+Please read our CONTRIBUTING.md
