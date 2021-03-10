@@ -14,7 +14,8 @@ const Footer = () => {
         color: 'white',
       }}
     >
-      sync -&gt; collect // sync -&gt; mint // sync -&gt; curate
+      <span>sync -&gt; collect // sync -&gt; mint // sync -&gt; curate</span><br/>
+      <span>use it consciously. visit artists profiles. be careful with copy minters.</span>
     </div>
   )
 }
