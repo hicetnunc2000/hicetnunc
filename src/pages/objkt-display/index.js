@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
-import { test } from '../../api'
-import { Container } from '../../components/container'
-import { Padding } from '../../components/padding'
+import { GetOBJKT } from '../../api'
+import { Page, Container, Padding } from '../../components/layout'
 import { Loading } from '../../components/loading'
 import { Button } from '../../components/button'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
@@ -30,13 +29,15 @@ export default class ObjktDisplay extends Component {
   }
 
   componentWillMount() {
-    test({ objkt_id: window.location.pathname.split('/')[2] }).then((data) => {
-      console.log(data)
-      this.setState({
-        objkt: data.result[0],
-        loading: false,
-      })
-    })
+    GetOBJKT({ objkt_id: window.location.pathname.split('/')[2] }).then(
+      (data) => {
+        console.log(data)
+        this.setState({
+          objkt: data.result[0],
+          loading: false,
+        })
+      }
+    )
   }
 
   handleChange = (event) => {
@@ -92,7 +93,7 @@ export default class ObjktDisplay extends Component {
   render() {
     const { loading, info, owners, objkt, owners_arr, curate } = this.state
     return (
-      <div className={styles.container}>
+      <Page>
         <Loading loading={loading}>
           {!loading && (
             <>
@@ -244,7 +245,7 @@ export default class ObjktDisplay extends Component {
             </>
           )}
         </Loading>
-      </div>
+      </Page>
     )
   }
 }

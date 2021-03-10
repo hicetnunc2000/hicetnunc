@@ -1,6 +1,6 @@
 import React, { createContext, Component } from 'react'
 import { BeaconWallet } from '@taquito/beacon-wallet'
-import { MichelsonMap, TezosToolkit } from '@taquito/taquito'
+import { TezosToolkit } from '@taquito/taquito'
 const { NetworkType } = require('@airgap/beacon-sdk')
 var ls = require('local-storage')
 const axios = require('axios')
@@ -14,7 +14,6 @@ const wallet = new BeaconWallet({
   preferredNetwork: 'mainnet',
 })
 Tezos.setWalletProvider(wallet)
-
 
 export default class HicetnuncContextProvider extends Component {
   constructor(props) {
@@ -182,7 +181,7 @@ export default class HicetnuncContextProvider extends Component {
         this.setState({
           address: undefined,
         })
-      }, 
+      },
 
       /* 
                 airgap/thanos interop methods
