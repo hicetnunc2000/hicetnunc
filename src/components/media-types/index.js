@@ -16,6 +16,7 @@ export const renderMediaType = (token_info) => {
     case 'image/png':
     case 'image/svg+xml':
     case 'image/bmp':
+    case 'image/webp':
       url = `https://cloudflare-ipfs.com/ipfs/${path}`
       return <ImageComponent src={url} />
     /* VIDEOS */

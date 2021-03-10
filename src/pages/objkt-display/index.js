@@ -2,7 +2,8 @@ import React, { Component } from 'react'
 import { GetOBJKT } from '../../api'
 import { Page, Container, Padding } from '../../components/layout'
 import { LoadingContainer } from '../../components/loading'
-import { Button } from '../../components/button'
+import { ItemInfo } from '../../components/item-info'
+import { Button, Primary } from '../../components/button'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
 import { walletPreview } from '../../utils/string'
 import { renderMediaType } from '../../components/media-types'
@@ -102,50 +103,15 @@ export default class ObjktDisplay extends Component {
 
               <Container>
                 <Padding>
-                  <div className={styles.edition}>
-                    <span>
-                      OBJKT#{objkt.token_id}
-                      <br />
-                      issuer{' '}
-                      <Button to={`/tz/${objkt.token_info.creators[0]}`}>
-                        {walletPreview(objkt.token_info.creators[0])}
-                      </Button>
-                    </span>
-
-                    <div>
-                      {objkt.swaps.length !== 0 ? (
-                        <span>
-                          {objkt.swaps[0].objkt_amount}/{objkt.total_amount}
-                        </span>
-                      ) : (
-                        <span>{objkt.total_amount} </span>
-                      )}
-                      <button
-                        onClick={this.collect}
-                        style={{
-                          backgroundColor: 'white',
-                        }}
-                      >
-                        {objkt.swaps.length !== 0 ? (
-                          <span>
-                            collect for{' '}
-                            {parseInt(objkt.swaps[0].xtz_per_objkt / 1000000)}{' '}
-                            tez
-                          </span>
-                        ) : (
-                          <span>not for sale</span>
-                        )}
-                      </button>
-                    </div>
-                  </div>
+                  <ItemInfo {...objkt} isDetailView />
                 </Padding>
               </Container>
 
               <Container>
                 <Padding>
                   <div className={styles.menu}>
-                    <Button onClick={this.info} selected={info}>
-                      info
+                    <Button onClick={this.info}>
+                      <Primary selected={info}>info</Primary>
                     </Button>
 
                     {objkt.token_info.creators[0] === this.context.address && (
