@@ -5,14 +5,14 @@
   width: 100%;
   margin-bottom: 20px;
 
-  @include respond-to('desktop') {
+  @include respond-to('tablet') {
     width: 50%;
     margin: 0 auto;
     margin-bottom: 20px;
   }
 
   &.large {
-    @include respond-to('desktop') {
+    @include respond-to('tablet') {
       width: 55%;
     }
   }

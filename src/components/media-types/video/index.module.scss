@@ -9,7 +9,7 @@
     height: auto;
     margin: 0 auto;
 
-    @include respond-to('desktop') {
+    @include respond-to('tablet') {
       max-height: 80vh;
       width: auto;
       height: initial;

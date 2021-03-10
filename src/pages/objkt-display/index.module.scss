@@ -12,7 +12,7 @@
     flex-direction: column;
     margin-bottom: 50px;
 
-    @include respond-to('desktop') {
+    @include respond-to('tablet') {
       flex-direction: initial;
       justify-content: space-between;
       align-items: flex-end;
