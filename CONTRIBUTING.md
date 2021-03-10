@@ -12,13 +12,11 @@ We're also aiming to reduce our dependencies in order to make our javascript bun
 
 - `reactstrap`
 - `react-loadingg`
-- `bootstrap`
 - etc
 
-It might not be easy to spot, because there is only one or two pages that have been properly re-writen. There are differences between using a `<button>` or a `<a>` or a `<Link>` (those differences range from security to accessibility, etc). The rule of thumb at the moment is to use `<Link to="/something" />` if you want to change pages within our site. If you want to open a link on an external page, then you need to use `<a href="some-url" target="_blank"/>`, and finally if all you want is to add user interaction with `onClick` please use a `<button>`. This logic has been abstracted for you into a component `src/components/button`. Soon that component will be able to render different views based on props being passed into it. like `<Button primary />` or `<Button secondary />`. 
+It might not be easy to spot, because there is only one or two pages that have been properly re-writen. There are differences between using a `<button>` or a `<a>` or a `<Link>` (those differences range from security to accessibility, etc). The rule of thumb at the moment is to use `<Link to="/something" />` if you want to change pages within our site. If you want to open a link on an external page, then you need to use `<a href="some-url" target="_blank"/>`, and finally if all you want is to add user interaction with `onClick` please use a `<button>`. This logic has been abstracted for you into a component `src/components/button`. Soon that component will be able to render different views based on props being passed into it. like `<Button primary />` or `<Button secondary />`.
 
 We're currently implementing [Storybook](https://storybook.js.org/) which will be the ideal place where you can check how the components look. We're also currently implementing basic unit testing using [Jest](https://jestjs.io/).
-
 
 ## Components
 
