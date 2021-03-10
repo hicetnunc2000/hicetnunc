@@ -43,12 +43,16 @@ export const Feed = () => {
           </Container>
         }
         endMessage={
-          <p>
-            mint mint mint{' '}
-            <span role="img" aria-labelledby={'Sparkles emoji'}>
-              ✨
-            </span>
-          </p>
+          <Container>
+            <Padding>
+              <p>
+                mint mint mint{' '}
+                <span role="img" aria-labelledby={'Sparkles emoji'}>
+                  ✨
+                </span>
+              </p>
+            </Padding>
+          </Container>
         }
       >
         {items.map((item, index) => (
