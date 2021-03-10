@@ -2,8 +2,10 @@
 import React, { useEffect, useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { GetFeed } from '../../api'
-import { FeedItem } from '../../components/feed-item'
 import { Page, Container, Padding } from '../../components/layout'
+import { FeedItem } from '../../components/feed-item'
+import { Loading } from '../../components/loading'
+import styles from './index.module.scss'
 
 export const Feed = () => {
   const [items, setItems] = useState([])
@@ -33,7 +35,11 @@ export const Feed = () => {
         hasMore={hasMore}
         loader={
           <Container>
-            <Padding>Loading...</Padding>
+            <Padding>
+              <div className={styles.container}>
+                <Loading />
+              </div>
+            </Padding>
           </Container>
         }
         endMessage={
