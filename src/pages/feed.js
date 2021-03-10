@@ -74,7 +74,7 @@ export default class Feed extends Component {
   collect = (event, index) => {
     console.log(index)
     if (this.context.Tezos == null) {
-      this.context.syncTaquito()
+      alert('sync')
     } else {
       this.context.collect(
         1,
