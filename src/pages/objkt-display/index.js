@@ -135,7 +135,7 @@ export default class ObjktDisplay extends Component {
                         {objkt.swaps.length !== 0 ? (
                           <span>
                             collect for{' '}
-                            {parseInt(objkt.swaps[0].xtz_per_objkt / 1000000)}{' '}
+                            {objkt.swaps[0].xtz_per_objkt / 1000000}{' '}
                             tez
                           </span>
                         ) : (
