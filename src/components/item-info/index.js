@@ -1,20 +1,18 @@
 import React from 'react'
 import { PATH } from '../../constants'
-import { Container } from '../layout'
-import { Button } from '../button'
-import { ItemInfo } from '../item-info'
-import { renderMediaType } from '../media-types'
+import { Padding } from '../layout'
+import { Button, Primary } from '../button'
 import styles from './index.module.scss'
 
-export const FeedItem = ({ token_info, token_id, swaps }) => {
-  // renderMediaType
+export const ItemInfo = ({ token_id }) => {
   return (
-    <Container>
-      <Button to={`${PATH.OBJKT}/${token_id}`}>
-        <div className={styles.container}>{renderMediaType(token_info)}</div>
-      </Button>
-      <ItemInfo token_id={token_id} swaps={swaps} />
-    </Container>
+    <Padding>
+      <div className={styles.container}>
+        <Button to={`${PATH.OBJKT}/${token_id}`}>
+          <Primary>OBJKT#{token_id}</Primary>
+        </Button>
+      </div>
+    </Padding>
   )
 }
 

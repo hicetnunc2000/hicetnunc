@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { GetFeed } from '../../api'
@@ -15,7 +16,8 @@ export const Feed = () => {
 
   useEffect(() => {
     GetFeed({ counter: count }).then((data) => {
-      setItems(data)
+      const next = items.concat(data)
+      setItems(next)
 
       if (data.length < 10) {
         setHasMore(false)
@@ -25,28 +27,28 @@ export const Feed = () => {
 
   return (
     <Page>
-      <Container>
-        <Padding>
-          <InfiniteScroll
-            dataLength={items.length}
-            next={loadMore}
-            hasMore={hasMore}
-            loader={<h4>Loading...</h4>}
-            endMessage={
-              <p>
-                mint mint mint{' '}
-                <span role="img" aria-labelledby={'Sparkles emoji'}>
-                  ✨
-                </span>
-              </p>
-            }
-          >
-            {items.map((item, index) => (
-              <FeedItem key={`${item.token_id}-${index}`} {...item} />
-            ))}
-          </InfiniteScroll>
-        </Padding>
-      </Container>
+      <InfiniteScroll
+        dataLength={items.length}
+        next={loadMore}
+        hasMore={hasMore}
+        loader={
+          <Container>
+            <Padding>Loading...</Padding>
+          </Container>
+        }
+        endMessage={
+          <p>
+            mint mint mint{' '}
+            <span role="img" aria-labelledby={'Sparkles emoji'}>
+              ✨
+            </span>
+          </p>
+        }
+      >
+        {items.map((item, index) => (
+          <FeedItem key={`${item.token_id}-${index}`} {...item} />
+        ))}
+      </InfiniteScroll>
     </Page>
   )
 }
