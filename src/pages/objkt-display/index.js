@@ -6,6 +6,7 @@ import { Button } from '../../components/button'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
 import { walletPreview } from '../../utils/string'
 import { renderMediaType } from '../../components/media-types'
+import Menu from '../../components/Menu'
 import styles from './index.module.scss'
 
 const axios = require('axios')
@@ -98,158 +99,162 @@ export default class ObjktDisplay extends Component {
     const { loading, info, owners, objkt, owners_arr, curate } = this.state
     return (
       <div className={styles.container}>
-        <Loading loading={loading}>
-          {!loading && (
-            <>
-              <Container large>
-                {objkt.token_id && renderMediaType(objkt.token_info)}
-              </Container>
+        {!this.context.collapsed ? (
+          <Menu />
+        ) : (
+          <Loading loading={loading}>
+            {!loading && (
+              <>
+                <Container large>
+                  {objkt.token_id && renderMediaType(objkt.token_info)}
+                </Container>
 
-              <Container>
-                <Padding>
-                  <div className={styles.edition}>
-                    <span>
-                      OBJKT#{objkt.token_id}
-                      <br />
-                      issuer{' '}
-                      <Button to={`/tz/${objkt.token_info.creators[0]}`}>
-                        {walletPreview(objkt.token_info.creators[0])}
-                      </Button>
-                    </span>
+                <Container>
+                  <Padding>
+                    <div className={styles.edition}>
+                      <span>
+                        OBJKT#{objkt.token_id}
+                        <br />
+                        issuer{' '}
+                        <Button to={`/tz/${objkt.token_info.creators[0]}`}>
+                          {walletPreview(objkt.token_info.creators[0])}
+                        </Button>
+                      </span>
 
-                    <div>
-                      {objkt.swaps.length !== 0 ? (
-                        <span>
-                          {objkt.swaps[0].objkt_amount}/
-                          {objkt.total_amount}
-                        </span>
-                      ) : (
-                        <span>{objkt.total_amount} </span>
-                      )}
-                      <button
-                        onClick={this.collect}
-                        style={{
-                          backgroundColor: 'white',
-                        }}
-                      >
+                      <div>
                         {objkt.swaps.length !== 0 ? (
                           <span>
-                            collect for{' '}
-                            {objkt.swaps[0].xtz_per_objkt / 1000000}{' '}
-                            tez
+                            {objkt.swaps[0].objkt_amount}/{objkt.total_amount}
                           </span>
                         ) : (
-                          <span>not for sale</span>
+                          <span>{objkt.total_amount} </span>
                         )}
-                      </button>
-                    </div>
-                  </div>
-                </Padding>
-              </Container>
-
-              <Container>
-                <Padding>
-                  <div className={styles.menu}>
-                    <Button onClick={this.info} selected={info}>
-                      info
-                    </Button>
-
-                    {objkt.token_info.creators[0] === this.context.address && (
-                      <>
-                        <Button onClick={this.curate} selected={curate}>
-                          +curate
-                        </Button>
-                        {objkt.swaps.length !== 0 && (
-                          <Button onClick={this.cancel}>
-                            -cancel curation
-                          </Button>
-                        )}
-                      </>
-                    )}
-                  </div>
-                </Padding>
-              </Container>
-
-              <Container>
-                <Padding>
-                  <div className={styles.curate}>
-                    {owners &&
-                      owners_arr.map((e) => (
-                        <div>
-                          {e.balance}x{' '}
-                          <a href={`https://tzkt.io/${e.address}`}>
-                            {e.address}
-                          </a>
-                        </div>
-                      ))}
-                    {curate && (
-                      <div
-                        style={{
-                          display: 'inline',
-                        }}
-                      >
-                        <input
-                          type="text"
-                          name="objkt_amount"
-                          onChange={this.handleChange}
-                          placeholder="OBJKT amount"
-                        ></input>
-                        <br />
-                        <input
-                          style={{ width: '100%' }}
-                          type="text"
-                          name="xtz_per_objkt"
-                          placeholder="µtez per OBJKT (1 tez = 1000000 µtez)"
-                          onChange={this.handleChange}
-                        ></input>
-                        <br />
                         <button
-                          style={{ width: '100%' }}
-                          onClick={this.submitForm}
+                          onClick={this.collect}
+                          style={{
+                            backgroundColor: 'white',
+                          }}
                         >
-                          curate
+                          {objkt.swaps.length !== 0 ? (
+                            <span>
+                              collect for{' '}
+                              {parseInt(objkt.swaps[0].xtz_per_objkt / 1000000)}{' '}
+                              tez
+                            </span>
+                          ) : (
+                            <span>not for sale</span>
+                          )}
                         </button>
                       </div>
-                    )}
-                  </div>
-                </Padding>
-              </Container>
+                    </div>
+                  </Padding>
+                </Container>
 
-              <Container>
-                <Padding>
-                  {info && (
-                    <div className={styles.info}>
-                      <div className={styles.item}>
-                        <div>TITLE</div>
-                        <div>{objkt.name}</div>
-                      </div>
-                      <div className={styles.item}>
-                        <div>DESCRIPTION</div>
-                        <div>{objkt.token_info.description}</div>
-                      </div>
-                      {objkt.token_info.tags.length > 0 && (
-                        <div className={styles.item}>
+                <Container>
+                  <Padding>
+                    <div className={styles.menu}>
+                      <Button onClick={this.info} selected={info}>
+                        info
+                      </Button>
+
+                      {objkt.token_info.creators[0] ===
+                        this.context.address && (
+                        <>
+                          <Button onClick={this.curate} selected={curate}>
+                            +curate
+                          </Button>
+                          {objkt.swaps.length !== 0 && (
+                            <Button onClick={this.cancel}>
+                              -cancel curation
+                            </Button>
+                          )}
+                        </>
+                      )}
+                    </div>
+                  </Padding>
+                </Container>
+
+                <Container>
+                  <Padding>
+                    <div className={styles.curate}>
+                      {owners &&
+                        owners_arr.map((e) => (
                           <div>
-                            {objkt.token_info.tags.map((tag, index) => {
-                              return (
-                                <div
-                                  key={`tag${tag}${index}`}
-                                  className={styles.tag}
-                                >
-                                  {tag}
-                                </div>
-                              )
-                            })}
+                            {e.balance}x{' '}
+                            <a href={`https://tzkt.io/${e.address}`}>
+                              {e.address}
+                            </a>
                           </div>
+                        ))}
+                      {curate && (
+                        <div
+                          style={{
+                            display: 'inline',
+                          }}
+                        >
+                          <input
+                            type="text"
+                            name="objkt_amount"
+                            onChange={this.handleChange}
+                            placeholder="OBJKT amount"
+                          ></input>
+                          <br />
+                          <input
+                            style={{ width: '100%' }}
+                            type="text"
+                            name="xtz_per_objkt"
+                            placeholder="µtez per OBJKT (1 tez = 1000000 µtez)"
+                            onChange={this.handleChange}
+                          ></input>
+                          <br />
+                          <button
+                            style={{ width: '100%' }}
+                            onClick={this.submitForm}
+                          >
+                            curate
+                          </button>
                         </div>
                       )}
                     </div>
-                  )}
-                </Padding>
-              </Container>
-            </>
-          )}
-        </Loading>
+                  </Padding>
+                </Container>
+
+                <Container>
+                  <Padding>
+                    {info && (
+                      <div className={styles.info}>
+                        <div className={styles.item}>
+                          <div>TITLE</div>
+                          <div>{objkt.name}</div>
+                        </div>
+                        <div className={styles.item}>
+                          <div>DESCRIPTION</div>
+                          <div>{objkt.token_info.description}</div>
+                        </div>
+                        {objkt.token_info.tags.length > 0 && (
+                          <div className={styles.item}>
+                            <div>
+                              {objkt.token_info.tags.map((tag, index) => {
+                                return (
+                                  <div
+                                    key={`tag${tag}${index}`}
+                                    className={styles.tag}
+                                  >
+                                    {tag}
+                                  </div>
+                                )
+                              })}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </Padding>
+                </Container>
+              </>
+            )}
+          </Loading>
+        )}
       </div>
     )
   }
