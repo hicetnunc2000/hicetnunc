@@ -3,22 +3,24 @@
 
 .container {
   @include resetButton();
+}
+
+.primary {
   color: $color;
 
   &.selected {
     font-weight: bold;
   }
-
   @include hover {
     color: $color;
     &:not(.selected) {
       text-decoration: underline;
     }
   }
+}
 
-  &.secondary {
-    @include hover {
-      text-decoration: none;
-    }
+.secondary {
+  @include hover {
+    text-decoration: none;
   }
 }

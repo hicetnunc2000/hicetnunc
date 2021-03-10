@@ -1,6 +1,7 @@
 import React, { useContext } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
+import { Container, Padding } from '../layout'
 import { Button } from '../button'
 import { fadeIn } from '../../utils/motion'
 import styles from './style.module.scss'
@@ -34,25 +35,27 @@ export const Header = () => {
 
       <AnimatePresence>
         {!context.collapsed && (
-          <motion.div {...fadeIn}>
-            <div className={styles.menu}>
-              <div className={styles.content}>
-                <ul>
-                  <li>○</li>
-                  <li>
-                    <Button to="/mint">
-                      OBJKTs<i style={{ fontSize: '15px' }}>(mint NFTs)</i>
-                    </Button>
-                  </li>
-                  <li>
-                    <Button to="/sync">manage assets</Button>
-                  </li>
-                  <li>
-                    <Button to="/about">about</Button>
-                  </li>
-                </ul>
-              </div>
-            </div>
+          <motion.div className={styles.menu} {...fadeIn()}>
+            <Container>
+              <Padding>
+                <div className={styles.content}>
+                  <ul>
+                    <li>○</li>
+                    <li>
+                      <Button to="/mint">
+                        OBJKTs<i style={{ fontSize: '15px' }}>(mint NFTs)</i>
+                      </Button>
+                    </li>
+                    <li>
+                      <Button to="/sync">manage assets</Button>
+                    </li>
+                    <li>
+                      <Button to="/about">about</Button>
+                    </li>
+                  </ul>
+                </div>
+              </Padding>
+            </Container>
           </motion.div>
         )}
       </AnimatePresence>

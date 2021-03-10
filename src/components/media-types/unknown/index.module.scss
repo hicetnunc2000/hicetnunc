@@ -1,0 +1,22 @@
+@import '../../../styles/layout.scss';
+@import '../../../styles/variables.scss';
+
+.container {
+  width: 100%;
+
+  .square {
+    display: block;
+    width: 100%;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: $color;
+
+    &:after {
+      content: '';
+      display: block;
+      padding-bottom: 100%;
+    }
+  }
+}

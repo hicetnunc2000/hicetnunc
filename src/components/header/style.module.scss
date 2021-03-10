@@ -7,6 +7,7 @@
   height: 55px;
   padding: 0 #{$mobile-padding};
   background-color: white;
+  z-index: 1000;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -54,22 +55,15 @@
   left: 0;
   right: 0;
   bottom: 0;
-  padding: 0 #{$mobile-padding};
   background-color: white;
   z-index: 1000;
 
   .content {
     display: flex;
     justify-content: flex-end;
-    width: 100%;
-
-    @include respond-to('desktop') {
-      width: 50%;
-      margin: 0 auto;
-    }
 
     ul {
-      margin-top: 100px;
+      margin-top: 45px;
       list-style: none;
       font-size: 30px;
 

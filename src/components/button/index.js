@@ -1,6 +1,5 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import classnames from 'classnames'
 import styles from './index.module.scss'
 
 /**
@@ -15,18 +14,10 @@ export const Button = ({
   href = null,
   onClick = () => null,
   children,
-  selected = false,
-  secondary = false,
 }) => {
-  const classes = classnames({
-    [styles.container]: true,
-    [styles.selected]: selected,
-    [styles.secondary]: secondary,
-  })
-
   if (to) {
     return (
-      <Link to={to} className={classes}>
+      <Link to={to} className={styles.container}>
         {children}
       </Link>
     )
@@ -38,15 +29,23 @@ export const Button = ({
         href={href}
         target="_blank"
         rel="noopener noreferrer"
-        className={classes}
+        className={styles.container}
       >
         {children}
       </a>
     )
   }
   return (
-    <button onClick={onClick} className={classes}>
+    <button onClick={onClick} className={styles.container}>
       {children}
     </button>
   )
 }
+
+export const primary = ({ children = null }) => (
+  <div className={styles.primary}>{children}</div>
+)
+
+export const secondary = ({ children = null }) => (
+  <div className={styles.secondary}>{children}</div>
+)
