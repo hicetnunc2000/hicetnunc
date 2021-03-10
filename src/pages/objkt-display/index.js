@@ -31,7 +31,6 @@ export default class ObjktDisplay extends Component {
   componentWillMount() {
     GetOBJKT({ objkt_id: window.location.pathname.split('/')[2] }).then(
       (data) => {
-        console.log(data)
         this.setState({
           objkt: data.result[0],
           loading: false,
