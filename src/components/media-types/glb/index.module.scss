@@ -1,0 +1,18 @@
+@import '../../../styles/layout.scss';
+
+.container {
+  width: 100%;
+
+  model-viewer {
+    width: 100vw;
+    height: 100vw;
+
+    @include respond-to('tablet') {
+      width: $TABLET;
+      height: $TABLET;
+      max-width: 100%;
+      max-height: auto;
+      margin: 0 auto;
+    }
+  }
+}
