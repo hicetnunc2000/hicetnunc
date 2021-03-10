@@ -30,7 +30,6 @@ export default class Display extends Component {
     console.log(this.context.getAuth())
     await axios
       .post(process.env.REACT_APP_TZ, {
-        // 3.129.20.231
         tz: window.location.pathname.split('/')[2],
       })
       .then(async (res) => {
