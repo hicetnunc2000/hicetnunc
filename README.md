@@ -37,6 +37,6 @@ check the issues for contributing
 
 `MIT license`
 
-# Contributins
+# Contributing
 
 Please read our CONTRIBUTING.md
