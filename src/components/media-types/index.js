@@ -2,6 +2,7 @@ import React from 'react'
 import { GLBComponent } from './glb'
 import { ImageComponent } from './image'
 import { VideoComponent } from './video'
+import { UnknownComponent } from './unknown'
 
 export const renderMediaType = (token_info) => {
   const { mimeType, uri } = token_info.formats[0]
@@ -15,6 +16,7 @@ export const renderMediaType = (token_info) => {
     case 'image/png':
     case 'image/svg+xml':
     case 'image/bmp':
+    case 'image/webp':
       url = `https://cloudflare-ipfs.com/ipfs/${path}`
       return <ImageComponent src={url} />
     /* VIDEOS */
@@ -30,7 +32,6 @@ export const renderMediaType = (token_info) => {
       url = require('../../media/cube.glb')
       return <GLBComponent src={url} />
     default:
-      console.warn('non supported mimeType', mimeType)
-      return null
+      return <UnknownComponent mimeType={mimeType} />
   }
 }

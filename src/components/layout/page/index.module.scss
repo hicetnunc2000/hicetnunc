@@ -1,0 +1,9 @@
+@import '../../../styles/variables.scss';
+@import '../../../styles/layout.scss';
+
+.container {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  padding: 100px 0;
+}

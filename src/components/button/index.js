@@ -15,11 +15,11 @@ export const Button = ({
   href = null,
   onClick = () => null,
   children,
-  selected = false,
+  disabled,
 }) => {
   const classes = classnames({
     [styles.container]: true,
-    [styles.selected]: selected,
+    [styles.disabled]: disabled,
   })
 
   if (to) {
@@ -47,4 +47,28 @@ export const Button = ({
       {children}
     </button>
   )
+}
+
+export const Primary = ({ children = null, selected }) => {
+  const classes = classnames({
+    [styles.primary]: true,
+    [styles.selected]: selected,
+  })
+  return <div className={classes}>{children}</div>
+}
+
+export const Secondary = ({ children = null, selected }) => {
+  const classes = classnames({
+    [styles.secondary]: true,
+    [styles.selected]: selected,
+  })
+  return <div className={classes}>{children}</div>
+}
+
+export const Purchase = ({ children = null, selected }) => {
+  const classes = classnames({
+    [styles.purchase]: true,
+    [styles.selected]: selected,
+  })
+  return <div className={classes}>{children}</div>
 }
