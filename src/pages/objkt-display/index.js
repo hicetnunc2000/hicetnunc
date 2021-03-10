@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { GetOBJKT } from '../../api'
 import { Page, Container, Padding } from '../../components/layout'
-import { Loading } from '../../components/loading'
+import { LoadingContainer } from '../../components/loading'
 import { Button } from '../../components/button'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
 import { walletPreview } from '../../utils/string'
@@ -93,7 +93,7 @@ export default class ObjktDisplay extends Component {
     const { loading, info, owners, objkt, owners_arr, curate } = this.state
     return (
       <Page>
-        <Loading loading={loading}>
+        <LoadingContainer loading={loading}>
           {!loading && (
             <>
               <Container large>
@@ -243,7 +243,7 @@ export default class ObjktDisplay extends Component {
               </Container>
             </>
           )}
-        </Loading>
+        </LoadingContainer>
       </Page>
     )
   }

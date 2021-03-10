@@ -1,53 +1,41 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { PATH } from '../../constants'
 import { Padding } from '../layout'
-import { Button, Primary } from '../button'
+import { Button, Primary, Purchase } from '../button'
+import { HicetnuncContext } from '../../context/HicetnuncContext'
 import styles from './index.module.scss'
 
-export const ItemInfo = ({ token_id }) => {
+export const ItemInfo = ({ token_id, swaps, total_amount }) => {
+  const context = useContext(HicetnuncContext)
+
+  const notForSale = swaps.length === 0
+  const price = swaps.length > 0 && Number(swaps[0].xtz_per_objkt) / 1000000
+  const edition = swaps.length && `${swaps[0].objkt_amount}/${total_amount}`
+  const message = notForSale ? 'not for sale' : `collect for ${price} tez`
+
+  const handleCollect = () => {
+    if (context.Tezos == null) {
+      context.syncTaquito()
+    } else {
+      context.collect(1, swaps[0].swap_id, swaps[0].xtz_per_objkt * 1)
+    }
+  }
+
   return (
-    <Padding>
-      <div className={styles.container}>
-        <Button to={`${PATH.OBJKT}/${token_id}`}>
-          <Primary>OBJKT#{token_id}</Primary>
-        </Button>
-      </div>
-    </Padding>
+    <>
+      <Padding>
+        <div className={styles.container}>
+          <Button to={`${PATH.OBJKT}/${token_id}`}>
+            <Primary>OBJKT#{token_id}</Primary>
+          </Button>
+
+          <Button onClick={() => handleCollect()} disabled={notForSale}>
+            <Purchase>{message}</Purchase>
+          </Button>
+        </div>
+
+        {!notForSale && <p className={styles.edition}>Edition: {edition}</p>}
+      </Padding>
+    </>
   )
 }
-
-// {
-//   "contract": "KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton",
-//   "network": "mainnet",
-//   "level": 1378902,
-//   "token_id": 3602,
-//   "symbol": "OBJKT",
-//   "name": "Proof of Build #3",
-//   "decimals": 0,
-//   "token_info": {
-//       "artifactUri": "ipfs://QmSpScqHjWaLNpn5g6ygWueMm16vemx574srFBrt4NoWiR",
-//       "creators": [
-//           "tz1djRgXXWWJiY1rpMECCxr5d9ZBqWewuiU1"
-//       ],
-//       "description": "Galleon wallet version 1.1.13b release process – slide 4.",
-//       "formats": [
-//           {
-//               "mimeType": "image/png",
-//               "uri": "ipfs://QmSpScqHjWaLNpn5g6ygWueMm16vemx574srFBrt4NoWiR"
-//           }
-//       ],
-//       "isBooleanAmount": false,
-//       "shouldPreferSymbol": false,
-//       "tags": [
-//           ""
-//       ],
-//       "thumbnailUri": "ipfs://QmNrhZHUaEqxhyLfqoq1mtHSipkWHeT31LNHb1QEbDHgnc"
-//   },
-//   "supply": 0,
-//   "transfered": 0,
-//   "swaps": [],
-//   "total_amount": 7,
-//   "owners": {
-//       "tz1djRgXXWWJiY1rpMECCxr5d9ZBqWewuiU1": "7"
-//   }
-// }

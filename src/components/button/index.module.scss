@@ -3,6 +3,11 @@
 
 .container {
   @include resetButton();
+
+  &.disabled {
+    pointer-events: none;
+    cursor: unset;
+  }
 }
 
 .primary {
@@ -23,4 +28,11 @@
   @include hover {
     text-decoration: none;
   }
+}
+
+.purchase {
+  font-size: 16px;
+  padding: 2px 6px;
+  border-right: 2px solid $color;
+  border-bottom: 2px solid $color;
 }
