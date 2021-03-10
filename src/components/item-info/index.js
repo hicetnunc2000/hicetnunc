@@ -27,7 +27,6 @@ export const ItemInfo = ({
     }
   }
 
-  console.log('DETAIL VIEW', isDetailView)
   return (
     <>
       <div className={styles.container}>
@@ -43,7 +42,7 @@ export const ItemInfo = ({
       </div>
 
       <div className={styles.container}>
-        <Button to={`${PATH.OBJKT}/${token_id}`} disable={isDetailView}>
+        <Button to={`${PATH.OBJKT}/${token_id}`} disabled={isDetailView}>
           <Primary>OBJKT#{token_id}</Primary>
         </Button>
 

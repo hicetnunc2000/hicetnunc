@@ -175,38 +175,35 @@ export default class ObjktDisplay extends Component {
                 </Padding>
               </Container>
 
-              <Container>
-                <Padding>
-                  {info && (
-                    <div className={styles.info}>
-                      <div className={styles.item}>
-                        <div>TITLE</div>
-                        <div>{objkt.name}</div>
-                      </div>
-                      <div className={styles.item}>
-                        <div>DESCRIPTION</div>
-                        <div>{objkt.token_info.description}</div>
-                      </div>
-                      {objkt.token_info.tags.length > 0 && (
-                        <div className={styles.item}>
-                          <div>
-                            {objkt.token_info.tags.map((tag, index) => {
-                              return (
-                                <div
-                                  key={`tag${tag}${index}`}
-                                  className={styles.tag}
-                                >
-                                  {tag}
-                                </div>
-                              )
-                            })}
-                          </div>
+              {info && (
+                <>
+                  <Container>
+                    <Padding>TITLE</Padding>
+                    <Padding>{objkt.name}</Padding>
+                  </Container>
+                  <Container>
+                    <Padding>DESCRIPTION</Padding>
+                    <Padding>{objkt.token_info.description}</Padding>
+                  </Container>
+
+                  {objkt.token_info.tags.length > 0 && (
+                    <Container>
+                      <Padding>
+                        <div className={styles.tags}>
+                          {objkt.token_info.tags.map((tag, index) => (
+                            <div
+                              key={`tag${tag}${index}`}
+                              className={styles.tag}
+                            >
+                              {tag}
+                            </div>
+                          ))}
                         </div>
-                      )}
-                    </div>
+                      </Padding>
+                    </Container>
                   )}
-                </Padding>
-              </Container>
+                </>
+              )}
             </>
           )}
         </LoadingContainer>
