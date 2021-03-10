@@ -5,6 +5,7 @@
   width: 100%;
   margin: 0 auto;
   margin-bottom: 20px;
+  // border: 1px dashed black;
 
   @include respond-to('tablet') {
     width: 50%;

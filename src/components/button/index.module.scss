@@ -16,6 +16,7 @@
   &.selected {
     font-weight: bold;
   }
+
   @include hover {
     color: $color;
     &:not(.selected) {

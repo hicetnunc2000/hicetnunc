@@ -9,4 +9,10 @@
   font-size: 14px;
   color: white;
   z-index: 2000;
+
+  & > * {
+    :last-child {
+      font-size: 50%;
+    }
+  }
 }

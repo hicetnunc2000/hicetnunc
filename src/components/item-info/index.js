@@ -1,11 +1,17 @@
 import React, { useContext } from 'react'
 import { PATH } from '../../constants'
-import { Padding } from '../layout'
 import { Button, Primary, Purchase } from '../button'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
+import { walletPreview } from '../../utils/string'
 import styles from './index.module.scss'
 
-export const ItemInfo = ({ token_id, swaps, total_amount }) => {
+export const ItemInfo = ({
+  token_id,
+  token_info,
+  swaps,
+  total_amount,
+  isDetailView,
+}) => {
   const context = useContext(HicetnuncContext)
 
   const notForSale = swaps.length === 0
@@ -21,21 +27,30 @@ export const ItemInfo = ({ token_id, swaps, total_amount }) => {
     }
   }
 
+  console.log('DETAIL VIEW', isDetailView)
   return (
     <>
-      <Padding>
-        <div className={styles.container}>
-          <Button to={`${PATH.OBJKT}/${token_id}`}>
-            <Primary>OBJKT#{token_id}</Primary>
-          </Button>
-
-          <Button onClick={() => handleCollect()} disabled={notForSale}>
-            <Purchase>{message}</Purchase>
-          </Button>
+      <div className={styles.container}>
+        <div className={styles.edition}>
+          <p>
+            Issuer:{' '}
+            <Button>
+              <Primary>{walletPreview(token_info.creators[0])}</Primary>
+            </Button>
+          </p>
+          {!notForSale && <p>Edition: {edition}</p>}
         </div>
+      </div>
 
-        {!notForSale && <p className={styles.edition}>Edition: {edition}</p>}
-      </Padding>
+      <div className={styles.container}>
+        <Button to={`${PATH.OBJKT}/${token_id}`} disable={isDetailView}>
+          <Primary>OBJKT#{token_id}</Primary>
+        </Button>
+
+        <Button onClick={() => handleCollect()} disabled={notForSale}>
+          <Purchase>{message}</Purchase>
+        </Button>
+      </div>
     </>
   )
 }

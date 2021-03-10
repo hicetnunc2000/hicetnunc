@@ -49,14 +49,26 @@ export const Button = ({
   )
 }
 
-export const Primary = ({ children = null }) => (
-  <div className={styles.primary}>{children}</div>
-)
+export const Primary = ({ children = null, selected }) => {
+  const classes = classnames({
+    [styles.primary]: true,
+    [styles.selected]: selected,
+  })
+  return <div className={classes}>{children}</div>
+}
 
-export const Secondary = ({ children = null }) => (
-  <div className={styles.secondary}>{children}</div>
-)
+export const Secondary = ({ children = null, selected }) => {
+  const classes = classnames({
+    [styles.secondary]: true,
+    [styles.selected]: selected,
+  })
+  return <div className={classes}>{children}</div>
+}
 
-export const Purchase = ({ children = null }) => (
-  <div className={styles.purchase}>{children}</div>
-)
+export const Purchase = ({ children = null, selected }) => {
+  const classes = classnames({
+    [styles.purchase]: true,
+    [styles.selected]: selected,
+  })
+  return <div className={classes}>{children}</div>
+}
