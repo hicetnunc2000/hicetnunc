@@ -235,10 +235,10 @@ export default class Feed extends Component {
                                   {this.state.items[index].swaps.length != 0 ? (
                                     <span>
                                       collect for{' '}
-                                      {parseInt(
+                                      {
                                         this.state.items[index].swaps[0]
                                           .xtz_per_objkt / 1000000
-                                      )}{' '}
+                                      }{' '}
                                       tez
                                     </span>
                                   ) : (
