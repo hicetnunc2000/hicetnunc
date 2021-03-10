@@ -16,10 +16,9 @@ We're also aiming to reduce our dependencies in order to make our javascript bun
 - `bootstrap`
 - etc
 
-It might not be easy to spot, because there is only one or two pages that have been properly re-writen. There are differences between using a `<button>` or a `<a>` or a `<Link>` (those differences range from security to accessibility, etc). The rule of thumb at the moment is to use `<Link to="/something" />` if you want to change pages within our site. If you want to open a link on an external page, then you need to use `<a href="some-url" target="_blank"/>`, and finally if all you want is to add user interaction with `onClick` please use a `<button>`. This logic has been abstracted for you into a component `src/components/button`. Soon that component will be able to render different views based on props being passed into it. like `<Button primary />` or `<Button secondary />`. 
+It might not be easy to spot, because there is only one or two pages that have been properly re-writen. There are differences between using a `<button>` or a `<a>` or a `<Link>` (those differences range from security to accessibility, etc). The rule of thumb at the moment is to use `<Link to="/something" />` if you want to change pages within our site. If you want to open a link on an external page, then you need to use `<a href="some-url" target="_blank"/>`, and finally if all you want is to add user interaction with `onClick` please use a `<button>`. This logic has been abstracted for you into a component `src/components/button`. Soon that component will be able to render different views based on props being passed into it. like `<Button primary />` or `<Button secondary />`.
 
 We're currently implementing [Storybook](https://storybook.js.org/) which will be the ideal place where you can check how the components look. We're also currently implementing basic unit testing using [Jest](https://jestjs.io/).
-
 
 ## Components
 
@@ -43,8 +42,8 @@ There are some auxiliary components, that aren't doing much besides aiding with 
 
 Pull requests should be as small as possible. At the moment there's a lot of eslint errors everywhere, and instead of fixing them all in one go, and potencially break something and not being able to identify exactly what broke it, we're deciding to go, page by page, component by component fixing those warnings, removing unused code, etc.
 
-Because its been a very small team contributing to this project, we've been mainly contributing directly into the master branch, but that wont happen anymore.
+Because its been a very small team contributing to this project, we've been mainly contributing directly into the `main` branch, but that wont happen anymore.
 
-We will be using a Git flow approach. This means that you will need to create a feature branch from the `develop` branch, write all your code there, and then when you submit your PR you submit it against the `develop` branch. Once the features on develop are tested and ready to push to production, an Admin will create a PR from `develop` to `master` and kick off a deployment.
+We will be using a Git flow approach. This means that you will need to create a feature branch from the `develop` branch, write all your code there, and then when you submit your PR you submit it against the `develop` branch. Once the features on develop are tested and ready to push to production, an Admin will create a PR from `develop` to `main` and kick off a deployment.
 
 If Git flow is something new to you, dont feel intimidated, come and join us on Discord and we'll take the time to help.
