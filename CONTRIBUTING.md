@@ -1,4 +1,4 @@
-# SCONTRIBUTING
+# CONTRIBUTING
 
 Hi, welcome to hic et nunc repository. We're happy you're here.
 
