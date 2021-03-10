@@ -2,7 +2,7 @@ import React, { useContext } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
 import { Container, Padding } from '../layout'
-import { Button } from '../button'
+import { Button, Primary, Secondary } from '../button'
 import { fadeIn } from '../../utils/motion'
 import styles from './style.module.scss'
 
@@ -13,13 +13,15 @@ export const Header = () => {
     <>
       <div className={styles.container}>
         <div className={styles.content}>
-          <Button to="/" secondary>
-            <div className={styles.logo}>〇 hic et nunc</div>
+          <Button to="/">
+            <Secondary>
+              <div className={styles.logo}>〇 hic et nunc</div>
+            </Secondary>
           </Button>
 
           <div className={styles.right}>
             <Button onClick={context.syncTaquito} secondary>
-              sync
+              <Secondary>sync</Secondary>
             </Button>
 
             <Button onClick={context.toogleNavbar} secondary>
@@ -43,14 +45,20 @@ export const Header = () => {
                     <li>○</li>
                     <li>
                       <Button to="/mint">
-                        OBJKTs<i style={{ fontSize: '15px' }}>(mint NFTs)</i>
+                        <Primary>
+                          OBJKTs<i style={{ fontSize: '15px' }}>(mint NFTs)</i>
+                        </Primary>
                       </Button>
                     </li>
                     <li>
-                      <Button to="/sync">manage assets</Button>
+                      <Button to="/sync">
+                        <Primary>manage assets</Primary>
+                      </Button>
                     </li>
                     <li>
-                      <Button to="/about">about</Button>
+                      <Button to="/about">
+                        <Primary>about</Primary>
+                      </Button>
                     </li>
                   </ul>
                 </div>
