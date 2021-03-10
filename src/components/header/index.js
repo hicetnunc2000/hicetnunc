@@ -41,10 +41,10 @@ export const Header = () => {
                 </Button>
               </li>
               <li>
-                <Button to="/mint">manage assets</Button>
+                <Button to="/sync">manage assets</Button>
               </li>
               <li>
-                <Button to="/mint">about</Button>
+                <Button to="/about">about</Button>
               </li>
             </ul>
           </div>
