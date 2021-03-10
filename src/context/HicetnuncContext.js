@@ -1,17 +1,20 @@
 import React, { createContext, Component } from 'react'
 import { BeaconWallet } from '@taquito/beacon-wallet'
 import { MichelsonMap, TezosToolkit } from '@taquito/taquito'
-const { DAppClient, NetworkType } = require('@airgap/beacon-sdk')
+const { NetworkType } = require('@airgap/beacon-sdk')
 var ls = require('local-storage')
 const axios = require('axios')
 
 export const HicetnuncContext = createContext()
 
+// This should be moved to a service so it is only done once on page load
 const Tezos = new TezosToolkit('https://mainnet.smartpy.io')
 const wallet = new BeaconWallet({
   name: 'hicetnunc.xyz',
   preferredNetwork: 'mainnet',
 })
+Tezos.setWalletProvider(wallet)
+
 
 export default class HicetnuncContextProvider extends Component {
   constructor(props) {
@@ -53,8 +56,9 @@ export default class HicetnuncContextProvider extends Component {
       },
 
       dAppClient: async () => {
-        this.state.client = await new DAppClient({ name: 'hicetnunc' })
+        this.state.client = wallet.client
 
+        // It doesn't look like this code is called, otherwise the active account should be checked, see below.
         this.state.client
           .requestPermissions({
             network: {
@@ -155,9 +159,13 @@ export default class HicetnuncContextProvider extends Component {
           rpcUrl: 'https://mainnet.smartpy.io',
         }
 
-        Tezos.setWalletProvider(wallet)
-
-        await wallet.requestPermissions({ network })
+        // We check the storage and only do a permission request if we don't have an active account yet
+        // This piece of code should be called on startup to "load" the current address from the user
+        // If the activeAccount is present, no "permission request" is required again, unless the user "disconnects" first.
+        const activeAccount = await wallet.client.getActiveAccount()
+        if (!activeAccount) {
+          await wallet.requestPermissions({ network })
+        }
 
         this.setState({
           Tezos: Tezos,
@@ -167,6 +175,14 @@ export default class HicetnuncContextProvider extends Component {
         this.state.setAuth(await wallet.getPKH())
         console.log(this.state)
       },
+
+      disconnect: async () => {
+        // This will clear the active account and the next "syncTaquito" will trigger a new sync
+        await wallet.client.clearActiveAccount()
+        this.setState({
+          address: undefined,
+        })
+      }, 
 
       /* 
                 airgap/thanos interop methods
@@ -189,8 +205,7 @@ export default class HicetnuncContextProvider extends Component {
       },
 
       signPayload: async (obj) => {
-        const client = new DAppClient({ name: 'hicetnunc' })
-        const signature = await client
+        const signature = await wallet.client
           .requestSignPayload({
             payload: obj.payload,
           })

@@ -26,17 +26,9 @@ docker container rm --force hicetnunc
 .env
 
 ```
-REACT_APP_UNGRUND_POST_FILE='http://0.0.0.0:5001/ipfs/post_file'
-REACT_APP_UNGRUND_MINT='http://0.0.0.0:3001/api/v1/objkt/mint'
-REACT_APP_UNGRUND_CURATE='http://0.0.0.0:3001/api/v1/objkt/curate'
-REACT_APP_UNGRUND_COLLECT='http://0.0.0.0:3001/api/v1/objkt/collect'
-REACT_APP_UNGRUND_OBJKT_FEED='http://0.0.0.0:5000/objkt/feed'
-REACT_APP_UNGRUND_OBJKT_SWAPS='http://0.0.0.0:5000/objkt/swaps'
-REACT_APP_UNGRUND_OBJKT_ID='http://0.0.0.0:5000/objkt/id'
-REACT_APP_UNGRUND_OBJKT_TZ_LEDGER='http://0.0.0.0:5000/objkt/tz_ledger'
-REACT_APP_UNGRUND_OBJKT_TZ_SWAPS='http://0.0.0.0:5000/objkt/tz_swaps'
-REACT_APP_UNGRUND_OBJKT_SWAPS_METADATA='http://0.0.0.0:5000/objkt/swap_metadata'
-REACT_APP_UNGRUND_OBJKT_LEDGER='http://0.0.0.0:5000/objkt/ledger'
+REACT_APP_FEED='http://0.0.0.0:3001/feed'
+REACT_APP_TZ='http://0.0.0.0:3001/tz'
+REACT_APP_OBJKT='http://0.0.0.0:3001/objkt'
 ```
 
 in the present version you must have ungrund running accessing hicetnunc's module https://github.com/hicetnunc2000/ungrund
@@ -45,8 +37,6 @@ check the issues for contributing
 
 `MIT license`
 
-# Development
+# Contributins
 
-We're slowly migrating to a more stable source code.
-
-Components should use sass and should be mobile first when defining the styles
+Please read our CONTRIBUTING.md
