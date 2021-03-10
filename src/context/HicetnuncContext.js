@@ -1,6 +1,6 @@
 import React, { createContext, Component } from 'react'
 import { BeaconWallet } from '@taquito/beacon-wallet'
-import { MichelsonMap, TezosToolkit } from '@taquito/taquito'
+import { TezosToolkit } from '@taquito/taquito'
 const { NetworkType } = require('@airgap/beacon-sdk')
 var ls = require('local-storage')
 const axios = require('axios')
@@ -14,7 +14,6 @@ const wallet = new BeaconWallet({
   preferredNetwork: 'mainnet',
 })
 Tezos.setWalletProvider(wallet)
-
 
 export default class HicetnuncContextProvider extends Component {
   constructor(props) {
@@ -80,8 +79,6 @@ export default class HicetnuncContextProvider extends Component {
       },
 
       objkt: 'KT1Hkg5qeNhfwpKW4fXvq7HGZB9z2EnmCCA9',
-
-      op: undefined,
 
       mint: async (tz, amount, cid, royalties) => {
         console.log([tz, amount, cid, royalties])
@@ -182,7 +179,7 @@ export default class HicetnuncContextProvider extends Component {
         this.setState({
           address: undefined,
         })
-      }, 
+      },
 
       /* 
                 airgap/thanos interop methods
@@ -253,20 +250,21 @@ export default class HicetnuncContextProvider extends Component {
           title: title,
         })
       },
-      menu: {
-        position: 'absolute',
-        listStyle: 'none',
-        right: '0',
-        marginTop: '20%',
-        marginRight: '25px',
-        textAlign: 'right',
-        fontSize: '30px',
-        animation: 'fadeMe 1.2s',
-      },
-      subList: {
-        listStyle: 'none',
-        fontSize: '26px',
-      },
+      // TODO: remove this?
+      // menu: {
+      //   position: 'absolute',
+      //   listStyle: 'none',
+      //   right: '0',
+      //   marginTop: '20%',
+      //   marginRight: '25px',
+      //   textAlign: 'right',
+      //   fontSize: '30px',
+      //   animation: 'fadeMe 1.2s',
+      // },
+      // subList: {
+      //   listStyle: 'none',
+      //   fontSize: '26px',
+      // },
     }
   }
 

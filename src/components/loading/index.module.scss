@@ -9,15 +9,15 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
 
-  .circle {
-    display: inline-block;
-    background-color: $color;
-    width: 30px;
-    height: 30px;
-    border-radius: 1000px;
-    animation: circle 2s linear infinite;
-  }
+.circle {
+  display: inline-block;
+  background-color: $color;
+  width: 30px;
+  height: 30px;
+  border-radius: 1000px;
+  animation: circle 2s linear infinite;
 }
 
 @keyframes circle {

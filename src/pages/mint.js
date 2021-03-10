@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import { Card, Col, Row } from 'reactstrap'
 import { BabelLoading } from 'react-loadingg'
 import { HicetnuncContext } from '../context/HicetnuncContext'
-import Menu from '../components/Menu'
 
 const IPFS = require('ipfs-api')
 const Buffer = require('buffer').Buffer
@@ -121,67 +120,63 @@ export default class Mint extends Component {
         ) : (
           <Row>
             <Col sm="12" md={{ position: 'fixed', size: 6, offset: 3 }}>
-              {this.context.collapsed ? (
-                <div>
-                  <Card style={{ border: 0, marginTop: '17%' }}>
+              <div>
+                <Card style={{ border: 0, marginTop: '17%' }}>
+                  <input
+                    type="text"
+                    name="title"
+                    onChange={this.handleChange}
+                    placeholder="OBJKT title"
+                  ></input>
+                  <input
+                    type="text"
+                    name="description"
+                    onChange={this.handleChange}
+                    placeholder="OBJKT description"
+                  ></input>
+                  <input
+                    type="text"
+                    name="tags"
+                    onChange={this.handleChange}
+                    placeholder="tags (separated by commas)"
+                  ></input>
+                  <input
+                    type="text"
+                    name="amount"
+                    onChange={this.handleChange}
+                    placeholder="amount of OBJKTs"
+                  ></input>
+                  <label
+                    style={{
+                      marginTop: '5%',
+                      paddingTop: '1.25%',
+                      paddingBottom: '1.25%',
+                      borderStyle: 'dashed',
+                      textAlign: 'center',
+                    }}
+                  >
+                    Upload OBJKT
                     <input
-                      type="text"
-                      name="title"
-                      onChange={this.handleChange}
-                      placeholder="OBJKT title"
-                    ></input>
-                    <input
-                      type="text"
-                      name="description"
-                      onChange={this.handleChange}
-                      placeholder="OBJKT description"
-                    ></input>
-                    <input
-                      type="text"
-                      name="tags"
-                      onChange={this.handleChange}
-                      placeholder="tags (separated by commas)"
-                    ></input>
-                    <input
-                      type="text"
-                      name="amount"
-                      onChange={this.handleChange}
-                      placeholder="amount of OBJKTs"
-                    ></input>
-                    <label
-                      style={{
-                        marginTop: '5%',
-                        paddingTop: '1.25%',
-                        paddingBottom: '1.25%',
-                        borderStyle: 'dashed',
-                        textAlign: 'center',
-                      }}
-                    >
-                      Upload OBJKT
-                      <input
-                        style={{ display: 'none' }}
-                        type="file"
-                        name="file"
-                        onChange={this.onFileChange}
-                      />
-                    </label>
-                    <br />
-                    <p>{this.state.fileTitle}</p>
-                    <button
-                      style={{ lenght: '100%', cursor: 'pointer' }}
-                      onClick={this.onFileUpload}
-                    >
-                      Mint
-                    </button>
-                    <span>this operation costs 0.08~ tez</span>
-                    <span>10% royalties are set by default</span>
-                    {/* redirect to objkt id */}
-                    {/* {this.context.op != undefined ? <p>injected operation {this.context.op}</p> : undefined} */}
-                  </Card>
-                </div>
-              ) : (
-                <Menu />
-              )}
+                      style={{ display: 'none' }}
+                      type="file"
+                      name="file"
+                      onChange={this.onFileChange}
+                    />
+                  </label>
+                  <br />
+                  <p>{this.state.fileTitle}</p>
+                  <button
+                    style={{ lenght: '100%', cursor: 'pointer' }}
+                    onClick={this.onFileUpload}
+                  >
+                    Mint
+                  </button>
+                  <span>this operation costs 0.08~ tez</span>
+                  <span>10% royalties are set by default</span>
+                  {/* redirect to objkt id */}
+                  {/* {this.context.op != undefined ? <p>injected operation {this.context.op}</p> : undefined} */}
+                </Card>
+              </div>
             </Col>
           </Row>
         )}

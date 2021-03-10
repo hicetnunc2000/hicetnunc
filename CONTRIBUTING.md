@@ -10,10 +10,8 @@ At the moment there's a lot of code repetition. This was mainly due to the heavy
 
 We're also aiming to reduce our dependencies in order to make our javascript bundle smaller, and render the page faster on the client. At the moment, we're using a couple of libraries that slowly will be deprecated. So try to avoid using them if you're contributing with new features. They are:
 
-- `styled-components`
 - `reactstrap`
 - `react-loadingg`
-- `bootstrap`
 - etc
 
 It might not be easy to spot, because there is only one or two pages that have been properly re-writen. There are differences between using a `<button>` or a `<a>` or a `<Link>` (those differences range from security to accessibility, etc). The rule of thumb at the moment is to use `<Link to="/something" />` if you want to change pages within our site. If you want to open a link on an external page, then you need to use `<a href="some-url" target="_blank"/>`, and finally if all you want is to add user interaction with `onClick` please use a `<button>`. This logic has been abstracted for you into a component `src/components/button`. Soon that component will be able to render different views based on props being passed into it. like `<Button primary />` or `<Button secondary />`.

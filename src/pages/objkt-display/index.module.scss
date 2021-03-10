@@ -25,34 +25,26 @@
     }
   }
 
-  .info {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-
-    .item {
-      display: flex;
-      flex-direction: column;
-      margin-top: 1em;
-    }
-
-    .tag {
-      display: inline-flex;
-      background-color: rgba(0, 0, 0, 0.1);
-      color: grey;
-      border-radius: 4px;
-      padding: 3px 6px;
-      margin-right: 6px;
-      margin-bottom: 6px;
-      font-size: 80%;
-      text-transform: uppercase;
-      font-size: 10px;
-    }
-  }
-
   .curate {
     input {
       padding: 12px 0;
     }
+  }
+}
+
+.tags {
+  display: flex;
+
+  .tag {
+    display: inline-flex;
+    background-color: rgba(0, 0, 0, 0.1);
+    color: grey;
+    border-radius: 4px;
+    padding: 3px 6px;
+    margin-right: 6px;
+    margin-bottom: 6px;
+    font-size: 80%;
+    text-transform: uppercase;
+    font-size: 10px;
   }
 }

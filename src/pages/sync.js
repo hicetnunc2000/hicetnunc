@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import { Row, Col } from 'reactstrap'
 import { Redirect } from 'react-router-dom'
 import { BabelLoading } from 'react-loadingg'
-import Menu from '../components/Menu'
 import { HicetnuncContext } from '../context/HicetnuncContext'
 
 export default class Sync extends Component {
@@ -17,12 +16,6 @@ export default class Sync extends Component {
       <div>
         {this.context.address !== '' ? (
           <Redirect to={`/tz/${this.context.address}`} />
-        ) : !this.context.collapsed ? (
-          <Row>
-            <Col sm="12" md={{ size: 6, offset: 3 }}>
-              <Menu />
-            </Col>
-          </Row>
         ) : (
           <div style={{ marginTop: '35vh', verticalAlign: 'middle' }}>
             <Row>
