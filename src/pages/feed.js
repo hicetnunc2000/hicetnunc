@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { Link } from 'react-router-dom'
 import { Card, Col, Row } from 'reactstrap'
 import { HicetnuncContext } from '../context/HicetnuncContext'
 import Menu from '../components/Menu'
@@ -71,7 +72,7 @@ export default class Feed extends Component {
   collect = (event, index) => {
     console.log(index)
     if (this.context.Tezos == null) {
-      alert('sync')
+      this.context.syncTaquito()
     } else {
       this.context.collect(
         1,
@@ -99,36 +100,40 @@ export default class Feed extends Component {
     )
     const image = (index) => (
       <div>
-        <LazyLoadImage
-          className="media"
-          style={{ maxHeight: '50vh', height: 'auto', width: 'auto' }}
-          src={`https://ipfs.io/ipfs/${
-            this.state.items[index].token_info.artifactUri.split('//')[1]
-          }`}
-          alt="💥"
-        />
+        <Link href={`/objkt/${this.state.items[index].token_id}`}>
+          <LazyLoadImage
+            className="media"
+            style={{ maxHeight: '50vh', height: 'auto', width: 'auto' }}
+            src={`https://ipfs.io/ipfs/${
+              this.state.items[index].token_info.artifactUri.split('//')[1]
+            }`}
+            alt="💥"
+          />
+        </Link>
       </div>
     )
 
     const video = (index) => (
       <div style={{ paddingTop: '4%', display: 'table', margin: '0 auto' }}>
-        <video
-          className="media"
-          style={{ maxHeight: '60vh', height: 'auto', width: 'auto' }}
-          controls
-          autoPlay
-          muted
-          loop
-        >
-          <source
-            src={
-              'https://dweb.link/ipfs/' +
-              this.state.items[index].token_info.artifactUri.split('//')[1]
-            }
-            alt="💥"
-            type="video/mp4"
-          ></source>
-        </video>
+        <a href={`/objkt/${this.state.items[index].token_id}`}>
+          <video
+            className="media"
+            style={{ maxHeight: '60vh', height: 'auto', width: 'auto' }}
+            controls
+            autoPlay
+            muted
+            loop
+          >
+            <source
+              src={
+                'https://dweb.link/ipfs/' +
+                this.state.items[index].token_info.artifactUri.split('//')[1]
+              }
+              alt="💥"
+              type="video/mp4"
+            ></source>
+          </video>
+        </a>
       </div>
     )
 
