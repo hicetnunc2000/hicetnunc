@@ -15,4 +15,10 @@
       text-decoration: underline;
     }
   }
+
+  &.secondary {
+    @include hover {
+      text-decoration: none;
+    }
+  }
 }

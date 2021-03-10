@@ -16,10 +16,12 @@ export const Button = ({
   onClick = () => null,
   children,
   selected = false,
+  secondary = false,
 }) => {
   const classes = classnames({
     [styles.container]: true,
     [styles.selected]: selected,
+    [styles.secondary]: secondary,
   })
 
   if (to) {
