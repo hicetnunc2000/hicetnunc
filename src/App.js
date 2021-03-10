@@ -9,7 +9,7 @@ import Mint from './pages/mint'
 import ObjktDisplay from './pages/objkt-display'
 import Loading from './pages/loading'
 import { Header } from './components/header'
-import Footer from './components/Footer'
+import { Footer } from './components/footer'
 import './App.css'
 
 function App() {
