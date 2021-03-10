@@ -11,6 +11,7 @@ export const renderMediaType = (token_info) => {
     case 'image/jpeg':
     case 'image/png':
     case 'image/svg+xml':
+    case 'image/bmp':
       url = `https://cloudflare-ipfs.com/ipfs/${uri.split('//')[1]}`
       return <ImageComponent src={url} />
     case 'video/mp4':
