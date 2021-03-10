@@ -2,7 +2,7 @@ import React from 'react'
 
 const Footer = () => {
   return (
-    <div
+    <footer
       style={{
         position: 'fixed',
         left: '0',
@@ -12,10 +12,11 @@ const Footer = () => {
         textAlign: 'center',
         fontSize: '14px',
         color: 'white',
+        zIndex: 2000,
       }}
     >
       sync -&gt; collect // sync -&gt; mint // sync -&gt; curate
-    </div>
+    </footer>
   )
 }
 

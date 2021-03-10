@@ -8,7 +8,7 @@ import Feed from './pages/feed'
 import Mint from './pages/mint'
 import ObjktDisplay from './pages/objkt-display'
 import Loading from './pages/loading'
-import Header from './components/Header'
+import { Header } from './components/header'
 import Footer from './components/Footer'
 import './App.css'
 

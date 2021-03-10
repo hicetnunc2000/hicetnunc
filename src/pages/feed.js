@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import { Card, Col, Row } from 'reactstrap'
 import { HicetnuncContext } from '../context/HicetnuncContext'
-import Menu from '../components/Menu'
 import { LazyLoadImage } from 'react-lazy-load-image-component'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { BabelLoading } from 'react-loadingg'
@@ -37,8 +36,6 @@ export default class Feed extends Component {
   }
 
   fetchData = async () => {
-    //await axios.get('http://localhost:3000/feed').then(res => console.log(res))
-
     await axios
       .post(process.env.REACT_APP_FEED, { counter: this.state.counter + 1 })
       .then((res) => {
@@ -213,10 +210,9 @@ export default class Feed extends Component {
                                   {
                                     this.state.items[index].swaps[0]
                                       .objkt_amount
-                                  }{'/'}
-                                  {
-                                    this.state.items[index].total_amount
                                   }
+                                  {'/'}
+                                  {this.state.items[index].total_amount}
                                   {/* this.state.items[index].total_amount */}
                                 </span>
                               ) : (
@@ -258,7 +254,7 @@ export default class Feed extends Component {
                   })}
                 </InfiniteScroll>
               ) : (
-                <Menu />
+                <div />
               )}
             </Card>
           </Col>
