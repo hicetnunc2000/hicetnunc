@@ -234,7 +234,6 @@ export default class HicetnuncContextProvider extends Component {
       },
 
       setMenu: (collapsed) => {
-        console.log('set menu', collapsed)
         this.setState({ collapsed })
       },
 
@@ -254,21 +253,6 @@ export default class HicetnuncContextProvider extends Component {
           title: title,
         })
       },
-      // TODO: remove this?
-      // menu: {
-      //   position: 'absolute',
-      //   listStyle: 'none',
-      //   right: '0',
-      //   marginTop: '20%',
-      //   marginRight: '25px',
-      //   textAlign: 'right',
-      //   fontSize: '30px',
-      //   animation: 'fadeMe 1.2s',
-      // },
-      // subList: {
-      //   listStyle: 'none',
-      //   fontSize: '26px',
-      // },
     }
   }
 
