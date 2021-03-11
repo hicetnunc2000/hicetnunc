@@ -3,7 +3,10 @@
 
 .container {
   @include resetButton();
-  display: contents;
+
+  &.fit {
+    display: contents;
+  }
 
   &.disabled {
     pointer-events: none;

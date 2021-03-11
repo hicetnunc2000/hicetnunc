@@ -16,4 +16,10 @@
       width: 55%;
     }
   }
+
+  &.xlarge {
+    @include respond-to('tablet') {
+      width: 80%;
+    }
+  }
 }

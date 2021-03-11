@@ -5,15 +5,22 @@ import { Container, Padding } from '../layout'
 import { Button, Primary, Secondary } from '../button'
 import { fadeIn } from '../../utils/motion'
 import styles from './style.module.scss'
+import { useHistory } from 'react-router'
 
 export const Header = () => {
   const context = useContext(HicetnuncContext)
+  const history = useHistory()
+
+  const handleRoute = (path) => {
+    context.setMenu(true)
+    history.push(path)
+  }
 
   return (
     <>
       <div className={styles.container}>
         <div className={styles.content}>
-          <Button to="/">
+          <Button onClick={() => handleRoute('/')}>
             <Secondary>
               <div className={styles.logo}>〇 hic et nunc</div>
             </Secondary>
@@ -44,19 +51,19 @@ export const Header = () => {
                   <ul>
                     <li>○</li>
                     <li>
-                      <Button to="/mint">
+                      <Button onClick={() => handleRoute('/mint')}>
                         <Primary>
                           OBJKTs<i style={{ fontSize: '15px' }}>(mint NFTs)</i>
                         </Primary>
                       </Button>
                     </li>
                     <li>
-                      <Button to="/sync">
+                      <Button onClick={() => handleRoute('/sync')}>
                         <Primary>manage assets</Primary>
                       </Button>
                     </li>
                     <li>
-                      <Button to="/about">
+                      <Button onClick={() => handleRoute('/about')}>
                         <Primary>about</Primary>
                       </Button>
                     </li>
