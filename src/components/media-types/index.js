@@ -3,6 +3,7 @@ import { GLBComponent } from './glb'
 import { ImageComponent } from './image'
 import { VideoComponent } from './video'
 import { UnknownComponent } from './unknown'
+import { MIMETYPE } from '../../constants'
 
 // some elements might not be interactive on the feed
 export const renderMediaType = (token_info, interactive) => {
@@ -12,23 +13,23 @@ export const renderMediaType = (token_info, interactive) => {
 
   switch (mimeType) {
     /* IMAGES */
-    case 'image/bmp':
-    case 'image/gif':
-    case 'image/jpeg':
-    case 'image/png':
-    case 'image/svg+xml':
-    case 'image/webp':
+    case MIMETYPE.BMP:
+    case MIMETYPE.GIF:
+    case MIMETYPE.JPEG:
+    case MIMETYPE.PNG:
+    case MIMETYPE.SVG:
+    case MIMETYPE.WEBP:
       url = `https://cloudflare-ipfs.com/ipfs/${path}`
       return <ImageComponent src={url} />
     /* VIDEOS */
-    case 'video/mp4':
-    case 'video/ogg':
-    case 'video/quicktime':
+    case MIMETYPE.MP4:
+    case MIMETYPE.OGG:
+    case MIMETYPE.QUICKTIME:
       url = `https://dweb.link/ipfs/${path}`
       return <VideoComponent src={url} />
     /* 3D */
-    case 'model/gltf-binary':
-    case 'model/gltf+json':
+    case MIMETYPE.GLTF:
+    case MIMETYPE.GLB:
       url = `https://cloudflare-ipfs.com/ipfs/${path}`
       return <GLBComponent src={url} interactive={interactive} />
     default:

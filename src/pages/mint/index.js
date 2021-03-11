@@ -5,6 +5,7 @@ import { Input } from '../../components/input'
 import { Button, Curate } from '../../components/button'
 import { Loading } from '../../components/loading'
 import { getMimeType } from '../../utils/sanitise'
+import { ALLOWED_MIMETYPES } from '../../constants'
 import styles from './index.module.scss'
 
 const IPFS = require('ipfs-api')
@@ -48,7 +49,6 @@ export class Mint extends Component {
       this.context.loading()
 
       const icon = 'ipfs://QmNrhZHUaEqxhyLfqoq1mtHSipkWHeT31LNHb1QEbDHgnc'
-
       const [file] = this.state.selectedFile
       const ipfs = new IPFS({
         host: 'ipfs.infura.io',
@@ -60,38 +60,43 @@ export class Mint extends Component {
       const mimeType = file.type !== '' ? file.type : await getMimeType(file)
       const buffer = Buffer.from(await file.arrayBuffer())
 
-      // 40mb limit
-      const filesize = (file.size / 1024 / 1024).toFixed(4) // MB
-      if (filesize < 40) {
-        const fileCid = 'ipfs://' + (await ipfs.files.add(buffer))[0].hash
-        const nftCid = (
-          await ipfs.files.add(
-            Buffer.from(
-              JSON.stringify({
-                name: this.state.title,
-                description: this.state.description,
-                tags: this.state.tags.replace(/\s/g, '').split(','),
-                symbol: 'OBJKT',
-                artifactUri: fileCid,
-                creators: [this.context.address],
-                formats: [{ uri: fileCid, mimeType }],
-                thumbnailUri: icon,
-                decimals: 0,
-                isBooleanAmount: false,
-                shouldPreferSymbol: false,
-              })
-            )
-          )
-        )[0].hash
-
-        this.context.mint(
-          this.context.getAuth(),
-          this.state.amount,
-          nftCid,
-          this.state.royalties
-        )
+      // only allows for supported mimetype
+      if (ALLOWED_MIMETYPES.indexOf(mimeType) === -1) {
+        alert(`File MimeType not supported ${mimeType}`)
       } else {
-        alert(`File too big (${filesize}). Limit is currently set at 40MB`)
+        // checks file size limit of 40MB
+        const filesize = (file.size / 1024 / 1024).toFixed(4)
+        if (filesize < 40) {
+          const fileCid = 'ipfs://' + (await ipfs.files.add(buffer))[0].hash
+          const nftCid = (
+            await ipfs.files.add(
+              Buffer.from(
+                JSON.stringify({
+                  name: this.state.title,
+                  description: this.state.description,
+                  tags: this.state.tags.replace(/\s/g, '').split(','),
+                  symbol: 'OBJKT',
+                  artifactUri: fileCid,
+                  creators: [this.context.address],
+                  formats: [{ uri: fileCid, mimeType }],
+                  thumbnailUri: icon,
+                  decimals: 0,
+                  isBooleanAmount: false,
+                  shouldPreferSymbol: false,
+                })
+              )
+            )
+          )[0].hash
+
+          this.context.mint(
+            this.context.getAuth(),
+            this.state.amount,
+            nftCid,
+            this.state.royalties
+          )
+        } else {
+          alert(`File too big (${filesize}). Limit is currently set at 40MB`)
+        }
       }
     }
   }

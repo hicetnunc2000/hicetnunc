@@ -1,3 +1,5 @@
+import { MIMETYPE } from '../constants'
+
 /**
  * If a OBJKT is missing a relevant property, we filter it out.
  * As example http://localhost:3000/objkt/2862 (has no token_info)
@@ -33,10 +35,10 @@ export const getMimeType = (file) => {
 
         switch (hex) {
           case '676C5446':
-            mimeType = 'model/gltf-binary'
+            mimeType = MIMETYPE.GLGLBF
             break
           case '7BA2020':
-            mimeType = 'model/gltf+json'
+            mimeType = MIMETYPE.GLTF
             break
           default:
             mimeType = 'Unknown MimeType'

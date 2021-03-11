@@ -20,3 +20,18 @@ export const ROUTES = {
 
 export const MINT_MAX_LIMIT = 10000
 export const MINT_MIN_LIMIT = 1
+
+export const MIMETYPE = {
+  BMP: 'image/bmp',
+  GIF: 'image/gif',
+  JPEG: 'image/jpeg',
+  PNG: 'image/png',
+  SVG: 'image/svg+xml',
+  WEBP: 'image/webp',
+  MP4: 'video/mp4',
+  OGG: 'video/ogg',
+  QUICKTIME: 'video/quicktime',
+  GLTF: 'model/gltf-binary',
+  GLB: 'model/gltf+json',
+}
+export const ALLOWED_MIMETYPES = Object.keys(MIMETYPE).map((k) => MIMETYPE[k])
