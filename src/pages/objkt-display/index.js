@@ -116,16 +116,27 @@ export default class ObjktDisplay extends Component {
 
                     {objkt.token_info.creators[0] === this.context.address && (
                       <>
-                        <Button onClick={this.curate} selected={curate}>
-                          +curate
+                        <Button onClick={this.curate}>
+                          <Primary selected={curate}>+curate</Primary>
                         </Button>
                         {objkt.swaps.length !== 0 && (
                           <Button onClick={this.cancel}>
-                            -cancel curation
+                            <Primary>-cancel curation</Primary>
                           </Button>
                         )}
                       </>
                     )}
+                    {/* REMOVE THIS */}
+                    <>
+                      <Button onClick={this.curate}>
+                        <Primary selected={curate}>+curate</Primary>
+                      </Button>
+                      {objkt.swaps.length !== 0 && (
+                        <Button onClick={this.cancel}>
+                          <Primary>-cancel curation</Primary>
+                        </Button>
+                      )}
+                    </>
                   </div>
                 </Padding>
               </Container>
@@ -142,6 +153,7 @@ export default class ObjktDisplay extends Component {
                           </a>
                         </div>
                       ))}
+
                     {curate && (
                       <div
                         style={{
@@ -149,18 +161,23 @@ export default class ObjktDisplay extends Component {
                         }}
                       >
                         <input
-                          type="text"
+                          type="number"
+                          min={0}
+                          max={2}
                           name="objkt_amount"
                           onChange={this.handleChange}
                           placeholder="OBJKT amount"
+                          style={{ width: '100%' }}
                         ></input>
                         <br />
                         <input
-                          style={{ width: '100%' }}
-                          type="text"
+                          type="number"
+                          min={0}
+                          max={2}
                           name="xtz_per_objkt"
                           placeholder="µtez per OBJKT (1 tez = 1000000 µtez)"
                           onChange={this.handleChange}
+                          style={{ width: '100%' }}
                         ></input>
                         <br />
                         <button

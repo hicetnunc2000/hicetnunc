@@ -5,12 +5,11 @@ const axios = require('axios')
  * filters it against a blacklist json
  */
 export const GetFeed = async ({ counter }) => {
-  console.log('get feed', process.env.)
   return Promise.all([
     axios.post(process.env.REACT_APP_FEED, {
       counter: counter,
     }),
-    axios.get(process.env.REACT_BLACKLIST_OBJKT),
+    axios.get(process.env.REACT_APP_BLACKLIST_OBJKT),
   ])
     .then((results) => {
       const feed = results[0].data.result

@@ -66,9 +66,6 @@ export default class HicetnuncContextProvider extends Component {
             },
           })
           .then((permissions) => {
-            console.log('got permissions', permissions)
-            console.log(permissions.address)
-
             this.setState({
               address: permissions.address,
             })
