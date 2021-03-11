@@ -2,8 +2,8 @@
 
 .loader {
   position: absolute;
-  top: 50%;
-  left: 50%;
+  margin-top: 50vh;
+  margin-left: 50vw;
   z-index: 1000;
   transform: translateX(-50%) translateY(-50%);
   display: flex;
