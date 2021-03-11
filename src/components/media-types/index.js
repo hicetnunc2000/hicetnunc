@@ -18,6 +18,7 @@ export const renderMediaType = (token_info, interactive) => {
     case MIMETYPE.JPEG:
     case MIMETYPE.PNG:
     case MIMETYPE.SVG:
+    case MIMETYPE.TIFF:
     case MIMETYPE.WEBP:
       url = `https://cloudflare-ipfs.com/ipfs/${path}`
       return <ImageComponent src={url} />
