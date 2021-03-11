@@ -17,6 +17,7 @@
 .tags {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
 
   .tag {
     display: inline-flex;
