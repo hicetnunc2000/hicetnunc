@@ -9,7 +9,9 @@ import styles from './index.module.scss'
 export const FeedItem = ({ token_info, token_id, swaps, total_amount }) => (
   <Container>
     <Button to={`${PATH.OBJKT}/${token_id}`}>
-      <div className={styles.container}>{renderMediaType(token_info)}</div>
+      <div className={styles.container}>
+        {renderMediaType(token_info, true)}
+      </div>
     </Button>
     <Padding>
       <ItemInfo

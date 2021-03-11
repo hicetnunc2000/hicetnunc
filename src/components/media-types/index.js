@@ -4,7 +4,8 @@ import { ImageComponent } from './image'
 import { VideoComponent } from './video'
 import { UnknownComponent } from './unknown'
 
-export const renderMediaType = (token_info) => {
+// some elements might not be interactive on the feed
+export const renderMediaType = (token_info, isFeed) => {
   const { mimeType, uri } = token_info.formats[0]
   const path = uri.split('//')[1]
   let url
@@ -29,7 +30,7 @@ export const renderMediaType = (token_info) => {
     case 'model/gltf-binary':
     case 'model/gltf+json':
       url = `https://cloudflare-ipfs.com/ipfs/${path}`
-      return <GLBComponent src={url} />
+      return <GLBComponent src={url} interactive={!isFeed} />
     default:
       return <UnknownComponent mimeType={mimeType} />
   }
