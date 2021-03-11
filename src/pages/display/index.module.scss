@@ -31,7 +31,7 @@
   margin-top: 100px;
   display: grid;
   grid-column-gap: 10px;
-	grid-row-gap: 10px;
+  grid-row-gap: 10px;
   grid-template-columns: repeat(1, minmax(0, 1fr));
 
   @include respond-to('tablet') {
