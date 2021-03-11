@@ -5,6 +5,7 @@
 export const SanitiseOBJKT = (objkt) => {
   return objkt.filter((o) => {
     if (!o.token_info) {
+      console.warn('objkt flagged as corrupt', o.token_id)
       return false
     }
     return true
