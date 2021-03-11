@@ -1,18 +1,24 @@
 @import '../../../styles/layout.scss';
 
 .container {
+  position: relative;
+  display: block;
   width: 100%;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:after {
+    content: '';
+    display: block;
+    padding-bottom: 100%;
+  }
 
   model-viewer {
-    width: 100vw;
-    height: 100vw;
-
-    @include respond-to('tablet') {
-      width: $TABLET;
-      height: $TABLET;
-      max-width: 100%;
-      max-height: auto;
-      margin: 0 auto;
-    }
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
   }
 }
