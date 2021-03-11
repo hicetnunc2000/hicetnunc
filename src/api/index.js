@@ -6,10 +6,16 @@ const axios = require('axios')
  */
 export const GetFeed = async ({ counter }) => {
   return Promise.all([
-    axios.post(process.env.REACT_APP_FEED, {
-      counter: counter,
+    axios
+      .post(process.env.REACT_APP_FEED, {
+        counter: counter,
+      })
+      .catch(() => {
+        return { data: { result: [] } }
+      }),
+    axios.get(process.env.REACT_APP_BLOCKLIST_OBJKT).catch(() => {
+      return { data: [] }
     }),
-    axios.get(process.env.REACT_APP_BLACKLIST_OBJKT),
   ])
     .then((results) => {
       const feed = results[0].data.result
