@@ -10,7 +10,7 @@ export const FeedItem = ({ token_info, token_id, swaps, total_amount }) => (
   <Container>
     <Button to={`${PATH.OBJKT}/${token_id}`}>
       <div className={styles.container}>
-        {renderMediaType(token_info, true)}
+        {renderMediaType(token_info, false)}
       </div>
     </Button>
     <Padding>

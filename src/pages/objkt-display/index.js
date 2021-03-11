@@ -123,10 +123,10 @@ export class ObjktDisplay extends Component {
     return (
       <Page>
         <LoadingContainer loading={loading}>
-          {!loading && false && (
+          {!loading && (
             <>
               <Container large>
-                {objkt.token_id && renderMediaType(objkt.token_info)}
+                {objkt.token_id && renderMediaType(objkt.token_info, true)}
               </Container>
 
               <Container>
