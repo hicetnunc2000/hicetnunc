@@ -8,6 +8,7 @@ import { Button, Curate, Primary } from '../../components/button'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
 import { renderMediaType } from '../../components/media-types'
 import { walletPreview } from '../../utils/string'
+import { SanitiseOBJKT } from '../../utils/sanitise'
 import styles from './index.module.scss'
 
 export class ObjktDisplay extends Component {
@@ -97,10 +98,32 @@ export class ObjktDisplay extends Component {
         Object.keys(objkt.owners).filter((s) => s.startsWith('tz'))) ||
       []
     const sales = ownersArray.length
+
+    // sanitize the objkt to make sure it has the necessary props.
+    // if not, displays an error message.
+    const [sanitised] = SanitiseOBJKT([objkt])
+    if (!loading && sanitised === undefined) {
+      return (
+        <Page>
+          <Container>
+            <Padding>
+              <div style={{ display: 'flex' }}>
+                This OBJKT is corrupted. Please reach out on&nbsp;
+                <Button href="https://discord.gg/jKNy6PynPK">
+                  <Primary>discord</Primary>
+                </Button>
+              </div>
+              <pre>{JSON.stringify(objkt, null, 2)}</pre>
+            </Padding>
+          </Container>
+        </Page>
+      )
+    }
+
     return (
       <Page>
         <LoadingContainer loading={loading}>
-          {!loading && (
+          {!loading && false && (
             <>
               <Container large>
                 {objkt.token_id && renderMediaType(objkt.token_info)}

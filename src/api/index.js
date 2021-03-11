@@ -1,8 +1,10 @@
+import { SanitiseOBJKT } from '../utils/sanitise'
+
 const axios = require('axios')
 
 /**
  * Gets Feed for homepage
- * filters it against a blacklist json
+ * filters it against a blocklist json
  */
 export const GetFeed = async ({ counter }) => {
   return Promise.all([
@@ -19,8 +21,13 @@ export const GetFeed = async ({ counter }) => {
   ])
     .then((results) => {
       const feed = results[0].data.result
-      const blacklist = results[1].data
-      return feed.filter((i) => !blacklist.includes(i.token_id))
+      const blocklist = results[1].data
+
+      // filters objkt's out if they are on the blocklist.
+      const objkts = feed.filter((i) => !blocklist.includes(i.token_id))
+
+      // filters objkt's out if they dont have the token_info prop
+      return SanitiseOBJKT(objkts)
     })
     .catch((e) => {
       console.error(e)
