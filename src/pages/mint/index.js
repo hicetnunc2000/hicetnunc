@@ -4,6 +4,7 @@ import { Page, Container, Padding } from '../../components/layout'
 import { Input } from '../../components/input'
 import { Button, Curate } from '../../components/button'
 import { Loading } from '../../components/loading'
+import { getMimeType } from '../../utils/sanitise'
 import styles from './index.module.scss'
 
 const IPFS = require('ipfs-api')
@@ -48,22 +49,21 @@ export class Mint extends Component {
 
       const icon = 'ipfs://QmNrhZHUaEqxhyLfqoq1mtHSipkWHeT31LNHb1QEbDHgnc'
 
-      const files = this.state.selectedFile
+      const [file] = this.state.selectedFile
       const ipfs = new IPFS({
         host: 'ipfs.infura.io',
         port: 5001,
         protocol: 'https',
       })
 
-      console.log(files)
-      console.log(Buffer.from(await files[0].arrayBuffer()))
+      // check for mymetype
+      const mimeType = file.type !== '' ? file.type : await getMimeType(file)
+      const buffer = Buffer.from(await file.arrayBuffer())
 
       // 40mb limit
-      if (files[0].size < 100000000) {
-        const fileCid =
-          'ipfs://' +
-          (await ipfs.files.add(Buffer.from(await files[0].arrayBuffer())))[0]
-            .hash
+      const filesize = (file.size / 1024 / 1024).toFixed(4) // MB
+      if (filesize < 40) {
+        const fileCid = 'ipfs://' + (await ipfs.files.add(buffer))[0].hash
         const nftCid = (
           await ipfs.files.add(
             Buffer.from(
@@ -74,7 +74,7 @@ export class Mint extends Component {
                 symbol: 'OBJKT',
                 artifactUri: fileCid,
                 creators: [this.context.address],
-                formats: [{ uri: fileCid, mimeType: files[0].type }],
+                formats: [{ uri: fileCid, mimeType }],
                 thumbnailUri: icon,
                 decimals: 0,
                 isBooleanAmount: false,
@@ -90,6 +90,8 @@ export class Mint extends Component {
           nftCid,
           this.state.royalties
         )
+      } else {
+        alert(`File too big (${filesize}). Limit is currently set at 40MB`)
       }
     }
   }
@@ -175,8 +177,8 @@ export class Mint extends Component {
 
             <Container>
               <Padding>
-                <span>this operation costs 0.08~ tez</span>
-                <span>10% royalties are set by default</span>
+                <p>this operation costs 0.08~ tez</p>
+                <p>10% royalties are set by default</p>
               </Padding>
             </Container>
           </>

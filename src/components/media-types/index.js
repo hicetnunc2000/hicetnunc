@@ -11,11 +11,11 @@ export const renderMediaType = (token_info) => {
 
   switch (mimeType) {
     /* IMAGES */
+    case 'image/bmp':
     case 'image/gif':
     case 'image/jpeg':
     case 'image/png':
     case 'image/svg+xml':
-    case 'image/bmp':
     case 'image/webp':
       url = `https://cloudflare-ipfs.com/ipfs/${path}`
       return <ImageComponent src={url} />
