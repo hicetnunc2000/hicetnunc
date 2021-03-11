@@ -11,4 +11,9 @@
   justify-content: space-between;
   width: 100%;
   font-size: 80%;
+
+  .inline {
+    display: flex;
+    align-items: center;
+  }
 }

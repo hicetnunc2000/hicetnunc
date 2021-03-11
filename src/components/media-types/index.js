@@ -28,8 +28,7 @@ export const renderMediaType = (token_info) => {
     /* 3D */
     case 'model/gltf-binary':
     case 'model/gltf+json':
-      // TODO: @crzypatchwork to define which domain we extract this from
-      url = require('../../media/cube.glb')
+      url = `https://cloudflare-ipfs.com/ipfs/${path}`
       return <GLBComponent src={url} />
     default:
       return <UnknownComponent mimeType={mimeType} />

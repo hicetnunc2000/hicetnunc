@@ -1,0 +1,10 @@
+.container {
+  width: 100%;
+  padding: 6px 0;
+  margin-bottom: 10px;
+  border: none;
+
+  &:focus {
+    outline: none;
+  }
+}

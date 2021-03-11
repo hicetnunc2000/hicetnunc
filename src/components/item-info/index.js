@@ -31,12 +31,12 @@ export const ItemInfo = ({
     <>
       <div className={styles.container}>
         <div className={styles.edition}>
-          <p>
-            Issuer:{' '}
-            <Button>
+          <div className={styles.inline}>
+            <p>Issuer:&nbsp;</p>
+            <Button to={`${PATH.ISSUER}/${token_info.creators[0]}`}>
               <Primary>{walletPreview(token_info.creators[0])}</Primary>
             </Button>
-          </p>
+          </div>
           {!notForSale && <p>Edition: {edition}</p>}
         </div>
       </div>
