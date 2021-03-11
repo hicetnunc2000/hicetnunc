@@ -220,15 +220,22 @@ export default class HicetnuncContextProvider extends Component {
           })
           .then((res) => {
             console.log(
+              'balance',
               parseInt(res.data[res.data.length - 1].balance / 1000000)
             )
           })
+          .catch((e) => console.log('balance error', e))
       },
 
       collapsed: true,
 
       toogleNavbar: () => {
         this.setState({ collapsed: !this.state.collapsed })
+      },
+
+      setMenu: (collapsed) => {
+        console.log('set menu', collapsed)
+        this.setState({ collapsed })
       },
 
       getStyle: (style) =>

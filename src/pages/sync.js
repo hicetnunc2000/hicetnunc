@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
-import { Row, Col } from 'reactstrap'
 import { Redirect } from 'react-router-dom'
-import { BabelLoading } from 'react-loadingg'
 import { HicetnuncContext } from '../context/HicetnuncContext'
+import { Page, Container, Padding } from '../components/layout'
+import { LoadingContainer } from '../components/loading'
+import { Button, Primary } from '../components/button'
 
 export default class Sync extends Component {
   static contextType = HicetnuncContext
@@ -13,43 +14,21 @@ export default class Sync extends Component {
 
   render() {
     return (
-      <div>
+      <Page>
         {this.context.address !== '' ? (
           <Redirect to={`/tz/${this.context.address}`} />
         ) : (
-          <div style={{ marginTop: '35vh', verticalAlign: 'middle' }}>
-            <Row>
-              <Col sm="12" md={{ position: 'fixed', size: 6, offset: 3 }}>
-                <span style={{ margin: 'auto', display: 'table' }}>
-                  requesting permissions{' '}
-                  <a
-                    style={{
-                      color: '#000',
-                      '&:hover': {
-                        color: '#000',
-                      },
-                    }}
-                    href="/sync"
-                  >
-                    try again?
-                  </a>
-                </span>
-                <br />
-              </Col>
-            </Row>
-            <BabelLoading
-              className="celLoad"
-              style={{
-                backgroundColor: 'black',
-                display: 'inline-block',
-                position: 'absolute',
-                right: '50%',
-                left: '50%',
-              }}
-            />
-          </div>
+          <Container>
+            <Padding>
+              <p>requesting permissions</p>
+              <Button to="/sync">
+                <Primary>try again?</Primary>
+              </Button>
+              <LoadingContainer />
+            </Padding>
+          </Container>
         )}
-      </div>
+      </Page>
     )
   }
 }

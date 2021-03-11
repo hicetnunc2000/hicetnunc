@@ -10,7 +10,7 @@ import { renderMediaType } from '../../components/media-types'
 import { walletPreview } from '../../utils/string'
 import styles from './index.module.scss'
 
-export default class ObjktDisplay extends Component {
+export class ObjktDisplay extends Component {
   static contextType = HicetnuncContext
 
   state = {
@@ -134,6 +134,13 @@ export default class ObjktDisplay extends Component {
                           </Button>
                         )}
                       </>
+                    )}
+
+                    {/* TODO: crzypatchwork to implement*/}
+                    {false && (
+                      <Button onClick={() => alert('available soon')}>
+                        <Primary>burn</Primary>
+                      </Button>
                     )}
                   </div>
                 </Padding>

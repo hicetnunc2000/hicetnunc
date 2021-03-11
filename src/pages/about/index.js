@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
 import { Page, Container, Padding } from '../../components/layout'
-import { Button } from '../../components/button'
+import { Button, Primary } from '../../components/button'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
 import styles from './index.module.scss'
 
-export default class About extends Component {
+export class About extends Component {
   static contextType = HicetnuncContext
 
   state = {
@@ -23,7 +23,9 @@ export default class About extends Component {
         <Container>
           <Padding>
             <Button href="https://github.com/hicetnunc2000">
-              <strong>hic et nunc stack</strong>
+              <Primary>
+                <strong>hic et nunc stack</strong>
+              </Primary>
             </Button>
           </Padding>
         </Container>
@@ -66,8 +68,12 @@ export default class About extends Component {
         <Container>
           <Padding>
             <div className={styles.buttons}>
-              <Button href="https://discord.gg/jKNy6PynPK">discord</Button>
-              <Button href="mailto:hicetnunc2000@protonmail.com">email</Button>
+              <Button href="https://discord.gg/jKNy6PynPK">
+                <Primary>discord</Primary>
+              </Button>
+              <Button href="mailto:hicetnunc2000@protonmail.com">
+                <Primary>email</Primary>
+              </Button>
             </div>
           </Padding>
         </Container>

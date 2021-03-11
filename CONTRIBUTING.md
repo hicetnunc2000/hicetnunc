@@ -10,7 +10,6 @@ At the moment there's a lot of code repetition. This was mainly due to the heavy
 
 We're also aiming to reduce our dependencies in order to make our javascript bundle smaller, and render the page faster on the client. At the moment, we're using a couple of libraries that slowly will be deprecated. So try to avoid using them if you're contributing with new features. They are:
 
-- `reactstrap`
 - `react-loadingg`
 - etc
 

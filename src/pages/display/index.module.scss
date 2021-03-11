@@ -1,0 +1,67 @@
+@import '../../styles/layout.scss';
+
+.profile {
+  display: flex;
+
+  .picture {
+    display: block;
+    border-style: solid;
+    border-radius: 50%;
+    border-color: black;
+    height: 150px;
+    width: 150px;
+  }
+
+  .info {
+    display: flex;
+    flex-direction: column;
+    margin-left: 20px;
+  }
+}
+
+.menu {
+  padding: 6px 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  & > * {
+    margin-right: 1em;
+  }
+}
+
+.list {
+  margin-top: 100px;
+  display: grid;
+  grid-column-gap: 10px;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+
+  @include respond-to('tablet') {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  @include respond-to('desktop') {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .container {
+    position: relative;
+    grid-column-end: span 1; // 1/1
+    margin-bottom: 40px;
+
+    @include respond-to('tablet') {
+      grid-column-end: span 2; // 2/4
+      margin-bottom: initial;
+    }
+
+    @include respond-to('desktop') {
+      grid-column-end: span 1; // 1/4
+    }
+
+    .number {
+      position: absolute;
+      bottom: 6px;
+      right: 6px;
+      background-color: black;
+      color: white;
+      padding: 4px;
+    }
+  }
+}
