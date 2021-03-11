@@ -3,6 +3,7 @@
 
 .container {
   @include resetButton();
+  display: contents;
 
   &.disabled {
     pointer-events: none;
@@ -32,14 +33,12 @@
 }
 
 .purchase {
-  font-size: 16px;
   padding: 2px 6px;
   border-right: 2px solid $color;
   border-bottom: 2px solid $color;
 }
 
 .curate {
-  font-size: 16px;
   padding: 2px 6px;
   width: 100%;
   background-color: rgb(239, 239, 239);
