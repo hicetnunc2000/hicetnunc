@@ -9,14 +9,14 @@
   }
 }
 
-// .curate {
-//   input {
-//     padding: 12px 0;
-//   }
-// }
+.owner {
+  display: flex;
+  align-items: center;
+}
 
 .tags {
   display: flex;
+  align-items: center;
 
   .tag {
     display: inline-flex;

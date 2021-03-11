@@ -199,7 +199,7 @@ export default class HicetnuncContextProvider extends Component {
       },
 
       signPayload: async (obj) => {
-        const signature = await wallet.client
+        await wallet.client
           .requestSignPayload({
             payload: obj.payload,
           })
