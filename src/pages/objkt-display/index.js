@@ -9,7 +9,6 @@ import { HicetnuncContext } from '../../context/HicetnuncContext'
 import { renderMediaType } from '../../components/media-types'
 import { walletPreview } from '../../utils/string'
 import styles from './index.module.scss'
-import { lowestPrice } from '../../utils/lowestPrice'
 
 export class ObjktDisplay extends Component {
   static contextType = HicetnuncContext
@@ -23,7 +22,6 @@ export class ObjktDisplay extends Component {
     curate: false,
     loading: true,
     cancel: false,
-    swap: false,
     test: false,
     value: 0,
     xtz_per_objkt: 0,
@@ -34,11 +32,8 @@ export class ObjktDisplay extends Component {
   componentWillMount() {
     GetOBJKT({ objkt_id: window.location.pathname.split('/')[2] }).then(
       (data) => {
-        const objkt = data.result[0]
-        const swap = lowestPrice(objkt.swaps)
         this.setState({
-          objkt,
-          swap,
+          objkt: data.result[0],
           loading: false,
         })
       }
@@ -73,8 +68,8 @@ export class ObjktDisplay extends Component {
     } else {
       this.context.collect(
         1,
-        this.state.swap.swap_id,
-        this.state.swap.xtz_per_objkt * 1
+        this.state.objkt.swaps[0].swap_id,
+        this.state.objkt.swaps[0].xtz_per_objkt * 1
       )
     }
   }
@@ -93,7 +88,7 @@ export class ObjktDisplay extends Component {
   curate = () =>
     this.setState({ info: false, owners: false, curate: true, cancel: false })
 
-  cancel = () => this.context.cancel(this.state.swap.swap_id)
+  cancel = () => this.context.cancel(this.state.objkt.swaps[0].swap_id)
 
   render() {
     const { loading, info, owners, objkt, curate } = this.state
