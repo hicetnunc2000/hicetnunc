@@ -82,3 +82,11 @@ export const Curate = ({ children = null, selected }) => {
   })
   return <div className={classes}>{children}</div>
 }
+
+export const Burn = ({ children = null, selected }) => {
+  const classes = classnames({
+    [styles.burn]: true,
+    [styles.selected]: selected,
+  })
+  return <div className={classes}>{children}</div>
+}
