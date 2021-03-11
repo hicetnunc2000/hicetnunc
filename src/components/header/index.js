@@ -28,13 +28,13 @@ export const Header = () => {
 
           <div className={styles.right}>
             <Button onClick={context.syncTaquito} secondary>
-              <Secondary>sync</Secondary>
+              <Secondary className={styles.textcolor}>sync</Secondary>
             </Button>
 
             <Button onClick={context.toogleNavbar} secondary>
               <img
                 src={require('../../media/menu-black-18dp.svg')}
-                alt=""
+                alt="menu button"
                 className={styles.hamburger}
               />
             </Button>
