@@ -48,7 +48,7 @@ export default class ObjktDisplay extends Component {
 
   amountChange = (e) => {
     const amount = e.target.value
-    console.log(amount)
+    // TODO: Add validation based on max available OBJK to sell. check render() method
     if (!amount || amount.match(/^\d{1,}(\.\d{0,6})?$/)) {
       this.setState({ tz_per_objkt: amount })
     }
@@ -92,7 +92,11 @@ export default class ObjktDisplay extends Component {
 
   render() {
     const { loading, info, owners, objkt, curate } = this.state
-    console.log(this.state)
+    const ownersArray =
+      (objkt.owners &&
+        Object.keys(objkt.owners).filter((s) => s.startsWith('tz'))) ||
+      []
+    const sales = ownersArray.length
     return (
       <Page>
         <LoadingContainer loading={loading}>
@@ -168,7 +172,7 @@ export default class ObjktDisplay extends Component {
               {owners && (
                 <Container>
                   <Padding>
-                    {Object.keys(objkt.owners).map((wallet) => {
+                    {ownersArray.map((wallet) => {
                       const amount = objkt.owners[wallet]
                       return (
                         <div
@@ -193,13 +197,13 @@ export default class ObjktDisplay extends Component {
                       type="number"
                       placeholder="OBJKT amount"
                       name="objkt_amount"
-                      min={0}
-                      max={10000 /* objkt.total_amount */}
+                      min={1}
+                      max={objkt.total_amount - sales}
                       onChange={this.handleChange}
                     />
                     <Input
                       type="number"
-                      placeholder="µtez per OBJKT (1 tez = 1000000 µtez)"
+                      placeholder="price per OBJKT (in tez)"
                       name="xtz_per_objkt"
                       min={0}
                       max={10000}

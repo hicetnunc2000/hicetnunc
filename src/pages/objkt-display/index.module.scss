@@ -2,10 +2,10 @@
 @import '../../styles/variables.scss';
 
 .menu {
-  background-color: pink;
+  padding: 6px 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
   & > * {
     margin-right: 1em;
-    border: 1px dashed red;
   }
 }
 
