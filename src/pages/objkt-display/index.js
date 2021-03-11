@@ -2,11 +2,12 @@ import React, { Component } from 'react'
 import { GetOBJKT } from '../../api'
 import { Page, Container, Padding } from '../../components/layout'
 import { LoadingContainer } from '../../components/loading'
+import { Input } from '../../components/input'
 import { ItemInfo } from '../../components/item-info'
-import { Button, Primary } from '../../components/button'
+import { Button, Curate, Primary } from '../../components/button'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
-import { walletPreview } from '../../utils/string'
 import { renderMediaType } from '../../components/media-types'
+import { walletPreview } from '../../utils/string'
 import styles from './index.module.scss'
 
 export default class ObjktDisplay extends Component {
@@ -17,7 +18,6 @@ export default class ObjktDisplay extends Component {
     objkt: {},
     balance: 0,
     info: true,
-    owners_arr: [],
     owners: false,
     curate: false,
     loading: true,
@@ -91,7 +91,8 @@ export default class ObjktDisplay extends Component {
   cancel = () => this.context.cancel(this.state.objkt.swaps[0].swap_id)
 
   render() {
-    const { loading, info, owners, objkt, owners_arr, curate } = this.state
+    const { loading, info, owners, objkt, curate } = this.state
+    console.log(this.state)
     return (
       <Page>
         <LoadingContainer loading={loading}>
@@ -114,6 +115,10 @@ export default class ObjktDisplay extends Component {
                       <Primary selected={info}>info</Primary>
                     </Button>
 
+                    <Button onClick={this.owners}>
+                      <Primary selected={owners}>owners</Primary>
+                    </Button>
+
                     {objkt.token_info.creators[0] === this.context.address && (
                       <>
                         <Button onClick={this.curate}>
@@ -125,68 +130,6 @@ export default class ObjktDisplay extends Component {
                           </Button>
                         )}
                       </>
-                    )}
-                    {/* REMOVE THIS */}
-                    <>
-                      <Button onClick={this.curate}>
-                        <Primary selected={curate}>+curate</Primary>
-                      </Button>
-                      {objkt.swaps.length !== 0 && (
-                        <Button onClick={this.cancel}>
-                          <Primary>-cancel curation</Primary>
-                        </Button>
-                      )}
-                    </>
-                  </div>
-                </Padding>
-              </Container>
-
-              <Container>
-                <Padding>
-                  <div className={styles.curate}>
-                    {owners &&
-                      owners_arr.map((e) => (
-                        <div>
-                          {e.balance}x{' '}
-                          <a href={`https://tzkt.io/${e.address}`}>
-                            {e.address}
-                          </a>
-                        </div>
-                      ))}
-
-                    {curate && (
-                      <div
-                        style={{
-                          display: 'inline',
-                        }}
-                      >
-                        <input
-                          type="number"
-                          min={0}
-                          max={2}
-                          name="objkt_amount"
-                          onChange={this.handleChange}
-                          placeholder="OBJKT amount"
-                          style={{ width: '100%' }}
-                        ></input>
-                        <br />
-                        <input
-                          type="number"
-                          min={0}
-                          max={2}
-                          name="xtz_per_objkt"
-                          placeholder="µtez per OBJKT (1 tez = 1000000 µtez)"
-                          onChange={this.handleChange}
-                          style={{ width: '100%' }}
-                        ></input>
-                        <br />
-                        <button
-                          style={{ width: '100%' }}
-                          onClick={this.submitForm}
-                        >
-                          curate
-                        </button>
-                      </div>
                     )}
                   </div>
                 </Padding>
@@ -220,6 +163,53 @@ export default class ObjktDisplay extends Component {
                     </Container>
                   )}
                 </>
+              )}
+
+              {owners && (
+                <Container>
+                  <Padding>
+                    {Object.keys(objkt.owners).map((wallet) => {
+                      const amount = objkt.owners[wallet]
+                      return (
+                        <div
+                          key={`${objkt.token_id}-${wallet}`}
+                          className={styles.owner}
+                        >
+                          {amount}x&nbsp;
+                          <Button href={`https://tzkt.io/${wallet}`}>
+                            <Primary>{walletPreview(wallet)}</Primary>
+                          </Button>
+                        </div>
+                      )
+                    })}
+                  </Padding>
+                </Container>
+              )}
+
+              {curate && (
+                <Container>
+                  <Padding>
+                    <Input
+                      type="number"
+                      placeholder="OBJKT amount"
+                      name="objkt_amount"
+                      min={0}
+                      max={10000 /* objkt.total_amount */}
+                      onChange={this.handleChange}
+                    />
+                    <Input
+                      type="number"
+                      placeholder="µtez per OBJKT (1 tez = 1000000 µtez)"
+                      name="xtz_per_objkt"
+                      min={0}
+                      max={10000}
+                      onChange={this.handleChange}
+                    />
+                    <Button onClick={this.submitForm}>
+                      <Curate>curate</Curate>
+                    </Button>
+                  </Padding>
+                </Container>
               )}
             </>
           )}
