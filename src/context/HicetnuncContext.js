@@ -66,9 +66,6 @@ export default class HicetnuncContextProvider extends Component {
             },
           })
           .then((permissions) => {
-            console.log('got permissions', permissions)
-            console.log(permissions.address)
-
             this.setState({
               address: permissions.address,
             })
@@ -202,7 +199,7 @@ export default class HicetnuncContextProvider extends Component {
       },
 
       signPayload: async (obj) => {
-        const signature = await wallet.client
+        await wallet.client
           .requestSignPayload({
             payload: obj.payload,
           })
