@@ -37,6 +37,17 @@ export default class Display extends Component {
       .then(async (res) => {
         const sanitised = SanitiseOBJKT(res.data.result)
 
+        // TODO: crzypathwork, please uncomment this to see that what we're getting from the API
+        // doesn't pass the creations filter on line 53. because it thinks that the creations belong to someone else. do we need this?
+        // console.log('data', res.data.result)
+        // console.log('sanitised', sanitised)
+        // console.log(
+        //   'filtered',
+        //   sanitised.filter((e) => {
+        //     console.log('testing', e.tz, e.token_info.creators)
+        //     return e.tz === e.token_info.creators[0]
+        //   })
+        // )
         this.setState({
           objkts: sanitised,
           creations: sanitised.filter((e) => e.tz === e.token_info.creators[0]),
@@ -102,13 +113,14 @@ export default class Display extends Component {
           <Container xlarge>
             <div className={styles.list}>
               {this.state.creations.map((nft, i) => {
+                // console.log('rendering', i, nft)
                 return (
                   <Button
                     key={nft.token_id}
                     to={`${PATH.OBJKT}/${nft.token_id}`}
                   >
                     <div className={styles.container}>
-                      {renderMediaType(nft.token_info)}
+                      {renderMediaType(nft.token_info, false)}
                       <div className={styles.number}>OBJKT#{nft.token_id}</div>
                     </div>
                   </Button>
@@ -128,7 +140,7 @@ export default class Display extends Component {
                     to={`${PATH.OBJKT}/${nft.token_id}`}
                   >
                     <div className={styles.container}>
-                      {renderMediaType(nft.token_info)}
+                      {renderMediaType(nft.token_info, false)}
                       <div className={styles.number}>OBJKT#{nft.token_id}</div>
                     </div>
                   </Button>
