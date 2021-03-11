@@ -65,13 +65,17 @@
     ul {
       margin-top: 45px;
       list-style: none;
-      font-size: 30px;
 
       li {
         text-align: right;
 
         &:first-of-type {
           text-decoration: line-through;
+        }
+
+        button,
+        a {
+          font-size: 30px;
         }
       }
     }

@@ -209,7 +209,7 @@ export default class ObjktDisplay extends Component {
                       max={10000}
                       onChange={this.handleChange}
                     />
-                    <Button onClick={this.submitForm}>
+                    <Button onClick={this.submitForm} fit>
                       <Curate>curate</Curate>
                     </Button>
                   </Padding>

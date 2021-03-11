@@ -16,10 +16,12 @@ export const Button = ({
   onClick = () => null,
   children,
   disabled,
+  fit,
 }) => {
   const classes = classnames({
     [styles.container]: true,
     [styles.disabled]: disabled,
+    [styles.fit]: fit,
   })
 
   if (to) {
