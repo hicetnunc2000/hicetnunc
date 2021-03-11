@@ -1,4 +1,5 @@
 @import '../../styles/layout.scss';
+@import '../../styles/variables.scss';
 
 .profile {
   display: flex;
@@ -7,7 +8,7 @@
     display: block;
     border-style: solid;
     border-radius: 50%;
-    border-color: black;
+    border-color: $color;
     height: 150px;
     width: 150px;
   }
@@ -60,8 +61,8 @@
       position: absolute;
       bottom: 6px;
       right: 6px;
-      background-color: black;
-      color: white;
+      background-color: $color;
+      color: $background;
       padding: 4px;
     }
   }
