@@ -18,16 +18,15 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-	color: $color;
 
     @include respond-to('desktop') {
       width: 50%;
       margin: 0 auto;
     }
 	
-	.textcolor {
-	  color: $color;
-	}
+    .textcolor {
+      color: inherit;
+    }
 	
     .logo {
       font-size: 20px;
