@@ -9,7 +9,7 @@ import styles from './index.module.scss'
 
 export const Feed = () => {
   const [items, setItems] = useState([])
-  const [count, setCount] = useState(1)
+  const [count, setCount] = useState(0)
   const [hasMore, setHasMore] = useState(true)
 
   const loadMore = () => {
