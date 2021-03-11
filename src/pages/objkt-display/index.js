@@ -59,7 +59,7 @@ export class ObjktDisplay extends Component {
     this.context.swap(
       this.state.objkt_amount,
       window.location.pathname.split('/')[2],
-      this.state.xtz_per_objkt
+      this.state.xtz_per_objkt * 1000000
     )
   }
 
