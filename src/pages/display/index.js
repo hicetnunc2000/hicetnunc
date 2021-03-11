@@ -6,6 +6,7 @@ import { Page, Container, Padding } from '../../components/layout'
 // import { LoadingContainer } from '../../components/loading'
 import { renderMediaType } from '../../components/media-types'
 import { walletPreview } from '../../utils/string'
+import { SanitiseOBJKT } from '../../utils/sanitise'
 import { PATH } from '../../constants'
 import styles from './index.module.scss'
 
@@ -34,14 +35,12 @@ export default class Display extends Component {
         tz: window.location.pathname.split('/')[2],
       })
       .then(async (res) => {
-        console.log(res.data.result)
+        const sanitised = SanitiseOBJKT(res.data.result)
 
         this.setState({
-          objkts: res.data.result,
-          creations: res.data.result.filter(
-            (e) => e.tz === e.token_info.creators[0]
-          ),
-          collection: res.data.result.filter(
+          objkts: sanitised,
+          creations: sanitised.filter((e) => e.tz === e.token_info.creators[0]),
+          collection: sanitised.filter(
             (e) =>
               e.tz !== e.token_info.creators[0] &&
               e.tz !== 'KT1Hkg5qeNhfwpKW4fXvq7HGZB9z2EnmCCA9' &&
