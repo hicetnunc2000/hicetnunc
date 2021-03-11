@@ -4,7 +4,7 @@ import { Page, Container, Padding } from '../../components/layout'
 import { LoadingContainer } from '../../components/loading'
 import { Input } from '../../components/input'
 import { ItemInfo } from '../../components/item-info'
-import { Button, Curate, Primary } from '../../components/button'
+import { Button, Curate, Primary, Burn } from '../../components/button'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
 import { renderMediaType } from '../../components/media-types'
 import { walletPreview } from '../../utils/string'
@@ -21,6 +21,7 @@ export class ObjktDisplay extends Component {
     info: true,
     owners: false,
     curate: false,
+    burn: false,
     loading: true,
     cancel: false,
     test: false,
@@ -81,18 +82,40 @@ export class ObjktDisplay extends Component {
       owners: false,
       curate: false,
       cancel: false,
+      burn: false,
     })
 
   owners = () =>
-    this.setState({ info: false, owners: true, curate: false, cancel: false })
+    this.setState({
+      info: false,
+      owners: true,
+      curate: false,
+      cancel: false,
+      burn: false,
+    })
 
   curate = () =>
-    this.setState({ info: false, owners: false, curate: true, cancel: false })
+    this.setState({
+      info: false,
+      owners: false,
+      curate: true,
+      cancel: false,
+      burn: false,
+    })
 
   cancel = () => this.context.cancel(this.state.objkt.swaps[0].swap_id)
 
+  toggleBurn = () =>
+    this.setState({
+      info: false,
+      owners: false,
+      curate: false,
+      cancel: false,
+      burn: true,
+    })
+
   render() {
-    const { loading, info, owners, objkt, curate } = this.state
+    const { loading, info, owners, objkt, curate, burn } = this.state
     const ownersArray =
       (objkt.owners &&
         Object.keys(objkt.owners).filter((s) => s.startsWith('tz'))) ||
@@ -156,14 +179,10 @@ export class ObjktDisplay extends Component {
                             <Primary>-cancel curation</Primary>
                           </Button>
                         )}
+                        <Button onClick={this.toggleBurn}>
+                          <Primary selected={burn}>burn</Primary>
+                        </Button>
                       </>
-                    )}
-
-                    {/* TODO: crzypatchwork to implement*/}
-                    {false && (
-                      <Button onClick={() => alert('available soon')}>
-                        <Primary>burn</Primary>
-                      </Button>
                     )}
                   </div>
                 </Padding>
@@ -244,6 +263,26 @@ export class ObjktDisplay extends Component {
                     </Button>
                   </Padding>
                 </Container>
+              )}
+
+              {burn && (
+                <>
+                  <Container>
+                    <Padding>
+                      <p>
+                        Burning your OBJKT will permanently delete your OBJKT
+                        from the network.{' '}
+                      </p>
+                    </Padding>
+                  </Container>
+                  <Container>
+                    <Padding>
+                      <Button onClick={() => alert('coming soon...')} fit>
+                        <Burn>burn it</Burn>
+                      </Button>
+                    </Padding>
+                  </Container>
+                </>
               )}
             </>
           )}
