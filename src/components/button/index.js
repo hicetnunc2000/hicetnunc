@@ -72,3 +72,11 @@ export const Purchase = ({ children = null, selected }) => {
   })
   return <div className={classes}>{children}</div>
 }
+
+export const Curate = ({ children = null, selected }) => {
+  const classes = classnames({
+    [styles.curate]: true,
+    [styles.selected]: selected,
+  })
+  return <div className={classes}>{children}</div>
+}

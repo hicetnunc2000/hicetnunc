@@ -10,7 +10,6 @@ import ObjktDisplay from './pages/objkt-display'
 import Loading from './pages/loading'
 import { Header } from './components/header'
 import { Footer } from './components/footer'
-import './App.css'
 
 const App = () => {
   return (

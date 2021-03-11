@@ -17,3 +17,6 @@ export const ROUTES = {
   OBJKT: { exact: false, path: '/objkt/:id', component: null },
   LOAD: { exact: false, path: '/load', component: null }, // TODO: check if this is being used?
 }
+
+export const MINT_MAX_LIMIT = 10000
+export const MINT_MIN_LIMIT = 1
