@@ -47,7 +47,7 @@ export const Menu = ({ isOpen = false }) => {
   }
 
   return (
-    <div className={styles.menu}>
+    <div className={styles.menu} aria-label="Open the menu" aria-hidden="true">
       <motion.svg
         viewBox="0 0 14 14"
         overflow="visible"
