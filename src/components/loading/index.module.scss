@@ -13,10 +13,11 @@
 
 .circle {
   display: inline-block;
-  background-color: $color;
+  background-color: var(--text-color);
   width: 30px;
   height: 30px;
   border-radius: 1000px;
+  transition: background-color #{$theme-duration} ease-out;
   animation: circle 2s linear infinite;
 }
 
