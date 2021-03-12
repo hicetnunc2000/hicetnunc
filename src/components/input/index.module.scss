@@ -1,8 +1,13 @@
+@import '../../styles/variables.scss';
+
 .container {
   width: 100%;
   padding: 6px 0;
   margin-bottom: 10px;
   border: none;
+  background-color: transparent;
+  color: var(--text-color);
+  transition: color #{$theme-duration} ease-out;
 
   &:focus {
     outline: none;

@@ -11,7 +11,10 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    color: $color;
+    color: var(--background-color);
+    background-color: var(--text-color);
+    transition: background-color #{$theme-duration} ease-out,
+      color #{$theme-duration} ease-out;
 
     &:after {
       content: '';

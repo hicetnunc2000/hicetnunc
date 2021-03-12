@@ -1,4 +1,8 @@
-$color: #ffffff;
-$background: #000000;
+:root {
+  --background-color: #000000;
+  --text-color: #ffffff;
+  --border-color: #ff0000;
+}
 
+$theme-duration: 0.8s;
 $mobile-padding: 1.25rem;

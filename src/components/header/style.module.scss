@@ -6,8 +6,10 @@
   width: 100%;
   height: 55px;
   padding: 0 #{$mobile-padding};
-  background-color: $background;
-  color: $color;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  transition: background-color #{$theme-duration} ease-out,
+    color #{$theme-duration} ease-out;
   z-index: 1000;
   display: flex;
   align-items: center;
@@ -23,16 +25,13 @@
       width: 50%;
       margin: 0 auto;
     }
-	
-    .textcolor {
-      color: inherit;
-    }
-	
+
     .logo {
       font-size: 20px;
-      color: $color;
       font-style: normal;
       text-decoration: none;
+      color: var(--text-color);
+      transition: color #{$theme-duration} ease-out;
     }
 
     .right {
@@ -60,8 +59,10 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: $background;
-  color: $color;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  transition: background-color #{$theme-duration} ease-out,
+    color #{$theme-duration} ease-out;
   z-index: 1000;
 
   .content {
@@ -73,15 +74,15 @@
       list-style: none;
 
       li {
+        font-size: 30px;
         text-align: right;
 
         &:first-of-type {
           text-decoration: line-through;
         }
 
-        button,
-        a {
-          font-size: 30px;
+        & > * {
+          font-size: inherit;
         }
       }
     }
