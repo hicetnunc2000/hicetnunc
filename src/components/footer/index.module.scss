@@ -14,9 +14,9 @@
     color #{$theme-duration} ease-out;
   z-index: 2000;
 
-  & > * {
-    :last-child {
-      font-size: 50%;
-    }
-  }
+  // & > * {
+  //   :last-child {
+  //     font-size: 50%;
+  //   }
+  // }
 }
