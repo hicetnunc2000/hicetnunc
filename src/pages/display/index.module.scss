@@ -1,15 +1,42 @@
 @import '../../styles/layout.scss';
+@import '../../styles/variables.scss';
 
 .profile {
   display: flex;
 
   .picture {
+    position: relative;
     display: block;
     border-style: solid;
     border-radius: 50%;
-    border-color: black;
     height: 150px;
     width: 150px;
+    border: 2px solid var(--text-color);
+    transition: border-color #{$theme-duration} ease-out;
+
+    &:before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 100%;
+      height: 2px;
+      background-color: var(--text-color);
+      transform: translateX(-50%) translateY(-50%) rotate(-45deg);
+      transition: background-color #{$theme-duration} ease-out;
+    }
+
+    &:after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 100%;
+      height: 2px;
+      background-color: var(--text-color);
+      transform: translateX(-50%) translateY(-50%) rotate(45deg);
+      transition: background-color #{$theme-duration} ease-out;
+    }
   }
 
   .info {
@@ -21,7 +48,9 @@
 
 .menu {
   padding: 6px 0;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  border-bottom: 1px solid var(--border-color);
+  transition: border-color #{$theme-duration} ease-out;
+
   & > * {
     margin-right: 1em;
   }
@@ -60,9 +89,11 @@
       position: absolute;
       bottom: 6px;
       right: 6px;
-      background-color: black;
-      color: white;
       padding: 4px;
+      background-color: var(--text-color);
+      color: var(--background-color);
+      transition: background-color #{$theme-duration} ease-out,
+        color #{$theme-duration} ease-out;
     }
   }
 }

@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { Button, Primary } from '../../components/button'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
-import x from '../../media/xt.png'
 import { Page, Container, Padding } from '../../components/layout'
 // import { LoadingContainer } from '../../components/loading'
 import { renderMediaType } from '../../components/media-types'
@@ -75,7 +74,8 @@ export default class Display extends Component {
         <Container>
           <Padding>
             <div className={styles.profile}>
-              <img src={x} alt="profile" className={styles.picture} />
+              <div className={styles.picture} />
+
               <div className={styles.info}>
                 <Button href={`https://tzkt.io/${addr}`}>
                   <Primary>{walletPreview(addr)}</Primary>
