@@ -49,16 +49,15 @@ export default class Display extends Component {
         // )
         this.setState({
           objkts: sanitised,
-          creations: sanitised.filter((e) => e.tz === e.token_info.creators[0]),
+          creations: sanitised.filter((e) => window.location.pathname.split('/')[2] === e.token_info.creators[0]),
           collection: sanitised.filter(
             (e) =>
-              e.tz !== e.token_info.creators[0] &&
-              e.tz !== 'KT1Hkg5qeNhfwpKW4fXvq7HGZB9z2EnmCCA9' &&
-              e.amount !== 0
+              window.location.pathname.split('/')[2] !== e.token_info.creators[0]
           ),
           loading: false,
         })
       })
+    console.log(this.state)
   }
 
   creations = () =>
@@ -81,7 +80,6 @@ export default class Display extends Component {
                   <Primary>{walletPreview(addr)}</Primary>
                 </Button>
                 {/* TODO: Move this to API not Context--> this.context.getBalance(addr) */}
-                <p>- TEZ</p>
                 <p>- ○</p>
               </div>
             </div>
@@ -116,7 +114,7 @@ export default class Display extends Component {
                 // console.log('rendering', i, nft)
                 return (
                   <Button
-                    key={nft.token_id}
+                    key={i}
                     to={`${PATH.OBJKT}/${nft.token_id}`}
                   >
                     <div className={styles.container}>
@@ -136,7 +134,7 @@ export default class Display extends Component {
               {this.state.collection.map((nft, i) => {
                 return (
                   <Button
-                    key={nft.token_id}
+                    key={i}
                     to={`${PATH.OBJKT}/${nft.token_id}`}
                   >
                     <div className={styles.container}>
