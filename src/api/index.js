@@ -60,6 +60,7 @@ export const GetOBJKT = async ({ objkt_id }) => {
       })
       .then((res) => {
         resolve(res.data)
+        console.log(res.data)
       })
       .catch((e) => reject(e))
   })

@@ -10,7 +10,7 @@ import { renderMediaType } from '../../components/media-types'
 import { walletPreview } from '../../utils/string'
 import { SanitiseOBJKT } from '../../utils/sanitise'
 import styles from './index.module.scss'
-
+const axios = require('axios')
 export class ObjktDisplay extends Component {
   static contextType = HicetnuncContext
 
@@ -31,15 +31,22 @@ export class ObjktDisplay extends Component {
     royalties: 0,
   }
 
-  componentWillMount() {
-    GetOBJKT({ objkt_id: window.location.pathname.split('/')[2] }).then(
-      (data) => {
+  componentWillMount = async () => {
+    await axios
+      .post(process.env.REACT_APP_OBJKT, {
+        objkt_id : window.location.pathname.split('/')[2],
+      })
+      .then((res) => {
+        console.log(res.data)
         this.setState({
-          objkt: data.result[0],
+          objkt: res.data.result,
           loading: false,
         })
-      }
-    )
+
+      })
+
+      console.log(this.state)
+
   }
 
   handleChange = (event) => {
@@ -192,7 +199,7 @@ export class ObjktDisplay extends Component {
                 <>
                   <Container>
                     <Padding>TITLE</Padding>
-                    <Padding>{objkt.name}</Padding>
+                    <Padding>{objkt.token_info.name}</Padding>
                   </Container>
                   <Container>
                     <Padding>DESCRIPTION</Padding>
@@ -229,7 +236,7 @@ export class ObjktDisplay extends Component {
                           className={styles.owner}
                         >
                           {amount}x&nbsp;
-                          <Button href={`https://tzkt.io/${wallet}`}>
+                          <Button href={`https://hicetnunc.xyz/tz/${wallet}`}>
                             <Primary>{walletPreview(wallet)}</Primary>
                           </Button>
                         </div>
