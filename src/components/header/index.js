@@ -21,18 +21,18 @@ export const Header = () => {
     <>
       <div className={styles.container}>
         <div className={styles.content}>
-          <Button onClick={() => handleRoute('/')}>
+          <Button onClick={() => handleRoute('/')} aria-label="Back to home">
             <Secondary>
               <div className={styles.logo}>〇 hic et nunc</div>
             </Secondary>
           </Button>
 
           <div className={styles.right}>
-            <Button onClick={context.syncTaquito} secondary>
+            <Button onClick={context.syncTaquito} secondary aria-label="Sync with wallet">
               <Secondary>sync</Secondary>
             </Button>
 
-            <Button onClick={context.toogleNavbar} secondary>
+            <Button onClick={context.toogleNavbar} secondary aria-label="Toggle menu">
               <Menu isOpen={!context.collapsed} />
             </Button>
           </div>
@@ -48,19 +48,19 @@ export const Header = () => {
                   <ul>
                     <li>○</li>
                     <li>
-                      <Button onClick={() => handleRoute('/mint')}>
+                      <Button onClick={() => handleRoute('/mint')} aria-label="Mint NFTs">
                         <Primary>
                           OBJKTs<i style={{ fontSize: '15px' }}>(mint NFTs)</i>
                         </Primary>
                       </Button>
                     </li>
                     <li>
-                      <Button onClick={() => handleRoute('/sync')}>
+                      <Button onClick={() => handleRoute('/sync')} aria-label="Manage assets">
                         <Primary>manage assets</Primary>
                       </Button>
                     </li>
                     <li>
-                      <Button onClick={() => handleRoute('/about')}>
+                      <Button onClick={() => handleRoute('/about')} aria-label="About hic et nunc">
                         <Primary>about</Primary>
                       </Button>
                     </li>
