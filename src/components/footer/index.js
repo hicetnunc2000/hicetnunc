@@ -1,6 +1,7 @@
 import React from 'react'
 import { Padding } from '../layout'
 import styles from './index.module.scss'
+import { ButtonTheme } from '../button-theme'
 
 export const Footer = () => {
   return (
@@ -12,6 +13,7 @@ export const Footer = () => {
         use it consciously. visit artists profiles. be careful with copy
         minters.
       </Padding>
+      <ButtonTheme />
     </footer>
   )
 }

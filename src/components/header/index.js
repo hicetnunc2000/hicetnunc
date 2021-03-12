@@ -1,15 +1,16 @@
 import React, { useContext } from 'react'
+import { useHistory } from 'react-router'
 import { motion, AnimatePresence } from 'framer-motion'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
 import { Container, Padding } from '../layout'
 import { Button, Primary, Secondary } from '../button'
 import { fadeIn } from '../../utils/motion'
+import { Menu } from '../icons'
 import styles from './style.module.scss'
-import { useHistory } from 'react-router'
 
 export const Header = () => {
-  const context = useContext(HicetnuncContext)
   const history = useHistory()
+  const context = useContext(HicetnuncContext)
 
   const handleRoute = (path) => {
     context.setMenu(true)
@@ -28,15 +29,11 @@ export const Header = () => {
 
           <div className={styles.right}>
             <Button onClick={context.syncTaquito} secondary>
-              <Secondary className={styles.textcolor}>sync</Secondary>
+              <Secondary>sync</Secondary>
             </Button>
 
             <Button onClick={context.toogleNavbar} secondary>
-              <img
-                src={require('../../media/menu-black-18dp.svg')}
-                alt="menu button"
-                className={styles.hamburger}
-              />
+              <Menu isOpen={!context.collapsed} />
             </Button>
           </div>
         </div>

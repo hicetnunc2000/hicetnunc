@@ -270,8 +270,8 @@ export class ObjktDisplay extends Component {
                   <Container>
                     <Padding>
                       <p>
-                        Burning your OBJKT will permanently delete your OBJKT
-                        from the network.{' '}
+                        Burning your OBJKT will permanently delete it from the
+                        network.
                       </p>
                     </Padding>
                   </Container>

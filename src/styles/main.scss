@@ -12,8 +12,10 @@ body {
   padding: 0;
   font-family: 'Courier New', Courier, monospace;
   overflow-x: hidden;
-  color: $color;
-  background: $background;
+  color: var(--text-color);
+  background-color: var(--background-color);
+  transition: background-color #{$theme-duration} ease-out,
+    color #{$theme-duration} ease-out;
 }
 
 * {
