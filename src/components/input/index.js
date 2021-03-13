@@ -8,6 +8,7 @@ export const Input = ({
   min,
   max,
   onChange = () => null,
+  disabled,
 }) => {
   return (
     <input
@@ -18,6 +19,7 @@ export const Input = ({
       max={max}
       onChange={onChange}
       className={styles.container}
+      disabled={disabled}
     ></input>
   )
 }

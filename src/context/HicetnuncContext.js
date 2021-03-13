@@ -86,7 +86,7 @@ export default class HicetnuncContextProvider extends Component {
             c.methods
               .mint_OBJKT(
                 tz,
-                parseInt(amount),
+                parseFloat(amount),
                 ('ipfs://' + cid)
                   .split('')
                   .reduce(
@@ -94,7 +94,7 @@ export default class HicetnuncContextProvider extends Component {
                       (hex += c.charCodeAt(0).toString(16).padStart(2, '0')),
                     ''
                   ),
-                parseInt(royalties) * 10
+                parseFloat(royalties) * 10
               )
               .send({ amount: 0 })
           )
@@ -111,35 +111,38 @@ export default class HicetnuncContextProvider extends Component {
       },
 
       collect: async (objkt_amount, swap_id, amount) => {
-        await Tezos.wallet
+        return await Tezos.wallet
           .at(this.state.objkt)
           .then((c) =>
             c.methods
-              .collect(parseInt(objkt_amount), parseInt(swap_id))
-              .send({ amount: parseInt(amount), mutez: true })
+              .collect(parseFloat(objkt_amount), parseFloat(swap_id))
+              .send({ amount: parseFloat(amount), mutez: true })
           )
+          .catch((e) => e)
       },
 
       swap: async (objkt_amount, objkt_id, xtz_per_objkt) => {
-        await Tezos.wallet
+        return await Tezos.wallet
           .at(this.state.objkt)
           .then((c) =>
             c.methods
               .swap(
-                parseInt(objkt_amount),
-                parseInt(objkt_id),
-                parseInt(xtz_per_objkt)
+                parseFloat(objkt_amount),
+                parseFloat(objkt_id),
+                parseFloat(xtz_per_objkt)
               )
               .send({ amount: 0 })
           )
+          .catch((e) => e)
       },
 
       cancel: async (swap_id) => {
-        await Tezos.wallet
+        return await Tezos.wallet
           .at(this.state.objkt)
           .then((c) =>
-            c.methods.cancel_swap(parseInt(swap_id)).send({ amount: 0 })
+            c.methods.cancel_swap(parseFloat(swap_id)).send({ amount: 0 })
           )
+          .catch((e) => e)
       },
 
       load: false,
@@ -222,7 +225,7 @@ export default class HicetnuncContextProvider extends Component {
           .then((res) => {
             console.log(
               'balance',
-              parseInt(res.data[res.data.length - 1].balance / 1000000)
+              parseFloat(res.data[res.data.length - 1].balance / 1000000)
             )
           })
           .catch((e) => console.log('balance error', e))

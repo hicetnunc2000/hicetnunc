@@ -5,6 +5,7 @@ import { HicetnuncContext } from '../../context/HicetnuncContext'
 import { walletPreview } from '../../utils/string'
 import styles from './index.module.scss'
 import { lowestPrice } from '../../utils/lowestPrice'
+import { getTotalSales } from '../../utils/sanitise'
 
 export const ItemInfo = ({
   token_id,
@@ -15,24 +16,13 @@ export const ItemInfo = ({
   total_amount,
   isDetailView,
 }) => {
-  const context = useContext(HicetnuncContext)
+  const { Tezos, syncTaquito, collect } = useContext(HicetnuncContext)
   const swap = lowestPrice(swaps)
   const notForSale = swaps.length === 0
   const soldOut = notForSale && transfered > 0
   const price = swaps.length > 0 && Number(swap.xtz_per_objkt) / 1000000
-  console.log({ owners, token_info })
   const editionNumber = owners
-    ? Object.keys(owners).reduce((edition, ownerID) => {
-        // not the platform or the creator
-        if (
-          ownerID !== 'KT1Hkg5qeNhfwpKW4fXvq7HGZB9z2EnmCCA9' &&
-          !token_info.creators.includes(ownerID)
-        ) {
-          // add the count of market owned editions
-          edition = edition + Number(owners[ownerID])
-        }
-        return edition
-      }, 1)
+    ? getTotalSales({ owners, creators: token_info.creators }) + 1
     : 1
   const edition = notForSale
     ? total_amount
@@ -42,10 +32,18 @@ export const ItemInfo = ({
   const message = notForSale ? soldOutMessage : `collect for ${price} tez`
 
   const handleCollect = () => {
-    if (context.Tezos == null) {
-      context.syncTaquito()
+    if (Tezos == null) {
+      syncTaquito()
     } else {
-      context.collect(1, swap.swap_id, swap.xtz_per_objkt * 1)
+      collect(1, swap.swap_id, swap.xtz_per_objkt * 1)
+        .then((e) => {
+          alert(e.message)
+          console.log('response from taquito', e)
+        })
+        .catch((e) => {
+          alert('an error occurred')
+          console.log('ko', e)
+        })
     }
   }
 
@@ -64,9 +62,13 @@ export const ItemInfo = ({
       </div>
 
       <div className={styles.container}>
-        <Button to={`${PATH.OBJKT}/${token_id}`} disabled={isDetailView}>
-          <Primary>OBJKT#{token_id}</Primary>
-        </Button>
+        {isDetailView ? (
+          <p>OBJKT#{token_id}</p>
+        ) : (
+          <Button to={`${PATH.OBJKT}/${token_id}`} disabled={isDetailView}>
+            <Primary>OBJKT#{token_id}</Primary>
+          </Button>
+        )}
 
         <Button onClick={() => handleCollect()} disabled={notForSale}>
           <Purchase>{message}</Purchase>
