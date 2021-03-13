@@ -76,7 +76,7 @@ export class ObjktDisplay extends Component {
     }
   }
 
-  info = () =>
+  toggleInfo = () =>
     this.setState({
       info: true,
       owners: false,
@@ -85,7 +85,7 @@ export class ObjktDisplay extends Component {
       burn: false,
     })
 
-  owners = () =>
+  toggleOwners = () =>
     this.setState({
       info: false,
       owners: true,
@@ -94,7 +94,7 @@ export class ObjktDisplay extends Component {
       burn: false,
     })
 
-  curate = () =>
+  toggleCurate = () =>
     this.setState({
       info: false,
       owners: false,
@@ -103,7 +103,15 @@ export class ObjktDisplay extends Component {
       burn: false,
     })
 
-  cancel = () => this.context.cancel(this.state.objkt.swaps[0].swap_id)
+  toggleCancel = () => {
+    this.setState({
+      info: false,
+      owners: false,
+      curate: false,
+      cancel: true,
+      burn: false,
+    })
+  }
 
   toggleBurn = () =>
     this.setState({
@@ -115,7 +123,7 @@ export class ObjktDisplay extends Component {
     })
 
   render() {
-    const { loading, info, owners, objkt, curate, burn } = this.state
+    const { loading, info, owners, curate, cancel, burn, objkt } = this.state
     const ownersArray =
       (objkt.owners &&
         Object.keys(objkt.owners).filter((s) => s.startsWith('tz'))) ||
@@ -161,22 +169,22 @@ export class ObjktDisplay extends Component {
               <Container>
                 <Padding>
                   <div className={styles.menu}>
-                    <Button onClick={this.info}>
+                    <Button onClick={this.toggleInfo}>
                       <Primary selected={info}>info</Primary>
                     </Button>
 
-                    <Button onClick={this.owners}>
+                    <Button onClick={this.toggleOwners}>
                       <Primary selected={owners}>owners</Primary>
                     </Button>
 
                     {objkt.token_info.creators[0] === this.context.address && (
                       <>
-                        <Button onClick={this.curate}>
-                          <Primary selected={curate}>+curate</Primary>
+                        <Button onClick={this.toggleCurate}>
+                          <Primary selected={curate}>curate</Primary>
                         </Button>
                         {objkt.swaps.length !== 0 && (
-                          <Button onClick={this.cancel}>
-                            <Primary>-cancel curation</Primary>
+                          <Button onClick={this.toggleCancel}>
+                            <Primary>cancel</Primary>
                           </Button>
                         )}
                         <Button onClick={this.toggleBurn}>
@@ -192,7 +200,7 @@ export class ObjktDisplay extends Component {
                 <>
                   <Container>
                     <Padding>TITLE</Padding>
-                    <Padding>{objkt.name}</Padding>
+                    <Padding>{objkt.token_info.name}</Padding>
                   </Container>
                   <Container>
                     <Padding>DESCRIPTION</Padding>
@@ -240,29 +248,60 @@ export class ObjktDisplay extends Component {
               )}
 
               {curate && (
-                <Container>
-                  <Padding>
-                    <Input
-                      type="number"
-                      placeholder="OBJKT amount"
-                      name="objkt_amount"
-                      min={1}
-                      max={objkt.total_amount - sales}
-                      onChange={this.handleChange}
-                    />
-                    <Input
-                      type="number"
-                      placeholder="price per OBJKT (in tez)"
-                      name="xtz_per_objkt"
-                      min={0}
-                      max={10000}
-                      onChange={this.handleChange}
-                    />
-                    <Button onClick={this.submitForm} fit>
-                      <Curate>curate</Curate>
-                    </Button>
-                  </Padding>
-                </Container>
+                <>
+                  <Container>
+                    <Padding>
+                      <Input
+                        type="number"
+                        placeholder="OBJKT amount"
+                        name="objkt_amount"
+                        min={1}
+                        max={objkt.total_amount - sales}
+                        onChange={this.handleChange}
+                      />
+                      <Input
+                        type="number"
+                        placeholder="price per OBJKT (in tez)"
+                        name="xtz_per_objkt"
+                        min={0}
+                        max={10000}
+                        onChange={this.handleChange}
+                      />
+                      <Button onClick={this.submitForm} fit>
+                        <Curate>curate</Curate>
+                      </Button>
+                    </Padding>
+                  </Container>
+
+                  <Container>
+                    <Padding>
+                      <p>swaps which carry value are charged with a 2.5% fee</p>
+                      <p>fee is reserved for platform maintenance</p>
+                    </Padding>
+                  </Container>
+                </>
+              )}
+
+              {cancel && (
+                <>
+                  <Container>
+                    <Padding>
+                      <p>You're about to cancel your curation.</p>
+                    </Padding>
+                  </Container>
+                  <Container>
+                    <Padding>
+                      <Button
+                        onClick={() =>
+                          this.context.cancel(objkt.swaps[0].swap_id)
+                        }
+                        fit
+                      >
+                        <Burn>cancel it</Burn>
+                      </Button>
+                    </Padding>
+                  </Container>
+                </>
               )}
 
               {burn && (
