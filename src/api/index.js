@@ -18,16 +18,26 @@ export const GetFeed = async ({ counter }) => {
     axios.get(process.env.REACT_APP_BLOCKLIST_OBJKT).catch(() => {
       return { data: [] }
     }),
+    axios.get(process.env.REACT_APP_BLOCKLIST_WALLET).catch(() => {
+      return { data: [] }
+    }),
   ])
     .then((results) => {
       const feed = results[0].data.result
-      const blocklist = results[1].data
+      const oblock = results[1].data
+      const wblock = results[2].data
 
-      // filters objkt's out if they are on the blocklist.
-      const objkts = feed.filter((i) => !blocklist.includes(i.token_id))
+      const objkts = feed
+        // filters objkt's out if they are flagges
+        .filter((i) => !oblock.includes(i.token_id))
+        // filter objkt's out if they're from flagged wallets
+        .filter((i) => !wblock.includes(i.token_info.creators[0]))
 
       // filters objkt's out if they dont have the token_info prop
-      return SanitiseOBJKT(objkts)
+      return {
+        filtered: SanitiseOBJKT(objkts),
+        original: results[0].data.result,
+      }
     })
     .catch((e) => {
       console.error(e)

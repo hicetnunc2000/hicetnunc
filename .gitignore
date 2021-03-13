@@ -15,6 +15,8 @@ yarn-error.log*
 
 TODO.md
 
+.DS_Store
+
 # Elastic Beanstalk Files
 .elasticbeanstalk/*
 !.elasticbeanstalk/*.cfg.yml
