@@ -20,7 +20,7 @@ export class ObjktDisplay extends Component {
     balance: 0,
     info: true,
     owners: false,
-    curate: false,
+    swaps: false,
     burn: false,
     loading: true,
     cancel: false,
@@ -80,7 +80,7 @@ export class ObjktDisplay extends Component {
     this.setState({
       info: true,
       owners: false,
-      curate: false,
+      swaps: false,
       cancel: false,
       burn: false,
     })
@@ -89,16 +89,16 @@ export class ObjktDisplay extends Component {
     this.setState({
       info: false,
       owners: true,
-      curate: false,
+      swaps: false,
       cancel: false,
       burn: false,
     })
 
-  toggleCurate = () =>
+  toggleSwaps = () =>
     this.setState({
       info: false,
       owners: false,
-      curate: true,
+      swaps: true,
       cancel: false,
       burn: false,
     })
@@ -107,7 +107,7 @@ export class ObjktDisplay extends Component {
     this.setState({
       info: false,
       owners: false,
-      curate: false,
+      swaps: false,
       cancel: true,
       burn: false,
     })
@@ -117,13 +117,13 @@ export class ObjktDisplay extends Component {
     this.setState({
       info: false,
       owners: false,
-      curate: false,
+      swaps: false,
       cancel: false,
       burn: true,
     })
 
   render() {
-    const { loading, info, owners, curate, cancel, burn, objkt } = this.state
+    const { loading, info, owners, swaps, cancel, burn, objkt } = this.state
     const ownersArray =
       (objkt.owners &&
         Object.keys(objkt.owners).filter((s) => s.startsWith('tz'))) ||
@@ -179,12 +179,12 @@ export class ObjktDisplay extends Component {
 
                     {objkt.token_info.creators[0] === this.context.address && (
                       <>
-                        <Button onClick={this.toggleCurate}>
-                          <Primary selected={curate}>curate</Primary>
+                        <Button onClick={this.toggleSwaps}>
+                          <Primary selected={swaps}>swap</Primary>
                         </Button>
                         {objkt.swaps.length !== 0 && (
                           <Button onClick={this.toggleCancel}>
-                            <Primary>cancel</Primary>
+                            <Primary selected={cancel}>cancel</Primary>
                           </Button>
                         )}
                         <Button onClick={this.toggleBurn}>
@@ -247,7 +247,7 @@ export class ObjktDisplay extends Component {
                 </Container>
               )}
 
-              {curate && (
+              {swaps && (
                 <>
                   <Container>
                     <Padding>
@@ -268,15 +268,17 @@ export class ObjktDisplay extends Component {
                         onChange={this.handleChange}
                       />
                       <Button onClick={this.submitForm} fit>
-                        <Curate>curate</Curate>
+                        <Curate>swap it</Curate>
                       </Button>
                     </Padding>
                   </Container>
 
                   <Container>
                     <Padding>
-                      <p>swaps which carry value are charged with a 2.5% fee</p>
-                      <p>fee is reserved for platform maintenance</p>
+                      <p>
+                        swaps which carry value are charged with a 2.5% fee for
+                        platform maintenance
+                      </p>
                     </Padding>
                   </Container>
                 </>
@@ -286,7 +288,7 @@ export class ObjktDisplay extends Component {
                 <>
                   <Container>
                     <Padding>
-                      <p>You're about to cancel your curation.</p>
+                      <p>You're about to cancel your swap.</p>
                     </Padding>
                   </Container>
                   <Container>
