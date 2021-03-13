@@ -36,7 +36,7 @@ export class ObjktDisplay extends Component {
   componentWillMount() {
     GetOBJKT({ objkt_id: window.location.pathname.split('/')[2] }).then(
       (data) => {
-        const objkt = data.result[0]
+        const objkt = data.result
         const swap = lowestPrice(objkt.swaps)
         this.setState({
           objkt: data.result,
