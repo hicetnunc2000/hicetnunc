@@ -59,3 +59,17 @@ export const getMimeType = (file) => {
 export const filterObjkts = (items) => {
   return items
 }
+
+export const getTotalSales = ({ owners, creators }) => {
+  return Object.keys(owners).reduce((edition, ownerID) => {
+    // not the platform or the creator
+    if (
+      ownerID !== 'KT1Hkg5qeNhfwpKW4fXvq7HGZB9z2EnmCCA9' &&
+      !creators.includes(ownerID)
+    ) {
+      // add the count of market owned editions
+      edition = edition + Number(owners[ownerID])
+    }
+    return edition
+  }, 0)
+}

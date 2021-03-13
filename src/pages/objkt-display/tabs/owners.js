@@ -9,10 +9,10 @@ export const Owners = ({ owners }) => {
         .filter((s) => s.startsWith('tz'))
         .map((s) => ({ amount: owners[s], wallet: s }))) ||
     []
-
+  console.log(filtered.length)
   return (
     <>
-      {owners.length === 0 ? (
+      {filtered.length === 0 ? (
         <Container>
           <Padding>no owners</Padding>
         </Container>

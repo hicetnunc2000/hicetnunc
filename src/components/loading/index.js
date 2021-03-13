@@ -4,8 +4,8 @@ import styles from './index.module.scss'
 export const Loading = ({ message }) => {
   return (
     <div className={styles.container}>
-      {message && <p>{message}</p>}
       <div className={styles.circle} />
+      {message && <p className={styles.message}>{message}</p>}
     </div>
   )
 }

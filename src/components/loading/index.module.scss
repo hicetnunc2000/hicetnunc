@@ -15,20 +15,19 @@
   display: flex;
   align-items: center;
 
-  p {
-    margin-right: 10px;
-    // font-size: 10px;
+  .circle {
+    display: inline-block;
+    background-color: var(--text-color);
+    width: 20px;
+    height: 20px;
+    border-radius: 1000px;
+    transition: background-color #{$theme-duration} ease-out;
+    animation: circle 1.5s linear infinite;
   }
-}
 
-.circle {
-  display: inline-block;
-  background-color: var(--text-color);
-  width: 20px;
-  height: 20px;
-  border-radius: 1000px;
-  transition: background-color #{$theme-duration} ease-out;
-  animation: circle 1.5s linear infinite;
+  .message {
+    margin-left: 10px;
+  }
 }
 
 @keyframes circle {
@@ -39,5 +38,17 @@
   100% {
     transform: scale(1);
     opacity: 0;
+  }
+}
+
+@keyframes flicker {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
   }
 }

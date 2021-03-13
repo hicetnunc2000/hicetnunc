@@ -1,17 +1,43 @@
-import React from 'react'
+import React, { useState, useContext } from 'react'
+import { useParams } from 'react-router-dom'
+import { HicetnuncContext } from '../../../context/HicetnuncContext'
 import { Container, Padding } from '../../../components/layout'
+import { Loading } from '../../../components/loading'
 import { Input } from '../../../components/input'
 import { Button, Curate } from '../../../components/button'
+import { getTotalSales } from '../../../utils/sanitise'
 
-export const Swap = ({ total_amount, owners }) => {
-  const filtered =
-    (owners &&
-      Object.keys(owners)
-        .filter((s) => s.startsWith('tz'))
-        .map((s) => ({ amount: owners[s], wallet: s }))) ||
-    []
-  const sales = filtered.length
-  console.log('sales', sales)
+export const Swap = ({ total_amount, owners, token_info }) => {
+  const { id } = useParams()
+  const { swap } = useContext(HicetnuncContext)
+  const [amount, setAmount] = useState()
+  const [price, setPrice] = useState()
+  const sales = getTotalSales({ owners, creators: token_info.creators })
+  const [progress, setProgress] = useState(false)
+  const [message, setMessage] = useState('')
+
+  const handleSubmit = () => {
+    if (!amount || amount === '' || !price || price === '') {
+      // simple validation for now
+      alert('the swap is invalid')
+      console.log(amount, price)
+    } else {
+      setProgress(true)
+      setMessage('generating swap')
+      // swap is valid call API
+      swap(parseFloat(amount), id, parseFloat(price * 1000000))
+        .then((e) => {
+          // when taquito returns a success/fail message
+          setProgress(false)
+          setMessage(e.description)
+          console.log('swap', e)
+        })
+        .catch((e) => {
+          setProgress(false)
+          setMessage('an error occurred')
+        })
+    }
+  }
 
   return (
     <>
@@ -20,22 +46,27 @@ export const Swap = ({ total_amount, owners }) => {
           <Input
             type="number"
             placeholder="OBJKT amount"
-            name="objkt_amount"
             min={1}
+            defaultValue={amount}
             max={total_amount - sales}
-            onChange={() => null /* this.handleChange */}
+            onChange={(e) => setAmount(e.target.value)}
+            disabled={progress}
           />
           <Input
             type="number"
             placeholder="price per OBJKT (in tez)"
-            name="xtz_per_objkt"
             min={0}
             max={10000}
-            onChange={() => null /* this.handleChange */}
+            onChange={(e) => setPrice(e.target.value)}
+            disabled={progress}
           />
-          <Button onClick={() => null /* this.submitForm */} fit>
+          <Button onClick={handleSubmit} fit disabled={progress}>
             <Curate>swap it</Curate>
           </Button>
+          <div>
+            <p>{message}</p>
+            {progress && <Loading />}
+          </div>
         </Padding>
       </Container>
 
