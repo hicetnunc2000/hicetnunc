@@ -2,10 +2,10 @@
 
 Coming soon
 
-## How to mint an NFT
+## How to mint
 
-## How to swap an NFT
+## How to swap
 
-## How to cancel a swap
+## How to cancel
 
-## How to burn a NFT
+## How to burn
