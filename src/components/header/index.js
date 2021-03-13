@@ -21,18 +21,18 @@ export const Header = () => {
     <>
       <div className={styles.container}>
         <div className={styles.content}>
-          <Button onClick={() => handleRoute('/')} aria-label="Back to home">
+          <Button onClick={() => handleRoute('/')} ariaLabel="Logo, back to home">
             <Secondary>
               <div className={styles.logo}>〇 hic et nunc</div>
             </Secondary>
           </Button>
 
           <div className={styles.right}>
-            <Button onClick={context.syncTaquito} secondary aria-label="Sync with wallet">
+            <Button onClick={context.syncTaquito} secondary ariaLabel="Sync with wallet">
               <Secondary>sync</Secondary>
             </Button>
 
-            <Button onClick={context.toogleNavbar} secondary aria-label="Toggle menu">
+            <Button onClick={context.toogleNavbar} secondary ariaLabel="Toggle menu">
               <Menu isOpen={!context.collapsed} />
             </Button>
           </div>
@@ -48,19 +48,19 @@ export const Header = () => {
                   <ul>
                     <li>○</li>
                     <li>
-                      <Button onClick={() => handleRoute('/mint')} aria-label="Mint NFTs">
+                      <Button onClick={() => handleRoute('/mint')} ariaLabel="Mint NFTs">
                         <Primary>
                           OBJKTs<i style={{ fontSize: '15px' }}>(mint NFTs)</i>
                         </Primary>
                       </Button>
                     </li>
                     <li>
-                      <Button onClick={() => handleRoute('/sync')} aria-label="Manage assets">
+                      <Button onClick={() => handleRoute('/sync')} ariaLabel="Manage assets">
                         <Primary>manage assets</Primary>
                       </Button>
                     </li>
                     <li>
-                      <Button onClick={() => handleRoute('/about')} aria-label="About hic et nunc">
+                      <Button onClick={() => handleRoute('/about')} ariaLabel="About hic et nunc">
                         <Primary>about</Primary>
                       </Button>
                     </li>

@@ -14,6 +14,7 @@ export const Button = ({
   to = null,
   href = null,
   onClick = () => null,
+	ariaLabel = null,
   children,
   disabled,
   fit,
@@ -26,7 +27,7 @@ export const Button = ({
 
   if (to) {
     return (
-      <Link to={to} className={classes}>
+      <Link to={to} className={classes} aria-label={ariaLabel}>
         {children}
       </Link>
     )
@@ -39,13 +40,14 @@ export const Button = ({
         target="_blank"
         rel="noopener noreferrer"
         className={classes}
+				aria-label={ariaLabel}
       >
         {children}
       </a>
     )
   }
   return (
-    <button onClick={onClick} className={classes}>
+    <button onClick={onClick} className={classes} aria-label={ariaLabel}>
       {children}
     </button>
   )

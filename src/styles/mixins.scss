@@ -6,6 +6,11 @@
   background-color: transparent;
   cursor: pointer;
   font-size: 16px;
+
+  &:focus {
+    outline-offset: 1px;
+    outline: 1px solid var(--text-color);
+  }
 }
 
 // mixins for touch hover state on press
