@@ -58,15 +58,15 @@ export const ItemInfo = ({
       </div>
       <div className={styles.container}>
         <div>
+          <Button onClick={() => alert('upvote')}>
+            <Primary>〇</Primary>
+          </Button>
+
           {false && (
             <Button onClick={() => alert('report')}>
               <Primary>Report</Primary>
             </Button>
           )}
-
-          <Button onClick={() => alert('upvote')}>
-            <Primary>〇</Primary>
-          </Button>
         </div>
       </div>
     </>
