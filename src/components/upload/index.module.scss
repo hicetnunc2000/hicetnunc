@@ -1,0 +1,24 @@
+.container {
+  margin-bottom: 10px;
+  // border: 1px dashed red;
+
+  label {
+    display: block;
+    width: 100%;
+    padding: 6px;
+    border-style: dashed;
+    text-align: center;
+
+    input {
+      display: none;
+      width: 100%;
+    }
+  }
+
+  .allowed {
+    font-size: 12px;
+    padding-top: 6px;
+    text-transform: lowercase;
+    opacity: 0.5;
+  }
+}
