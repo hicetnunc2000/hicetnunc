@@ -7,6 +7,7 @@ export const Input = ({
   name = 'input-name-not-set',
   min,
   max,
+  maxlength = 280,
   onChange = () => null,
   disabled,
 }) => {
@@ -17,6 +18,7 @@ export const Input = ({
       name={name}
       min={min}
       max={max}
+      maxlength={maxlength}
       onChange={onChange}
       className={styles.container}
       disabled={disabled}
