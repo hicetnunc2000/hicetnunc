@@ -10,16 +10,21 @@ export const ItemInfo = ({
   token_id,
   token_info,
   swaps,
+  transfered,
   total_amount,
   isDetailView,
 }) => {
   const context = useContext(HicetnuncContext)
-
-  const notForSale = swaps.length === 0
   const swap = lowestPrice(swaps)
+  const notForSale = swaps.length === 0
+  const soldOut = notForSale && transfered > 0
   const price = swaps.length > 0 && Number(swap.xtz_per_objkt) / 1000000
-  const edition = swaps.length && `${swap.objkt_amount}/${total_amount}`
-  const message = notForSale ? 'not for sale' : `collect for ${price} tez`
+  const edition = notForSale
+    ? total_amount
+    : swaps.length && `${swap.objkt_amount}/${total_amount}`
+
+  const soldOutMessage = soldOut ? 'sold out!' : 'not for sale'
+  const message = notForSale ? soldOutMessage : `collect for ${price} tez`
 
   const handleCollect = () => {
     if (context.Tezos == null) {
@@ -39,7 +44,7 @@ export const ItemInfo = ({
               <Primary>{walletPreview(token_info.creators[0])}</Primary>
             </Button>
           </div>
-          {!notForSale && <p>Edition: {edition}</p>}
+          <p>Edition: {edition}</p>
         </div>
       </div>
 

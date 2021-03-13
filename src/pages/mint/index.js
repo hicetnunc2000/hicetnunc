@@ -5,7 +5,11 @@ import { Input } from '../../components/input'
 import { Button, Curate } from '../../components/button'
 import { Loading } from '../../components/loading'
 import { getMimeType } from '../../utils/sanitise'
-import { ALLOWED_MIMETYPES } from '../../constants'
+import {
+  ALLOWED_MIMETYPES,
+  ALLOWED_FILETYPES,
+  MINT_FILESIZE,
+} from '../../constants'
 import styles from './index.module.scss'
 
 const IPFS = require('ipfs-api')
@@ -60,13 +64,19 @@ export class Mint extends Component {
       const mimeType = file.type !== '' ? file.type : await getMimeType(file)
       const buffer = Buffer.from(await file.arrayBuffer())
 
+      console.log('file', file.type)
+
       // only allows for supported mimetype
       if (ALLOWED_MIMETYPES.indexOf(mimeType) === -1) {
-        alert(`File MimeType not supported ${mimeType}`)
+        alert(
+          `File format invalid. supported formats include: ${ALLOWED_FILETYPES.join(
+            ', '
+          ).toLocaleLowerCase()}`
+        )
       } else {
-        // checks file size limit of 40MB
+        // checks file size limit
         const filesize = (file.size / 1024 / 1024).toFixed(4)
-        if (filesize < 40) {
+        if (filesize <= MINT_FILESIZE) {
           const fileCid = 'ipfs://' + (await ipfs.files.add(buffer))[0].hash
           const nftCid = (
             await ipfs.files.add(
@@ -95,7 +105,9 @@ export class Mint extends Component {
             this.state.royalties
           )
         } else {
-          alert(`File too big (${filesize}). Limit is currently set at 40MB`)
+          alert(
+            `File too big (${filesize}). Limit is currently set at ${MINT_FILESIZE}MB`
+          )
         }
       }
     }
@@ -168,6 +180,16 @@ export class Mint extends Component {
                     onChange={this.onFileChange}
                   />
                 </label>
+                <div
+                  style={{
+                    fontSize: '12px',
+                    paddingTop: '6px',
+                    textTransform: 'lowercase',
+                    opacity: 0.5,
+                  }}
+                >
+                  {ALLOWED_FILETYPES.join(', ')}
+                </div>
               </Padding>
             </Container>
 

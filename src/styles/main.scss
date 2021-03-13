@@ -1,3 +1,5 @@
+@import 'variables.scss';
+
 html {
   margin: 0;
   padding: 0;
@@ -10,6 +12,10 @@ body {
   padding: 0;
   font-family: 'Courier New', Courier, monospace;
   overflow-x: hidden;
+  color: var(--text-color);
+  background-color: var(--background-color);
+  transition: background-color #{$theme-duration} ease-out,
+    color #{$theme-duration} ease-out;
 }
 
 * {
