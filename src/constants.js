@@ -40,5 +40,4 @@ export const MIMETYPE = {
 }
 
 export const ALLOWED_MIMETYPES = Object.keys(MIMETYPE).map((k) => MIMETYPE[k])
-
 export const ALLOWED_FILETYPES = Object.keys(MIMETYPE)

@@ -62,15 +62,15 @@ export const GethDAOFeed = async ({ counter }) => {
 /**
  * Get OBJKT detail page
  */
-export const GetOBJKT = async ({ objkt_id }) => {
+export const GetOBJKT = async ({ id }) => {
   return new Promise((resolve, reject) => {
     axios
       .post(process.env.REACT_APP_OBJKT, {
-        objkt_id,
+        objkt_id: id,
       })
       .then((res) => {
-        resolve(res.data)
+        resolve(res.data.result)
       })
-      .catch((e) => reject(e))
+      .catch((e) => reject(e)) // TODO: send error message to context. have an error component to display the error
   })
 }
