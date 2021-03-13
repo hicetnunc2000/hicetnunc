@@ -53,8 +53,9 @@ export const getMimeType = (file) => {
 }
 
 /**
+ * TODO:
  * Receives an array of objects and filters them out if they're part of the blocklist (o.json)
  */
 export const filterObjkts = (items) => {
-  return
+  return items
 }
