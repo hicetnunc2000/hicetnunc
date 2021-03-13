@@ -6,7 +6,13 @@ import { ItemInfo } from '../item-info'
 import { renderMediaType } from '../media-types'
 import styles from './index.module.scss'
 
-export const FeedItem = ({ token_info, token_id, swaps, total_amount }) => (
+export const FeedItem = ({
+  token_info,
+  token_id,
+  owners,
+  swaps,
+  total_amount,
+}) => (
   <Container>
     <Button to={`${PATH.OBJKT}/${token_id}`}>
       <div className={styles.container}>
@@ -16,6 +22,7 @@ export const FeedItem = ({ token_info, token_id, swaps, total_amount }) => (
     <Padding>
       <ItemInfo
         token_info={token_info}
+        owners={owners}
         token_id={token_id}
         swaps={swaps}
         total_amount={total_amount}

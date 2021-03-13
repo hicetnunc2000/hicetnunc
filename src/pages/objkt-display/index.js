@@ -10,6 +10,7 @@ import { renderMediaType } from '../../components/media-types'
 import { walletPreview } from '../../utils/string'
 import { SanitiseOBJKT } from '../../utils/sanitise'
 import styles from './index.module.scss'
+import { lowestPrice } from '../../utils/lowestPrice'
 
 export class ObjktDisplay extends Component {
   static contextType = HicetnuncContext
@@ -24,6 +25,7 @@ export class ObjktDisplay extends Component {
     burn: false,
     loading: true,
     cancel: false,
+    swap: false,
     test: false,
     value: 0,
     xtz_per_objkt: 0,
@@ -34,9 +36,12 @@ export class ObjktDisplay extends Component {
   componentWillMount() {
     GetOBJKT({ objkt_id: window.location.pathname.split('/')[2] }).then(
       (data) => {
+        const objkt = data.result[0]
+        const swap = lowestPrice(objkt.swaps)
         this.setState({
           objkt: data.result,
           loading: false,
+          swap,
         })
       }
     )
@@ -70,8 +75,8 @@ export class ObjktDisplay extends Component {
     } else {
       this.context.collect(
         1,
-        this.state.objkt.swaps[0].swap_id,
-        this.state.objkt.swaps[0].xtz_per_objkt * 1
+        this.state.swap.swap_id,
+        this.state.swap.xtz_per_objkt * 1
       )
     }
   }
@@ -295,7 +300,7 @@ export class ObjktDisplay extends Component {
                     <Padding>
                       <Button
                         onClick={() =>
-                          this.context.cancel(objkt.swaps[0].swap_id)
+                          this.context.cancel(this.state.swap.swap_id)
                         }
                         fit
                       >
