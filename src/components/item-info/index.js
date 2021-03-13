@@ -9,6 +9,7 @@ import { lowestPrice } from '../../utils/lowestPrice'
 export const ItemInfo = ({
   token_id,
   token_info,
+  owners,
   swaps,
   transfered,
   total_amount,
@@ -19,20 +20,20 @@ export const ItemInfo = ({
   const notForSale = swaps.length === 0
   const soldOut = notForSale && transfered > 0
   const price = swaps.length > 0 && Number(swap.xtz_per_objkt) / 1000000
-  const editionNumber = Object.keys(token_info.owners).reduce(
-    (edition, ownerID) => {
-      // not the platform or the creator
-      if (
-        token_info.owners[ownerID] !== 'KT1Hkg5qeNhfwpKW4fXvq7HGZB9z2EnmCCA9' &&
-        !token_info.creators.includes(token_info.owners[ownerID])
-      ) {
-        // add the count of market owned editions
-        edition = edition + Number(token_info.owners[ownerID])
-      }
-      return edition
-    },
-    0
-  )
+  console.log({ owners, token_info })
+  const editionNumber = owners
+    ? Object.keys(owners).reduce((edition, ownerID) => {
+        // not the platform or the creator
+        if (
+          ownerID !== 'KT1Hkg5qeNhfwpKW4fXvq7HGZB9z2EnmCCA9' &&
+          !token_info.creators.includes(ownerID)
+        ) {
+          // add the count of market owned editions
+          edition = edition + Number(owners[ownerID])
+        }
+        return edition
+      }, 1)
+    : 1
   const edition = notForSale
     ? total_amount
     : swaps.length && `${editionNumber}/${total_amount}`
