@@ -7,9 +7,10 @@ import { UnknownComponent } from './unknown'
 import { MIMETYPE } from '../../constants'
 
 // some elements might not be interactive on the feed
-export const renderMediaType = (token_info, interactive) => {
+export const renderMediaType = (token_info, interactive, preview = false) => {
   const { mimeType, uri } = token_info.formats[0]
   const path = uri.split('//')[1]
+  let ipfsHost
   let url
 
   switch (mimeType) {
@@ -21,55 +22,27 @@ export const renderMediaType = (token_info, interactive) => {
     case MIMETYPE.SVG:
     case MIMETYPE.TIFF:
     case MIMETYPE.WEBP:
-      url = `https://cloudflare-ipfs.com/ipfs/${path}`
+      ipfsHost = `https://cloudflare-ipfs.com/ipfs/`
+      url = preview ? uri : `${ipfsHost}${path}`
       return <ImageComponent src={url} />
     /* VIDEOS */
     case MIMETYPE.MP4:
     case MIMETYPE.OGV:
     case MIMETYPE.QUICKTIME:
-      url = `https://ipfs.io/ipfs/${path}`
+      ipfsHost = `https://ipfs.io/ipfs/`
+      url = preview ? uri : `${ipfsHost}${path}`
       return <VideoComponent src={url} />
     /* 3D */
     case MIMETYPE.GLTF:
     case MIMETYPE.GLB:
-      url = `https://cloudflare-ipfs.com/ipfs/${path}`
+      ipfsHost = `https://cloudflare-ipfs.com/ipfs/`
+      url = preview ? uri : `${ipfsHost}${path}`
       return <GLBComponent src={url} interactive={interactive} />
     case MIMETYPE.MP3:
     case MIMETYPE.OGA:
-      url = `https://cloudflare-ipfs.com/ipfs/${path}`
+      ipfsHost = `https://cloudflare-ipfs.com/ipfs/`
+      url = preview ? uri : `${ipfsHost}${path}`
       return <AudioComponent src={url} />
-    default:
-      return <UnknownComponent mimeType={mimeType} />
-  }
-}
-
-export const previewMediaType = (mimeType, dataUrl, interactive) => {
-  // const { mimeType, uri } = token_info.formats[0]
-  // const path = uri.split('//')[1]
-  // let url
-
-  switch (mimeType) {
-    /* IMAGES */
-    case MIMETYPE.BMP:
-    case MIMETYPE.GIF:
-    case MIMETYPE.JPEG:
-    case MIMETYPE.PNG:
-    case MIMETYPE.SVG:
-    case MIMETYPE.TIFF:
-    case MIMETYPE.WEBP:
-      return <ImageComponent src={dataUrl} />
-    /* VIDEOS */
-    case MIMETYPE.MP4:
-    case MIMETYPE.OGV:
-    case MIMETYPE.QUICKTIME:
-      return <VideoComponent src={dataUrl} />
-    /* 3D */
-    case MIMETYPE.GLTF:
-    case MIMETYPE.GLB:
-      return <GLBComponent src={dataUrl} interactive={interactive} />
-    case MIMETYPE.MP3:
-    case MIMETYPE.OGA:
-      return <AudioComponent src={dataUrl} />
     default:
       return <UnknownComponent mimeType={mimeType} />
   }

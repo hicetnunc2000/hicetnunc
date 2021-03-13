@@ -5,7 +5,7 @@ import { Input } from '../../components/input'
 import { Button, Curate } from '../../components/button'
 import { Loading } from '../../components/loading'
 import { getMimeType } from '../../utils/sanitise'
-import { previewMediaType } from '../../components/media-types'
+import { renderMediaType } from '../../components/media-types'
 import {
   ALLOWED_MIMETYPES,
   ALLOWED_FILETYPES,
@@ -208,10 +208,13 @@ export class Mint extends Component {
             {this.state.preview !== null ? (
               <Container>
                 <Padding>
-                  {previewMediaType(
-                    this.state.preview.type,
-                    this.state.preview.dataUrl,
-                    false
+                  {renderMediaType(
+                    {
+                      mimeType: this.state.preview.type,
+                      uri: this.state.preview.dataUrl,
+                    },
+                    true,
+                    true
                   )}
                 </Padding>
               </Container>
