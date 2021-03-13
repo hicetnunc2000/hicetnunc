@@ -133,6 +133,8 @@ export class ObjktDisplay extends Component {
       (objkt.owners &&
         Object.keys(objkt.owners).filter((s) => s.startsWith('tz'))) ||
       []
+
+      
     const sales = ownersArray.length
 
     // sanitize the objkt to make sure it has the necessary props.
