@@ -42,3 +42,35 @@ export const renderMediaType = (token_info, interactive) => {
       return <UnknownComponent mimeType={mimeType} />
   }
 }
+
+export const previewMediaType = (mimeType, dataUrl, interactive) => {
+  // const { mimeType, uri } = token_info.formats[0]
+  // const path = uri.split('//')[1]
+  // let url
+
+  switch (mimeType) {
+    /* IMAGES */
+    case MIMETYPE.BMP:
+    case MIMETYPE.GIF:
+    case MIMETYPE.JPEG:
+    case MIMETYPE.PNG:
+    case MIMETYPE.SVG:
+    case MIMETYPE.TIFF:
+    case MIMETYPE.WEBP:
+      return <ImageComponent src={dataUrl} />
+    /* VIDEOS */
+    case MIMETYPE.MP4:
+    case MIMETYPE.OGV:
+    case MIMETYPE.QUICKTIME:
+      return <VideoComponent src={dataUrl} />
+    /* 3D */
+    case MIMETYPE.GLTF:
+    case MIMETYPE.GLB:
+      return <GLBComponent src={dataUrl} interactive={interactive} />
+    case MIMETYPE.MP3:
+    case MIMETYPE.OGA:
+      return <AudioComponent src={dataUrl} />
+    default:
+      return <UnknownComponent mimeType={mimeType} />
+  }
+}
