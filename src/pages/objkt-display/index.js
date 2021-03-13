@@ -35,7 +35,7 @@ export class ObjktDisplay extends Component {
     GetOBJKT({ objkt_id: window.location.pathname.split('/')[2] }).then(
       (data) => {
         this.setState({
-          objkt: data.result[0],
+          objkt: data.result,
           loading: false,
         })
       }
