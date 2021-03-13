@@ -8,7 +8,7 @@ import { Button, Primary } from '../components/button'
 export default class Sync extends Component {
   static contextType = HicetnuncContext
 
-  componentWillMount = async () => {
+  componentDidMount = async () => {
     this.context.dAppClient()
   }
 

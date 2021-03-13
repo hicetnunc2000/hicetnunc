@@ -26,7 +26,7 @@ export default class Display extends Component {
     creationsState: true,
   }
 
-  componentWillMount = async () => {
+  componentDidMount = async () => {
     this.context.setPath(window.location.pathname)
     const currentWallet = window.location.pathname.split('/')[2]
     console.log('current wallet', currentWallet)
