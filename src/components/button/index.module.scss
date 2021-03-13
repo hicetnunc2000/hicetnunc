@@ -15,14 +15,14 @@
 }
 
 .primary {
-  color: $color;
+  color: var(--text-color);
+  transition: color #{$theme-duration} ease-out;
 
   &.selected {
     font-weight: bold;
   }
 
   @include hover {
-    color: $color;
     &:not(.selected) {
       text-decoration: underline;
     }
@@ -30,6 +30,9 @@
 }
 
 .secondary {
+  color: var(--text-color);
+  transition: color #{$theme-duration} ease-out;
+
   @include hover {
     text-decoration: none;
   }
@@ -37,23 +40,30 @@
 
 .purchase {
   padding: 2px 6px;
-  border-right: 2px solid $color;
-  border-bottom: 2px solid $color;
+  color: var(--text-color);
+  border-right: 2px solid var(--text-color);
+  border-bottom: 2px solid var(--text-color);
+  transition: border-color #{$theme-duration} ease-out,
+    color #{$theme-duration} ease-out;
 }
 
 .curate {
   padding: 2px 6px;
   width: 100%;
+  color: black; // this colour doesnt change
   background-color: rgb(239, 239, 239);
-  border-right: 2px solid $color;
-  border-bottom: 2px solid $color;
+  border-right: 2px solid var(--text-color);
+  border-bottom: 2px solid var(--text-color);
+  transition: border-color #{$theme-duration} ease-out,
+    color #{$theme-duration} ease-out;
 }
 
 .burn {
   padding: 2px 6px;
   width: 100%;
   background-color: red;
-  color: $color;
-  border-right: 2px solid $color;
-  border-bottom: 2px solid $color;
+  color: black; // this colour doesn't change
+  border-right: 2px solid var(--text-color);
+  border-bottom: 2px solid var(--text-color);
+  transition: border-color #{$theme-duration} ease-out;
 }
