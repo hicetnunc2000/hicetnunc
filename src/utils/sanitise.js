@@ -35,7 +35,7 @@ export const getMimeType = (file) => {
 
         switch (hex) {
           case '676C5446':
-            mimeType = MIMETYPE.GLGLBF
+            mimeType = MIMETYPE.GLB
             break
           case '7BA2020':
             mimeType = MIMETYPE.GLTF
