@@ -22,11 +22,7 @@ export class About extends Component {
       <Page>
         <Container>
           <Padding>
-            <Button href="https://github.com/hicetnunc2000">
-              <Primary>
-                <strong>hic et nunc stack</strong>
-              </Primary>
-            </Button>
+            <strong>hic et nunc</strong>
           </Padding>
         </Container>
 
@@ -67,14 +63,23 @@ export class About extends Component {
 
         <Container>
           <Padding>
-            <div className={styles.buttons}>
+            <strong className={styles.buttons}>
               <Button href="https://discord.gg/jKNy6PynPK">
                 <Primary>discord</Primary>
               </Button>
+              {', '}
               <Button href="mailto:hicetnunc2000@protonmail.com">
                 <Primary>email</Primary>
               </Button>
-            </div>
+              {', '}
+              <Button href="https://github.com/hicetnunc2000">
+                <Primary>github</Primary>
+              </Button>
+              {', '}
+              <Button href="https://github.com/hicetnunc2000/hicetnunc/blob/main/FAQ.md">
+                <Primary>faq</Primary>
+              </Button>
+            </strong>
           </Padding>
         </Container>
       </Page>

@@ -18,8 +18,9 @@ export const ROUTES = {
   LOAD: { exact: false, path: '/load', component: null }, // TODO: check if this is being used?
 }
 
-export const MINT_MAX_LIMIT = 10000
 export const MINT_MIN_LIMIT = 1
+export const MINT_MAX_LIMIT = 10000
+export const MINT_FILESIZE = 40
 
 export const MIMETYPE = {
   BMP: 'image/bmp',
@@ -30,9 +31,14 @@ export const MIMETYPE = {
   TIFF: 'image/tiff',
   WEBP: 'image/webp',
   MP4: 'video/mp4',
-  OGG: 'video/ogg',
+  OGV: 'video/ogg',
   QUICKTIME: 'video/quicktime',
-  GLTF: 'model/gltf-binary',
-  GLB: 'model/gltf+json',
+  GLB: 'model/gltf-binary',
+  GLTF: 'model/gltf+json',
+  MP3: 'audio/mpeg',
+  OGA: 'audio/ogg',
 }
+
 export const ALLOWED_MIMETYPES = Object.keys(MIMETYPE).map((k) => MIMETYPE[k])
+
+export const ALLOWED_FILETYPES = Object.keys(MIMETYPE)

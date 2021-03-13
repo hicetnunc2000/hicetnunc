@@ -2,6 +2,7 @@ import React from 'react'
 import { GLBComponent } from './glb'
 import { ImageComponent } from './image'
 import { VideoComponent } from './video'
+import { AudioComponent } from './audio'
 import { UnknownComponent } from './unknown'
 import { MIMETYPE } from '../../constants'
 
@@ -24,15 +25,19 @@ export const renderMediaType = (token_info, interactive) => {
       return <ImageComponent src={url} />
     /* VIDEOS */
     case MIMETYPE.MP4:
-    case MIMETYPE.OGG:
+    case MIMETYPE.OGV:
     case MIMETYPE.QUICKTIME:
-      url = `https://dweb.link/ipfs/${path}`
+      url = `https://ipfs.io/ipfs/${path}`
       return <VideoComponent src={url} />
     /* 3D */
     case MIMETYPE.GLTF:
     case MIMETYPE.GLB:
       url = `https://cloudflare-ipfs.com/ipfs/${path}`
       return <GLBComponent src={url} interactive={interactive} />
+    case MIMETYPE.MP3:
+    case MIMETYPE.OGA:
+      url = `https://cloudflare-ipfs.com/ipfs/${path}`
+      return <AudioComponent src={url} />
     default:
       return <UnknownComponent mimeType={mimeType} />
   }

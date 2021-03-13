@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Button, Primary } from '../../components/button'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
 import { Page, Container, Padding } from '../../components/layout'
-// import { LoadingContainer } from '../../components/loading'
+import { Loading } from '../../components/loading'
 import { renderMediaType } from '../../components/media-types'
 import { walletPreview } from '../../utils/string'
 import { SanitiseOBJKT } from '../../utils/sanitise'
@@ -28,33 +28,23 @@ export default class Display extends Component {
 
   componentWillMount = async () => {
     this.context.setPath(window.location.pathname)
+    const currentWallet = window.location.pathname.split('/')[2]
+    console.log('current wallet', currentWallet)
     await axios
       .post(process.env.REACT_APP_TZ, {
         // 3.129.20.231
-        tz: window.location.pathname.split('/')[2],
+        tz: currentWallet,
       })
       .then(async (res) => {
         const sanitised = SanitiseOBJKT(res.data.result)
 
-        // TODO: crzypathwork, please uncomment this to see that what we're getting from the API
-        // doesn't pass the creations filter on line 53. because it thinks that the creations belong to someone else. do we need this?
-        // console.log('data', res.data.result)
-        // console.log('sanitised', sanitised)
-        // console.log(
-        //   'filtered',
-        //   sanitised.filter((e) => {
-        //     console.log('testing', e.tz, e.token_info.creators)
-        //     return e.tz === e.token_info.creators[0]
-        //   })
-        // )
         this.setState({
           objkts: sanitised,
-          creations: sanitised.filter((e) => e.tz === e.token_info.creators[0]),
+          creations: sanitised.filter(
+            (e) => currentWallet === e.token_info.creators[0]
+          ),
           collection: sanitised.filter(
-            (e) =>
-              e.tz !== e.token_info.creators[0] &&
-              e.tz !== 'KT1Hkg5qeNhfwpKW4fXvq7HGZB9z2EnmCCA9' &&
-              e.amount !== 0
+            (e) => currentWallet !== e.token_info.creators[0]
           ),
           loading: false,
         })
@@ -109,11 +99,18 @@ export default class Display extends Component {
           </Padding>
         </Container>
 
+        {this.state.loading && (
+          <Container>
+            <Padding>
+              <Loading />
+            </Padding>
+          </Container>
+        )}
+
         {this.state.creationsState && (
           <Container xlarge>
             <div className={styles.list}>
               {this.state.creations.map((nft, i) => {
-                // console.log('rendering', i, nft)
                 return (
                   <Button
                     key={nft.token_id}

@@ -1,14 +1,22 @@
 import React from 'react'
 import { Padding } from '../layout'
-import styles from './index.module.scss'
 import { ButtonTheme } from '../button-theme'
+import { AnimationSwap } from '../animation-swap'
+import styles from './index.module.scss'
 
 export const Footer = () => {
   return (
     <footer className={styles.container}>
-      <Padding>
-        sync -&gt; collect // sync -&gt; mint // sync -&gt; curate
-      </Padding>
+      {false && (
+        <Padding>
+          <AnimationSwap label="collect" />
+        </Padding>
+      )}
+      {true && (
+        <Padding>
+          sync -&gt; collect // sync -&gt; mint // sync -&gt; swap
+        </Padding>
+      )}
       <Padding>
         use it consciously. visit artists profiles. be careful with copy
         minters.
