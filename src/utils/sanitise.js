@@ -51,3 +51,10 @@ export const getMimeType = (file) => {
     filereader.readAsArrayBuffer(file.slice(0, 4))
   })
 }
+
+/**
+ * Receives an array of objects and filters them out if they're part of the blocklist (o.json)
+ */
+export const filterObjkts = (items) => {
+  return
+}
