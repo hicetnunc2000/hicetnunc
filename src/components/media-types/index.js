@@ -26,7 +26,7 @@ export const renderMediaType = (token_info, interactive) => {
     case MIMETYPE.MP4:
     case MIMETYPE.OGG:
     case MIMETYPE.QUICKTIME:
-      url = `https://dweb.link/ipfs/${path}`
+      url = `https://ipfs.io/ipfs/${path}`
       return <VideoComponent src={url} />
     /* 3D */
     case MIMETYPE.GLTF:
