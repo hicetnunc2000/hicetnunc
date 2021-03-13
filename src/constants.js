@@ -31,10 +31,12 @@ export const MIMETYPE = {
   TIFF: 'image/tiff',
   WEBP: 'image/webp',
   MP4: 'video/mp4',
-  OGG: 'video/ogg',
+  OGV: 'video/ogg',
   QUICKTIME: 'video/quicktime',
   GLB: 'model/gltf-binary',
   GLTF: 'model/gltf+json',
+  MP3: 'audio/mpeg',
+  OGA: 'audio/ogg',
 }
 
 export const ALLOWED_MIMETYPES = Object.keys(MIMETYPE).map((k) => MIMETYPE[k])

@@ -180,8 +180,15 @@ export class Mint extends Component {
                     onChange={this.onFileChange}
                   />
                 </label>
-                <div style={{ fontSize: '12px', textTransform: 'lowercase' }}>
-                  ({ALLOWED_FILETYPES.join(', ')})
+                <div
+                  style={{
+                    fontSize: '12px',
+                    paddingTop: '6px',
+                    textTransform: 'lowercase',
+                    opacity: 0.5,
+                  }}
+                >
+                  {ALLOWED_FILETYPES.join(', ')}
                 </div>
               </Padding>
             </Container>

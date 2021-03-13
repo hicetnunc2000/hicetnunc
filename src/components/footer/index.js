@@ -14,7 +14,7 @@ export const Footer = () => {
       )}
       {true && (
         <Padding>
-          sync -&gt; collect // sync -&gt; mint // sync -&gt; curate
+          sync -&gt; collect // sync -&gt; mint // sync -&gt; swap
         </Padding>
       )}
       <Padding>
