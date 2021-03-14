@@ -75,7 +75,7 @@ export const ObjktDisplay = () => {
             </Padding>
           </Container>
 
-          <Tab {...nft} />
+          <Tab {...nft} address={address} />
         </>
       )}
     </Page>
