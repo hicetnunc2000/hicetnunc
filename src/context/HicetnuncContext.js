@@ -136,6 +136,41 @@ export default class HicetnuncContextProvider extends Component {
           .catch((e) => e)
       },
 
+      curate: async (objkt_id) => {
+        await Tezos.wallet
+          .at(this.state.objkt)
+          .then((c) =>
+            c.methods.curate(1, objkt_id).send()
+          )
+      },
+
+      claim_hDAO: async(hDAO_amount, objkt_id) => {
+        await Tezos.wallet
+        .at('KT1TybhR7XraG75JFYKSrh7KnxukMBT5dor6')
+        .then((c) => {
+          c.methods.claim_hDAO(parseInt(hDAO_amount), parseInt(objkt_id)).send()
+        })
+      },
+
+      burn: async (tz, objkt_id, amount) => {
+        await Tezos.wallet
+          .at('KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton')
+          .then((c) =>
+            c.methods.transfer([
+              {
+                from_: tz,
+                txs: [
+                  {
+                    to_: 'tz1burnburnburnburnburnburnburjAYjjX',
+                    token_id: parseInt(objkt_id),
+                    amount: parseInt(amount)
+                  }
+                ]
+              }
+            ]).send()
+          )
+      },
+
       cancel: async (swap_id) => {
         return await Tezos.wallet
           .at(this.state.objkt)

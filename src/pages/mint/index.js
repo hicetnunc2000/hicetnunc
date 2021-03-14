@@ -5,6 +5,7 @@ import { Input } from '../../components/input'
 import { Button, Curate } from '../../components/button'
 import { Loading } from '../../components/loading'
 import { getMimeType } from '../../utils/sanitise'
+import { renderMediaType } from '../../components/media-types'
 import {
   ALLOWED_MIMETYPES,
   ALLOWED_FILETYPES,
@@ -31,6 +32,7 @@ export class Mint extends Component {
     reveal: false,
     loading: false,
     royalties: 10,
+    preview: null,
   }
 
   handleChange = (event) => {
@@ -40,6 +42,16 @@ export class Mint extends Component {
   }
 
   onFileChange = (event) => {
+    const file = event.target.files[0]
+
+    const fileReader = new FileReader()
+    fileReader.addEventListener('load', (evt) => {
+      this.setState({
+        preview: { type: file.type, dataUrl: evt.target.result },
+      })
+    })
+    fileReader.readAsDataURL(file)
+
     this.setState({
       selectedFile: event.target.files,
       fileTitle: event.target.files[0].name,
@@ -192,6 +204,23 @@ export class Mint extends Component {
                 </div>
               </Padding>
             </Container>
+
+            {this.state.preview !== null ? (
+              <Container>
+                <Padding>
+                  {renderMediaType(
+                    {
+                      mimeType: this.state.preview.type,
+                      uri: this.state.preview.dataUrl,
+                    },
+                    true,
+                    true
+                  )}
+                </Padding>
+              </Container>
+            ) : (
+              <></>
+            )}
 
             <Container>
               <Padding>
