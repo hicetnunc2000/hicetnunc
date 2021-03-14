@@ -1,5 +1,8 @@
 # RELEASES
 
+## 14 March 2021
+- identicon
+
 ## 13 March 2021
 
 ### Bug fixes
