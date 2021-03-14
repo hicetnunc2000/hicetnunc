@@ -1,7 +1,20 @@
 # RELEASES
 
 ## 14 March 2021
-- identicon
+
+### Bug fixes
+
+- sanitize objects before filtering (veqtor)
+-
+
+### Features
+
+- identicon based on wallet id (vhf)
+- adding preview to mint page (guidoschmidt + andrevenancio)
+- adding progress message for swap, curate and burn (andrevenancio)
+- redirect to user profile once a swap, cancel and burn happen (andrevenancio)
+
+---
 
 ## 13 March 2021
 
