@@ -14,6 +14,8 @@
 - adding progress message for swap, curate and burn (andrevenancio)
 - redirect to user profile once a swap, cancel and burn happen (andrevenancio)
 - introducing hDAO feed (andrevenancio + crzypathwork)
+- enabled glb viewer autoplay (leonardschoelch)
+- updating FAQ (violetforest)
 
 ---
 
