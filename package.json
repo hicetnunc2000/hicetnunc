@@ -19,7 +19,7 @@
     "framer-motion": "^3.10.2",
     "ipfs-api": "^26.1.2",
     "local-storage": "^2.0.0",
-    "node-sass": "^4.14.1",
+    "node-sass": "^5.0.0",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-error-boundary": "^3.1.0",
