@@ -46,7 +46,7 @@ export const Feed = () => {
         }
       })
     }
-  }, [count])
+  }, [count, feedType])
 
   const toggleFeed = (index) => {
     setFeedType(index)
