@@ -32,6 +32,7 @@ If you try to +curate on OBJKTs that you have already set the price for, your wa
 
 ## How to burn
 
-For now, the burn feature has not been implemented. To burn an OBJKT, you need to send it to a “burn wallet”. From your wallet, click on your OBJKT, and send it to the following tezos address: tz1burnburnburnburnburnburnburjAYjjX
+The burn button allows you to burn the NFT. Don't forget to cancel the curation of this OBJKT so it can be available in your wallet when you are ready to burn it.
 
-Your OBJKT will be stored in this temporary burn wallet until the burn feature is implemented. Don't forget to cancel the curation of this OBJKT so it can be available in your wallet when you are ready to send it to the burn wallet.
+However, at the moment, burned tokens still appear in your wallet. We are working to update API to filter the burned OBJKTs.
+
