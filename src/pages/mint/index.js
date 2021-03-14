@@ -57,6 +57,7 @@ export const Mint = () => {
               console.log('confirmado', e)
               setProgress(false)
               setMessage(e.description)
+              // redirect here
             })
             .catch((e) => {
               setProgress(false)
