@@ -16,7 +16,12 @@ export const Upload = ({ label, onChange = () => null }) => {
     const mimeType = file.type !== '' ? file.type : await getMimeType(file)
     const buffer = Buffer.from(await file.arrayBuffer())
 
-    onChange({ title, mimeType, file, buffer })
+    // set reader for preview
+    const reader = new FileReader()
+    reader.addEventListener('load', (e) => {
+      onChange({ title, mimeType, file, buffer, reader: e.target.result })
+    })
+    reader.readAsDataURL(file)
   }
 
   return (

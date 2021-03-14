@@ -111,13 +111,18 @@ export default class Display extends Component {
           <Container xlarge>
             <div className={styles.list}>
               {this.state.creations.map((nft, i) => {
+                const { mimeType, uri } = nft.token_info.formats[0]
+
                 return (
                   <Button
                     key={nft.token_id}
                     to={`${PATH.OBJKT}/${nft.token_id}`}
                   >
                     <div className={styles.container}>
-                      {renderMediaType(nft.token_info, false)}
+                      {renderMediaType({
+                        mimeType,
+                        uri: uri.split('//')[1],
+                      })}
                       <div className={styles.number}>OBJKT#{nft.token_id}</div>
                     </div>
                   </Button>
@@ -131,13 +136,14 @@ export default class Display extends Component {
           <Container xlarge>
             <div className={styles.list}>
               {this.state.collection.map((nft, i) => {
+                const { mimeType, uri } = nft.token_info.formats[0]
                 return (
                   <Button
                     key={nft.token_id}
                     to={`${PATH.OBJKT}/${nft.token_id}`}
                   >
                     <div className={styles.container}>
-                      {renderMediaType(nft.token_info, false)}
+                      {renderMediaType({ mimeType, uri: uri.split('//')[1] })}
                       <div className={styles.number}>OBJKT#{nft.token_id}</div>
                     </div>
                   </Button>

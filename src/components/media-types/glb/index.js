@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import styles from './index.module.scss'
 
 /* DOCS: https://modelviewer.dev/ */
-export const GLBComponent = ({ src, interactive = false }) => {
+export const GLBComponent = ({ src, interactive }) => {
   const ref = useRef()
   const [width, setWidth] = useState('100px')
   const [height, setHeight] = useState('100px')
