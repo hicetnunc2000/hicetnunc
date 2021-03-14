@@ -29,7 +29,7 @@
     "react-player": "^2.8.2",
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
-    "react-scripts": "^3.4.3",
+    "react-scripts": "^4.0.3",
     "react-scroll": "^1.8.1"
   },
   "scripts": {
