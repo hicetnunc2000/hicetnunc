@@ -29,7 +29,7 @@ export class About extends Component {
         <Container>
           <Padding>
             <p>
-              the present decentralized application allows its users to manage
+              The present decentralized application allows its users to manage
               decentralized digital assets, serving as a public smart contract
               infrastructure on Tezos Blockchain.
             </p>{' '}
@@ -49,7 +49,7 @@ export class About extends Component {
         <Container>
           <Padding>
             <p>
-              we're concerned about your security and autonomy. please verify
+              We're concerned about your security and autonomy. please verify
               informations while making transactions.
             </p>
           </Padding>
@@ -57,29 +57,47 @@ export class About extends Component {
 
         <Container>
           <Padding>
-            <p>for consulting, networking or questions:</p>
+            <div className={styles.buttons}>
+              <p>For consulting, networking or questions get in touch by</p>
+              &nbsp;
+              <Button href="mailto:hicetnunc2000@protonmail.com">
+                <Primary>
+                  <strong>email</strong>
+                </Primary>
+              </Button>
+              <p>or on</p>&nbsp;
+              <Button href="https://discord.gg/jKNy6PynPK">
+                <Primary>
+                  <strong>discord</strong>
+                </Primary>
+              </Button>
+            </div>
           </Padding>
         </Container>
 
         <Container>
           <Padding>
-            <strong className={styles.buttons}>
-              <Button href="https://discord.gg/jKNy6PynPK">
-                <Primary>discord</Primary>
-              </Button>
-              {', '}
-              <Button href="mailto:hicetnunc2000@protonmail.com">
-                <Primary>email</Primary>
-              </Button>
-              {', '}
-              <Button href="https://github.com/hicetnunc2000">
-                <Primary>github</Primary>
-              </Button>
-              {', '}
+            <div className={styles.buttons}>
+              <p>FAQ's are available</p>&nbsp;
               <Button href="https://github.com/hicetnunc2000/hicetnunc/blob/main/FAQ.md">
-                <Primary>faq</Primary>
+                <Primary>
+                  <strong>here</strong>
+                </Primary>
               </Button>
-            </strong>
+            </div>
+          </Padding>
+        </Container>
+
+        <Container>
+          <Padding>
+            <div className={styles.buttons}>
+              <p>Issues can be reported here</p>&nbsp;
+              <Button href="https://github.com/hicetnunc2000/hicetnunc/issues">
+                <Primary>
+                  <strong>here</strong>
+                </Primary>
+              </Button>
+            </div>
           </Padding>
         </Container>
       </Page>
