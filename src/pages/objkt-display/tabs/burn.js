@@ -16,14 +16,13 @@ export const Burn = (props) => {
     if (r) {
       setProgress(true)
       setMessage('burning NFT')
-      //      burn: async (tz, objkt_id, amount) => {
 
       burn(address, token_id, total_amount)
         .then((e) => {
           // when taquito returns a success/fail message
           console.log('cancel', e)
           setProgress(false)
-          setMessage(e.description)
+          setMessage(e.message)
         })
         .catch((e) => {
           console.log('error', e)
@@ -43,7 +42,7 @@ export const Burn = (props) => {
       <Container>
         <Padding>
           <Button onClick={handleSubmit} fit>
-            <Curate>cancel it</Curate>
+            <Curate>burn it</Curate>
           </Button>
           <div>
             <p>{message}</p>

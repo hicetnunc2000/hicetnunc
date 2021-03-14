@@ -23,11 +23,11 @@ export const GetFeed = async ({ counter }) => {
     }),
   ])
     .then((results) => {
-      const feed = results[0].data.result
+      const original = results[0].data.result
       const oblock = results[1].data
       const wblock = results[2].data
 
-      const objkts = feed
+      const filtered = SanitiseOBJKT(original)
         // filters objkt's out if they are flagges
         .filter((i) => !oblock.includes(i.token_id))
         // filter objkt's out if they're from flagged wallets
@@ -35,8 +35,8 @@ export const GetFeed = async ({ counter }) => {
 
       // filters objkt's out if they dont have the token_info prop
       return {
-        filtered: SanitiseOBJKT(objkts),
-        original: results[0].data.result,
+        filtered,
+        original,
       }
     })
     .catch((e) => {

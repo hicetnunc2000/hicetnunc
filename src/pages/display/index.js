@@ -4,6 +4,7 @@ import { HicetnuncContext } from '../../context/HicetnuncContext'
 import { Page, Container, Padding } from '../../components/layout'
 import { Loading } from '../../components/loading'
 import { renderMediaType } from '../../components/media-types'
+import { Identicon } from '../../components/identicons'
 import { walletPreview } from '../../utils/string'
 import { SanitiseOBJKT } from '../../utils/sanitise'
 import { PATH } from '../../constants'
@@ -64,7 +65,7 @@ export default class Display extends Component {
         <Container>
           <Padding>
             <div className={styles.profile}>
-              <div className={styles.picture} />
+              <Identicon address={addr} />
 
               <div className={styles.info}>
                 <Button href={`https://tzkt.io/${addr}`}>
