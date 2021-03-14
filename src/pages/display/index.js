@@ -8,7 +8,6 @@ import { walletPreview } from '../../utils/string'
 import { SanitiseOBJKT } from '../../utils/sanitise'
 import { PATH } from '../../constants'
 import styles from './index.module.scss'
-import { Identicon } from '../../components/identicons'
 
 const axios = require('axios')
 
@@ -74,7 +73,7 @@ export default class Display extends Component {
         <Container>
           <Padding>
             <div className={styles.profile}>
-              <Identicon address={addr} />
+              <div className={styles.picture} />
 
               <div className={styles.info}>
                 <Button href={`https://tzkt.io/${addr}`}>
