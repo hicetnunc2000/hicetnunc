@@ -65,10 +65,16 @@ export class About extends Component {
                   <strong>email</strong>
                 </Primary>
               </Button>
-              <p>or on</p>&nbsp;
+              <p>,</p>&nbsp;
               <Button href="https://discord.gg/jKNy6PynPK">
                 <Primary>
                   <strong>discord</strong>
+                </Primary>
+              </Button>
+              <p>or on</p>&nbsp;
+              <Button href="https://reddit.com/r/hicetnunc">
+                <Primary>
+                  <strong>reddit</strong>
                 </Primary>
               </Button>
             </div>
