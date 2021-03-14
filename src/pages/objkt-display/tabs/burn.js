@@ -1,13 +1,13 @@
-import React, { useState } from 'react'
-// import { HicetnuncContext } from '../../../context/HicetnuncContext'
+import React, { useState, useContext } from 'react'
+import { HicetnuncContext } from '../../../context/HicetnuncContext'
 import { Container, Padding } from '../../../components/layout'
 import { Button, Curate } from '../../../components/button'
 import { Loading } from '../../../components/loading'
-// import { lowestPrice } from '../../../utils/lowestPrice'
 
-export const Burn = ({ swaps }) => {
-  // const { cancel } = useContext(HicetnuncContext)
-  // const { swap_id } = lowestPrice(swaps)
+export const Burn = (props) => {
+  console.log('burn props', props)
+  const { address, token_id, total_amount } = props
+  const { burn } = useContext(HicetnuncContext)
   const [message, setMessage] = useState()
   const [progress, setProgress] = useState()
 
@@ -16,17 +16,20 @@ export const Burn = ({ swaps }) => {
     if (r) {
       setProgress(true)
       setMessage('burning NFT')
-      // cancel(swap_id)
-      //   .then((e) => {
-      //     // when taquito returns a success/fail message
-      //     setProgress(false)
-      //     setMessage(e.description)
-      //     console.log('cancel', e)
-      //   })
-      //   .catch((e) => {
-      //     setProgress(false)
-      //     setMessage('an error occurred')
-      //   })
+      //      burn: async (tz, objkt_id, amount) => {
+
+      burn(address, token_id, total_amount)
+        .then((e) => {
+          // when taquito returns a success/fail message
+          console.log('cancel', e)
+          setProgress(false)
+          setMessage(e.description)
+        })
+        .catch((e) => {
+          console.log('error', e)
+          setProgress(false)
+          setMessage('an error occurred')
+        })
     }
   }
 
