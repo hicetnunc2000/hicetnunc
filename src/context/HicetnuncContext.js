@@ -210,6 +210,33 @@ export default class HicetnuncContextProvider extends Component {
           .catch((signPayloadError) => console.error(signPayloadError))
       },
 
+      curate: async (objkt_id) => {
+        await Tezos.wallet
+          .at(this.state.objkt)
+          .then((c) =>
+            c.methods.curate(10, objkt_id).send()
+          )
+      },
+
+      burn : async (tz, objkt_id, objkt_amount) => {
+      await Tezos.wallet
+      .at(this.state.objkt)
+      .then((c) => {
+        c.methods.transfer([
+          {
+            from_: tz,
+            txs: [
+              {
+                to_: 'tz1burnburnburnburnburnburnburjAYjjX',
+                token_id: objkt_id,
+                amount: objkt_amount
+              }
+            ]
+          }
+        ])        
+      })
+    },
+
       balance: 0,
 
       getBalance: (address) => {
