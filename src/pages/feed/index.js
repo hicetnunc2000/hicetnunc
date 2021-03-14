@@ -9,7 +9,7 @@ import { Button, Primary } from '../../components/button'
 import styles from './index.module.scss'
 
 export const Feed = () => {
-  const [feedType, setFeedType] = useState(0)
+  const [feedType, setFeedType] = useState(1)
   const [items, setItems] = useState([])
   const [count, setCount] = useState(0)
   const [hasMore, setHasMore] = useState(true)
@@ -57,16 +57,18 @@ export const Feed = () => {
 
   return (
     <Page>
-      <div className={styles.sticky}>
-        <div className={styles.content}>
-          <Button onClick={() => toggleFeed(0)}>
-            <Primary selected={feedType === 0}>hDAO</Primary>
-          </Button>
-          <Button onClick={() => toggleFeed(1)}>
-            <Primary selected={feedType === 1}>latest</Primary>
-          </Button>
+      {false && (
+        <div className={styles.sticky}>
+          <div className={styles.content}>
+            <Button onClick={() => toggleFeed(0)}>
+              <Primary selected={feedType === 0}>hDAO</Primary>
+            </Button>
+            <Button onClick={() => toggleFeed(1)}>
+              <Primary selected={feedType === 1}>latest</Primary>
+            </Button>
+          </div>
         </div>
-      </div>
+      )}
 
       <InfiniteScroll
         dataLength={items.length}
