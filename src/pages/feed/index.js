@@ -17,11 +17,13 @@ export const Feed = () => {
   }
 
   useEffect(() => {
-    GetFeed({ counter: count }).then((data) => {
-      const next = items.concat(data)
+    GetFeed({ counter: count }).then(({ filtered, original }) => {
+      // filtered isn't guaranteed to always be 10. if we're filtering they might be less.
+      const next = items.concat(filtered)
       setItems(next)
 
-      if (data.length < 10) {
+      // if original returns less than 10, then there's no more data coming from API
+      if (original.length < 10) {
         setHasMore(false)
       }
     })
