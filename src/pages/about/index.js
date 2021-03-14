@@ -71,7 +71,7 @@ export class About extends Component {
                   <strong>discord</strong>
                 </Primary>
               </Button>
-              <p>or on</p>&nbsp;
+              <p>, or on</p>&nbsp;
               <Button href="https://reddit.com/r/hicetnunc">
                 <Primary>
                   <strong>reddit</strong>
