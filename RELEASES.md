@@ -13,6 +13,7 @@
 - adding preview to mint page (guidoschmidt + andrevenancio)
 - adding progress message for swap, curate and burn (andrevenancio)
 - redirect to user profile once a swap, cancel and burn happen (andrevenancio)
+- introducing hDAO feed (andrevenancio + crzypathwork)
 
 ---
 
