@@ -5,7 +5,7 @@
 ### Bug fixes
 
 - sanitize objects before filtering (veqtor)
--
+- bug fixes and code refactor on objkt detail page (andrevenancio)
 
 ### Features
 
