@@ -49,6 +49,10 @@ export const ItemInfo = ({
     }
   }
 
+  const curate = (token_id) => {
+    context.curate(token_id)
+  }
+
   return (
     <>
       <div className={styles.container}>
@@ -80,7 +84,7 @@ export const ItemInfo = ({
             </Button>
           )}
 
-          <Button onClick={() => alert('upvote')}>
+          <Button onClick={() => curate(token_id)}>
             <Primary>〇</Primary>
           </Button>
         </div>

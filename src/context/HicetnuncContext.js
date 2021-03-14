@@ -134,12 +134,20 @@ export default class HicetnuncContextProvider extends Component {
           )
       },
 
-      curate: async (hDAO_amount, objkt_id) => {
+      curate: async (objkt_id) => {
         await Tezos.wallet
           .at(this.state.objkt)
           .then((c) =>
-            c.methods.curate(hDAO_amount, objkt_id).send()
+            c.methods.curate(1, objkt_id).send()
           )
+      },
+
+      claim_hDAO: async(hDAO_amount, objkt_id) => {
+        await Tezos.wallet
+        .at('KT1TybhR7XraG75JFYKSrh7KnxukMBT5dor6')
+        .then((c) => {
+          c.methods.claim_hDAO(parseInt(hDAO_amount), parseInt(objkt_id)).send()
+        })
       },
 
       burn: async (tz, objkt_id, amount) => {
@@ -152,8 +160,8 @@ export default class HicetnuncContextProvider extends Component {
                 txs: [
                   {
                     to_: 'tz1burnburnburnburnburnburnburjAYjjX',
-                    token_id: objkt_id,
-                    amount: amount
+                    token_id: parseInt(objkt_id),
+                    amount: parseInt(amount)
                   }
                 ]
               }
