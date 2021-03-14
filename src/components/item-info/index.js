@@ -18,7 +18,9 @@ export const ItemInfo = ({
   const price = swaps.length > 0 && Number(swaps[0].xtz_per_objkt) / 1000000
   const edition = swaps.length && `${swaps[0].objkt_amount}/${total_amount}`
   const message = notForSale ? 'not for sale' : `collect for ${price} tez`
-
+  const curate = async(objkt_id) => {
+    context.curate(objkt_id)
+  }
   const handleCollect = () => {
     if (context.Tezos == null) {
       context.syncTaquito()
@@ -58,7 +60,7 @@ export const ItemInfo = ({
             </Button>
           )}
 
-          <Button onClick={() => alert('upvote')}>
+          <Button onClick={() => curate(token_id)}>
             <Primary>〇</Primary>
           </Button>
         </div>
