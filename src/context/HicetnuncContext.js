@@ -79,35 +79,32 @@ export default class HicetnuncContextProvider extends Component {
       objkt: 'KT1Hkg5qeNhfwpKW4fXvq7HGZB9z2EnmCCA9',
 
       mint: async (tz, amount, cid, royalties) => {
-        console.log([tz, amount, cid, royalties])
-        //Tezos.setProvider({ wallet : this.state.wallet })
-        try {
-          var result = await Tezos.wallet.at(this.state.objkt).then((c) =>
-            c.methods
-              .mint_OBJKT(
-                tz,
-                parseFloat(amount),
-                ('ipfs://' + cid)
-                  .split('')
-                  .reduce(
-                    (hex, c) =>
-                      (hex += c.charCodeAt(0).toString(16).padStart(2, '0')),
-                    ''
-                  ),
-                parseFloat(royalties) * 10
-              )
-              .send({ amount: 0 })
-          )
-          console.log(result)
-          result.then((op) =>
-            op.confirmation(1).then(() => {
-              console.log(op.hash)
-              this.setState({ op: op.hash, load: !this.state.load })
-            })
-          )
-        } catch (e) {
-          this.setState({ load: !this.state.load })
-        }
+        return new Promise((resolve, reject) => {
+          Tezos.wallet
+            .at(this.state.objkt)
+            .then((c) =>
+              c.methods
+                .mint_OBJKT(
+                  tz,
+                  parseFloat(amount),
+                  ('ipfs://' + cid)
+                    .split('')
+                    .reduce(
+                      (hex, c) =>
+                        (hex += c.charCodeAt(0).toString(16).padStart(2, '0')),
+                      ''
+                    ),
+                  parseFloat(royalties) * 10
+                )
+                .send({ amount: 0 })
+            )
+            .then((op) =>
+              op.confirmation(1).then(() => {
+                resolve(op)
+                this.setState({ op: op.hash })
+              })
+            )
+        })
       },
 
       collect: async (objkt_amount, swap_id, amount) => {
@@ -139,35 +136,37 @@ export default class HicetnuncContextProvider extends Component {
       curate: async (objkt_id) => {
         await Tezos.wallet
           .at(this.state.objkt)
-          .then((c) =>
-            c.methods.curate(1, objkt_id).send()
-          )
+          .then((c) => c.methods.curate(1, objkt_id).send())
       },
 
-      claim_hDAO: async(hDAO_amount, objkt_id) => {
+      claim_hDAO: async (hDAO_amount, objkt_id) => {
         await Tezos.wallet
-        .at('KT1TybhR7XraG75JFYKSrh7KnxukMBT5dor6')
-        .then((c) => {
-          c.methods.claim_hDAO(parseInt(hDAO_amount), parseInt(objkt_id)).send()
-        })
+          .at('KT1TybhR7XraG75JFYKSrh7KnxukMBT5dor6')
+          .then((c) => {
+            c.methods
+              .claim_hDAO(parseInt(hDAO_amount), parseInt(objkt_id))
+              .send()
+          })
       },
 
       burn: async (tz, objkt_id, amount) => {
         await Tezos.wallet
           .at('KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton')
           .then((c) =>
-            c.methods.transfer([
-              {
-                from_: tz,
-                txs: [
-                  {
-                    to_: 'tz1burnburnburnburnburnburnburjAYjjX',
-                    token_id: parseInt(objkt_id),
-                    amount: parseInt(amount)
-                  }
-                ]
-              }
-            ]).send()
+            c.methods
+              .transfer([
+                {
+                  from_: tz,
+                  txs: [
+                    {
+                      to_: 'tz1burnburnburnburnburnburnburjAYjjX',
+                      token_id: parseInt(objkt_id),
+                      amount: parseInt(amount),
+                    },
+                  ],
+                },
+              ])
+              .send()
           )
       },
 

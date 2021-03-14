@@ -1,0 +1,29 @@
+@import '../../styles/layout.scss';
+
+.container {
+  display: flex;
+  flex-direction: column;
+
+  .media,
+  .info {
+    width: 100%;
+  }
+
+  .info {
+    display: flex;
+    align-items: flex-start;
+  }
+
+  @include respond-to('tablet') {
+    flex-direction: initial;
+
+    .media,
+    .info {
+      width: 50%;
+    }
+
+    .info {
+      padding-left: 10px;
+    }
+  }
+}

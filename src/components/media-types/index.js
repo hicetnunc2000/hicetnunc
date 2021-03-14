@@ -6,11 +6,16 @@ import { AudioComponent } from './audio'
 import { UnknownComponent } from './unknown'
 import { MIMETYPE } from '../../constants'
 
-// some elements might not be interactive on the feed
-export const renderMediaType = (token_info, interactive, preview = false) => {
-  const { mimeType, uri } = token_info.formats[0]
-  const path = uri.split('//')[1]
-  let ipfsHost
+const CLOUDFLARE = 'https://cloudflare-ipfs.com/ipfs/'
+const IPFS = 'https://ipfs.io/ipfs/'
+
+export const renderMediaType = ({
+  mimeType,
+  uri,
+  interactive = false,
+  preview = false,
+}) => {
+  const path = uri
   let url
 
   switch (mimeType) {
@@ -22,26 +27,23 @@ export const renderMediaType = (token_info, interactive, preview = false) => {
     case MIMETYPE.SVG:
     case MIMETYPE.TIFF:
     case MIMETYPE.WEBP:
-      ipfsHost = `https://cloudflare-ipfs.com/ipfs/`
-      url = preview ? uri : `${ipfsHost}${path}`
+      url = preview ? uri : `${CLOUDFLARE}${path}`
       return <ImageComponent src={url} />
     /* VIDEOS */
     case MIMETYPE.MP4:
     case MIMETYPE.OGV:
     case MIMETYPE.QUICKTIME:
-      ipfsHost = `https://ipfs.io/ipfs/`
-      url = preview ? uri : `${ipfsHost}${path}`
+    case MIMETYPE.WEBM:
+      url = preview ? uri : `${IPFS}${path}`
       return <VideoComponent src={url} />
     /* 3D */
     case MIMETYPE.GLTF:
     case MIMETYPE.GLB:
-      ipfsHost = `https://cloudflare-ipfs.com/ipfs/`
-      url = preview ? uri : `${ipfsHost}${path}`
+      url = preview ? uri : `${CLOUDFLARE}${path}`
       return <GLBComponent src={url} interactive={interactive} />
     case MIMETYPE.MP3:
     case MIMETYPE.OGA:
-      ipfsHost = `https://cloudflare-ipfs.com/ipfs/`
-      url = preview ? uri : `${ipfsHost}${path}`
+      url = preview ? uri : `${CLOUDFLARE}${path}`
       return <AudioComponent src={url} />
     default:
       return <UnknownComponent mimeType={mimeType} />

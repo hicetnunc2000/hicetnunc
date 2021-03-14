@@ -33,6 +33,7 @@ export const MIMETYPE = {
   MP4: 'video/mp4',
   OGV: 'video/ogg',
   QUICKTIME: 'video/quicktime',
+  WEBM: 'video/webm',
   GLB: 'model/gltf-binary',
   GLTF: 'model/gltf+json',
   MP3: 'audio/mpeg',
