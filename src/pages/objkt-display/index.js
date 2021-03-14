@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
-import { GetOBJKT } from '../../api/index'
+import { GetOBJKT } from '../../data/api'
 import { Loading } from '../../components/loading'
 import { Page, Container, Padding } from '../../components/layout'
 import { renderMediaType } from '../../components/media-types'

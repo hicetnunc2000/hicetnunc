@@ -16,9 +16,16 @@
   }
 
   .allowed {
+    display: inline-flex;
     font-size: 12px;
     padding-top: 6px;
     text-transform: lowercase;
     opacity: 0.5;
+
+    & > * {
+      &.selected {
+        font-weight: bold;
+      }
+    }
   }
 }
