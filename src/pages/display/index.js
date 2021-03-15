@@ -14,8 +14,11 @@ const axios = require('axios')
 
 export default class Display extends Component {
   static contextType = HicetnuncContext
+  addr = window.location.pathname.split('/')[2]
 
   state = {
+    wallet: window.location.pathname.split('/')[2],
+    alias: walletPreview(window.location.pathname.split('/')[2]),
     render: false,
     balance: 0,
     loading: true,
@@ -29,12 +32,28 @@ export default class Display extends Component {
 
   componentWillMount = async () => {
     this.context.setPath(window.location.pathname)
-    const currentWallet = window.location.pathname.split('/')[2]
-    console.log('current wallet', currentWallet)
+
+    fetch(`https://api.tzkt.io/v1/accounts/${this.state.wallet}`)
+      .then(response => {
+        if (response.ok)
+          return response.json()
+        return Promise.reject(response);
+      })
+      .then((data) => {
+        console.log(data)
+        if (data.alias)
+          this.setState({ alias: data.alias })
+        if (data.balance)
+          this.setState({ balance: (data.balance / 1000000) })
+      })
+      .catch((error) => {
+        console.log('Something went wrong.', error);
+      });
+
     await axios
       .post(process.env.REACT_APP_TZ, {
         // 3.129.20.231
-        tz: currentWallet,
+        tz: this.state.wallet,
       })
       .then(async (res) => {
         const sanitised = SanitiseOBJKT(res.data.result)
@@ -42,10 +61,10 @@ export default class Display extends Component {
         this.setState({
           objkts: sanitised,
           creations: sanitised.filter(
-            (e) => currentWallet === e.token_info.creators[0]
+            (e) => this.state.wallet === e.token_info.creators[0]
           ),
           collection: sanitised.filter(
-            (e) => currentWallet !== e.token_info.creators[0]
+            (e) => this.state.wallet !== e.token_info.creators[0]
           ),
           loading: false,
         })
@@ -59,20 +78,19 @@ export default class Display extends Component {
     this.setState({ collectionState: true, creationsState: false })
 
   render() {
-    const addr = window.location.pathname.split('/')[2]
     return (
       <Page>
         <Container>
           <Padding>
             <div className={styles.profile}>
-              <Identicon address={addr} />
+              <Identicon address={this.state.wallet} />
 
               <div className={styles.info}>
-                <Button href={`https://tzkt.io/${addr}`}>
-                  <Primary>{walletPreview(addr)}</Primary>
+                <Button href={`https://tzkt.io/${this.state.wallet}`}>
+                  <Primary>{this.state.alias}</Primary>
                 </Button>
                 {/* TODO: Move this to API not Context--> this.context.getBalance(addr) */}
-                <p>- TEZ</p>
+                <p>{this.state.balance} - ꜩ</p>
                 <p>- ○</p>
               </div>
             </div>
