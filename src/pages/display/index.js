@@ -39,14 +39,13 @@ export default class Display extends Component {
         return Promise.reject(response);
       })
       .then((data) => {
-        console.log(data)
         if (data.alias)
           this.setState({ alias: data.alias })
         if (data.balance)
           this.setState({ balance: (data.balance / 1000000) })
       })
       .catch((error) => {
-        console.log('Something went wrong.', error);
+        console.warn('Something went wrong.', error);
       });
 
     await axios
