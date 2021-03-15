@@ -38,7 +38,10 @@ export const GetFeed = async ({ counter }) => {
     })
     .catch((e) => {
       console.error(e)
-      return {[], []}
+      return {
+        filtered: [], 
+        original: []
+      }
     })
 }
 
