@@ -14,7 +14,6 @@ const axios = require('axios')
 
 export default class Display extends Component {
   static contextType = HicetnuncContext
-  addr = window.location.pathname.split('/')[2]
 
   state = {
     wallet: window.location.pathname.split('/')[2],
