@@ -62,7 +62,7 @@ export class About extends Component {
               &nbsp;
               <Button href="mailto:hicetnunc2000@protonmail.com">
                 <Primary>
-                  <strong>email</strong>
+                  <strong>email</strong>&nbsp;
                 </Primary>
               </Button>
               <p>or on</p>&nbsp;
