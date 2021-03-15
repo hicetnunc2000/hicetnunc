@@ -61,6 +61,7 @@ export const filterObjkts = (items) => {
 }
 
 export const getTotalSales = ({ owners, creators }) => {
+  if(!owners) return 0;
   return Object.keys(owners).reduce((edition, ownerID) => {
     // not the platform or the creator
     if (
