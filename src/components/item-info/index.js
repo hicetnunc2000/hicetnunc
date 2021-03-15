@@ -17,20 +17,12 @@ export const ItemInfo = ({
   isDetailView,
 }) => {
   const { Tezos, syncTaquito, collect } = useContext(HicetnuncContext)
-  const swap = lowestPrice(swaps)
-  const notForSale = swaps.length === 0
-  const soldOut = notForSale && transfered > 0
-  const price = swaps.length > 0 && Number(swap.xtz_per_objkt) / 1000000
-  const editionNumber = owners
-    ? getTotalSales({ owners, creators: token_info.creators }) + 1
-    : 1
-  const edition = notForSale
-    ? total_amount
-    : swaps.length && `${editionNumber}/${total_amount}`
+  const swap = swaps
+  const price = swaps[0] != undefined ? Number(swaps[0].xtz_per_objkt) / 1000000 : 'x'
 
-  const soldOutMessage = soldOut ? 'sold out!' : 'not for sale'
-  const message = notForSale ? soldOutMessage : `collect for ${price} tez`
-
+  const edition = swap.amount !== undefined ? swap.amount : 'x' 
+  //const message = `collect for ${price} tez`
+  const message = 'x'
   const handleCollect = () => {
     if (Tezos == null) {
       syncTaquito()
@@ -70,7 +62,7 @@ export const ItemInfo = ({
           </Button>
         )}
 
-        <Button onClick={() => handleCollect()} disabled={notForSale}>
+        <Button onClick={() => handleCollect()} >
           <Purchase>{message}</Purchase>
         </Button>
       </div>

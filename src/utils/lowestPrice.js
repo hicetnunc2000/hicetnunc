@@ -1,5 +1,5 @@
 export const lowestPrice = (swaps) => {
-  if (swaps.length === 0) {
+  if (swaps != undefined) {
     return swaps
   }
   return swaps.reduce((sum, item) => {
