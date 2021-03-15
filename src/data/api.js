@@ -11,9 +11,6 @@ export const GetFeed = async ({ counter }) => {
     axios
       .post(process.env.REACT_APP_FEED, {
         counter: counter,
-      })
-      .catch(() => {
-        return { data: { result: [] } }
       }),
     axios.get(process.env.REACT_APP_BLOCKLIST_OBJKT).catch(() => {
       return { data: [] }
@@ -41,7 +38,10 @@ export const GetFeed = async ({ counter }) => {
     })
     .catch((e) => {
       console.error(e)
-      return []
+      return {
+        filtered: [], 
+        original: []
+      }
     })
 }
 
@@ -55,7 +55,6 @@ export const GethDAOFeed = async ({ counter }) => {
       .then((res) => {
         resolve(res.data.result)
       })
-      .catch((e) => reject(e))
   })
 }
 
