@@ -53,9 +53,9 @@ export const Feed = () => {
           // filtered isn't guaranteed to always be 10. if we're filtering they might be less.
           const next = items.concat(filtered)
           setItems(next)
-
+          console.log(filtered)
           // if original returns less than 10, then there's no more data coming from API
-          if (original.length < 10) {
+          if (original.length < 30) {
             setHasMore(false)
           }
         })
