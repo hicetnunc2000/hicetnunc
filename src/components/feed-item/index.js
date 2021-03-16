@@ -22,12 +22,13 @@ export const FeedItem = ({
         </div>
       </Button>
       <Padding>
-        <ItemInfo
+                 <ItemInfo
           token_info={token_info}
           owners={owners}
           token_id={token_id}
           swaps={swaps}
           total_amount={total_amount}
+          feed={true}
         />
       </Padding>
     </Container>
