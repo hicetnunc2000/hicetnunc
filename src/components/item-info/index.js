@@ -7,27 +7,49 @@ import styles from './index.module.scss'
 import { lowestPrice } from '../../utils/lowestPrice'
 import { getTotalSales } from '../../utils/sanitise'
 
+const _ = require('lodash')
+
 export const ItemInfo = ({
   token_id,
   token_info,
   owners,
   swaps,
   transfered,
+  feed,
   total_amount,
   isDetailView,
 }) => {
-  const { Tezos, syncTaquito, collect } = useContext(HicetnuncContext)
-  const swap = swaps
-  const price = swaps[0] != undefined ? Number(swaps[0].xtz_per_objkt) / 1000000 : 'x'
+  const { Tezos, syncTaquito, collect, curate } = useContext(HicetnuncContext)
+  console.log(swaps, owners, total_amount)
+  const reducer = (accumulator, currentValue) => accumulator + currentValue;
 
-  const edition = swap.amount !== undefined ? swap.amount : 'x' 
-  //const message = `collect for ${price} tez`
-  const message = 'x'
+  var available = 0
+  var editions = 0
+  var kt = _.values(_.omitBy(owners, (value, key) => !key.startsWith("KT")))[0]
+  console.log(kt)
+  //owners = _.values(_.omitBy(owners, (value, key) => !key.startsWith(token_info.creators[0])))
+
+  console.log(owners)
+  var max = _.values(owners)
+  max = max.filter(e => parseInt(e) < 0)
+
+
+  //  var max = values_arr.filter(e => e < 0)
+  var available = parseInt(_.values(_.omitBy(owners, (value, key) => !key.startsWith("KT")))[0])
+  var editions = parseInt(max[0]) * -1
+
+  owners = _.values(_.omitBy(owners, (value, key) => key.startsWith("KT")))
+  console.log((available + editions) * -1)
+  console.log(editions)
+  console.log(swaps)
+  const soldOutMessage = 'not for sale'
+  const message = available > 0 ? 'collect for ' + Number(swaps[0].xtz_per_objkt) / 1000000 + ' tez' : 'not for sale'
+
   const handleCollect = () => {
     if (Tezos == null) {
       syncTaquito()
     } else {
-      collect(1, swap.swap_id, swap.xtz_per_objkt * 1)
+      collect(1, swaps[0].swap_id, swaps[0].xtz_per_objkt * 1)
         .then((e) => {
           alert(e.message)
           console.log('response from taquito', e)
@@ -49,7 +71,14 @@ export const ItemInfo = ({
               <Primary>{walletPreview(token_info.creators[0])}</Primary>
             </Button>
           </div>
-          <p>Edition: {edition}</p>
+          { 
+          !feed ? 
+          <div>
+          <p>Edition: {available}/{editions}</p>
+          </div>
+          :
+          undefined
+          }
         </div>
       </div>
 
@@ -61,16 +90,32 @@ export const ItemInfo = ({
             <Primary>OBJKT#{token_id}</Primary>
           </Button>
         )}
+        {
+          feed ?
+            <div>
+              <Button onClick={() => curate(token_id)}>
+                <Primary>〇</Primary>
+              </Button>
+            </div>
+            :
+            <Button onClick={() => handleCollect()} >
+              <Purchase>{message}</Purchase>
+            </Button>
+        }
 
-        <Button onClick={() => handleCollect()} >
-          <Purchase>{message}</Purchase>
-        </Button>
       </div>
       <div className={styles.container}>
+        {
+          !feed ?
+            <div>
+              <Button onClick={() => curate(token_id)}>
+                <Primary>〇</Primary>
+              </Button>
+            </div>
+            :
+            undefined
+        }
         <div>
-          <Button onClick={() => alert('upvote')}>
-            <Primary>〇</Primary>
-          </Button>
 
           {false && (
             <Button onClick={() => alert('report')}>
