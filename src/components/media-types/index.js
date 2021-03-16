@@ -3,6 +3,7 @@ import { GLBComponent } from './glb'
 import { ImageComponent } from './image'
 import { VideoComponent } from './video'
 import { AudioComponent } from './audio'
+import { VectorComponent } from './vector'
 import { UnknownComponent } from './unknown'
 import { MIMETYPE } from '../../constants'
 
@@ -24,11 +25,14 @@ export const renderMediaType = ({
     case MIMETYPE.GIF:
     case MIMETYPE.JPEG:
     case MIMETYPE.PNG:
-    case MIMETYPE.SVG:
     case MIMETYPE.TIFF:
     case MIMETYPE.WEBP:
       url = preview ? uri : `${CLOUDFLARE}${path}`
       return <ImageComponent src={url} />
+	/* VECTOR */
+    case MIMETYPE.SVG:
+      url = preview ? uri : `${CLOUDFLARE}${path}`
+      return <VectorComponent src={url} />
     /* VIDEOS */
     case MIMETYPE.MP4:
     case MIMETYPE.OGV:
