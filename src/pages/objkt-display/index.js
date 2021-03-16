@@ -29,7 +29,7 @@ export const ObjktDisplay = () => {
   useEffect(() => {
     GetOBJKT({ id }).then((objkt) => {
       // add sanitation here
-      console.log(objkt)
+      // console.log(objkt)
       objkt.feed = false
       setNFT(objkt)
       setLoading(false)
