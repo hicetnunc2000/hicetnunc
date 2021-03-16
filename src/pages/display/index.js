@@ -20,7 +20,6 @@ export default class Display extends Component {
     wallet: window.location.pathname.split('/')[2],
     walletPrev: walletPreview(window.location.pathname.split('/')[2]),
     render: false,
-    balance: 0,
     loading: true,
     results: [],
     objkts: [],
@@ -32,14 +31,10 @@ export default class Display extends Component {
 
   componentWillMount = async () => {
     this.context.setPath(window.location.pathname)
-    await GetUserData(this.state.wallet).then(data => {
-      if (data.data.alias)
-        this.setState({ alias: data.data.alias })
-      if (data.data.balance)
-        this.setState({ balance: (data.data.balance / 1000000) })
-    })
 
     await GetUserMetadata(this.state.wallet).then(data => {
+      if (data.data.alias)
+        this.setState({ alias: data.data.alias })
       if (data.data.description)
         this.setState({ description: data.data.description })
       if (data.data.site)
@@ -94,9 +89,8 @@ export default class Display extends Component {
                   <Primary>{this.state.walletPrev}</Primary>
                 </Button>
 
-                <p>{this.state.balance} - ꜩ</p>
+                {/* TODO: Add upvote counts here */}
                 <p>- ○</p>
-                {/* TODO: Move this to API not Context--> this.context.getBalance(addr) */}
 
                 <div>
                   {this.state.site &&
