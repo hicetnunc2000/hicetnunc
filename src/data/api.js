@@ -77,14 +77,6 @@ export const GetOBJKT = async ({ id }) => {
 
 
 /**
- * Get User Data from tzkt.io
- */
-export const GetUserData = async (walletAddr) => {
-  return await axios.get(`https://api.tzkt.io/v1/accounts/${walletAddr}`)
-}
-
-
-/**
  * Get User Metaata from tzkt.io
  */
 export const GetUserMetadata = async (walletAddr) => {
