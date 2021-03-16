@@ -6,11 +6,14 @@ const axios = require('axios')
  * Gets Feed for homepage
  * filters it against a blocklist json
  */
-export const GetFeed = async ({ counter }) => {
+export const GetFeed = async ({ counter, max_time }) => {
   return Promise.all([
     axios
-      .post(process.env.REACT_APP_FEED, {
-        counter: counter,
+      .get(process.env.REACT_APP_FEED, {
+          params: {
+            counter: counter,
+            time: max_time
+        }
       }),
     axios.get(process.env.REACT_APP_BLOCKLIST_OBJKT).catch(() => {
       return { data: [] }
