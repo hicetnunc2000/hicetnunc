@@ -3,17 +3,24 @@
 .container {
   width: 100%;
 
-  .object {
-    display: block;
-    width: 100%;
-    height: auto;
-    margin: 0 auto;
-
-    @include respond-to('tablet') {
-      max-height: 80vh;
-      width: auto;
-      height: initial;
-      max-width: 100%;
-    }
+  iframe {
+    width: 80vw;
+    height: 80vh;
+    border: none;
+    resize: both;
   }
+
+  // .object {
+  //   display: block;
+  //   width: 100%;
+  //   height: auto;
+  //   margin: 0 auto;
+
+  //   @include respond-to('tablet') {
+  //     max-height: 80vh;
+  //     width: auto;
+  //     height: initial;
+  //     max-width: 100%;
+  //   }
+  // }
 }
