@@ -38,5 +38,7 @@ However, at the moment, burned tokens still appear in your wallet. We are workin
 
 ## How to find buyers
 
-Unfortunately, there are people minting NFTs who did not create what they upload. These copyminters, as we call it, try to make quick buck with art from other people. Collectors have to very careful and try to find out who the artists are and if the art is genuine. To make it easier for them, please leave a trace to any social profile or website in the description of your artwork, so potential buyers can validate the authenticity. 
+Unfortunately, there are people minting NFTs who did not create what they upload. These copyminters, as we call it, try to make quick buck with art from other people. Collectors have to very careful and try to find out who the artists are and if the art is genuine. 
+
+To make it easier for them, please leave a trace to any social profile or website in the description of your artwork, so potential buyers can validate the authenticity. 
 
