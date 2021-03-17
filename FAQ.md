@@ -39,6 +39,9 @@ NOTE: You need to [cancel] the curation of this OBJKT so it can be available in 
 However, at the moment, burned tokens still appear in your wallet. We are working to update API to filter the burned OBJKTs.
 
 *As of 3/17 this feature is not yet implemented.*
+*There is a workaround where you may send the desired burned work to the burn address directly from your Tezos wallet.
+The address is: tz1burnburnburnburnburnburnburjAYjjX
+_NOTE:_ The OBJKT will still stay listed on your profile, so this method is not recommended.*
 
 ## How to find buyers
 
