@@ -9,42 +9,59 @@ import { Button, Primary } from '../../components/button'
 import styles from './index.module.scss'
 
 export const Feed = () => {
+  const [error, setError] = useState(false)
   const [feedType, setFeedType] = useState(1)
   const [items, setItems] = useState([])
   const [count, setCount] = useState(0)
   const [hasMore, setHasMore] = useState(true)
+  console.log('feed av')
 
   const loadMore = () => {
     setCount(count + 1)
   }
 
   useEffect(() => {
+    console.log('use effect')
+
+    if (error) {
+      console.log('returning on error')
+      return
+    }
+
     if (feedType === 0) {
       console.log('hDAO feed')
 
       // api
-      GethDAOFeed({ counter: count }).then((result) => {
-        const next = items.concat(result)
-        setItems(next)
+      GethDAOFeed({ counter: count })
+        .then((result) => {
+          const next = items.concat(result)
+          setItems(next)
 
-        if (result.length < 10) {
-          setHasMore(false)
-        }
-      })
+          if (result.length < 10) {
+            setHasMore(false)
+          }
+        })
+        .catch((e) => {
+          setError(true)
+        })
     } else {
       console.log('latest feed')
 
       // api
-      GetFeed({ counter: count }).then(({ filtered, original }) => {
-        // filtered isn't guaranteed to always be 10. if we're filtering they might be less.
-        const next = items.concat(filtered)
-        setItems(next)
-
-        // if original returns less than 10, then there's no more data coming from API
-        if (original.length < 10) {
-          setHasMore(false)
-        }
-      })
+      GetFeed({ counter: count })
+        .then(({ filtered, original }) => {
+          // filtered isn't guaranteed to always be 10. if we're filtering they might be less.
+          const next = items.concat(filtered)
+          setItems(next)
+          console.log(filtered)
+          // if original returns less than 10, then there's no more data coming from API
+          if (original.length < 30) {
+            setHasMore(false)
+          }
+        })
+        .catch((e) => {
+          setError(true)
+        })
     }
   }, [count, feedType])
 

@@ -27,6 +27,7 @@ export default class Display extends Component {
     collection: [],
     collectionState: false,
     creationsState: true,
+    hdao : 0
   }
 
   componentWillMount = async () => {
@@ -53,6 +54,9 @@ export default class Display extends Component {
         tz: this.state.wallet,
       })
       .then(async (res) => {
+        this.setState({
+          hdao : res.data.hdao
+        })
         const sanitised = SanitiseOBJKT(res.data.result)
 
         this.setState({
@@ -89,8 +93,8 @@ export default class Display extends Component {
                   <Primary>{this.state.walletPrev}</Primary>
                 </Button>
 
-                {/* TODO: Add upvote counts here */}
-                <p>- ○</p>
+                {/* TODO: Move this to API not Context--> this.context.getBalance(addr) */}
+                <p>{this.state.hdao} ○</p>
 
                 <div>
                   {this.state.site &&
@@ -122,6 +126,7 @@ export default class Display extends Component {
                     </a>
                   }
                 </div>
+
               </div>
             </div>
           </Padding>
