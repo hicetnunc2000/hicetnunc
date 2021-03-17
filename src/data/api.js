@@ -24,7 +24,7 @@ export const GetFeed = async ({ counter }) => {
       const original = results[0].data.result
       const oblock = results[1].data
       const wblock = results[2].data
-
+      console.log(original)
       const filtered = SanitiseOBJKT(original)
         // filters objkt's out if they are flagges
         .filter((i) => !oblock.includes(i.token_id))
