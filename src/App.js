@@ -12,7 +12,6 @@ import { Header } from './components/header'
 import { Footer } from './components/footer'
 
 const App = () => {
-  const reload = () => window.location.reload()
   return (
     <HicetnuncContextProvider>
       <Header />
@@ -24,7 +23,6 @@ const App = () => {
         <Route path="/mint" component={Mint} />
         <Route path="/objkt/:id" component={ObjktDisplay} />
         <Route path="/load" component={Loading} />
-        <Route path="/sandbox-svg.html" onEnter={reload} />
       </Switch>
       <Footer />
     </HicetnuncContextProvider>
