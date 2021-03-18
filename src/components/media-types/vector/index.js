@@ -8,6 +8,7 @@ export const VectorComponent = ({ src }) => {
         title={src}
         src={`https://hicetnunc2000.github.io/hicetnunc/gh-pages/sandbox-svg.html?src=${src}`}
         sandbox="allow-same-origin allow-scripts"
+        scrolling="no"
       />
     </div>
   )
