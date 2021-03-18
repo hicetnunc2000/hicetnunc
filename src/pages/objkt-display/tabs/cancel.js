@@ -18,8 +18,9 @@ export const Cancel = ({ swaps, address }) => {
     const r = global.confirm('Are you sure?')
     if (r) {
       setProgress(true)
+      console.log(swaps)
       setMessage('cancelling swap')
-      cancel(swap_id)
+      cancel(swaps[0].swap_id)
         .then((e) => {
           // when taquito returns a success/fail message
           setProgress(false)

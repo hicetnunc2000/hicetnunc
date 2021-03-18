@@ -6,7 +6,7 @@ import { Loading } from '../../../components/loading'
 
 export const Burn = (props) => {
   console.log('burn props', props)
-  const { address, token_id, total_amount } = props
+  const { address, token_id, total_amount, owners } = props
   const { burn } = useContext(HicetnuncContext)
   const [message, setMessage] = useState()
   const [progress, setProgress] = useState()
@@ -16,8 +16,11 @@ export const Burn = (props) => {
     if (r) {
       setProgress(true)
       setMessage('burning NFT')
+      //console.log(owners)
+      console.log('total amount', total_amount)
 
-      burn(address, token_id, total_amount)
+      console.log(props.owners, owners[address])
+/*       burn(address, token_id, total_amount)
         .then((e) => {
           // when taquito returns a success/fail message
           console.log('cancel', e)
@@ -28,7 +31,7 @@ export const Burn = (props) => {
           console.log('error', e)
           setProgress(false)
           setMessage('an error occurred')
-        })
+        }) */
     }
   }
 
