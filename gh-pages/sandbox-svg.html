@@ -33,6 +33,7 @@
         obj.style.marginTop = `${
           (innerHeight - obj.offsetHeight * scale) / 2
         }px`
+        console.log('resize', scaleX, scaleY, scale)
       }
 
       obj.addEventListener('load', resize)
