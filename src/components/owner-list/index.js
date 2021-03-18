@@ -9,7 +9,7 @@ export const OwnerList = ({ owners }) => (
       return (
         <div key={wallet} className={styles.owner}>
           {amount}x&nbsp;
-          <Button href={`https://tzkt.io/${wallet}`}>
+          <Button href={`https://hicetnunc.xyz/tz/${wallet}`}>
             <Primary>{walletPreview(wallet)}</Primary>
           </Button>
         </div>

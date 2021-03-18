@@ -55,7 +55,6 @@ export const ItemInfo = ({
     } else {
       collect(1, swaps[0].swap_id, swaps[0].xtz_per_objkt * 1)
         .then((e) => {
-          alert(e.message)
           console.log('response from taquito', e)
         })
         .catch((e) => {
