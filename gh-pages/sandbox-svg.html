@@ -23,6 +23,7 @@
 
       // Keep the OBJKT centered
       const resize = () => {
+        console.log('resize')
         const scaleX = innerWidth / obj.offsetHeight
         const scaleY = innerHeight / obj.offsetHeight
         const scale = Math.min(scaleX, scaleY)
@@ -33,10 +34,12 @@
         obj.style.marginTop = `${
           (innerHeight - obj.offsetHeight * scale) / 2
         }px`
-        console.log('resize', scaleX, scaleY, scale)
       }
 
-      obj.addEventListener('load', resize)
+      obj.addEventListener('load', function () {
+        resize()
+        setTimeout(resize, 1000)
+      })
       obj.setAttribute('data', src)
       addEventListener('resize', resize)
     </script>

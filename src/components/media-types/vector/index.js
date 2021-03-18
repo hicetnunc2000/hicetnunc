@@ -7,7 +7,7 @@ export const VectorComponent = ({ src }) => {
       <iframe
         title="hic et nunc SVG renderer"
         src={src}
-        sandbox="allow-same-origin allow-scripts"
+        sandbox="allow-scripts"
         scrolling="no"
       />
     </div>
