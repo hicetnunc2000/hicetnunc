@@ -28,6 +28,7 @@ export const MIMETYPE = {
   JPEG: 'image/jpeg',
   PNG: 'image/png',
   SVG: 'image/svg+xml',
+  HTML: 'text/html',
   TIFF: 'image/tiff',
   WEBP: 'image/webp',
   MP4: 'video/mp4',
@@ -38,7 +39,6 @@ export const MIMETYPE = {
   GLTF: 'model/gltf+json',
   MP3: 'audio/mpeg',
   OGA: 'audio/ogg',
-  HTML: 'text/html',
 }
 
 export const ALLOWED_MIMETYPES = Object.keys(MIMETYPE).map((k) => MIMETYPE[k])
