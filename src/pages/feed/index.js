@@ -101,15 +101,17 @@ export const Feed = () => {
           </Padding>
         </Container>
       ) : (
-        <Container>
-          <Padding>
-            <Button onClick={loadMore}>
-              <Primary>
-                <strong>Load More</strong>
-              </Primary>
-            </Button>
-          </Padding>
-        </Container>
+        hasMore && (
+          <Container>
+            <Padding>
+              <Button onClick={loadMore}>
+                <Primary>
+                  <strong>Load More</strong>
+                </Primary>
+              </Button>
+            </Padding>
+          </Container>
+        )
       )}
     </Page>
   )
