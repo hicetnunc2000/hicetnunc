@@ -100,18 +100,23 @@ export const Feed = () => {
             <Loading />
           </Padding>
         </Container>
+      ) : hasMore ? (
+        <Container>
+          <Padding>
+            <Button onClick={loadMore}>
+              <Primary>
+                <strong>Load More</strong>
+              </Primary>
+            </Button>
+          </Padding>
+        </Container>
       ) : (
-        hasMore && (
-          <Container>
-            <Padding>
-              <Button onClick={loadMore}>
-                <Primary>
-                  <strong>Load More</strong>
-                </Primary>
-              </Button>
-            </Padding>
-          </Container>
-        )
+        <p>
+          mint mint mint{' '}
+          <span role="img" aria-labelledby={'Sparkles emoji'}>
+            ✨
+          </span>
+        </p>
       )}
     </Page>
   )
