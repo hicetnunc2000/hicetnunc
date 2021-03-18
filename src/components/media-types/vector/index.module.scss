@@ -8,11 +8,16 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  pointer-events: none;
 
   &:after {
     content: '';
     display: block;
     padding-bottom: 100%;
+  }
+
+  &.interactive {
+    pointer-events: all;
   }
 
   iframe {
