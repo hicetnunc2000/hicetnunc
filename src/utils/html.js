@@ -27,11 +27,18 @@ export function injectCSPMetaTagIntoHTML(html) {
   const parser = new DOMParser()
   const doc = parser.parseFromString(html, 'text/html')
 
+  // remove any existing CSP meta tags
+  const existing = doc.head.querySelectorAll('meta[http-equiv="Content-Security-Policy"]')
+  if (existing.length) {
+    for (let i = 0; i < existing.length; i++) {
+      existing[i].remove()
+    }
+  }
+
   // inject CSP meta tag
-  const meta = document.createElement('meta')
-  meta.httpEquiv = 'Content-Security-Policy'
-  meta.content = `default-src 'self'; script-src 'unsafe-inline'; style-src 'unsafe-inline'`
-  doc.head.appendChild(meta)
+  doc.head.insertAdjacentHTML('afterbegin', `
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'unsafe-inline'; style-src 'unsafe-inline'">
+  `)
 
   // doc -> HTML
   return doc.documentElement.innerHTML
