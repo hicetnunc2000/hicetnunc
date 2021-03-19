@@ -15,6 +15,7 @@ export const renderMediaType = ({
   uri,
   interactive = false,
   preview = false,
+  metadata,
 }) => {
   const path = uri
   let url
@@ -32,7 +33,9 @@ export const renderMediaType = ({
     /* VECTOR */
     case MIMETYPE.SVG:
       url = preview ? uri : `${CLOUDFLARE}${path}`
-      return <VectorComponent src={url} interactive={interactive} />
+      return (
+        <VectorComponent {...metadata} src={url} interactive={interactive} />
+      )
     /* VIDEOS */
     case MIMETYPE.MP4:
     case MIMETYPE.OGV:
