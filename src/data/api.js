@@ -1,3 +1,4 @@
+import { WalletPostMessageTransport } from '@airgap/beacon-sdk'
 import { SanitiseOBJKT } from '../utils/sanitise'
 
 const axios = require('axios')
@@ -42,7 +43,7 @@ export const GetFeed = async ({ counter, max_time }) => {
     .catch((e) => {
       console.error(e)
       return {
-        filtered: [], 
+        filtered: [],
         original: []
       }
     })
@@ -75,4 +76,12 @@ export const GetOBJKT = async ({ id }) => {
       })
       .catch((e) => reject(e)) // TODO: send error message to context. have an error component to display the error
   })
+}
+
+
+/**
+ * Get User Metaata from tzkt.io
+ */
+export const GetUserMetadata = async (walletAddr) => {
+  return await axios.get(`https://api.tzkt.io/v1/accounts/${walletAddr}/metadata`)
 }

@@ -7,6 +7,7 @@ export const Owners = ({ owners }) => {
     (owners &&
       Object.keys(owners)
         .filter((s) => s.startsWith('tz'))
+        .filter((s) => parseFloat(owners[s]) > 0) // removes negative owners
         .map((s) => ({ amount: owners[s], wallet: s }))) ||
     []
   return (

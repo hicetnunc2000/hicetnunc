@@ -31,7 +31,7 @@ export const ObjktDisplay = () => {
       // add sanitation here
       // console.log(objkt)
       objkt.feed = false
-      console.log(objkt.owners)
+      console.log('owners list', objkt.owners)
       setNFT(objkt)
       setLoading(false)
     })
