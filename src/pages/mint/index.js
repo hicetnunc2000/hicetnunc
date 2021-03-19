@@ -7,10 +7,12 @@ import { Loading } from '../../components/loading'
 import { Upload } from '../../components/upload'
 import { Preview } from '../../components/preview'
 import { prepareFile } from '../../data/ipfs'
+import { injectCSPMetaTagIntoBuffer } from '../../utils/html'
 import {
   ALLOWED_MIMETYPES,
   ALLOWED_FILETYPES,
   MINT_FILESIZE,
+  MIMETYPE,
 } from '../../constants'
 
 export const Mint = () => {
@@ -38,6 +40,11 @@ export const Mint = () => {
           ).toLocaleLowerCase()}`
         )
       } else {
+        if (file.mimeType === MIMETYPE.HTML) {
+          // for HTML files, inject CSP meta tag to forbid external sources
+          file.buffer = injectCSPMetaTagIntoBuffer(file.buffer)
+        }        
+
         // checks file size limit
         const filesize = (file.file.size / 1024 / 1024).toFixed(4)
         if (filesize <= MINT_FILESIZE) {

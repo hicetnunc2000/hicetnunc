@@ -1,9 +1,10 @@
 import React, { useContext } from 'react'
+import { injectCSPMetaTagIntoDataURI } from '../../../utils/html'
 import classnames from 'classnames'
 import { HicetnuncContext } from '../../../context/HicetnuncContext'
 import styles from './index.module.scss'
 
-export const VectorComponent = ({ src, interactive, preview, token_info }) => {
+export const HTMLComponent = ({ src, interactive, preview, token_info }) => {
   const context = useContext(HicetnuncContext)
   const classes = classnames({
     [styles.container]: true,
@@ -21,18 +22,18 @@ export const VectorComponent = ({ src, interactive, preview, token_info }) => {
     _viewer_ = context.address
   }
 
-  let iframeSrc
+  let safeSrc
   if (preview) {
-    iframeSrc = src
+    safeSrc = injectCSPMetaTagIntoDataURI(src)
   } else {
-    iframeSrc = `${src}?author=${_author_}&viewer=${_viewer_}`
+    safeSrc = `${src}?author=${_author_}&viewer=${_viewer_}`
   }
 
   return (
     <div className={classes}>
       <iframe
-        title="hic et nunc SVG renderer"
-        src={iframeSrc}
+        title="hic et nunc HTML renderer"
+        src={safeSrc}
         sandbox="allow-scripts"
         scrolling="no"
       />

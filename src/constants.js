@@ -28,6 +28,7 @@ export const MIMETYPE = {
   JPEG: 'image/jpeg',
   PNG: 'image/png',
   SVG: 'image/svg+xml',
+  HTML: 'text/html',
   TIFF: 'image/tiff',
   WEBP: 'image/webp',
   MP4: 'video/mp4',
