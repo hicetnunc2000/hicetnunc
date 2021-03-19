@@ -21,29 +21,25 @@ export const ItemInfo = ({
 }) => {
   const { Tezos, syncTaquito, collect, curate } = useContext(HicetnuncContext)
   // console.log(swaps, owners, total_amount)
-  const reducer = (accumulator, currentValue) => accumulator + currentValue
+  // const reducer = (accumulator, currentValue) => accumulator + currentValue
 
-  var available = 0
-  var editions = 0
-  var kt = _.values(_.omitBy(owners, (value, key) => !key.startsWith('KT')))[0]
-  console.log(kt)
+  let available = 0
+  let editions = 0
+  // var kt = _.values(_.omitBy(owners, (value, key) => !key.startsWith('KT')))[0]
   //owners = _.values(_.omitBy(owners, (value, key) => !key.startsWith(token_info.creators[0])))
 
-  console.log(owners)
-  var max = _.values(owners)
+  let max = _.values(owners)
+  // filtering negative values?
   max = max.filter((e) => parseInt(e) < 0)
 
-  //  var max = values_arr.filter(e => e < 0)
-  var available = parseInt(
-    _.values(_.omitBy(owners, (value, key) => !key.startsWith('KT')))[0]
+  available = parseInt(
+    _.values(_.omitBy(owners, (value, key) => !key.startsWith('KT')))[0] || 0
   )
-  var editions = parseInt(max[0]) * -1
+  editions = parseInt(max[0]) * -1
 
   owners = _.values(_.omitBy(owners, (value, key) => key.startsWith('KT')))
-  console.log((available + editions) * -1)
-  console.log(editions)
-  console.log(swaps)
   const soldOutMessage = 'not for sale'
+  const notForSale = available > 0 || isNaN(editions)
   const message =
     available > 0
       ? 'collect for ' + Number(swaps[0].xtz_per_objkt) / 1000000 + ' tez'
@@ -67,13 +63,15 @@ export const ItemInfo = ({
               <Primary>{walletPreview(token_info.creators[0])}</Primary>
             </Button>
           </div>
-          {!feed ? (
+          {!feed && (
             <div>
               <p>
-                Edition: {available}/{editions}
+                {notForSale
+                  ? soldOutMessage
+                  : `Edition: ${available}/${editions}`}
               </p>
             </div>
-          ) : undefined}
+          )}
         </div>
       </div>
 
@@ -98,13 +96,13 @@ export const ItemInfo = ({
         )}
       </div>
       <div className={styles.container}>
-        {!feed ? (
+        {!feed && (
           <div>
             <Button onClick={() => curate(token_id)}>
               <Primary>〇</Primary>
             </Button>
           </div>
-        ) : undefined}
+        )}
         <div>
           {false && (
             <Button onClick={() => alert('report')}>

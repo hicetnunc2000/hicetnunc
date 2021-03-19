@@ -1,4 +1,4 @@
-import { WalletPostMessageTransport } from '@airgap/beacon-sdk'
+// import { WalletPostMessageTransport } from '@airgap/beacon-sdk'
 import { SanitiseOBJKT } from '../utils/sanitise'
 
 const axios = require('axios')
@@ -9,13 +9,12 @@ const axios = require('axios')
  */
 export const GetFeed = async ({ counter, max_time }) => {
   return Promise.all([
-    axios
-      .get(process.env.REACT_APP_FEED, {
-          params: {
-            counter: counter,
-            time: max_time
-        }
-      }),
+    axios.get(process.env.REACT_APP_FEED, {
+      params: {
+        counter: counter,
+        time: max_time,
+      },
+    }),
     axios.get(process.env.REACT_APP_BLOCKLIST_OBJKT).catch(() => {
       return { data: [] }
     }),
@@ -44,7 +43,7 @@ export const GetFeed = async ({ counter, max_time }) => {
       console.error(e)
       return {
         filtered: [],
-        original: []
+        original: [],
       }
     })
 }
@@ -78,10 +77,11 @@ export const GetOBJKT = async ({ id }) => {
   })
 }
 
-
 /**
  * Get User Metaata from tzkt.io
  */
 export const GetUserMetadata = async (walletAddr) => {
-  return await axios.get(`https://api.tzkt.io/v1/accounts/${walletAddr}/metadata`)
+  return await axios.get(
+    `https://api.tzkt.io/v1/accounts/${walletAddr}/metadata`
+  )
 }
