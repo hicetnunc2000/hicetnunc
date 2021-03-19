@@ -17,7 +17,6 @@
   <![CDATA[
   const c = new URLSearchParams(location.search).get('creator')
   const v = new URLSearchParams(location.search).get('viewer')
-  document.documentElement.getElementById("c").innerHTML = c;
-  document.documentElement.getElementById("v").innerHTML = v;
+  console.log(c, v);
   ]]></script>
 </svg>
