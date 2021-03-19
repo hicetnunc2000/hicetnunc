@@ -28,10 +28,6 @@ export const ObjktDisplay = () => {
 
   useEffect(() => {
     GetOBJKT({ id }).then((objkt) => {
-      // add sanitation here
-      // console.log(objkt)
-      objkt.feed = false
-      console.log(objkt.owners)
       setNFT(objkt)
       setLoading(false)
     })
@@ -55,6 +51,7 @@ export const ObjktDisplay = () => {
                 mimeType: nft.token_info.formats[0].mimeType,
                 uri: nft.token_info.formats[0].uri.split('//')[1],
                 interactive: true,
+                metadata: nft,
               })}
           </Container>
 

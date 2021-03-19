@@ -54,13 +54,6 @@ export const ItemInfo = ({
       syncTaquito()
     } else {
       collect(1, swaps[0].swap_id, swaps[0].xtz_per_objkt * 1)
-        .then((e) => {
-          console.log('response from taquito', e)
-        })
-        .catch((e) => {
-          alert('an error occurred')
-          console.log('ko', e)
-        })
     }
   }
 
