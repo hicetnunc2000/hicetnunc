@@ -57,7 +57,7 @@ export const Feed = () => {
 
       setLoading(true)
       // api
-      GetFeed({ counter: count, max_time: startTime })
+      GetFeed({ counter: count })
         .then(({ filtered, original }) => {
           // filtered isn't guaranteed to always be 10. if we're filtering they might be less.
           const next = items.concat(filtered)
