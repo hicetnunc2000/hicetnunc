@@ -1,6 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react'
-import InfiniteScroll from 'react-infinite-scroll-component'
 import { GetFeed, GethDAOFeed } from '../../data/api'
 import { Page, Container, Padding } from '../../components/layout'
 import { FeedItem } from '../../components/feed-item'
@@ -9,20 +8,18 @@ import { Button, Primary } from '../../components/button'
 import styles from './index.module.scss'
 
 export const Feed = () => {
+  const [loading, setLoading] = useState(true)
   const [error, setError] = useState(false)
   const [feedType, setFeedType] = useState(1)
   const [items, setItems] = useState([])
   const [count, setCount] = useState(0)
   const [hasMore, setHasMore] = useState(true)
-  console.log('feed av')
 
   const loadMore = () => {
     setCount(count + 1)
   }
 
   useEffect(() => {
-    console.log('use effect')
-
     if (error) {
       console.log('returning on error')
       return
@@ -31,11 +28,14 @@ export const Feed = () => {
     if (feedType === 0) {
       console.log('hDAO feed')
 
+      setLoading(true)
       // api
       GethDAOFeed({ counter: count })
         .then((result) => {
           const next = items.concat(result)
           setItems(next)
+
+          setLoading(false)
 
           if (result.length < 10) {
             setHasMore(false)
@@ -43,24 +43,27 @@ export const Feed = () => {
         })
         .catch((e) => {
           setError(true)
+          setLoading(false)
         })
     } else {
       console.log('latest feed')
 
+      setLoading(true)
       // api
       GetFeed({ counter: count })
         .then(({ filtered, original }) => {
           // filtered isn't guaranteed to always be 10. if we're filtering they might be less.
           const next = items.concat(filtered)
           setItems(next)
-          console.log(filtered)
-          // if original returns less than 10, then there's no more data coming from API
+          setLoading(false)
+          // if original returns less than 30, then there's no more data coming from API
           if (original.length < 30) {
             setHasMore(false)
           }
         })
         .catch((e) => {
           setError(true)
+          setLoading(false)
         })
     }
   }, [count, feedType])
@@ -87,36 +90,36 @@ export const Feed = () => {
         </div>
       )}
 
-      <InfiniteScroll
-        dataLength={items.length}
-        next={loadMore}
-        hasMore={hasMore}
-        loader={
-          <Container>
-            <Padding>
-              <div className={styles.container}>
-                <Loading />
-              </div>
-            </Padding>
-          </Container>
-        }
-        endMessage={
-          <Container>
-            <Padding>
+      {items.map((item, index) => (
+        <FeedItem key={`${item.token_id}-${index}`} {...item} />
+      ))}
+
+      {loading ? (
+        <Container>
+          <Padding>
+            <Loading />
+          </Padding>
+        </Container>
+      ) : (
+        <Container>
+          <Padding>
+            {hasMore ? (
+              <Button onClick={loadMore}>
+                <Primary>
+                  <strong>Load More</strong>
+                </Primary>
+              </Button>
+            ) : (
               <p>
                 mint mint mint{' '}
                 <span role="img" aria-labelledby={'Sparkles emoji'}>
                   ✨
                 </span>
               </p>
-            </Padding>
-          </Container>
-        }
-      >
-        {items.map((item, index) => (
-          <FeedItem key={`${item.token_id}-${index}`} {...item} />
-        ))}
-      </InfiniteScroll>
+            )}
+          </Padding>
+        </Container>
+      )}
     </Page>
   )
 }

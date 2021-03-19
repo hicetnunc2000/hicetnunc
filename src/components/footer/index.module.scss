@@ -1,9 +1,7 @@
 @import '../../styles/variables.scss';
 
 .container {
-  position: fixed;
-  left: 0;
-  bottom: 0;
+  position: relative;
   padding: 2px 0;
   width: 100%;
   text-align: center;
@@ -13,10 +11,4 @@
   transition: background-color #{$theme-duration} ease-out,
     color #{$theme-duration} ease-out;
   z-index: 2000;
-
-  // & > * {
-  //   :last-child {
-  //     font-size: 50%;
-  //   }
-  // }
 }
