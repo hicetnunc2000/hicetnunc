@@ -4,14 +4,15 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <style>
-      html, body {
+      html,
+      body {
         background-color: #efefef;
         font-family: sans-serif;
         font-size: 1rem;
         font-weight: bold;
         margin: 0;
         padding: 0;
-        pointer-events:none;
+        pointer-events: none;
         -webkit-user-select: none;
         -moz-user-select: none;
         -ms-user-select: none;
@@ -36,14 +37,10 @@
     </style>
   </head>
   <body>
-    <div class="wrapper">
-      <div id="creator">Creator</div>
-      <div id="viewer">Viewer</div>
-    </div>
     <script type="text/javascript">
       const c = new URLSearchParams(location.search).get('creator')
       const v = new URLSearchParams(location.search).get('viewer')
-      console.log(c, v);
+      console.log(c, v)
     </script>
   </body>
 </html>
