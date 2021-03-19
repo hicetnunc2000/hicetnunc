@@ -35,12 +35,12 @@ export const renderMediaType = ({
     case MIMETYPE.SVG:
       url = preview ? uri : `${CLOUDFLARE}${path}`
       return (
-        <VectorComponent {...metadata} src={url} interactive={interactive} />
+        <VectorComponent {...metadata} src={url} interactive={interactive} preview={preview} />
       )
     /* HTML */
     case MIMETYPE.HTML:
       url = preview ? uri : `${CLOUDFLARE}${path}`
-      return <HTMLComponent src={url} interactive={interactive} preview={preview} />
+      return <HTMLComponent {...metadata} src={url} interactive={interactive} preview={preview} />
     /* VIDEOS */
     case MIMETYPE.MP4:
     case MIMETYPE.OGV:

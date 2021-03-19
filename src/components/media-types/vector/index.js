@@ -3,7 +3,7 @@ import classnames from 'classnames'
 import { HicetnuncContext } from '../../../context/HicetnuncContext'
 import styles from './index.module.scss'
 
-export const VectorComponent = ({ src, interactive, token_info }) => {
+export const VectorComponent = ({ src, interactive, preview, token_info }) => {
   const context = useContext(HicetnuncContext)
   const classes = classnames({
     [styles.container]: true,
@@ -21,11 +21,18 @@ export const VectorComponent = ({ src, interactive, token_info }) => {
     _viewer_ = context.address
   }
 
+  let iframeSrc
+  if (preview) {
+    iframeSrc = src
+  } else {
+    iframeSrc = `${src}?author=${_author_}&viewer=${_viewer_}`
+  }
+
   return (
     <div className={classes}>
       <iframe
         title="hic et nunc SVG renderer"
-        src={`${src}?author=${_author_}&viewer=${_viewer_}`}
+        src={iframeSrc}
         sandbox="allow-scripts"
         scrolling="no"
       />
