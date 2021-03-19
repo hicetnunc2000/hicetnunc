@@ -8,26 +8,23 @@ import { Loading } from '../../components/loading'
 import { Button, Primary } from '../../components/button'
 import styles from './index.module.scss'
 
-const customFloor = function(value, roundTo) {
-  return Math.floor(value / roundTo) * roundTo;
-} 
+const customFloor = function (value, roundTo) {
+  return Math.floor(value / roundTo) * roundTo
+}
 
 const ONE_MINUTE_MILLIS = 60 * 1000
 
 export const Feed = () => {
   const [error, setError] = useState(false)
-  const [feedType, setFeedType] = useState(1)
+  const [feedType, setFeedType] = useState(0)
   const [items, setItems] = useState([])
   const [count, setCount] = useState(0)
   const [hasMore, setHasMore] = useState(true)
   const startTime = customFloor(Date.now(), ONE_MINUTE_MILLIS)
-  console.log('feed av')
 
   const loadMore = () => {
     setCount(count + 1)
   }
-
-  
 
   useEffect(() => {
     console.log('use effect')
@@ -57,7 +54,7 @@ export const Feed = () => {
       console.log('latest feed')
 
       // api
-      GetFeed({ counter: count, max_time: startTime})
+      GetFeed({ counter: count, max_time: startTime })
         .then(({ filtered, original }) => {
           // filtered isn't guaranteed to always be 10. if we're filtering they might be less.
           const next = items.concat(filtered)
