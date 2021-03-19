@@ -9,12 +9,10 @@ const axios = require('axios')
  */
 export const GetFeed = async ({ counter, max_time }) => {
   return Promise.all([
-    axios.get(process.env.REACT_APP_FEED, {
-      params: {
-        counter: counter,
-        time: max_time,
+    axios.post(process.env.REACT_APP_FEED, {
+        counter: counter
       },
-    }),
+    ),
     axios.get(process.env.REACT_APP_BLOCKLIST_OBJKT).catch(() => {
       return { data: [] }
     }),
