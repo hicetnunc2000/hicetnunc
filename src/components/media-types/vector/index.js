@@ -3,24 +3,23 @@ import classnames from 'classnames'
 import { HicetnuncContext } from '../../../context/HicetnuncContext'
 import styles from './index.module.scss'
 
-export const VectorComponent = ({ src, interactive, author }) => {
+export const VectorComponent = ({ src, interactive, token_info }) => {
   const context = useContext(HicetnuncContext)
   const classes = classnames({
     [styles.container]: true,
     [styles.interactive]: interactive,
   })
 
-  let _author_ = 'no-author-logged'
-  let _viewer_ = 'no-viewer-logged'
+  let _author_ = false
+  let _viewer_ = false
 
-  if (author) {
-    _author_ = author
+  if (token_info && token_info.creators[0]) {
+    _author_ = token_info.creators[0]
   }
 
   if (context.address !== '') {
     _viewer_ = context.address
   }
-  console.log('SVG', _author_, _viewer_)
 
   return (
     <div className={classes}>
