@@ -5,7 +5,6 @@ export const PATH = {
   SYNC: '/sync',
   MINT: '/mint',
   OBJKT: '/objkt',
-  LOAD: '/load', // TODO: check if this is being used?
 }
 
 export const ROUTES = {
@@ -15,7 +14,6 @@ export const ROUTES = {
   SYNC: { exact: false, path: '/sync', component: null },
   MINT: { exact: false, path: '/mint', component: null },
   OBJKT: { exact: false, path: '/objkt/:id', component: null },
-  LOAD: { exact: false, path: '/load', component: null }, // TODO: check if this is being used?
 }
 
 export const MINT_MIN_LIMIT = 1
@@ -28,7 +26,7 @@ export const MIMETYPE = {
   JPEG: 'image/jpeg',
   PNG: 'image/png',
   SVG: 'image/svg+xml',
-  HTML: 'text/html',
+  // HTML: 'text/html', // temp disable
   TIFF: 'image/tiff',
   WEBP: 'image/webp',
   MP4: 'video/mp4',
