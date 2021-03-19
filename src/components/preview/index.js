@@ -5,7 +5,6 @@ import styles from './index.module.scss'
 
 export const Preview = ({ mimeType, uri, tags }) => {
   const t = tags !== '' ? tags.replace(/\s/g, '').split(',') : []
-
   return (
     <div className={styles.container}>
       <div className={styles.media}>

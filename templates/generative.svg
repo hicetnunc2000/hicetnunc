@@ -1,0 +1,22 @@
+
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg viewBox="0 0 500 500" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    .txt { font: bold 10px sans-serif; 
+      pointer-events:none;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+    }
+  </style>
+  <text x="50%" y="10%" class="txt" text-anchor="middle" id="c">Creator</text>
+  <text x="50%" y="50%" class="txt" text-anchor="middle" id="v">Viewer</text>
+  <script type="text/javascript">
+  <![CDATA[
+  const c = new URLSearchParams(location.search).get('creator')
+  const v = new URLSearchParams(location.search).get('viewer')
+  console.log(c, v);
+  ]]></script>
+</svg>

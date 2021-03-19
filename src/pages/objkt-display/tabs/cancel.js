@@ -5,11 +5,13 @@ import { Container, Padding } from '../../../components/layout'
 import { Button, Curate } from '../../../components/button'
 import { Loading } from '../../../components/loading'
 import { PATH } from '../../../constants'
-import { lowestPrice } from '../../../utils/lowestPrice'
+// import { lowestPrice } from '../../../utils/lowestPrice'
 
+// README: Commented a couple of code out to avoid warning. Not sure what crzypathwork was trying to do
+// can we refactor/clean it?
 export const Cancel = ({ swaps, address }) => {
   const { cancel } = useContext(HicetnuncContext)
-  const { swap_id } = lowestPrice(swaps)
+  // const { swap_id } = lowestPrice(swaps)
   const [message, setMessage] = useState()
   const [progress, setProgress] = useState()
   const history = useHistory()
@@ -18,7 +20,7 @@ export const Cancel = ({ swaps, address }) => {
     const r = global.confirm('Are you sure?')
     if (r) {
       setProgress(true)
-      console.log(swaps)
+      // console.log(swaps)
       setMessage('cancelling swap')
       cancel(swaps[0].swap_id)
         .then((e) => {
