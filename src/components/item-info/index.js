@@ -26,6 +26,8 @@ export const ItemInfo = ({
   if (owners != undefined) {
     const kt = `KT1Hkg5qeNhfwpKW4fXvq7HGZB9z2EnmCCA9`
     available = owners[kt]
+  } else {
+    console.log(owners)
   }
   // var kt = _.values(_.omitBy(owners, (value, key) => !key.startsWith('KT')))[0]
   //owners = _.values(_.omitBy(owners, (value, key) => !key.startsWith(token_info.creators[0])))
@@ -58,7 +60,7 @@ export const ItemInfo = ({
           {!feed && (
             <div>
               <p>
-                <span>`Editions: {available}/{total_amount}</span>
+                <span>Editions: {available}/{total_amount}</span>
               </p>
             </div>
           )}
