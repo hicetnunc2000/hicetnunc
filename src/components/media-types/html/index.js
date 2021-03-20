@@ -11,11 +11,11 @@ export const HTMLComponent = ({ src, interactive, preview, token_info }) => {
     [styles.interactive]: interactive,
   })
 
-  let _author_ = false
+  let _creator_ = false
   let _viewer_ = false
 
   if (token_info && token_info.creators[0]) {
-    _author_ = token_info.creators[0]
+    _creator_ = token_info.creators[0]
   }
 
   if (context.address !== '') {
@@ -26,7 +26,7 @@ export const HTMLComponent = ({ src, interactive, preview, token_info }) => {
   if (preview) {
     safeSrc = injectCSPMetaTagIntoDataURI(src)
   } else {
-    safeSrc = `${src}?author=${_author_}&viewer=${_viewer_}`
+    safeSrc = `${src}?creator=${_creator_}&viewer=${_viewer_}`
   }
 
   return (
