@@ -12,20 +12,33 @@ import { Header } from './components/header'
 import { Footer } from './components/footer'
 import { Loading as Preloading } from './components/loading'
 import { getItem, setItem } from './utils/storage'
+import { setLanguage } from './constants'
 
 const App = () => {
   const [loading, setLoading] = useState(true)
-  // 1 load language file if provided
-
   // 1st time loading the site
+  //
   useEffect(() => {
     const language = getItem('language') || setItem('language', 'en')
-    console.log('language')
+    console.log('language', language)
+    fetch(
+      `https://raw.githubusercontent.com/hicetnunc2000/hicetnunc/main/languages/${language}.json`
+    )
+      .then((e) => e.json())
+      .then((data) => {
+        setLanguage(data)
+        setLoading(false)
+      })
+      .catch(() => {
+        console.log('failed to load language')
+        setLoading(false)
+      })
   }, [])
 
   if (loading) {
     return <Preloading />
   }
+
   return (
     <HicetnuncContextProvider>
       <Header />
