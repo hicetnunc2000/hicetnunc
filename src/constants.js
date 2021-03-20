@@ -9,6 +9,8 @@ let LANGUAGE = {
   },
   footer: {
     mint: 'sync -> collect // sync -> mint // sync -> swap',
+    warning:
+      'use it consciously. visit artists profiles. be careful with copy minters.',
   },
   home: {
     latest: 'latest',
