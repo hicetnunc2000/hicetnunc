@@ -1,11 +1,14 @@
 {
   "header": {
-    "sync": "sync*",
+    "sync": "sync",
     "menu": [
-      { "primary": "OBJKTs", "secondary": "(mint NFTs)" },
-      { "primary": "manage asseets" },
-      { "primary": "about" }
+      { "primary": "OBJKTs", "secondary": "(mint NFTs)", "route": "/mint" },
+      { "primary": "manage asseets", "route": "/sync" },
+      { "primary": "about", "route": "/about" }
     ]
+  },
+  "footer": {
+    "mint": "sync -> collect // sync -> mint // sync -> swap"
   },
   "home": {
     "latest": "latest",
