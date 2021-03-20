@@ -10,11 +10,11 @@ export const VectorComponent = ({ src, interactive, preview, token_info }) => {
     [styles.interactive]: interactive,
   })
 
-  let _author_ = false
+  let _creator_ = false
   let _viewer_ = false
 
   if (token_info && token_info.creators[0]) {
-    _author_ = token_info.creators[0]
+    _creator_ = token_info.creators[0]
   }
 
   if (context.address !== '') {
@@ -25,7 +25,7 @@ export const VectorComponent = ({ src, interactive, preview, token_info }) => {
   if (preview) {
     iframeSrc = src
   } else {
-    iframeSrc = `${src}?author=${_author_}&viewer=${_viewer_}`
+    iframeSrc = `${src}?creator=${_creator_}&viewer=${_viewer_}`
   }
 
   return (
