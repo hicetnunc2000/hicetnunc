@@ -6,11 +6,15 @@ import { Container, Padding } from '../layout'
 import { Button, Primary, Secondary } from '../button'
 import { fadeIn } from '../../utils/motion'
 import { Menu } from '../icons'
+import { getLanguage } from '../../constants'
 import styles from './style.module.scss'
 
 export const Header = () => {
   const history = useHistory()
   const context = useContext(HicetnuncContext)
+
+  const language = getLanguage()
+  console.log('language', language)
 
   const handleRoute = (path) => {
     context.setMenu(true)
@@ -29,7 +33,7 @@ export const Header = () => {
 
           <div className={styles.right}>
             <Button onClick={context.syncTaquito} secondary>
-              <Secondary>sync</Secondary>
+              <Secondary>{language.header.sync}</Secondary>
             </Button>
 
             <Button onClick={context.toogleNavbar} secondary>
@@ -47,23 +51,20 @@ export const Header = () => {
                 <div className={styles.content}>
                   <ul>
                     <li>○</li>
-                    <li>
-                      <Button onClick={() => handleRoute('/mint')}>
-                        <Primary>
-                          OBJKTs<i style={{ fontSize: '15px' }}>(mint NFTs)</i>
-                        </Primary>
-                      </Button>
-                    </li>
-                    <li>
-                      <Button onClick={() => handleRoute('/sync')}>
-                        <Primary>manage assets</Primary>
-                      </Button>
-                    </li>
-                    <li>
-                      <Button onClick={() => handleRoute('/about')}>
-                        <Primary>about</Primary>
-                      </Button>
-                    </li>
+                    {language.header.menu.map((menu) => (
+                      <li key={menu.route}>
+                        <Button onClick={() => handleRoute(menu.route)}>
+                          <Primary>
+                            {menu.primary}
+                            {menu.secondary && (
+                              <i style={{ fontSize: '15px' }}>
+                                {menu.secondary}
+                              </i>
+                            )}
+                          </Primary>
+                        </Button>
+                      </li>
+                    ))}
                   </ul>
                 </div>
               </Padding>
