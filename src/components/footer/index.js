@@ -1,27 +1,30 @@
 import React from 'react'
 import { Padding } from '../layout'
+import { ButtonLanguage } from '../button-language'
 import { ButtonTheme } from '../button-theme'
-import { AnimationSwap } from '../animation-swap'
 import styles from './index.module.scss'
 
 export const Footer = () => {
   return (
     <footer className={styles.container}>
+      <Padding>
+        <div className={styles.copy}>
+          sync -&gt; collect // sync -&gt; mint // sync -&gt; swap
+        </div>
+        <div className={styles.buttons}>
+          <ButtonLanguage />
+          <ButtonTheme />
+        </div>
+      </Padding>
+
       {false && (
         <Padding>
-          <AnimationSwap label="collect" />
+          <div className={styles.warning}>
+            use it consciously. visit artists profiles. be careful with copy
+            minters.
+          </div>
         </Padding>
       )}
-      {true && (
-        <Padding>
-          sync -&gt; collect // sync -&gt; mint // sync -&gt; swap
-        </Padding>
-      )}
-      <Padding>
-        use it consciously. visit artists profiles. be careful with copy
-        minters.
-      </Padding>
-      <ButtonTheme />
     </footer>
   )
 }

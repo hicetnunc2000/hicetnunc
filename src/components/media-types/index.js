@@ -4,7 +4,7 @@ import { ImageComponent } from './image'
 import { VideoComponent } from './video'
 import { AudioComponent } from './audio'
 import { VectorComponent } from './vector'
-import { HTMLComponent } from './html'
+// import { HTMLComponent } from './html'
 import { UnknownComponent } from './unknown'
 import { MIMETYPE } from '../../constants'
 
