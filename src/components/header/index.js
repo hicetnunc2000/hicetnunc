@@ -12,9 +12,7 @@ import styles from './style.module.scss'
 export const Header = () => {
   const history = useHistory()
   const context = useContext(HicetnuncContext)
-
   const language = getLanguage()
-  console.log('language', language)
 
   const handleRoute = (path) => {
     context.setMenu(true)
