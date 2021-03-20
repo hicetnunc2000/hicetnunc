@@ -14,7 +14,7 @@ export const Burn = (props) => {
   const [progress, setProgress] = useState() // eslint-disable-line
 
   const handleSubmit = () => {
-    const r = global.confirm('Are you sure?')
+    const r = global.confirm('Burning will remove all OBJKT#:id from your possession to a burn address.')
     if (r) {
       alert('burning temporary disabled')
       // setProgress(true)
@@ -42,7 +42,7 @@ export const Burn = (props) => {
     <>
       <Container>
         <Padding>
-          <p>Burning your NFT will permanently delete it from the network.</p>
+          <p>Burning will remove all OBJKT#:id from your possession to a burn address.</p>
         </Padding>
       </Container>
       <Container>
