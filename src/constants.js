@@ -111,6 +111,7 @@ export const MIMETYPE = {
   PNG: 'image/png',
   SVG: 'image/svg+xml',
   // HTML: 'text/html', // temp disable
+  JAVASCRIPT: 'text/javascript',
   TIFF: 'image/tiff',
   WEBP: 'image/webp',
   MP4: 'video/mp4',

@@ -5,6 +5,7 @@ import { VideoComponent } from './video'
 import { AudioComponent } from './audio'
 import { VectorComponent } from './vector'
 // import { HTMLComponent } from './html'
+import { Hicetnunc } from './hicetnunc'
 import { UnknownComponent } from './unknown'
 import { MIMETYPE } from '../../constants'
 
@@ -54,6 +55,10 @@ export const renderMediaType = ({
     //       preview={preview}
     //     />
     //   )
+    /* JAVASCRIPT */
+    case MIMETYPE.JAVASCRIPT:
+      url = preview ? uri : `${CLOUDFLARE}${path}`
+      return <Hicetnunc {...metadata} src={url} interactive={interactive} />
     /* VIDEOS */
     case MIMETYPE.MP4:
     case MIMETYPE.OGV:
