@@ -28,6 +28,7 @@ export const ObjktDisplay = () => {
 
   useEffect(() => {
     GetOBJKT({ id }).then((objkt) => {
+      console.log(objkt)
       setNFT(objkt)
       setLoading(false)
     })

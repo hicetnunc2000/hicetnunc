@@ -20,26 +20,16 @@ export const ItemInfo = ({
   isDetailView,
 }) => {
   const { Tezos, syncTaquito, collect, curate } = useContext(HicetnuncContext)
-  // console.log(swaps, owners, total_amount)
-  // const reducer = (accumulator, currentValue) => accumulator + currentValue
 
-  let available = 0
-  let editions = 0
+  const kt = `KT1Hkg5qeNhfwpKW4fXvq7HGZB9z2EnmCCA9`
+
+  let available = owners[kt]
+
   // var kt = _.values(_.omitBy(owners, (value, key) => !key.startsWith('KT')))[0]
   //owners = _.values(_.omitBy(owners, (value, key) => !key.startsWith(token_info.creators[0])))
 
-  let max = _.values(owners)
-  // filtering negative values?
-  max = max.filter((e) => parseInt(e) < 0)
-
-  available = parseInt(
-    _.values(_.omitBy(owners, (value, key) => !key.startsWith('KT')))[0] || 0
-  )
-  editions = parseInt(max[0]) * -1
-
-  owners = _.values(_.omitBy(owners, (value, key) => key.startsWith('KT')))
   const soldOutMessage = 'not for sale'
-  const notForSale = available > 0 || isNaN(editions)
+  //const notForSale = available > 0 || isNaN(editions)
   const message =
     available > 0
       ? 'collect for ' + Number(swaps[0].xtz_per_objkt) / 1000000 + ' tez'
@@ -66,9 +56,7 @@ export const ItemInfo = ({
           {!feed && (
             <div>
               <p>
-                {notForSale
-                  ? soldOutMessage
-                  : `Edition: ${available}/${editions}`}
+                <span>`Editions: {available}/{total_amount}</span>
               </p>
             </div>
           )}
