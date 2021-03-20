@@ -21,10 +21,12 @@ export const ItemInfo = ({
 }) => {
   const { Tezos, syncTaquito, collect, curate } = useContext(HicetnuncContext)
 
-  const kt = `KT1Hkg5qeNhfwpKW4fXvq7HGZB9z2EnmCCA9`
+  let available = 0
 
-  let available = owners[kt]
-
+  if (owners != undefined) {
+    const kt = `KT1Hkg5qeNhfwpKW4fXvq7HGZB9z2EnmCCA9`
+    available = owners[kt]
+  }
   // var kt = _.values(_.omitBy(owners, (value, key) => !key.startsWith('KT')))[0]
   //owners = _.values(_.omitBy(owners, (value, key) => !key.startsWith(token_info.creators[0])))
 
