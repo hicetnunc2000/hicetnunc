@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import { injectCSPMetaTagIntoDataURI } from '../../../utils/html'
+// import { injectCSPMetaTagIntoDataURI } from '../../../utils/html'
 import classnames from 'classnames'
 import { HicetnuncContext } from '../../../context/HicetnuncContext'
 import styles from './index.module.scss'
@@ -22,21 +22,23 @@ export const HTMLComponent = ({ src, interactive, preview, token_info }) => {
     _viewer_ = context.address
   }
 
-  let safeSrc
-  if (preview) {
-    safeSrc = injectCSPMetaTagIntoDataURI(src)
-  } else {
-    safeSrc = `${src}?creator=${_creator_}&viewer=${_viewer_}`
-  }
+  // let safeSrc
+  // if (preview) {
+  //   safeSrc = injectCSPMetaTagIntoDataURI(src)
+  // } else {
+  //   safeSrc = `${src}?creator=${_creator_}&viewer=${_viewer_}`
+  // }
 
+  // Disabling until we figure out how to deal with ZIP here
   return (
     <div className={classes}>
-      <iframe
+      PREVIEW IFRAME GOES HERE
+      {/* <iframe
         title="hic et nunc HTML renderer"
         src={safeSrc}
         sandbox="allow-scripts"
         scrolling="no"
-      />
+      /> */}
     </div>
   )
 }

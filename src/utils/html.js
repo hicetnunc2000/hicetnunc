@@ -1,3 +1,74 @@
+import * as zip from '@zip.js/zip.js/dist/zip-full'
+import mime from 'mime-types'
+
+export async function prepareFilesFromZIP (uri) {
+  // unzip
+  const files = await unzipDataURI(uri)
+  
+  // inject CSP meta tag
+  const indexBlob = files['index.html'].blob
+  const indexBuffer = await indexBlob.arrayBuffer()
+  const safeIndexBuffer = injectCSPMetaTagIntoBuffer(indexBuffer)
+  files['index.html'].blob = new Blob([safeIndexBuffer], {
+    type: indexBlob.type
+  })
+
+  return files
+}
+
+export async function unzipDataURI (uri) {
+  const zipReader = new zip.ZipReader(new zip.Data64URIReader(uri))
+  let entries = await zipReader.getEntries()
+
+  // Find root dir
+  let rootDir = null
+  for (let i = 0; i < entries.length; i++) {
+    const parts = entries[i].filename.split('/')
+    const filename = parts[parts.length - 1]
+    if (filename === 'index.html') {
+      const parts = entries[i].filename.split('/')
+      parts.pop()
+      rootDir = parts.join('/')
+      break
+    }
+  }
+
+  if (rootDir === null) {
+    const msg = 'No index.html file found!'
+    window.alert(msg)
+    throw new Error(msg)
+  }
+
+  // Truncate paths
+  entries = entries.map(entry => {
+    console.log('entry', entry)
+    entry.relativePath = entry.filename.replace(`${rootDir}/`, '')
+    return entry
+  })
+
+  // get file blobs
+  const promises = []
+  entries.forEach(entry => {
+    const mimeType = mime.lookup(entry.filename)
+    promises.push(entry.getData(new zip.BlobWriter(mimeType)))
+  })
+  const results = await Promise.all(promises)
+  await zipReader.close()
+
+  // create files map
+  const files = {}
+  entries.forEach((entry, index) => {
+    files[entry.relativePath] = {
+      blob: results[index],
+      directory: entry.directory
+    }
+  })
+
+  console.log('FILES', files)
+
+  return files
+}
+
 export function injectCSPMetaTagIntoDataURI(dataURI) {
   // data URI -> HTML
   const prefix = 'data:text/html;base64,'
