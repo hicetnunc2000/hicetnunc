@@ -4,7 +4,7 @@ import mime from 'mime-types'
 export async function prepareFilesFromZIP (uri) {
   // unzip
   const files = await unzipDataURI(uri)
-  
+
   // inject CSP meta tag
   const indexBlob = files['index.html'].blob
   const indexBuffer = await indexBlob.arrayBuffer()
@@ -41,7 +41,6 @@ export async function unzipDataURI (uri) {
 
   // Truncate paths
   entries = entries.map(entry => {
-    console.log('entry', entry)
     entry.relativePath = entry.filename.replace(`${rootDir}/`, '')
     return entry
   })
@@ -63,8 +62,6 @@ export async function unzipDataURI (uri) {
       directory: entry.directory
     }
   })
-
-  console.log('FILES', files)
 
   return files
 }

@@ -6,7 +6,7 @@ import { Button, Curate } from '../../components/button'
 import { Loading } from '../../components/loading'
 import { Upload } from '../../components/upload'
 import { Preview } from '../../components/preview'
-import { prepareFile } from '../../data/ipfs'
+import { prepareFile, prepareDirectory } from '../../data/ipfs'
 import { prepareFilesFromZIP } from '../../utils/html'
 import {
   ALLOWED_MIMETYPES,
@@ -40,48 +40,75 @@ export const Mint = () => {
           ).toLocaleLowerCase()}`
         )
       } else {
-
+        let nftCid
         if (file.mimeType === MIMETYPE.HTML_ZIP) {
+
+          console.log('Process HTML directory')
+
           const files = await prepareFilesFromZIP(file.reader)
-          console.log(files)
-        }    
 
-        /*
+          // check all file sizes
+          const sizes = Object.values(files)
+            .map(f => f.blob.size)
+            .filter(s => (s / 1024 / 1024).toFixed(4) > MINT_FILESIZE)
 
-        TODO: In case of HTML_ZIP type, upload all files (directories?)
+          if (sizes.length) {
+            const filesizes = sizes.join(', ')
+            alert(
+              `Files too big (${filesizes}). Limit is currently set at ${MINT_FILESIZE}MB`
+            )            
+          } else {
+            setProgress(true)
+            setMessage('minting...')
+  
+            nftCid = await prepareDirectory({
+              name: title,
+              description,
+              tags,
+              address,
+              files: files,
+            })
+          }
+        } else {
 
-        */
+          console.log('Process individual file')
 
-        // // checks file size limit
-        // const filesize = (file.file.size / 1024 / 1024).toFixed(4)
-        // if (filesize <= MINT_FILESIZE) {
-        //   setProgress(true)
-        //   setMessage('minting...')
-        //   // mint
-        //   const nftCid = await prepareFile({
-        //     name: title,
-        //     description,
-        //     tags,
-        //     address,
-        //     buffer: file.buffer,
-        //     mimeType: file.mimeType,
+          const filesize = (file.file.size / 1024 / 1024).toFixed(4)
+          if (filesize > MINT_FILESIZE) {
+            alert(
+              `File too big (${filesize}). Limit is currently set at ${MINT_FILESIZE}MB`
+            )
+          } else {
+            // setProgress(true)
+            // setMessage('minting...')
+
+            // nftCid = await prepareFile({
+            //   name: title,
+            //   description,
+            //   tags,
+            //   address,
+            //   buffer: file.buffer,
+            //   mimeType: file.mimeType,
+            // })
+          }
+        }
+
+        if (!nftCid) {
+          return
+        }
+
+        console.log('MINT!')
+        // mint(getAuth(), amount, nftCid[0].hash, 10)
+        //   .then((e) => {
+        //     console.log('confirmado', e)
+        //     setProgress(false)
+        //     setMessage(e.description)
+        //     // redirect here
         //   })
-        //   mint(getAuth(), amount, nftCid[0].hash, 10)
-        //     .then((e) => {
-        //       console.log('confirmado', e)
-        //       setProgress(false)
-        //       setMessage(e.description)
-        //       // redirect here
-        //     })
-        //     .catch((e) => {
-        //       setProgress(false)
-        //       setMessage('an error occurred')
-        //     })
-        // } else {
-        //   alert(
-        //     `File too big (${filesize}). Limit is currently set at ${MINT_FILESIZE}MB`
-        //   )
-        // }
+        //   .catch((e) => {
+        //     setProgress(false)
+        //     setMessage('an error occurred')
+        //   })
       }
     }
   }
