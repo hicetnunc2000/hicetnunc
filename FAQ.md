@@ -42,3 +42,19 @@ Unfortunately, there are people minting NFTs who did not create what they upload
 
 To make it easier for them, please leave a trace to any social profile or website in the description of your artwork, so potential buyers can validate the authenticity. 
 
+## How to get verified
+-- or how do I get my name in the profile?
+
+hicetnunc fetches the profile information from https://tzkt.io so to get your name associated with your wallet address you need to contact tzkt.io. They will ask you to fill in a form and to transfer a small amount of tez from your wallet to prove it is really you.
+
+* Go to your hic et nunc profile
+* Click your wallet address link, you will navigate to tzkt.io
+* Hover the mouse over the contact icons
+* A pop-up will be displayed "You can share your email and other contacts."
+* Click the share link
+* A new pop-up will be displayed which contains their contact information
+* They will send you instructions on how to proceed.
+
+* They will ask you to fill in a form with your contact information
+* They will ask you to transfer 0.00177 tez to their address and provide the transaction in the form
+
