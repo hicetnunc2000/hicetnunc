@@ -61,15 +61,13 @@ export const Mint = () => {
             setProgress(true)
             setMessage('minting...')
 
-            /* DISABLING UNTIL prepareDirectory IS TESTED */
-
-            // nftCid = await prepareDirectory({
-            //   name: title,
-            //   description,
-            //   tags,
-            //   address,
-            //   files,
-            // })
+            nftCid = await prepareDirectory({
+              name: title,
+              description,
+              tags,
+              address,
+              files,
+            })
           }
         } else {
 

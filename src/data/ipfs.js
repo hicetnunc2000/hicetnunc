@@ -1,4 +1,4 @@
-const IPFS = require('ipfs-api')
+const createClient = require('ipfs-http-client')
 const Buffer = require('buffer').Buffer
 const { v4: uuidv4 } = require('uuid')
 
@@ -10,11 +10,7 @@ export const prepareFile = async ({
   buffer,
   mimeType,
 }) => {
-  const ipfs = new IPFS({
-    host: 'ipfs.infura.io',
-    port: 5001,
-    protocol: 'https',
-  })
+  const ipfs = createClient('https://ipfs.infura.io:5001')
 
   const hash = await ipfs.files.add(buffer)
   const fileCid = `ipfs://${hash[0].hash}`
@@ -46,13 +42,14 @@ export const prepareDirectory = async ({
   address,
   files,
 }) => {
-  const ipfs = new IPFS({
-    host: 'ipfs.infura.io',
-    port: 5001,
-    protocol: 'https',
-  })  
+  const ipfs = createClient('https://ipfs.infura.io:5001')
 
-  /* WARNING: UNTESTED! */
+  /*
+  
+  WARNING:  NOT WORKING! 
+  Getting 403 authorization errors from infura
+
+  */
 
   console.log('Upload files to IPFS')
   console.log(files)
