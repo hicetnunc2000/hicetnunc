@@ -60,13 +60,13 @@ export const Mint = () => {
           } else {
             setProgress(true)
             setMessage('minting...')
-  
+          
             nftCid = await prepareDirectory({
               name: title,
               description,
               tags,
               address,
-              files: files,
+              files,
             })
           }
         } else {
@@ -97,7 +97,8 @@ export const Mint = () => {
           return
         }
 
-        console.log('MINT!')
+        // disabling minting while testing
+
         // mint(getAuth(), amount, nftCid[0].hash, 10)
         //   .then((e) => {
         //     console.log('confirmado', e)

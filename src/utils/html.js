@@ -20,6 +20,9 @@ export async function unzipDataURI (uri) {
   const zipReader = new zip.ZipReader(new zip.Data64URIReader(uri))
   let entries = await zipReader.getEntries()
 
+  // remove directories
+  entries = entries.filter(e => !e.directory)
+
   // Find root dir
   let rootDir = null
   for (let i = 0; i < entries.length; i++) {
