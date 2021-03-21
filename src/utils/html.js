@@ -105,7 +105,7 @@ export function injectCSPMetaTagIntoHTML(html) {
 
   // inject CSP meta tag
   doc.head.insertAdjacentHTML('afterbegin', `
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'unsafe-inline'; style-src 'unsafe-inline'">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline';">  
   `)
 
   // doc -> HTML
