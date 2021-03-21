@@ -22,6 +22,9 @@ export const HTMLComponent = ({ src, interactive, preview, token_info }) => {
     _viewer_ = context.address
   }
 
+  console.log('creator', _creator_)
+  console.log('viewer', _viewer_)
+
   // let safeSrc
   // if (preview) {
   //   safeSrc = injectCSPMetaTagIntoDataURI(src)
@@ -29,10 +32,12 @@ export const HTMLComponent = ({ src, interactive, preview, token_info }) => {
   //   safeSrc = `${src}?creator=${_creator_}&viewer=${_viewer_}`
   // }
 
-  // Disabling until we figure out how to deal with ZIP here
+  // TOOD: Disabled until displaying from zip is re-implemented
   return (
     <div className={classes}>
-      PREVIEW IFRAME GOES HERE
+      Preview not available for HTML ZIP files.
+      <br />
+      Click 'mint' below to proceed.
       {/* <iframe
         title="hic et nunc HTML renderer"
         src={safeSrc}

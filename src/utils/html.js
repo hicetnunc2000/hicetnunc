@@ -6,10 +6,10 @@ export async function prepareFilesFromZIP (uri) {
   const files = await unzipDataURI(uri)
 
   // inject CSP meta tag
-  const indexBlob = files['index.html'].blob
+  const indexBlob = files['index.html']
   const indexBuffer = await indexBlob.arrayBuffer()
   const safeIndexBuffer = injectCSPMetaTagIntoBuffer(indexBuffer)
-  files['index.html'].blob = new Blob([safeIndexBuffer], {
+  files['index.html'] = new Blob([safeIndexBuffer], {
     type: indexBlob.type
   })
 
@@ -60,10 +60,7 @@ export async function unzipDataURI (uri) {
   // create files map
   const files = {}
   entries.forEach((entry, index) => {
-    files[entry.relativePath] = {
-      blob: results[index],
-      directory: entry.directory
-    }
+    files[entry.relativePath] = results[index]
   })
 
   return files

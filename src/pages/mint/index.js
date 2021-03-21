@@ -49,25 +49,27 @@ export const Mint = () => {
 
           // check all file sizes
           const sizes = Object.values(files)
-            .map(f => f.blob.size)
+            .map(f => f.size)
             .filter(s => (s / 1024 / 1024).toFixed(4) > MINT_FILESIZE)
 
           if (sizes.length) {
             const filesizes = sizes.join(', ')
             alert(
               `Files too big (${filesizes}). Limit is currently set at ${MINT_FILESIZE}MB`
-            )            
+            )
           } else {
             setProgress(true)
             setMessage('minting...')
-          
-            nftCid = await prepareDirectory({
-              name: title,
-              description,
-              tags,
-              address,
-              files,
-            })
+
+            /* DISABLING UNTIL prepareDirectory IS TESTED */
+
+            // nftCid = await prepareDirectory({
+            //   name: title,
+            //   description,
+            //   tags,
+            //   address,
+            //   files,
+            // })
           }
         } else {
 
@@ -79,25 +81,27 @@ export const Mint = () => {
               `File too big (${filesize}). Limit is currently set at ${MINT_FILESIZE}MB`
             )
           } else {
-            // setProgress(true)
-            // setMessage('minting...')
+            setProgress(true)
+            setMessage('minting...')
 
-            // nftCid = await prepareFile({
-            //   name: title,
-            //   description,
-            //   tags,
-            //   address,
-            //   buffer: file.buffer,
-            //   mimeType: file.mimeType,
-            // })
+            nftCid = await prepareFile({
+              name: title,
+              description,
+              tags,
+              address,
+              buffer: file.buffer,
+              mimeType: file.mimeType,
+            })
           }
         }
+
+        console.log('nftCid', nftCid)
 
         if (!nftCid) {
           return
         }
 
-        // disabling minting while testing
+        /* MINTING DISABLED */
 
         // mint(getAuth(), amount, nftCid[0].hash, 10)
         //   .then((e) => {

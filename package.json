@@ -32,7 +32,8 @@
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "^4.0.3",
-    "react-scroll": "^1.8.1"
+    "react-scroll": "^1.8.1",
+    "uuid": "^8.3.2"
   },
   "scripts": {
     "start": "react-scripts start",
