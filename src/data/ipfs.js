@@ -45,7 +45,7 @@ export const prepareDirectory = async ({
   address,
   files,
 }) => {
-
+  
   console.log('Upload files to IPFS!')
   console.log(files)
 
