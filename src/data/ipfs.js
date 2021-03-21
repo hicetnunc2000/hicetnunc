@@ -37,3 +37,17 @@ export const prepareFile = async ({
   )
   return result
 }
+
+export const prepareDirectory = async ({
+  name,
+  description,
+  tags,
+  address,
+  files,
+}) => {
+
+  console.log('Upload files to IPFS!')
+  console.log(files)
+
+  return Promise.resolve()
+}
