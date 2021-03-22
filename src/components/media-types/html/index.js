@@ -35,7 +35,7 @@ export const HTMLComponent = ({ src, interactive, preview, token_info }) => {
         title="hic et nunc HTML renderer"
         src={safeSrc}
         sandbox="allow-scripts allow-same-origin"
-        allow="camera microphone geolocation"
+        allow="camera; microphone; geolocation"
         scrolling="no"
       />
     </div>
