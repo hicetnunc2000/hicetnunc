@@ -79,9 +79,6 @@ export const Mint = () => {
 
   const handleValidation = () => {
     if (
-      title !== '' &&
-      description !== '' &&
-      tags !== '' &&
       amount > 0 &&
       file
     ) {

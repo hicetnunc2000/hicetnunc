@@ -46,7 +46,21 @@ export const Header = () => {
               <Padding>
                 <div className={styles.content}>
                   <ul>
-                    <li>○</li>
+                    <li>
+                      <Button onClick={() => handleRoute('/hdao')}>
+                        <Primary>
+                          ○
+                        </Primary>
+                      </Button>
+                    </li>
+                    <li>
+                      <Button onClick={() => handleRoute('/random')}>
+                        <Primary>
+                          random
+                        </Primary>
+                      </Button>
+                    </li>
+
                     <li>
                       <Button onClick={() => handleRoute('/mint')}>
                         <Primary>
