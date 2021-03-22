@@ -4,7 +4,7 @@ import { Button, Primary, Purchase } from '../button'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
 import { walletPreview } from '../../utils/string'
 import styles from './index.module.scss'
-// import { lowestPrice } from '../../utils/lowestPrice'
+import { lowestPrice } from '../../utils/lowestPrice'
 // import { getTotalSales } from '../../utils/sanitise'
 
 const _ = require('lodash')
@@ -32,18 +32,19 @@ export const ItemInfo = ({
   // var kt = _.values(_.omitBy(owners, (value, key) => !key.startsWith('KT')))[0]
   //owners = _.values(_.omitBy(owners, (value, key) => !key.startsWith(token_info.creators[0])))
 
+  const swap = lowestPrice(swaps);
   const soldOutMessage = 'not for sale'
   //const notForSale = available > 0 || isNaN(editions)
   const message =
     available > 0
-      ? 'collect for ' + Number(swaps[0].xtz_per_objkt) / 1000000 + ' tez'
+      ? 'collect for ' + Number(swap.xtz_per_objkt) / 1000000 + ' tez'
       : 'not for sale'
 
   const handleCollect = () => {
     if (Tezos == null) {
       syncTaquito()
     } else {
-      collect(1, swaps[0].swap_id, swaps[0].xtz_per_objkt * 1)
+      collect(1, swap.swap_id, swaps.xtz_per_objkt * 1)
     }
   }
 
