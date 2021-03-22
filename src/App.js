@@ -18,8 +18,8 @@ const App = () => {
     <HicetnuncContextProvider>
       <Header />
       <Switch>
-        <Route exact path="/" component={Feed} />
-        <Route exact path="/hdao" component={HDAO} />
+        <Route exact path="/latest" component={Feed} />
+        <Route exact path="/" component={HDAO} />
         <Route exact path="/random" component={Random} />
         <Route path="/tz/:id" component={Display} />
         <Route path="/about" component={About} />
