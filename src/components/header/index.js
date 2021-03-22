@@ -47,9 +47,9 @@ export const Header = () => {
                 <div className={styles.content}>
                   <ul>
                     <li>
-                      <Button onClick={() => handleRoute('/latest')}>
+                      <Button onClick={() => handleRoute('/hdao')}>
                         <Primary>
-                          latest
+                          ○
                         </Primary>
                       </Button>
                     </li>
