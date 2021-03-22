@@ -2,6 +2,8 @@
   "header": {
     "sync": "sync",
     "menu": [
+      { "primary": "○", "route": "/hdao" },
+      { "primary": "aleatorio", "route": "/random" },
       { "primary": "OBJKTs", "secondary": "(mint NFTs)", "route": "/mint" },
       { "primary": "manage asseets", "route": "/sync" },
       { "primary": "about", "route": "/about" }
