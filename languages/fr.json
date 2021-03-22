@@ -2,6 +2,8 @@
   "header": {
     "sync": "synchroniser",
     "menu": [
+      { "primary": "○", "route": "/hdao" },
+      { "primary": "random", "route": "/random" },
       { "primary": "OBJKTs", "secondary": "(émettre NFTs)", "route": "/mint" },
       { "primary": "gestion des biens", "route": "/sync" },
       { "primary": "à propos", "route": "/about" }
