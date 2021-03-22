@@ -37,9 +37,6 @@ export const getMimeType = (file) => {
           case '676C5446':
             mimeType = MIMETYPE.GLB
             break
-          case '7BA2020':
-            mimeType = MIMETYPE.GLTF
-            break
           default:
             mimeType = 'Unknown MimeType'
         }
