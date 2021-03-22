@@ -10,6 +10,8 @@ import { ObjktDisplay } from './pages/objkt-display'
 import Loading from './pages/loading' // TODO: andrevenancio
 import { Header } from './components/header'
 import { Footer } from './components/footer'
+import { HDAO } from './pages/hdao'
+import { Random  } from './pages/random'
 
 const App = () => {
   return (
@@ -17,6 +19,8 @@ const App = () => {
       <Header />
       <Switch>
         <Route exact path="/" component={Feed} />
+        <Route exact path="/hdao" component={HDAO} />
+        <Route exact path="/random" component={Random} />
         <Route path="/tz/:id" component={Display} />
         <Route path="/about" component={About} />
         <Route path="/sync" component={Sync} />
