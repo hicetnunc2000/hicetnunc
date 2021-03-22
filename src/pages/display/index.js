@@ -166,7 +166,7 @@ export default class Display extends Component {
                     </a>
                   )}
                   {this.state.reddit && (
-                    <a href={`https://reddit.com/"${this.state.reddit}`}>
+                    <a href={`https://reddit.com/${this.state.reddit}`}>
                       <svg
                         height="16"
                         viewBox="0 0 512 512"
