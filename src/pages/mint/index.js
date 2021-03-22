@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
 import { Page, Container, Padding } from '../../components/layout'
 import { Input } from '../../components/input'
-import { Button, Curate } from '../../components/button'
+import { Button, Curate, Primary } from '../../components/button'
 import { Loading } from '../../components/loading'
 import { Upload } from '../../components/upload'
 import { Preview } from '../../components/preview'
@@ -15,14 +15,13 @@ import {
 
 export const Mint = () => {
   const { Tezos, mint, address, getAuth } = useContext(HicetnuncContext)
-  const [preview, setPreview] = useState(false)
+  const [step, setStep] = useState(0)
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
   const [tags, setTags] = useState('')
   const [amount, setAmount] = useState(1)
   const [file, setFile] = useState() // the uploaded file
 
-  const [progress, setProgress] = useState(false)
   const [message, setMessage] = useState('')
 
   const handleMint = async () => {
@@ -41,8 +40,6 @@ export const Mint = () => {
         // checks file size limit
         const filesize = (file.file.size / 1024 / 1024).toFixed(4)
         if (filesize <= MINT_FILESIZE) {
-          setProgress(true)
-          setMessage('minting...')
           // mint
           const nftCid = await prepareFile({
             name: title,
@@ -54,13 +51,13 @@ export const Mint = () => {
           })
           mint(getAuth(), amount, nftCid[0].hash, 10)
             .then((e) => {
-              console.log('confirmado', e)
-              setProgress(false)
-              setMessage(e.description)
+              console.log('mint confirm', e)
+              setMessage('Minted successfully')
               // redirect here
             })
             .catch((e) => {
-              setProgress(false)
+              console.log('mint error', e)
+              alert('an error occurred')
               setMessage('an error occurred')
             })
         } else {
@@ -73,7 +70,7 @@ export const Mint = () => {
   }
 
   const handlePreview = () => {
-    setPreview(true)
+    setStep(1)
   }
 
   const handleFileUpload = (props) => {
@@ -95,53 +92,67 @@ export const Mint = () => {
 
   return (
     <Page>
-      <Container>
-        <Padding>
-          <Input
-            type="text"
-            onChange={(e) => setTitle(e.target.value)}
-            placeholder="title"
-          />
+      {step === 0 && (
+        <>
+          <Container>
+            <Padding>
+              <Input
+                type="text"
+                onChange={(e) => setTitle(e.target.value)}
+                placeholder="title"
+              />
 
-          <Input
-            type="text"
-            onChange={(e) => setDescription(e.target.value)}
-            placeholder="description"
-          />
+              <Input
+                type="text"
+                onChange={(e) => setDescription(e.target.value)}
+                placeholder="description"
+              />
 
-          <Input
-            type="text"
-            onChange={(e) => setTags(e.target.value)}
-            placeholder="tags (separated by commas)"
-          />
+              <Input
+                type="text"
+                onChange={(e) => setTags(e.target.value)}
+                placeholder="tags (separated by commas)"
+              />
 
-          <Input
-            type="number"
-            min={1}
-            onChange={(e) => setAmount(e.target.value)}
-            placeholder="amount"
-          />
-        </Padding>
-      </Container>
+              <Input
+                type="number"
+                min={1}
+                onChange={(e) => setAmount(e.target.value)}
+                placeholder="amount"
+              />
+            </Padding>
+          </Container>
 
-      <Container>
-        <Padding>
-          <Upload label="Upload OBJKT" onChange={handleFileUpload} />
-        </Padding>
-      </Container>
+          <Container>
+            <Padding>
+              <Upload label="Upload OBJKT" onChange={handleFileUpload} />
+            </Padding>
+          </Container>
 
-      {!preview && (
-        <Container>
-          <Padding>
-            <Button onClick={handlePreview} fit disabled={handleValidation()}>
-              <Curate>Preview</Curate>
-            </Button>
-          </Padding>
-        </Container>
+          <Container>
+            <Padding>
+              <Button onClick={handlePreview} fit disabled={handleValidation()}>
+                <Curate>Preview</Curate>
+              </Button>
+            </Padding>
+          </Container>
+        </>
       )}
 
-      {preview && (
+      {step === 1 && (
         <>
+          <Container>
+            <Padding>
+              <div style={{ display: 'flex' }}>
+                <Button onClick={() => setStep(0)} fit>
+                  <Primary>
+                    <strong>back</strong>
+                  </Primary>
+                </Button>
+              </div>
+            </Padding>
+          </Container>
+
           <Container>
             <Padding>
               <Preview
@@ -159,11 +170,6 @@ export const Mint = () => {
               <Button onClick={handleMint} fit>
                 <Curate>mint</Curate>
               </Button>
-
-              <div>
-                <p>{message}</p>
-                {progress && <Loading />}
-              </div>
             </Padding>
           </Container>
 
@@ -173,6 +179,33 @@ export const Mint = () => {
               <p>10% royalties are set by default</p>
             </Padding>
           </Container>
+        </>
+      )}
+
+      {step === 2 && (
+        <>
+          <Container>
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                flexDirection: 'column',
+                height: 'calc(100vh - 200px)',
+              }}
+            >
+              preparing OBJKT (NFT)
+              <Loading />
+            </div>
+          </Container>
+
+          {message && (
+            <Container>
+              <Padding>
+                <p>{message}</p>
+              </Padding>
+            </Container>
+          )}
         </>
       )}
     </Page>
