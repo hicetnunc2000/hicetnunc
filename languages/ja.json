@@ -2,6 +2,8 @@
   "header": {
     "sync": "sync",
     "menu": [
+      { "primary": "○", "route": "/hdao" },
+      { "primary": "random", "route": "/random" },
       { "primary": "OBJKTs", "secondary": "(ミントNFT)", "route": "/mint" },
       { "primary": "資産を管理する", "route": "/sync" },
       { "primary": "約", "route": "/about" }
