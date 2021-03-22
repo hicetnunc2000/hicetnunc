@@ -1,0 +1,78 @@
+{
+  "header": {
+    "sync": "sync",
+    "menu": [
+      { "primary": "OBJKTs", "secondary": "(NFTs minten)", "route": "/mint" },
+      { "primary": "Sammlung verwalten", "route": "/sync" },
+      { "primary": "Über hicetnunc", "route": "/about" }
+    ]
+  },
+  "footer": {
+    "mint": "sync -> sammeln // sync -> minten // sync -> swappen"
+  },
+  "home": {
+    "latest": "Neueste",
+    "hDAO": "hDAO",
+    "more": "Mehr laden"
+  },
+  "mint": {
+    "title": "Titel",
+    "description": "Beschreibung",
+    "tags": "Tags (mit Komma trennen)",
+    "amount": "Anzahl der OBJKTe die du minten möchtest",
+    "upload": "OBJKTe hochladen",
+    "supports": "supports",
+    "preview": "Vorschau",
+    "mint": "minten",
+    "warning": "Dieser Prozess kostet 0.08~ tez. 10% Gebühren für den Künstler werden standardmäßig abgeführt."
+  },
+  "manage": {
+    "creations": "Eigene Werke",
+    "collection": "Sammlung"
+  },
+  "about": {
+    "title": "hic et nunc",
+    "paragraphs": [
+      "Diese dezentralisierte Anwendung ermöglicht den Nutzern, dezentralisierte digitale Objekte zu verwalten. Alle Transaktionen werden mittels öffentlicher smart contracts auf der Tezos Blockchain durchgeführt.",
+      "IPFS NFTs können ohne Genehmigung geminted und gehandelt werden. Dieses Webseite wurde als Experiment entwickelt um die Möglichkeiten neuer Crypto-Ökonomien zu erforschen.",
+      "Uns ist eure Sicherheit und Autonomie wichtig. Bitte verifiziert Informationen wie z.B. das Profil des Künstlers bei Transaktionen.",
+      "Für Support, Vernetzung oder Fragen kontaktiert uns per %EMAIL%, %DISCORD%, oder auf %REDDIT%. (bitte in englischer Sprache)",
+      "Bitte lest die %FAQS%.",
+      "Falls ihr Probleme mit der Webseite habt, könnt ihr hier Fehler melden %ISSUE%"
+    ]
+  },
+  "detail": {
+    "issuer": "Künstler",
+    "notForSale": "Nicht zu verkaufen",
+    "soldOut": "Ausverkauft",
+    "collect": "Sammeln für %PRICE%",
+    "menuInfo": "Info",
+    "menuOwners": "Eigentümer",
+    "menuSwap": "swappen",
+    "menuCancel": "abbrechen",
+    "menuBurn": "vernichten",
+    "info": {
+      "title": "TITEL",
+      "description": "BESCHREIBUNG",
+      "tags": "TAGS"
+    },
+    "owners": {
+      "title": "keine Eigentümer"
+    },
+    "swap": {
+      "amount": "OBJKT Anzahl",
+      "price": "Preis pro OBJKT (in tez)",
+      "cta": "swap it",
+      "warning": "Bei swaps mit einem Wert > 0 behält hicetnunc 2.5% Gebühren zum Betrieb der Plattform ein."
+    },
+    "cancel": {
+      "title": "Du bist im Begriff, den swap abzubrechen",
+      "cta": "Abbrechen"
+    },
+    "burn": {
+      "title": "Dein NFT wird für immer aus dem Netzwerk gelöscht",
+      "cta": "vernichten"
+    },
+    "confirm": "Bist du sicher?"
+  }
+}
