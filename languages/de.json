@@ -2,6 +2,8 @@
   "header": {
     "sync": "sync",
     "menu": [
+      { "primary": "○", "route": "/hdao" },
+      { "primary": "random", "route": "/random" },
       { "primary": "OBJKTs", "secondary": "(NFTs minten)", "route": "/mint" },
       { "primary": "Sammlung verwalten", "route": "/sync" },
       { "primary": "Über hicetnunc", "route": "/about" }
