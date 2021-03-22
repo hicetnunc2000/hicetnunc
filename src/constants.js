@@ -118,7 +118,6 @@ export const MIMETYPE = {
   QUICKTIME: 'video/quicktime',
   WEBM: 'video/webm',
   GLB: 'model/gltf-binary',
-  GLTF: 'model/gltf+json',
   MP3: 'audio/mpeg',
   OGA: 'audio/ogg',
 }
