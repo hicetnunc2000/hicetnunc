@@ -33,7 +33,8 @@ export const VectorComponent = ({ src, interactive, preview, token_info }) => {
       <iframe
         title="hic et nunc SVG renderer"
         src={iframeSrc}
-        sandbox="allow-scripts"
+        sandbox="allow-scripts allow-same-origin"
+        allow="camera microphone geolocation"
         scrolling="no"
       />
     </div>
