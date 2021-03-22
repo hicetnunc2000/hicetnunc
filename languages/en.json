@@ -2,13 +2,16 @@
   "header": {
     "sync": "sync",
     "menu": [
+      { "primary": "○", "route": "/hdao" },
+      { "primary": "random", "route": "/random" },
       { "primary": "OBJKTs", "secondary": "(mint NFTs)", "route": "/mint" },
       { "primary": "manage asseets", "route": "/sync" },
       { "primary": "about", "route": "/about" }
     ]
   },
   "footer": {
-    "mint": "sync -> collect // sync -> mint // sync -> swap"
+    "mint": "sync -> collect // sync -> mint // sync -> swap",
+    "warning": "use it consciously. visit artists profiles. be careful with copy minters."
   },
   "home": {
     "latest": "latest",
