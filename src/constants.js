@@ -114,7 +114,7 @@ export const MIMETYPE = {
   JPEG: 'image/jpeg',
   PNG: 'image/png',
   SVG: 'image/svg+xml',
-  HTML_ZIP: 'application/zip',
+  ZIP: 'application/zip',
   TIFF: 'image/tiff',
   WEBP: 'image/webp',
   MP4: 'video/mp4',
@@ -125,6 +125,10 @@ export const MIMETYPE = {
   MP3: 'audio/mpeg',
   OGA: 'audio/ogg',
 }
+
+export const MIMETYPE_LABELS = Object.keys(MIMETYPE).map(k => {
+  return k === 'ZIP' ? 'HTML (ZIP file)' : k
+})
 
 export const ALLOWED_MIMETYPES = Object.keys(MIMETYPE).map((k) => MIMETYPE[k])
 export const ALLOWED_FILETYPES = Object.keys(MIMETYPE)

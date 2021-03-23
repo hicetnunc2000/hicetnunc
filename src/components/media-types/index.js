@@ -43,7 +43,7 @@ export const renderMediaType = ({
         />
       )
     /* HTML ZIP */
-    case MIMETYPE.HTML_ZIP:
+    case MIMETYPE.ZIP:
       url = preview ? uri : `${CLOUDFLARE}${path}`
       return (
         <HTMLComponent

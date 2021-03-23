@@ -23,6 +23,7 @@ export const VectorComponent = ({ src, interactive, preview, token_info }) => {
 
   let iframeSrc
   if (preview) {
+    // can't pass creator/viewer query params to data URI
     iframeSrc = src
   } else {
     iframeSrc = `${src}?creator=${_creator_}&viewer=${_viewer_}`
