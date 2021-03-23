@@ -14,6 +14,7 @@ export const FeedItem = ({
   total_amount,
 }) => {
   const { mimeType, uri } = token_info.formats[0]
+
   return (
     <Container>
       <Button to={`${PATH.OBJKT}/${token_id}`}>

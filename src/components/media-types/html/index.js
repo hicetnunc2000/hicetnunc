@@ -1,5 +1,4 @@
 import React, { useContext } from 'react'
-import { injectCSPMetaTagIntoDataURI } from '../../../utils/html'
 import classnames from 'classnames'
 import { HicetnuncContext } from '../../../context/HicetnuncContext'
 import styles from './index.module.scss'
@@ -22,21 +21,37 @@ export const HTMLComponent = ({ src, interactive, preview, token_info }) => {
     _viewer_ = context.address
   }
 
-  let safeSrc
-  if (preview) {
-    safeSrc = injectCSPMetaTagIntoDataURI(src)
-  } else {
-    safeSrc = `${src}?creator=${_creator_}&viewer=${_viewer_}`
-  }
+  console.log('creator', _creator_)
+  console.log('viewer', _viewer_)
 
-  return (
-    <div className={classes}>
-      <iframe
-        title="hic et nunc HTML renderer"
-        src={safeSrc}
-        sandbox="allow-scripts"
-        scrolling="no"
-      />
-    </div>
-  )
+  if (preview) {
+    return (
+      <div>
+        <div>
+          Previews are not available for HTML ZIP files.
+          <br /><br />
+          <div style={{color: 'red'}}>
+            IMPORTANT:
+            <br/><br/>
+            Your zip file must contain an index.html file.
+            <br/><br/>
+            Links to external resources in your code will not work. Please include everything in your zip file.
+          </div>
+          <br /><br />
+          Click 'mint' below to proceed.
+        </div>
+      </div>
+    )
+  } else {
+    return (
+      <div className={classes}>
+        <iframe
+          title="hic et nunc HTML renderer"
+          src={`${src}?creator=${_creator_}&viewer=${_viewer_}`}
+          sandbox="allow-scripts"
+          scrolling="no"
+        />
+      </div>
+    )
+  }
 }
