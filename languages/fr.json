@@ -45,6 +45,7 @@
     ]
   },
   "detail": {
+    "editions": "Editions",
     "issuer": "Emetteur",
     "notForSale": "Pas à vendre",
     "soldOut": "Epuisé",

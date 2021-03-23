@@ -44,6 +44,7 @@
     ]
   },
   "detail": {
+    "editions": "Editions",
     "issuer": "Künstler",
     "notForSale": "Nicht zu verkaufen",
     "soldOut": "Ausverkauft",
