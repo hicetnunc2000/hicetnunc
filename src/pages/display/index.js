@@ -42,6 +42,7 @@ export default class Display extends Component {
       if (data.data.github) this.setState({ github: data.data.github })
       if (data.data.email) this.setState({ email: data.data.email })
       if (data.data.reddit) this.setState({ reddit: data.data.reddit })
+      if (data.data.logo) this.setState({ logo: data.data.logo })
     })
 
     await axios
@@ -80,7 +81,7 @@ export default class Display extends Component {
         <Container>
           <Padding>
             <div className={styles.profile}>
-              <Identicon address={this.state.wallet} />
+              <Identicon address={this.state.wallet} logo={this.state.logo}/>
 
               <div className={styles.info}>
                 {this.state.alias && <p>{this.state.alias}</p>}
