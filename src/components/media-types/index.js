@@ -21,6 +21,19 @@ export const renderMediaType = ({
   const path = uri
   let url
 
+  if (MIMETYPE.ZIP.includes(mimeType)) {
+    /* HTML ZIP */
+    url = preview ? uri : `${CLOUDFLARE}${path}`
+    return (
+      <HTMLComponent
+        {...metadata}
+        src={url}
+        interactive={interactive}
+        preview={preview}
+      />
+    )
+  }
+
   switch (mimeType) {
     /* IMAGES */
     case MIMETYPE.BMP:
@@ -36,17 +49,6 @@ export const renderMediaType = ({
       url = preview ? uri : `${CLOUDFLARE}${path}`
       return (
         <VectorComponent
-          {...metadata}
-          src={url}
-          interactive={interactive}
-          preview={preview}
-        />
-      )
-    /* HTML ZIP */
-    case MIMETYPE.ZIP:
-      url = preview ? uri : `${CLOUDFLARE}${path}`
-      return (
-        <HTMLComponent
           {...metadata}
           src={url}
           interactive={interactive}
