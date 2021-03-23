@@ -11,6 +11,9 @@ import styles from './style.module.scss'
 export const Header = () => {
   const history = useHistory()
   const context = useContext(HicetnuncContext)
+  //context.setAccount()
+
+  //console.log(ls.get('activeAccount'))
 
   const handleRoute = (path) => {
     context.setMenu(true)
@@ -29,7 +32,7 @@ export const Header = () => {
 
           <div className={styles.right}>
             <Button onClick={context.syncTaquito} secondary>
-              <Secondary>sync {context.activeAccount}</Secondary>
+              <Secondary>sync</Secondary>
             </Button>
 
             <Button onClick={context.toogleNavbar} secondary>
