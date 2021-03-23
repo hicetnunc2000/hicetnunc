@@ -65,3 +65,12 @@ hicetnunc fetches the profile information from https://tzkt.io so to get your na
 * They will ask you to fill in a form with your contact information
 * They will ask you to transfer 0.00177 tez to their address and provide the transaction in the form
 
+## How to Contribute?
+If you want to contribute to hicetnunc either by adding to this FAQ document, or submitting bug fixes or new features this is how you can do it. The following instructions were written with beginners in mind. Specially if you're looking to contribute to the site with translations or updates on the FAQ's or any other contributions that don't require coding.
+
+* Create a Github account
+* Go to our [repository](https://github.com/hicetnunc2000/hicetnunc) and on the top right hit the "Fork" button. This will create a copy of the repository to your own account.
+* From the forked repository (now on your account), feel free to change anything you want.
+* Once done, you should create a Pull Request. A Pull request is basically was of us verifying what you're trying to push to the main repository, so we can review you, request any amend and then if all goes well merge it and you're contributions go live in our next deployment cycle.
+
+Try to keep PR as small and objective as possible. Any questions feel free to reach our on Discord for further support.
