@@ -122,9 +122,12 @@ export const MIMETYPE = {
   QUICKTIME: 'video/quicktime',
   WEBM: 'video/webm',
   GLB: 'model/gltf-binary',
+  GLTF: 'model/gltf+json',
   MP3: 'audio/mpeg',
   OGA: 'audio/ogg',
 }
 
-export const ALLOWED_MIMETYPES = Object.keys(MIMETYPE).map((k) => MIMETYPE[k])
+export const ALLOWED_MIMETYPES = Object.keys(MIMETYPE)
+  .map((k) => MIMETYPE[k])
+  .filter((e) => e !== MIMETYPE.GLTF)
 export const ALLOWED_FILETYPES = Object.keys(MIMETYPE)
