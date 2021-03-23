@@ -1,4 +1,5 @@
 import React, { useContext, useState } from 'react'
+import { useHistory } from 'react-router'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
 import { Page, Container, Padding } from '../../components/layout'
 import { Input } from '../../components/input'
@@ -13,10 +14,12 @@ import {
   ALLOWED_FILETYPES,
   MINT_FILESIZE,
   MIMETYPE,
+  PATH,
 } from '../../constants'
 
 export const Mint = () => {
   const { Tezos, mint, address, getAuth } = useContext(HicetnuncContext)
+  const history = useHistory()
   const [step, setStep] = useState(0)
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
@@ -50,12 +53,19 @@ export const Mint = () => {
       alert(
         `File too big (${filesize}). Limit is currently set at ${MINT_FILESIZE}MB`
       )
+      return
     }
 
+    // file about to be minted, change to the mint screen
+
+    setStep(2)
     // upload file(s)
     let nftCid
-    if (MIMETYPE.ZIP.includes(file.mimeType)) {
-      // process html zip
+    if (
+      MIMETYPE.ZIP.includes(file.mimeType) ||
+      MIMETYPE.ZIP2.includes(file.mimeType) ||
+      MIMETYPE.ZIP2.includes(file.mimeType)
+    ) {
       const files = await prepareFilesFromZIP(file.buffer)
 
       nftCid = await prepareDirectory({
@@ -77,21 +87,18 @@ export const Mint = () => {
       })
     }
 
-    console.log('nftCid', nftCid)
-
-    /* MINTING DISABLED */
-
-    // mint(getAuth(), amount, nftCid[0].hash, 10)
-    // .then((e) => {
-    //   console.log('mint confirm', e)
-    //   setMessage('Minted successfully')
-    //   // redirect here
-    // })
-    // .catch((e) => {
-    //   console.log('mint error', e)
-    //   alert('an error occurred')
-    //   setMessage('an error occurred')
-    // })
+    mint(getAuth(), amount, nftCid[0].hash, 10)
+      .then((e) => {
+        console.log('mint confirm', e)
+        setMessage('Minted successfully')
+        // redirect here
+        history.push(PATH.ISSUER)
+      })
+      .catch((e) => {
+        console.log('mint error', e)
+        alert('an error occurred')
+        setMessage('an error occurred')
+      })
   }
 
   const handlePreview = () => {
@@ -103,10 +110,7 @@ export const Mint = () => {
   }
 
   const handleValidation = () => {
-    if (
-      amount > 0 &&
-      file
-    ) {
+    if (amount > 0 && file) {
       return false
     }
     return true

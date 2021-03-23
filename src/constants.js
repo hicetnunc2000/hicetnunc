@@ -129,20 +129,8 @@ export const MIMETYPE = {
   OGA: 'audio/ogg',
 }
 
-const allowed = []
-for (let k in MIMETYPE) {
-  const t = MIMETYPE[k]
-  if (t instanceof Array) {
-    t.forEach((t2) => {
-      allowed.push(t2)
-    })
-  } else {
-    allowed.push(t)
-  }
-}
-
 export const ALLOWED_MIMETYPES = Object.keys(MIMETYPE)
   .map((k) => MIMETYPE[k])
-  .filter((e) => e !== MIMETYPE.GLTF)
+  .filter((e) => e !== MIMETYPE.GLTF) // disabling GLTF from new updates
 
 export const ALLOWED_FILETYPES = Object.keys(MIMETYPE)
