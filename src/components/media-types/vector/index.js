@@ -25,11 +25,12 @@ export const VectorComponent = ({ src, interactive, token_info }) => {
     <div className={classes}>
       <iframe
         title="hic et nunc SVG renderer"
-        src={`https://hicetnunc2000.github.io/hicetnunc/gh-pages/sandbox-svg.html?src=${src}&creator=${_creator_}&viewer=${_viewer_}`}
+        src={`${src}?author=${_creator_}&viewer=${_viewer_}`}
         sandbox="allow-scripts"
         scrolling="no"
       />
     </div>
   )
 }
-// old: src={`${src}?author=${_creator_}&viewer=${_viewer_}`}
+// svg version: src={`${src}?author=${_creator_}&viewer=${_viewer_}`}
+// iframe version:         src={`https://hicetnunc2000.github.io/hicetnunc/gh-pages/sandbox-svg.html?src=${src}&creator=${_creator_}&viewer=${_viewer_}`}
