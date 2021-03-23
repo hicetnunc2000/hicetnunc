@@ -33,11 +33,18 @@ export const ItemInfo = ({
   //owners = _.values(_.omitBy(owners, (value, key) => !key.startsWith(token_info.creators[0])))
 
   const soldOutMessage = 'not for sale'
+  var message = ''
+
   //const notForSale = available > 0 || isNaN(editions)
-  const message =
+  try {
+  message =
     available > 0
       ? 'collect for ' + Number(swaps[0].xtz_per_objkt) / 1000000 + ' tez'
       : 'not for sale'
+  } catch (e) {
+    console.log(e)
+    message = 'not for sale'
+  }
 
   const handleCollect = () => {
     if (Tezos == null) {
