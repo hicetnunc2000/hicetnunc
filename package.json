@@ -15,11 +15,13 @@
     "base-x": "^3.0.8",
     "buffer": "^6.0.3",
     "classnames": "^2.2.6",
+    "fflate": "^0.6.9",
     "filereader": "^0.10.3",
     "framer-motion": "^4.0.0",
-    "ipfs-api": "^26.1.2",
+    "ipfs-http-client": "^49.0.4",
     "local-storage": "^2.0.0",
     "lodash": "^4.17.21",
+    "mime-types": "^2.1.29",
     "node-sass": "^5.0.0",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
@@ -30,7 +32,8 @@
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "^4.0.3",
-    "react-scroll": "^1.8.1"
+    "react-scroll": "^1.8.1",
+    "read-json-lines-sync": "^2.0.8"
   },
   "scripts": {
     "start": "react-scripts start",

@@ -114,7 +114,11 @@ export const MIMETYPE = {
   JPEG: 'image/jpeg',
   PNG: 'image/png',
   SVG: 'image/svg+xml',
-  // HTML: 'text/html', // temp disable
+  ZIP: [
+    'application/zip',
+    'application/x-zip-compressed',
+    'multipart/x-zip'
+  ],
   TIFF: 'image/tiff',
   WEBP: 'image/webp',
   MP4: 'video/mp4',
@@ -127,7 +131,24 @@ export const MIMETYPE = {
   OGA: 'audio/ogg',
 }
 
+export const MIMETYPE_LABELS = Object.keys(MIMETYPE).map(k => {
+  return k === 'ZIP' ? 'HTML (ZIP file)' : k
+})
+
+const allowed = []
+for (let k in MIMETYPE) {
+  const t = MIMETYPE[k]
+  if (t instanceof Array) {
+    t.forEach(t2 => {
+      allowed.push(t2)
+    })
+  } else {
+    allowed.push(t)
+  }
+}
+
 export const ALLOWED_MIMETYPES = Object.keys(MIMETYPE)
   .map((k) => MIMETYPE[k])
   .filter((e) => e !== MIMETYPE.GLTF)
+
 export const ALLOWED_FILETYPES = Object.keys(MIMETYPE)

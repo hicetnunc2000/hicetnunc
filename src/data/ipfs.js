@@ -1,5 +1,7 @@
-const IPFS = require('ipfs-api')
+const createClient = require('ipfs-http-client')
 const Buffer = require('buffer').Buffer
+const axios = require('axios')
+const readJsonLines = require('read-json-lines-sync').default
 
 export const prepareFile = async ({
   name,
@@ -9,25 +11,88 @@ export const prepareFile = async ({
   buffer,
   mimeType,
 }) => {
-  const ipfs = new IPFS({
-    host: 'ipfs.infura.io',
-    port: 5001,
-    protocol: 'https',
+  const ipfs = createClient('https://ipfs.infura.io:5001')
+  const hash = await ipfs.add(buffer)
+  const cid = `ipfs://${hash[0].hash}`
+
+  console.log(hash, cid)
+
+  const result = await uploadMetadataFile({
+    name,
+    description,
+    tags,
+    cid,
+    address,
+    mimeType
+  })
+  return result
+}
+
+export const prepareDirectory = async ({
+  name,
+  description,
+  tags,
+  address,
+  files,
+}) => {
+  // upload files
+  const hash = await uploadFilesToDirectory(files)
+
+  const cid = `ipfs://${hash}`
+
+  console.log(hash, cid)
+
+  const result = await uploadMetadataFile({
+    name,
+    description,
+    tags,
+    cid,
+    address,
+    mimeType: 'application/x-directory'
+  })
+  return result
+}
+
+function not_directory(file) {
+  return file.blob.type !== 'application/x-directory';
+}
+
+async function uploadFilesToDirectory (files) {
+  files = files.filter(not_directory)
+  console.log('Upload files to IPFS')
+  console.log(files)
+
+  const form = new FormData()
+
+  files.forEach(file => {
+    form.append('file', file.blob, encodeURIComponent(file.path))
+  })
+  console.log(form)
+  const endpoint = 'https://ipfs.infura.io:5001/api/v0/add?pin=true&recursive=true&wrap-with-directory=true'
+  const res = await axios.post(endpoint, form, {
+    headers: { "Content-Type": "multipart/form-data" }
   })
 
-  const hash = await ipfs.files.add(buffer)
-  const fileCid = `ipfs://${hash[0].hash}`
+  const data = readJsonLines(res.data)
+  const rootDir = data.find(e => e.Name === '')
+  return rootDir.Hash
+}
 
-  const result = await ipfs.files.add(
+async function uploadMetadataFile({name, description, tags, cid, address, mimeType}) {
+  const ipfs = createClient('https://ipfs.infura.io:5001')
+
+  console.log('create metadata file!')
+
+  const result = await ipfs.add(
     Buffer.from(
       JSON.stringify({
         name,
         description,
         tags: tags.replace(/\s/g, '').split(','),
         symbol: 'OBJKT',
-        artifactUri: fileCid,
+        artifactUri: cid,
         creators: [address],
-        formats: [{ uri: fileCid, mimeType }],
+        formats: [{ uri: cid, mimeType }],
         thumbnailUri: 'ipfs://QmNrhZHUaEqxhyLfqoq1mtHSipkWHeT31LNHb1QEbDHgnc',
         decimals: 0,
         isBooleanAmount: false,
@@ -35,5 +100,8 @@ export const prepareFile = async ({
       })
     )
   )
+
+  console.log(result)
+
   return result
 }
