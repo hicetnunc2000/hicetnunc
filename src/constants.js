@@ -114,11 +114,9 @@ export const MIMETYPE = {
   JPEG: 'image/jpeg',
   PNG: 'image/png',
   SVG: 'image/svg+xml',
-  ZIP: [
-    'application/zip',
-    'application/x-zip-compressed',
-    'multipart/x-zip'
-  ],
+  ZIP: 'application/zip',
+  ZIP1: 'application/x-zip-compressed',
+  ZIP2: 'multipart/x-zip',
   TIFF: 'image/tiff',
   WEBP: 'image/webp',
   MP4: 'video/mp4',
@@ -131,15 +129,11 @@ export const MIMETYPE = {
   OGA: 'audio/ogg',
 }
 
-export const MIMETYPE_LABELS = Object.keys(MIMETYPE).map(k => {
-  return k === 'ZIP' ? 'HTML (ZIP file)' : k
-})
-
 const allowed = []
 for (let k in MIMETYPE) {
   const t = MIMETYPE[k]
   if (t instanceof Array) {
-    t.forEach(t2 => {
+    t.forEach((t2) => {
       allowed.push(t2)
     })
   } else {
