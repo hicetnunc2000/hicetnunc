@@ -29,7 +29,7 @@ export const Header = () => {
 
           <div className={styles.right}>
             <Button onClick={context.syncTaquito} secondary>
-              <Secondary>sync</Secondary>
+              <Secondary>sync {context.activeAccount}</Secondary>
             </Button>
 
             <Button onClick={context.toogleNavbar} secondary>
