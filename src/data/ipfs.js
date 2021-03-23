@@ -12,26 +12,19 @@ export const prepareFile = async ({
   mimeType,
 }) => {
   const ipfs = createClient('https://ipfs.infura.io:5001')
-  const hash = await ipfs.files.add(buffer)
-  const fileCid = `ipfs://${hash[0].hash}`
+  const hash = await ipfs.add(buffer)
+  const cid = `ipfs://${hash[0].hash}`
 
-  const result = await ipfs.files.add(
-    Buffer.from(
-      JSON.stringify({
-        name,
-        description,
-        tags: tags.replace(/\s/g, '').split(','),
-        symbol: 'OBJKT',
-        artifactUri: fileCid,
-        creators: [address],
-        formats: [{ uri: fileCid, mimeType }],
-        thumbnailUri: 'ipfs://QmNrhZHUaEqxhyLfqoq1mtHSipkWHeT31LNHb1QEbDHgnc',
-        decimals: 0,
-        isBooleanAmount: false,
-        shouldPreferSymbol: false,
-      })
-    )
-  )
+  console.log(hash, cid)
+
+  const result = await uploadMetadataFile({
+    name,
+    description,
+    tags,
+    cid,
+    address,
+    mimeType
+  })
   return result
 }
 
@@ -47,26 +40,16 @@ export const prepareDirectory = async ({
 
   const cid = `ipfs://${hash}`
 
-  // create and upload meta file
-  const ipfs = createClient('https://ipfs.infura.io:5001')
-  const result = await ipfs.files.add(
-    Buffer.from(
-      JSON.stringify({
-        name,
-        description,
-        tags: tags.replace(/\s/g, '').split(','),
-        symbol: 'OBJKT',
-        artifactUri: cid,
-        creators: [address],
-        formats: [{ uri: cid, mimeType: 'application/x-directory' }],
-        thumbnailUri: 'ipfs://QmNrhZHUaEqxhyLfqoq1mtHSipkWHeT31LNHb1QEbDHgnc',
-        decimals: 0,
-        isBooleanAmount: false,
-        shouldPreferSymbol: false,
-      })
-    )
-  )
+  console.log(hash, cid)
 
+  const result = await uploadMetadataFile({
+    name,
+    description,
+    tags,
+    cid,
+    address,
+    mimeType: 'application/x-directory'
+  })
   return result
 }
 
@@ -78,7 +61,7 @@ async function uploadFilesToDirectory (files) {
   files = files.filter(not_directory)
   console.log('Upload files to IPFS')
   console.log(files)
-   
+
   const form = new FormData()
 
   files.forEach(file => {
@@ -93,4 +76,32 @@ async function uploadFilesToDirectory (files) {
   const data = readJsonLines(res.data)
   const rootDir = data.find(e => e.Name === '')
   return rootDir.Hash
+}
+
+async function uploadMetadataFile({name, description, tags, cid, address, mimeType}) {
+  const ipfs = createClient('https://ipfs.infura.io:5001')
+
+  console.log('create metadata file!')
+
+  const result = await ipfs.add(
+    Buffer.from(
+      JSON.stringify({
+        name,
+        description,
+        tags: tags.replace(/\s/g, '').split(','),
+        symbol: 'OBJKT',
+        artifactUri: cid,
+        creators: [address],
+        formats: [{ uri: cid, mimeType }],
+        thumbnailUri: 'ipfs://QmNrhZHUaEqxhyLfqoq1mtHSipkWHeT31LNHb1QEbDHgnc',
+        decimals: 0,
+        isBooleanAmount: false,
+        shouldPreferSymbol: false,
+      })
+    )
+  )
+
+  console.log(result)
+
+  return result
 }
