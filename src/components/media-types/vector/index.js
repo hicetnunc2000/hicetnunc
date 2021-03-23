@@ -40,3 +40,5 @@ export const VectorComponent = ({ src, interactive, preview, token_info }) => {
     </div>
   )
 }
+// svg version:     src={`${src}?author=${_creator_}&viewer=${_viewer_}`}
+// iframe version:  src={`https://hicetnunc2000.github.io/hicetnunc/gh-pages/sandbox-svg.html?src=${src}&creator=${_creator_}&viewer=${_viewer_}`}
