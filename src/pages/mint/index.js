@@ -54,7 +54,7 @@ export const Mint = () => {
 
     // upload file(s)
     let nftCid
-    if (file.mimeType === MIMETYPE.HTML_ZIP) {
+    if (file.mimeType === MIMETYPE.ZIP) {
       // process html zip
       const files = await prepareFilesFromZIP(file.buffer)
 

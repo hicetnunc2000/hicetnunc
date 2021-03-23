@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { ALLOWED_FILETYPES, getLanguage } from '../../constants'
+import { ALLOWED_FILETYPES, MIMETYPE_LABELS, getLanguage } from '../../constants'
 import { getMimeType } from '../../utils/sanitise'
 import styles from './index.module.scss'
 
@@ -32,7 +32,7 @@ export const Upload = ({ label, onChange = () => null }) => {
         <input type="file" name="file" onChange={onFileChange} />
       </label>
       <div className={styles.allowed}>
-        {language.mint.supports}:&nbsp;{ALLOWED_FILETYPES.join(', ')}
+        {language.mint.supports}:&nbsp;{MIMETYPE_LABELS.join(', ')}
       </div>
     </div>
   )
