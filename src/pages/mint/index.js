@@ -32,88 +32,78 @@ export const Mint = () => {
 
     if (Tezos === null) {
       alert('sync')
-    } else {
-      if (ALLOWED_MIMETYPES.indexOf(file.mimeType) === -1) {
-        alert(
-          `File format invalid. supported formats include: ${ALLOWED_FILETYPES.join(
-            ', '
-          ).toLocaleLowerCase()}`
-        )
-      } else {
-        let nftCid
-        if (file.mimeType === MIMETYPE.HTML_ZIP) {
-
-          console.log('Process HTML directory')
-
-          const files = await prepareFilesFromZIP(file.reader)
-
-          // check all file sizes
-          const sizes = Object.values(files)
-            .map(f => f.size)
-            .filter(s => (s / 1024 / 1024).toFixed(4) > MINT_FILESIZE)
-
-          if (sizes.length) {
-            const filesizes = sizes.join(', ')
-            alert(
-              `Files too big (${filesizes}). Limit is currently set at ${MINT_FILESIZE}MB`
-            )
-          } else {
-            setProgress(true)
-            setMessage('minting...')
-
-            nftCid = await prepareDirectory({
-              name: title,
-              description,
-              tags,
-              address,
-              files,
-            })
-          }
-        } else {
-
-          console.log('Process individual file')
-
-          const filesize = (file.file.size / 1024 / 1024).toFixed(4)
-          if (filesize > MINT_FILESIZE) {
-            alert(
-              `File too big (${filesize}). Limit is currently set at ${MINT_FILESIZE}MB`
-            )
-          } else {
-            setProgress(true)
-            setMessage('minting...')
-
-            nftCid = await prepareFile({
-              name: title,
-              description,
-              tags,
-              address,
-              buffer: file.buffer,
-              mimeType: file.mimeType,
-            })
-          }
-        }
-
-        console.log('nftCid', nftCid)
-
-        if (!nftCid) {
-          return
-        }
-
-        /* MINTING DISABLED */
-
-        // mint(getAuth(), amount, nftCid[0].hash, 10)
-        //   .then((e) => {
-        //     console.log('confirmado', e)
-        //     setProgress(false)
-        //     setMessage(e.description)
-        //     // redirect here
-        //   })
-        //   .catch((e) => {
-        //     setProgress(false)
-        //     setMessage('an error occurred')
-        //   })
-      }
+      return
     }
+
+    // check mime type
+    if (ALLOWED_MIMETYPES.indexOf(file.mimeType) === -1) {
+      alert(
+        `File format invalid. supported formats include: ${ALLOWED_FILETYPES.join(
+          ', '
+        ).toLocaleLowerCase()}`
+      )
+      return
+    }
+
+    // check file size
+    const filesize = (file.file.size / 1024 / 1024).toFixed(4)
+    if (filesize > MINT_FILESIZE) {
+      alert(
+        `File too big (${filesize}). Limit is currently set at ${MINT_FILESIZE}MB`
+      )
+    }
+
+    // upload file(s)
+    let nftCid
+    if (file.mimeType === MIMETYPE.HTML_ZIP) {
+      // process html zip
+      const files = await prepareFilesFromZIP(file.reader)
+
+      setProgress(true)
+      setMessage('minting...')
+
+      nftCid = await prepareDirectory({
+        name: title,
+        description,
+        tags,
+        address,
+        files,
+      })
+    } else {
+      // process all other files
+      setProgress(true)
+      setMessage('minting...')
+
+      nftCid = await prepareFile({
+        name: title,
+        description,
+        tags,
+        address,
+        buffer: file.buffer,
+        mimeType: file.mimeType,
+      })
+    }
+    if (!nftCid) {
+      console.log('Upload to IPFS unsuccessfull')
+      return
+    }
+
+    console.log('nftCid', nftCid)
+
+    /* MINTING DISABLED */
+
+    // mint(getAuth(), amount, nftCid[0].hash, 10)
+    //   .then((e) => {
+    //     console.log('confirmado', e)
+    //     setProgress(false)
+    //     setMessage(e.description)
+    //     // redirect here
+    //   })
+    //   .catch((e) => {
+    //     setProgress(false)
+    //     setMessage('an error occurred')
+    //   })
+    // }
   }
 
   const handlePreview = () => {
