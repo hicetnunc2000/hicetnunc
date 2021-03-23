@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { ALLOWED_FILETYPES, MIMETYPE_LABELS, getLanguage } from '../../constants'
+import { MIMETYPE_LABELS, getLanguage } from '../../constants'
 import { getMimeType } from '../../utils/sanitise'
 import styles from './index.module.scss'
 
