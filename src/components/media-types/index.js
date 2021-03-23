@@ -4,7 +4,7 @@ import { ImageComponent } from './image'
 import { VideoComponent } from './video'
 import { AudioComponent } from './audio'
 import { VectorComponent } from './vector'
-// import { HTMLComponent } from './html'
+import { HTMLComponent } from './html'
 import { UnknownComponent } from './unknown'
 import { MIMETYPE } from '../../constants'
 
@@ -20,6 +20,19 @@ export const renderMediaType = ({
 }) => {
   const path = uri
   let url
+
+  if (MIMETYPE.ZIP.includes(mimeType)) {
+    /* HTML ZIP */
+    url = preview ? uri : `${CLOUDFLARE}${path}`
+    return (
+      <HTMLComponent
+        {...metadata}
+        src={url}
+        interactive={interactive}
+        preview={preview}
+      />
+    )
+  }
 
   switch (mimeType) {
     /* IMAGES */
@@ -42,18 +55,6 @@ export const renderMediaType = ({
           preview={preview}
         />
       )
-    /* HTML */
-    // Temp disabled by andre until approval
-    // case MIMETYPE.HTML:
-    //   url = preview ? uri : `${CLOUDFLARE}${path}`
-    //   return (
-    //     <HTMLComponent
-    //       {...metadata}
-    //       src={url}
-    //       interactive={interactive}
-    //       preview={preview}
-    //     />
-    //   )
     /* VIDEOS */
     case MIMETYPE.MP4:
     case MIMETYPE.OGV:

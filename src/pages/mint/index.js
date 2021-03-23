@@ -6,8 +6,8 @@ import { Button, Curate, Primary } from '../../components/button'
 import { Loading } from '../../components/loading'
 import { Upload } from '../../components/upload'
 import { Preview } from '../../components/preview'
-import { prepareFile } from '../../data/ipfs'
-import { injectCSPMetaTagIntoBuffer } from '../../utils/html'
+import { prepareFile, prepareDirectory } from '../../data/ipfs'
+import { prepareFilesFromZIP } from '../../utils/html'
 import {
   ALLOWED_MIMETYPES,
   ALLOWED_FILETYPES,
@@ -31,49 +31,67 @@ export const Mint = () => {
 
     if (Tezos === null) {
       alert('sync')
-    } else {
-      if (ALLOWED_MIMETYPES.indexOf(file.mimeType) === -1) {
-        alert(
-          `File format invalid. supported formats include: ${ALLOWED_FILETYPES.join(
-            ', '
-          ).toLocaleLowerCase()}`
-        )
-      } else {
-        if (file.mimeType === MIMETYPE.HTML) {
-          // for HTML files, inject CSP meta tag to forbid external sources
-          file.buffer = injectCSPMetaTagIntoBuffer(file.buffer)
-        }        
-
-        // checks file size limit
-        const filesize = (file.file.size / 1024 / 1024).toFixed(4)
-        if (filesize <= MINT_FILESIZE) {
-          // mint
-          const nftCid = await prepareFile({
-            name: title,
-            description,
-            tags,
-            address,
-            buffer: file.buffer,
-            mimeType: file.mimeType,
-          })
-          mint(getAuth(), amount, nftCid[0].hash, 10)
-            .then((e) => {
-              console.log('mint confirm', e)
-              setMessage('Minted successfully')
-              // redirect here
-            })
-            .catch((e) => {
-              console.log('mint error', e)
-              alert('an error occurred')
-              setMessage('an error occurred')
-            })
-        } else {
-          alert(
-            `File too big (${filesize}). Limit is currently set at ${MINT_FILESIZE}MB`
-          )
-        }
-      }
+      return
     }
+
+    // check mime type
+    if (ALLOWED_MIMETYPES.indexOf(file.mimeType) === -1) {
+      alert(
+        `File format invalid. supported formats include: ${ALLOWED_FILETYPES.join(
+          ', '
+        ).toLocaleLowerCase()}`
+      )
+      return
+    }
+
+    // check file size
+    const filesize = (file.file.size / 1024 / 1024).toFixed(4)
+    if (filesize > MINT_FILESIZE) {
+      alert(
+        `File too big (${filesize}). Limit is currently set at ${MINT_FILESIZE}MB`
+      )
+    }
+
+    // upload file(s)
+    let nftCid
+    if (MIMETYPE.ZIP.includes(file.mimeType)) {
+      // process html zip
+      const files = await prepareFilesFromZIP(file.buffer)
+
+      nftCid = await prepareDirectory({
+        name: title,
+        description,
+        tags,
+        address,
+        files,
+      })
+    } else {
+      // process all other files
+      nftCid = await prepareFile({
+        name: title,
+        description,
+        tags,
+        address,
+        buffer: file.buffer,
+        mimeType: file.mimeType,
+      })
+    }
+
+    console.log('nftCid', nftCid)
+
+    /* MINTING DISABLED */
+
+    // mint(getAuth(), amount, nftCid[0].hash, 10)
+    // .then((e) => {
+    //   console.log('mint confirm', e)
+    //   setMessage('Minted successfully')
+    //   // redirect here
+    // })
+    // .catch((e) => {
+    //   console.log('mint error', e)
+    //   alert('an error occurred')
+    //   setMessage('an error occurred')
+    // })
   }
 
   const handlePreview = () => {
