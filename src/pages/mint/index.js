@@ -87,7 +87,9 @@ export const Mint = () => {
       })
     }
 
-    mint(getAuth(), amount, nftCid[0].hash, 10)
+    console.log('nftCid:', nftCid)
+
+    mint(getAuth(), amount, nftCid.path, 10)
       .then((e) => {
         console.log('mint confirm', e)
         setMessage('Minted successfully')
