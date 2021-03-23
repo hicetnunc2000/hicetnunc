@@ -5,8 +5,8 @@
       { "primary": "○", "route": "/hdao" },
       { "primary": "aleatorio", "route": "/random" },
       { "primary": "OBJKTs", "secondary": "(mint NFTs)", "route": "/mint" },
-      { "primary": "manage asseets", "route": "/sync" },
-      { "primary": "about", "route": "/about" }
+      { "primary": "gerenciar NFTs", "route": "/sync" },
+      { "primary": "sobre", "route": "/about" }
     ]
   },
   "footer": {
@@ -14,24 +14,24 @@
     "warning": "use it consciously. visit artists profiles. be careful with copy minters."
   },
   "home": {
-    "latest": "latest",
+    "latest": "últimos",
     "hDAO": "hDAO",
-    "more": "Load More"
+    "more": "Carregar mais"
   },
   "mint": {
-    "title": "title",
-    "description": "description",
-    "tags": "tags (separated by commas)",
-    "amount": "amount of OBJKT's to mint",
+    "title": "título",
+    "description": "descrição",
+    "tags": "tags (separadas por vírgula)",
+    "amount": "quantidade de OBJKT's para mint",
     "upload": "Upload OBJKT",
     "supports": "supports",
     "preview": "preview",
     "mint": "mint",
-    "warning": "this operation costs 0.08~ tez. 10% royalties are set by default"
+    "warning": "esta operação custará 0.08~ tez. 10% de royalties por padrão"
   },
   "manage": {
-    "creations": "creations",
-    "collection": "collection"
+    "creations": "criações",
+    "collection": "coleção"
   },
   "about": {
     "title": "hic et nunc",
