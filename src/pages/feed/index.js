@@ -96,26 +96,30 @@ export const Feed = () => {
           </div>
         </div>
       )}
-
-      {items.map((item, index) => (
-        <FeedItem key={`${item.token_id}-${index}`} {...item} />
-      ))}
-
+      <main class="art-happens-here">
+        {items.map((item, index) => (
+          <FeedItem key={`${item.token_id}-${index}`} {...item} />
+        ))}
+      </main>
       {loading ? (
         <Container>
           <Padding>
-            <Loading />
+            <div class="load-more">
+              <Loading />
+            </div>
           </Padding>
         </Container>
       ) : (
         <Container>
           <Padding>
             {hasMore ? (
-              <Button onClick={loadMore}>
-                <Primary>
-                  <strong>Load More</strong>
-                </Primary>
-              </Button>
+              <div class="load-more">
+                <Button onClick={loadMore} className={'load-more-button'}>
+                  <Primary>
+                    Load More
+                  </Primary>
+                </Button>
+              </div>
             ) : (
               <p>
                 mint mint mint{' '}

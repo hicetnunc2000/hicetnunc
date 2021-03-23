@@ -1,4 +1,6 @@
 @import 'variables.scss';
+@import 'layout.scss';
+@import url('https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&display=swap');
 
 html {
   margin: 0;
@@ -9,8 +11,8 @@ html {
 
 body {
   margin: 0;
-  padding: 0;
-  font-family: 'Courier New', Courier, monospace;
+  //font-family: 'Courier New', Courier, monospace;
+  font-family: 'Courier Prime', monospace;
   overflow-x: hidden;
   color: var(--text-color);
   background-color: var(--background-color);
@@ -25,5 +27,95 @@ body {
   -webkit-font-smoothing: antialiased;
   -webkit-tap-highlight-color: transparent;
   -webkit-touch-callout: none;
-  font-family: 'Courier New', Courier, monospace;
+  //font-family: 'Courier New', Courier, monospace;
+  font-family: 'Courier Prime', monospace;
+}
+
+/* //////////////////////////// */
+// SET LAYOUT BUTTON
+/* //////////////////////////// */
+
+#setLayout {
+  display: inline-flex;
+  align-items: center;
+  background: none;
+  border: none;
+  outline:none;
+  &:hover {
+    cursor:pointer;
+  }
+  span {
+    &.material-icons {
+      color:var(--text-color) !important;
+    }
+  }
+}
+
+/* //////////////////////////// */
+// GRID LAYOUT
+/* //////////////////////////// */
+
+.default-layout {
+  .is-grid {
+    display:inline-flex;
+  }
+  .is-default {
+    display:none;
+  }
+}
+
+.grid-layout {
+  .is-grid {
+    display:none;
+  }
+  .is-default {
+    display:inline-flex;
+  }
+  .full-width {
+    width:100%;
+  }
+  .art-happens-here {
+    display:flex;
+    justify-content: center;
+    flex-wrap:wrap;
+    padding:2rem 0 4rem;
+    @include respond-to('tablet') {
+      padding:2rem 2rem 4rem;
+    }
+    > div {
+      width:100%;
+      padding:0;
+      margin:0;
+      flex-grow:1;
+      img {
+        border-radius:0;
+      }
+      @include respond-to('tablet') {
+        width:$grid-item-width;
+        margin:.8rem;
+        img {
+          border-radius:.25rem;
+        }
+      }
+    }
+  }
+}
+
+/* //////////////////////////// */
+// LOAD MORE
+/* //////////////////////////// */
+
+.load-more {
+  display:flex;
+  justify-content: center;
+  button {
+    display:flex;
+    justify-content: center;
+    align-items:center;
+    background:var(--background-color);
+    border:1px solid var(--text-color);
+    padding:.5rem 1rem;
+    border-radius:.2rem;
+    font-weight:700;
+  }
 }

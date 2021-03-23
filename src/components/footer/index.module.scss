@@ -1,14 +1,25 @@
 @import '../../styles/variables.scss';
+@import '../../styles/layout.scss';
 
 .container {
-  position: relative;
-  padding: 2px 0;
-  width: 100%;
-  text-align: center;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  padding: 1rem;
+  width: 100vw;
+  display:flex;
+  justify-content: space-between;
+  align-items:center;
   font-size: 14px;
-  background-color: var(--text-color);
-  color: var(--background-color);
+  background-color: var(--background-color);
+  color: var(--text-color);
   transition: background-color #{$theme-duration} ease-out,
-    color #{$theme-duration} ease-out;
+  color #{$theme-duration} ease-out;
+  border-top:1px solid var(--text-color);
   z-index: 2000;
+  > div {
+    display:flex;
+    flex-direction:column;
+    align-items: center;
+  }
 }

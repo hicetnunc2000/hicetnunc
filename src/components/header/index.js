@@ -19,8 +19,8 @@ export const Header = () => {
 
   return (
     <>
-      <div className={styles.container}>
-        <div className={styles.content}>
+      <header className={styles.container}>
+        <div className={'full-width '+styles.content}>
           <Button onClick={() => handleRoute('/')}>
             <Secondary>
               <div className={styles.logo}>〇 hic et nunc</div>
@@ -29,7 +29,7 @@ export const Header = () => {
 
           <div className={styles.right}>
             <Button onClick={context.syncTaquito} secondary>
-              <Secondary>sync {context.activeAccount}</Secondary>
+              <Secondary>sync</Secondary>
             </Button>
 
             <Button onClick={context.toogleNavbar} secondary>
@@ -37,7 +37,7 @@ export const Header = () => {
             </Button>
           </div>
         </div>
-      </div>
+      </header>
 
       <AnimatePresence>
         {!context.collapsed && (
@@ -45,7 +45,7 @@ export const Header = () => {
             <Container>
               <Padding>
                 <div className={styles.content}>
-                  <ul>
+                <ul>
                     <li>
                       <Button onClick={() => handleRoute('/hdao')}>
                         <Primary>
