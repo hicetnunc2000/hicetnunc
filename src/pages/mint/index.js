@@ -56,7 +56,7 @@ export const Mint = () => {
     let nftCid
     if (file.mimeType === MIMETYPE.HTML_ZIP) {
       // process html zip
-      const files = await prepareFilesFromZIP(file.reader)
+      const files = await prepareFilesFromZIP(file.buffer)
 
       nftCid = await prepareDirectory({
         name: title,

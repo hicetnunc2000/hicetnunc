@@ -1,9 +1,9 @@
-import * as zip from '@zip.js/zip.js/dist/zip-full'
+import * as fflate from 'fflate'
 import mime from 'mime-types'
 
-export async function prepareFilesFromZIP (uri) {
-  // unzip
-  const files = await unzipDataURI(uri)
+export async function prepareFilesFromZIP (buffer) {
+  // unzip files
+  const files = await unzipBuffer(buffer)
 
   // inject CSP meta tag
   const indexBlob = files['index.html']
@@ -16,20 +16,24 @@ export async function prepareFilesFromZIP (uri) {
   return files
 }
 
-export async function unzipDataURI (uri) {
-  const zipReader = new zip.ZipReader(new zip.Data64URIReader(uri))
-  let entries = await zipReader.getEntries()
-
-  // remove directories
-  entries = entries.filter(e => !e.directory)
+export async function unzipBuffer (buffer) {
+  let entries = fflate.unzipSync(buffer)
+  entries = Object.entries(entries)
+    .filter(entry => entry[1].length !== 0)
+    .map(entry => {
+      return {
+        path: entry[0],
+        data: entry[1]
+      }
+    })
 
   // Find root dir
   let rootDir = null
   for (let i = 0; i < entries.length; i++) {
-    const parts = entries[i].filename.split('/')
+    const parts = entries[i].path.split('/')
     const filename = parts[parts.length - 1]
     if (filename === 'index.html') {
-      const parts = entries[i].filename.split('/')
+      const parts = entries[i].path.split('/')
       parts.pop()
       rootDir = parts.join('/')
       break
@@ -42,25 +46,13 @@ export async function unzipDataURI (uri) {
     throw new Error(msg)
   }
 
-  // Truncate paths
-  entries = entries.map(entry => {
-    entry.relativePath = entry.filename.replace(`${rootDir}/`, '')
-    return entry
-  })
-
-  // get file blobs
-  const promises = []
-  entries.forEach(entry => {
-    const mimeType = mime.lookup(entry.filename)
-    promises.push(entry.getData(new zip.BlobWriter(mimeType)))
-  })
-  const results = await Promise.all(promises)
-  await zipReader.close()
-
-  // create files map
+  // Create files map
   const files = {}
   entries.forEach((entry, index) => {
-    files[entry.relativePath] = results[index]
+    const relPath = entry.path.replace(`${rootDir}/`, '')
+    files[relPath] = new Blob([entry.data], {
+      type: mime.lookup(entry.path)
+    })
   })
 
   return files
@@ -105,7 +97,7 @@ export function injectCSPMetaTagIntoHTML(html) {
 
   // inject CSP meta tag
   doc.head.insertAdjacentHTML('afterbegin', `
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline';">  
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline';">
   `)
 
   // doc -> HTML
