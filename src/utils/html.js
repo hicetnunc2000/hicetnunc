@@ -3,7 +3,7 @@ import mime from 'mime-types'
 
 export async function prepareFilesFromZIP (buffer) {
   // unzip files
-  const files = await unzipBuffer(buffer)
+  let files = await unzipBuffer(buffer)
 
   // inject CSP meta tag
   const indexBlob = files['index.html']
@@ -13,17 +13,27 @@ export async function prepareFilesFromZIP (buffer) {
     type: indexBlob.type
   })
 
+  // reformat
+  files = Object.entries(files).map(file => {
+    return {
+      path: file[0],
+      blob: file[1]
+    }
+  })
+
+  // remove top level dir
+  files = files.filter(f => f.path !== '')
+
   return files
 }
 
 export async function unzipBuffer (buffer) {
   let entries = fflate.unzipSync(buffer)
   entries = Object.entries(entries)
-    .filter(entry => entry[1].length !== 0)
     .map(entry => {
       return {
         path: entry[0],
-        data: entry[1]
+        buffer: entry[1]
       }
     })
 
@@ -50,8 +60,11 @@ export async function unzipBuffer (buffer) {
   const files = {}
   entries.forEach((entry, index) => {
     const relPath = entry.path.replace(`${rootDir}/`, '')
-    files[relPath] = new Blob([entry.data], {
-      type: mime.lookup(entry.path)
+    const type = entry.buffer.length === 0 
+      ? 'application/x-directory'
+      : mime.lookup(entry.path)
+    files[relPath] = new Blob([entry.buffer], {
+      type
     })
   })
 
