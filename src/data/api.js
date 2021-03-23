@@ -10,8 +10,8 @@ const axios = require('axios')
 export const GetFeed = async ({ counter, max_time }) => {
   return Promise.all([
     axios.post(process.env.REACT_APP_FEED, {
-        counter: counter
-      },
+      counter: counter
+    },
     ),
     axios.get(process.env.REACT_APP_BLOCKLIST_OBJKT).catch(() => {
       return { data: [] }
@@ -53,6 +53,19 @@ export const GethDAOFeed = async ({ counter }) => {
   return new Promise((resolve, reject) => {
     axios
       .post(process.env.REACT_APP_FEED_HDAO, { counter: counter })
+      .then((res) => {
+        resolve(res.data.result)
+      })
+  })
+}
+/* 
+  Get Random Feed
+   */
+
+export const GetRandomFeed = async ({ counter }) => {
+  return new Promise((resolve, reject) => {
+    axios
+      .post(process.env.REACT_APP_RANDOM, { counter: counter })
       .then((res) => {
         resolve(res.data.result)
       })
