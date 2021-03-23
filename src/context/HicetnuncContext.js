@@ -170,7 +170,7 @@ export default class HicetnuncContextProvider extends Component {
           )
       },
 
-      activeAccount : undefined,
+
 
       cancel: async (swap_id) => {
         return await Tezos.wallet
