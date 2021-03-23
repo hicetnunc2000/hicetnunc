@@ -146,6 +146,5 @@ for (let k in MIMETYPE) {
   }
 }
 export const ALLOWED_MIMETYPES = allowed
-console.log('ALLOWED_MIMETYPES', ALLOWED_MIMETYPES)
 
 export const ALLOWED_FILETYPES = Object.keys(MIMETYPE)

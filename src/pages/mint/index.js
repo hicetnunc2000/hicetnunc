@@ -81,17 +81,17 @@ export const Mint = () => {
 
     /* MINTING DISABLED */
 
-    mint(getAuth(), amount, nftCid[0].hash, 10)
-    .then((e) => {
-      console.log('mint confirm', e)
-      setMessage('Minted successfully')
-      // redirect here
-    })
-    .catch((e) => {
-      console.log('mint error', e)
-      alert('an error occurred')
-      setMessage('an error occurred')
-    })
+    // mint(getAuth(), amount, nftCid[0].hash, 10)
+    // .then((e) => {
+    //   console.log('mint confirm', e)
+    //   setMessage('Minted successfully')
+    //   // redirect here
+    // })
+    // .catch((e) => {
+    //   console.log('mint error', e)
+    //   alert('an error occurred')
+    //   setMessage('an error occurred')
+    // })
   }
 
   const handlePreview = () => {
