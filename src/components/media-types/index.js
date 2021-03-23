@@ -45,6 +45,7 @@ export const renderMediaType = ({
       return <VideoComponent src={url} />
     /* 3D */
     case MIMETYPE.GLB:
+    case MIMETYPE.GLTF:
       url = preview ? uri : `${CLOUDFLARE}${path}`
       return <GLBComponent src={url} interactive={interactive} />
     case MIMETYPE.MP3:
