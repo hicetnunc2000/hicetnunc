@@ -26,10 +26,16 @@ export const HTMLComponent = ({ src, interactive, preview, token_info }) => {
 
   if (preview) {
     return (
-      <div className={classes}>
-        Preview not available for HTML ZIP files.
-        <br /><br/>
-        Click 'mint' below to proceed.
+      <div>
+        <div>
+          Previews are not available for HTML ZIP files.
+          <br /><br />
+          <span style={{color: 'red'}}>
+            IMPORTANT: Links to external scripts/assets in your code will not work. Please include everything in your zip file.
+          </span>
+          <br /><br />
+          Click 'mint' below to proceed.
+        </div>
       </div>
     )
   } else {
