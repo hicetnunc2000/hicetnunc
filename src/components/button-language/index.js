@@ -3,8 +3,11 @@ import { getItem, setItem } from '../../utils/storage'
 import styles from './index.module.scss'
 
 const languages = [
-  { key: 'en', title: 'english', icon: '🇬🇧' },
-  { key: 'pt', title: 'português', icon: '🇧🇷' },
+  { key: 'en', title: 'english' },
+  { key: 'de', title: 'german' },
+  { key: 'fr', title: 'french' },
+  { key: 'ja', title: 'japanese' },
+  { key: 'pt', title: 'português' },
 ]
 
 export const ButtonLanguage = () => {
