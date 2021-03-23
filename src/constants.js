@@ -2,6 +2,8 @@ let LANGUAGE = {
   header: {
     sync: 'sync',
     menu: [
+      { primary: '○', route: '/hdao' },
+      { primary: 'random', route: '/random' },
       { primary: 'OBJKTs', secondary: '(mint NFTs)', route: '/mint' },
       { primary: 'manage asseets', route: '/sync' },
       { primary: 'about', route: '/about' },
@@ -21,7 +23,7 @@ let LANGUAGE = {
     title: 'title',
     description: 'description',
     tags: 'tags (separated by commas)',
-    amount: "amount of OBJKT's to mint",
+    amount: "number of OBJKT's to mint",
     upload: 'Upload OBJKT',
     supports: 'supports',
     preview: 'preview',
@@ -44,6 +46,7 @@ let LANGUAGE = {
     ],
   },
   detail: {
+    editions: 'Editions',
     issuer: 'Issuer',
     notForSale: 'Not for sale',
     soldOut: 'Sold out',
@@ -62,7 +65,7 @@ let LANGUAGE = {
       title: 'no owners',
     },
     swap: {
-      amount: 'OBJKT amount',
+      amount: 'number of OBJKTs',
       price: 'price per OBJKT (in tez)',
       cta: 'swap it',
       warning:
@@ -79,6 +82,7 @@ let LANGUAGE = {
     confirm: 'Are you sure?',
   },
 }
+
 export const setLanguage = (data) => (LANGUAGE = data)
 export const getLanguage = () => LANGUAGE
 

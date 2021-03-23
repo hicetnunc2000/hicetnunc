@@ -48,7 +48,6 @@ export const Header = () => {
               <Padding>
                 <div className={styles.content}>
                   <ul>
-                    <li>○</li>
                     {language.header.menu.map((menu) => (
                       <li key={menu.route}>
                         <Button onClick={() => handleRoute(menu.route)}>

@@ -44,6 +44,7 @@
     ]
   },
   "detail": {
+    "editions": "Editions",
     "issuer": "発行者",
     "notForSale": "非売品",
     "soldOut": "完売",
