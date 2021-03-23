@@ -10,11 +10,11 @@ export const VectorComponent = ({ src, interactive, token_info }) => {
     [styles.interactive]: interactive,
   })
 
-  let _author_ = false
+  let _creator_ = false
   let _viewer_ = false
 
   if (token_info && token_info.creators[0]) {
-    _author_ = token_info.creators[0]
+    _creator_ = token_info.creators[0]
   }
 
   if (context.address !== '') {
@@ -25,10 +25,11 @@ export const VectorComponent = ({ src, interactive, token_info }) => {
     <div className={classes}>
       <iframe
         title="hic et nunc SVG renderer"
-        src={`${src}?author=${_author_}&viewer=${_viewer_}`}
+        src={`https://hicetnunc2000.github.io/hicetnunc/gh-pages/sandbox-svg.html?src=${src}&creator=${_creator_}&viewer=${_viewer_}`}
         sandbox="allow-scripts"
         scrolling="no"
       />
     </div>
   )
 }
+// old: src={`${src}?author=${_creator_}&viewer=${_viewer_}`}
