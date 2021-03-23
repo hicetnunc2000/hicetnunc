@@ -17,7 +17,6 @@
     "classnames": "^2.2.6",
     "fflate": "^0.6.9",
     "filereader": "^0.10.3",
-    "form-data": "^2.3.3",
     "framer-motion": "^4.0.0",
     "ipfs-http-client": "^49.0.4",
     "local-storage": "^2.0.0",
@@ -34,7 +33,7 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "^4.0.3",
     "react-scroll": "^1.8.1",
-    "uuid": "^8.3.2"
+    "read-json-lines-sync": "^2.0.8"
   },
   "scripts": {
     "start": "react-scripts start",
