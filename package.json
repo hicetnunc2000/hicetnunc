@@ -16,7 +16,7 @@
     "buffer": "^6.0.3",
     "classnames": "^2.2.6",
     "filereader": "^0.10.3",
-    "framer-motion": "^4.0.0",
+    "framer-motion": "^4.0.2",
     "ipfs-api": "^26.1.2",
     "local-storage": "^2.0.0",
     "lodash": "^4.17.21",
