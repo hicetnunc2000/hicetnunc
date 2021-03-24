@@ -119,6 +119,7 @@ export default class HicetnuncContextProvider extends Component {
       },
 
       swap: async (objkt_amount, objkt_id, xtz_per_objkt) => {
+        console.log(objkt_amount)
         return await Tezos.wallet
           .at(this.state.objkt)
           .then((c) =>
@@ -149,19 +150,21 @@ export default class HicetnuncContextProvider extends Component {
           })
       },
 
-      burn: async (tz, objkt_id, amount) => {
+      burn: async (objkt_id, amount) => {
+        var tz = await wallet.client.getActiveAccount()
+        console.log(tz)
         await Tezos.wallet
           .at('KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton')
-          .then((c) =>
+          .then(async (c) =>
             c.methods
               .transfer([
                 {
-                  from_: tz,
+                  from_: tz.address,
                   txs: [
                     {
                       to_: 'tz1burnburnburnburnburnburnburjAYjjX',
                       token_id: parseInt(objkt_id),
-                      amount: parseInt(amount),
+                      amount: parseInt(amount[tz.address]),
                     },
                   ],
                 },

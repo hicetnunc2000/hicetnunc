@@ -15,6 +15,7 @@ export const ItemInfo = ({
   owners,
   swaps,
   transfered,
+  acc,
   feed,
   total_amount,
   isDetailView,

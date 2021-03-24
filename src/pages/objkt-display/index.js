@@ -9,6 +9,7 @@ import { ItemInfo } from '../../components/item-info'
 import { Button, Primary } from '../../components/button'
 import { Menu } from '../../components/menu'
 import { Info, Owners, Swap, Cancel, Burn } from './tabs'
+const _ = require('lodash')
 
 const TABS = [
   { title: 'info', component: Info },
@@ -20,16 +21,21 @@ const TABS = [
 
 export const ObjktDisplay = () => {
   const { id } = useParams()
-  const { address } = useContext(HicetnuncContext)
+  const { address, acc, setAccount } = useContext(HicetnuncContext)
 
   const [loading, setLoading] = useState(true)
   const [tabIndex, setTabIndex] = useState(0)
   const [nft, setNFT] = useState()
+  const [owners, setOwners] = useState(null)
+
+
 
   useEffect(() => {
-    GetOBJKT({ id }).then((objkt) => {
-      console.log(objkt)
+    GetOBJKT({ id }).then(async (objkt) => {
+      await setAccount()
+
       setNFT(objkt)
+      setOwners(objkt.owners)
       setLoading(false)
     })
   }, [id])
@@ -66,7 +72,7 @@ export const ObjktDisplay = () => {
             <Padding>
               <Menu>
                 {TABS.filter(
-                  (e) => !e.private || nft.token_info.creators[0] === address
+                  (e) => !e.private || _.keys(owners).includes(address)
                 ).map(({ title }, index) => (
                   <Button key={title} onClick={() => setTabIndex(index)}>
                     <Primary selected={tabIndex === index}>{title}</Primary>
