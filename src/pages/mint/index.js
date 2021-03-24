@@ -38,6 +38,7 @@ export const Mint = () => {
       alert('sync')
       return
     }
+    console.log(acc)
 
     // check mime type
     if (ALLOWED_MIMETYPES.indexOf(file.mimeType) === -1) {
@@ -68,7 +69,7 @@ export const Mint = () => {
         name: title,
         description,
         tags,
-        address,
+        acc,
         files,
       })
     } else {
@@ -77,7 +78,7 @@ export const Mint = () => {
         name: title,
         description,
         tags,
-        address,
+        acc,
         buffer: file.buffer,
         mimeType: file.mimeType,
       })
