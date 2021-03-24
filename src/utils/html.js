@@ -130,7 +130,7 @@ export function getCoverImagePathFromBuffer(buffer) {
   const parser = new DOMParser()
   const doc = parser.parseFromString(html, 'text/html')
 
-  const meta = doc.querySelector('meta[property="cover-image"]')
+  const meta = doc.querySelector('meta[property="og:image"]')
 
   if (!meta) return null
 
