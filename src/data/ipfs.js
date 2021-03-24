@@ -1,3 +1,5 @@
+import { IPFS_DIRECTORY_MIMETYPE } from '../constants'
+
 const createClient = require('ipfs-http-client')
 const Buffer = require('buffer').Buffer
 const axios = require('axios')
@@ -45,13 +47,13 @@ export const prepareDirectory = async ({
     tags,
     cid,
     address,
-    mimeType: 'application/x-directory',
+    mimeType: IPFS_DIRECTORY_MIMETYPE,
     displayUri
   })
 }
 
 function not_directory(file) {
-  return file.blob.type !== 'application/x-directory';
+  return file.blob.type !== IPFS_DIRECTORY_MIMETYPE;
 }
 
 async function uploadFilesToDirectory (files) {

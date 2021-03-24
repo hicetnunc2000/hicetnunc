@@ -6,7 +6,7 @@ import { AudioComponent } from './audio'
 import { VectorComponent } from './vector'
 import { HTMLComponent } from './html'
 import { UnknownComponent } from './unknown'
-import { MIMETYPE } from '../../constants'
+import { MIMETYPE, IPFS_DIRECTORY_MIMETYPE } from '../../constants'
 
 const CLOUDFLARE = 'https://cloudflare-ipfs.com/ipfs/'
 const IPFS = 'https://ipfs.io/ipfs/'
@@ -21,17 +21,8 @@ export const renderMediaType = ({
   const path = uri
   let url
 
-  if (MIMETYPE.ZIP.includes(mimeType)) {
-    /* HTML ZIP */
-    url = preview ? uri : `${CLOUDFLARE}${path}`
-    return (
-      <HTMLComponent
-        {...metadata}
-        src={url}
-        interactive={interactive}
-        preview={preview}
-      />
-    )
+  if (mimeType === IPFS_DIRECTORY_MIMETYPE) {
+    mimeType = MIMETYPE.ZIP
   }
 
   switch (mimeType) {
@@ -55,6 +46,19 @@ export const renderMediaType = ({
           preview={preview}
         />
       )
+    /* HTML ZIP */
+    case MIMETYPE.ZIP:
+    case MIMETYPE.ZIP1:
+    case MIMETYPE.ZIP2:
+      url = preview ? uri : `${CLOUDFLARE}${path}`
+      return (
+        <HTMLComponent
+          {...metadata}
+          src={url}
+          interactive={interactive}
+          preview={preview}
+        />
+      )      
     /* VIDEOS */
     case MIMETYPE.MP4:
     case MIMETYPE.OGV:
