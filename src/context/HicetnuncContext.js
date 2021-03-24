@@ -170,8 +170,6 @@ export default class HicetnuncContextProvider extends Component {
           )
       },
 
-      activeAccount : undefined,
-
       cancel: async (swap_id) => {
         return await Tezos.wallet
           .at(this.state.objkt)
@@ -186,6 +184,16 @@ export default class HicetnuncContextProvider extends Component {
       /* taquito */
       Tezos: null,
       wallet: null,
+      acc : null,
+      message : 'sync',
+
+      updateMessage : (message) => this.setState({ message : message }),
+
+      setAccount : async () => {
+        this.setState({
+          acc : Tezos !== undefined ? await wallet.client.getActiveAccount() : undefined
+        })
+      },
 
       syncTaquito: async () => {
         const network = {
@@ -197,13 +205,16 @@ export default class HicetnuncContextProvider extends Component {
         // This piece of code should be called on startup to "load" the current address from the user
         // If the activeAccount is present, no "permission request" is required again, unless the user "disconnects" first.
         const activeAccount = await wallet.client.getActiveAccount()
-        if (!activeAccount) {
+        console.log(activeAccount)
+        if (activeAccount === undefined) {
+          console.log('permissions')
           await wallet.requestPermissions({ network })
         }
 
         this.setState({
           Tezos: Tezos,
           address: await wallet.getPKH(),
+          acc: await wallet.client.getActiveAccount(),
           wallet: wallet,
         })
         this.state.setAuth(await wallet.getPKH())

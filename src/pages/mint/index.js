@@ -18,7 +18,9 @@ import {
 } from '../../constants'
 
 export const Mint = () => {
-  const { Tezos, mint, address, getAuth } = useContext(HicetnuncContext)
+  const { Tezos, mint, address, getAuth, acc, setAccount } = useContext(
+    HicetnuncContext
+  )
   const history = useHistory()
   const [step, setStep] = useState(0)
   const [title, setTitle] = useState('')
@@ -31,8 +33,8 @@ export const Mint = () => {
 
   const handleMint = async () => {
     console.log('mint', Tezos)
-
-    if (Tezos === null) {
+    setAccount()
+    if (acc === null) {
       alert('sync')
       return
     }
@@ -61,9 +63,7 @@ export const Mint = () => {
     setStep(2)
     // upload file(s)
     let nftCid
-    if (
-      [MIMETYPE.ZIP, MIMETYPE.ZIP1, MIMETYPE.ZIP2].includes(file.mimeType)
-    ) {
+    if ([MIMETYPE.ZIP, MIMETYPE.ZIP1, MIMETYPE.ZIP2].includes(file.mimeType)) {
       const files = await prepareFilesFromZIP(file.buffer)
 
       nftCid = await prepareDirectory({
