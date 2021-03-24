@@ -81,7 +81,7 @@ export default class Display extends Component {
         <Container>
           <Padding>
             <div className={styles.profile}>
-              <Identicon address={this.state.wallet} logo={this.state.logo}/>
+              <Identicon address={this.state.wallet} logo={this.state.logo} />
 
               <div className={styles.info}>
                 {this.state.alias && <p>{this.state.alias}</p>}
@@ -236,6 +236,7 @@ export default class Display extends Component {
                       {renderMediaType({
                         mimeType,
                         uri: uri.split('//')[1],
+                        metadata: nft,
                       })}
                       <div className={styles.number}>OBJKT#{nft.token_id}</div>
                     </div>
@@ -257,7 +258,11 @@ export default class Display extends Component {
                     to={`${PATH.OBJKT}/${nft.token_id}`}
                   >
                     <div className={styles.container}>
-                      {renderMediaType({ mimeType, uri: uri.split('//')[1] })}
+                      {renderMediaType({
+                        mimeType,
+                        uri: uri.split('//')[1],
+                        metadata: nft,
+                      })}
                       <div className={styles.number}>OBJKT#{nft.token_id}</div>
                     </div>
                   </Button>
