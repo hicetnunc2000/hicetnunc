@@ -1,4 +1,5 @@
 @import '../../../styles/layout.scss';
+@import '../../../styles/layout.scss';
 
 .container {
   position: relative;
@@ -20,12 +21,20 @@
     pointer-events: all;
   }
 
-  .play {
-    position: relative;
-    background-color: red;
+  .preview {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: black;
 
     img {
-      display: block;
+      width: 100%;
+      height: auto;
     }
 
     .button {
@@ -37,26 +46,18 @@
       display: flex;
       align-items: center;
       justify-content: center;
-
-      .dark {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        z-index: 0;
-        background: radial-gradient(
-          circle,
-          rgba(255, 255, 255, 0.3) 0%,
-          rgba(0, 0, 0, 0.1) 100%
-        );
-      }
+      background: radial-gradient(
+        circle,
+        rgba(255, 255, 255, 0.3) 0%,
+        rgba(0, 0, 0, 0.1) 100%
+      );
 
       svg {
         position: relative;
         display: flex;
-        width: 100px;
+        width: 30%;
         height: auto;
+        margin: 0 auto;
         z-index: 1;
       }
     }

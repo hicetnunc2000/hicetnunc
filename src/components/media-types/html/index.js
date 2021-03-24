@@ -12,7 +12,7 @@ export const HTMLComponent = ({
   displayUri,
 }) => {
   const context = useContext(HicetnuncContext)
-  const [viewing, setViewing] = useState(false)
+  const [viewing, setViewing] = useState(interactive)
 
   let _creator_ = false
   let _viewer_ = false
@@ -58,7 +58,7 @@ export const HTMLComponent = ({
   if (!viewing) {
     return (
       <div className={classes}>
-        <div className={styles.play}>
+        <div className={styles.preview}>
           <img src={displayUri} alt="thumbnail" />
           <div className={styles.button}>
             <Button onClick={() => setViewing(true)}>
