@@ -1,16 +1,16 @@
 {
   "header": {
-    "sync": "sync",
+    "sync": "シンク",
     "menu": [
       { "primary": "○", "route": "/hdao" },
       { "primary": "random", "route": "/random" },
-      { "primary": "OBJKTs", "secondary": "(ミントNFT)", "route": "/mint" },
-      { "primary": "資産を管理する", "route": "/sync" },
-      { "primary": "約", "route": "/about" }
+      { "primary": "OBJKTs", "secondary": "(NFTをミントする)", "route": "/mint" },
+      { "primary": "作品管理", "route": "/sync" },
+      { "primary": "hic et nunc について", "route": "/about" }
     ]
   },
   "footer": {
-    "mint": "同期 -> 収集する // 同期 -> ミント // 同期 -> スワップ"
+    "mint": "シンク -> 作品収集 // シンク -> ミント // シンク -> スワップ"
   },
   "home": {
     "latest": "最新",
@@ -18,64 +18,64 @@
     "more": "もっと読み込む"
   },
   "mint": {
-    "title": "題名",
+    "title": "作品タイトル",
     "description": "説明",
-    "tags": "タグ (カンマで区切られた)",
-    "amount": "OBJKTsからミントまでの数",
-    "upload": "OBJKTをアップロードする",
-    "supports": "サポートします",
+    "tags": "タグ (カンマ区切り)",
+    "amount": "ミント(生成)する数",
+    "upload": "OBJKTをアップロード",
+    "supports": "サポート",
     "preview": "プレビュー",
-    "mint": "ミント",
-    "warning": "この操作の費用は0.08〜tezです。 デフォルトでは10％の使用料が設定されています"
+    "mint": "ミントする",
+    "warning": "この操作にかかる費用は0.08〜tezです。 デフォルトで10％のロイヤリティフィーが設定されています。"
   },
   "manage": {
-    "creations": "作品",
+    "creations": "作品一覧",
     "collection": "コレクション"
   },
   "about": {
     "title": "hic et nunc",
     "paragraphs": [
-      "現在の分散型アプリケーションにより、ユーザーは分散型デジタル資産を管理でき、TezosBlockchainのパブリックスマートコントラクトインフラストラクチャとして機能します。",
-      "IPFS NFTは、許可のない方法で作成および取引できます。 そのような実験は、代替の暗号経済を想像することを意図して設計されました。",
-      "私たちはあなたのセキュリティと自律性を心配しています。 取引の際は情報をご確認ください。",
-      "コンサルティング、ネットワーキング、または質問については、%EMAIL%、%DISCORD%、または%REDDIT%から連絡してください。",
-      "%FAQS%をお読みください。",
-      "ウェブサイトに問題がある場合は、%ISSUE%を報告してください"
+      "この分散型アプリケーションは、テゾスブロックチェーン上で稼働する分散型デジタル資産を管理するための公開スマートコントラクトインフラストラクチャです。",
+      "IPFS NFT資産は、パーミッションレスにミント(生成)や取引ができます。 この実験は、暗号技術を応用した経済のオルタナティブを模索することを意図して設計されました。",
+      "私たちはあなたのセキュリティと各々の自律的な規範を大切にしたいと思います。 取引の際は情報を慎重にご確認ください。",
+      "ご意見、ご質問やこのアプリケーションに関する議論については、%EMAIL%、%DISCORD%、%REDDIT%から連絡してください。",
+      "%FAQS%を一度お読みください。",
+      "ウェブサイトに問題がある場合は、%ISSUE% にて報告してください"
     ]
   },
   "detail": {
-    "editions": "Editions",
+    "editions": "エディション",
     "issuer": "発行者",
     "notForSale": "非売品",
     "soldOut": "完売",
-    "collect": "%PRICE%で集める",
+    "collect": "%PRICE%で取得する",
     "menuInfo": "情報",
     "menuOwners": "所有者",
     "menuSwap": "スワップ",
     "menuCancel": "キャンセル",
-    "menuBurn": "燃やす",
+    "menuBurn": "破棄する",
     "info": {
-      "title": "題名",
+      "title": "作品名",
       "description": "説明",
       "tags": "タグ"
     },
     "owners": {
-      "title": "所有者なし"
+      "title": "未所有"
     },
     "swap": {
-      "amount": "OBJKTsの数",
-      "price": "OBJKTあたりの価格（tez）",
-      "cta": "交換する",
-      "warning": "価値のあるスワップには、プラットフォームのメンテナンスに2.5％の手数料がかかります"
+      "amount": "OBJKTsのスワップ数",
+      "price": "1 OBJKT あたりの価格 (tez)",
+      "cta": "交換",
+      "warning": "1tez 以上の価格がついているものは、プラットフォームのメンテナンスに2.5％の手数料がかかります"
     },
     "cancel": {
-      "title": "スワップをキャンセルしようとしています",
-      "cta": "キャンセルする"
+      "title": "スワップをキャンセルしますか？",
+      "cta": "キャンセル"
     },
     "burn": {
-      "title": "NFTを書き込むと、ネットワークから完全に削除されます",
-      "cta": "それを燃やす"
+      "title": "NFTを破棄(Burn)すると、ネットワークから完全に削除されます。",
+      "cta": "破棄する"
     },
-    "confirm": "本気ですか？"
+    "confirm": "本当に？(再度確認)"
   }
 }
