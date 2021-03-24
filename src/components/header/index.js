@@ -29,8 +29,6 @@ export const Header = () => {
     context.message = 'sync'
   }
 
-
-  console.log(ls)
   //const activeAccount = await wallet.client.getActiveAccount()
   //console.log(activeAccount)
   const handleRoute = (path) => {
@@ -50,7 +48,11 @@ export const Header = () => {
 
           <div className={styles.right}>
             <Button onClick={context.syncTaquito} secondary>
-              <Secondary>{context.message !== 'sync' ? walletPreview(context.message) : context.message}</Secondary>
+              <Secondary>
+                {context.message !== 'sync'
+                  ? walletPreview(context.message)
+                  : context.message}
+              </Secondary>
             </Button>
 
             <Button onClick={context.toogleNavbar} secondary>
@@ -69,16 +71,12 @@ export const Header = () => {
                   <ul>
                     <li>
                       <Button onClick={() => handleRoute('/hdao')}>
-                        <Primary>
-                          ○
-                        </Primary>
+                        <Primary>○</Primary>
                       </Button>
                     </li>
                     <li>
                       <Button onClick={() => handleRoute('/random')}>
-                        <Primary>
-                          random
-                        </Primary>
+                        <Primary>random</Primary>
                       </Button>
                     </li>
 
