@@ -29,29 +29,34 @@ export const HTMLComponent = ({ src, interactive, preview, token_info }) => {
       <div>
         <div>
           Previews are not available for HTML ZIP files.
-          <br /><br />
-          <div style={{color: 'red'}}>
+          <br />
+          <br />
+          <div style={{ color: 'red' }}>
             IMPORTANT:
-            <br/><br/>
+            <br />
+            <br />
             Your zip file must contain an index.html file.
-            <br/><br/>
-            Links to external resources in your code will not work. Please include everything in your zip file.
+            <br />
+            <br />
+            Links to external resources in your code will not work. Please
+            include everything in your zip file.
           </div>
-          <br /><br />
+          <br />
+          <br />
           Click 'mint' below to proceed.
         </div>
       </div>
     )
-  } else {
-    return (
-      <div className={classes}>
-        <iframe
-          title="hic et nunc HTML renderer"
-          src={`${src}?creator=${_creator_}&viewer=${_viewer_}`}
-          sandbox="allow-scripts"
-          scrolling="no"
-        />
-      </div>
-    )
   }
+
+  return (
+    <div className={classes}>
+      <iframe
+        title="hic et nunc HTML renderer"
+        src={`${src}?creator=${_creator_}&viewer=${_viewer_}`}
+        sandbox="allow-scripts"
+        scrolling="no"
+      />
+    </div>
+  )
 }
