@@ -24,7 +24,6 @@ export const ButtonTheme = () => {
 
   const classes = classnames({
     [styles.container]: true,
-    // [styles.light]: light,
   })
   return <div className={classes} onClick={() => setLight(!light)} />
 }

@@ -7,7 +7,7 @@ export const Input = ({
   name = 'input-name-not-set',
   min,
   max,
-  maxlength = 30000,
+  maxlength = 500,
   onChange = () => null,
   disabled,
 }) => {

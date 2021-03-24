@@ -15,4 +15,13 @@
       transition: all #{$theme-duration} ease-out;
     }
   }
+
+  img {
+    border-radius: 100%;
+    padding: 1px;
+    width: 120px;
+    height: 120px;
+    border: 2px solid var(--text-color);
+    transition: border-color #{$theme-duration} ease-out;
+  }
 }

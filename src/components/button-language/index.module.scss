@@ -1,0 +1,12 @@
+@import '../../styles/variables.scss';
+
+.container {
+  color: var(--background-color);
+  transition: color #{$theme-duration} ease-out;
+  background-color: transparent;
+  border: none;
+
+  &:focus {
+    outline: none;
+  }
+}

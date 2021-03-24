@@ -4,8 +4,9 @@ import { ImageComponent } from './image'
 import { VideoComponent } from './video'
 import { AudioComponent } from './audio'
 import { VectorComponent } from './vector'
+import { HTMLComponent } from './html'
 import { UnknownComponent } from './unknown'
-import { MIMETYPE } from '../../constants'
+import { MIMETYPE, IPFS_DIRECTORY_MIMETYPE } from '../../constants'
 
 const CLOUDFLARE = 'https://cloudflare-ipfs.com/ipfs/'
 const IPFS = 'https://ipfs.io/ipfs/'
@@ -19,6 +20,11 @@ export const renderMediaType = ({
 }) => {
   const path = uri
   let url
+
+  const { token_info } = metadata
+
+  const displayUri = token_info.displayUri.replace('ipfs://', CLOUDFLARE)
+  console.log('display uri', displayUri)
 
   switch (mimeType) {
     /* IMAGES */
@@ -34,7 +40,27 @@ export const renderMediaType = ({
     case MIMETYPE.SVG:
       url = preview ? uri : `${CLOUDFLARE}${path}`
       return (
-        <VectorComponent {...metadata} src={url} interactive={interactive} />
+        <VectorComponent
+          {...metadata}
+          src={url}
+          interactive={interactive}
+          preview={preview}
+        />
+      )
+    /* HTML ZIP */
+    case IPFS_DIRECTORY_MIMETYPE:
+    case MIMETYPE.ZIP:
+    case MIMETYPE.ZIP1:
+    case MIMETYPE.ZIP2:
+      url = preview ? uri : `${CLOUDFLARE}${path}`
+      return (
+        <HTMLComponent
+          {...metadata}
+          src={url}
+          interactive={interactive}
+          preview={preview}
+          displayUri={displayUri}
+        />
       )
     /* VIDEOS */
     case MIMETYPE.MP4:
@@ -48,6 +74,7 @@ export const renderMediaType = ({
     case MIMETYPE.GLTF:
       url = preview ? uri : `${CLOUDFLARE}${path}`
       return <GLBComponent src={url} interactive={interactive} />
+    /* AUDIO */
     case MIMETYPE.MP3:
     case MIMETYPE.OGA:
       url = preview ? uri : `${CLOUDFLARE}${path}`
