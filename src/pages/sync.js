@@ -9,15 +9,20 @@ export default class Sync extends Component {
   static contextType = HicetnuncContext
 
   componentWillMount = async () => {
-    this.context.dAppClient()
+    if (this.context.acc == null) {
+      await this.context.syncTaquito()
+    } else {
+      return
+    }
+    console.log(this.context)
   }
 
   render() {
     return (
       <Page>
-        {this.context.address !== '' ? (
-          <Redirect to={`/tz/${this.context.address}`} />
-        ) : (
+        { this.context.acc !== null ?
+          <Redirect to={`/tz/${this.context.acc.address}`} />
+          :
           <Container>
             <Padding>
               <p>requesting permissions</p>
@@ -27,7 +32,8 @@ export default class Sync extends Component {
               <LoadingContainer />
             </Padding>
           </Container>
-        )}
+
+        }
       </Page>
     )
   }
