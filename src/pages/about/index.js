@@ -97,7 +97,7 @@ export class About extends Component {
         <Container>
           <Padding>
             <div className={styles.buttons}>
-              <p>Issues can be reported here</p>&nbsp;
+              <p>Issues can be reported</p>&nbsp;
               <Button href="https://github.com/hicetnunc2000/hicetnunc/issues">
                 <Primary>
                   <strong>here</strong>
