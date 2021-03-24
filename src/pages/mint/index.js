@@ -29,8 +29,6 @@ export const Mint = () => {
 
   const [message, setMessage] = useState('')
 
-  console.log('acc', acc)
-
   const handleMint = async () => {
     console.log('mint', Tezos)
     setAccount()
@@ -38,7 +36,7 @@ export const Mint = () => {
       alert('sync')
       return
     }
-    console.log(acc)
+    console.log('acc', acc)
 
     // check mime type
     if (ALLOWED_MIMETYPES.indexOf(file.mimeType) === -1) {
@@ -59,7 +57,6 @@ export const Mint = () => {
 
     // file about to be minted, change to the mint screen
 
-    debugger
     setStep(2)
     // upload file(s)
     let nftCid
