@@ -9,7 +9,7 @@ export const Footer = () => {
   const language = getLanguage()
 
   return (
-    <footer className={styles.container}>
+    <footer className={styles.container} style={{ position: 'fixed' }}>
       <Padding>
         <div className={styles.copy}>{language.footer.mint}</div>
         <div className={styles.buttons}>
