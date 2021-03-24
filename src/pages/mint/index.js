@@ -34,7 +34,7 @@ export const Mint = () => {
   const handleMint = async () => {
     console.log('mint', Tezos)
     setAccount()
-    if (acc === null) {
+    if (!acc) {
       alert('sync')
       return
     }
