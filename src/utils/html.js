@@ -111,6 +111,12 @@ export function injectCSPMetaTagIntoHTML(html) {
     }
   }
 
+  if (!doc.head) {
+    const msg = 'index.html is missing <head> tag!'
+    window.alert(msg)
+    throw new Error(msg)
+  }
+
   // inject CSP meta tag
   doc.head.insertAdjacentHTML(
     'afterbegin',
@@ -120,7 +126,7 @@ export function injectCSPMetaTagIntoHTML(html) {
   )
 
   // doc -> HTML
-  return doc.documentElement.innerHTML
+  return `<!DOCTYPE html><html>${doc.documentElement.innerHTML}</html>`
 }
 
 export function getCoverImagePathFromBuffer(buffer) {

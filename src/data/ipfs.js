@@ -39,7 +39,7 @@ export const prepareDirectory = async ({
   // upload files
   const hashes = await uploadFilesToDirectory(files)
   const cid = `ipfs://${hashes.directory}`
-  const displayUri = `ipfs://${hashes.cover}`
+  const displayUri = hashes.cover ? `ipfs://${hashes.cover}` : null
 
   return await uploadMetadataFile({
     name,
