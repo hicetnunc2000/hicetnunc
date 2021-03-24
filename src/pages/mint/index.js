@@ -11,7 +11,7 @@ import { prepareFile, prepareDirectory } from '../../data/ipfs'
 import { prepareFilesFromZIP } from '../../utils/html'
 import {
   ALLOWED_MIMETYPES,
-  ALLOWED_FILETYPES,
+  ALLOWED_FILETYPES_LABEL,
   MINT_FILESIZE,
   MIMETYPE,
   PATH,
@@ -42,9 +42,7 @@ export const Mint = () => {
     // check mime type
     if (ALLOWED_MIMETYPES.indexOf(file.mimeType) === -1) {
       alert(
-        `File format invalid. supported formats include: ${ALLOWED_FILETYPES.join(
-          ', '
-        ).toLocaleLowerCase()}`
+        `File format invalid. supported formats include: ${ALLOWED_FILETYPES_LABEL.toLocaleLowerCase()}`
       )
       return
     }

@@ -114,9 +114,6 @@ export const MIMETYPE = {
   JPEG: 'image/jpeg',
   PNG: 'image/png',
   SVG: 'image/svg+xml',
-  ZIP: 'application/zip',
-  ZIP1: 'application/x-zip-compressed',
-  ZIP2: 'multipart/x-zip',
   TIFF: 'image/tiff',
   WEBP: 'image/webp',
   MP4: 'video/mp4',
@@ -127,6 +124,9 @@ export const MIMETYPE = {
   GLTF: 'model/gltf+json',
   MP3: 'audio/mpeg',
   OGA: 'audio/ogg',
+  ZIP: 'application/zip',
+  ZIP1: 'application/x-zip-compressed',
+  ZIP2: 'multipart/x-zip',  
 }
 
 export const IPFS_DIRECTORY_MIMETYPE = 'application/x-directory'
@@ -136,3 +136,9 @@ export const ALLOWED_MIMETYPES = Object.keys(MIMETYPE)
   .filter((e) => e !== MIMETYPE.GLTF) // disabling GLTF from new updates
 
 export const ALLOWED_FILETYPES = Object.keys(MIMETYPE)
+
+export const ALLOWED_FILETYPES_LABEL = ALLOWED_FILETYPES
+  .filter(k => k !== 'ZIP1')
+  .filter(k => k !== 'ZIP2')
+  .map(k => k === 'ZIP' ? 'HTML (ZIP ARCHIVE)' : k)
+  .join(', ')
