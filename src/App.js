@@ -22,7 +22,6 @@ const App = () => {
   //
   useEffect(() => {
     const language = getItem('language') || setItem('language', 'en')
-    console.log('language', language)
     fetch(
       `https://raw.githubusercontent.com/hicetnunc2000/hicetnunc/main/languages/${language}.json`
     )
