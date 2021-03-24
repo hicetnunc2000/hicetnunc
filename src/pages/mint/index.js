@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
 import { Page, Container, Padding } from '../../components/layout'
 import { Input } from '../../components/input'
@@ -14,7 +14,7 @@ import {
 } from '../../constants'
 
 export const Mint = () => {
-  const { Tezos, mint, address, getAuth } = useContext(HicetnuncContext)
+  const { Tezos, mint, address, getAuth, acc, setAccount } = useContext(HicetnuncContext)
   const [step, setStep] = useState(0)
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
@@ -26,8 +26,8 @@ export const Mint = () => {
 
   const handleMint = async () => {
     console.log('mint', Tezos)
-
-    if (Tezos === null) {
+    setAccount()
+    if (acc === null) {
       alert('sync')
     } else {
       if (ALLOWED_MIMETYPES.indexOf(file.mimeType) === -1) {

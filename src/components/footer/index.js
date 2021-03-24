@@ -6,7 +6,7 @@ import styles from './index.module.scss'
 
 export const Footer = () => {
   return (
-    <footer className={styles.container}>
+    <footer className={styles.container} style={{ position : 'fixed' }}>
       {false && (
         <Padding>
           <AnimationSwap label="collect" />
