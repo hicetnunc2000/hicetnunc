@@ -129,6 +129,8 @@ export const MIMETYPE = {
   OGA: 'audio/ogg',
 }
 
+export const IPFS_DIRECTORY_MIMETYPE = 'application/x-directory'
+
 export const ALLOWED_MIMETYPES = Object.keys(MIMETYPE)
   .map((k) => MIMETYPE[k])
   .filter((e) => e !== MIMETYPE.GLTF) // disabling GLTF from new updates
