@@ -36,7 +36,7 @@ export const HTMLComponent = ({
             IMPORTANT:
             <br />
             <br />
-            Your zip file must contain an index.html file and a thumbnail.jpg
+            Your zip file must contain an index.html file.
             <br />
             <br />
             Links to external resources in your code will not work. Please
