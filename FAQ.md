@@ -1,8 +1,7 @@
 # FAQ
-
 Welcome to minting your first OBJKTs on Hicetunc. This open source project was launched March 1 and is still in its alpha stages. Below you’ll some of our most frequently asked questions.
 
-Please keep in mind that the site is being actively worked on by contributors who work on a volunteer basis, and features are constantly being pushed and updated to the site. This FAQ page will try to keep in sync with the newest features and be updated as much as possible, but if some things don’t seem to match, please consult our discord.
+Please keep in mind that the site is being actively worked on by contributors who work on a volunteer basis, and features are constantly being pushed and updated to the site. This FAQ page will try to keep in sync with the newest features and be updated as much as possible, but if some things don’t seem to match, please consult our Discord.
 
 ![The menu](https://i.ibb.co/Z2jh5Lz/hic-menu.jpg)
 
@@ -104,7 +103,7 @@ The hDAOs appear in your profile and should appear in your wallet.
 
 ## How to find buyers
 
-Unfortunately, there are people minting NFTs who did not create what they upload. These copyminters, as we call it, try to make quick buck with art from other people. Collectors have to very careful and try to find out who the artists are and if the art is genuine. 
+Unfortunately, there are people minting NFTs who did not create what they upload. These copyminters, as we call them, try to make a quick buck with art from other people. Collectors have to very careful and try to find out who the artists are and if the art is genuine. 
 
 To make it easier for them, please leave a trace to any social profile or website in the description of your artwork, so potential buyers can validate the authenticity. If you can link the NFTs the artist is advertising on the profile with the NFTs on Hicetnunc, you can assume it is legit.
 
@@ -137,7 +136,6 @@ Here are the steps to get started:
 * Once done, create a Pull Request (PR). A Pull request is basically a way for us to verify the content you want to add to the main repository. We will review it, request any amendments and if all goes well merge it. After that, your contributions will generally go live in our next deployment cycle.
 
 Please try to keep your PR as small and objective as possible, it makes it easier for us to add it into the main repository. For questions feel free to reach our on Discord for  support, and thanks for your willingness to help this project.
-
 You can also talk to the devs in the #devs channel in the Discord.
 
 ## Features not yet implemented. (At the moment there is no ETA or timeline available)
@@ -161,3 +159,4 @@ Yes, we are actively working on supporting multiple languages. You can follow th
 
 ## Nothing is working and I've tried all the troubleshooting possible. What should I do?
 We recommend to wait at least one day. The developers are constantly pushing updates to the site, and sometimes patience is the best answer.
+Please try to keep PR as small and objective as possible, it makes it easier for us to add it into the main repository. For questions feel free to reach our on Discord for support, and thanks for your willingness to help this project.
