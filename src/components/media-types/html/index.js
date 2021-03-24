@@ -25,6 +25,8 @@ export const HTMLComponent = ({
     _viewer_ = context.address
   }
 
+  const coverMeta = '<meta property="og:image" content="path/to/image.jpg" />'
+
   if (preview) {
     return (
       <div>
@@ -37,6 +39,10 @@ export const HTMLComponent = ({
             <br />
             <br />
             Your zip file must contain an index.html file.
+            <br />
+            <br />
+            Please also include an image file and reference it in a meta tag like this:<br />
+            {coverMeta}
             <br />
             <br />
             Links to external resources in your code will not work. Please
