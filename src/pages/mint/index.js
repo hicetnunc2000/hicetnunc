@@ -18,9 +18,7 @@ import {
 } from '../../constants'
 
 export const Mint = () => {
-  const { Tezos, mint, address, getAuth, acc, setAccount } = useContext(
-    HicetnuncContext
-  )
+  const { Tezos, mint, getAuth, acc, setAccount } = useContext(HicetnuncContext)
   const history = useHistory()
   const [step, setStep] = useState(0)
   const [title, setTitle] = useState('')
@@ -30,6 +28,8 @@ export const Mint = () => {
   const [file, setFile] = useState() // the uploaded file
 
   const [message, setMessage] = useState('')
+
+  console.log('acc', acc)
 
   const handleMint = async () => {
     console.log('mint', Tezos)
@@ -59,6 +59,7 @@ export const Mint = () => {
 
     // file about to be minted, change to the mint screen
 
+    debugger
     setStep(2)
     // upload file(s)
     let nftCid
@@ -69,7 +70,7 @@ export const Mint = () => {
         name: title,
         description,
         tags,
-        acc,
+        address: acc.address,
         files,
       })
     } else {
@@ -78,7 +79,7 @@ export const Mint = () => {
         name: title,
         description,
         tags,
-        acc,
+        address: acc.address,
         buffer: file.buffer,
         mimeType: file.mimeType,
       })
