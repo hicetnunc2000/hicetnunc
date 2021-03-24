@@ -38,6 +38,7 @@ export const MIMETYPE = {
   GLTF: 'model/gltf+json',
   MP3: 'audio/mpeg',
   OGA: 'audio/ogg',
+  PDF: 'application/pdf'
 }
 
 export const ALLOWED_MIMETYPES = Object.keys(MIMETYPE)
