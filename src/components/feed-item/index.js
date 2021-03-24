@@ -12,21 +12,26 @@ export const FeedItem = ({
   owners,
   swaps,
   total_amount,
-}) => (
-  <Container>
-    <Button to={`${PATH.OBJKT}/${token_id}`}>
-      <div className={styles.container}>
-        {renderMediaType(token_info, false)}
-      </div>
-    </Button>
-    <Padding>
-      <ItemInfo
-        token_info={token_info}
-        owners={owners}
-        token_id={token_id}
-        swaps={swaps}
-        total_amount={total_amount}
-      />
-    </Padding>
-  </Container>
-)
+}) => {
+  const { mimeType, uri } = token_info.formats[0]
+
+  return (
+    <Container>
+      <Button to={`${PATH.OBJKT}/${token_id}`}>
+        <div className={styles.container}>
+          {renderMediaType({ mimeType, uri: uri.split('//')[1] })}
+        </div>
+      </Button>
+      <Padding>
+        <ItemInfo
+          token_info={token_info}
+          owners={owners}
+          token_id={token_id}
+          swaps={swaps}
+          total_amount={total_amount}
+          feed={true}
+        />
+      </Padding>
+    </Container>
+  )
+}

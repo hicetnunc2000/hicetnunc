@@ -34,11 +34,11 @@ export const getMimeType = (file) => {
         let mimeType
 
         switch (hex) {
-          case '676C5446':
-            mimeType = MIMETYPE.GLB
-            break
           case '7BA2020':
             mimeType = MIMETYPE.GLTF
+            break
+          case '676C5446':
+            mimeType = MIMETYPE.GLB
             break
           default:
             mimeType = 'Unknown MimeType'
@@ -58,4 +58,18 @@ export const getMimeType = (file) => {
  */
 export const filterObjkts = (items) => {
   return items
+}
+
+export const getTotalSales = ({ owners, creators }) => {
+  return Object.keys(owners).reduce((edition, ownerID) => {
+    // not the platform or the creator
+    if (
+      ownerID !== 'KT1Hkg5qeNhfwpKW4fXvq7HGZB9z2EnmCCA9' &&
+      !creators.includes(ownerID)
+    ) {
+      // add the count of market owned editions
+      edition = edition + Number(owners[ownerID])
+    }
+    return edition
+  }, 0)
 }

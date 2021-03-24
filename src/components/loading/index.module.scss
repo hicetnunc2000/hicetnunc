@@ -11,27 +11,44 @@
   justify-content: center;
 }
 
-.circle {
-  display: inline-block;
-  background-color: var(--text-color);
-  width: 30px;
-  height: 30px;
-  border-radius: 1000px;
-  transition: background-color #{$theme-duration} ease-out;
-  animation: circle 2s linear infinite;
+.container {
+  display: flex;
+  align-items: center;
+
+  .circle {
+    display: inline-block;
+    background-color: var(--text-color);
+    width: 20px;
+    height: 20px;
+    border-radius: 1000px;
+    transition: background-color #{$theme-duration} ease-out;
+    animation: circle 1.5s linear infinite;
+  }
+
+  .message {
+    margin-left: 10px;
+  }
 }
 
 @keyframes circle {
   0% {
-    transform: scale(0.1);
+    transform: scale(0);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0;
+  }
+}
+
+@keyframes flicker {
+  0% {
     opacity: 1;
   }
   50% {
-    transform: scale(1);
-    opacity: 0.5;
+    opacity: 0;
   }
   100% {
-    transform: scale(1.5);
-    opacity: 0.1;
+    opacity: 1;
   }
 }

@@ -1,0 +1,82 @@
+{
+  "header": {
+    "sync": "synchroniser",
+    "menu": [
+      { "primary": "○", "route": "/hdao" },
+      { "primary": "random", "route": "/random" },
+      { "primary": "OBJKTs", "secondary": "(émettre NFTs)", "route": "/mint" },
+      { "primary": "gestion des biens", "route": "/sync" },
+      { "primary": "à propos", "route": "/about" }
+    ]
+  },
+  "footer": {
+    "mint": "synchroniser -> collectionner // synchroniser -> émettre // synchroniser -> échanger",
+    "warning": "utilisez-le de façon responsable. visitez les profils des artistes. faites attention aux émetteurs de copies."
+  },
+  "home": {
+    "latest": "récents",
+    "hDAO": "hDAO",
+    "more": "Voir plus"
+  },
+  "mint": {
+    "title": "titre",
+    "description": "description",
+    "tags": "tags (séparés par une virgule)",
+    "amount": "nombre d'OBJKTs à émettre",
+    "upload": "Envoyer OBJKT",
+    "supports": "supporte",
+    "preview": "prévisualiser",
+    "mint": "émettre",
+    "warning": "cette opération coûte 0.08~ tez. 10% de commission sont pris par défaut"
+  },
+  "manage": {
+    "creations": "créations",
+    "collection": "collection"
+  },
+  "about": {
+    "title": "hic et nunc",
+    "paragraphs": [
+      "Cette application décentralisée permet à ses utilisateurs de gérer des biens digitaux décentralisés, comme infrastructure publique de contrats intelligents sur la Blockchain Tezos.",
+      "Les NFTs IPFS peuvent être émis et échangés de façon libre. L'ambition de cet outil est d'imaginer des économies crypto alternatives.",
+      "Nous faisons attention à votre sécurité et à votre indépendance. Veuillez vérifier vos informations pendant vos transactions.",
+      "Si vous avez des questions, besoin de conseils ou souhaitez intégrer la communauté, contactez-nous via %EMAIL%, %DISCORD% ou sur %REDDIT%.",
+      "Prenez le temps de consulter la %FAQ%.",
+      "Si vous avez des problèmes avec le site, signalez un problème: %ISSUE%"
+    ]
+  },
+  "detail": {
+    "editions": "Editions",
+    "issuer": "Emetteur",
+    "notForSale": "Pas à vendre",
+    "soldOut": "Epuisé",
+    "collect": "Collectionner pour %PRICE%",
+    "menuInfo": "info",
+    "menuOwners": "propriétaires",
+    "menuSwap": "échanger",
+    "menuCancel": "annuler",
+    "menuBurn": "brûler",
+    "info": {
+      "title": "TITRE",
+      "description": "DESCRIPTION",
+      "tags": "TAGS"
+    },
+    "owners": {
+      "title": "pas de propriétaires"
+    },
+    "swap": {
+      "amount": "nombre d'OBJKT",
+      "price": "prix par OBJKT (en tez)",
+      "cta": "échanger",
+      "warning": "les échanges ayant de la valeur comportent une taxe de 2.5% afin de maintenir la plateforme"
+    },
+    "cancel": {
+      "title": "vous allez annuler votre échange",
+      "cta": "annuler"
+    },
+    "burn": {
+      "title": "Brûler votre NFT va l'enlever de façon permanente du réseau",
+      "cta": "brûler"
+    },
+    "confirm": "Etes-vous sûr?"
+  }
+}

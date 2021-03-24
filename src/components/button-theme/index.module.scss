@@ -1,21 +1,13 @@
 @import '../../styles/variables.scss';
 
 .container {
-  position: absolute;
-  top: 50%;
-  right: $mobile-padding;
+  display: flex;
   width: 16px;
   height: 16px;
   border-radius: 50%;
   background-color: var(--background-color);
   transition: background-color #{$theme-duration} ease-out,
-    color #{$theme-duration} ease-out, box-shadow #{$theme-duration} ease-out;
-  transform: translateX(-50%) translateY(-50%);
+    color #{$theme-duration} ease-out;
   z-index: 1000;
   cursor: pointer;
-
-  // &.light {
-  //   background-color: var(--text-color);
-  //   box-shadow: inset 7px 0px 0 2px var(--background-color);
-  // }
 }

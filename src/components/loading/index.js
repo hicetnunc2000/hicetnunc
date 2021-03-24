@@ -1,8 +1,13 @@
 import React from 'react'
 import styles from './index.module.scss'
 
-export const Loading = () => {
-  return <div className={styles.circle} />
+export const Loading = ({ message }) => {
+  return (
+    <div className={styles.container}>
+      <div className={styles.circle} />
+      {message && <p className={styles.message}>{message}</p>}
+    </div>
+  )
 }
 
 export const LoadingContainer = ({ loading, children = null }) => {

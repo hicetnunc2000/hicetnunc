@@ -1,0 +1,11 @@
+@import '../../styles/variables.scss';
+
+.container {
+  padding: 6px 0;
+  border-bottom: 1px solid var(--border-color);
+  transition: border-color #{$theme-duration} ease-out;
+
+  & > * {
+    margin-right: 1em;
+  }
+}

@@ -1,5 +1,24 @@
 # RELEASES
 
+## 14 March 2021
+
+### Bug fixes
+
+- sanitize objects before filtering (veqtor)
+- bug fixes and code refactor on objkt detail page (andrevenancio)
+
+### Features
+
+- identicon based on wallet id (vhf)
+- adding preview to mint page (guidoschmidt + andrevenancio)
+- adding progress message for swap, curate and burn (andrevenancio)
+- redirect to user profile once a swap, cancel and burn happen (andrevenancio)
+- introducing hDAO feed (andrevenancio + crzypathwork)
+- enabled glb viewer autoplay (leonardschoelch)
+- updating FAQ (violetforest)
+
+---
+
 ## 13 March 2021
 
 ### Bug fixes
