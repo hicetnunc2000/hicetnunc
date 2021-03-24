@@ -21,11 +21,6 @@ export const renderMediaType = ({
   const path = uri
   let url
 
-  const { token_info } = metadata
-
-  const displayUri = token_info.displayUri.replace('ipfs://', CLOUDFLARE)
-  console.log('display uri', displayUri)
-
   switch (mimeType) {
     /* IMAGES */
     case MIMETYPE.BMP:
@@ -53,6 +48,8 @@ export const renderMediaType = ({
     case MIMETYPE.ZIP1:
     case MIMETYPE.ZIP2:
       url = preview ? uri : `${CLOUDFLARE}${path}`
+      const { token_info } = metadata
+      const displayUri = token_info.displayUri.replace('ipfs://', CLOUDFLARE)
       return (
         <HTMLComponent
           {...metadata}
