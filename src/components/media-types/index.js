@@ -21,9 +21,10 @@ export const renderMediaType = ({
   const path = uri
   let url
 
-  if (mimeType === IPFS_DIRECTORY_MIMETYPE) {
-    mimeType = MIMETYPE.ZIP
-  }
+  const { token_info } = metadata
+
+  const displayUri = token_info.displayUri.replace('ipfs://', CLOUDFLARE)
+  console.log('display uri', displayUri)
 
   switch (mimeType) {
     /* IMAGES */
@@ -47,6 +48,7 @@ export const renderMediaType = ({
         />
       )
     /* HTML ZIP */
+    case IPFS_DIRECTORY_MIMETYPE:
     case MIMETYPE.ZIP:
     case MIMETYPE.ZIP1:
     case MIMETYPE.ZIP2:
@@ -57,8 +59,9 @@ export const renderMediaType = ({
           src={url}
           interactive={interactive}
           preview={preview}
+          displayUri={displayUri}
         />
-      )      
+      )
     /* VIDEOS */
     case MIMETYPE.MP4:
     case MIMETYPE.OGV:
