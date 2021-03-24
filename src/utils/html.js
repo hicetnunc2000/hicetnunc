@@ -1,7 +1,7 @@
 import * as fflate from 'fflate'
 import mime from 'mime-types'
 
-export async function prepareFilesFromZIP (buffer) {
+export async function prepareFilesFromZIP(buffer) {
   // unzip files
   let files = await unzipBuffer(buffer)
 
@@ -10,32 +10,31 @@ export async function prepareFilesFromZIP (buffer) {
   const indexBuffer = await indexBlob.arrayBuffer()
   const safeIndexBuffer = injectCSPMetaTagIntoBuffer(indexBuffer)
   files['index.html'] = new Blob([safeIndexBuffer], {
-    type: indexBlob.type
+    type: indexBlob.type,
   })
 
   // reformat
-  files = Object.entries(files).map(file => {
+  files = Object.entries(files).map((file) => {
     return {
       path: file[0],
-      blob: file[1]
+      blob: file[1],
     }
   })
 
   // remove top level dir
-  files = files.filter(f => f.path !== '')
+  files = files.filter((f) => f.path !== '')
 
   return files
 }
 
-export async function unzipBuffer (buffer) {
+export async function unzipBuffer(buffer) {
   let entries = fflate.unzipSync(buffer)
-  entries = Object.entries(entries)
-    .map(entry => {
-      return {
-        path: entry[0],
-        buffer: entry[1]
-      }
-    })
+  entries = Object.entries(entries).map((entry) => {
+    return {
+      path: entry[0],
+      buffer: entry[1],
+    }
+  })
 
   // Find root dir
   let rootDir = null
@@ -60,11 +59,12 @@ export async function unzipBuffer (buffer) {
   const files = {}
   entries.forEach((entry, index) => {
     const relPath = entry.path.replace(`${rootDir}/`, '')
-    const type = entry.buffer.length === 0 
-      ? 'application/x-directory'
-      : mime.lookup(entry.path)
+    const type =
+      entry.buffer.length === 0
+        ? 'application/x-directory'
+        : mime.lookup(entry.path)
     files[relPath] = new Blob([entry.buffer], {
-      type
+      type,
     })
   })
 
@@ -101,7 +101,9 @@ export function injectCSPMetaTagIntoHTML(html) {
   const doc = parser.parseFromString(html, 'text/html')
 
   // remove any existing CSP meta tags
-  const existing = doc.head.querySelectorAll('meta[http-equiv="Content-Security-Policy"]')
+  const existing = doc.head.querySelectorAll(
+    'meta[http-equiv="Content-Security-Policy"]'
+  )
   if (existing.length) {
     for (let i = 0; i < existing.length; i++) {
       existing[i].remove()
@@ -109,9 +111,12 @@ export function injectCSPMetaTagIntoHTML(html) {
   }
 
   // inject CSP meta tag
-  doc.head.insertAdjacentHTML('afterbegin', `
+  doc.head.insertAdjacentHTML(
+    'afterbegin',
+    `
     <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline';">
-  `)
+  `
+  )
 
   // doc -> HTML
   return doc.documentElement.innerHTML
@@ -131,3 +136,4 @@ export function getCoverImagePathFromBuffer(buffer) {
 
   return meta.getAttribute('content')
 }
+
