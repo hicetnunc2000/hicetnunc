@@ -1,5 +1,6 @@
 import * as fflate from 'fflate'
 import mime from 'mime-types'
+import { IPFS_DIRECTORY_MIMETYPE } from '../constants'
 
 export async function prepareFilesFromZIP(buffer) {
   // unzip files
@@ -61,7 +62,7 @@ export async function unzipBuffer(buffer) {
     const relPath = entry.path.replace(`${rootDir}/`, '')
     const type =
       entry.buffer.length === 0
-        ? 'application/x-directory'
+        ? IPFS_DIRECTORY_MIMETYPE
         : mime.lookup(entry.path)
     files[relPath] = new Blob([entry.buffer], {
       type,
