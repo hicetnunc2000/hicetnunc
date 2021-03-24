@@ -42,6 +42,7 @@ export default class Display extends Component {
       if (data.data.github) this.setState({ github: data.data.github })
       if (data.data.email) this.setState({ email: data.data.email })
       if (data.data.reddit) this.setState({ reddit: data.data.reddit })
+      if (data.data.logo) this.setState({ logo: data.data.logo })
     })
 
     await axios
@@ -80,7 +81,7 @@ export default class Display extends Component {
         <Container>
           <Padding>
             <div className={styles.profile}>
-              <Identicon address={this.state.wallet} />
+              <Identicon address={this.state.wallet} logo={this.state.logo}/>
 
               <div className={styles.info}>
                 {this.state.alias && <p>{this.state.alias}</p>}
@@ -166,12 +167,17 @@ export default class Display extends Component {
                     </a>
                   )}
                   {this.state.reddit && (
-                    <a href={`https://reddit.com/"${this.state.reddit}`}>
+                    <a href={`https://reddit.com/${this.state.reddit}`}>
                       <svg
                         height="16"
                         viewBox="0 0 512 512"
                         width="16"
                         xmlns="http://www.w3.org/2000/svg"
+                        style={{
+                          fill: 'var(--text-color)',
+                          stroke: 'transparent',
+                          marginRight: '10px',
+                        }}
                       >
                         <path d="m309.605469 343.347656c-11.46875 11.46875-36.042969 15.5625-53.554688 15.5625-17.5625 0-42.085937-4.09375-53.554687-15.5625-2.714844-2.714844-7.066406-2.714844-9.777344 0-2.714844 2.714844-2.714844 7.066406 0 9.777344 18.175781 18.175781 53.09375 19.609375 63.332031 19.609375s45.105469-1.433594 63.335938-19.609375c2.660156-2.714844 2.660156-7.066406 0-9.777344-2.714844-2.714844-7.066407-2.714844-9.78125 0zm0 0" />
                         <path d="m224 282.675781c0-14.695312-11.980469-26.675781-26.675781-26.675781-14.691407 0-26.675781 11.980469-26.675781 26.675781 0 14.691407 11.984374 26.675781 26.675781 26.675781 14.695312 0 26.675781-11.980468 26.675781-26.675781zm0 0" />

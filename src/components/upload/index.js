@@ -1,11 +1,12 @@
 import React, { useState } from 'react'
-import { ALLOWED_FILETYPES } from '../../constants'
+import { ALLOWED_FILETYPES, getLanguage } from '../../constants'
 import { getMimeType } from '../../utils/sanitise'
 import styles from './index.module.scss'
 
 const Buffer = require('buffer').Buffer
 
 export const Upload = ({ label, onChange = () => null }) => {
+  const language = getLanguage()
   const [title, setTitle] = useState(label)
 
   const onFileChange = async (e) => {
@@ -31,7 +32,7 @@ export const Upload = ({ label, onChange = () => null }) => {
         <input type="file" name="file" onChange={onFileChange} />
       </label>
       <div className={styles.allowed}>
-        supports:&nbsp;{ALLOWED_FILETYPES.join(', ')}
+        {language.mint.supports}:&nbsp;{ALLOWED_FILETYPES.join(', ')}
       </div>
     </div>
   )

@@ -80,7 +80,7 @@ export const Curate = ({ children = null, selected }) => {
     [styles.curate]: true,
     [styles.selected]: selected,
   })
-  return <div className={classes}><a style={{ cursor : `pointer` }}>{children}</a></div>
+  return <div className={classes}>{children}</div>
 }
 
 export const Burn = ({ children = null, selected }) => {

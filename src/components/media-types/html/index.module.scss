@@ -1,0 +1,73 @@
+@import '../../../styles/layout.scss';
+
+.container {
+  position: relative;
+  display: block;
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+
+  &:after {
+    content: '';
+    display: block;
+    padding-bottom: 100%;
+  }
+
+  &.interactive {
+    pointer-events: all;
+  }
+
+  .play {
+    position: relative;
+    background-color: red;
+
+    img {
+      display: block;
+    }
+
+    .button {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      .dark {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 0;
+        background: radial-gradient(
+          circle,
+          rgba(255, 255, 255, 0.3) 0%,
+          rgba(0, 0, 0, 0.1) 100%
+        );
+      }
+
+      svg {
+        position: relative;
+        display: flex;
+        width: 100px;
+        height: auto;
+        z-index: 1;
+      }
+    }
+  }
+
+  iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+}

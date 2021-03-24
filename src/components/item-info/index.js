@@ -23,12 +23,11 @@ export const ItemInfo = ({
 
   let available = 0
 
-  if (owners != undefined) {
+  if (owners !== undefined) {
     const kt = `KT1Hkg5qeNhfwpKW4fXvq7HGZB9z2EnmCCA9`
     available = owners[kt]
-  } else {
-    console.log(owners)
   }
+
   // var kt = _.values(_.omitBy(owners, (value, key) => !key.startsWith('KT')))[0]
   //owners = _.values(_.omitBy(owners, (value, key) => !key.startsWith(token_info.creators[0])))
 
@@ -37,10 +36,10 @@ export const ItemInfo = ({
 
   //const notForSale = available > 0 || isNaN(editions)
   try {
-  message =
-    available > 0
-      ? 'collect for ' + Number(swaps[0].xtz_per_objkt) / 1000000 + ' tez'
-      : 'not for sale'
+    message =
+      available > 0
+        ? 'collect for ' + Number(swaps[0].xtz_per_objkt) / 1000000 + ' tez'
+        : 'not for sale'
   } catch (e) {
     console.log(e)
     message = 'not for sale'
@@ -67,7 +66,9 @@ export const ItemInfo = ({
           {!feed && (
             <div>
               <p>
-                <span>Editions: {available}/{total_amount}</span>
+                <span>
+                  Editions: {available}/{total_amount}
+                </span>
               </p>
             </div>
           )}
