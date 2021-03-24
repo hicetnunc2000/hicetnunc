@@ -138,8 +138,7 @@ export const ALLOWED_MIMETYPES = Object.keys(MIMETYPE)
 export const ALLOWED_FILETYPES = Object.keys(MIMETYPE)
 
 export const ALLOWED_FILETYPES_LABEL = ALLOWED_FILETYPES
-  .filter(k => {
-    return  k !== 'ZIP1' && k !== 'ZIP2'
-  })
+  .filter(k => k !== 'ZIP1')
+  .filter(k => k !== 'ZIP2')
   .map(k => k === 'ZIP' ? 'HTML (ZIP ARCHIVE)' : k)
   .join(', ')
