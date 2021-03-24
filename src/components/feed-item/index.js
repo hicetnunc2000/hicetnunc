@@ -9,7 +9,6 @@ import styles from './index.module.scss'
 export const FeedItem = (props) => {
   const { token_info, token_id, owners, swaps, total_amount } = props
   const { mimeType, uri } = token_info.formats[0]
-  console.log('feed items', props)
 
   return (
     <Container>

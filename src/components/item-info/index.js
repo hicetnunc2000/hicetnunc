@@ -42,7 +42,6 @@ export const ItemInfo = ({
         ? 'collect for ' + Number(swaps[0].xtz_per_objkt) / 1000000 + ' tez'
         : 'not for sale'
   } catch (e) {
-    console.log(e)
     message = 'not for sale'
   }
 
