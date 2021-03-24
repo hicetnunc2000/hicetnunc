@@ -116,3 +116,18 @@ export function injectCSPMetaTagIntoHTML(html) {
   // doc -> HTML
   return doc.documentElement.innerHTML
 }
+
+export function getCoverImagePathFromBuffer(buffer) {
+  // buffer -> html
+  const html = new TextDecoder().decode(buffer)
+
+  // html -> doc
+  const parser = new DOMParser()
+  const doc = parser.parseFromString(html, 'text/html')
+
+  const meta = doc.querySelector('meta[property="cover-image"]')
+
+  if (!meta) return null
+
+  return meta.getAttribute('content')
+}
