@@ -31,7 +31,7 @@ REACT_APP_TZ='http://0.0.0.0:3001/tz'
 REACT_APP_OBJKT='http://0.0.0.0:3001/objkt'
 ```
 
-in the present version you must have ungrund running accessing hicetnunc's module https://github.com/hicetnunc2000/ungrund
+in the present version you must have ungrund running accessing hicetnunc's module https://github.com/hicetnunc2000/hicetnunc-api
 
 check the issues for contributing
 

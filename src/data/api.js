@@ -1,3 +1,4 @@
+// import { WalletPostMessageTransport } from '@airgap/beacon-sdk'
 import { SanitiseOBJKT } from '../utils/sanitise'
 
 const axios = require('axios')
@@ -6,15 +7,12 @@ const axios = require('axios')
  * Gets Feed for homepage
  * filters it against a blocklist json
  */
-export const GetFeed = async ({ counter }) => {
+export const GetFeed = async ({ counter, max_time }) => {
   return Promise.all([
-    axios
-      .post(process.env.REACT_APP_FEED, {
-        counter: counter,
-      })
-      .catch(() => {
-        return { data: { result: [] } }
-      }),
+    axios.post(process.env.REACT_APP_FEED, {
+      counter: counter
+    },
+    ),
     axios.get(process.env.REACT_APP_BLOCKLIST_OBJKT).catch(() => {
       return { data: [] }
     }),
@@ -23,11 +21,11 @@ export const GetFeed = async ({ counter }) => {
     }),
   ])
     .then((results) => {
-      const feed = results[0].data.result
+      const original = results[0].data.result
       const oblock = results[1].data
       const wblock = results[2].data
-
-      const objkts = feed
+      console.log(original)
+      const filtered = SanitiseOBJKT(original)
         // filters objkt's out if they are flagges
         .filter((i) => !oblock.includes(i.token_id))
         // filter objkt's out if they're from flagged wallets
@@ -35,13 +33,16 @@ export const GetFeed = async ({ counter }) => {
 
       // filters objkt's out if they dont have the token_info prop
       return {
-        filtered: SanitiseOBJKT(objkts),
-        original: results[0].data.result,
+        filtered,
+        original,
       }
     })
     .catch((e) => {
       console.error(e)
-      return []
+      return {
+        filtered: [],
+        original: [],
+      }
     })
 }
 
@@ -55,22 +56,43 @@ export const GethDAOFeed = async ({ counter }) => {
       .then((res) => {
         resolve(res.data.result)
       })
-      .catch((e) => reject(e))
+  })
+}
+/* 
+  Get Random Feed
+   */
+
+export const GetRandomFeed = async ({ counter }) => {
+  return new Promise((resolve, reject) => {
+    axios
+      .post(process.env.REACT_APP_RANDOM, { counter: counter })
+      .then((res) => {
+        resolve(res.data.result)
+      })
   })
 }
 
 /**
  * Get OBJKT detail page
  */
-export const GetOBJKT = async ({ objkt_id }) => {
+export const GetOBJKT = async ({ id }) => {
   return new Promise((resolve, reject) => {
     axios
       .post(process.env.REACT_APP_OBJKT, {
-        objkt_id,
+        objkt_id: id,
       })
       .then((res) => {
-        resolve(res.data)
+        resolve(res.data.result)
       })
-      .catch((e) => reject(e))
+      .catch((e) => reject(e)) // TODO: send error message to context. have an error component to display the error
   })
+}
+
+/**
+ * Get User Metaata from tzkt.io
+ */
+export const GetUserMetadata = async (walletAddr) => {
+  return await axios.get(
+    `https://api.tzkt.io/v1/accounts/${walletAddr}/metadata`
+  )
 }

@@ -1,0 +1,81 @@
+{
+  "header": {
+    "sync": "sync",
+    "menu": [
+      { "primary": "○", "route": "/hdao" },
+      { "primary": "random", "route": "/random" },
+      { "primary": "OBJKTs", "secondary": "(ミントNFT)", "route": "/mint" },
+      { "primary": "資産を管理する", "route": "/sync" },
+      { "primary": "約", "route": "/about" }
+    ]
+  },
+  "footer": {
+    "mint": "同期 -> 収集する // 同期 -> ミント // 同期 -> スワップ"
+  },
+  "home": {
+    "latest": "最新",
+    "hDAO": "hDAO",
+    "more": "もっと読み込む"
+  },
+  "mint": {
+    "title": "題名",
+    "description": "説明",
+    "tags": "タグ (カンマで区切られた)",
+    "amount": "OBJKTsからミントまでの数",
+    "upload": "OBJKTをアップロードする",
+    "supports": "サポートします",
+    "preview": "プレビュー",
+    "mint": "ミント",
+    "warning": "この操作の費用は0.08〜tezです。 デフォルトでは10％の使用料が設定されています"
+  },
+  "manage": {
+    "creations": "作品",
+    "collection": "コレクション"
+  },
+  "about": {
+    "title": "hic et nunc",
+    "paragraphs": [
+      "現在の分散型アプリケーションにより、ユーザーは分散型デジタル資産を管理でき、TezosBlockchainのパブリックスマートコントラクトインフラストラクチャとして機能します。",
+      "IPFS NFTは、許可のない方法で作成および取引できます。 そのような実験は、代替の暗号経済を想像することを意図して設計されました。",
+      "私たちはあなたのセキュリティと自律性を心配しています。 取引の際は情報をご確認ください。",
+      "コンサルティング、ネットワーキング、または質問については、%EMAIL%、%DISCORD%、または%REDDIT%から連絡してください。",
+      "%FAQS%をお読みください。",
+      "ウェブサイトに問題がある場合は、%ISSUE%を報告してください"
+    ]
+  },
+  "detail": {
+    "editions": "Editions",
+    "issuer": "発行者",
+    "notForSale": "非売品",
+    "soldOut": "完売",
+    "collect": "%PRICE%で集める",
+    "menuInfo": "情報",
+    "menuOwners": "所有者",
+    "menuSwap": "スワップ",
+    "menuCancel": "キャンセル",
+    "menuBurn": "燃やす",
+    "info": {
+      "title": "題名",
+      "description": "説明",
+      "tags": "タグ"
+    },
+    "owners": {
+      "title": "所有者なし"
+    },
+    "swap": {
+      "amount": "OBJKTsの数",
+      "price": "OBJKTあたりの価格（tez）",
+      "cta": "交換する",
+      "warning": "価値のあるスワップには、プラットフォームのメンテナンスに2.5％の手数料がかかります"
+    },
+    "cancel": {
+      "title": "スワップをキャンセルしようとしています",
+      "cta": "キャンセルする"
+    },
+    "burn": {
+      "title": "NFTを書き込むと、ネットワークから完全に削除されます",
+      "cta": "それを燃やす"
+    },
+    "confirm": "本気ですか？"
+  }
+}

@@ -1,6 +1,6 @@
 # FAQ
 
-Welcome to minting your first OBJKTs on Hicetunc. This open source project was launched March 1 and is still in its alpha stages. Below you’ll find guides to minting.
+Welcome to minting your first OBJKTs on Hicetunc. This open source project was launched March 1 and is still in its alpha stages. Below you’ll some of our most frequently asked questions.
 
 Please keep in mind that the site is being actively worked on by contributors who work on a volunteer basis, and features are constantly being pushed and updated to the site. This FAQ page will try to keep in sync with the newest features and be updated as much as possible, but if some things don’t seem to match, please consult our discord.
 
@@ -101,6 +101,7 @@ The hDAOs appear in your profile and should appear in your wallet.
 
 ![hDAO tokens in profile](https://i.ibb.co/sF5JP0h/hdao.jpg)
 
+
 ## How to find buyers
 
 Unfortunately, there are people minting NFTs who did not create what they upload. These copyminters, as we call it, try to make quick buck with art from other people. Collectors have to very careful and try to find out who the artists are and if the art is genuine. 
@@ -110,7 +111,7 @@ To make it easier for them, please leave a trace to any social profile or websit
 ## How to get verified
 -- or how do I get my name in the profile?
 
-hicetnunc fetches the profile information from <a href="https://tzkt.io" target="_blank">https://tzkt.io</a> so to get your name associated with your wallet address you need to contact tzkt.io. They will ask you to fill in a form and to transfer a small amount of tez from your wallet to prove it is really you.
+hicetnunc fetches the profile information from https://tzkt.io so to get your name associated with your wallet address you need to contact tzkt.io. They will ask you to fill in a form and to transfer a small amount of tez from your wallet to prove it is really you.
 
 * Go to your hic et nunc profile
 * Click your wallet address link, you will navigate to tzkt.io
@@ -128,12 +129,14 @@ You can contribute to Hic et Nunc either by contributing bug fixes and developme
 
 Please read the <a href="https://github.com/hicetnunc2000/hicetnunc/blob/main/CONTRIBUTING.md" target="_blank">Contribution Guide</a> or follow the steps below:
 
+Here are the steps to get started:
+
 * Create a Github account
-* Go to our <a href="https://github.com/hicetnunc2000/hicetnunc" target="_blank">repository</a> and on the top right click the "Fork" button. This will create a copy of the repository to your own account.
+* Go to our [repository](https://github.com/hicetnunc2000/hicetnunc) and on the top right click the "Fork" button. This will create a copy of the repository to your own account.
 * From the forked repository (now on your account), feel free to make the changes you wish to see.
 * Once done, create a Pull Request (PR). A Pull request is basically a way for us to verify the content you want to add to the main repository. We will review it, request any amendments and if all goes well merge it. After that, your contributions will generally go live in our next deployment cycle.
 
-Please try to keep PR as small and objective as possible, it makes it easier for us to add it into the main repository. For questions feel free to reach our on Discord for  support, and thanks for your willingness to help this project.
+Please try to keep your PR as small and objective as possible, it makes it easier for us to add it into the main repository. For questions feel free to reach our on Discord for  support, and thanks for your willingness to help this project.
 
 You can also talk to the devs in the #devs channel in the Discord.
 
@@ -154,7 +157,7 @@ Our discord has the following promotion channels:
 You can also make a post on reddit in <a href="https://reddit.com/r/hicetnunc" target="_blank">r/hicetnunc</a>, or message the <a href="https://twitter.com/hicetnunc2000" target="_blank">twitter</a> and <a href="https://www.instagram.com/hicetnunc2000/" target="_blank">instagram</a> and you can tag us in your posts.
 
 ## Do you support multiple languages?
-Yes, we are actively working on supporting multiple languages.
+Yes, we are actively working on supporting multiple languages. You can follow the development (here)[https://github.com/hicetnunc2000/hicetnunc/issues/173]
 
 ## Nothing is working and I've tried all the troubleshooting possible. What should I do?
 We recommend to wait at least one day. The developers are constantly pushing updates to the site, and sometimes patience is the best answer.

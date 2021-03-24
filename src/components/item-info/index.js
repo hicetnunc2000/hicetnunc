@@ -4,7 +4,10 @@ import { Button, Primary, Purchase } from '../button'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
 import { walletPreview } from '../../utils/string'
 import styles from './index.module.scss'
-import { lowestPrice } from '../../utils/lowestPrice'
+// import { lowestPrice } from '../../utils/lowestPrice'
+// import { getTotalSales } from '../../utils/sanitise'
+
+const _ = require('lodash')
 
 export const ItemInfo = ({
   token_id,
@@ -12,45 +15,43 @@ export const ItemInfo = ({
   owners,
   swaps,
   transfered,
+  feed,
   total_amount,
   isDetailView,
 }) => {
-  const context = useContext(HicetnuncContext)
-  const swap = lowestPrice(swaps)
-  const notForSale = swaps.length === 0
-  const soldOut = notForSale && transfered > 0
-  const price = swaps.length > 0 && Number(swap.xtz_per_objkt) / 1000000
-  console.log({ owners, token_info })
-  const editionNumber = owners
-    ? Object.keys(owners).reduce((edition, ownerID) => {
-        // not the platform or the creator
-        if (
-          ownerID !== 'KT1Hkg5qeNhfwpKW4fXvq7HGZB9z2EnmCCA9' &&
-          !token_info.creators.includes(ownerID)
-        ) {
-          // add the count of market owned editions
-          edition = edition + Number(owners[ownerID])
-        }
-        return edition
-      }, 1)
-    : 1
-  const edition = notForSale
-    ? total_amount
-    : swaps.length && `${editionNumber}/${total_amount}`
+  const { Tezos, syncTaquito, collect, curate } = useContext(HicetnuncContext)
 
-  const soldOutMessage = soldOut ? 'sold out!' : 'not for sale'
-  const message = notForSale ? soldOutMessage : `collect for ${price} tez`
+  let available = 0
 
-  const handleCollect = () => {
-    if (context.Tezos == null) {
-      context.syncTaquito()
-    } else {
-      context.collect(1, swap.swap_id, swap.xtz_per_objkt * 1)
-    }
+  if (owners != undefined) {
+    const kt = `KT1Hkg5qeNhfwpKW4fXvq7HGZB9z2EnmCCA9`
+    available = owners[kt]
+  } else {
+    console.log(owners)
+  }
+  // var kt = _.values(_.omitBy(owners, (value, key) => !key.startsWith('KT')))[0]
+  //owners = _.values(_.omitBy(owners, (value, key) => !key.startsWith(token_info.creators[0])))
+
+  const soldOutMessage = 'not for sale'
+  var message = ''
+
+  //const notForSale = available > 0 || isNaN(editions)
+  try {
+  message =
+    available > 0
+      ? 'collect for ' + Number(swaps[0].xtz_per_objkt) / 1000000 + ' tez'
+      : 'not for sale'
+  } catch (e) {
+    console.log(e)
+    message = 'not for sale'
   }
 
-  const curate = (token_id) => {
-    context.curate(token_id)
+  const handleCollect = () => {
+    if (Tezos == null) {
+      syncTaquito()
+    } else {
+      collect(1, swaps[0].swap_id, swaps[0].xtz_per_objkt * 1)
+    }
   }
 
   return (
@@ -63,30 +64,50 @@ export const ItemInfo = ({
               <Primary>{walletPreview(token_info.creators[0])}</Primary>
             </Button>
           </div>
-          <p>Edition: {edition}</p>
+          {!feed && (
+            <div>
+              <p>
+                <span>Editions: {available}/{total_amount}</span>
+              </p>
+            </div>
+          )}
         </div>
       </div>
 
       <div className={styles.container}>
-        <Button to={`${PATH.OBJKT}/${token_id}`} disabled={isDetailView}>
-          <Primary>OBJKT#{token_id}</Primary>
-        </Button>
-
-        <Button onClick={() => handleCollect()} disabled={notForSale}>
-          <Purchase>{message}</Purchase>
-        </Button>
+        {isDetailView ? (
+          <p>OBJKT#{token_id}</p>
+        ) : (
+          <Button to={`${PATH.OBJKT}/${token_id}`} disabled={isDetailView}>
+            <Primary>OBJKT#{token_id}</Primary>
+          </Button>
+        )}
+        {feed ? (
+          <div>
+            <Button onClick={() => curate(token_id)}>
+              <Primary>〇</Primary>
+            </Button>
+          </div>
+        ) : (
+          <Button onClick={() => handleCollect()}>
+            <Purchase>{message}</Purchase>
+          </Button>
+        )}
       </div>
       <div className={styles.container}>
+        {!feed && (
+          <div>
+            <Button onClick={() => curate(token_id)}>
+              <Primary>〇</Primary>
+            </Button>
+          </div>
+        )}
         <div>
           {false && (
             <Button onClick={() => alert('report')}>
               <Primary>Report</Primary>
             </Button>
           )}
-
-          <Button onClick={() => curate(token_id)}>
-            <Primary>〇</Primary>
-          </Button>
         </div>
       </div>
     </>

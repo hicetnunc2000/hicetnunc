@@ -1,0 +1,82 @@
+{
+  "header": {
+    "sync": "sync",
+    "menu": [
+      { "primary": "○", "route": "/hdao" },
+      { "primary": "aleatorio", "route": "/random" },
+      { "primary": "OBJKTs", "secondary": "(mint NFTs)", "route": "/mint" },
+      { "primary": "gerenciar NFTs", "route": "/sync" },
+      { "primary": "sobre", "route": "/about" }
+    ]
+  },
+  "footer": {
+    "mint": "sync -> collect // sync -> mint // sync -> swap",
+    "warning": "use it consciously. visit artists profiles. be careful with copy minters."
+  },
+  "home": {
+    "latest": "últimos",
+    "hDAO": "hDAO",
+    "more": "Carregar mais"
+  },
+  "mint": {
+    "title": "título",
+    "description": "descrição",
+    "tags": "tags (separadas por vírgula)",
+    "amount": "quantidade de OBJKT's para mint",
+    "upload": "Upload OBJKT",
+    "supports": "supports",
+    "preview": "preview",
+    "mint": "mint",
+    "warning": "esta operação custará 0.08~ tez. 10% de royalties por padrão"
+  },
+  "manage": {
+    "creations": "criações",
+    "collection": "coleção"
+  },
+  "about": {
+    "title": "hic et nunc",
+    "paragraphs": [
+      "The present decentralized application allows its users to manage decentralized digital assets, serving as a public smart contract infrastructure on Tezos Blockchain.",
+      "IPFS NFTs can be minted and traded by permissionless means. such experiment was designed intending to imagine alternative crypto economies.",
+      "We're concerned about your security and autonomy. please verify informations while making transactions.",
+      "For consulting, networking or questions get in touch by %EMAIL%, %DISCORD%, or on %REDDIT%.",
+      "Please read through our %FAQS%.",
+      "If you're having trouble with the website, please report an %ISSUE%"
+    ]
+  },
+  "detail": {
+    "editions": "Editions",
+    "issuer": "Issuer",
+    "notForSale": "Not for sale",
+    "soldOut": "Sold out",
+    "collect": "Collect for %PRICE%",
+    "menuInfo": "info",
+    "menuOwners": "owners",
+    "menuSwap": "swap",
+    "menuCancel": "cancel",
+    "menuBurn": "burn",
+    "info": {
+      "title": "TITLE",
+      "description": "DESCRIPTION",
+      "tags": "TAGS"
+    },
+    "owners": {
+      "title": "no owners"
+    },
+    "swap": {
+      "amount": "OBJKT amount",
+      "price": "price per OBJKT (in tez)",
+      "cta": "swap it",
+      "warning": "swaps which carry value are charged with a 2.5% fee for platform maintenance"
+    },
+    "cancel": {
+      "title": "you're about to cancel your swap",
+      "cta": "cancel it"
+    },
+    "burn": {
+      "title": "Burning your NFT will permanently delete it from the network",
+      "cta": "burn it"
+    },
+    "confirm": "Are you sure?"
+  }
+}

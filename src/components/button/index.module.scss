@@ -8,9 +8,11 @@
     display: contents;
   }
 
-  &.disabled {
+  &.disabled,
+  &:disabled {
     pointer-events: none;
     cursor: unset;
+    opacity: 0.7;
   }
 }
 
@@ -48,6 +50,10 @@
 }
 
 .curate {
+  opacity: inherit;
+  margin-bottom: 10px;
+  cursor: pointer;
+
   padding: 2px 6px;
   width: 100%;
   color: black; // this colour doesnt change
@@ -59,6 +65,9 @@
 }
 
 .burn {
+  opacity: inherit;
+  margin-bottom: 10px;
+
   padding: 2px 6px;
   width: 100%;
   background-color: red;

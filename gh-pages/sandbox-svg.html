@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>sandbox-svg</title>
+    <style>
+      body {
+        background: #eee;
+        padding: 0;
+        margin: 0;
+      }
+      object {
+        transform-origin: top left;
+      }
+    </style>
+  </head>
+
+  <body>
+    <object type="image/svg+xml" data=""></object>
+    <script>
+      // retrieving the OBJKT URL
+      const src = new URLSearchParams(location.search).get('src')
+      const obj = document.querySelector('object')
+
+      // Keep the OBJKT centered
+      const resize = () => {
+        const scaleX = innerWidth / obj.offsetHeight
+        const scaleY = innerHeight / obj.offsetHeight
+        const scale = Math.min(scaleX, scaleY)
+        obj.style.transform = `scale(${scale})`
+        obj.style.marginLeft = `${
+          (innerWidth - obj.offsetHeight * scale) / 2
+        }px`
+        obj.style.marginTop = `${
+          (innerHeight - obj.offsetHeight * scale) / 2
+        }px`
+      }
+
+      obj.addEventListener('load', function () {
+        resize()
+        setTimeout(resize, 100)
+      })
+      obj.setAttribute('data', src)
+      addEventListener('resize', resize)
+    </script>
+  </body>
+</html>
