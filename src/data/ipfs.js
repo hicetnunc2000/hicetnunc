@@ -48,45 +48,46 @@ export const prepareDirectory = async ({
     cid,
     address,
     mimeType: IPFS_DIRECTORY_MIMETYPE,
-    displayUri
+    displayUri,
   })
 }
 
 function not_directory(file) {
-  return file.blob.type !== IPFS_DIRECTORY_MIMETYPE;
+  return file.blob.type !== IPFS_DIRECTORY_MIMETYPE
 }
 
-async function uploadFilesToDirectory (files) {
+async function uploadFilesToDirectory(files) {
   files = files.filter(not_directory)
 
   const form = new FormData()
 
-  files.forEach(file => {
+  files.forEach((file) => {
     form.append('file', file.blob, encodeURIComponent(file.path))
   })
-  const endpoint = 'https://ipfs.infura.io:5001/api/v0/add?pin=true&recursive=true&wrap-with-directory=true'
+  const endpoint =
+    'https://ipfs.infura.io:5001/api/v0/add?pin=true&recursive=true&wrap-with-directory=true'
   const res = await axios.post(endpoint, form, {
-    headers: { 'Content-Type': 'multipart/form-data' }
+    headers: { 'Content-Type': 'multipart/form-data' },
   })
 
   const data = readJsonLines(res.data)
 
   // get cover hash if it exists
   let cover = null
-  const indexFile = files.find(f => f.path === 'index.html')
+  const indexFile = files.find((f) => f.path === 'index.html')
   if (indexFile) {
     const indexBuffer = await indexFile.blob.arrayBuffer()
     const coverImagePath = getCoverImagePathFromBuffer(indexBuffer)
 
     if (coverImagePath) {
-      const coverEntry = data.find(f => f.Name === coverImagePath)
+      const coverEntry = data.find((f) => f.Name === coverImagePath)
       if (coverEntry) {
         cover = coverEntry.Hash
       }
     }
   }
 
-  const rootDir = data.find(e => e.Name === '')
+  const rootDir = data.find((e) => e.Name === '')
   const directory = rootDir.Hash
 
   return { directory, cover }
@@ -99,7 +100,7 @@ async function uploadMetadataFile({
   cid,
   address,
   mimeType,
-  displayUri = null
+  displayUri = null,
 }) {
   const ipfs = createClient('https://ipfs.infura.io:5001')
 
@@ -122,4 +123,3 @@ async function uploadMetadataFile({
     )
   )
 }
-
