@@ -94,7 +94,7 @@ export const Mint = () => {
         console.log('mint confirm', e)
         setMessage('Minted successfully')
         // redirect here
-        history.push(PATH.ISSUER)
+        history.push(`${PATH.ISSUER}/${address}`)
       })
       .catch((e) => {
         console.log('mint error', e)
