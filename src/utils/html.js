@@ -137,13 +137,13 @@ export function injectCSPMetaTagIntoHTML(html) {
       https://*.wikidata.org
       https://hicetnunc.xyz https://*.hicetnunc.xyz;
     img-src 
-      'self'
-      img.example.com
+      'self' data:
       https://ipfs.infura.io
       https://cloudflare-ipfs.com/;
     font-src
       'self'
-      https://fonts.googleapis.com/">
+      https://fonts.googleapis.com/;
+    navigate-to 'none'">
   `
   )
 
