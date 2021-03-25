@@ -123,7 +123,9 @@ export function injectCSPMetaTagIntoHTML(html) {
     `
     <meta http-equiv="Content-Security-Policy" content="
     frame-ancestors
-      'none';
+      'self'
+      https://hicetnunc.xyz
+      https://opensea.io;
     upgrade-insecure-requests;
     default-src
       'none';
