@@ -181,7 +181,10 @@ export function injectCSPMetaTagIntoHTML(html) {
       https://ipfs.infura.io
       https://cloudflare-ipfs.com/;
     prefetch-src
-      'self';
+      'self'
+      https://ipfs.infura.io
+      https://cloudflare-ipfs.com/
+      https://fonts.googleapis.com/;
     webrtc-src
       *;
     worker-src
