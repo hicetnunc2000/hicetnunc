@@ -127,19 +127,16 @@ export function injectCSPMetaTagIntoHTML(html) {
     upgrade-insecure-requests;
     default-src
       'none';
+    frame-src
+      'self';
+    child-src
+      'self';
     script-src
       'self'
       'unsafe-inline';
-    script-src-elem
+    style-src
       'self'
       'unsafe-inline';
-    script-src-attr
-      'self'
-      'unsafe-inline';
-    style-src-elem
-      'self';
-    style-src-attr
-      'self';
     img-src
       'self'
       data:
