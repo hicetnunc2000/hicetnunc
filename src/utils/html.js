@@ -121,7 +121,29 @@ export function injectCSPMetaTagIntoHTML(html) {
   doc.head.insertAdjacentHTML(
     'afterbegin',
     `
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline';">
+    <meta http-equiv="Content-Security-Policy" content="
+    default-src
+      'self'
+      'unsafe-inline';
+    connect-src
+      'self'
+      https://better-call.dev https://*.better-call.dev
+      https://*.cryptonomic-infra.tech https://cryptonomic-infra.tech
+      https://*.infura.io https://infura.io
+      ws: wss:
+      bootstrap.libp2p.io
+      preload.ipfs.io
+      https://*.tzkt.io
+      https://*.wikidata.org
+      https://hicetnunc.xyz https://*.hicetnunc.xyz;
+    img-src 
+      'self'
+      img.example.com
+      https://ipfs.infura.io
+      https://cloudflare-ipfs.com/;
+    font-src
+      'self'
+      https://fonts.googleapis.com/">
   `
   )
 
