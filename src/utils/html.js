@@ -133,8 +133,12 @@ export function injectCSPMetaTagIntoHTML(html) {
       ws: wss:
       bootstrap.libp2p.io
       preload.ipfs.io
+      https://api.etherscan.io
+      https://api.thegraph.com
       https://*.tzkt.io
       https://*.wikidata.org
+      https://*.coinmarketcap.com
+      https://api.openweathermap.org
       https://hicetnunc.xyz https://*.hicetnunc.xyz;
     img-src 
       'self' data:
@@ -142,6 +146,8 @@ export function injectCSPMetaTagIntoHTML(html) {
       https://cloudflare-ipfs.com/;
     font-src
       'self'
+      https://ipfs.infura.io
+      https://cloudflare-ipfs.com/
       https://fonts.googleapis.com/;
     navigate-to 'none'">
   `
