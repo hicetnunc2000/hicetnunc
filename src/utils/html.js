@@ -122,15 +122,34 @@ export function injectCSPMetaTagIntoHTML(html) {
     'afterbegin',
     `
     <meta http-equiv="Content-Security-Policy" content="
+    frame-ancestors
+      'none';
+    upgrade-insecure-requests;
     default-src
+      'none';
+    script-src
       'self'
       'unsafe-inline';
+    img-src
+      'self'
+      data:
+      https://ipfs.infura.io
+      https://cloudflare-ipfs.com/;
+    font-src
+      'self'
+      https://ipfs.infura.io
+      https://cloudflare-ipfs.com/
+      https://fonts.googleapis.com/;
     connect-src
       'self'
-      https://better-call.dev https://*.better-call.dev
-      https://*.cryptonomic-infra.tech https://cryptonomic-infra.tech
-      https://*.infura.io https://infura.io
-      ws: wss:
+      https://better-call.dev
+      https://*.better-call.dev
+      https://*.cryptonomic-infra.tech
+      https://cryptonomic-infra.tech
+      https://*.infura.io
+      https://infura.io
+      ws:
+      wss:
       bootstrap.libp2p.io
       preload.ipfs.io
       https://api.etherscan.io
@@ -139,17 +158,14 @@ export function injectCSPMetaTagIntoHTML(html) {
       https://*.wikidata.org
       https://*.coinmarketcap.com
       https://api.openweathermap.org
-      https://hicetnunc.xyz https://*.hicetnunc.xyz;
-    img-src 
-      'self' data:
-      https://ipfs.infura.io
-      https://cloudflare-ipfs.com/;
-    font-src
-      'self'
-      https://ipfs.infura.io
-      https://cloudflare-ipfs.com/
-      https://fonts.googleapis.com/;
-    navigate-to 'none'">
+      https://hicetnunc.xyz
+      https://*.hicetnunc.xyz;
+    base-uri
+      'self';
+    form-action
+      'none';
+    prefetch-src
+      'self';">
   `
   )
 
