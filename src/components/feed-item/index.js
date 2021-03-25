@@ -4,6 +4,7 @@ import { Container, Padding } from '../layout'
 import { Button } from '../button'
 import { ItemInfo } from '../item-info'
 import { renderMediaType } from '../media-types'
+import { MimeTypeIcon } from '../mimetype-icon'
 import styles from './index.module.scss'
 
 export const FeedItem = (props) => {
@@ -14,6 +15,7 @@ export const FeedItem = (props) => {
     <Container>
       <Button to={`${PATH.OBJKT}/${token_id}`}>
         <div className={styles.container}>
+          <MimeTypeIcon mimeType={mimeType} uri={uri} />
           {renderMediaType({
             mimeType,
             uri: uri.split('//')[1],

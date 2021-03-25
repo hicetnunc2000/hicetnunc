@@ -2,7 +2,7 @@ import React from 'react'
 import { MIMETYPE, IPFS_DIRECTORY_MIMETYPE } from '../../constants'
 import styles from './styles.module.scss'
 
-export const MimeTypeIcon = ({ mimeType }) => {
+export const MimeTypeIcon = ({ mimeType, uri }) => {
   const getIcon = () => {
     switch (mimeType) {
       /* IMAGES */
@@ -42,7 +42,11 @@ export const MimeTypeIcon = ({ mimeType }) => {
       case MIMETYPE.OGV:
       case MIMETYPE.QUICKTIME:
       case MIMETYPE.WEBM:
-        return null
+        return (
+          <svg viewBox="0 0 16 18">
+            <path d="M14,0 L14,2 L12,2 L12,0 L4,0 L4,2 L2,2 L2,0 L0,0 L0,18 L2,18 L2,16 L4,16 L4,18 L12,18 L12,16 L14,16 L14,18 L16,18 L16,0 L14,0 L14,0 Z M4,14 L2,14 L2,12 L4,12 L4,14 L4,14 Z M4,10 L2,10 L2,8 L4,8 L4,10 L4,10 Z M4,6 L2,6 L2,4 L4,4 L4,6 L4,6 Z M14,14 L12,14 L12,12 L14,12 L14,14 L14,14 Z M14,10 L12,10 L12,8 L14,8 L14,10 L14,10 Z M14,6 L12,6 L12,4 L14,4 L14,6 L14,6 Z" />
+          </svg>
+        )
       /* 3D */
       case MIMETYPE.GLB:
       case MIMETYPE.GLTF:
@@ -64,5 +68,11 @@ export const MimeTypeIcon = ({ mimeType }) => {
     }
   }
 
-  return <div className={styles.container}>{getIcon()}</div>
+  return null
+
+  // return (
+  //   <div className={styles.container}>
+  //     {getIcon()}
+  //   </div>
+  // )
 }
