@@ -1,0 +1,21 @@
+@import '../../styles/layout.scss';
+@import '../../styles/variables.scss';
+
+.container {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  padding: 4px;
+  // background-color: var(--text-color);
+  z-index: 1000;
+
+  svg {
+    width: 40px;
+    height: auto;
+
+    path {
+      fill: var(--background-color);
+      transition: fill #{$theme-duration} ease-out;
+    }
+  }
+}
