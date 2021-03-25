@@ -93,7 +93,7 @@ export const HTMLComponent = ({
         title="hic et nunc HTML renderer"
         src={`${src}?creator=${_creator_}&viewer=${_viewer_}`}
         sandbox="allow-scripts allow-same-origin"
-        allow="camera; microphone; geolocation"
+        allow="camera; microphone; geolocation; xr-spatial-tracking"
         scrolling="no"
       />
     </div>

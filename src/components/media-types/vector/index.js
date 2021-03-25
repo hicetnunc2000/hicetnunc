@@ -35,7 +35,7 @@ export const VectorComponent = ({ src, interactive, preview, token_info }) => {
         title="hic et nunc SVG renderer"
         src={iframeSrc}
         sandbox="allow-scripts allow-same-origin"
-        allow="camera; microphone; geolocation"
+        allow="camera; microphone; geolocation; xr-spatial-tracking"
         scrolling="no"
       />
     </div>
