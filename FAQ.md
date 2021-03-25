@@ -5,6 +5,19 @@ Please keep in mind that the site is being actively worked on by contributors wh
 
 ![The menu](https://i.ibb.co/Z2jh5Lz/hic-menu.jpg)
 
+## Quickstart Tutorial Videos
+
+This 3-Part video tutorial covers:
+1. Wallet (setup a Tezos wallet and get your first TEZ)
+2. Mint (mint your first NFT)
+3. Swap (price & list your NFT)
+
+[Watch Quickstart Tutorial Videos](https://twitter.com/verticalcrypto/status/1374349022245359627)
+
+<a href="https://twitter.com/verticalcrypto/status/1374349022245359627?s=20"><img src="https://i.ibb.co/YcVtFjG/hicetnunc-starter-pt1-wallet.gif" alt="hicetnunc-starter-pt1-wallet" border="0"></a>
+
+
+
 ## How to mint 🌿 (create an NFT) 
 
 * Click on “Sync". 
