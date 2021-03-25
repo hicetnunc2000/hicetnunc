@@ -234,7 +234,7 @@ export default class Display extends Component {
                     to={`${PATH.OBJKT}/${nft.token_id}`}
                   >
                     <div className={styles.container}>
-                      <MimeTypeIcon mimeType={mimeType} />
+                      <MimeTypeIcon mimeType={mimeType} uri={uri} />
                       {renderMediaType({
                         mimeType,
                         uri: uri.split('//')[1],
@@ -260,7 +260,7 @@ export default class Display extends Component {
                     to={`${PATH.OBJKT}/${nft.token_id}`}
                   >
                     <div className={styles.container}>
-                      <MimeTypeIcon mimeType={mimeType} />
+                      <MimeTypeIcon mimeType={mimeType} uri={uri} />
                       {renderMediaType({
                         mimeType,
                         uri: uri.split('//')[1],
