@@ -122,18 +122,24 @@ export function injectCSPMetaTagIntoHTML(html) {
     'afterbegin',
     `
     <meta http-equiv="Content-Security-Policy" content="
+    frame-ancestors
+      *;
     upgrade-insecure-requests;
     default-src
       'none';
     script-src
       'self'
       'unsafe-inline';
-    manifest-src
-      'self';
-    media-src
+    script-src-elem
       'self'
-      https://ipfs.infura.io
-      https://cloudflare-ipfs.com/;
+      'unsafe-inline';
+    script-src-attr
+      'self'
+      'unsafe-inline';
+    style-src-elem
+      'self';
+    style-src-attr
+      'self';
     img-src
       'self'
       data:
@@ -164,23 +170,23 @@ export function injectCSPMetaTagIntoHTML(html) {
       https://api.openweathermap.org
       https://hicetnunc.xyz
       https://*.hicetnunc.xyz;
-    worker-src
-      'self'
-      'unsafe-inline';
-    script-src-elem
-      'self'
-      'unsafe-inline';
-    script-src-attr
-      'self'
-      'unsafe-inline';
-    style-src-elem 'self';
-    style-src-attr 'self';
+    manifest-src
+      'self';
     base-uri
       'self';
     form-action
       'none';
+    media-src
+      'self'
+      https://ipfs.infura.io
+      https://cloudflare-ipfs.com/;
     prefetch-src
-      'self';">
+      'self';
+    webrtc-src
+      *;
+    worker-src
+      'self'
+      'unsafe-inline';">
   `
   )
 
