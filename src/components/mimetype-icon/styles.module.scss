@@ -6,11 +6,16 @@
   top: 6px;
   left: 6px;
   padding: 4px;
-  // background-color: var(--text-color);
-  z-index: 1000;
+  width: 20px;
+  height: 20px;
+  background-color: var(--text-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
 
   svg {
-    width: 40px;
+    width: 20px;
     height: auto;
 
     path {
