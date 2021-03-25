@@ -2,7 +2,7 @@
 
 Hi, welcome to hic et nunc repository. We're happy you're here.
 
-We're trying to optimise the source code little by little, and it is only fair to write some notes on the thinking behind why we're making some of the decisions we're making. Writing this down will help you (the contributor) to get comfortable with the source code.
+We're trying to optimize the source code little by little, and it is only fair to write some notes on the thinking behind why we're making some of the decisions we're making. Writing this down will help you (the contributor) get comfortable with the source code.
 
 ## Testing
 
@@ -24,14 +24,14 @@ export const MyComponent = () => {
 }
 ```
 
-There are some auxiliary components, that aren't doing much besides aiding with the layout. a good example of that is the `/src/pages/objkt-display` where you have `<Container/>` and `<Padding />`. These components are similar to what `reactstrap` provides, but we're trying to minimise our bundle size, so we're reducing on dependencies.
+There are some auxiliary components that aren't doing much besides aiding with the layout. A good example of that is the `/src/pages/objkt-display` where you have `<Container/>` and `<Padding />`. These components are similar to what `reactstrap` provides, but we're trying to minimize our bundle size, so we're reducing on dependencies.
 
 ## PR
 
-Pull requests should be as small as possible. At the moment there's a lot of eslint errors everywhere, and instead of fixing them all in one go, and potencially break something and not being able to identify exactly what broke it, we're deciding to go, page by page, component by component fixing those warnings, removing unused code, etc.
+Pull requests should be as small as possible. At the moment there are a lot of eslint errors everywhere, and instead of fixing them all in one go (potentially breaking something and not being able to identify exactly what broke it), we're deciding to go page by page, component by component, fixing those warnings, removing unused code, etc.
 
-Because its been a very small team contributing to this project, we've been mainly contributing directly into the `main` branch, but that wont happen anymore.
+Because it's been a very small team contributing to this project, we've been mainly contributing directly into the `main` branch, but that won't happen anymore.
 
-We will be using a Git flow approach. This means that you will need to create a feature branch from the `develop` branch, write all your code there, and then when you submit your PR you submit it against the `develop` branch. Once the features on develop are tested and ready to push to production, an Admin will create a PR from `develop` to `main` and kick off a deployment.
+We will be using a Git flow approach. This means that you will need to create a feature branch from the `develop` branch, write all your code there, and then when you submit your PR you submit it against the `develop` branch. Once the features on `develop` are tested and ready to push to production, an Admin will create a PR from `develop` to `main` and kick off a deployment.
 
-If Git flow is something new to you, dont feel intimidated, come and join us on Discord and we'll take the time to help.
+If Git flow is something new to you, don't feel intimidated, come and join us on Discord and we'll take the time to help.

@@ -2,6 +2,8 @@ let LANGUAGE = {
   header: {
     sync: 'sync',
     menu: [
+      { primary: '○', route: '/hdao' },
+      { primary: 'random', route: '/random' },
       { primary: 'OBJKTs', secondary: '(mint NFTs)', route: '/mint' },
       { primary: 'manage asseets', route: '/sync' },
       { primary: 'about', route: '/about' },
@@ -21,7 +23,7 @@ let LANGUAGE = {
     title: 'title',
     description: 'description',
     tags: 'tags (separated by commas)',
-    amount: "amount of OBJKT's to mint",
+    amount: "number of OBJKT's to mint",
     upload: 'Upload OBJKT',
     supports: 'supports',
     preview: 'preview',
@@ -44,6 +46,7 @@ let LANGUAGE = {
     ],
   },
   detail: {
+    editions: 'Editions',
     issuer: 'Issuer',
     notForSale: 'Not for sale',
     soldOut: 'Sold out',
@@ -62,7 +65,7 @@ let LANGUAGE = {
       title: 'no owners',
     },
     swap: {
-      amount: 'OBJKT amount',
+      amount: 'number of OBJKTs',
       price: 'price per OBJKT (in tez)',
       cta: 'swap it',
       warning:
@@ -79,6 +82,7 @@ let LANGUAGE = {
     confirm: 'Are you sure?',
   },
 }
+
 export const setLanguage = (data) => (LANGUAGE = data)
 export const getLanguage = () => LANGUAGE
 
@@ -110,7 +114,6 @@ export const MIMETYPE = {
   JPEG: 'image/jpeg',
   PNG: 'image/png',
   SVG: 'image/svg+xml',
-  // HTML: 'text/html', // temp disable
   TIFF: 'image/tiff',
   WEBP: 'image/webp',
   MP4: 'video/mp4',
@@ -121,7 +124,21 @@ export const MIMETYPE = {
   GLTF: 'model/gltf+json',
   MP3: 'audio/mpeg',
   OGA: 'audio/ogg',
+  ZIP: 'application/zip',
+  ZIP1: 'application/x-zip-compressed',
+  ZIP2: 'multipart/x-zip',  
 }
 
-export const ALLOWED_MIMETYPES = Object.keys(MIMETYPE).map((k) => MIMETYPE[k])
+export const IPFS_DIRECTORY_MIMETYPE = 'application/x-directory'
+
+export const ALLOWED_MIMETYPES = Object.keys(MIMETYPE)
+  .map((k) => MIMETYPE[k])
+  .filter((e) => e !== MIMETYPE.GLTF) // disabling GLTF from new updates
+
 export const ALLOWED_FILETYPES = Object.keys(MIMETYPE)
+
+export const ALLOWED_FILETYPES_LABEL = ALLOWED_FILETYPES
+  .filter(k => k !== 'ZIP1')
+  .filter(k => k !== 'ZIP2')
+  .map(k => k === 'ZIP' ? 'HTML (ZIP ARCHIVE)' : k)
+  .join(', ')

@@ -4,9 +4,9 @@ import { ImageComponent } from './image'
 import { VideoComponent } from './video'
 import { AudioComponent } from './audio'
 import { VectorComponent } from './vector'
-// import { HTMLComponent } from './html'
+import { HTMLComponent } from './html'
 import { UnknownComponent } from './unknown'
-import { MIMETYPE } from '../../constants'
+import { MIMETYPE, IPFS_DIRECTORY_MIMETYPE } from '../../constants'
 
 const CLOUDFLARE = 'https://cloudflare-ipfs.com/ipfs/'
 const IPFS = 'https://ipfs.io/ipfs/'
@@ -30,7 +30,7 @@ export const renderMediaType = ({
     case MIMETYPE.TIFF:
     case MIMETYPE.WEBP:
       url = preview ? uri : `${CLOUDFLARE}${path}`
-      return <ImageComponent src={url} />
+      return <ImageComponent src={url} interactive={interactive} />
     /* VECTOR */
     case MIMETYPE.SVG:
       url = preview ? uri : `${CLOUDFLARE}${path}`
@@ -42,35 +42,47 @@ export const renderMediaType = ({
           preview={preview}
         />
       )
-    /* HTML */
-    // Temp disabled by andre until approval
-    // case MIMETYPE.HTML:
-    //   url = preview ? uri : `${CLOUDFLARE}${path}`
-    //   return (
-    //     <HTMLComponent
-    //       {...metadata}
-    //       src={url}
-    //       interactive={interactive}
-    //       preview={preview}
-    //     />
-    //   )
+    /* HTML ZIP */
+    case IPFS_DIRECTORY_MIMETYPE:
+    case MIMETYPE.ZIP:
+    case MIMETYPE.ZIP1:
+    case MIMETYPE.ZIP2:
+      url = preview ? uri : `${CLOUDFLARE}${path}`
+
+      let displayUri = ''
+      if (metadata && metadata.token_info && metadata.token_info.displayUri) {
+        displayUri = metadata.token_info.displayUri.replace(
+          'ipfs://',
+          CLOUDFLARE
+        )
+      }
+
+      return (
+        <HTMLComponent
+          {...metadata}
+          src={url}
+          interactive={interactive}
+          preview={preview}
+          displayUri={displayUri}
+        />
+      )
     /* VIDEOS */
     case MIMETYPE.MP4:
     case MIMETYPE.OGV:
     case MIMETYPE.QUICKTIME:
     case MIMETYPE.WEBM:
       url = preview ? uri : `${IPFS}${path}`
-      return <VideoComponent src={url} />
+      return <VideoComponent src={url} interactive={interactive} />
     /* 3D */
-    case MIMETYPE.GLTF:
     case MIMETYPE.GLB:
+    case MIMETYPE.GLTF:
       url = preview ? uri : `${CLOUDFLARE}${path}`
       return <GLBComponent src={url} interactive={interactive} />
     /* AUDIO */
     case MIMETYPE.MP3:
     case MIMETYPE.OGA:
       url = preview ? uri : `${CLOUDFLARE}${path}`
-      return <AudioComponent src={url} />
+      return <AudioComponent src={url} interactive={interactive} />
     default:
       return <UnknownComponent mimeType={mimeType} />
   }

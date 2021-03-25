@@ -119,6 +119,7 @@ export default class HicetnuncContextProvider extends Component {
       },
 
       swap: async (objkt_amount, objkt_id, xtz_per_objkt) => {
+        console.log(objkt_amount)
         return await Tezos.wallet
           .at(this.state.objkt)
           .then((c) =>
@@ -149,19 +150,21 @@ export default class HicetnuncContextProvider extends Component {
           })
       },
 
-      burn: async (tz, objkt_id, amount) => {
+      burn: async (objkt_id, amount) => {
+        var tz = await wallet.client.getActiveAccount()
+        console.log(tz)
         await Tezos.wallet
           .at('KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton')
-          .then((c) =>
+          .then(async (c) =>
             c.methods
               .transfer([
                 {
-                  from_: tz,
+                  from_: tz.address,
                   txs: [
                     {
                       to_: 'tz1burnburnburnburnburnburnburjAYjjX',
                       token_id: parseInt(objkt_id),
-                      amount: parseInt(amount),
+                      amount: parseInt(amount[tz.address]),
                     },
                   ],
                 },
@@ -184,6 +187,16 @@ export default class HicetnuncContextProvider extends Component {
       /* taquito */
       Tezos: null,
       wallet: null,
+      acc : null,
+      message : 'sync',
+
+      updateMessage : (message) => this.setState({ message : message }),
+
+      setAccount : async () => {
+        this.setState({
+          acc : Tezos !== undefined ? await wallet.client.getActiveAccount() : undefined
+        })
+      },
 
       syncTaquito: async () => {
         const network = {
@@ -195,13 +208,16 @@ export default class HicetnuncContextProvider extends Component {
         // This piece of code should be called on startup to "load" the current address from the user
         // If the activeAccount is present, no "permission request" is required again, unless the user "disconnects" first.
         const activeAccount = await wallet.client.getActiveAccount()
-        if (!activeAccount) {
+        console.log(activeAccount)
+        if (activeAccount === undefined) {
+          console.log('permissions')
           await wallet.requestPermissions({ network })
         }
 
         this.setState({
           Tezos: Tezos,
           address: await wallet.getPKH(),
+          acc: await wallet.client.getActiveAccount(),
           wallet: wallet,
         })
         this.state.setAuth(await wallet.getPKH())

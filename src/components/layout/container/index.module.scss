@@ -7,18 +7,18 @@
   margin-bottom: 20px;
   // border: 1px dashed $color;
 
-  @include respond-to('tablet') {
+  @include respond-to('desktop') {
     width: 50%;
   }
 
   &.large {
-    @include respond-to('tablet') {
+    @include respond-to('desktop') {
       width: 55%;
     }
   }
 
   &.xlarge {
-    @include respond-to('tablet') {
+    @include respond-to('desktop') {
       width: 80%;
     }
   }

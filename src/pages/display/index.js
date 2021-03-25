@@ -8,8 +8,9 @@ import { Identicon } from '../../components/identicons'
 import { walletPreview } from '../../utils/string'
 import { SanitiseOBJKT } from '../../utils/sanitise'
 import { PATH } from '../../constants'
-import styles from './index.module.scss'
+import { MimeTypeIcon } from '../../components/mimetype-icon'
 import { /* GetUserData, */ GetUserMetadata } from '../../data/api'
+import styles from './index.module.scss'
 
 const axios = require('axios')
 
@@ -42,6 +43,7 @@ export default class Display extends Component {
       if (data.data.github) this.setState({ github: data.data.github })
       if (data.data.email) this.setState({ email: data.data.email })
       if (data.data.reddit) this.setState({ reddit: data.data.reddit })
+      if (data.data.logo) this.setState({ logo: data.data.logo })
     })
 
     await axios
@@ -80,7 +82,7 @@ export default class Display extends Component {
         <Container>
           <Padding>
             <div className={styles.profile}>
-              <Identicon address={this.state.wallet} />
+              <Identicon address={this.state.wallet} logo={this.state.logo} />
 
               <div className={styles.info}>
                 {this.state.alias && <p>{this.state.alias}</p>}
@@ -166,7 +168,7 @@ export default class Display extends Component {
                     </a>
                   )}
                   {this.state.reddit && (
-                    <a href={`https://reddit.com/"${this.state.reddit}`}>
+                    <a href={`https://reddit.com/${this.state.reddit}`}>
                       <svg
                         height="16"
                         viewBox="0 0 512 512"
@@ -232,9 +234,11 @@ export default class Display extends Component {
                     to={`${PATH.OBJKT}/${nft.token_id}`}
                   >
                     <div className={styles.container}>
+                      <MimeTypeIcon mimeType={mimeType} uri={uri} />
                       {renderMediaType({
                         mimeType,
                         uri: uri.split('//')[1],
+                        metadata: nft,
                       })}
                       <div className={styles.number}>OBJKT#{nft.token_id}</div>
                     </div>
@@ -256,7 +260,12 @@ export default class Display extends Component {
                     to={`${PATH.OBJKT}/${nft.token_id}`}
                   >
                     <div className={styles.container}>
-                      {renderMediaType({ mimeType, uri: uri.split('//')[1] })}
+                      <MimeTypeIcon mimeType={mimeType} uri={uri} />
+                      {renderMediaType({
+                        mimeType,
+                        uri: uri.split('//')[1],
+                        metadata: nft,
+                      })}
                       <div className={styles.number}>OBJKT#{nft.token_id}</div>
                     </div>
                   </Button>

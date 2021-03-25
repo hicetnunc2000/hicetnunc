@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useHistory } from 'react-router'
 import { motion, AnimatePresence } from 'framer-motion'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
@@ -6,14 +6,31 @@ import { Container, Padding } from '../layout'
 import { Button, Primary, Secondary } from '../button'
 import { fadeIn } from '../../utils/motion'
 import { Menu } from '../icons'
-import { getLanguage } from '../../constants'
 import styles from './style.module.scss'
+import { walletPreview } from '../../utils/string'
+
+const ls = require('local-storage')
+/* import { BeaconWallet } from '@taquito/beacon-wallet'
+
+const wallet = new BeaconWallet({
+  name: 'hicetnunc.xyz',
+  preferredNetwork: 'mainnet',
+}) */
 
 export const Header = () => {
   const history = useHistory()
   const context = useContext(HicetnuncContext)
-  const language = getLanguage()
 
+  useEffect(() => context.setAccount(), [])
+
+  try {
+    context.message = context.acc.address
+  } catch (e) {
+    context.message = 'sync'
+  }
+
+  //const activeAccount = await wallet.client.getActiveAccount()
+  //console.log(activeAccount)
   const handleRoute = (path) => {
     context.setMenu(true)
     history.push(path)
@@ -31,7 +48,11 @@ export const Header = () => {
 
           <div className={styles.right}>
             <Button onClick={context.syncTaquito} secondary>
-              <Secondary>{language.header.sync}</Secondary>
+              <Secondary>
+                {context.message !== 'sync'
+                  ? walletPreview(context.message)
+                  : context.message}
+              </Secondary>
             </Button>
 
             <Button onClick={context.toogleNavbar} secondary>
@@ -48,21 +69,34 @@ export const Header = () => {
               <Padding>
                 <div className={styles.content}>
                   <ul>
-                    <li>○</li>
-                    {language.header.menu.map((menu) => (
-                      <li key={menu.route}>
-                        <Button onClick={() => handleRoute(menu.route)}>
-                          <Primary>
-                            {menu.primary}
-                            {menu.secondary && (
-                              <i style={{ fontSize: '15px' }}>
-                                {menu.secondary}
-                              </i>
-                            )}
-                          </Primary>
-                        </Button>
-                      </li>
-                    ))}
+                    <li>
+                      <Button onClick={() => handleRoute('/hdao')}>
+                        <Primary>○</Primary>
+                      </Button>
+                    </li>
+                    <li>
+                      <Button onClick={() => handleRoute('/random')}>
+                        <Primary>random</Primary>
+                      </Button>
+                    </li>
+
+                    <li>
+                      <Button onClick={() => handleRoute('/mint')}>
+                        <Primary>
+                          OBJKTs<i style={{ fontSize: '15px' }}>(mint NFTs)</i>
+                        </Primary>
+                      </Button>
+                    </li>
+                    <li>
+                      <Button onClick={() => handleRoute('/sync')}>
+                        <Primary>manage assets</Primary>
+                      </Button>
+                    </li>
+                    <li>
+                      <Button onClick={() => handleRoute('/about')}>
+                        <Primary>about</Primary>
+                      </Button>
+                    </li>
                   </ul>
                 </div>
               </Padding>

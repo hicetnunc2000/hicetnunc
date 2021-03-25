@@ -1,4 +1,5 @@
 @import '../../../styles/layout.scss';
+@import '../../../styles/layout.scss';
 
 .container {
   position: relative;
@@ -18,6 +19,48 @@
 
   &.interactive {
     pointer-events: all;
+  }
+
+  .preview {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: black;
+
+    img {
+      width: 100%;
+      height: auto;
+    }
+
+    .button {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(
+        circle,
+        rgba(255, 255, 255, 0.3) 0%,
+        rgba(0, 0, 0, 0.1) 100%
+      );
+
+      svg {
+        position: relative;
+        display: flex;
+        width: 30%;
+        height: auto;
+        margin: 0 auto;
+        z-index: 1;
+      }
+    }
   }
 
   iframe {
