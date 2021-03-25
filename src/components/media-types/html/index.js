@@ -41,7 +41,9 @@ export const HTMLComponent = ({
             Your zip file must contain an index.html file.
             <br />
             <br />
-            Please also include an image file and reference it in a meta tag like this:<br />
+            Please also include an image file and reference it in a meta tag
+            like this:
+            <br />
             {coverMeta}
             <br />
             <br />

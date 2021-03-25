@@ -30,7 +30,7 @@ export const renderMediaType = ({
     case MIMETYPE.TIFF:
     case MIMETYPE.WEBP:
       url = preview ? uri : `${CLOUDFLARE}${path}`
-      return <ImageComponent src={url} />
+      return <ImageComponent src={url} interactive={interactive} />
     /* VECTOR */
     case MIMETYPE.SVG:
       url = preview ? uri : `${CLOUDFLARE}${path}`
@@ -72,7 +72,7 @@ export const renderMediaType = ({
     case MIMETYPE.QUICKTIME:
     case MIMETYPE.WEBM:
       url = preview ? uri : `${IPFS}${path}`
-      return <VideoComponent src={url} />
+      return <VideoComponent src={url} interactive={interactive} />
     /* 3D */
     case MIMETYPE.GLB:
     case MIMETYPE.GLTF:
@@ -82,7 +82,7 @@ export const renderMediaType = ({
     case MIMETYPE.MP3:
     case MIMETYPE.OGA:
       url = preview ? uri : `${CLOUDFLARE}${path}`
-      return <AudioComponent src={url} />
+      return <AudioComponent src={url} interactive={interactive} />
     default:
       return <UnknownComponent mimeType={mimeType} />
   }
