@@ -162,6 +162,7 @@ export function injectCSPMetaTagIntoHTML(html) {
       https://api.etherscan.io
       https://api.thegraph.com
       https://*.tzkt.io
+      https://api.tzstats.com
       https://*.wikidata.org
       https://*.coinmarketcap.com
       https://api.openweathermap.org
