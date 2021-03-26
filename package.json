@@ -7,7 +7,7 @@
     "@babel/core": "^7.13.10",
     "@taquito/beacon-wallet": "^8.0.6-beta.0",
     "@taquito/taquito": "^8.0.6-beta.0",
-    "@testing-library/jest-dom": "^5.11.9",
+    "@testing-library/jest-dom": "^5.11.10",
     "@testing-library/react": "^11.2.5",
     "@testing-library/user-event": "^13.0.16",
     "axios": "^0.21.1",
