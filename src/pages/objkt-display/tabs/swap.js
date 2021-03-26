@@ -32,7 +32,7 @@ export const Swap = ({ total_amount, owners, token_info, address }) => {
           // when taquito returns a success/fail message
           setProgress(false)
           setMessage(e.description)
-          console.log('swap', e)
+          console.log('swap/list', e)
 
           //history.push(`${PATH.ISSUER}/${address}`)
         })

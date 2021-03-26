@@ -67,7 +67,7 @@ export const ItemInfo = ({
             <div>
               <p>
                 <span>
-                  Editions: {available}/{total_amount}
+                  Editions: {available > 0 ? <span>{available}/{total_amount}</span> : <span>{total_amount}</span>}
                 </span>
               </p>
             </div>
