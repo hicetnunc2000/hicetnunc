@@ -92,7 +92,7 @@ export const HTMLComponent = ({
       <iframe
         title="hic et nunc HTML renderer"
         src={`${src}?creator=${_creator_}&viewer=${_viewer_}`}
-        sandbox="allow-scripts allow-same-origin"
+        sandbox="allow-scripts"
         allow="camera; microphone; geolocation; xr-spatial-tracking"
         scrolling="no"
       />
