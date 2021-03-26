@@ -15,15 +15,13 @@ export const ItemInfo = ({
   owners,
   swaps,
   transfered,
-  acc,
   feed,
   total_amount,
   isDetailView,
 }) => {
-  const { Tezos, syncTaquito, collect, curate } = useContext(HicetnuncContext)
+  const { Tezos, syncTaquito, collect, curate, acc, getAccount } = useContext(HicetnuncContext)
 
   let available = 0
-
   if (owners !== undefined) {
     const kt = `KT1Hkg5qeNhfwpKW4fXvq7HGZB9z2EnmCCA9`
     available = owners[kt]
@@ -46,7 +44,8 @@ export const ItemInfo = ({
   }
 
   const handleCollect = () => {
-    if (Tezos == null) {
+
+    if (acc == null) {
       syncTaquito()
     } else {
       collect(1, swaps[0].swap_id, swaps[0].xtz_per_objkt * 1)
