@@ -137,7 +137,7 @@ export default class HicetnuncContextProvider extends Component {
       curate: async (objkt_id) => {
         await Tezos.wallet
           .at(this.state.objkt)
-          .then((c) => c.methods.curate(10, objkt_id).send())
+          .then((c) => c.methods.curate(100, objkt_id).send())
       },
 
       claim_hDAO: async (hDAO_amount, objkt_id) => {
