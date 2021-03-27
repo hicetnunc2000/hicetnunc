@@ -37,7 +37,7 @@ export const ItemInfo = ({
   //const notForSale = available > 0 || isNaN(editions)
   try {
     message =
-      available > 0 && (swaps[0] !== undefined ? (swaps[0].issuer == token_info.creators[0]) : false)
+      available > 0 && (swaps[0] !== undefined ? (swaps[0].issuer == (token_info.creators[0] !== undefined ? token_info.creators[0] : true)) : false)
         ? 'collect for ' + Number(swaps[0].xtz_per_objkt) / 1000000 + ' tez'
         : 'not for sale'
   } catch (e) {
