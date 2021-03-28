@@ -21,8 +21,6 @@ export const Header = () => {
   const history = useHistory()
   const context = useContext(HicetnuncContext)
 
-  console.log('collapsed', context.collapsed)
-
   useEffect(() => {
     context.setAccount()
   }, [])
