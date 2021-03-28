@@ -3,12 +3,13 @@ import React, { useContext, useEffect } from 'react'
 import { useHistory } from 'react-router'
 import { motion, AnimatePresence } from 'framer-motion'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
+import { Footer } from '../footer'
 import { Container, Padding } from '../layout'
 import { Button, Primary, Secondary } from '../button'
 import { fadeIn } from '../../utils/motion'
 import { Menu } from '../icons'
-import styles from './style.module.scss'
 import { walletPreview } from '../../utils/string'
+import styles from './style.module.scss'
 
 /* import { BeaconWallet } from '@taquito/beacon-wallet'
 
@@ -20,8 +21,6 @@ const wallet = new BeaconWallet({
 export const Header = () => {
   const history = useHistory()
   const context = useContext(HicetnuncContext)
-
-  console.log('collapsed', context.collapsed)
 
   useEffect(() => {
     context.setAccount()
@@ -119,6 +118,7 @@ export const Header = () => {
                 </div>
               </Padding>
             </Container>
+            <Footer />
           </motion.div>
         )}
       </AnimatePresence>
