@@ -24,7 +24,14 @@
     }
 
     .info {
+      display: flex;
+      flex-direction: column;
       padding-left: 10px;
+
+      .title,
+      .description {
+        margin-bottom: 20px;
+      }
     }
   }
 }

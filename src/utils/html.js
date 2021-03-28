@@ -121,7 +121,75 @@ export function injectCSPMetaTagIntoHTML(html) {
   doc.head.insertAdjacentHTML(
     'afterbegin',
     `
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline';">
+    <meta http-equiv="Content-Security-Policy" content="
+    frame-ancestors
+      *;
+    upgrade-insecure-requests;
+    default-src
+      'none';
+    frame-src
+      'self';
+    child-src
+      'self';
+    script-src
+      'self'
+      'unsafe-inline'
+      https://cloudflare-ipfs.com/;
+    style-src
+      'self'
+      'unsafe-inline'
+      https://cloudflare-ipfs.com/;
+    img-src
+      'self'
+      data:
+      https://ipfs.infura.io
+      https://cloudflare-ipfs.com/;
+    font-src
+      'self'
+      https://ipfs.infura.io
+      https://cloudflare-ipfs.com/
+      https://fonts.googleapis.com/;
+    connect-src
+      'self'
+      https://better-call.dev
+      https://*.better-call.dev
+      https://*.cryptonomic-infra.tech
+      https://cryptonomic-infra.tech
+      https://*.infura.io
+      https://infura.io
+      ws:
+      wss:
+      bootstrap.libp2p.io
+      preload.ipfs.io
+      https://api.etherscan.io
+      https://api.thegraph.com
+      https://*.tzkt.io
+      https://api.tzstats.com
+      https://*.wikidata.org
+      https://*.coinmarketcap.com
+      https://api.openweathermap.org
+      https://hicetnunc.xyz
+      https://*.hicetnunc.xyz;
+    manifest-src
+      'self';
+    base-uri
+      'self';
+    form-action
+      'none';
+    media-src
+      'self'
+      https://ipfs.infura.io
+      https://cloudflare-ipfs.com/;
+    prefetch-src
+      'self'
+      https://ipfs.infura.io
+      https://cloudflare-ipfs.com/
+      https://fonts.googleapis.com/;
+    webrtc-src
+      *;
+    worker-src
+      'self'
+      'unsafe-inline';">
   `
   )
 

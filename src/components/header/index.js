@@ -1,15 +1,16 @@
-import React, { useContext, useEffect, useState } from 'react'
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useContext, useEffect } from 'react'
 import { useHistory } from 'react-router'
 import { motion, AnimatePresence } from 'framer-motion'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
+import { Footer } from '../footer'
 import { Container, Padding } from '../layout'
 import { Button, Primary, Secondary } from '../button'
 import { fadeIn } from '../../utils/motion'
 import { Menu } from '../icons'
-import styles from './style.module.scss'
 import { walletPreview } from '../../utils/string'
+import styles from './style.module.scss'
 
-const ls = require('local-storage')
 /* import { BeaconWallet } from '@taquito/beacon-wallet'
 
 const wallet = new BeaconWallet({
@@ -21,12 +22,22 @@ export const Header = () => {
   const history = useHistory()
   const context = useContext(HicetnuncContext)
 
-  useEffect(() => context.setAccount(), [])
+  useEffect(() => {
+    context.setAccount()
+  }, [])
 
-  try {
-    context.message = context.acc.address
-  } catch (e) {
-    context.message = 'sync'
+  // we assume user isn't connected
+  let button = 'sync'
+
+  // but if they are
+  if (context.acc?.address) {
+    // is menu closed?
+    if (context.collapsed) {
+      button = walletPreview(context.acc.address)
+    } else {
+      // menu is open
+      button = 'unsync'
+    }
   }
 
   //const activeAccount = await wallet.client.getActiveAccount()
@@ -34,6 +45,16 @@ export const Header = () => {
   const handleRoute = (path) => {
     context.setMenu(true)
     history.push(path)
+  }
+
+  const handleSyncUnsync = () => {
+    if (context.acc?.address) {
+      // disconnect wallet
+      context.disconnect()
+    } else {
+      // connect wallet
+      context.syncTaquito()
+    }
   }
 
   return (
@@ -47,12 +68,8 @@ export const Header = () => {
           </Button>
 
           <div className={styles.right}>
-            <Button onClick={context.syncTaquito} secondary>
-              <Secondary>
-                {context.message !== 'sync'
-                  ? walletPreview(context.message)
-                  : context.message}
-              </Secondary>
+            <Button onClick={handleSyncUnsync} secondary>
+              <Primary>{button}</Primary>
             </Button>
 
             <Button onClick={context.toogleNavbar} secondary>
@@ -101,6 +118,7 @@ export const Header = () => {
                 </div>
               </Padding>
             </Container>
+            <Footer />
           </motion.div>
         )}
       </AnimatePresence>
