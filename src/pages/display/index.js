@@ -61,6 +61,13 @@ export default class Display extends Component {
           (e) => this.state.wallet === e.token_info.creators[0]
         )
 
+        const collection = sanitised.filter(
+          (e) => this.state.wallet !== e.token_info.creators[0]
+        )
+
+        console.log('creations', creations.length)
+        console.log('collections', collection.length)
+
         let totalCreations = creations.length
         let total = 0
         const loadOwners = async (id, index) => {
@@ -85,17 +92,26 @@ export default class Display extends Component {
                     -1
                   : true
               ),
-              collection: sanitised.filter(
-                (e) => this.state.wallet !== e.token_info.creators[0]
-              ),
+              collection,
               loading: false,
             })
           }
         }
 
-        // load all owners
-        for (let i = 0; i < creations.length; i++) {
-          loadOwners(creations[i].token_id, i)
+        if (creations.length > 0) {
+          // if the user has creations load all owners
+          for (let i = 0; i < creations.length; i++) {
+            loadOwners(creations[i].token_id, i)
+          }
+        } else {
+          // if the user has no creations, just set state
+
+          this.setState({
+            objkts: sanitised,
+            creations,
+            collection,
+            loading: false,
+          })
         }
       })
   }
