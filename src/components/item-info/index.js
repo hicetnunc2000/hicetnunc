@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
 import { PATH } from '../../constants'
-import { Button, Primary, Purchase } from '../button'
+import { Button, Primary, Purchase, Curate } from '../button'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
 import { walletPreview } from '../../utils/string'
 import styles from './index.module.scss'
@@ -19,7 +19,7 @@ export const ItemInfo = ({
   total_amount,
   isDetailView,
 }) => {
-  const { Tezos, syncTaquito, collect, curate } = useContext(HicetnuncContext)
+  const { Tezos, syncTaquito, collect } = useContext(HicetnuncContext)
 
   let available = 0
 
@@ -77,9 +77,7 @@ export const ItemInfo = ({
         )}
         {feed ? (
           <div>
-            <Button onClick={() => curate(token_id)}>
-              <Primary>〇</Primary>
-            </Button>
+            <Curate tokenId={token_id} />
           </div>
         ) : (
           <Button onClick={() => handleCollect()}>
@@ -90,9 +88,7 @@ export const ItemInfo = ({
       <div className={styles.container}>
         {!feed && (
           <div>
-            <Button onClick={() => curate(token_id)}>
-              <Primary>〇</Primary>
-            </Button>
+            <Curate tokenId={token_id} />
           </div>
         )}
         <div>

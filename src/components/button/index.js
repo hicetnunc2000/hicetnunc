@@ -1,7 +1,8 @@
-import React from 'react'
+import React, { useContext, Component } from 'react'
 import { Link } from 'react-router-dom'
 import classnames from 'classnames'
 import styles from './index.module.scss'
+import { HicetnuncContext } from '../../context/HicetnuncContext'
 
 /**
  * Button component renders a button based on the type of prop received
@@ -75,12 +76,47 @@ export const Purchase = ({ children = null, selected }) => {
   return <div className={classes}>{children}</div>
 }
 
-export const Curate = ({ children = null, selected }) => {
-  const classes = classnames({
-    [styles.curate]: true,
-    [styles.selected]: selected,
-  })
-  return <div className={classes}><a style={{ cursor : `pointer` }}>{children}</a></div>
+export class Curate extends Component {
+  static contextType = HicetnuncContext
+
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      tokenId: props.tokenId,
+      waiting: false,
+      setWaiting: (waiting) => {
+        this.setState({ waiting: waiting })
+      }
+    }
+  }
+
+  async tryCurate(state) {
+    state.setWaiting(true)
+    const context = this.context
+    context.curate(state.tokenId)
+    .finally(() => {
+      state.setWaiting(false)
+    })
+  }
+
+  render() {
+    const classes = classnames({
+      [styles.curate]: true,
+    })
+    const classesActive = classnames({
+      [styles.curateActive]: true,
+    })
+    return (
+      <Button className={classes} onClick={() => this.tryCurate(this.state)}>
+        <Primary>
+          <div style={{position: 'relative'}}>
+            <div className={classesActive} style={{display: this.state.waiting ? 'block' : 'none'}}>〇</div>
+          〇</div>
+        </Primary>
+      </Button>
+    )
+    }
 }
 
 export const Burn = ({ children = null, selected }) => {
@@ -90,3 +126,13 @@ export const Burn = ({ children = null, selected }) => {
   })
   return <div className={classes}>{children}</div>
 }
+
+
+<div class="button_primary__2VQbN" style="
+    position: relative;
+">
+
+<div id="a" style="
+
+">〇</div>
+</div>
