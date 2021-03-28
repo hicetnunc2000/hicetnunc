@@ -22,8 +22,11 @@ const App = () => {
   //
   useEffect(() => {
     const language = getItem('language') || setItem('language', 'en')
+    const langRoot = process.env.NODE_ENV === 'development' ?
+      '/languages' :
+      'https://raw.githubusercontent.com/hicetnunc2000/hicetnunc/main/languages'
     fetch(
-      `https://raw.githubusercontent.com/hicetnunc2000/hicetnunc/main/languages/${language}.json`
+      `${langRoot}/${language}.json`
     )
       .then((e) => e.json())
       .then((data) => {
