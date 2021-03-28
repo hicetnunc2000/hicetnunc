@@ -52,7 +52,6 @@ export default class Display extends Component {
         tz: this.state.wallet,
       })
       .then(async (res) => {
-        console.log(res)
         this.setState({
           hdao: res.data.hdao,
         })
