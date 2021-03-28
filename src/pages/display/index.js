@@ -79,10 +79,11 @@ export default class Display extends Component {
           if (total === totalCreations) {
             this.setState({
               objkts: sanitised,
-              creations: creations.filter(
-                (e) =>
-                  e.owners.indexOf('tz1burnburnburnburnburnburnburjAYjjX') ===
-                  -1
+              creations: creations.filter((e) =>
+                e.owners
+                  ? e.owners.indexOf('tz1burnburnburnburnburnburnburjAYjjX') ===
+                    -1
+                  : true
               ),
               collection: sanitised.filter(
                 (e) => this.state.wallet !== e.token_info.creators[0]
