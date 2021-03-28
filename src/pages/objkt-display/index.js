@@ -32,7 +32,6 @@ export const ObjktDisplay = () => {
   const [address, setAddress] = useState(null)
   //setAccount()
 
-
   useEffect(() => {
     GetOBJKT({ id }).then(async (objkt) => {
       await setAccount()
@@ -40,14 +39,13 @@ export const ObjktDisplay = () => {
       setOwners(objkt.owners)
       try {
         setAddress(acc.address)
-      } catch (e) { }
+      } catch (e) {}
 
       try {
         setCreator(objkt.token_info.creators[0])
-      } catch (e) { }
+      } catch (e) {}
 
       setLoading(false)
-
     })
   }, [id])
 
@@ -83,7 +81,10 @@ export const ObjktDisplay = () => {
             <Padding>
               <Menu>
                 {TABS.filter(
-                  (e) => !e.private || _.keys(owners).includes(address) || address == creator
+                  (e) =>
+                    !e.private ||
+                    _.keys(owners).includes(address) ||
+                    address === creator
                 ).map(({ title }, index) => (
                   <Button key={title} onClick={() => setTabIndex(index)}>
                     <Primary selected={tabIndex === index}>{title}</Primary>
