@@ -47,7 +47,7 @@ export const Header = () => {
   }
 
   const handleSyncUnsync = () => {
-    if (context.acc?.address) {
+    if (context.acc?.address && !context.collapsed) {
       // disconnect wallet
       context.disconnect()
     } else {
