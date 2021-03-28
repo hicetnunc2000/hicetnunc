@@ -31,7 +31,7 @@ addr : ''
   render() {
     return (
       <Page>
-        { this.context.address !== undefined ?
+        { this.context.address !== '' ?
           <Redirect to={`/tz/${this.context.address}`} />
           :
           <Container>
