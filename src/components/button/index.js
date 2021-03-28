@@ -1,7 +1,9 @@
-import React from 'react'
+import React, { useContext, useState } from 'react'
 import { Link } from 'react-router-dom'
 import classnames from 'classnames'
 import styles from './index.module.scss'
+import { HicetnuncContext } from '../../context/HicetnuncContext'
+import { Loading } from '../loading'
 
 /**
  * Button component renders a button based on the type of prop received
@@ -75,9 +77,9 @@ export const Purchase = ({ children = null, selected }) => {
   return <div className={classes}>{children}</div>
 }
 
-export const Curate = ({ children = null, selected }) => {
+export const ActionButton = ({ children = null, selected }) => {
   const classes = classnames({
-    [styles.curate]: true,
+    [styles.action]: true,
     [styles.selected]: selected,
   })
   return <div className={classes}>{children}</div>
@@ -89,4 +91,31 @@ export const Burn = ({ children = null, selected }) => {
     [styles.selected]: selected,
   })
   return <div className={classes}>{children}</div>
+}
+
+export const CurateButton = (props) => {
+  const [waiting, setWaiting] = useState(false)
+  const context = useContext(HicetnuncContext)
+
+  const tryCurate = async() => {
+    setWaiting(true)
+    context.curate(props.tokenId)
+    .finally(() => {
+      setWaiting(false)
+    })
+  }
+
+  return (
+    <Button onClick={tryCurate}>
+      <Primary>
+        {
+          waiting ? (
+            <Loading />
+          ) : (
+            <div>〇</div>
+          )
+        }
+      </Primary>
+    </Button>
+  )
 }

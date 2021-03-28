@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
 import { PATH } from '../../constants'
-import { Button, Primary, Purchase } from '../button'
+import { Button, Primary, Purchase, CurateButton } from '../button'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
 import { walletPreview } from '../../utils/string'
 import styles from './index.module.scss'
@@ -85,9 +85,7 @@ export const ItemInfo = ({
         )}
         {feed ? (
           <div>
-            <Button onClick={() => curate(token_id)}>
-              <Primary>〇</Primary>
-            </Button>
+            <CurateButton tokenId={token_id} />
           </div>
         ) : (
           <Button onClick={() => handleCollect()}>
@@ -98,9 +96,7 @@ export const ItemInfo = ({
       <div className={styles.container}>
         {!feed && (
           <div>
-            <Button onClick={() => curate(token_id)}>
-              <Primary>〇</Primary>
-            </Button>
+            <CurateButton tokenId={token_id} />
           </div>
         )}
         <div>

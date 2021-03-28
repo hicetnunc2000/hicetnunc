@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
 import { Page, Container, Padding } from '../../components/layout'
 import { Input } from '../../components/input'
-import { Button, Curate } from '../../components/button'
+import { Button, ActionButton } from '../../components/button'
 import { Loading } from '../../components/loading'
 import { getMimeType } from '../../utils/sanitise'
 import { renderMediaType } from '../../components/media-types'
@@ -224,7 +224,7 @@ export class Mint extends Component {
               <Padding>
                 <p>{this.state.fileTitle}</p>
                 <Button onClick={this.onFileUpload} fit>
-                  <Curate>Mint</Curate>
+                  <ActionButton>Mint</ActionButton>
                 </Button>
               </Padding>
             </Container>

@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react'
 import { HicetnuncContext } from '../../../context/HicetnuncContext'
 import { Container, Padding } from '../../../components/layout'
-import { Button, Curate } from '../../../components/button'
+import { Button, ActionButton } from '../../../components/button'
 import { Loading } from '../../../components/loading'
 const _ = require('lodash')
 // README: commented some code out displaying errors and logs.
@@ -55,7 +55,7 @@ export const Burn = (props) => {
       <Container>
         <Padding>
           <Button onClick={handleSubmit} fit>
-            <Curate>burn it</Curate>
+            <ActionButton>burn it</ActionButton>
           </Button>
           <div>
             <p>{message}</p>
