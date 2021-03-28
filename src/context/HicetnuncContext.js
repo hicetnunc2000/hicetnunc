@@ -187,14 +187,17 @@ export default class HicetnuncContextProvider extends Component {
       /* taquito */
       Tezos: null,
       wallet: null,
-      acc : null,
-      message : 'sync',
+      acc: null,
 
-      updateMessage : (message) => this.setState({ message : message }),
+      updateMessage: (message) => this.setState({ message: message }),
 
-      setAccount : async () => {
+      setAccount: async () => {
         this.setState({
-          acc : Tezos !== undefined ? await wallet.client.getActiveAccount() : undefined
+          acc:
+            Tezos !== undefined
+              ? await wallet.client.getActiveAccount()
+              : undefined,
+          address : await wallet.client.getActiveAccount()
         })
       },
 
@@ -218,17 +221,19 @@ export default class HicetnuncContextProvider extends Component {
           Tezos: Tezos,
           address: await wallet.getPKH(),
           acc: await wallet.client.getActiveAccount(),
-          wallet: wallet,
+          wallet,
         })
         this.state.setAuth(await wallet.getPKH())
         console.log(this.state)
       },
 
       disconnect: async () => {
+        console.log('disconnect wallet')
         // This will clear the active account and the next "syncTaquito" will trigger a new sync
         await wallet.client.clearActiveAccount()
         this.setState({
           address: undefined,
+          acc: undefined,
         })
       },
 
