@@ -1,4 +1,4 @@
-import React, { useContext, Component } from 'react'
+import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import classnames from 'classnames'
 import styles from './index.module.scss'
@@ -76,7 +76,23 @@ export const Purchase = ({ children = null, selected }) => {
   return <div className={classes}>{children}</div>
 }
 
-export class Curate extends Component {
+export const ActionButton = ({ children = null, selected }) => {
+  const classes = classnames({
+    [styles.action]: true,
+    [styles.selected]: selected,
+  })
+  return <div className={classes}>{children}</div>
+}
+
+export const Burn = ({ children = null, selected }) => {
+  const classes = classnames({
+    [styles.burn]: true,
+    [styles.selected]: selected,
+  })
+  return <div className={classes}>{children}</div>
+}
+
+export class CurateButton extends Component {
   static contextType = HicetnuncContext
 
   constructor(props) {
@@ -101,14 +117,11 @@ export class Curate extends Component {
   }
 
   render() {
-    const classes = classnames({
-      [styles.curate]: true,
-    })
     const classesActive = classnames({
       [styles.curateActive]: true,
     })
     return (
-      <Button className={classes} onClick={() => this.tryCurate(this.state)}>
+      <Button onClick={() => this.tryCurate(this.state)}>
         <Primary>
           <div style={{position: 'relative'}}>
             <div className={classesActive} style={{display: this.state.waiting ? 'block' : 'none'}}>〇</div>
@@ -118,21 +131,3 @@ export class Curate extends Component {
     )
     }
 }
-
-export const Burn = ({ children = null, selected }) => {
-  const classes = classnames({
-    [styles.burn]: true,
-    [styles.selected]: selected,
-  })
-  return <div className={classes}>{children}</div>
-}
-
-
-<div class="button_primary__2VQbN" style="
-    position: relative;
-">
-
-<div id="a" style="
-
-">〇</div>
-</div>

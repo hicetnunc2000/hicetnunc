@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
 import { Page, Container, Padding } from '../../components/layout'
 import { Input } from '../../components/input'
-import { Button, Curate, Primary } from '../../components/button'
+import { Button, ActionButton, Primary } from '../../components/button'
 import { Loading } from '../../components/loading'
 import { Upload } from '../../components/upload'
 import { Preview } from '../../components/preview'
@@ -129,7 +129,7 @@ export const Mint = () => {
           <Container>
             <Padding>
               <Button onClick={handlePreview} fit disabled={handleValidation()}>
-                <Curate>Preview</Curate>
+                <ActionButton>Preview</ActionButton>
               </Button>
             </Padding>
           </Container>
@@ -165,7 +165,7 @@ export const Mint = () => {
           <Container>
             <Padding>
               <Button onClick={handleMint} fit>
-                <Curate>mint</Curate>
+                <ActionButton>mint</ActionButton>
               </Button>
             </Padding>
           </Container>

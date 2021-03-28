@@ -1,13 +1,13 @@
 import React, { useContext } from 'react'
 import { PATH } from '../../constants'
-import { Button, Primary, Purchase, Curate } from '../button'
+import { Button, Primary, Purchase, CurateButton } from '../button'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
 import { walletPreview } from '../../utils/string'
 import styles from './index.module.scss'
 // import { lowestPrice } from '../../utils/lowestPrice'
 // import { getTotalSales } from '../../utils/sanitise'
 
-const _ = require('lodash')
+// const _ = require('lodash')
 
 export const ItemInfo = ({
   token_id,
@@ -77,7 +77,7 @@ export const ItemInfo = ({
         )}
         {feed ? (
           <div>
-            <Curate tokenId={token_id} />
+            <CurateButton tokenId={token_id} />
           </div>
         ) : (
           <Button onClick={() => handleCollect()}>
@@ -88,7 +88,7 @@ export const ItemInfo = ({
       <div className={styles.container}>
         {!feed && (
           <div>
-            <Curate tokenId={token_id} />
+            <CurateButton tokenId={token_id} />
           </div>
         )}
         <div>

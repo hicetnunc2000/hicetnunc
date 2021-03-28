@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react'
 import { useHistory } from 'react-router'
 import { HicetnuncContext } from '../../../context/HicetnuncContext'
 import { Container, Padding } from '../../../components/layout'
-import { Button, Curate } from '../../../components/button'
+import { Button, ActionButton } from '../../../components/button'
 import { Loading } from '../../../components/loading'
 import { PATH } from '../../../constants'
 // import { lowestPrice } from '../../../utils/lowestPrice'
@@ -47,7 +47,7 @@ export const Cancel = ({ swaps, address }) => {
       <Container>
         <Padding>
           <Button onClick={handleSubmit} fit>
-            <Curate>cancel it</Curate>
+            <ActionButton>cancel it</ActionButton>
           </Button>
           <div>
             <p>{message}</p>
