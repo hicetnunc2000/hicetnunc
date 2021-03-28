@@ -18,7 +18,7 @@ addr : ''
   static contextType = HicetnuncContext
 
   componentWillMount = async () => {
-    if (this.context.address == undefined) {
+    if (this.context.acc == undefined) {
       await this.context.syncTaquito()
       await this.context.setAccount()
       this.context.address = this.context.addr
