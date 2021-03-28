@@ -18,12 +18,12 @@ addr : ''
   static contextType = HicetnuncContext
 
   componentWillMount = async () => {
-    if (this.context.acc == undefined) {
+    if (this.context.acc == null) {
       await this.context.syncTaquito()
       await this.context.setAccount()
-      this.context.address = this.context.addr
+
     } else {
-      return
+      await this.context.setAccount()
     }
     console.log(this.context)
   }
@@ -31,8 +31,8 @@ addr : ''
   render() {
     return (
       <Page>
-        { this.context.address !== '' ?
-          <Redirect to={`/tz/${this.context.address}`} />
+        { this.context.acc !== undefined ?
+          <Redirect to={`/tz/${this.context.acc.address}`} />
           :
           <Container>
             <Padding>

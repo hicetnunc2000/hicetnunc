@@ -14,7 +14,7 @@ const _ = require('lodash')
 
 const TABS = [
   { title: 'info', component: Info },
-  { title: 'owners', component: Owners },
+  { title: 'collectors', component: Owners },
   { title: 'swap', component: Swap, private: true },
   { title: 'cancel', component: Cancel, private: true },
   { title: 'burn', component: Burn, private: true },
