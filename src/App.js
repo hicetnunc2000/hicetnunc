@@ -22,9 +22,11 @@ const App = () => {
   //
   useEffect(() => {
     const language = getItem('language') || setItem('language', 'en')
-    fetch(
-      `https://raw.githubusercontent.com/hicetnunc2000/hicetnunc/main/languages/${language}.json`
-    )
+    const langRoot =
+      process.env.NODE_ENV === 'development'
+        ? '/languages'
+        : 'https://raw.githubusercontent.com/hicetnunc2000/hicetnunc/main/languages'
+    fetch(`${langRoot}/${language}.json`)
       .then((e) => e.json())
       .then((data) => {
         setLanguage(data)
@@ -54,7 +56,6 @@ const App = () => {
         <Route path="/objkt/:id" component={ObjktDisplay} />
         <Route path="/load" component={Loading} />
       </Switch>
-      <Footer />
     </HicetnuncContextProvider>
   )
 }

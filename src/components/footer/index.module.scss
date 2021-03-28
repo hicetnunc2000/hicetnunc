@@ -2,7 +2,10 @@
 @import '../../styles/layout.scss';
 
 .container {
-  position: relative;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
   background-color: var(--text-color);
   color: var(--background-color);
   transition: background-color #{$theme-duration} ease-out,
