@@ -16,11 +16,18 @@
 
       async function init() {
         try {
+          const uid = new URLSearchParams(window.location.search).get('uid')
+
+          if (!uid) {
+            console.log('No uid supplied')
+            return
+          }
+
           // Initialize service worker to intercept all http requests
           await initServiceWorker()
 
           // Request files data from parent
-          const fileData = await requestFileData()
+          const fileData = await requestFileData(uid)
 
           // Send data to service worker
           navigator.serviceWorker.controller.postMessage({
@@ -33,6 +40,14 @@
         } catch (err) {
           throw err
         }
+      }
+
+      function delay(ms) {
+        return new Promise((resolve, reject) => {
+          setTimeout(() => {
+            resolve()
+          }, ms)
+        })
       }
 
       // Init service worker interceptor
@@ -58,8 +73,7 @@
 
 
       // Request data from parent window
-      function requestFileData() {
-        const uid = new URLSearchParams(window.location.search).get('uid')
+      function requestFileData(uid) {
         window.top.postMessage(uid, '*');
 
         return new Promise((resolve, reject) => {
