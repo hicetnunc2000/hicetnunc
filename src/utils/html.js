@@ -8,6 +8,7 @@ export async function prepareFilesFromZIP(buffer) {
 
   // inject CSP meta tag
   const indexBlob = files['index.html']
+  files['index_raw.html'] = new Blob([indexBlob], {type: indexBlob.type})
   const indexBuffer = await indexBlob.arrayBuffer()
   const safeIndexBuffer = injectCSPMetaTagIntoBuffer(indexBuffer)
   files['index.html'] = new Blob([safeIndexBuffer], {
@@ -212,3 +213,14 @@ export function getCoverImagePathFromBuffer(buffer) {
   return meta.getAttribute('content')
 }
 
+export function dataRUIToBuffer(dataURI) {
+  const parts = dataURI.split(',')     
+  const base64 = parts[1]
+  const binaryStr = atob(base64)
+  const len = binaryStr.length
+  const bytes = new Uint8Array(len)
+  for (let i = 0; i < len; i++) {
+      bytes[i] = binaryStr.charCodeAt(i)
+  }
+  return bytes
+}
