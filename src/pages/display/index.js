@@ -58,16 +58,62 @@ export default class Display extends Component {
         })
         const sanitised = SanitiseOBJKT(res.data.result)
 
-        this.setState({
-          objkts: sanitised,
-          creations: sanitised.filter(
-            (e) => this.state.wallet === e.token_info.creators[0]
-          ),
-          collection: sanitised.filter(
-            (e) => this.state.wallet !== e.token_info.creators[0]
-          ),
-          loading: false,
-        })
+        const creations = sanitised.filter(
+          (e) => this.state.wallet === e.token_info.creators[0]
+        )
+
+        const collection = sanitised.filter(
+          (e) => this.state.wallet !== e.token_info.creators[0]
+        )
+
+        console.log('creations', creations.length)
+        console.log('collections', collection.length)
+
+        let totalCreations = creations.length
+        let total = 0
+        const loadOwners = async (id, index) => {
+          const owners = await axios
+            .get(
+              `https://api.better-call.dev/v1/contract/mainnet/KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton/tokens/holders?token_id=${id}`
+            )
+            .then((res) => res.data)
+
+          // add owners to creations array
+          creations[index].owners = [...Object.keys(owners)]
+
+          total++
+
+          // all loaded
+          if (total === totalCreations) {
+            this.setState({
+              objkts: sanitised,
+              creations: creations.filter((e) =>
+                e.owners
+                  ? e.owners.indexOf('tz1burnburnburnburnburnburnburjAYjjX') ===
+                    -1
+                  : true
+              ),
+              collection,
+              loading: false,
+            })
+          }
+        }
+
+        if (creations.length > 0) {
+          // if the user has creations load all owners
+          for (let i = 0; i < creations.length; i++) {
+            loadOwners(creations[i].token_id, i)
+          }
+        } else {
+          // if the user has no creations, just set state
+
+          this.setState({
+            objkts: sanitised,
+            creations,
+            collection,
+            loading: false,
+          })
+        }
       })
   }
 

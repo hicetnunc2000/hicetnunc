@@ -27,17 +27,21 @@ export const ItemInfo = ({
     available = owners[kt]
   }
 
+  let s = _.minBy(swaps, 'xtz_per_objkt')
+
+
   // var kt = _.values(_.omitBy(owners, (value, key) => !key.startsWith('KT')))[0]
   //owners = _.values(_.omitBy(owners, (value, key) => !key.startsWith(token_info.creators[0])))
 
   const soldOutMessage = 'not for sale'
   var message = ''
+  console.log(acc)
 
   //const notForSale = available > 0 || isNaN(editions)
   try {
     message =
-      available > 0
-        ? 'collect for ' + Number(swaps[0].xtz_per_objkt) / 1000000 + ' tez'
+      available > 0 && swaps[0] !== undefined
+        ? 'collect for ' + Number(s.xtz_per_objkt) / 1000000 + ' tez'
         : 'not for sale'
   } catch (e) {
     message = 'not for sale'
@@ -48,7 +52,7 @@ export const ItemInfo = ({
     if (acc == null) {
       syncTaquito()
     } else {
-      collect(1, swaps[0].swap_id, swaps[0].xtz_per_objkt * 1)
+      collect(1, s.swap_id, s.xtz_per_objkt * 1)
     }
   }
 

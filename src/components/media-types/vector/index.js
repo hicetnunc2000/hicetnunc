@@ -17,8 +17,8 @@ export const VectorComponent = ({ src, interactive, preview, token_info }) => {
     _creator_ = token_info.creators[0]
   }
 
-  if (context.address !== '') {
-    _viewer_ = context.address
+  if (context.address && context.address.address) {
+    _viewer_ = context.address.address
   }
 
   let iframeSrc
