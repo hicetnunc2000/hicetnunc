@@ -47,7 +47,8 @@ export const prepareDirectory = async ({
     tags,
     cid,
     address,
-    mimeType: IPFS_DIRECTORY_MIMETYPE
+    mimeType: IPFS_DIRECTORY_MIMETYPE,
+    displayUri
   })
 }
 
