@@ -32,7 +32,6 @@ export const HTMLComponent = ({
 
   useEffect(() => {
     const handler = async (event) => {
-      console.log("use effect called on Safari?!", event)
       if (event.data !== uid) {
         return
       }
@@ -91,7 +90,8 @@ export const HTMLComponent = ({
             <iframe
               ref={iframeRef}
               title="html-zip-embed"
-              src={`https://hicetnunc2000.github.io/hicetnunc/gh-pages/html-preview/index.html?uid=${uid}&creator=${_creator_}&viewer=${_viewer_}`}
+              // src={`https://hicetnunc2000.github.io/hicetnunc/gh-pages/html-preview/?uid=${uid}&creator=${_creator_}&viewer=${_viewer_}`}
+              src={`https://localhost:8080/sub/derp/?uid=${uid}&creator=${_creator_}&viewer=${_viewer_}`}
               sandbox="allow-scripts allow-same-origin allow-modals"
             />
           </div>

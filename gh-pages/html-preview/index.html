@@ -32,6 +32,7 @@
           // Send data to service worker
           navigator.serviceWorker.controller.postMessage({
             type: 'resources',
+            basePath: window.location.pathname,
             payload: fileData
           });
 
