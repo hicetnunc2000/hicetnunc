@@ -10,15 +10,18 @@ self.addEventListener('activate', function(event) {
 
 self.addEventListener('message', event => {
   if (event.data && event.data.type === 'resources') {
-    cache = event.data.payload
+    cache = {}
+    for (let relPath in event.data.payload) {
+      const basePath = event.data.basePath.replace('index.html', '')
+      const absPath = basePath + relPath
+      cache[absPath] = event.data.payload[relPath]
+    }
   }
 })
 
 self.addEventListener('fetch', event => {
-  const url = event.request.url
-  const ref = event.request.referrer.split('?')[0]
-  const path = url.replace(ref, '')
-
+  const path = getURLPath(event.request.url)
+  console.log(path)
   if (cache[path]) {
     const res = new Response(cache[path])
     event.respondWith(Promise.resolve(res))
@@ -28,3 +31,9 @@ self.addEventListener('fetch', event => {
     )
   }
 })
+
+function getURLPath(url, defaults) {
+  var reUrlPath = /(?:\w+:)?\/\/[^\/]+([^?#]+)/
+  var urlParts = url.match(reUrlPath) || [url, defaults]
+  return urlParts.pop()
+}
