@@ -23,7 +23,7 @@ export const HTMLComponent = ({
   }
 
   if (context.address !== '') {
-    _viewer_ = context.address
+    _viewer_ = context.address.address
   }
 
   // preview
