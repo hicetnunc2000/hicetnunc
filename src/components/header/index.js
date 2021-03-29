@@ -6,8 +6,9 @@ import { Container, Padding } from '../layout'
 import { Button, Primary, Secondary } from '../button'
 import { fadeIn } from '../../utils/motion'
 import { Menu } from '../icons'
-import styles from './style.module.scss'
 import { walletPreview } from '../../utils/string'
+import { VisuallyHidden } from '../visually-hidden'
+import styles from './style.module.scss'
 
 const ls = require('local-storage')
 /* import { BeaconWallet } from '@taquito/beacon-wallet'
@@ -38,7 +39,7 @@ export const Header = () => {
 
   return (
     <>
-      <div className={styles.container}>
+      <header className={styles.container}>
         <div className={styles.content}>
           <Button onClick={() => handleRoute('/')}>
             <Secondary>
@@ -56,18 +57,21 @@ export const Header = () => {
             </Button>
 
             <Button onClick={context.toogleNavbar} secondary>
+              <VisuallyHidden>
+                {`${context.collapsed ? 'show' : 'hide'} menu`}
+              </VisuallyHidden>
               <Menu isOpen={!context.collapsed} />
             </Button>
           </div>
         </div>
-      </div>
+      </header>
 
       <AnimatePresence>
         {!context.collapsed && (
           <motion.div className={styles.menu} {...fadeIn()}>
             <Container>
               <Padding>
-                <div className={styles.content}>
+                <nav className={styles.content}>
                   <ul>
                     <li>
                       <Button onClick={() => handleRoute('/hdao')}>
@@ -98,7 +102,7 @@ export const Header = () => {
                       </Button>
                     </li>
                   </ul>
-                </div>
+                </nav>
               </Padding>
             </Container>
           </motion.div>

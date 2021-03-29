@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
 import { GetOBJKT } from '../../data/api'
 import { Loading } from '../../components/loading'
-import { Page, Container, Padding } from '../../components/layout'
+import { Container, Padding } from '../../components/layout'
 import { renderMediaType } from '../../components/media-types'
 import { ItemInfo } from '../../components/item-info'
 import { Button, Primary } from '../../components/button'
@@ -54,7 +54,7 @@ export const ObjktDisplay = () => {
   const Tab = TABS[tabIndex].component
 
   return (
-    <Page>
+    <>
       {loading && (
         <Container>
           <Loading />
@@ -96,6 +96,6 @@ export const ObjktDisplay = () => {
           <Tab {...nft} address={address} />
         </>
       )}
-    </Page>
+    </>
   )
 }
