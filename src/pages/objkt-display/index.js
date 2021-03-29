@@ -16,7 +16,6 @@ const TABS = [
   { title: 'info', component: Info },
   { title: 'collectors', component: Owners },
   { title: 'swap', component: Swap, private: true },
-  { title: 'cancel', component: Cancel, private: true },
   { title: 'burn', component: Burn, private: true },
 ]
 
@@ -83,8 +82,7 @@ export const ObjktDisplay = () => {
                 {TABS.filter(
                   (e) =>
                     !e.private ||
-                    _.keys(owners).includes(address) ||
-                    address === creator
+                    _.keys(owners).includes(address)
                 ).map(({ title }, index) => (
                   <Button key={title} onClick={() => setTabIndex(index)}>
                     <Primary selected={tabIndex === index}>{title}</Primary>
