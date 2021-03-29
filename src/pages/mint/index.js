@@ -84,18 +84,18 @@ export const Mint = () => {
 
     console.log('nftCid:', nftCid)
 
-    // mint(getAuth(), amount, nftCid.path, 10)
-    //   .then((e) => {
-    //     console.log('mint confirm', e)
-    //     setMessage('Minted successfully')
-    //     // redirect here
-    //     history.push(PATH.FEED)
-    //   })
-    //   .catch((e) => {
-    //     console.log('mint error', e)
-    //     alert('an error occurred')
-    //     setMessage('an error occurred')
-    //   })
+    mint(getAuth(), amount, nftCid.path, 10)
+      .then((e) => {
+        console.log('mint confirm', e)
+        setMessage('Minted successfully')
+        // redirect here
+        history.push(PATH.FEED)
+      })
+      .catch((e) => {
+        console.log('mint error', e)
+        alert('an error occurred')
+        setMessage('an error occurred')
+      })
   }
 
   const handlePreview = () => {
