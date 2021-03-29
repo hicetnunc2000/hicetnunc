@@ -56,6 +56,7 @@ const App = () => {
         <Route path="/objkt/:id" component={ObjktDisplay} />
         <Route path="/load" component={Loading} />
       </Switch>
+      <Footer />
     </HicetnuncContextProvider>
   )
 }
