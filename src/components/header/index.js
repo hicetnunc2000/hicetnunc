@@ -118,7 +118,7 @@ export const Header = () => {
                 </div>
               </Padding>
             </Container>
-            <Footer />
+            {false && <Footer />}
           </motion.div>
         )}
       </AnimatePresence>
