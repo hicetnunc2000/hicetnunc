@@ -14,6 +14,7 @@ const customFloor = function (value, roundTo) {
 const ONE_MINUTE_MILLIS = 60 * 1000
 
 export const Feed = () => {
+  const [scrollPosition, setScrollPosition] = useState({ x: 0, y: 0 });
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(false)
   const [feedType, setFeedType] = useState(1)
@@ -25,6 +26,25 @@ export const Feed = () => {
   const loadMore = () => {
     setCount(count + 1)
   }
+
+  useEffect(() => {
+
+    window.addEventListener('scroll', onScroll, false);
+
+    return unmount;
+
+    function unmount() {
+      window.removeEventListener('scroll', onScroll, false);
+    }
+
+    function onScroll() {
+      setScrollPosition({
+        x: document.body.scrollLeft,
+        y: document.body.scrollTop
+      });
+    }
+
+  });
 
   useEffect(() => {
     if (error) {
@@ -98,7 +118,7 @@ export const Feed = () => {
       )}
 
       {items.map((item, index) => (
-        <FeedItem key={`${item.token_id}-${index}`} {...item} />
+        <FeedItem key={`${item.token_id}-${index}`} scroll={scrollPosition} {...item} />
       ))}
 
       {loading ? (

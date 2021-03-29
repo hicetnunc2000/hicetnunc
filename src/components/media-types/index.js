@@ -72,7 +72,7 @@ export const renderMediaType = ({
     case MIMETYPE.QUICKTIME:
     case MIMETYPE.WEBM:
       url = preview ? uri : `${IPFS}${path}`
-      return <VideoComponent src={url} interactive={interactive} />
+      return <VideoComponent src={url} interactive={interactive} {...metadata} />
     /* 3D */
     case MIMETYPE.GLB:
     case MIMETYPE.GLTF:
