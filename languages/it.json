@@ -1,0 +1,82 @@
+{
+  "header": {
+    "sync": "sync",
+    "menu": [
+      { "primary": "○", "route": "/hdao" },
+      { "primary": "casuale", "route": "/random" },
+      { "primary": "OBJKT", "secondary": "(crea NFT)", "route": "/mint" },
+      { "primary": "gestisci collezione", "route": "/sync" },
+      { "primary": "informazioni aggiuntive", "route": "/about" }
+    ]
+  },
+  "footer": {
+    "mint": "verifica la tua attività quando esegui transazioni.",
+    "warning": "usa questo strumento consapevolmente. visita i profili degli artisti. presta attenzione ai copy minters."
+  },
+  "home": {
+    "latest": "recenti",
+    "hDAO": "hDAO",
+    "more": "Carica più elementi"
+  },
+  "mint": {
+    "title": "titolo",
+    "description": "descrizione",
+    "tags": "tag (separati da una virgola)",
+    "amount": "numero di OBJKT da emettere",
+    "upload": "Upload OBJKT",
+    "supports": "file supportati",
+    "preview": "anteprima",
+    "mint": "crea",
+    "warning": "questa operazione costa 0,08~ tez. 10% in commissione è stabilito di default"
+  },
+  "manage": {
+    "creations": "creazioni",
+    "collection": "collezione"
+  },
+  "about": {
+    "title": "hic et nunc",
+    "paragraphs": [
+      "Questa applicazione decentralizzata consente ai propri utenti di gestire risorse digitali, fungendo come infrastruttura disponibile al pubblico per interagire con smart contract sviluppati sulla Tezos blockchain.",
+      "Gli NFT su IPFS possono essere creati e scambiati tramite il protocollo senza intermediari. Questo esperimento è stato sviluppato con l'idea di crypto economie alternative in mente.",
+      "Diamo importanza alla vostra sicurezza e autonomia. si prega di verificare le informazioni durante le transazioni.",
+      "Per consulenze, networking o domande contattaci tramite %EMAIL%, %DISCORD%, oppure su %REDDIT%.",
+      "Consulta le risposte a domande popolari %FAQS%.",
+      "Se hai problemi con il sito web, segnalo su GitHub: %ISSUE%"
+    ]
+  },
+  "detail": {
+    "editions": "Edizioni",
+    "issuer": "Emittente",
+    "notForSale": "Non in vendita",
+    "soldOut": "Esaurito",
+    "collect": "Colleziona per %PRICE%",
+    "menuInfo": "info",
+    "menuOwners": "proprietari",
+    "menuSwap": "scambia",
+    "menuCancel": "cancella",
+    "menuBurn": "brucia",
+    "info": {
+      "title": "TITOLO",
+      "description": "DESCRIZIONE",
+      "tags": "TAG"
+    },
+    "owners": {
+      "title": "nessun proprietario"
+    },
+    "swap": {
+      "amount": "numero di OBJKT",
+      "price": "prezzo per OBJKT (in tez)",
+      "cta": "scambia",
+      "warning": "gli swap con valore associato vengono addebitati con una commissione del 2,5% per la manutenzione della piattaforma"
+    },
+    "cancel": {
+      "title": "stai per cancellare lo scambio",
+      "cta": "cancella"
+    },
+    "burn": {
+      "title": "Bruciare il tuo NFT lo eliminerà definitivamente dalla rete",
+      "cta": "brucia"
+    },
+    "confirm": "Sei sicuro?"
+  }
+}
