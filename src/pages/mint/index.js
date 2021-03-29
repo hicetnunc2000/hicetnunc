@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react'
 import { useHistory } from 'react-router'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
-import { Page, Container, Padding } from '../../components/layout'
+import { Container, Padding } from '../../components/layout'
 import { Input } from '../../components/input'
 import { Button, Curate, Primary } from '../../components/button'
 import { Loading } from '../../components/loading'
@@ -114,7 +114,7 @@ export const Mint = () => {
   }
 
   return (
-    <Page>
+    <>
       {step === 0 && (
         <>
           <Container>
@@ -231,6 +231,6 @@ export const Mint = () => {
           )}
         </>
       )}
-    </Page>
+    </>
   )
 }
