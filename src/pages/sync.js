@@ -6,11 +6,22 @@ import { LoadingContainer } from '../components/loading'
 import { Button, Primary } from '../components/button'
 
 export default class Sync extends Component {
+
+  constructor(props) {
+    super(props)
+
+    this.state = {
+addr : ''
+    }
+  }
+
   static contextType = HicetnuncContext
 
   componentWillMount = async () => {
-    if (this.context.acc == null) {
+    if (this.context.acc == undefined) {
       await this.context.syncTaquito()
+      await this.context.setAccount()
+      this.context.address = this.context.addr
     } else {
       return
     }
@@ -20,8 +31,8 @@ export default class Sync extends Component {
   render() {
     return (
       <Page>
-        { this.context.acc !== null ?
-          <Redirect to={`/tz/${this.context.acc.address}`} />
+        { this.context.address !== undefined ?
+          <Redirect to={`/tz/${this.context.address}`} />
           :
           <Container>
             <Padding>
