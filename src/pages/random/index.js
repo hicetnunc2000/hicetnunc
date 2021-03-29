@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react'
 import { GetFeed, GethDAOFeed, GetRandomFeed } from '../../data/api'
-import { Page, Container, Padding } from '../../components/layout'
+import { Container, Padding } from '../../components/layout'
 import { FeedItem } from '../../components/feed-item'
 import { Loading } from '../../components/loading'
 import { Button, Primary } from '../../components/button'
@@ -67,7 +67,7 @@ export const Random = () => {
   }
 
   return (
-    <Page>
+    <>
       {false && (
         <div className={styles.sticky}>
           <div className={styles.content}>
@@ -111,6 +111,6 @@ export const Random = () => {
           </Padding>
         </Container>
       )}
-    </Page>
+    </>
   )
 }

@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react'
 import { GetFeed, GethDAOFeed } from '../../data/api'
-import { Page, Container, Padding } from '../../components/layout'
+import { Container, Padding } from '../../components/layout'
 import { FeedItem } from '../../components/feed-item'
 import { Loading } from '../../components/loading'
 import { Button, Primary } from '../../components/button'
@@ -83,7 +83,7 @@ export const Feed = () => {
   }
 
   return (
-    <Page>
+    <>
       {false && (
         <div className={styles.sticky}>
           <div className={styles.content}>
@@ -97,9 +97,15 @@ export const Feed = () => {
         </div>
       )}
 
-      {items.map((item, index) => (
-        <FeedItem key={`${item.token_id}-${index}`} {...item} />
-      ))}
+      {items.length > 0 && (
+        <ul>
+          {items.map((item, index) => (
+            <li key={`${item.token_id}-${index}`}>
+              <FeedItem {...item} />
+            </li>
+          ))}
+        </ul>
+      )}
 
       {loading ? (
         <Container>
@@ -127,6 +133,6 @@ export const Feed = () => {
           </Padding>
         </Container>
       )}
-    </Page>
+    </>
   )
 }
