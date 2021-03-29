@@ -90,8 +90,7 @@ export const HTMLComponent = ({
             <iframe
               ref={iframeRef}
               title="html-zip-embed"
-              // src={`https://hicetnunc2000.github.io/hicetnunc/gh-pages/html-preview/?uid=${uid}&creator=${_creator_}&viewer=${_viewer_}`}
-              src={`https://localhost:8080/sub/derp/?uid=${uid}&creator=${_creator_}&viewer=${_viewer_}`}
+              src={`https://hicetnunc2000.github.io/hicetnunc/gh-pages/html-preview/?uid=${uid}&creator=${_creator_}&viewer=${_viewer_}`}
               sandbox="allow-scripts allow-same-origin allow-modals"
             />
           </div>
