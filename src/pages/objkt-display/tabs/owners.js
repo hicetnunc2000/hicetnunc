@@ -69,9 +69,7 @@ export const Owners = ({ owners, swaps }) => {
           undefined
       }
       {filtered.length === 0 ? (
-        <Container>
-          <Padding>no owners</Padding>
-        </Container>
+        undefined
       ) : (
         <Container>
           <Padding>
