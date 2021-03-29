@@ -22,7 +22,7 @@ export const HTMLComponent = ({
     _creator_ = token_info.creators[0]
   }
 
-  if (context.address !== '') {
+  if (context.address && context.address.address) {
     _viewer_ = context.address.address
   }
 
