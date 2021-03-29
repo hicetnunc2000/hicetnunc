@@ -197,6 +197,7 @@ export default class HicetnuncContextProvider extends Component {
             Tezos !== undefined
               ? await wallet.client.getActiveAccount()
               : undefined,
+          address : await wallet.client.getActiveAccount()
         })
       },
 
