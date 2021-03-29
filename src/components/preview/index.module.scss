@@ -2,7 +2,7 @@
 
 .container {
   display: flex;
-  flex-direction: column;
+  flex-direction: column !important;
 
   .media,
   .info {
@@ -12,6 +12,7 @@
   .info {
     display: flex;
     align-items: flex-start;
+    margin-top: 20px;
   }
 
   @include respond-to('tablet') {
@@ -19,7 +20,7 @@
 
     .media,
     .info {
-      width: 50%;
+      width: 100%;
     }
 
     .info {

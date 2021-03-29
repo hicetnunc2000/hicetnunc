@@ -22,7 +22,7 @@
     "title": "titolo",
     "description": "descrizione",
     "tags": "tag (separati da una virgola)",
-    "amount": "numero di OBJKT's da emettere",
+    "amount": "numero di OBJKT da emettere",
     "upload": "Upload OBJKT",
     "supports": "file supportati",
     "preview": "anteprima",
@@ -57,14 +57,14 @@
     "menuBurn": "brucia",
     "info": {
       "title": "TITOLO",
-      "description": "DESCIZIONE",
+      "description": "DESCRIZIONE",
       "tags": "TAG"
     },
     "owners": {
       "title": "nessun proprietario"
     },
     "swap": {
-      "amount": "numero di OBJKTs",
+      "amount": "numero di OBJKT",
       "price": "prezzo per OBJKT (in tez)",
       "cta": "scambia",
       "warning": "gli swap con valore associato vengono addebitati con una commissione del 2,5% per la manutenzione della piattaforma"
