@@ -1,7 +1,8 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useState, useRef, useEffect } from 'react'
 import classnames from 'classnames'
 import { HicetnuncContext } from '../../../context/HicetnuncContext'
 import { Button } from '../../button'
+import { dataRUIToBuffer, prepareFilesFromZIP } from '../../../utils/html'
 import { VisuallyHidden } from '../../visually-hidden'
 import styles from './index.module.scss'
 
@@ -22,47 +23,88 @@ export const HTMLComponent = ({
     _creator_ = token_info.creators[0]
   }
 
-  if (context.address !== '') {
-    _viewer_ = context.address
+  if (context.address && context.address.address) {
+    _viewer_ = context.address.address
   }
 
-  const coverMeta = '<meta property="og:image" content="path/to/image.jpg" />'
+  // preview
+  const iframeRef = useRef(null);
+  const uid = Math.round(Math.random() * 100000000).toString()
 
-  if (preview) {
-    return (
-      <div>
-        <div>
-          Previews are not available for HTML ZIP files.
-          <br />
-          <br />
-          <div style={{ color: 'red' }}>
-            IMPORTANT:
-            <br />
-            <br />
-            Your zip file must contain an index.html file.
-            <br />
-            <br />
-            Please also include an image file and reference it in a meta tag
-            like this:
-            <br />
-            {coverMeta}
-            <br />
-            <br />
-            Links to external resources in your code will not work. Please
-            include everything in your zip file.
-          </div>
-          <br />
-          <br />
-          Click 'mint' below to proceed.
-        </div>
-      </div>
-    )
-  }
+  useEffect(() => {
+    const handler = async (event) => {
+      if (event.data !== uid) {
+        return
+      }
+
+      const buffer = dataRUIToBuffer(src)
+      const filesArr = await prepareFilesFromZIP(buffer)
+      const files = {}
+      filesArr.forEach(f => {
+        files[f.path] = f.blob
+      })
+      iframeRef.current.contentWindow.postMessage(files, '*')
+    }
+
+    window.addEventListener('message', handler)
+
+    return () => window.removeEventListener('message', handler)
+  }, [uid, src])
 
   const classes = classnames({
     [styles.container]: true,
     [styles.interactive]: interactive,
   })
+
+  if (preview) {
+    // creator is the viewer in preview
+    _creator_ = _viewer_
+
+    console.log('creator', _creator_)
+    console.log('viewer', _viewer_)
+
+    if (src) {
+      const coverMeta = '<meta property="og:image" content="path/to/image.jpg">'
+      return (
+        <div>
+          <div className={styles.warning}>
+            IMPORTANT:
+            <br />
+            <br />
+            <ul>
+              <li>
+                Your zip file must contain an index.html file.
+              </li>
+              <li>
+                You must also include a cover image and reference it in a meta tag like this:
+                <br />
+                {coverMeta}
+              </li>
+              <li>
+                Access to external resources is high restricted at the moment. Please include everything in your zip file (libraries, assets, etc).
+              </li>
+            </ul>
+            <br />
+            HTML support is experimental – please report bugs on <a href="https://github.com/hicetnunc2000/hicetnunc/issues" target="_blank">Github</a>.
+          </div>
+          <div className={styles.container}>
+            <iframe
+              ref={iframeRef}
+              title="html-zip-embed"
+              src={`https://hicetnunc2000.github.io/hicetnunc/gh-pages/html-preview/?uid=${uid}&creator=${_creator_}&viewer=${_viewer_}`}
+              sandbox="allow-scripts allow-same-origin allow-modals"
+            />
+          </div>
+        </div>
+      )
+    } else {
+      return (
+        <div className={styles.container}>
+          Loading...
+        </div>
+      )
+    }
+  }
 
   if (!viewing) {
     return (
@@ -92,7 +134,7 @@ export const HTMLComponent = ({
   return (
     <div className={classes}>
       <iframe
-        title="hic et nunc HTML renderer"
+        title="html-embed"
         src={`${src}?creator=${_creator_}&viewer=${_viewer_}`}
         sandbox="allow-scripts"
         scrolling="no"

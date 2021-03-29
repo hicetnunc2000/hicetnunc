@@ -14,9 +14,8 @@ const _ = require('lodash')
 
 const TABS = [
   { title: 'info', component: Info },
-  { title: 'owners', component: Owners },
+  { title: 'collectors', component: Owners },
   { title: 'swap', component: Swap, private: true },
-  { title: 'cancel', component: Cancel, private: true },
   { title: 'burn', component: Burn, private: true },
 ]
 
@@ -32,7 +31,6 @@ export const ObjktDisplay = () => {
   const [address, setAddress] = useState(null)
   //setAccount()
 
-
   useEffect(() => {
     GetOBJKT({ id }).then(async (objkt) => {
       await setAccount()
@@ -40,14 +38,13 @@ export const ObjktDisplay = () => {
       setOwners(objkt.owners)
       try {
         setAddress(acc.address)
-      } catch (e) { }
+      } catch (e) {}
 
       try {
         setCreator(objkt.token_info.creators[0])
-      } catch (e) { }
+      } catch (e) {}
 
       setLoading(false)
-
     })
   }, [id])
 
@@ -83,7 +80,9 @@ export const ObjktDisplay = () => {
             <Padding>
               <Menu>
                 {TABS.filter(
-                  (e) => !e.private || _.keys(owners).includes(address) || address == creator
+                  (e) =>
+                    !e.private ||
+                    _.keys(owners).includes(address)
                 ).map(({ title }, index) => (
                   <Button key={title} onClick={() => setTabIndex(index)}>
                     <Primary selected={tabIndex === index}>{title}</Primary>

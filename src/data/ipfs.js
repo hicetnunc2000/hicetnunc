@@ -39,7 +39,7 @@ export const prepareDirectory = async ({
   // upload files
   const hashes = await uploadFilesToDirectory(files)
   const cid = `ipfs://${hashes.directory}`
-  const displayUri = hashes.cover ? `ipfs://${hashes.cover}` : null
+  const displayUri = hashes.cover ? `ipfs://${hashes.cover}` : ''
 
   return await uploadMetadataFile({
     name,
@@ -48,7 +48,7 @@ export const prepareDirectory = async ({
     cid,
     address,
     mimeType: IPFS_DIRECTORY_MIMETYPE,
-    displayUri,
+    displayUri
   })
 }
 
@@ -100,7 +100,7 @@ async function uploadMetadataFile({
   cid,
   address,
   mimeType,
-  displayUri = null,
+  displayUri = '',
 }) {
   const ipfs = createClient('https://ipfs.infura.io:5001')
 
