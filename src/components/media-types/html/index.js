@@ -28,7 +28,7 @@ export const HTMLComponent = ({
   }
 
   // preview
-  const iframeRef = useRef(null);
+  const iframeRef = useRef(null)
   const uid = Math.round(Math.random() * 100000000).toString()
 
   useEffect(() => {
@@ -40,7 +40,7 @@ export const HTMLComponent = ({
       const buffer = dataRUIToBuffer(src)
       const filesArr = await prepareFilesFromZIP(buffer)
       const files = {}
-      filesArr.forEach(f => {
+      filesArr.forEach((f) => {
         files[f.path] = f.blob
       })
       iframeRef.current.contentWindow.postMessage(files, '*')
@@ -72,20 +72,29 @@ export const HTMLComponent = ({
             <br />
             <br />
             <ul>
+              <li>Your zip file must contain an index.html file.</li>
               <li>
-                Your zip file must contain an index.html file.
-              </li>
-              <li>
-                You must also include a cover image and reference it in a meta tag like this:
+                You must also include a cover image and reference it in a meta
+                tag like this:
                 <br />
                 {coverMeta}
               </li>
               <li>
-                Access to external resources is high restricted at the moment. Please include everything in your zip file (libraries, assets, etc).
+                Access to external resources is high restricted at the moment.
+                Please include everything in your zip file (libraries, assets,
+                etc).
               </li>
             </ul>
             <br />
-            HTML support is experimental – please report bugs on <a href="https://github.com/hicetnunc2000/hicetnunc/issues" target="_blank">Github</a>.
+            HTML support is experimental – please report bugs on{' '}
+            <a
+              href="https://github.com/hicetnunc2000/hicetnunc/issues"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Github
+            </a>
+            .
           </div>
           <div className={styles.container}>
             <iframe
@@ -98,11 +107,7 @@ export const HTMLComponent = ({
         </div>
       )
     } else {
-      return (
-        <div className={styles.container}>
-          Loading...
-        </div>
-      )
+      return <div className={styles.container}>Loading...</div>
     }
   }
 

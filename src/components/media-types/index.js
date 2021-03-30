@@ -6,6 +6,7 @@ import { AudioComponent } from './audio'
 import { VectorComponent } from './vector'
 import { HTMLComponent } from './html'
 import { UnknownComponent } from './unknown'
+import { PdfComponent } from './pdf'
 import { MIMETYPE, IPFS_DIRECTORY_MIMETYPE } from '../../constants'
 
 const CLOUDFLARE = 'https://cloudflare-ipfs.com/ipfs/'
@@ -83,6 +84,10 @@ export const renderMediaType = ({
     case MIMETYPE.OGA:
       url = preview ? uri : `${CLOUDFLARE}${path}`
       return <AudioComponent src={url} interactive={interactive} />
+    /* PDF */
+    case MIMETYPE.PDF:
+      url = preview ? uri : `${CLOUDFLARE}${path}`
+      return <PdfComponent src={url} />
     default:
       return <UnknownComponent mimeType={mimeType} />
   }
