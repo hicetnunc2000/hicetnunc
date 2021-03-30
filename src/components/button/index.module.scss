@@ -17,7 +17,6 @@
 }
 
 .primary {
-  font-size: 16px;
   color: var(--text-color);
   transition: color #{$theme-duration} ease-out;
 
@@ -33,7 +32,6 @@
 }
 
 .secondary {
-  font-size: 16px;
   color: var(--text-color);
   transition: color #{$theme-duration} ease-out;
 
@@ -43,7 +41,6 @@
 }
 
 .purchase {
-  font-size: 16px;
   padding: 2px 6px;
   color: var(--text-color);
   border-right: 2px solid var(--text-color);
@@ -53,7 +50,6 @@
 }
 
 .curate {
-  font-size: 16px;
   opacity: inherit;
   margin-bottom: 10px;
   cursor: pointer;
@@ -69,7 +65,6 @@
 }
 
 .burn {
-  font-size: 16px;
   opacity: inherit;
   margin-bottom: 10px;
 
