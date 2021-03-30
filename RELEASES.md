@@ -4,7 +4,24 @@
 
 ### Features
 
-- PDF Support (clemsos)
+- PDF Support ([clemsos](https://github.com/clemsos))
+
+## 29 March 2021
+
+### Bug fixes
+
+- HTML Preview ([pichiste](https://github.com/pichiste))
+
+### Features
+
+- external domain allow list ([veqtor](https://github.com/veqtor))
+
+## 24 March 2021
+
+### Features
+
+- HTML Support ([pichiste](https://github.com/pichiste),[veqtor](https://github.com/veqtor))
+- CSP ([veqtor](https://github.com/veqtor))
 
 ## 14 March 2021
 
