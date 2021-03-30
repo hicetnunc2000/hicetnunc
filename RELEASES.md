@@ -1,5 +1,11 @@
 # RELEASES
 
+## 30 March 2021
+
+### Features
+
+- PDF Support (clemsos)
+
 ## 14 March 2021
 
 ### Bug fixes
