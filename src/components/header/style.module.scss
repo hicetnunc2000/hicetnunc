@@ -30,7 +30,7 @@
       height: 20px;
       display: fixed;
       fill: var(--text-color);
-      transition: color #{$theme-duration} ease-out;
+      transition: fill #{$theme-duration} ease-out;
     }
 
     .right {
@@ -76,7 +76,7 @@
         font-size: 30px;
         text-align: right;
 
-/*         &:first-of-type {
+        /*         &:first-of-type {
           text-decoration: line-through;
         } */
 

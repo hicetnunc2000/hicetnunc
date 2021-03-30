@@ -3,7 +3,6 @@ import { HicetnuncContext } from '../../../context/HicetnuncContext'
 import { Container, Padding } from '../../../components/layout'
 import { Button, Curate } from '../../../components/button'
 import { Loading } from '../../../components/loading'
-const _ = require('lodash')
 // README: commented some code out displaying errors and logs.
 // adding warning saying burning is temporary disabled.
 export const Burn = (props) => {
@@ -14,12 +13,14 @@ export const Burn = (props) => {
   const [progress, setProgress] = useState() // eslint-disable-line
 
   const handleSubmit = () => {
-    const r = global.confirm('Burning will remove all OBJKT#:id from your possession to a burn address.')
+    const r = global.confirm(
+      'Burning will remove all OBJKT#:id from your possession to a burn address.'
+    )
     console.log(props.token_id)
     console.log(props.acc)
     console.log(props.owners)
 
-    // 
+    //
     if (r) {
       //alert('burning temporary disabled')
       setProgress(true)
@@ -49,7 +50,10 @@ export const Burn = (props) => {
     <>
       <Container>
         <Padding>
-          <p>Burning will remove all OBJKT#{props.token_id} from your possession to a burn address.</p>
+          <p>
+            Burning will remove all OBJKT#{props.token_id} from your possession
+            to a burn address.
+          </p>
         </Padding>
       </Container>
       <Container>
