@@ -2,10 +2,10 @@ import React from 'react'
 import { LazyLoadImage } from 'react-lazy-load-image-component'
 import styles from './index.module.scss'
 
-export const ImageComponent = ({ src }) => {
+export const ImageComponent = ({ src, inView }) => {
   return (
     <div className={styles.container}>
-      <LazyLoadImage className={styles.image} src={src} alt="💥" />
+      {inView && <LazyLoadImage className={styles.image} src={src} alt="💥" />}
     </div>
   )
 }

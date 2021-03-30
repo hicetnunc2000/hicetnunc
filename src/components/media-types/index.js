@@ -32,20 +32,15 @@ export const renderMediaType = ({
     case MIMETYPE.TIFF:
     case MIMETYPE.WEBP:
       return (
-        <Container>
-          <ImageComponent src={url} interactive={interactive} />
+        <Container interactive={interactive}>
+          <ImageComponent src={url} />
         </Container>
       )
     /* VECTOR */
     case MIMETYPE.SVG:
       return (
-        <Container>
-          <VectorComponent
-            {...metadata}
-            src={url}
-            interactive={interactive}
-            preview={preview}
-          />
+        <Container interactive={interactive}>
+          <VectorComponent {...metadata} src={url} preview={preview} />
         </Container>
       )
     /* HTML ZIP */
@@ -61,11 +56,10 @@ export const renderMediaType = ({
         )
       }
       return (
-        <Container>
+        <Container interactive={interactive}>
           <HTMLComponent
             {...metadata}
             src={url}
-            interactive={interactive}
             preview={preview}
             displayUri={displayUri}
           />
@@ -78,30 +72,30 @@ export const renderMediaType = ({
     case MIMETYPE.WEBM:
       url = preview ? uri : `${IPFS}${path}`
       return (
-        <Container>
-          <VideoComponent src={url} interactive={interactive} />
+        <Container interactive={interactive}>
+          <VideoComponent src={url} />
         </Container>
       )
     /* 3D */
     case MIMETYPE.GLB:
     case MIMETYPE.GLTF:
       return (
-        <Container>
-          <GLBComponent src={url} interactive={interactive} />
+        <Container interactive={interactive}>
+          <GLBComponent src={url} />
         </Container>
       )
     /* AUDIO */
     case MIMETYPE.MP3:
     case MIMETYPE.OGA:
       return (
-        <Container>
-          <AudioComponent src={url} interactive={interactive} />
+        <Container interactive={interactive}>
+          <AudioComponent src={url} />
         </Container>
       )
     /* PDF */
     case MIMETYPE.PDF:
       return (
-        <Container>
+        <Container interactive={interactive}>
           <PdfComponent src={url} />
         </Container>
       )
