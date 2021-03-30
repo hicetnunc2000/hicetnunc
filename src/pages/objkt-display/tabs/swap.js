@@ -1,12 +1,11 @@
 import React, { useState, useContext } from 'react'
-import { useHistory, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { HicetnuncContext } from '../../../context/HicetnuncContext'
 import { Container, Padding } from '../../../components/layout'
 import { Loading } from '../../../components/loading'
 import { Input } from '../../../components/input'
 import { Button, Curate } from '../../../components/button'
 import { getTotalSales } from '../../../utils/sanitise'
-import { PATH } from '../../../constants'
 
 export const Swap = ({ total_amount, owners, token_info, address }) => {
   const { id } = useParams()
@@ -16,7 +15,6 @@ export const Swap = ({ total_amount, owners, token_info, address }) => {
   const sales = getTotalSales({ owners, creators: token_info.creators })
   const [progress, setProgress] = useState(false)
   const [message, setMessage] = useState('')
-  const history = useHistory()
 
   const handleSubmit = () => {
     if (!amount || amount === '' || !price || price === '') {

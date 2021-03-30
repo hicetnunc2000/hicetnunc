@@ -5,15 +5,19 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  --background-color: #111111;
-  --text-color: #dedede;
-  --border-color: rgba(255, 255, 255, 0.3);
+  :root {
+    --background-color: #111111;
+    --text-color: #dedede;
+    --border-color: rgba(255, 255, 255, 0.3);
+  }
 }
 
 @media (prefers-color-scheme: light) {
-  --background-color: #ffffff;
-  --text-color: #000000;
-  --border-color: rgba(0, 0, 0, 0.1);
+  :root {
+    --background-color: #ffffff;
+    --text-color: #000000;
+    --border-color: rgba(0, 0, 0, 0.1);
+  }
 }
 
 $theme-duration: 0.8s;
