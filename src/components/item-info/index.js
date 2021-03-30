@@ -21,11 +21,11 @@ export const ItemInfo = ({
 }) => {
   const { syncTaquito, collect, curate, acc } = useContext(HicetnuncContext)
 
-  let available = 0
+ /*  let available = 0
   if (owners !== undefined) {
     const kt = `KT1Hkg5qeNhfwpKW4fXvq7HGZB9z2EnmCCA9`
     available = owners[kt]
-  }
+  } */
 
   let s = _.minBy(swaps, 'xtz_per_objkt')
 
@@ -36,11 +36,11 @@ export const ItemInfo = ({
   // const soldOutMessage = 'not for sale'
   var message = ''
   console.log(acc)
-
+  console.log(s, swaps)
   //const notForSale = available > 0 || isNaN(editions)
   try {
     message =
-      available > 0 && swaps[0] !== undefined
+      swaps[0] !== undefined
         ? 'collect for ' + Number(s.xtz_per_objkt) / 1000000 + ' tez'
         : 'not for sale'
   } catch (e) {
@@ -70,13 +70,13 @@ export const ItemInfo = ({
               <p>
                 <span>
                   Editions:{' '}
-                  {available > 0 ? (
+{/*                   {available > 0 ? ( */}
                     <span>
-                      {available}/{total_amount}
+                      {s.objkt_amount}
                     </span>
-                  ) : (
+{/* /*                   ) : (
                     <span>{total_amount}</span>
-                  )}
+                  )} */ }
                 </span>
               </p>
             </div>
