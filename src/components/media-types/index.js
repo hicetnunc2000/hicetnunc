@@ -8,6 +8,7 @@ import { HTMLComponent } from './html'
 import { UnknownComponent } from './unknown'
 import { PdfComponent } from './pdf'
 import { MIMETYPE, IPFS_DIRECTORY_MIMETYPE } from '../../constants'
+import { Container } from './container'
 
 const CLOUDFLARE = 'https://cloudflare-ipfs.com/ipfs/'
 const IPFS = 'https://ipfs.io/ipfs/'
@@ -20,7 +21,7 @@ export const renderMediaType = ({
   metadata,
 }) => {
   const path = uri
-  let url
+  let url = preview ? uri : `${CLOUDFLARE}${path}`
 
   switch (mimeType) {
     /* IMAGES */
@@ -30,26 +31,28 @@ export const renderMediaType = ({
     case MIMETYPE.PNG:
     case MIMETYPE.TIFF:
     case MIMETYPE.WEBP:
-      url = preview ? uri : `${CLOUDFLARE}${path}`
-      return <ImageComponent src={url} interactive={interactive} />
+      return (
+        <Container>
+          <ImageComponent src={url} interactive={interactive} />
+        </Container>
+      )
     /* VECTOR */
     case MIMETYPE.SVG:
-      url = preview ? uri : `${CLOUDFLARE}${path}`
       return (
-        <VectorComponent
-          {...metadata}
-          src={url}
-          interactive={interactive}
-          preview={preview}
-        />
+        <Container>
+          <VectorComponent
+            {...metadata}
+            src={url}
+            interactive={interactive}
+            preview={preview}
+          />
+        </Container>
       )
     /* HTML ZIP */
     case IPFS_DIRECTORY_MIMETYPE:
     case MIMETYPE.ZIP:
     case MIMETYPE.ZIP1:
     case MIMETYPE.ZIP2:
-      url = preview ? uri : `${CLOUDFLARE}${path}`
-
       let displayUri = ''
       if (metadata && metadata.token_info && metadata.token_info.displayUri) {
         displayUri = metadata.token_info.displayUri.replace(
@@ -57,15 +60,16 @@ export const renderMediaType = ({
           CLOUDFLARE
         )
       }
-
       return (
-        <HTMLComponent
-          {...metadata}
-          src={url}
-          interactive={interactive}
-          preview={preview}
-          displayUri={displayUri}
-        />
+        <Container>
+          <HTMLComponent
+            {...metadata}
+            src={url}
+            interactive={interactive}
+            preview={preview}
+            displayUri={displayUri}
+          />
+        </Container>
       )
     /* VIDEOS */
     case MIMETYPE.MP4:
@@ -73,21 +77,34 @@ export const renderMediaType = ({
     case MIMETYPE.QUICKTIME:
     case MIMETYPE.WEBM:
       url = preview ? uri : `${IPFS}${path}`
-      return <VideoComponent src={url} interactive={interactive} />
+      return (
+        <Container>
+          <VideoComponent src={url} interactive={interactive} />
+        </Container>
+      )
     /* 3D */
     case MIMETYPE.GLB:
     case MIMETYPE.GLTF:
-      url = preview ? uri : `${CLOUDFLARE}${path}`
-      return <GLBComponent src={url} interactive={interactive} />
+      return (
+        <Container>
+          <GLBComponent src={url} interactive={interactive} />
+        </Container>
+      )
     /* AUDIO */
     case MIMETYPE.MP3:
     case MIMETYPE.OGA:
-      url = preview ? uri : `${CLOUDFLARE}${path}`
-      return <AudioComponent src={url} interactive={interactive} />
+      return (
+        <Container>
+          <AudioComponent src={url} interactive={interactive} />
+        </Container>
+      )
     /* PDF */
     case MIMETYPE.PDF:
-      url = preview ? uri : `${CLOUDFLARE}${path}`
-      return <PdfComponent src={url} />
+      return (
+        <Container>
+          <PdfComponent src={url} />
+        </Container>
+      )
     default:
       return <UnknownComponent mimeType={mimeType} />
   }
