@@ -8,7 +8,7 @@ import { getMimeType } from '../../utils/sanitise'
 import { renderMediaType } from '../../components/media-types'
 import {
   ALLOWED_MIMETYPES,
-  ALLOWED_FILETYPES,
+  ALLOWED_FILETYPES_LABEL,
   MINT_FILESIZE,
 } from '../../constants'
 import styles from './index.module.scss'
@@ -81,9 +81,7 @@ export class Mint extends Component {
       // only allows for supported mimetype
       if (ALLOWED_MIMETYPES.indexOf(mimeType) === -1) {
         alert(
-          `File format invalid. supported formats include: ${ALLOWED_FILETYPES.join(
-            ', '
-          ).toLocaleLowerCase()}`
+          `File format invalid. supported formats include: ${ALLOWED_FILETYPES_LABEL.toLocaleLowerCase()}`
         )
       } else {
         // checks file size limit
@@ -200,7 +198,7 @@ export class Mint extends Component {
                     opacity: 0.5,
                   }}
                 >
-                  {ALLOWED_FILETYPES.join(', ')}
+                  {ALLOWED_FILETYPES_LABEL}
                 </div>
               </Padding>
             </Container>

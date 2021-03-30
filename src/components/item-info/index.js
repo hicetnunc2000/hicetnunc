@@ -19,31 +19,40 @@ export const ItemInfo = ({
   total_amount,
   isDetailView,
 }) => {
-  const { Tezos, syncTaquito, collect, curate } = useContext(HicetnuncContext)
+  const { Tezos, syncTaquito, collect, curate, acc, getAccount } = useContext(HicetnuncContext)
 
   let available = 0
-
-  if (owners != undefined) {
+  if (owners !== undefined) {
     const kt = `KT1Hkg5qeNhfwpKW4fXvq7HGZB9z2EnmCCA9`
     available = owners[kt]
-  } else {
-    console.log(owners)
   }
+
+  let s = _.minBy(swaps, 'xtz_per_objkt')
+
+
   // var kt = _.values(_.omitBy(owners, (value, key) => !key.startsWith('KT')))[0]
   //owners = _.values(_.omitBy(owners, (value, key) => !key.startsWith(token_info.creators[0])))
 
   const soldOutMessage = 'not for sale'
+  var message = ''
+  console.log(acc)
+
   //const notForSale = available > 0 || isNaN(editions)
-  const message =
-    available > 0
-      ? 'collect for ' + Number(swaps[0].xtz_per_objkt) / 1000000 + ' tez'
-      : 'not for sale'
+  try {
+    message =
+      available > 0 && swaps[0] !== undefined
+        ? 'collect for ' + Number(s.xtz_per_objkt) / 1000000 + ' tez'
+        : 'not for sale'
+  } catch (e) {
+    message = 'not for sale'
+  }
 
   const handleCollect = () => {
-    if (Tezos == null) {
+
+    if (acc == null) {
       syncTaquito()
     } else {
-      collect(1, swaps[0].swap_id, swaps[0].xtz_per_objkt * 1)
+      collect(1, s.swap_id, s.xtz_per_objkt * 1)
     }
   }
 
@@ -60,7 +69,9 @@ export const ItemInfo = ({
           {!feed && (
             <div>
               <p>
-                <span>Editions: {available}/{total_amount}</span>
+                <span>
+                  Editions: {available > 0 ? <span>{available}/{total_amount}</span> : <span>{total_amount}</span>}
+                </span>
               </p>
             </div>
           )}

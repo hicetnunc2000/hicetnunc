@@ -10,7 +10,7 @@
     ]
   },
   "footer": {
-    "mint": "sync -> collect // sync -> mint // sync -> swap",
+    "mint": "verify your operations while executing transactions.",
     "warning": "use it consciously. visit artists profiles. be careful with copy minters."
   },
   "home": {
@@ -45,6 +45,7 @@
     ]
   },
   "detail": {
+    "editions": "Editions",
     "issuer": "Issuer",
     "notForSale": "Not for sale",
     "soldOut": "Sold out",

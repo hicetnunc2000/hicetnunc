@@ -9,27 +9,41 @@ import { ItemInfo } from '../../components/item-info'
 import { Button, Primary } from '../../components/button'
 import { Menu } from '../../components/menu'
 import { Info, Owners, Swap, Cancel, Burn } from './tabs'
+import { getAccountIdentifier } from '@airgap/beacon-sdk'
+const _ = require('lodash')
 
 const TABS = [
   { title: 'info', component: Info },
-  { title: 'owners', component: Owners },
+  { title: 'collectors', component: Owners },
   { title: 'swap', component: Swap, private: true },
-  { title: 'cancel', component: Cancel, private: true },
   { title: 'burn', component: Burn, private: true },
 ]
 
 export const ObjktDisplay = () => {
   const { id } = useParams()
-  const { address } = useContext(HicetnuncContext)
+  const { acc, setAccount } = useContext(HicetnuncContext)
 
   const [loading, setLoading] = useState(true)
   const [tabIndex, setTabIndex] = useState(0)
   const [nft, setNFT] = useState()
+  const [owners, setOwners] = useState(null)
+  const [creator, setCreator] = useState(null)
+  const [address, setAddress] = useState(null)
+  //setAccount()
 
   useEffect(() => {
-    GetOBJKT({ id }).then((objkt) => {
-      console.log(objkt)
+    GetOBJKT({ id }).then(async (objkt) => {
+      await setAccount()
       setNFT(objkt)
+      setOwners(objkt.owners)
+      try {
+        setAddress(acc.address)
+      } catch (e) {}
+
+      try {
+        setCreator(objkt.token_info.creators[0])
+      } catch (e) {}
+
       setLoading(false)
     })
   }, [id])
@@ -66,7 +80,9 @@ export const ObjktDisplay = () => {
             <Padding>
               <Menu>
                 {TABS.filter(
-                  (e) => !e.private || nft.token_info.creators[0] === address
+                  (e) =>
+                    !e.private ||
+                    _.keys(owners).includes(address)
                 ).map(({ title }, index) => (
                   <Button key={title} onClick={() => setTabIndex(index)}>
                     <Primary selected={tabIndex === index}>{title}</Primary>
