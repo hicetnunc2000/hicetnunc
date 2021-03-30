@@ -80,12 +80,13 @@ export const ObjktDisplay = () => {
           <Container>
             <Padding>
               <Menu>
-                {TABS.filter(
-                  (e) => !e.private || _.keys(owners).includes(address)
-                ).map(({ title }, index) => (
+                {TABS.map(({ title }, index) => (
                   <Button key={title} onClick={() => setTabIndex(index)}>
                     <Primary selected={tabIndex === index}>{title}</Primary>
                   </Button>
+                  /* filter(
+                  (e) => !e.private || _.keys(owners).includes(address)
+                ) */
                 ))}
               </Menu>
             </Padding>
