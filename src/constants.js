@@ -124,9 +124,10 @@ export const MIMETYPE = {
   GLTF: 'model/gltf+json',
   MP3: 'audio/mpeg',
   OGA: 'audio/ogg',
+  PDF: 'application/pdf',
   ZIP: 'application/zip',
   ZIP1: 'application/x-zip-compressed',
-  ZIP2: 'multipart/x-zip',  
+  ZIP2: 'multipart/x-zip'  
 }
 
 export const IPFS_DIRECTORY_MIMETYPE = 'application/x-directory'
