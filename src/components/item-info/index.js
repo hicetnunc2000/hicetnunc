@@ -29,7 +29,7 @@ export const ItemInfo = ({
 
   let s = _.minBy(swaps, 'xtz_per_objkt')
 
-
+  console.log(s)
   // var kt = _.values(_.omitBy(owners, (value, key) => !key.startsWith('KT')))[0]
   //owners = _.values(_.omitBy(owners, (value, key) => !key.startsWith(token_info.creators[0])))
 
