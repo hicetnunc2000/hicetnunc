@@ -21,6 +21,10 @@ export default class HicetnuncContextProvider extends Component {
     super(props)
 
     this.state = {
+      // fullscreen. DO NOT CHANGE!
+      fullscreen: false,
+      setFullscreen: (fullscreen) => this.setState({ fullscreen }),
+
       pathname: '',
 
       address: '',
@@ -197,7 +201,7 @@ export default class HicetnuncContextProvider extends Component {
             Tezos !== undefined
               ? await wallet.client.getActiveAccount()
               : undefined,
-          address : await wallet.client.getActiveAccount()
+          address: await wallet.client.getActiveAccount(),
         })
       },
 
