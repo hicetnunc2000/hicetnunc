@@ -27,10 +27,9 @@
     }
 
     .logo {
-      font-size: 20px;
-      font-style: normal;
-      text-decoration: none;
-      color: var(--text-color);
+      height: 20px;
+      display: fixed;
+      fill: var(--text-color);
       transition: color #{$theme-duration} ease-out;
     }
 
