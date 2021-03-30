@@ -1,4 +1,5 @@
 import React, { useContext, useState } from 'react'
+import { useHistory } from 'react-router'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
 import { Page, Container, Padding } from '../../components/layout'
 import { Input } from '../../components/input'
@@ -6,15 +7,19 @@ import { Button, Curate, Primary } from '../../components/button'
 import { Loading } from '../../components/loading'
 import { Upload } from '../../components/upload'
 import { Preview } from '../../components/preview'
-import { prepareFile } from '../../data/ipfs'
+import { prepareFile, prepareDirectory } from '../../data/ipfs'
+import { prepareFilesFromZIP } from '../../utils/html'
 import {
   ALLOWED_MIMETYPES,
-  ALLOWED_FILETYPES,
+  ALLOWED_FILETYPES_LABEL,
   MINT_FILESIZE,
+  MIMETYPE,
+  PATH,
 } from '../../constants'
 
 export const Mint = () => {
-  const { Tezos, mint, address, getAuth } = useContext(HicetnuncContext)
+  const { Tezos, mint, getAuth, acc, setAccount } = useContext(HicetnuncContext)
+  const history = useHistory()
   const [step, setStep] = useState(0)
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
@@ -26,47 +31,71 @@ export const Mint = () => {
 
   const handleMint = async () => {
     console.log('mint', Tezos)
-
-    if (Tezos === null) {
+    setAccount()
+    if (!acc) {
       alert('sync')
-    } else {
-      if (ALLOWED_MIMETYPES.indexOf(file.mimeType) === -1) {
-        alert(
-          `File format invalid. supported formats include: ${ALLOWED_FILETYPES.join(
-            ', '
-          ).toLocaleLowerCase()}`
-        )
-      } else {
-        // checks file size limit
-        const filesize = (file.file.size / 1024 / 1024).toFixed(4)
-        if (filesize <= MINT_FILESIZE) {
-          // mint
-          const nftCid = await prepareFile({
-            name: title,
-            description,
-            tags,
-            address,
-            buffer: file.buffer,
-            mimeType: file.mimeType,
-          })
-          mint(getAuth(), amount, nftCid[0].hash, 10)
-            .then((e) => {
-              console.log('mint confirm', e)
-              setMessage('Minted successfully')
-              // redirect here
-            })
-            .catch((e) => {
-              console.log('mint error', e)
-              alert('an error occurred')
-              setMessage('an error occurred')
-            })
-        } else {
-          alert(
-            `File too big (${filesize}). Limit is currently set at ${MINT_FILESIZE}MB`
-          )
-        }
-      }
+      return
     }
+    console.log('acc', acc)
+
+    // check mime type
+    if (ALLOWED_MIMETYPES.indexOf(file.mimeType) === -1) {
+      alert(
+        `File format invalid. supported formats include: ${ALLOWED_FILETYPES_LABEL.toLocaleLowerCase()}`
+      )
+      return
+    }
+
+    // check file size
+    const filesize = (file.file.size / 1024 / 1024).toFixed(4)
+    if (filesize > MINT_FILESIZE) {
+      alert(
+        `File too big (${filesize}). Limit is currently set at ${MINT_FILESIZE}MB`
+      )
+      return
+    }
+
+    // file about to be minted, change to the mint screen
+
+    setStep(2)
+    // upload file(s)
+    let nftCid
+    if ([MIMETYPE.ZIP, MIMETYPE.ZIP1, MIMETYPE.ZIP2].includes(file.mimeType)) {
+      const files = await prepareFilesFromZIP(file.buffer)
+
+      nftCid = await prepareDirectory({
+        name: title,
+        description,
+        tags,
+        address: acc.address,
+        files,
+      })
+    } else {
+      // process all other files
+      nftCid = await prepareFile({
+        name: title,
+        description,
+        tags,
+        address: acc.address,
+        buffer: file.buffer,
+        mimeType: file.mimeType,
+      })
+    }
+
+    console.log('nftCid:', nftCid)
+
+    mint(getAuth(), amount, nftCid.path, 10)
+      .then((e) => {
+        console.log('mint confirm', e)
+        setMessage('Minted successfully')
+        // redirect here
+        history.push(PATH.FEED)
+      })
+      .catch((e) => {
+        console.log('mint error', e)
+        alert('an error occurred')
+        setMessage('an error occurred')
+      })
   }
 
   const handlePreview = () => {
@@ -78,10 +107,7 @@ export const Mint = () => {
   }
 
   const handleValidation = () => {
-    if (
-      amount > 0 &&
-      file
-    ) {
+    if (amount > 0 && file) {
       return false
     }
     return true

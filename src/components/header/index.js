@@ -1,20 +1,60 @@
-import React, { useContext } from 'react'
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useContext, useEffect } from 'react'
 import { useHistory } from 'react-router'
 import { motion, AnimatePresence } from 'framer-motion'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
+import { Footer } from '../footer'
 import { Container, Padding } from '../layout'
 import { Button, Primary, Secondary } from '../button'
 import { fadeIn } from '../../utils/motion'
 import { Menu } from '../icons'
+import { walletPreview } from '../../utils/string'
 import styles from './style.module.scss'
+
+/* import { BeaconWallet } from '@taquito/beacon-wallet'
+
+const wallet = new BeaconWallet({
+  name: 'hicetnunc.xyz',
+  preferredNetwork: 'mainnet',
+}) */
 
 export const Header = () => {
   const history = useHistory()
   const context = useContext(HicetnuncContext)
 
+  useEffect(() => {
+    context.setAccount()
+  }, [])
+
+  // we assume user isn't connected
+  let button = 'sync'
+
+  // but if they are
+  if (context.acc?.address) {
+    // is menu closed?
+    if (context.collapsed) {
+      button = walletPreview(context.acc.address)
+    } else {
+      // menu is open
+      button = 'unsync'
+    }
+  }
+
+  //const activeAccount = await wallet.client.getActiveAccount()
+  //console.log(activeAccount)
   const handleRoute = (path) => {
     context.setMenu(true)
     history.push(path)
+  }
+
+  const handleSyncUnsync = () => {
+    if (context.acc?.address && !context.collapsed) {
+      // disconnect wallet
+      context.disconnect()
+    } else {
+      // connect wallet
+      context.syncTaquito()
+    }
   }
 
   return (
@@ -28,8 +68,8 @@ export const Header = () => {
           </Button>
 
           <div className={styles.right}>
-            <Button onClick={context.syncTaquito} secondary>
-              <Secondary>sync</Secondary>
+            <Button onClick={handleSyncUnsync} secondary>
+              <Primary>{button}</Primary>
             </Button>
 
             <Button onClick={context.toogleNavbar} secondary>
@@ -48,16 +88,12 @@ export const Header = () => {
                   <ul>
                     <li>
                       <Button onClick={() => handleRoute('/hdao')}>
-                        <Primary>
-                          ○
-                        </Primary>
+                        <Primary>○</Primary>
                       </Button>
                     </li>
                     <li>
                       <Button onClick={() => handleRoute('/random')}>
-                        <Primary>
-                          random
-                        </Primary>
+                        <Primary>random</Primary>
                       </Button>
                     </li>
 
@@ -82,6 +118,7 @@ export const Header = () => {
                 </div>
               </Padding>
             </Container>
+            {false && <Footer />}
           </motion.div>
         )}
       </AnimatePresence>

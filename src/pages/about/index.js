@@ -2,10 +2,13 @@ import React, { Component } from 'react'
 import { Page, Container, Padding } from '../../components/layout'
 import { Button, Primary } from '../../components/button'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
+import { getLanguage } from '../../constants'
 import styles from './index.module.scss'
 
 export class About extends Component {
   static contextType = HicetnuncContext
+
+  language = getLanguage()
 
   state = {
     reveal: false,
@@ -28,30 +31,19 @@ export class About extends Component {
 
         <Container>
           <Padding>
-            <p>
-              The present decentralized application allows its users to manage
-              decentralized digital assets, serving as a public smart contract
-              infrastructure on Tezos Blockchain.
-            </p>{' '}
+            <p>{this.language.about.paragraphs[0]}</p>
           </Padding>
         </Container>
 
         <Container>
           <Padding>
-            <p>
-              IPFS NFTs can be minted and traded by permissionless means. such
-              experiment was designed intending to imagine alternative crypto
-              economies.
-            </p>{' '}
+            <p>{this.language.about.paragraphs[1]}</p>
           </Padding>
         </Container>
 
         <Container>
           <Padding>
-            <p>
-              We're concerned about your security and autonomy. please verify
-              informations while making transactions.
-            </p>
+            <p>{this.language.about.paragraphs[2]}</p>
           </Padding>
         </Container>
 
@@ -97,7 +89,7 @@ export class About extends Component {
         <Container>
           <Padding>
             <div className={styles.buttons}>
-              <p>Issues can be reported here</p>&nbsp;
+              <p>Issues can be reported</p>&nbsp;
               <Button href="https://github.com/hicetnunc2000/hicetnunc/issues">
                 <Primary>
                   <strong>here</strong>

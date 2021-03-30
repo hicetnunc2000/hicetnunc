@@ -287,7 +287,15 @@ const identicons = [
   ),
 ]
 
-export const Identicon = ({ address = '' }) => {
+export const Identicon = ({ address = '', logo }) => {
+  if(logo) {
+    return(
+      <div className={styles.identicon}>
+        <img src={`https://services.tzkt.io/v1/avatars2/${address}`} />
+      </div>
+    )
+  }
+
   const [path, xsa] = avatar(address)
   const identicon = identicons[xsa % identicons.length](path, address)
 

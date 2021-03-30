@@ -26,14 +26,15 @@ export const Swap = ({ total_amount, owners, token_info, address }) => {
       setProgress(true)
       setMessage('generating swap')
       // swap is valid call API
+      console.log(amount, id, price)
       swap(parseFloat(amount), id, parseFloat(price * 1000000))
         .then((e) => {
           // when taquito returns a success/fail message
           setProgress(false)
           setMessage(e.description)
-          console.log('swap', e)
+          console.log('swap/list', e)
 
-          history.push(`${PATH.ISSUER}/${address}`)
+          //history.push(`${PATH.ISSUER}/${address}`)
         })
         .catch((e) => {
           setProgress(false)
