@@ -61,10 +61,13 @@ export async function unzipBuffer(buffer) {
   const files = {}
   entries.forEach((entry, index) => {
     const relPath = entry.path.replace(`${rootDir}/`, '')
-    const type =
-      entry.buffer.length === 0
-        ? IPFS_DIRECTORY_MIMETYPE
-        : mime.lookup(entry.path)
+    let type
+    if (entry.buffer.length === 0 && entry.path.endsWith('/')) {
+      type = IPFS_DIRECTORY_MIMETYPE
+    } else {
+      type = mime.lookup(entry.path)      
+    }
+
     files[relPath] = new Blob([entry.buffer], {
       type,
     })
@@ -135,11 +138,10 @@ export function injectCSPMetaTagIntoHTML(html) {
     script-src
       'self'
       'unsafe-inline'
-      https://cloudflare-ipfs.com/;
+      'unsafe-eval';
     style-src
       'self'
-      'unsafe-inline'
-      https://cloudflare-ipfs.com/;
+      'unsafe-inline';
     img-src
       'self'
       data:
@@ -214,7 +216,7 @@ export function getCoverImagePathFromBuffer(buffer) {
 }
 
 export function dataRUIToBuffer(dataURI) {
-  const parts = dataURI.split(',')     
+  const parts = dataURI.split(',')
   const base64 = parts[1]
   const binaryStr = atob(base64)
   const len = binaryStr.length
