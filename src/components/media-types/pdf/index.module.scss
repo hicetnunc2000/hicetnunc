@@ -1,7 +1,5 @@
 @import '../../../styles/layout.scss';
 
-
-
 .container {
   display: block;
   position: relative;
@@ -13,8 +11,8 @@
     display: block;
     padding-bottom: 100%;
   }
-  
-  .pdf {
+
+  iframe {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -24,5 +22,3 @@
     border: none;
   }
 }
-
-

@@ -83,7 +83,7 @@ export const renderMediaType = ({
     case MIMETYPE.MP3:
     case MIMETYPE.OGA:
       url = preview ? uri : `${CLOUDFLARE}${path}`
-      return <AudioComponent src={url} interactive={interactive}/>
+      return <AudioComponent src={url} interactive={interactive} />
     /* PDF */
     case MIMETYPE.PDF:
       url = preview ? uri : `${CLOUDFLARE}${path}`
