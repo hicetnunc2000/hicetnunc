@@ -19,7 +19,7 @@ export const ItemInfo = ({
   total_amount,
   isDetailView,
 }) => {
-  const { Tezos, syncTaquito, collect, curate, acc, getAccount } = useContext(HicetnuncContext)
+  const { syncTaquito, collect, curate, acc } = useContext(HicetnuncContext)
 
   let available = 0
   if (owners !== undefined) {
@@ -29,11 +29,11 @@ export const ItemInfo = ({
 
   let s = _.minBy(swaps, 'xtz_per_objkt')
 
-
+  console.log(s)
   // var kt = _.values(_.omitBy(owners, (value, key) => !key.startsWith('KT')))[0]
   //owners = _.values(_.omitBy(owners, (value, key) => !key.startsWith(token_info.creators[0])))
 
-  const soldOutMessage = 'not for sale'
+  // const soldOutMessage = 'not for sale'
   var message = ''
   console.log(acc)
 
@@ -48,7 +48,6 @@ export const ItemInfo = ({
   }
 
   const handleCollect = () => {
-
     if (acc == null) {
       syncTaquito()
     } else {
@@ -70,7 +69,14 @@ export const ItemInfo = ({
             <div>
               <p>
                 <span>
-                  Editions: {available > 0 ? <span>{available}/{total_amount}</span> : <span>{total_amount}</span>}
+                  Editions:{' '}
+                  {available > 0 ? (
+                    <span>
+                      {available}/{total_amount}
+                    </span>
+                  ) : (
+                    <span>{total_amount}</span>
+                  )}
                 </span>
               </p>
             </div>

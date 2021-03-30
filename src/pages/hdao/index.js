@@ -1,17 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react'
-import { GetFeed, GethDAOFeed } from '../../data/api'
+import { GethDAOFeed } from '../../data/api'
 import { Container, Padding } from '../../components/layout'
 import { FeedItem } from '../../components/feed-item'
 import { Loading } from '../../components/loading'
 import { Button, Primary } from '../../components/button'
 import styles from './index.module.scss'
-
-const customFloor = function (value, roundTo) {
-  return Math.floor(value / roundTo) * roundTo
-}
-
-const ONE_MINUTE_MILLIS = 60 * 1000
 
 export const HDAO = () => {
   const [loading, setLoading] = useState(true)
@@ -20,7 +14,6 @@ export const HDAO = () => {
   const [items, setItems] = useState([])
   const [count, setCount] = useState(0)
   const [hasMore, setHasMore] = useState(true)
-  const startTime = customFloor(Date.now(), ONE_MINUTE_MILLIS)
 
   const loadMore = () => {
     setCount(count + 1)
@@ -59,7 +52,7 @@ export const HDAO = () => {
       setLoading(true)
       // api
       GethDAOFeed({ counter: count })
-        .then(result => {
+        .then((result) => {
           // filtered isn't guaranteed to always be 10. if we're filtering they might be less.
           console.log(result)
           const next = items.concat(result)

@@ -7,12 +7,6 @@ import { Loading } from '../../components/loading'
 import { Button, Primary } from '../../components/button'
 import styles from './index.module.scss'
 
-const customFloor = function (value, roundTo) {
-  return Math.floor(value / roundTo) * roundTo
-}
-
-const ONE_MINUTE_MILLIS = 60 * 1000
-
 export const Feed = () => {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(false)
@@ -20,7 +14,6 @@ export const Feed = () => {
   const [items, setItems] = useState([])
   const [count, setCount] = useState(0)
   const [hasMore, setHasMore] = useState(true)
-  const startTime = customFloor(Date.now(), ONE_MINUTE_MILLIS)
 
   const loadMore = () => {
     setCount(count + 1)
