@@ -10,7 +10,7 @@
   align-items: center;
   justify-content: center;
   pointer-events: none;
-  border: 1px solid var(--border-color);
+  overflow: hidden;
 
   &:after {
     content: '';
@@ -81,8 +81,9 @@
   padding: 20px;
 
   ul {
-    // list-style: none;    
-    margin-left: 0; padding-left: 20px;    
+    // list-style: none;
+    margin-left: 0;
+    padding-left: 20px;
 
     li {
       margin-bottom: 20px;
