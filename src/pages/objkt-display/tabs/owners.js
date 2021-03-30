@@ -32,7 +32,7 @@ export const Owners = ({ owners, swaps }) => {
   }
   return (
     <>
-      {swaps.length > 0 ? (
+      {swaps.length > 0 && (
         <Container>
           <Padding>
             {swaps.map((e) => {
@@ -62,21 +62,21 @@ export const Owners = ({ owners, swaps }) => {
                       </Purchase>
                     </Button>
                   </span>
-                  {e.issuer == (acc !== undefined ? acc.address : '') ? (
+                  {e.issuer === (acc !== undefined ? acc.address : '') && (
                     <span style={{ float: 'right' }}>
                       <Button onClick={() => cancel(e.swap_id)}>
                         <Purchase>cancel</Purchase>
                       </Button>
                     </span>
-                  ) : undefined}
+                  )}
                   {/* cancel */}
                 </div>
               )
             })}
           </Padding>
         </Container>
-      ) : undefined}
-      {filtered.length === 0 ? undefined : (
+      )}
+      {filtered.length !== 0 && (
         <Container>
           <Padding>
             <OwnerList owners={filtered} />

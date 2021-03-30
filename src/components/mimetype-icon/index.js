@@ -2,6 +2,9 @@ import React from 'react'
 import { MIMETYPE, IPFS_DIRECTORY_MIMETYPE } from '../../constants'
 import styles from './styles.module.scss'
 
+// temporary disabling this component
+const DONT_USE = true
+
 export const MimeTypeIcon = ({ mimeType, uri }) => {
   const getIcon = () => {
     switch (mimeType) {
@@ -68,11 +71,8 @@ export const MimeTypeIcon = ({ mimeType, uri }) => {
     }
   }
 
-  return null
-
-  // return (
-  //   <div className={styles.container}>
-  //     {getIcon()}
-  //   </div>
-  // )
+  if (DONT_USE) {
+    return null
+  }
+  return <div className={styles.container}>{getIcon()}</div>
 }
