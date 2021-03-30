@@ -27,10 +27,16 @@
     }
 
     .logo {
-      height: 20px;
-      display: fixed;
-      fill: var(--text-color);
-      transition: fill #{$theme-duration} ease-out;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 30px;
+
+      svg {
+        height: 20px;
+        fill: var(--text-color);
+        transition: fill #{$theme-duration} ease-out;
+      }
     }
 
     .right {
