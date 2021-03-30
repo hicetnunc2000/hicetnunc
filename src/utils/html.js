@@ -138,11 +138,10 @@ export function injectCSPMetaTagIntoHTML(html) {
     script-src
       'self'
       'unsafe-inline'
-      https://cloudflare-ipfs.com/;
+      'unsafe-eval';
     style-src
       'self'
-      'unsafe-inline'
-      https://cloudflare-ipfs.com/;
+      'unsafe-inline';
     img-src
       'self'
       data:
