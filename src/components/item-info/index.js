@@ -72,7 +72,10 @@ export const ItemInfo = ({
                   Editions:{' '}
 {/*                   {available > 0 ? ( */}
                     <span>
-                      {s.objkt_amount}
+                      {swaps[0] !== undefined ? 
+                      s.objkt_amount
+                      :
+                      undefined }
                     </span>
 {/* /*                   ) : (
                     <span>{total_amount}</span>
