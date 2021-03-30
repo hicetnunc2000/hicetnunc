@@ -9,6 +9,8 @@ import { Button, Primary, Secondary } from '../button'
 import { fadeIn } from '../../utils/motion'
 import { Menu } from '../icons'
 import { walletPreview } from '../../utils/string'
+import hen from '../../media/hen.png'; //image is in the current folder where the App.js exits
+
 import styles from './style.module.scss'
 
 /* import { BeaconWallet } from '@taquito/beacon-wallet'
@@ -63,7 +65,7 @@ export const Header = () => {
         <div className={styles.content}>
           <Button onClick={() => handleRoute('/')}>
             <Secondary>
-              <div className={styles.logo}>〇 hic et nunc</div>
+              <div><img style={{ height: '40px', display : 'fixed'}} src={hen} /></div>
             </Secondary>
           </Button>
 
