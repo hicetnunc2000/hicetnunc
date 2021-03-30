@@ -60,7 +60,7 @@ export default class Display extends Component {
         const creations = sanitised.filter(
           (e) => this.state.wallet === e.token_info.creators[0]
         )
-          this.setState({ creations : creations })
+          this.setState({ creations : creations, loading : false })
         let totalCreations = creations.length
         let total = 0
 /*         const loadOwners = async (id, index) => {
