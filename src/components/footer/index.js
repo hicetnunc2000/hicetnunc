@@ -13,7 +13,7 @@ export const Footer = () => {
       <Padding>
         <div className={styles.copy}>{language.footer.mint}</div>
         <div className={styles.buttons}>
-          {false && <ButtonLanguage />}
+          <ButtonLanguage />
           <ButtonTheme />
         </div>
       </Padding>
