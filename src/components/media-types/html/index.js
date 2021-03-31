@@ -141,7 +141,7 @@ export const HTMLComponent = ({
       <iframe
         title="html-embed"
         src={`${src}?creator=${_creator_}&viewer=${_viewer_}`}
-        sandbox="allow-scripts"
+        sandbox="allow-scripts allow-same-origin"
         scrolling="no"
       />
     </div>

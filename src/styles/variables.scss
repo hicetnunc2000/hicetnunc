@@ -4,21 +4,5 @@
   --border-color: rgba(0, 0, 0, 0.1);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background-color: #111111;
-    --text-color: #dedede;
-    --border-color: rgba(255, 255, 255, 0.3);
-  }
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    --background-color: #ffffff;
-    --text-color: #000000;
-    --border-color: rgba(0, 0, 0, 0.1);
-  }
-}
-
-$theme-duration: 0.8s;
+$theme-duration: 0.5s;
 $mobile-padding: 1.25rem;
