@@ -2,12 +2,13 @@ import React from 'react'
 import { getItem, setItem } from '../../utils/storage'
 import styles from './index.module.scss'
 
+// DO NOT ENABLE THIS JUST YET (Andre)
 const languages = [
   { key: 'en', title: 'english' },
-  { key: 'de', title: 'german' },
-  { key: 'fr', title: 'french' },
-  { key: 'ja', title: 'japanese' },
-  { key: 'pt', title: 'português' },
+  // { key: 'de', title: 'german' },
+  // { key: 'fr', title: 'french' },
+  // { key: 'ja', title: 'japanese' },
+  // { key: 'pt', title: 'português' },
 ]
 
 export const ButtonLanguage = () => {
