@@ -1,10 +1,12 @@
 # FAQ
-[Mint 🌿](mint.md)
-[Swap 🔃](swap.md)
-[Cancel ❌](cancel.md)
-[Burn 🔥](burn.md)
-[Contribute 🧑‍🤝‍🧑](contribute.md)
-[Tutorials ](tutorials.md)
+| Menu |
+| -----|
+| [Mint 🌿](mint.md)|
+| [Swap 🔃](swap.md) |
+| [Cancel ❌](cancel.md) |
+| [Burn 🔥](burn.md) |
+| [Contribute 🧑‍🤝‍🧑](contribute.md) |
+| [Tutorials ](tutorials.md) |
 
 ## Welcome
 Welcome to minting your first OBJKTs on Hicetunc. This open source project was launched March 1 and is still in its alpha stages. Below you’ll some of our most frequently asked questions.
