@@ -1,0 +1,28 @@
+@import '../../styles/variables.scss';
+
+.container {
+  display: flex;
+  flex-direction: column;
+  color: var(--text-color);
+
+  .swap {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+
+    .issuer {
+      display: flex;
+      align-items: center;
+    }
+
+    .buttons {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+
+      & > * {
+        margin-left: 10px;
+      }
+    }
+  }
+}

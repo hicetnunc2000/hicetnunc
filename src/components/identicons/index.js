@@ -288,10 +288,13 @@ const identicons = [
 ]
 
 export const Identicon = ({ address = '', logo }) => {
-  if(logo) {
-    return(
+  if (logo) {
+    return (
       <div className={styles.identicon}>
-        <img src={`https://services.tzkt.io/v1/avatars2/${address}`} />
+        <img
+          src={`https://services.tzkt.io/v1/avatars2/${address}`}
+          alt="identicon"
+        />
       </div>
     )
   }

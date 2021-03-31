@@ -1,90 +1,18 @@
-let LANGUAGE = {
-  header: {
-    sync: 'sync',
-    menu: [
-      { primary: '○', route: '/hdao' },
-      { primary: 'random', route: '/random' },
-      { primary: 'OBJKTs', secondary: '(mint NFTs)', route: '/mint' },
-      { primary: 'manage asseets', route: '/sync' },
-      { primary: 'about', route: '/about' },
-    ],
-  },
-  footer: {
-    mint: 'sync -> collect // sync -> mint // sync -> swap',
-    warning:
-      'use it consciously. visit artists profiles. be careful with copy minters.',
-  },
-  home: {
-    latest: 'latest',
-    hDAO: 'hDAO',
-    more: 'Load More',
-  },
-  mint: {
-    title: 'title',
-    description: 'description',
-    tags: 'tags (separated by commas)',
-    amount: "number of OBJKT's to mint",
-    upload: 'Upload OBJKT',
-    supports: 'supports',
-    preview: 'preview',
-    mint: 'mint',
-    warning: 'this operation costs 0.08~ tez. 10% royalties are set by default',
-  },
-  manage: {
-    creations: 'creations',
-    collection: 'collection',
-  },
-  about: {
-    title: 'hic et nunc',
-    paragraphs: [
-      'The present decentralized application allows its users to manage decentralized digital assets, serving as a public smart contract infrastructure on Tezos Blockchain.',
-      'IPFS NFTs can be minted and traded by permissionless means. such experiment was designed intending to imagine alternative crypto economies.',
-      "We're concerned about your security and autonomy. please verify informations while making transactions.",
-      'For consulting, networking or questions get in touch by %EMAIL%, %DISCORD%, or on %REDDIT%.',
-      'Please read through our %FAQS%.',
-      "If you're having trouble with the website, please report an %ISSUE%",
-    ],
-  },
-  detail: {
-    editions: 'Editions',
-    issuer: 'Issuer',
-    notForSale: 'Not for sale',
-    soldOut: 'Sold out',
-    collect: 'Collect for %PRICE%',
-    menuInfo: 'info',
-    menuOwners: 'owners',
-    menuSwap: 'swap',
-    menuCancel: 'cancel',
-    menuBurn: 'burn',
-    info: {
-      title: 'TITLE',
-      description: 'DESCRIPTION',
-      tags: 'TAGS',
-    },
-    owners: {
-      title: 'no owners',
-    },
-    swap: {
-      amount: 'number of OBJKTs',
-      price: 'price per OBJKT (in tez)',
-      cta: 'swap it',
-      warning:
-        'swaps which carry value are charged with a 2.5% fee for platform maintenance',
-    },
-    cancel: {
-      title: "you're about to cancel your swap",
-      cta: 'cancel it',
-    },
-    burn: {
-      title: 'Burning your NFT will permanently delete it from the network',
-      cta: 'burn it',
-    },
-    confirm: 'Are you sure?',
-  },
-}
-
+let LANGUAGE = {}
 export const setLanguage = (data) => (LANGUAGE = data)
 export const getLanguage = () => LANGUAGE
+
+let objktBlockList = []
+export const setObjktBlockList = (data) => (objktBlockList = data)
+export const getObjktBlockList = () => objktBlockList
+
+let walletBlockList = []
+export const setWalletBlockList = (data) => (walletBlockList = data)
+export const getWalletBlockList = () => walletBlockList
+
+let banBlockList = []
+export const setBanBlockList = (data) => (banBlockList = data)
+export const getBanBlockList = () => banBlockList
 
 export const PATH = {
   FEED: '/',
@@ -124,9 +52,10 @@ export const MIMETYPE = {
   GLTF: 'model/gltf+json',
   MP3: 'audio/mpeg',
   OGA: 'audio/ogg',
+  PDF: 'application/pdf',
   ZIP: 'application/zip',
   ZIP1: 'application/x-zip-compressed',
-  ZIP2: 'multipart/x-zip',  
+  ZIP2: 'multipart/x-zip',
 }
 
 export const IPFS_DIRECTORY_MIMETYPE = 'application/x-directory'
@@ -137,8 +66,9 @@ export const ALLOWED_MIMETYPES = Object.keys(MIMETYPE)
 
 export const ALLOWED_FILETYPES = Object.keys(MIMETYPE)
 
-export const ALLOWED_FILETYPES_LABEL = ALLOWED_FILETYPES
-  .filter(k => k !== 'ZIP1')
-  .filter(k => k !== 'ZIP2')
-  .map(k => k === 'ZIP' ? 'HTML (ZIP ARCHIVE)' : k)
+export const ALLOWED_FILETYPES_LABEL = ALLOWED_FILETYPES.filter(
+  (k) => k !== 'ZIP1'
+)
+  .filter((k) => k !== 'ZIP2')
+  .map((k) => (k === 'ZIP' ? 'HTML (ZIP ARCHIVE)' : k))
   .join(', ')

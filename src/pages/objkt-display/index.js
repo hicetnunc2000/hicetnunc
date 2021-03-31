@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useContext, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
@@ -8,8 +9,7 @@ import { renderMediaType } from '../../components/media-types'
 import { ItemInfo } from '../../components/item-info'
 import { Button, Primary } from '../../components/button'
 import { Menu } from '../../components/menu'
-import { Info, Owners, Swap, Cancel, Burn } from './tabs'
-import { getAccountIdentifier } from '@airgap/beacon-sdk'
+import { Info, Owners, Swap, Burn } from './tabs'
 const _ = require('lodash')
 
 const TABS = [
@@ -27,7 +27,7 @@ export const ObjktDisplay = () => {
   const [tabIndex, setTabIndex] = useState(0)
   const [nft, setNFT] = useState()
   const [owners, setOwners] = useState(null)
-  const [creator, setCreator] = useState(null)
+  // const [creator, setCreator] = useState(null)
   const [address, setAddress] = useState(null)
   //setAccount()
 
@@ -40,13 +40,14 @@ export const ObjktDisplay = () => {
         setAddress(acc.address)
       } catch (e) {}
 
-      try {
-        setCreator(objkt.token_info.creators[0])
-      } catch (e) {}
+      // try {
+      //   // Why do we need this, if "creator" is never used?
+      //   setCreator(objkt.token_info.creators[0])
+      // } catch (e) {}
 
       setLoading(false)
     })
-  }, [id])
+  }, [])
 
   const Tab = TABS[tabIndex].component
 
@@ -79,14 +80,13 @@ export const ObjktDisplay = () => {
           <Container>
             <Padding>
               <Menu>
-                {TABS.filter(
-                  (e) =>
-                    !e.private ||
-                    _.keys(owners).includes(address)
-                ).map(({ title }, index) => (
+                {TABS.map(({ title }, index) => (
                   <Button key={title} onClick={() => setTabIndex(index)}>
                     <Primary selected={tabIndex === index}>{title}</Primary>
                   </Button>
+                  /* filter(
+                  (e) => !e.private || _.keys(owners).includes(address)
+                ) */
                 ))}
               </Menu>
             </Padding>
