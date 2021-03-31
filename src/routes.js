@@ -1,31 +1,16 @@
-import { HDAO } from './pages/hdao'
-import { Random } from './pages/random'
 import Sync from './pages/sync' // TODO: andrevenancio
 import { About } from './pages/about'
 import Display from './pages/display' // TODO: andrevenancio
-import { Feed } from './pages/feed'
+import { Feeds } from './pages/feeds'
 import { Mint } from './pages/mint'
 import { ObjktDisplay } from './pages/objkt-display'
-import Loading from './pages/loading' // TODO: andrevenancio
 
 const routes = [
   {
     exact: true,
     path: '/',
-    component: Feed,
-    title: 'Feed'
-  },
-  {
-    exact: true,
-    path: '/hdao',
-    component: HDAO,
-    title: 'HDAO'
-  },
-  {
-    exact: true,
-    path: '/random',
-    component: Random,
-    title: 'Random'
+    component: Feeds,
+    title: 'Feeds'
   },
   {
     path: '/tz/:id',
@@ -51,11 +36,6 @@ const routes = [
     path: '/objkt/:id',
     component: ObjktDisplay,
     title: 'ObjktDisplay'
-  },
-  {
-    path: '/load',
-    component: Loading,
-    title: 'Loading'
   }
 ]
 
