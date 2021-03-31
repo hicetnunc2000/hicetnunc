@@ -1,6 +1,7 @@
 import React, { createContext, Component } from 'react'
 import { BeaconWallet } from '@taquito/beacon-wallet'
 import { TezosToolkit } from '@taquito/taquito'
+import { getItem, setItem } from '../utils/storage'
 
 const { NetworkType } = require('@airgap/beacon-sdk')
 var ls = require('local-storage')
@@ -21,6 +22,32 @@ export default class HicetnuncContextProvider extends Component {
     super(props)
 
     this.state = {
+      // fullscreen. DO NOT CHANGE!
+      fullscreen: false,
+      setFullscreen: (fullscreen) => this.setState({ fullscreen }),
+
+      // theme, DO NO CHANGE!
+      theme: 'light',
+      setTheme: (theme) => {
+        let root = document.documentElement
+
+        const light = theme === 'light'
+
+        setItem('theme', light ? 'light' : 'dark')
+
+        root.style.setProperty(
+          '--background-color',
+          light ? '#ffffff' : '#111111'
+        )
+        root.style.setProperty('--text-color', light ? '#000000' : '#dedede')
+        root.style.setProperty(
+          '--border-color',
+          light ? 'rgba(0,0,0,0.1)' : 'rgba(255,255,255,0.3)'
+        )
+
+        this.setState({ theme })
+      },
+
       pathname: '',
 
       address: '',
@@ -197,7 +224,7 @@ export default class HicetnuncContextProvider extends Component {
             Tezos !== undefined
               ? await wallet.client.getActiveAccount()
               : undefined,
-          address : await wallet.client.getActiveAccount()
+          address: await wallet.client.getActiveAccount(),
         })
       },
 

@@ -13,7 +13,7 @@ export const Owners = ({ owners, swaps }) => {
   console.log(owners, swaps)
   console.log(_.merge(owners, swaps))
 
-
+  const s = _.minBy(swaps, 'xtz_per_objkt')
   const filtered =
     (owners &&
       Object.keys(owners)
