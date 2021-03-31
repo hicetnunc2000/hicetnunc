@@ -4,38 +4,21 @@ import HicetnuncContextProvider from './context/HicetnuncContext'
 import Sync from './pages/sync' // TODO: andrevenancio
 import { About } from './pages/about'
 import Display from './pages/display' // TODO: andrevenancio
-import { Feed } from './pages/feed'
+import { Feeds } from './pages/feeds'
 import { Mint } from './pages/mint'
 import { ObjktDisplay } from './pages/objkt-display'
-import Loading from './pages/loading' // TODO: andrevenancio
 import { Header } from './components/header'
-import { Footer } from './components/footer'
 import { Loading as Preloading } from './components/loading'
-import { getItem, setItem } from './utils/storage'
-import { setLanguage } from './constants'
-import { HDAO } from './pages/hdao'
-import { Random } from './pages/random'
+import { getInitialData } from './data/api'
 
 const App = () => {
   const [loading, setLoading] = useState(true)
+
   // 1st time loading the site
-  //
   useEffect(() => {
-    const language = getItem('language') || setItem('language', 'en')
-    const langRoot =
-      process.env.NODE_ENV === 'development'
-        ? '/languages'
-        : 'https://raw.githubusercontent.com/hicetnunc2000/hicetnunc/main/languages'
-    fetch(`${langRoot}/${language}.json`)
-      .then((e) => e.json())
-      .then((data) => {
-        setLanguage(data)
-        setLoading(false)
-      })
-      .catch(() => {
-        console.log('failed to load language')
-        setLoading(false)
-      })
+    getInitialData().then(() => {
+      setLoading(false)
+    })
   }, [])
 
   if (loading) {
@@ -46,17 +29,13 @@ const App = () => {
     <HicetnuncContextProvider>
       <Header />
       <Switch>
-        <Route exact path="/" component={Feed} />
-        <Route exact path="/hdao" component={HDAO} />
-        <Route exact path="/random" component={Random} />
+        <Route exact path="/" component={Feeds} />
         <Route path="/tz/:id" component={Display} />
         <Route path="/about" component={About} />
         <Route path="/sync" component={Sync} />
         <Route path="/mint" component={Mint} />
         <Route path="/objkt/:id" component={ObjktDisplay} />
-        <Route path="/load" component={Loading} />
       </Switch>
-      <Footer />
     </HicetnuncContextProvider>
   )
 }
