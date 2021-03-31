@@ -5,10 +5,24 @@ export const VideoComponent = ({ src, interactive, inView }) => {
   const domElement = useRef()
 
   useEffect(() => {
+    // https://developers.google.com/web/updates/2017/06/play-request-was-interrupted
+    let promise
     if (inView) {
-      domElement.current.play()
+      promise = domElement.current.play()
     } else {
-      domElement.current.pause()
+      if (promise !== undefined) {
+        promise
+          .then(() => {
+            // Automatic playback started!
+            // Show playing UI.
+            // We can now safely pause video...
+            domElement.current.pause()
+          })
+          .catch((error) => {
+            // Auto-play was prevented
+            // Show paused UI.
+          })
+      }
     }
   }, [inView])
 

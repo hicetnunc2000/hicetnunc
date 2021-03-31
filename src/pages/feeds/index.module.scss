@@ -13,7 +13,7 @@
   height: 40px;
   display: flex;
   background-color: var(--background-color);
-
+  z-index: 100;
   padding: 0 #{$mobile-padding};
   color: var(--text-color);
   transition: background-color #{$theme-duration} ease-out,

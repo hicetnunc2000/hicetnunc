@@ -11,6 +11,7 @@ import { Menu } from '../icons'
 import { walletPreview } from '../../utils/string'
 
 import styles from './style.module.scss'
+import { getItem, setItem } from '../../utils/storage'
 
 /* import { BeaconWallet } from '@taquito/beacon-wallet'
 
@@ -25,6 +26,7 @@ export const Header = () => {
 
   useEffect(() => {
     context.setAccount()
+    context.setTheme(getItem('theme') || setItem('theme', 'light'))
   }, [])
 
   // we assume user isn't connected
@@ -105,17 +107,6 @@ export const Header = () => {
                 <div className={styles.content}>
                   <ul>
                     <li>
-                      <Button onClick={() => handleRoute('/hdao')}>
-                        <Primary>○</Primary>
-                      </Button>
-                    </li>
-                    <li>
-                      <Button onClick={() => handleRoute('/random')}>
-                        <Primary>random</Primary>
-                      </Button>
-                    </li>
-
-                    <li>
                       <Button onClick={() => handleRoute('/mint')}>
                         <Primary>
                           OBJKTs<i style={{ fontSize: '15px' }}>(mint NFTs)</i>
@@ -136,7 +127,7 @@ export const Header = () => {
                 </div>
               </Padding>
             </Container>
-            {false && <Footer />}
+            <Footer />
           </motion.div>
         )}
       </AnimatePresence>
