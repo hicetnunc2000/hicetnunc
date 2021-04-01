@@ -42,7 +42,10 @@ export const HTMLComponent = ({
       filesArr.forEach((f) => {
         files[f.path] = f.blob
       })
-      iframeRef.current.contentWindow.postMessage(files, '*')
+      iframeRef.current.contentWindow.postMessage({
+        target: 'hicetnunc-html-preview',
+        data: files
+      }, '*')
     }
 
     window.addEventListener('message', handler)
