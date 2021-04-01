@@ -107,6 +107,16 @@ export const Header = () => {
                 <div className={styles.content}>
                   <ul>
                     <li>
+                      <Button onClick={() => handleRoute('/hdao')}>
+                        <Primary>○</Primary>
+                      </Button>
+                    </li>
+                    <li>
+                      <Button onClick={() => handleRoute('/random')}>
+                        <Primary>random</Primary>
+                      </Button>
+                    </li>
+                    <li>
                       <Button onClick={() => handleRoute('/mint')}>
                         <Primary>
                           OBJKTs<i style={{ fontSize: '15px' }}>(mint NFTs)</i>
