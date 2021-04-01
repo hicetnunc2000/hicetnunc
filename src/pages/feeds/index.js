@@ -1,7 +1,6 @@
 import { Feeds } from './feeds'
 
 export const Latest = () => {
-  console.log('latest feed')
   return <Feeds type={0} />
 }
 
