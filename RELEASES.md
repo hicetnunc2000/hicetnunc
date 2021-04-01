@@ -1,5 +1,17 @@
 # RELEASES
 
+## 31 March 2021
+
+### Features
+
+- Consolidated Latest, hDao and random feed ([andrevenancio](https://github.com/andrevenancio))
+- fullscreen implemented ([andrevenancio](https://github.com/andrevenancio))
+- videos outside window stop playing ([andrevenancio](https://github.com/andrevenancio))
+- images are lazy loading ([andrevenancio](https://github.com/andrevenancio))
+- loading optimised to avoid loading multiple ban lists every time user goes to feed ([andrevenancio](https://github.com/andrevenancio))
+- infinite scroll returns ([andrevenancio](https://github.com/andrevenancio))
+- footer moved inside menu ([andrevenancio](https://github.com/andrevenancio))
+
 ## 30 March 2021
 
 ### Features
