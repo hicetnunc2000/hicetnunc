@@ -13,13 +13,6 @@ export const Container = ({ children = null, interactive }) => {
   const context = useContext(HicetnuncContext)
   const domElement = useRef()
 
-  // TODO: Fix Safari and iPhone
-  // On Safari, entire page goes fullscreen, not media element
-  // Should use CSS to expand media element
-  // On iPhone, fullscreen isn't supported, but can still us CSS approach
-  // const isSafari = !!navigator.userAgent.match(/Version\/[\d\.]+.*Safari/);
-  // const iPhone = /iPhone|iPod/.test(navigator.userAgent) && !window.MSStream
-
   const { ref, inView } = useInView({
     threshold: 0,
   })
@@ -50,7 +43,10 @@ export const Container = ({ children = null, interactive }) => {
   }
 
   const fullscreenChange = (e) => {
-    if (document.fullscreenElement) {
+    const fullEl = document.fullcreenElement
+      || document.mozFullScreenElement
+      || document.webkitCurrentFullScreenElement
+    if (fullEl) {
       context.setFullscreen(true)
     } else {
       context.setFullscreen(false)
@@ -59,8 +55,10 @@ export const Container = ({ children = null, interactive }) => {
 
   useEffect(() => {
     document.addEventListener('fullscreenchange', fullscreenChange, false)
+    document.addEventListener('webkitfullscreenchange', fullscreenChange, false)
     return () => {
       document.removeEventListener('fullscreenchange', fullscreenChange, false)
+      document.removeEventListener('webkitfullscreenchange', fullscreenChange, false)
     }
   }, [])
 
