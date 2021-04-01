@@ -13,6 +13,13 @@ export const Container = ({ children = null, interactive }) => {
   const context = useContext(HicetnuncContext)
   const domElement = useRef()
 
+  // TODO: Fix Safari and iPhone
+  // On Safari, entire page goes fullscreen, not media element
+  // Should use CSS to expand media element
+  // On iPhone, fullscreen isn't supported, but can still us CSS approach
+  // const isSafari = !!navigator.userAgent.match(/Version\/[\d\.]+.*Safari/);
+  // const iPhone = /iPhone|iPod/.test(navigator.userAgent) && !window.MSStream
+
   const { ref, inView } = useInView({
     threshold: 0,
   })
