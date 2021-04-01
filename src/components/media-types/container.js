@@ -18,11 +18,26 @@ export const Container = ({ children = null, interactive }) => {
   })
 
   const toggleFullScreen = () => {
-    if (!document.fullscreenElement) {
-      document.documentElement.requestFullscreen()
+    const docEl = document.documentElement
+    const fullEl = document.fullcreenElement
+      || document.mozFullScreenElement
+      || document.webkitCurrentFullScreenElement
+
+    if (!fullEl) {
+      if (docEl.requestFullscreen) {
+        docEl.requestFullscreen()
+      } else if (docEl.webkitRequestFullscreen) {
+        docEl.webkitRequestFullscreen()
+      } else if (docEl.msRequestFullscreen) {
+        docEl.msRequestFullscreen()
+      }
     } else {
       if (document.exitFullscreen) {
         document.exitFullscreen()
+      } else if (document.webkitExitFullscreen) {
+        document.webkitExitFullscreen()
+      } else if (document.msExitFullscreen) {
+        document.msExitFullscreen()
       }
     }
   }
