@@ -65,7 +65,7 @@ export async function unzipBuffer(buffer) {
     if (entry.buffer.length === 0 && entry.path.endsWith('/')) {
       type = IPFS_DIRECTORY_MIMETYPE
     } else {
-      type = mime.lookup(entry.path)      
+      type = mime.lookup(entry.path)
     }
 
     files[relPath] = new Blob([entry.buffer], {
@@ -144,7 +144,9 @@ export function injectCSPMetaTagIntoHTML(html) {
       'unsafe-inline';
     img-src
       'self'
+      'unsafe-inline'
       data:
+      blob:
       https://ipfs.infura.io
       https://cloudflare-ipfs.com/;
     font-src
@@ -181,6 +183,9 @@ export function injectCSPMetaTagIntoHTML(html) {
       'none';
     media-src
       'self'
+      'unsafe-inline'
+      data:
+      blob:
       https://ipfs.infura.io
       https://cloudflare-ipfs.com/;
     prefetch-src
