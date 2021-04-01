@@ -5,6 +5,8 @@ import classnames from 'classnames'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
 import styles from './styles.module.scss'
 
+const iPhone = /iPhone|iPod/.test(navigator.userAgent) && !window.MSStream
+
 /**
  * This component handles fullscreen mode
  * and inView prop for lazy loading
@@ -17,18 +19,41 @@ export const Container = ({ children = null, interactive }) => {
     threshold: 0,
   })
 
+  // For cases of iPhone where Fullscreen API is not supported
+  const toggleFauxFullScreen = () => {
+    context.setFullscreen(!context.fullscreen)
+  }
+
   const toggleFullScreen = () => {
-    if (!document.fullscreenElement) {
-      document.documentElement.requestFullscreen()
+    const docEl = document.documentElement
+    const fullEl = document.fullcreenElement
+      || document.mozFullScreenElement
+      || document.webkitCurrentFullScreenElement
+
+    if (!fullEl) {
+      if (docEl.requestFullscreen) {
+        docEl.requestFullscreen()
+      } else if (docEl.webkitRequestFullscreen) {
+        docEl.webkitRequestFullscreen()
+      } else if (docEl.msRequestFullscreen) {
+        docEl.msRequestFullscreen()
+      }
     } else {
       if (document.exitFullscreen) {
         document.exitFullscreen()
+      } else if (document.webkitExitFullscreen) {
+        document.webkitExitFullscreen()
+      } else if (document.msExitFullscreen) {
+        document.msExitFullscreen()
       }
     }
   }
 
   const fullscreenChange = (e) => {
-    if (document.fullscreenElement) {
+    const fullEl = document.fullcreenElement
+      || document.mozFullScreenElement
+      || document.webkitCurrentFullScreenElement
+    if (fullEl) {
       context.setFullscreen(true)
     } else {
       context.setFullscreen(false)
@@ -37,8 +62,10 @@ export const Container = ({ children = null, interactive }) => {
 
   useEffect(() => {
     document.addEventListener('fullscreenchange', fullscreenChange, false)
+    document.addEventListener('webkitfullscreenchange', fullscreenChange, false)
     return () => {
       document.removeEventListener('fullscreenchange', fullscreenChange, false)
+      document.removeEventListener('webkitfullscreenchange', fullscreenChange, false)
     }
   }, [])
 
@@ -58,7 +85,7 @@ export const Container = ({ children = null, interactive }) => {
     <div ref={ref}>
       <div ref={domElement} className={classes}>
         {interactive && (
-          <div onClick={toggleFullScreen} className={styles.icon}>
+          <div onClick={iPhone ? toggleFauxFullScreen : toggleFullScreen} className={styles.icon}>
             {context.fullscreen ? (
               <svg viewBox="0 0 14 14">
                 <g

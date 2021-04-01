@@ -1,7 +1,13 @@
 import React from 'react'
 import { Tags } from '../tags'
+import { MIMETYPE } from '../../constants'
 import { renderMediaType } from '../media-types'
+import { HTMLWarning } from '../media-types/html/warning'
 import styles from './index.module.scss'
+
+function isHTML(mimeType) {
+  return MIMETYPE.ZIP || MIMETYPE.ZIP1 || MIMETYPE.ZIP2
+}
 
 export const Preview = ({ title, description, mimeType, uri, tags }) => {
   const t = tags !== '' ? tags.replace(/\s/g, '').split(',') : []
@@ -15,6 +21,9 @@ export const Preview = ({ title, description, mimeType, uri, tags }) => {
           preview: true,
         })}
       </div>
+      {isHTML(mimeType) && (
+        <HTMLWarning />
+      )}
       <div className={styles.info}>
         <div>TITLE</div>
         <div className={styles.title}>{title}</div>

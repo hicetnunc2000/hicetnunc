@@ -66,47 +66,15 @@ export const HTMLComponent = ({
     console.log('viewer', _viewer_)
 
     if (src) {
-      const coverMeta = '<meta property="og:image" content="path/to/image.jpg">'
       return (
-        <div>
-          <div className={styles.warning}>
-            IMPORTANT:
-            <br />
-            <br />
-            <ul>
-              <li>Your zip file must contain an index.html file.</li>
-              <li>
-                You must also include a cover image and reference it in a meta
-                tag like this:
-                <br />
-                {coverMeta}
-              </li>
-              <li>
-                Access to external resources is high restricted at the moment.
-                Please include everything in your zip file (libraries, assets,
-                etc).
-              </li>
-            </ul>
-            <br />
-            HTML support is experimental – please report bugs on{' '}
-            <a
-              href="https://github.com/hicetnunc2000/hicetnunc/issues"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Github
-            </a>
-            .
-          </div>
-          <div className={styles.container}>
-            <iframe
-              ref={iframeRef}
-              title="html-zip-embed"
-              src={`https://hicetnunc2000.github.io/hicetnunc/gh-pages/html-preview/?uid=${uid}&creator=${_creator_}&viewer=${_viewer_}`}
-              sandbox="allow-scripts allow-same-origin allow-modals"
-            />
-          </div>
-        </div>
+        <div className={classes}>
+          <iframe
+            ref={iframeRef}
+            title="html-zip-embed"
+            src={`https://hicetnunc2000.github.io/hicetnunc/gh-pages/html-preview/?uid=${uid}&creator=${_creator_}&viewer=${_viewer_}`}
+            sandbox="allow-scripts allow-same-origin allow-modals"
+          />
+        </div>        
       )
     } else {
       return <div className={styles.container}>Loading...</div>
