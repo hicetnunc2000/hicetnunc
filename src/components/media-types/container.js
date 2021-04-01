@@ -18,6 +18,14 @@ export const Container = ({ children = null, interactive }) => {
   })
 
   const toggleFullScreen = () => {
+    // iPhone doesn't support Fullscreen API
+    // but we can toggle fullscreen class manually
+    const iPhone = /iPhone|iPod/.test(navigator.userAgent) && !window.MSStream
+    if (iPhone) {
+      context.setFullscreen(!context.fullscreen)
+      return
+    }
+
     const docEl = document.documentElement
     const fullEl = document.fullcreenElement
       || document.mozFullScreenElement
