@@ -5,6 +5,8 @@ import classnames from 'classnames'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
 import styles from './styles.module.scss'
 
+const iPhone = /iPhone|iPod/.test(navigator.userAgent) && !window.MSStream
+
 /**
  * This component handles fullscreen mode
  * and inView prop for lazy loading
@@ -17,15 +19,12 @@ export const Container = ({ children = null, interactive }) => {
     threshold: 0,
   })
 
-  const toggleFullScreen = () => {
-    // iPhone doesn't support Fullscreen API
-    // but we can toggle fullscreen class manually
-    const iPhone = /iPhone|iPod/.test(navigator.userAgent) && !window.MSStream
-    if (iPhone) {
-      context.setFullscreen(!context.fullscreen)
-      return
-    }
+  // For cases of iPhone where Fullscreen API is not supported
+  const toggleFauxFullScreen = () => {
+    context.setFullscreen(!context.fullscreen)
+  }
 
+  const toggleFullScreen = () => {
     const docEl = document.documentElement
     const fullEl = document.fullcreenElement
       || document.mozFullScreenElement
@@ -86,7 +85,7 @@ export const Container = ({ children = null, interactive }) => {
     <div ref={ref}>
       <div ref={domElement} className={classes}>
         {interactive && (
-          <div onClick={toggleFullScreen} className={styles.icon}>
+          <div onClick={iPhone ? toggleFauxFullScreen : toggleFullScreen} className={styles.icon}>
             {context.fullscreen ? (
               <svg viewBox="0 0 14 14">
                 <g
