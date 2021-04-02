@@ -1,17 +1,26 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useContext, useEffect, useRef } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import { useInView } from 'react-intersection-observer'
 import classnames from 'classnames'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
 import styles from './styles.module.scss'
 
-const iPhone = /iPhone|iPod/.test(navigator.userAgent) && !window.MSStream
+/**
+ * Currently fullscreen is disabled on iOS
+ * this is mainly because Safari iOS doesn't support fullscreen api.
+ */
+const iOS = /iPhone|iPod|iPad/.test(navigator.userAgent) && !window.MSStream
 
 /**
  * This component handles fullscreen mode
  * and inView prop for lazy loading
  */
-export const Container = ({ children = null, interactive }) => {
+export const Container = ({
+  children = null,
+  interactive,
+  nofullscreen = false,
+}) => {
+  const [over, setOver] = useState(false)
   const context = useContext(HicetnuncContext)
   const domElement = useRef()
 
@@ -19,41 +28,21 @@ export const Container = ({ children = null, interactive }) => {
     threshold: 0,
   })
 
-  // For cases of iPhone where Fullscreen API is not supported
-  const toggleFauxFullScreen = () => {
-    context.setFullscreen(!context.fullscreen)
-  }
-
   const toggleFullScreen = () => {
-    const docEl = document.documentElement
-    const fullEl = document.fullcreenElement
-      || document.mozFullScreenElement
-      || document.webkitCurrentFullScreenElement
-
-    if (!fullEl) {
-      if (docEl.requestFullscreen) {
-        docEl.requestFullscreen()
-      } else if (docEl.webkitRequestFullscreen) {
-        docEl.webkitRequestFullscreen()
-      } else if (docEl.msRequestFullscreen) {
-        docEl.msRequestFullscreen()
-      }
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen()
     } else {
       if (document.exitFullscreen) {
         document.exitFullscreen()
-      } else if (document.webkitExitFullscreen) {
-        document.webkitExitFullscreen()
-      } else if (document.msExitFullscreen) {
-        document.msExitFullscreen()
       }
     }
   }
 
   const fullscreenChange = (e) => {
-    const fullEl = document.fullcreenElement
-      || document.mozFullScreenElement
-      || document.webkitCurrentFullScreenElement
-    if (fullEl) {
+    if (iOS) {
+      return
+    }
+    if (document.fullscreenElement) {
       context.setFullscreen(true)
     } else {
       context.setFullscreen(false)
@@ -61,16 +50,20 @@ export const Container = ({ children = null, interactive }) => {
   }
 
   useEffect(() => {
-    document.addEventListener('fullscreenchange', fullscreenChange, false)
-    document.addEventListener('webkitfullscreenchange', fullscreenChange, false)
+    if (nofullscreen || !iOS) {
+      document.addEventListener('fullscreenchange', fullscreenChange)
+    }
+
     return () => {
-      document.removeEventListener('fullscreenchange', fullscreenChange, false)
-      document.removeEventListener('webkitfullscreenchange', fullscreenChange, false)
+      if (nofullscreen || !iOS) {
+        document.removeEventListener('fullscreenchange', fullscreenChange)
+      }
     }
   }, [])
 
   const classes = classnames({
     [styles.container]: true,
+    [styles.hover]: over,
     [styles.fullscreen]: context.fullscreen,
   })
 
@@ -83,9 +76,14 @@ export const Container = ({ children = null, interactive }) => {
 
   return (
     <div ref={ref}>
-      <div ref={domElement} className={classes}>
-        {interactive && (
-          <div onClick={iPhone ? toggleFauxFullScreen : toggleFullScreen} className={styles.icon}>
+      <div
+        ref={domElement}
+        className={classes}
+        onMouseOver={() => setOver(true)}
+        onMouseOut={() => setOver(false)}
+      >
+        {interactive && !iOS && !nofullscreen && (
+          <div onClick={toggleFullScreen} className={styles.icon}>
             {context.fullscreen ? (
               <svg viewBox="0 0 14 14">
                 <g
