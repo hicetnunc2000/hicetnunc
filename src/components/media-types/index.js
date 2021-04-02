@@ -11,7 +11,7 @@ import { MIMETYPE, IPFS_DIRECTORY_MIMETYPE } from '../../constants'
 import { Container } from './container'
 
 const CLOUDFLARE = 'https://cloudflare-ipfs.com/ipfs/'
-const IPFS = 'https://ipfs.io/ipfs/'
+const INFURA_IPFS = 'https://ipfs.infura.io/ipfs/'
 
 export const renderMediaType = ({
   mimeType,
@@ -48,11 +48,15 @@ export const renderMediaType = ({
     case MIMETYPE.ZIP:
     case MIMETYPE.ZIP1:
     case MIMETYPE.ZIP2:
+      if (!preview) {
+        url = `${INFURA_IPFS}${path}`
+
+      }
       let displayUri = ''
       if (metadata && metadata.token_info && metadata.token_info.displayUri) {
         displayUri = metadata.token_info.displayUri.replace(
           'ipfs://',
-          CLOUDFLARE
+          INFURA_IPFS
         )
       }
       return (
@@ -70,7 +74,7 @@ export const renderMediaType = ({
     case MIMETYPE.OGV:
     case MIMETYPE.QUICKTIME:
     case MIMETYPE.WEBM:
-      url = preview ? uri : `${IPFS}${path}`
+      url = preview ? uri : `${INFURA_IPFS}${path}`
       return (
         <Container interactive={interactive} nofullscreen>
           <VideoComponent src={url} />
