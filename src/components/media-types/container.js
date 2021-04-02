@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useContext, useEffect, useRef, useState } from 'react'
+import screenfull from 'screenfull'
 import { useInView } from 'react-intersection-observer'
 import classnames from 'classnames'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
@@ -38,27 +39,10 @@ export const Container = ({
   })
 
   const toggleFullScreen = () => {
-    const docEl = document.documentElement
-    const fullEl = document.fullcreenElement
-      || document.mozFullScreenElement
-      || document.webkitCurrentFullScreenElement
-
-    if (!fullEl) {
-      if (docEl.requestFullscreen) {
-        docEl.requestFullscreen()
-      } else if (docEl.webkitRequestFullscreen) {
-        docEl.webkitRequestFullscreen()
-      } else if (docEl.msRequestFullscreen) {
-        docEl.msRequestFullscreen()
-      }
+    if (!screenfull.isFullscreen) {
+      screenfull.request()
     } else {
-      if (document.exitFullscreen) {
-        document.exitFullscreen()
-      } else if (document.webkitExitFullscreen) {
-        document.webkitExitFullscreen()
-      } else if (document.msExitFullscreen) {
-        document.msExitFullscreen()
-      }
+      screenfull.exit()
     }
   }
 
@@ -66,10 +50,8 @@ export const Container = ({
     if (iOS) {
       return
     }
-    const fullEl = document.fullcreenElement
-      || document.mozFullScreenElement
-      || document.webkitCurrentFullScreenElement
-    if (fullEl) {
+
+    if (screenfull.isFullscreen) {
       context.setFullscreen(true)
     } else {
       context.setFullscreen(false)
