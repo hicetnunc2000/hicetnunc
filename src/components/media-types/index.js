@@ -59,9 +59,10 @@ export const renderMediaType = ({
       }
       let displayUri = ''
       if (metadata && metadata.token_info && metadata.token_info.displayUri) {
-        let displayUri = metadata.token_info.displayUri
-        const displayUriHash = displayUri.replace('ipfs://', '')
-        displayUri = `${CLOUDFLARE}${displayUriHash}`
+        displayUri = metadata.token_info.displayUri.replace(
+          'ipfs://',
+          CLOUDFLARE
+        )
       }
       return (
         <Container interactive={interactive}>
