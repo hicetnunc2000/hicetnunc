@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import classnames from 'classnames'
 import { Button, Primary } from '../../components/button'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
-import { Page, Container, Padding } from '../../components/layout'
+import { Container, Padding } from '../../components/layout'
 import { Loading } from '../../components/loading'
 import { renderMediaType } from '../../components/media-types'
 import { Identicon } from '../../components/identicons'
@@ -10,6 +10,7 @@ import { walletPreview } from '../../utils/string'
 import { SanitiseOBJKT } from '../../utils/sanitise'
 import { PATH } from '../../constants'
 import { MimeTypeIcon } from '../../components/mimetype-icon'
+import { VisuallyHidden } from '../../components/visually-hidden'
 import { /* GetUserData, */ GetUserMetadata } from '../../data/api'
 import styles from './index.module.scss'
 
@@ -83,12 +84,9 @@ export default class Display extends Component {
               `https://api.better-call.dev/v1/contract/mainnet/KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton/tokens/holders?token_id=${id}`
             )
             .then((res) => res.data)
-
           // add owners to creations array
           creations[index].owners = [...Object.keys(owners)]
-
           total++
-
           // all loaded
           if (total === totalCreations) {
             this.setState({
@@ -105,7 +103,6 @@ export default class Display extends Component {
             })
           }
         }
-
         // load all owners
         for (let i = 0; i < creations.length; i++) {
           loadOwners(creations[i].token_id, i)
@@ -122,7 +119,7 @@ export default class Display extends Component {
 
   render() {
     return (
-      <Page>
+      <>
         <Container>
           <Padding>
             <div className={styles.profile}>
@@ -140,6 +137,7 @@ export default class Display extends Component {
                 <div>
                   {this.state.site && (
                     <Button href={this.state.site}>
+                      <VisuallyHidden>{this.state.site}</VisuallyHidden>
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         width="16"
@@ -158,6 +156,7 @@ export default class Display extends Component {
                   )}
                   {this.state.twitter && (
                     <Button href={`https://twitter.com/${this.state.twitter}`}>
+                      <VisuallyHidden>{`https://twitter.com/${this.state.twitter}`}</VisuallyHidden>
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         width="16"
@@ -178,6 +177,7 @@ export default class Display extends Component {
                     <Button
                       href={`https://instagram.com/${this.state.instagram}`}
                     >
+                      <VisuallyHidden>{`https://instagram.com/${this.state.instagram}`}</VisuallyHidden>
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         width="16"
@@ -196,6 +196,7 @@ export default class Display extends Component {
                   )}
                   {this.state.github && (
                     <Button href={`https://github.com/${this.state.github}`}>
+                      <VisuallyHidden>{`https://github.com/${this.state.github}`}</VisuallyHidden>
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         width="16"
@@ -214,6 +215,7 @@ export default class Display extends Component {
                   )}
                   {this.state.reddit && (
                     <Button href={`https://reddit.com/${this.state.reddit}`}>
+                      <VisuallyHidden>{`https://reddit.com/${this.state.reddit}`}</VisuallyHidden>
                       <svg
                         height="16"
                         viewBox="0 0 512 512"
@@ -401,7 +403,7 @@ export default class Display extends Component {
             </div>
           </Container>
         )}
-      </Page>
+      </>
     )
   }
 }

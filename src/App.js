@@ -1,15 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { Switch, Route } from 'react-router-dom'
 import HicetnuncContextProvider from './context/HicetnuncContext'
-import Sync from './pages/sync' // TODO: andrevenancio
-import { About } from './pages/about'
-import Display from './pages/display' // TODO: andrevenancio
-import { Latest, Hdao, Random } from './pages/feeds'
-import { Mint } from './pages/mint'
-import { ObjktDisplay } from './pages/objkt-display'
+import { getInitialData } from './data/api'
 import { Header } from './components/header'
 import { Loading as Preloading } from './components/loading'
-import { getInitialData } from './data/api'
+import { Page } from './components/layout'
+import { routes } from './routes'
 
 const App = () => {
   const [loading, setLoading] = useState(true)
@@ -29,14 +25,18 @@ const App = () => {
     <HicetnuncContextProvider>
       <Header />
       <Switch>
-        <Route exact path="/" component={Latest} />
-        <Route exact path="/hdao" component={Hdao} />
-        <Route exact path="/random" component={Random} />
-        <Route path="/tz/:id" component={Display} />
-        <Route path="/about" component={About} />
-        <Route path="/sync" component={Sync} />
-        <Route path="/mint" component={Mint} />
-        <Route path="/objkt/:id" component={ObjktDisplay} />
+        {routes.map(({ title, exact, path, component: Comp }) => (
+          <Route
+            path={path}
+            exact={exact}
+            key={path}
+            render={() => (
+              <Page title={title}>
+                <Comp />
+              </Page>
+            )}
+          />
+        ))}
       </Switch>
     </HicetnuncContextProvider>
   )
