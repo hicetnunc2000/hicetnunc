@@ -135,7 +135,6 @@ export default class Display extends Component {
                   <Primary>{this.state.walletPrev}</Primary>
                 </Button>
 
-                {/* TODO: Move this to API not Context--> this.context.getBalance(addr) */}
                 <p>{this.state.hdao} ○</p>
 
                 <div>
@@ -270,38 +269,43 @@ export default class Display extends Component {
 
         {this.state.creationsState && (
           <Container xlarge>
-            <Padding>
-              <div className={styles.pagination}>
-                {Array.from(
-                  Array(
-                    Math.ceil(
-                      this.state.creations.length /
-                        this.state.creationItemsPerPage
+            {/* PAGINATION NOT READY YET */}
+            {false && (
+              <Padding>
+                <div className={styles.pagination}>
+                  {Array.from(
+                    Array(
+                      Math.ceil(
+                        this.state.creations.length /
+                          this.state.creationItemsPerPage
+                      )
                     )
-                  )
-                ).map((a, i) => {
-                  const itemClasses = classnames({
-                    [styles.item]: true,
-                    [styles.selected]: i === this.state.creationPage,
-                  })
-                  return (
-                    <div
-                      key={`creation-${i}`}
-                      className={itemClasses}
-                      onClick={() => this.setState({ creationPage: i })}
-                    />
-                  )
-                })}
-              </div>
-            </Padding>
+                  ).map((a, i) => {
+                    const itemClasses = classnames({
+                      [styles.item]: true,
+                      [styles.selected]: i === this.state.creationPage,
+                    })
+                    return (
+                      <div
+                        key={`creation-${i}`}
+                        className={itemClasses}
+                        onClick={() => this.setState({ creationPage: i })}
+                      />
+                    )
+                  })}
+                </div>
+              </Padding>
+            )}
             <div className={styles.list}>
-              {this.state.creations.map((nft, i) => {
-                const firstIndex =
-                  this.state.creationPage * this.state.creationItemsPerPage
-                if (
-                  i >= firstIndex &&
-                  i < (firstIndex + 1) * this.state.creationItemsPerPage
-                ) {
+              {this.state.creations.map(
+                (nft, i) => {
+                  // pagination disabled
+                  // const firstIndex =
+                  //   this.state.creationPage * this.state.creationItemsPerPage
+                  // if (
+                  //   i >= firstIndex &&
+                  //   i < (firstIndex + 1) * this.state.creationItemsPerPage
+                  // ) {
                   const { mimeType, uri } = nft.token_info.formats[0]
 
                   return (
@@ -322,49 +326,54 @@ export default class Display extends Component {
                       </div>
                     </Button>
                   )
-                } else {
-                  return null
                 }
-              })}
+                //  else {
+                // return null
+                // }}
+              )}
             </div>
           </Container>
         )}
 
         {this.state.collectionState && (
           <Container xlarge>
-            <Padding>
-              <div className={styles.pagination}>
-                {Array.from(
-                  Array(
-                    Math.ceil(
-                      this.state.collection.length /
-                        this.state.collectionItemsPerPage
+            {/* PAGINATION NOT READY YET */}
+            {false && (
+              <Padding>
+                <div className={styles.pagination}>
+                  {Array.from(
+                    Array(
+                      Math.ceil(
+                        this.state.collection.length /
+                          this.state.collectionItemsPerPage
+                      )
                     )
-                  )
-                ).map((a, i) => {
-                  const itemClasses = classnames({
-                    [styles.item]: true,
-                    [styles.selected]: i === this.state.collectionPage,
-                  })
-                  return (
-                    <div
-                      key={`collection-${i}`}
-                      className={itemClasses}
-                      onClick={() => this.setState({ collectionPage: i })}
-                    />
-                  )
-                })}
-              </div>
-            </Padding>
-
+                  ).map((a, i) => {
+                    const itemClasses = classnames({
+                      [styles.item]: true,
+                      [styles.selected]: i === this.state.collectionPage,
+                    })
+                    return (
+                      <div
+                        key={`collection-${i}`}
+                        className={itemClasses}
+                        onClick={() => this.setState({ collectionPage: i })}
+                      />
+                    )
+                  })}
+                </div>
+              </Padding>
+            )}
             <div className={styles.list}>
-              {this.state.collection.map((nft, i) => {
-                const firstIndex =
-                  this.state.collectionPage * this.state.collectionItemsPerPage
-                if (
-                  i >= firstIndex &&
-                  i < (firstIndex + 1) * this.state.collectionItemsPerPage
-                ) {
+              {this.state.collection.map(
+                (nft, i) => {
+                  // pagination
+                  // const firstIndex =
+                  //   this.state.collectionPage * this.state.collectionItemsPerPage
+                  // if (
+                  //   i >= firstIndex &&
+                  //   i < (firstIndex + 1) * this.state.collectionItemsPerPage
+                  // ) {
                   const { mimeType, uri } = nft.token_info.formats[0]
                   return (
                     <Button
@@ -384,10 +393,11 @@ export default class Display extends Component {
                       </div>
                     </Button>
                   )
-                } else {
-                  return null
                 }
-              })}
+                // else {
+                // return null
+                // }}
+              )}
             </div>
           </Container>
         )}
