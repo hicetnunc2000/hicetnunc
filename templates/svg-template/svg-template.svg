@@ -5,6 +5,7 @@
   <script type="text/javascript">
   <![CDATA[
   // DONT FORGET TO always use viewBox. Your SVG should always align to the full browser width and height when being viewed on the browser.
+  // Its not recommended to use ForeignObject anymore. You should probably use HTML instead
   const c = new URLSearchParams(location.search).get('creator')
   const v = new URLSearchParams(location.search).get('viewer')
   console.log(c, v);
