@@ -20,8 +20,6 @@ const iOS = [
   // iPad on iOS 13 detection
   || (navigator.userAgent.includes("Mac") && "ontouchend" in document)
 
-console.log('iOS', iOS)
-
 /**
  * This component handles fullscreen mode
  * and inView prop for lazy loading
