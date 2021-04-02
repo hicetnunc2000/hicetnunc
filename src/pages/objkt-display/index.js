@@ -4,13 +4,12 @@ import { useParams } from 'react-router-dom'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
 import { GetOBJKT } from '../../data/api'
 import { Loading } from '../../components/loading'
-import { Page, Container, Padding } from '../../components/layout'
+import { Container, Padding } from '../../components/layout'
 import { renderMediaType } from '../../components/media-types'
 import { ItemInfo } from '../../components/item-info'
 import { Button, Primary } from '../../components/button'
 import { Menu } from '../../components/menu'
 import { Info, Owners, Swap, Burn } from './tabs'
-const _ = require('lodash')
 
 const TABS = [
   { title: 'info', component: Info },
@@ -26,24 +25,16 @@ export const ObjktDisplay = () => {
   const [loading, setLoading] = useState(true)
   const [tabIndex, setTabIndex] = useState(0)
   const [nft, setNFT] = useState()
-  const [owners, setOwners] = useState(null)
-  // const [creator, setCreator] = useState(null)
   const [address, setAddress] = useState(null)
-  //setAccount()
 
   useEffect(() => {
     GetOBJKT({ id }).then(async (objkt) => {
       await setAccount()
       setNFT(objkt)
-      setOwners(objkt.owners)
+
       try {
         setAddress(acc.address)
       } catch (e) {}
-
-      // try {
-      //   // Why do we need this, if "creator" is never used?
-      //   setCreator(objkt.token_info.creators[0])
-      // } catch (e) {}
 
       setLoading(false)
     })
@@ -52,7 +43,7 @@ export const ObjktDisplay = () => {
   const Tab = TABS[tabIndex].component
 
   return (
-    <Page>
+    <>
       {loading && (
         <Container>
           <Loading />
@@ -84,9 +75,6 @@ export const ObjktDisplay = () => {
                   <Button key={title} onClick={() => setTabIndex(index)}>
                     <Primary selected={tabIndex === index}>{title}</Primary>
                   </Button>
-                  /* filter(
-                  (e) => !e.private || _.keys(owners).includes(address)
-                ) */
                 ))}
               </Menu>
             </Padding>
@@ -95,6 +83,6 @@ export const ObjktDisplay = () => {
           <Tab {...nft} address={address} />
         </>
       )}
-    </Page>
+    </>
   )
 }
