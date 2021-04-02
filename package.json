@@ -13,7 +13,7 @@
     "axios": "^0.21.1",
     "base-x": "^3.0.8",
     "buffer": "^6.0.3",
-    "classnames": "^2.2.6",
+    "classnames": "^2.3.0",
     "fflate": "^0.6.9",
     "filereader": "^0.10.3",
     "framer-motion": "^4.0.2",
