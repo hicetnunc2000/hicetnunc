@@ -21,7 +21,7 @@
     "ipfs-http-client": "^49.0.4",
     "local-storage": "^2.0.0",
     "lodash": "^4.17.21",
-    "mime-types": "^2.1.29",
+    "mime-types": "^2.1.30",
     "node-sass": "^5.0.0",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
