@@ -16,20 +16,34 @@
     position: absolute;
     bottom: 10px;
     right: 10px;
-    width: 20px;
-    height: 20px;
+    width: 30px;
+    height: 30px;
     background-color: var(--background-color);
     display: flex;
     align-items: center;
     justify-content: center;
     z-index: 1;
+    cursor: pointer;
+    opacity: 0;
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 1000px;
+    transition: opacity 0.3s ease-in-out;
+
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.5);
+    }
 
     svg {
-      width: 14px;
-      height: 14px;
+      width: 12px;
+      height: 12px;
       path {
-        fill: var(--text-color);
+        fill: white;
       }
+    }
+  }
+  &.hover {
+    .icon {
+      opacity: 1;
     }
   }
 }
