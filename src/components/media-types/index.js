@@ -14,7 +14,7 @@ import { Container } from './container'
 const CLOUDFLARE = 'https://cloudflare-ipfs.com/ipfs/'
 
 function getInfuraUrl(hash) {
-  const cidv1 =  new ipfsClient.CID(hash).toV1()
+  const cidv1 = new ipfsClient.CID(hash).toV1()
   const subomain = cidv1.toString()
   return `https://${subomain}.ipfs.infura-ipfs.io/`
 }
