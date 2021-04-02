@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import classnames from 'classnames'
 import { Button, Primary } from '../../components/button'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
 import { Page, Container, Padding } from '../../components/layout'
@@ -29,6 +30,10 @@ export default class Display extends Component {
     collectionState: false,
     creationsState: true,
     hdao: 0,
+    creationPage: 0,
+    creationItemsPerPage: 12, // 4x3 grid
+    collectionPage: 0,
+    collectionItemsPerPage: 12, // 4x3 grid
   }
 
   componentWillMount = async () => {
@@ -68,9 +73,11 @@ export default class Display extends Component {
           loading: false,
           collection: collection,
         })
+
+        /*
         let totalCreations = creations.length
         let total = 0
-        /*         const loadOwners = async (id, index) => {
+                 const loadOwners = async (id, index) => {
           const owners = await axios
             .get(
               `https://api.better-call.dev/v1/contract/mainnet/KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton/tokens/holders?token_id=${id}`
@@ -261,26 +268,61 @@ export default class Display extends Component {
 
         {this.state.creationsState && (
           <Container xlarge>
+            <Padding>
+              <div className={styles.pagination}>
+                {Array.from(
+                  Array(
+                    Math.ceil(
+                      this.state.creations.length /
+                        this.state.creationItemsPerPage
+                    )
+                  )
+                ).map((a, i) => {
+                  const itemClasses = classnames({
+                    [styles.item]: true,
+                    [styles.selected]: i === this.state.creationPage,
+                  })
+                  return (
+                    <div
+                      key={`creation-${i}`}
+                      className={itemClasses}
+                      onClick={() => this.setState({ creationPage: i })}
+                    />
+                  )
+                })}
+              </div>
+            </Padding>
             <div className={styles.list}>
               {this.state.creations.map((nft, i) => {
-                const { mimeType, uri } = nft.token_info.formats[0]
+                const firstIndex =
+                  this.state.creationPage * this.state.creationItemsPerPage
+                if (
+                  i >= firstIndex &&
+                  i < (firstIndex + 1) * this.state.creationItemsPerPage
+                ) {
+                  const { mimeType, uri } = nft.token_info.formats[0]
 
-                return (
-                  <Button
-                    key={nft.token_id}
-                    to={`${PATH.OBJKT}/${nft.token_id}`}
-                  >
-                    <div className={styles.container}>
-                      <MimeTypeIcon mimeType={mimeType} uri={uri} />
-                      {renderMediaType({
-                        mimeType,
-                        uri: uri.split('//')[1],
-                        metadata: nft,
-                      })}
-                      <div className={styles.number}>OBJKT#{nft.token_id}</div>
-                    </div>
-                  </Button>
-                )
+                  return (
+                    <Button
+                      key={nft.token_id}
+                      to={`${PATH.OBJKT}/${nft.token_id}`}
+                    >
+                      <div className={styles.container}>
+                        <MimeTypeIcon mimeType={mimeType} uri={uri} />
+                        {renderMediaType({
+                          mimeType,
+                          uri: uri.split('//')[1],
+                          metadata: nft,
+                        })}
+                        <div className={styles.number}>
+                          OBJKT#{nft.token_id}
+                        </div>
+                      </div>
+                    </Button>
+                  )
+                } else {
+                  return null
+                }
               })}
             </div>
           </Container>
@@ -288,25 +330,61 @@ export default class Display extends Component {
 
         {this.state.collectionState && (
           <Container xlarge>
+            <Padding>
+              <div className={styles.pagination}>
+                {Array.from(
+                  Array(
+                    Math.ceil(
+                      this.state.collection.length /
+                        this.state.collectionItemsPerPage
+                    )
+                  )
+                ).map((a, i) => {
+                  const itemClasses = classnames({
+                    [styles.item]: true,
+                    [styles.selected]: i === this.state.collectionPage,
+                  })
+                  return (
+                    <div
+                      key={`collection-${i}`}
+                      className={itemClasses}
+                      onClick={() => this.setState({ collectionPage: i })}
+                    />
+                  )
+                })}
+              </div>
+            </Padding>
+
             <div className={styles.list}>
               {this.state.collection.map((nft, i) => {
-                const { mimeType, uri } = nft.token_info.formats[0]
-                return (
-                  <Button
-                    key={nft.token_id}
-                    to={`${PATH.OBJKT}/${nft.token_id}`}
-                  >
-                    <div className={styles.container}>
-                      <MimeTypeIcon mimeType={mimeType} uri={uri} />
-                      {renderMediaType({
-                        mimeType,
-                        uri: uri.split('//')[1],
-                        metadata: nft,
-                      })}
-                      <div className={styles.number}>OBJKT#{nft.token_id}</div>
-                    </div>
-                  </Button>
-                )
+                const firstIndex =
+                  this.state.collectionPage * this.state.collectionItemsPerPage
+                if (
+                  i >= firstIndex &&
+                  i < (firstIndex + 1) * this.state.collectionItemsPerPage
+                ) {
+                  const { mimeType, uri } = nft.token_info.formats[0]
+                  return (
+                    <Button
+                      key={nft.token_id}
+                      to={`${PATH.OBJKT}/${nft.token_id}`}
+                    >
+                      <div className={styles.container}>
+                        <MimeTypeIcon mimeType={mimeType} uri={uri} />
+                        {renderMediaType({
+                          mimeType,
+                          uri: uri.split('//')[1],
+                          metadata: nft,
+                        })}
+                        <div className={styles.number}>
+                          OBJKT#{nft.token_id}
+                        </div>
+                      </div>
+                    </Button>
+                  )
+                } else {
+                  return null
+                }
               })}
             </div>
           </Container>
