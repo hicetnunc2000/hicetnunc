@@ -15,7 +15,11 @@ const iOS = /iPhone|iPod|iPad/.test(navigator.userAgent) && !window.MSStream
  * This component handles fullscreen mode
  * and inView prop for lazy loading
  */
-export const Container = ({ children = null, interactive }) => {
+export const Container = ({
+  children = null,
+  interactive,
+  nofullscreen = false,
+}) => {
   const [over, setOver] = useState(false)
   const context = useContext(HicetnuncContext)
   const domElement = useRef()
@@ -48,10 +52,14 @@ export const Container = ({ children = null, interactive }) => {
   }
 
   useEffect(() => {
-    document.addEventListener('fullscreenchange', fullscreenChange, false)
+    if (nofullscreen || iOS) {
+      document.addEventListener('fullscreenchange', fullscreenChange)
+    }
 
     return () => {
-      document.removeEventListener('fullscreenchange', fullscreenChange, false)
+      if (nofullscreen || iOS) {
+        document.removeEventListener('fullscreenchange', fullscreenChange)
+      }
     }
   }, [])
 
@@ -76,7 +84,7 @@ export const Container = ({ children = null, interactive }) => {
         onMouseOver={() => setOver(true)}
         onMouseOut={() => setOver(false)}
       >
-        {interactive && !iOS && (
+        {interactive && !iOS && !nofullscreen && (
           <div
             onClick={iOS ? toggleFauxFullScreen : toggleFullScreen}
             className={styles.icon}
