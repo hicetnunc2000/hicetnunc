@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useContext, useEffect, useRef, useState } from 'react'
+import screenfull from 'screenfull'
 import { useInView } from 'react-intersection-observer'
 import classnames from 'classnames'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
@@ -9,7 +10,16 @@ import styles from './styles.module.scss'
  * Currently fullscreen is disabled on iOS
  * this is mainly because Safari iOS doesn't support fullscreen api.
  */
-const iOS = /iPhone|iPod|iPad/.test(navigator.userAgent) && !window.MSStream
+const iOS = [
+    'iPad Simulator',
+    'iPhone Simulator',
+    'iPod Simulator',
+    'iPad',
+    'iPhone',
+    'iPod'
+  ].includes(navigator.platform)
+  // iPad on iOS 13 detection
+  || (navigator.userAgent.includes("Mac") && "ontouchend" in document)
 
 /**
  * This component handles fullscreen mode
@@ -29,12 +39,10 @@ export const Container = ({
   })
 
   const toggleFullScreen = () => {
-    if (!document.fullscreenElement) {
-      document.documentElement.requestFullscreen()
+    if (!screenfull.isFullscreen) {
+      screenfull.request()
     } else {
-      if (document.exitFullscreen) {
-        document.exitFullscreen()
-      }
+      screenfull.exit()
     }
   }
 
@@ -42,7 +50,8 @@ export const Container = ({
     if (iOS) {
       return
     }
-    if (document.fullscreenElement) {
+
+    if (screenfull.isFullscreen) {
       context.setFullscreen(true)
     } else {
       context.setFullscreen(false)
@@ -52,11 +61,13 @@ export const Container = ({
   useEffect(() => {
     if (nofullscreen || !iOS) {
       document.addEventListener('fullscreenchange', fullscreenChange)
+      document.addEventListener('webkitfullscreenchange', fullscreenChange, false)
     }
 
     return () => {
       if (nofullscreen || !iOS) {
         document.removeEventListener('fullscreenchange', fullscreenChange)
+        document.removeEventListener('webkitfullscreenchange', fullscreenChange, false)
       }
     }
   }, [])
