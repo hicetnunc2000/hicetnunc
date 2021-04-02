@@ -5,7 +5,7 @@ import { getInitialData } from './data/api'
 import { Header } from './components/header'
 import { Loading as Preloading } from './components/loading'
 import { Page } from './components/layout'
-import routes from './routes'
+import { routes } from './routes'
 
 const App = () => {
   const [loading, setLoading] = useState(true)

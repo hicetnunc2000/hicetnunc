@@ -1,16 +1,28 @@
-import Sync from './pages/sync' // TODO: andrevenancio
+import Sync from './pages/sync'
 import { About } from './pages/about'
-import Display from './pages/display' // TODO: andrevenancio
-import { Feeds } from './pages/feeds'
+import Display from './pages/display'
+import { Latest, Hdao, Random } from './pages/feeds'
 import { Mint } from './pages/mint'
 import { ObjktDisplay } from './pages/objkt-display'
 
-const routes = [
+export const routes = [
   {
     exact: true,
     path: '/',
-    component: Feeds,
-    title: 'Feeds',
+    component: Latest,
+    title: 'Latest Feed',
+  },
+  {
+    exact: false,
+    path: '/hdao',
+    component: Hdao,
+    title: 'hDAO Feed',
+  },
+  {
+    exact: false,
+    path: '/random',
+    component: Random,
+    title: 'Random Feed',
   },
   {
     exact: false,
@@ -43,5 +55,3 @@ const routes = [
     title: 'ObjktDisplay',
   },
 ]
-
-export default routes
