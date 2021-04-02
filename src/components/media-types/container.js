@@ -28,11 +28,6 @@ export const Container = ({
     threshold: 0,
   })
 
-  // For cases of iPhone where Fullscreen API is not supported
-  const toggleFauxFullScreen = () => {
-    context.setFullscreen(!context.fullscreen)
-  }
-
   const toggleFullScreen = () => {
     if (!document.fullscreenElement) {
       document.documentElement.requestFullscreen()
@@ -44,6 +39,9 @@ export const Container = ({
   }
 
   const fullscreenChange = (e) => {
+    if (iOS) {
+      return
+    }
     if (document.fullscreenElement) {
       context.setFullscreen(true)
     } else {
@@ -52,12 +50,12 @@ export const Container = ({
   }
 
   useEffect(() => {
-    if (nofullscreen || iOS) {
+    if (nofullscreen || !iOS) {
       document.addEventListener('fullscreenchange', fullscreenChange)
     }
 
     return () => {
-      if (nofullscreen || iOS) {
+      if (nofullscreen || !iOS) {
         document.removeEventListener('fullscreenchange', fullscreenChange)
       }
     }
@@ -85,10 +83,7 @@ export const Container = ({
         onMouseOut={() => setOver(false)}
       >
         {interactive && !iOS && !nofullscreen && (
-          <div
-            onClick={iOS ? toggleFauxFullScreen : toggleFullScreen}
-            className={styles.icon}
-          >
+          <div onClick={toggleFullScreen} className={styles.icon}>
             {context.fullscreen ? (
               <svg viewBox="0 0 14 14">
                 <g
