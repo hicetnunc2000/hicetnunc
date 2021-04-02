@@ -1,4 +1,5 @@
 import React from 'react'
+import ipfsClient from 'ipfs-http-client'
 import { GLBComponent } from './glb'
 import { ImageComponent } from './image'
 import { VideoComponent } from './video'
@@ -11,7 +12,12 @@ import { MIMETYPE, IPFS_DIRECTORY_MIMETYPE } from '../../constants'
 import { Container } from './container'
 
 const CLOUDFLARE = 'https://cloudflare-ipfs.com/ipfs/'
-const IPFS = 'https://ipfs.io/ipfs/'
+
+function getInfuraUrl(hash) {
+  const cidv1 = new ipfsClient.CID(hash).toV1()
+  const subomain = cidv1.toString()
+  return `https://${subomain}.ipfs.infura-ipfs.io/`
+}
 
 export const renderMediaType = ({
   mimeType,
@@ -48,6 +54,9 @@ export const renderMediaType = ({
     case MIMETYPE.ZIP:
     case MIMETYPE.ZIP1:
     case MIMETYPE.ZIP2:
+      if (!preview) {
+        url = getInfuraUrl(path)
+      }
       let displayUri = ''
       if (metadata && metadata.token_info && metadata.token_info.displayUri) {
         displayUri = metadata.token_info.displayUri.replace(
@@ -70,7 +79,9 @@ export const renderMediaType = ({
     case MIMETYPE.OGV:
     case MIMETYPE.QUICKTIME:
     case MIMETYPE.WEBM:
-      url = preview ? uri : `${IPFS}${path}`
+      if (!preview) {
+        url = getInfuraUrl(path)
+      }
       return (
         <Container interactive={interactive} nofullscreen>
           <VideoComponent src={url} />
