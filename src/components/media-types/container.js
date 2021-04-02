@@ -9,7 +9,18 @@ import styles from './styles.module.scss'
  * Currently fullscreen is disabled on iOS
  * this is mainly because Safari iOS doesn't support fullscreen api.
  */
-const iOS = /iPhone|iPod|iPad/.test(navigator.userAgent) && !window.MSStream
+const iOS = [
+    'iPad Simulator',
+    'iPhone Simulator',
+    'iPod Simulator',
+    'iPad',
+    'iPhone',
+    'iPod'
+  ].includes(navigator.platform)
+  // iPad on iOS 13 detection
+  || (navigator.userAgent.includes("Mac") && "ontouchend" in document)
+
+console.log('iOS', iOS)
 
 /**
  * This component handles fullscreen mode
