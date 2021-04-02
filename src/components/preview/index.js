@@ -6,7 +6,7 @@ import { HTMLWarning } from '../media-types/html/warning'
 import styles from './index.module.scss'
 
 function isHTML(mimeType) {
-  return MIMETYPE.ZIP || MIMETYPE.ZIP1 || MIMETYPE.ZIP2
+  return mimeType === MIMETYPE.ZIP || mimeType === MIMETYPE.ZIP1 || mimeType === MIMETYPE.ZIP2
 }
 
 export const Preview = ({ title, description, mimeType, uri, tags }) => {
