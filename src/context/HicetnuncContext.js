@@ -1,7 +1,7 @@
 import React, { createContext, Component } from 'react'
 import { BeaconWallet } from '@taquito/beacon-wallet'
 import { TezosToolkit } from '@taquito/taquito'
-import { getItem, setItem } from '../utils/storage'
+import { setItem } from '../utils/storage'
 
 const { NetworkType } = require('@airgap/beacon-sdk')
 var ls = require('local-storage')
