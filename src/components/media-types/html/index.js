@@ -3,6 +3,7 @@ import classnames from 'classnames'
 import { HicetnuncContext } from '../../../context/HicetnuncContext'
 import { Button } from '../../button'
 import { dataRUIToBuffer, prepareFilesFromZIP } from '../../../utils/html'
+import { VisuallyHidden } from '../../visually-hidden'
 import styles from './index.module.scss'
 
 export const HTMLComponent = ({
@@ -88,6 +89,7 @@ export const HTMLComponent = ({
           <img src={displayUri} alt="thumbnail" />
           <div className={styles.button}>
             <Button onClick={() => setViewing(true)}>
+              <VisuallyHidden>View</VisuallyHidden>
               <div className={styles.dark} />
               <svg
                 version="1.1"
