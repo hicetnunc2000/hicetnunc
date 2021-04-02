@@ -72,7 +72,7 @@ export const renderMediaType = ({
     case MIMETYPE.WEBM:
       url = preview ? uri : `${IPFS}${path}`
       return (
-        <Container interactive={interactive}>
+        <Container interactive={interactive} nofullscreen>
           <VideoComponent src={url} />
         </Container>
       )
