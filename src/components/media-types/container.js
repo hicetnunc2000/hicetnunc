@@ -30,7 +30,6 @@ export const Container = ({
   interactive,
   nofullscreen = false,
 }) => {
-  const [over, setOver] = useState(false)
   const context = useContext(HicetnuncContext)
   const domElement = useRef()
 
@@ -74,7 +73,6 @@ export const Container = ({
 
   const classes = classnames({
     [styles.container]: true,
-    [styles.hover]: over,
     [styles.fullscreen]: context.fullscreen,
   })
 
@@ -90,8 +88,6 @@ export const Container = ({
       <div
         ref={domElement}
         className={classes}
-        onMouseOver={() => setOver(true)}
-        onMouseOut={() => setOver(false)}
       >
         {interactive && !iOS && !nofullscreen && (
           <div onClick={toggleFullScreen} className={styles.icon}>
