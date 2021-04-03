@@ -100,7 +100,7 @@ export const renderMediaType = ({
     case MIMETYPE.OGA:
       return (
         <Container interactive={interactive}>
-          <AudioComponent src={url} />
+          <AudioComponent src={url} token_info={metadata.token_info} />
         </Container>
       )
     /* PDF */
