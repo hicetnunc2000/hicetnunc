@@ -41,7 +41,7 @@ const creator = new URLSearchParams(window.location.search).get('creator')
 const viewer = new URLSearchParams(window.location.search).get('viewer')
 ```
 
-### Minting
+## Minting
 
 - Once your project folder is ready to be minted, go ahead and compress it into a zip file.
 - Head to [https://hicetnunc.xyz/mint](https://hicetnunc.xyz/mint), fill out the information for your work, and upload your zip file.
