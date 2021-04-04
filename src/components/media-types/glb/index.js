@@ -10,13 +10,13 @@ export const GLBComponent = ({ src, interactive }) => {
   const props = {
     className: styles.glb,
     src,
-    'ar': true,
     'autoplay': true,
     'auto-rotate': true,
     'data-js-focus-visible': true,
   }
 
   if (interactive) {
+    props['ar'] = true
     props['camera-controls'] = true
   }
 
