@@ -7,7 +7,7 @@ export const Page = ({ title = 'hic et nunc', children = null }) => {
   return (
     <main className={styles.container}>
       <Helmet>
-        <title>hic en nunc - {title}</title>
+        <title>hic et nunc - {title}</title>
       </Helmet>
       <VisuallyHidden as="h1">{title}</VisuallyHidden>
       {children}
