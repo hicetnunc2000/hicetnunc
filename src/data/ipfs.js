@@ -56,8 +56,8 @@ export const prepareDirectory = async ({
   thumbnail,
 }) => {
   // upload directory of files
-  const hashes = await uploadFilesToDirectory(files)
-  const cid = `ipfs://${hashes.directory}`
+  const dirHash = await uploadFilesToDirectory(files)
+  const cid = `ipfs://${dirHash}`
 
   // upload cover image
   const ipfs = createClient(infuraUrl)
