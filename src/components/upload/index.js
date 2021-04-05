@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
-import { ALLOWED_FILETYPES_LABEL, getLanguage } from '../../constants'
+import { getLanguage } from '../../constants'
 import { getMimeType } from '../../utils/sanitise'
 import styles from './index.module.scss'
 
 const Buffer = require('buffer').Buffer
 
-export const Upload = ({ label, onChange = () => null }) => {
+export const Upload = ({ label, allowedTypes, allowedTypesLabel, onChange = () => null }) => {
   const language = getLanguage()
   const [title, setTitle] = useState(label)
 
@@ -25,14 +25,16 @@ export const Upload = ({ label, onChange = () => null }) => {
     reader.readAsDataURL(file)
   }
 
+  const accept = allowedTypes.join(',')
+
   return (
     <div className={styles.container}>
       <label>
         {title}
-        <input type="file" name="file" onChange={onFileChange} />
+        <input type="file" name="file" accept={accept} onChange={onFileChange} />
       </label>
       <div className={styles.allowed}>
-        {language.mint.supports}:&nbsp;{ALLOWED_FILETYPES_LABEL}
+        {language.mint.supports}:&nbsp;{allowedTypesLabel}
       </div>
     </div>
   )
