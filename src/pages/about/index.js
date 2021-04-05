@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Container, Padding } from '../../components/layout'
+import { Page, Container, Padding } from '../../components/layout'
 import { Button, Primary } from '../../components/button'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
 import { getLanguage } from '../../constants'
@@ -22,7 +22,7 @@ export class About extends Component {
 
   render() {
     return (
-      <>
+      <Page title="about">
         <Container>
           <Padding>
             <strong>hic et nunc</strong>
@@ -76,8 +76,8 @@ export class About extends Component {
         <Container>
           <Padding>
             <div className={styles.buttons}>
-              <p>FAQ's are available</p>&nbsp;
-              <Button href="https://github.com/hicetnunc2000/hicetnunc/blob/main/FAQ.md">
+              <p>WIKI is available</p>&nbsp;
+              <Button href="https://github.com/hicetnunc2000/hicetnunc/wiki">
                 <Primary>
                   <strong>here</strong>
                 </Primary>
@@ -98,7 +98,7 @@ export class About extends Component {
             </div>
           </Padding>
         </Container>
-      </>
+      </Page>
     )
   }
 }

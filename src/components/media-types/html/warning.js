@@ -1,11 +1,15 @@
+import { Button, Primary } from '../../button'
 import styles from './index.module.scss'
 
-const coverMeta = '<meta property="og:image" content="path/to/image.jpg">'
-
-export function HTMLWarning () {
+export function HTMLWarning() {
   return (
     <div className={styles.warning}>
-      IMPORTANT: Please read the <a href="https://github.com/hicetnunc2000/hicetnunc/wiki/Interactive-OBJKTs" target="_blank">Interactive OBJKTs Guide</a> before minting!
+      <p>IMPORTANT: Please read the guide before minting!</p>
+      <Button href="https://github.com/hicetnunc2000/hicetnunc/wiki/Interactive-OBJKTs">
+        <Primary>
+          <strong>Interactive OBJKTs Guide</strong>
+        </Primary>
+      </Button>
     </div>
   )
 }

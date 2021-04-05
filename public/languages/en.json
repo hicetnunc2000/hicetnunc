@@ -3,35 +3,35 @@
     "sync": "sync",
     "menu": [
       { "primary": "○", "route": "/hdao" },
-      { "primary": "aleatorio", "route": "/random" },
+      { "primary": "random", "route": "/random" },
       { "primary": "OBJKTs", "secondary": "(mint NFTs)", "route": "/mint" },
-      { "primary": "gerenciar NFTs", "route": "/sync" },
-      { "primary": "sobre", "route": "/about" }
+      { "primary": "manage asseets", "route": "/sync" },
+      { "primary": "about", "route": "/about" }
     ]
   },
   "footer": {
-    "mint": "sync -> collect // sync -> mint // sync -> swap",
+    "mint": "visit profiles ✨ verify your operations while executing transactions.",
     "warning": "use it consciously. visit artists profiles. be careful with copy minters."
   },
   "home": {
-    "latest": "últimos",
+    "latest": "latest",
     "hDAO": "hDAO",
-    "more": "Carregar mais"
+    "more": "Load More"
   },
   "mint": {
-    "title": "título",
-    "description": "descrição",
-    "tags": "tags (separadas por vírgula)",
-    "amount": "quantidade de OBJKT's para mint",
+    "title": "title",
+    "description": "description",
+    "tags": "tags (separated by commas)",
+    "amount": "number of OBJKT's to mint",
     "upload": "Upload OBJKT",
     "supports": "supports",
     "preview": "preview",
     "mint": "mint",
-    "warning": "esta operação custará 0.08~ tez. 10% de royalties por padrão"
+    "warning": "this operation costs 0.08~ tez. 10% royalties are set by default"
   },
   "manage": {
-    "creations": "criações",
-    "collection": "coleção"
+    "creations": "creations",
+    "collection": "collection"
   },
   "about": {
     "title": "hic et nunc",
@@ -40,7 +40,7 @@
       "IPFS NFTs can be minted and traded by permissionless means. such experiment was designed intending to imagine alternative crypto economies.",
       "We're concerned about your security and autonomy. please verify informations while making transactions.",
       "For consulting, networking or questions get in touch by %EMAIL%, %DISCORD%, or on %REDDIT%.",
-      "Please read through our %FAQS%.",
+      "Please read through our %WIKI%.",
       "If you're having trouble with the website, please report an %ISSUE%"
     ]
   },
@@ -64,7 +64,7 @@
       "title": "no owners"
     },
     "swap": {
-      "amount": "OBJKT amount",
+      "amount": "number of OBJKTs",
       "price": "price per OBJKT (in tez)",
       "cta": "swap it",
       "warning": "swaps which carry value are charged with a 2.5% fee for platform maintenance"

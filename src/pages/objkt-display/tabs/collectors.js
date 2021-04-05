@@ -4,21 +4,16 @@ import { OwnerList } from '../../../components/owner-list'
 import { HicetnuncContext } from '../../../context/HicetnuncContext'
 import { OwnerSwaps } from '../../../components/owner-swaps'
 
-const _ = require('lodash')
-
-export const Owners = ({ owners, swaps }) => {
+export const Collectors = ({ owners, swaps }) => {
   const { syncTaquito, collect, acc, getAccount, cancel } = useContext(
     HicetnuncContext
   )
-  console.log(owners, swaps)
-  console.log(_.merge(owners, swaps))
-
-  // const s = _.minBy(swaps, (o) => o.xtz_per_objkt)
   const filtered =
     (owners &&
       Object.keys(owners)
         .filter((s) => s.startsWith('tz'))
         .filter((s) => parseFloat(owners[s]) > 0) // removes negative owners
+        .filter((e) => e !== 'tz1burnburnburnburnburnburnburjAYjjX') // remove burn wallet
         .map((s) => ({ amount: owners[s], wallet: s }))) ||
     []
 

@@ -10,7 +10,7 @@ export const GLBComponent = ({ src, interactive }) => {
   const props = {
     className: styles.glb,
     src,
-    'autoplay': true,
+    autoplay: true,
     'auto-rotate': true,
     'data-js-focus-visible': true,
   }

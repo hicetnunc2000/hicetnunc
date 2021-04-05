@@ -43,10 +43,13 @@ export const HTMLComponent = ({
       filesArr.forEach((f) => {
         files[f.path] = f.blob
       })
-      iframeRef.current.contentWindow.postMessage({
-        target: 'hicetnunc-html-preview',
-        data: files
-      }, '*')
+      iframeRef.current.contentWindow.postMessage(
+        {
+          target: 'hicetnunc-html-preview',
+          data: files,
+        },
+        '*'
+      )
     }
 
     window.addEventListener('message', handler)
@@ -75,7 +78,7 @@ export const HTMLComponent = ({
             src={`https://hicetnunc2000.github.io/hicetnunc/gh-pages/html-preview/?uid=${uid}&creator=${_creator_}&viewer=${_viewer_}`}
             sandbox="allow-scripts allow-same-origin allow-modals"
           />
-        </div>        
+        </div>
       )
     } else {
       return <div className={styles.container}>Loading...</div>
