@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
 import { GetOBJKT } from '../../data/api'
 import { Loading } from '../../components/loading'
-import { Container, Padding } from '../../components/layout'
+import { Page, Container, Padding } from '../../components/layout'
 import { renderMediaType } from '../../components/media-types'
 import { ItemInfo } from '../../components/item-info'
 import { Button, PrimaryButton } from '../../components/button'
@@ -43,7 +43,7 @@ export const ObjktDisplay = () => {
   const Tab = TABS[tabIndex].component
 
   return (
-    <>
+    <Page title={nft?.token_info.name}>
       {loading && (
         <Container>
           <Loading />
@@ -85,6 +85,6 @@ export const ObjktDisplay = () => {
           <Tab {...nft} address={address} />
         </>
       )}
-    </>
+    </Page>
   )
 }

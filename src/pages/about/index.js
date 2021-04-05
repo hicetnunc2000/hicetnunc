@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import { Container, Padding } from '../../components/layout'
-import { PrimaryButton } from '../../components/button'
+import { Page, Container, Padding } from '../../components/layout'
+import { Button, Primary } from '../../components/button'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
 import { getLanguage } from '../../constants'
 import styles from './index.module.scss'
@@ -22,7 +22,7 @@ export class About extends Component {
 
   render() {
     return (
-      <>
+      <Page title="about">
         <Container>
           <Padding>
             <strong>hic et nunc</strong>
@@ -88,7 +88,7 @@ export class About extends Component {
             </div>
           </Padding>
         </Container>
-      </>
+      </Page>
     )
   }
 }

@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import classnames from 'classnames'
 import { Button, PrimaryButton } from '../../components/button'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
-import { Container, Padding } from '../../components/layout'
+import { Page, Container, Padding } from '../../components/layout'
 import { Loading } from '../../components/loading'
 import { renderMediaType } from '../../components/media-types'
 import { Identicon } from '../../components/identicons'
@@ -54,7 +54,6 @@ export default class Display extends Component {
 
     await axios
       .post(process.env.REACT_APP_TZ, {
-        // 3.129.20.231
         tz: this.state.wallet,
       })
       .then(async (res) => {
@@ -119,14 +118,18 @@ export default class Display extends Component {
 
   render() {
     return (
-      <>
+      <Page title={this.state.wallet}>
         <Container>
           <Padding>
             <div className={styles.profile}>
               <Identicon address={this.state.wallet} logo={this.state.logo} />
 
               <div className={styles.info}>
-                {this.state.alias && <p>{this.state.alias}</p>}
+                {this.state.alias && (
+                  <p>
+                    <strong>{this.state.alias}</strong>
+                  </p>
+                )}
                 {this.state.description && <p>{this.state.description}</p>}
                 <PrimaryButton
                   href={`https://tzkt.io/${this.state.wallet}`}
@@ -405,7 +408,7 @@ export default class Display extends Component {
             </div>
           </Container>
         )}
-      </>
+      </Page>
     )
   }
 }

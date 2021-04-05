@@ -56,6 +56,8 @@ export const Container = ({
     } else {
       context.setFullscreen(false)
     }
+    // simulates resize to fix GLB player
+    window.dispatchEvent(new Event('resize'))
   }
 
   useEffect(() => {

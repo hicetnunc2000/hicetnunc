@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react'
 import { useHistory } from 'react-router'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
-import { Container, Padding } from '../../components/layout'
+import { Page, Container, Padding } from '../../components/layout'
 import { Input } from '../../components/input'
 import { Button, ActionButton, PrimaryButton } from '../../components/button'
 import { Loading } from '../../components/loading'
@@ -18,25 +18,24 @@ import {
 } from '../../constants'
 
 export const Mint = () => {
-  const { Tezos, mint, getAuth, acc, setAccount } = useContext(HicetnuncContext)
+  const { mint, getAuth, acc, setAccount } = useContext(HicetnuncContext)
   const history = useHistory()
   const [step, setStep] = useState(0)
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
   const [tags, setTags] = useState('')
   const [amount, setAmount] = useState(1)
+  const [royalties, setRoyalties] = useState(10)
   const [file, setFile] = useState() // the uploaded file
 
   const [message, setMessage] = useState('')
 
   const handleMint = async () => {
-    console.log('mint', Tezos)
     setAccount()
     if (!acc) {
       alert('sync')
       return
     }
-    console.log('acc', acc)
 
     // check mime type
     if (ALLOWED_MIMETYPES.indexOf(file.mimeType) === -1) {
@@ -82,9 +81,7 @@ export const Mint = () => {
       })
     }
 
-    console.log('nftCid:', nftCid)
-
-    mint(getAuth(), amount, nftCid.path, 10)
+    mint(getAuth(), amount, nftCid.path, royalties)
       .then((e) => {
         console.log('mint confirm', e)
         setMessage('Minted successfully')
@@ -114,7 +111,7 @@ export const Mint = () => {
   }
 
   return (
-    <>
+    <Page title="mint">
       {step === 0 && (
         <>
           <Container>
@@ -134,7 +131,7 @@ export const Mint = () => {
               <Input
                 type="text"
                 onChange={(e) => setTags(e.target.value)}
-                placeholder="tags (separated by commas)"
+                placeholder="tags (comma separated. example: illustration, digital, crypto)"
               />
 
               <Input
@@ -142,6 +139,14 @@ export const Mint = () => {
                 min={1}
                 onChange={(e) => setAmount(e.target.value)}
                 placeholder="amount"
+              />
+
+              <Input
+                type="royalties"
+                min={0}
+                max={25}
+                onChange={(e) => setRoyalties(e.target.value)}
+                placeholder="your royalties after each sale (between 0-25%)"
               />
             </Padding>
           </Container>
@@ -195,7 +200,7 @@ export const Mint = () => {
           <Container>
             <Padding>
               <p>this operation costs 0.08~ tez</p>
-              <p>10% royalties are set by default</p>
+              <p>Your royalties upon each sale are {royalties}%</p>
             </Padding>
           </Container>
         </>
@@ -227,6 +232,6 @@ export const Mint = () => {
           )}
         </>
       )}
-    </>
+    </Page>
   )
 }

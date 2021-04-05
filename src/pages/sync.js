@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Redirect } from 'react-router-dom'
 import { HicetnuncContext } from '../context/HicetnuncContext'
-import { Container, Padding } from '../components/layout'
+import { Page, Container, Padding } from '../components/layout'
 import { LoadingContainer } from '../components/loading'
 import { PrimaryButton } from '../components/button'
 
@@ -30,13 +30,17 @@ export default class Sync extends Component {
     return this.context.acc !== undefined ? (
       <Redirect to={`/tz/${this.context.acc.address}`} />
     ) : (
-      <Container>
-        <Padding>
-          <p>requesting permissions</p>
-          <PrimaryButton to="/sync">try again?</PrimaryButton>
-          <LoadingContainer />
-        </Padding>
-      </Container>
+      <Page title="">
+        <Container>
+          <Padding>
+            <p>requesting permissions</p>
+            <Button to="/sync">
+              <Primary>try again?</Primary>
+            </Button>
+            <LoadingContainer />
+          </Padding>
+        </Container>
+      </Page>
     )
   }
 }
