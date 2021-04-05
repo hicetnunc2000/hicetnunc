@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react'
 import { useHistory } from 'react-router'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
-import { Container, Padding } from '../../components/layout'
+import { Page, Container, Padding } from '../../components/layout'
 import { Input } from '../../components/input'
 import { Button, Curate, Primary } from '../../components/button'
 import { Loading } from '../../components/loading'
@@ -18,7 +18,7 @@ import {
 } from '../../constants'
 
 export const Mint = () => {
-  const { Tezos, mint, getAuth, acc, setAccount } = useContext(HicetnuncContext)
+  const { mint, getAuth, acc, setAccount } = useContext(HicetnuncContext)
   const history = useHistory()
   const [step, setStep] = useState(0)
   const [title, setTitle] = useState('')
@@ -30,13 +30,11 @@ export const Mint = () => {
   const [message, setMessage] = useState('')
 
   const handleMint = async () => {
-    console.log('mint', Tezos)
     setAccount()
     if (!acc) {
       alert('sync')
       return
     }
-    console.log('acc', acc)
 
     // check mime type
     if (ALLOWED_MIMETYPES.indexOf(file.mimeType) === -1) {
@@ -82,8 +80,6 @@ export const Mint = () => {
       })
     }
 
-    console.log('nftCid:', nftCid)
-
     mint(getAuth(), amount, nftCid.path, 10)
       .then((e) => {
         console.log('mint confirm', e)
@@ -114,7 +110,7 @@ export const Mint = () => {
   }
 
   return (
-    <>
+    <Page title="mint">
       {step === 0 && (
         <>
           <Container>
@@ -231,6 +227,6 @@ export const Mint = () => {
           )}
         </>
       )}
-    </>
+    </Page>
   )
 }
