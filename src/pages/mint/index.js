@@ -25,6 +25,7 @@ export const Mint = () => {
   const [description, setDescription] = useState('')
   const [tags, setTags] = useState('')
   const [amount, setAmount] = useState(1)
+  const [royalties, setRoyalties] = useState(10)
   const [file, setFile] = useState() // the uploaded file
 
   const [message, setMessage] = useState('')
@@ -80,7 +81,7 @@ export const Mint = () => {
       })
     }
 
-    mint(getAuth(), amount, nftCid.path, 10)
+    mint(getAuth(), amount, nftCid.path, royalties)
       .then((e) => {
         console.log('mint confirm', e)
         setMessage('Minted successfully')
@@ -130,7 +131,7 @@ export const Mint = () => {
               <Input
                 type="text"
                 onChange={(e) => setTags(e.target.value)}
-                placeholder="tags (separated by commas)"
+                placeholder="tags (comma separated. example: illustration, digital, crypto)"
               />
 
               <Input
@@ -138,6 +139,14 @@ export const Mint = () => {
                 min={1}
                 onChange={(e) => setAmount(e.target.value)}
                 placeholder="amount"
+              />
+
+              <Input
+                type="royalties"
+                min={0}
+                max={25}
+                onChange={(e) => setRoyalties(e.target.value)}
+                placeholder="your royalties after each sale (between 0-25%)"
               />
             </Padding>
           </Container>
@@ -195,7 +204,7 @@ export const Mint = () => {
           <Container>
             <Padding>
               <p>this operation costs 0.08~ tez</p>
-              <p>10% royalties are set by default</p>
+              <p>Your royalties upon each sale are {royalties}%</p>
             </Padding>
           </Container>
         </>
