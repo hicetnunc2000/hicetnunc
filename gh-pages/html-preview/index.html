@@ -62,8 +62,9 @@
             }
 
             function onError(err) {
-              const msg =
-                'There was an error generating the preview. If you are using Brave browser, please turn off shields and try again.'
+              const msg = navigator.brave
+                ? 'There was an error generating the preview. If you are using Brave browser, please turn off shields and try again, or use a different browser.'
+                : 'There was an error generating the preview. Please check the web console for errors.'
               alert(msg)
               reject(err)
             }
