@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Container, Padding } from '../../components/layout'
-import { Button, Primary } from '../../components/button'
+import { PrimaryButton } from '../../components/button'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
 import { getLanguage } from '../../constants'
 import styles from './index.module.scss'
@@ -52,23 +52,17 @@ export class About extends Component {
             <div className={styles.buttons}>
               <p>For consulting, networking or questions get in touch by</p>
               &nbsp;
-              <Button href="mailto:hicetnunc2000@protonmail.com">
-                <Primary>
-                  <strong>email</strong>
-                </Primary>
-              </Button>
+              <PrimaryButton href="mailto:hicetnunc2000@protonmail.com">
+                <strong>email</strong>
+              </PrimaryButton>
               <p>,</p>&nbsp;
-              <Button href="https://discord.gg/jKNy6PynPK">
-                <Primary>
-                  <strong>discord</strong>
-                </Primary>
-              </Button>
+              <PrimaryButton href="https://discord.gg/jKNy6PynPK">
+                <strong>discord</strong>
+              </PrimaryButton>
               <p>, or on</p>&nbsp;
-              <Button href="https://reddit.com/r/hicetnunc">
-                <Primary>
-                  <strong>reddit</strong>
-                </Primary>
-              </Button>
+              <PrimaryButton href="https://reddit.com/r/hicetnunc">
+                <strong>reddit</strong>
+              </PrimaryButton>
             </div>
           </Padding>
         </Container>
@@ -77,11 +71,9 @@ export class About extends Component {
           <Padding>
             <div className={styles.buttons}>
               <p>WIKI is available</p>&nbsp;
-              <Button href="https://github.com/hicetnunc2000/hicetnunc/wiki">
-                <Primary>
-                  <strong>here</strong>
-                </Primary>
-              </Button>
+              <PrimaryButton href="https://github.com/hicetnunc2000/hicetnunc/wiki">
+                <strong>here</strong>
+              </PrimaryButton>
             </div>
           </Padding>
         </Container>
@@ -90,11 +82,9 @@ export class About extends Component {
           <Padding>
             <div className={styles.buttons}>
               <p>Issues can be reported</p>&nbsp;
-              <Button href="https://github.com/hicetnunc2000/hicetnunc/issues">
-                <Primary>
-                  <strong>here</strong>
-                </Primary>
-              </Button>
+              <PrimaryButton href="https://github.com/hicetnunc2000/hicetnunc/issues">
+                <strong>here</strong>
+              </PrimaryButton>
             </div>
           </Padding>
         </Container>

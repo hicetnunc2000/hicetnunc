@@ -3,7 +3,7 @@ import { useHistory } from 'react-router'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
 import { Container, Padding } from '../../components/layout'
 import { Input } from '../../components/input'
-import { Button, Curate, Primary } from '../../components/button'
+import { Button, ActionButton, PrimaryButton } from '../../components/button'
 import { Loading } from '../../components/loading'
 import { Upload } from '../../components/upload'
 import { Preview } from '../../components/preview'
@@ -154,9 +154,9 @@ export const Mint = () => {
 
           <Container>
             <Padding>
-              <Button onClick={handlePreview} fit disabled={handleValidation()}>
-                <Curate>Preview</Curate>
-              </Button>
+              <ActionButton
+                onClick={handlePreview} fit disabled={handleValidation()}
+              >Preview</ActionButton>
             </Padding>
           </Container>
         </>
@@ -167,11 +167,9 @@ export const Mint = () => {
           <Container>
             <Padding>
               <div style={{ display: 'flex' }}>
-                <Button onClick={() => setStep(0)} fit>
-                  <Primary>
-                    <strong>back</strong>
-                  </Primary>
-                </Button>
+              <PrimaryButton onClick={() => setStep(0)} fit>
+                <strong>back</strong>
+              </PrimaryButton>
               </div>
             </Padding>
           </Container>
@@ -190,9 +188,7 @@ export const Mint = () => {
 
           <Container>
             <Padding>
-              <Button onClick={handleMint} fit>
-                <Curate>mint</Curate>
-              </Button>
+              <ActionButton onClick={handleMint} fit>mint</ActionButton>
             </Padding>
           </Container>
 

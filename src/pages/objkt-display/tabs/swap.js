@@ -4,7 +4,7 @@ import { HicetnuncContext } from '../../../context/HicetnuncContext'
 import { Container, Padding } from '../../../components/layout'
 import { Loading } from '../../../components/loading'
 import { Input } from '../../../components/input'
-import { Button, Curate } from '../../../components/button'
+import { ActionButton } from '../../../components/button'
 import { getTotalSales } from '../../../utils/sanitise'
 
 export const Swap = ({ total_amount, owners, token_info, address }) => {
@@ -62,9 +62,7 @@ export const Swap = ({ total_amount, owners, token_info, address }) => {
             onChange={(e) => setPrice(e.target.value)}
             disabled={progress}
           />
-          <Button onClick={handleSubmit} fit disabled={progress}>
-            <Curate>swap it</Curate>
-          </Button>
+          <ActionButton onClick={handleSubmit} fit disabled={progress}>swap it</ActionButton>
           <div>
             <p>{message}</p>
             {progress && <Loading />}

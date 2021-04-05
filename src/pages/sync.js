@@ -3,7 +3,7 @@ import { Redirect } from 'react-router-dom'
 import { HicetnuncContext } from '../context/HicetnuncContext'
 import { Container, Padding } from '../components/layout'
 import { LoadingContainer } from '../components/loading'
-import { Button, Primary } from '../components/button'
+import { PrimaryButton } from '../components/button'
 
 export default class Sync extends Component {
   constructor(props) {
@@ -33,9 +33,7 @@ export default class Sync extends Component {
       <Container>
         <Padding>
           <p>requesting permissions</p>
-          <Button to="/sync">
-            <Primary>try again?</Primary>
-          </Button>
+          <PrimaryButton to="/sync">try again?</PrimaryButton>
           <LoadingContainer />
         </Padding>
       </Container>

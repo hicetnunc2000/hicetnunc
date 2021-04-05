@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import classnames from 'classnames'
-import { Button, Primary } from '../../components/button'
+import { Button, PrimaryButton } from '../../components/button'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
 import { Container, Padding } from '../../components/layout'
 import { Loading } from '../../components/loading'
@@ -128,9 +128,9 @@ export default class Display extends Component {
               <div className={styles.info}>
                 {this.state.alias && <p>{this.state.alias}</p>}
                 {this.state.description && <p>{this.state.description}</p>}
-                <Button href={`https://tzkt.io/${this.state.wallet}`}>
-                  <Primary>{this.state.walletPrev}</Primary>
-                </Button>
+                <PrimaryButton
+                  href={`https://tzkt.io/${this.state.wallet}`}
+                >{this.state.walletPrev}</PrimaryButton>
 
                 <p>{this.state.hdao} ○</p>
 
@@ -246,17 +246,19 @@ export default class Display extends Component {
               <strong>OBJKTs</strong>
             </p>
             <div className={styles.menu}>
-              <Button onClick={this.creations}>
-                <Primary selected={this.state.creationsState}>
-                  creations
-                </Primary>
-              </Button>
+              <PrimaryButton
+                onClick={this.creations}
+                selected={this.state.creationsState}
+              >
+                creations
+              </PrimaryButton>
 
-              <Button onClick={this.collection}>
-                <Primary selected={this.state.collectionState}>
-                  collection
-                </Primary>
-              </Button>
+              <PrimaryButton
+                onClick={this.collection}
+                selected={this.state.collectionState}
+              >
+                collection
+              </PrimaryButton>
             </div>
           </Padding>
         </Container>
