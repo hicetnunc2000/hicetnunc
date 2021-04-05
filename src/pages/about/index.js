@@ -22,7 +22,7 @@ export class About extends Component {
 
   render() {
     return (
-      <Page title="About">
+      <Page title="about">
         <Container>
           <Padding>
             <strong>hic et nunc</strong>
