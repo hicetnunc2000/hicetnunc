@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useContext, useEffect, useRef, useState } from 'react'
+import React, { useContext, useEffect, useRef } from 'react'
 import screenfull from 'screenfull'
 import { useInView } from 'react-intersection-observer'
 import classnames from 'classnames'
@@ -10,16 +10,17 @@ import styles from './styles.module.scss'
  * Currently fullscreen is disabled on iOS
  * this is mainly because Safari iOS doesn't support fullscreen api.
  */
-const iOS = [
+const iOS =
+  [
     'iPad Simulator',
     'iPhone Simulator',
     'iPod Simulator',
     'iPad',
     'iPhone',
-    'iPod'
-  ].includes(navigator.platform)
+    'iPod',
+  ].includes(navigator.platform) ||
   // iPad on iOS 13 detection
-  || (navigator.userAgent.includes("Mac") && "ontouchend" in document)
+  (navigator.userAgent.includes('Mac') && 'ontouchend' in document)
 
 /**
  * This component handles fullscreen mode
@@ -60,13 +61,21 @@ export const Container = ({
   useEffect(() => {
     if (nofullscreen || !iOS) {
       document.addEventListener('fullscreenchange', fullscreenChange)
-      document.addEventListener('webkitfullscreenchange', fullscreenChange, false)
+      document.addEventListener(
+        'webkitfullscreenchange',
+        fullscreenChange,
+        false
+      )
     }
 
     return () => {
       if (nofullscreen || !iOS) {
         document.removeEventListener('fullscreenchange', fullscreenChange)
-        document.removeEventListener('webkitfullscreenchange', fullscreenChange, false)
+        document.removeEventListener(
+          'webkitfullscreenchange',
+          fullscreenChange,
+          false
+        )
       }
     }
   }, [])
@@ -85,10 +94,7 @@ export const Container = ({
 
   return (
     <div ref={ref}>
-      <div
-        ref={domElement}
-        className={classes}
-      >
+      <div ref={domElement} className={classes}>
         {interactive && !iOS && !nofullscreen && (
           <div onClick={toggleFullScreen} className={styles.icon}>
             {context.fullscreen ? (

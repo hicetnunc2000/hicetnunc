@@ -6,16 +6,18 @@ import { HTMLWarning } from '../media-types/html/warning'
 import styles from './index.module.scss'
 
 function isHTML(mimeType) {
-  return mimeType === MIMETYPE.ZIP || mimeType === MIMETYPE.ZIP1 || mimeType === MIMETYPE.ZIP2
+  return (
+    mimeType === MIMETYPE.ZIP ||
+    mimeType === MIMETYPE.ZIP1 ||
+    mimeType === MIMETYPE.ZIP2
+  )
 }
 
 export const Preview = ({ title, description, mimeType, uri, tags }) => {
   const t = tags !== '' ? tags.replace(/\s/g, '').split(',') : []
   return (
     <div className={styles.container}>
-      {isHTML(mimeType) && (
-        <HTMLWarning />
-      )}      
+      {isHTML(mimeType) && <HTMLWarning />}
       <div className={styles.media}>
         {renderMediaType({
           mimeType,
