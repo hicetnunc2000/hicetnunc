@@ -4,16 +4,16 @@ import { useParams } from 'react-router-dom'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
 import { GetOBJKT } from '../../data/api'
 import { Loading } from '../../components/loading'
-import { Container, Padding } from '../../components/layout'
+import { Page, Container, Padding } from '../../components/layout'
 import { renderMediaType } from '../../components/media-types'
 import { ItemInfo } from '../../components/item-info'
 import { Button, Primary } from '../../components/button'
 import { Menu } from '../../components/menu'
-import { Info, Owners, Swap, Burn } from './tabs'
+import { Info, Collectors, Swap, Burn } from './tabs'
 
 const TABS = [
   { title: 'info', component: Info },
-  { title: 'collectors', component: Owners },
+  { title: 'collectors', component: Collectors },
   { title: 'swap', component: Swap, private: true },
   { title: 'burn', component: Burn, private: true },
 ]
@@ -43,7 +43,7 @@ export const ObjktDisplay = () => {
   const Tab = TABS[tabIndex].component
 
   return (
-    <>
+    <Page title={nft?.token_info.name}>
       {loading && (
         <Container>
           <Loading />
@@ -83,6 +83,6 @@ export const ObjktDisplay = () => {
           <Tab {...nft} address={address} />
         </>
       )}
-    </>
+    </Page>
   )
 }

@@ -4,7 +4,6 @@ import HicetnuncContextProvider from './context/HicetnuncContext'
 import { getInitialData } from './data/api'
 import { Header } from './components/header'
 import { Loading as Preloading } from './components/loading'
-import { Page } from './components/layout'
 import { routes } from './routes'
 
 const App = () => {
@@ -25,17 +24,8 @@ const App = () => {
     <HicetnuncContextProvider>
       <Header />
       <Switch>
-        {routes.map(({ title, exact, path, component: Comp }) => (
-          <Route
-            path={path}
-            exact={exact}
-            key={path}
-            render={() => (
-              <Page title={title}>
-                <Comp />
-              </Page>
-            )}
-          />
+        {routes.map(({ exact, path, component: Comp }) => (
+          <Route path={path} exact={exact} key={path} component={Comp} />
         ))}
       </Switch>
     </HicetnuncContextProvider>
