@@ -56,6 +56,8 @@ export const Container = ({
     } else {
       context.setFullscreen(false)
     }
+    console.log('resize')
+    window.dispatchEvent(new Event('resize'))
   }
 
   useEffect(() => {
