@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, PrimaryButton, PurchaseButton } from '../button'
+import { PrimaryButton, PurchaseButton } from '../button'
 import { walletPreview } from '../../utils/string'
 import styles from './index.module.scss'
 

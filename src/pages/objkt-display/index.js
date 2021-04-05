@@ -7,7 +7,7 @@ import { Loading } from '../../components/loading'
 import { Page, Container, Padding } from '../../components/layout'
 import { renderMediaType } from '../../components/media-types'
 import { ItemInfo } from '../../components/item-info'
-import { Button, PrimaryButton } from '../../components/button'
+import { PrimaryButton } from '../../components/button'
 import { Menu } from '../../components/menu'
 import { Info, Collectors, Swap, Burn } from './tabs'
 

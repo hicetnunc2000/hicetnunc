@@ -1,6 +1,6 @@
 import React from 'react'
 import { Container, Padding } from '../../../components/layout'
-import { Button, PrimaryButton } from '../../../components/button'
+import { PrimaryButton } from '../../../components/button'
 import { Tags } from '../../../components/tags'
 
 export const Info = ({ token_info }) => {

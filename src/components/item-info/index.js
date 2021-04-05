@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
 import { PATH } from '../../constants'
-import { Button, PrimaryButton, PurchaseButton, CurateButton } from '../button'
+import { PrimaryButton, PurchaseButton, CurateButton } from '../button'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
 import { walletPreview } from '../../utils/string'
 import styles from './index.module.scss'
@@ -18,7 +18,7 @@ export const ItemInfo = ({
   total_amount,
   isDetailView,
 }) => {
-  const { syncTaquito, collect, curate, acc } = useContext(HicetnuncContext)
+  const { syncTaquito, collect, acc } = useContext(HicetnuncContext)
 
   /*  let available = 0
   if (owners !== undefined) {
