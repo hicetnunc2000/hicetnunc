@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
 import { Footer } from '../footer'
 import { Container, Padding } from '../layout'
-import { Button, Primary } from '../button'
+import { Button, PrimaryButton } from '../button'
 import { fadeIn } from '../../utils/motion'
 import { Menu } from '../icons'
 import { walletPreview } from '../../utils/string'
@@ -88,9 +88,7 @@ export const Header = () => {
           </Button>
 
           <div className={styles.right}>
-            <Button onClick={handleSyncUnsync} secondary>
-              <Primary>{button}</Primary>
-            </Button>
+            <PrimaryButton onClick={handleSyncUnsync} secondary>{button}</PrimaryButton>
 
             <Button onClick={context.toogleNavbar} secondary>
               <VisuallyHidden>
@@ -110,31 +108,21 @@ export const Header = () => {
                 <nav className={styles.content}>
                   <ul>
                     <li>
-                      <Button onClick={() => handleRoute('/hdao')}>
-                        <Primary>○</Primary>
-                      </Button>
+                      <PrimaryButton onClick={() => handleRoute('/hdao')}>○</PrimaryButton>
                     </li>
                     <li>
-                      <Button onClick={() => handleRoute('/random')}>
-                        <Primary>random</Primary>
-                      </Button>
+                      <PrimaryButton onClick={() => handleRoute('/random')}>random</PrimaryButton>
                     </li>
                     <li>
-                      <Button onClick={() => handleRoute('/mint')}>
-                        <Primary>
-                          OBJKTs<i style={{ fontSize: '15px' }}>(mint NFTs)</i>
-                        </Primary>
-                      </Button>
+                      <PrimaryButton onClick={() => handleRoute('/mint')}>
+                        OBJKTs<i style={{ fontSize: '15px' }}>(mint NFTs)</i>
+                      </PrimaryButton>
                     </li>
                     <li>
-                      <Button onClick={() => handleRoute('/sync')}>
-                        <Primary>manage assets</Primary>
-                      </Button>
+                      <PrimaryButton onClick={() => handleRoute('/sync')}>manage assets</PrimaryButton>
                     </li>
                     <li>
-                      <Button onClick={() => handleRoute('/about')}>
-                        <Primary>about</Primary>
-                      </Button>
+                      <PrimaryButton onClick={() => handleRoute('/about')}>about</PrimaryButton>
                     </li>
                   </ul>
                 </nav>

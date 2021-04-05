@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react'
 import { HicetnuncContext } from '../../../context/HicetnuncContext'
 import { Container, Padding } from '../../../components/layout'
-import { Button, Curate } from '../../../components/button'
+import { ActionButton } from '../../../components/button'
 import { Loading } from '../../../components/loading'
 // README: commented some code out displaying errors and logs.
 // adding warning saying burning is temporary disabled.
@@ -58,9 +58,7 @@ export const Burn = (props) => {
       </Container>
       <Container>
         <Padding>
-          <Button onClick={handleSubmit} fit>
-            <Curate>burn it</Curate>
-          </Button>
+          <ActionButton onClick={handleSubmit} fit>burn it</ActionButton>
           <div>
             <p>{message}</p>
             {progress && <Loading />}

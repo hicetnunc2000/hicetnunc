@@ -7,7 +7,7 @@ import { Loading } from '../../components/loading'
 import { Page, Container, Padding } from '../../components/layout'
 import { renderMediaType } from '../../components/media-types'
 import { ItemInfo } from '../../components/item-info'
-import { Button, Primary } from '../../components/button'
+import { PrimaryButton } from '../../components/button'
 import { Menu } from '../../components/menu'
 import { Info, Collectors, Swap, Burn } from './tabs'
 
@@ -72,9 +72,11 @@ export const ObjktDisplay = () => {
             <Padding>
               <Menu>
                 {TABS.map(({ title }, index) => (
-                  <Button key={title} onClick={() => setTabIndex(index)}>
-                    <Primary selected={tabIndex === index}>{title}</Primary>
-                  </Button>
+                  <PrimaryButton
+                    key={title}
+                    onClick={() => setTabIndex(index)}
+                    selected={tabIndex === index}
+                  >{title}</PrimaryButton>
                 ))}
               </Menu>
             </Padding>

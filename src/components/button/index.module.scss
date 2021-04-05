@@ -40,16 +40,7 @@
   }
 }
 
-.purchase {
-  padding: 2px 6px;
-  color: var(--text-color);
-  border-right: 2px solid var(--text-color);
-  border-bottom: 2px solid var(--text-color);
-  transition: border-color #{$theme-duration} ease-out,
-    color #{$theme-duration} ease-out;
-}
-
-.curate {
+.action {
   opacity: inherit;
   margin-bottom: 10px;
   cursor: pointer;
@@ -58,6 +49,15 @@
   width: 100%;
   color: black; // this colour doesnt change
   background-color: rgb(239, 239, 239);
+  border-right: 2px solid var(--text-color);
+  border-bottom: 2px solid var(--text-color);
+  transition: border-color #{$theme-duration} ease-out,
+    color #{$theme-duration} ease-out;
+}
+
+.purchase {
+  padding: 2px 6px;
+  color: var(--text-color);
   border-right: 2px solid var(--text-color);
   border-bottom: 2px solid var(--text-color);
   transition: border-color #{$theme-duration} ease-out,
@@ -75,4 +75,10 @@
   border-right: 2px solid var(--text-color);
   border-bottom: 2px solid var(--text-color);
   transition: border-color #{$theme-duration} ease-out;
+}
+
+.curate {
+  color: #000;
+  color: var(--text-color);
+  transition: color .5s ease-out;
 }

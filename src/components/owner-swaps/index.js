@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Primary, Purchase } from '../button'
+import { PrimaryButton, PurchaseButton } from '../button'
 import { walletPreview } from '../../utils/string'
 import styles from './index.module.scss'
 
@@ -10,23 +10,15 @@ export const OwnerSwaps = ({ swaps, handleCollect, acc, cancel }) => (
         <div key={`${swap.swap_id}-${index}`} className={styles.swap}>
           <div className={styles.issuer}>
             {swap.objkt_amount} x&nbsp;
-            <Button to={`/tz/${swap.issuer}`}>
-              <Primary>{walletPreview(swap.issuer)}</Primary>
-            </Button>
+            <PrimaryButton to={`/tz/${swap.issuer}`}>{walletPreview(swap.issuer)}</PrimaryButton>
           </div>
 
           <div className={styles.buttons}>
-            <Button
-              onClick={() => handleCollect(swap.swap_id, swap.xtz_per_objkt)}
-            >
-              <Purchase>
-                collect for {parseFloat(swap.xtz_per_objkt / 1000000)} tez
-              </Purchase>
-            </Button>
+            <PurchaseButton onClick={() => handleCollect(swap.swap_id, swap.xtz_per_objkt)}>
+              collect for {parseFloat(swap.xtz_per_objkt / 1000000)} tez
+            </PurchaseButton>
             {swap.issuer === (acc !== undefined ? acc.address : '') && (
-              <Button onClick={() => cancel(swap.swap_id)}>
-                <Purchase>cancel</Purchase>
-              </Button>
+              <PurchaseButton onClick={() => cancel(swap.swap_id)}>cancel</PurchaseButton>
             )}
           </div>
         </div>

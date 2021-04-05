@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
 import { PATH } from '../../constants'
-import { Button, Primary, Purchase } from '../button'
+import { PrimaryButton, PurchaseButton, CurateButton } from '../button'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
 import { walletPreview } from '../../utils/string'
 import styles from './index.module.scss'
@@ -18,7 +18,7 @@ export const ItemInfo = ({
   total_amount,
   isDetailView,
 }) => {
-  const { syncTaquito, collect, curate, acc } = useContext(HicetnuncContext)
+  const { syncTaquito, collect, acc } = useContext(HicetnuncContext)
 
   /*  let available = 0
   if (owners !== undefined) {
@@ -59,9 +59,7 @@ export const ItemInfo = ({
         <div className={styles.edition}>
           <div className={styles.inline}>
             <p>Issuer:&nbsp;</p>
-            <Button to={`${PATH.ISSUER}/${token_info.creators[0]}`}>
-              <Primary>{walletPreview(token_info.creators[0])}</Primary>
-            </Button>
+            <PrimaryButton to={`${PATH.ISSUER}/${token_info.creators[0]}`}>{walletPreview(token_info.creators[0])}</PrimaryButton>
           </div>
           {!feed && (
             <div>
@@ -85,35 +83,25 @@ export const ItemInfo = ({
         {isDetailView ? (
           <p>OBJKT#{token_id}</p>
         ) : (
-          <Button to={`${PATH.OBJKT}/${token_id}`} disabled={isDetailView}>
-            <Primary>OBJKT#{token_id}</Primary>
-          </Button>
+          <PrimaryButton to={`${PATH.OBJKT}/${token_id}`} disabled={isDetailView}>OBJKT#{token_id}</PrimaryButton>
         )}
         {feed ? (
           <div>
-            <Button onClick={() => curate(token_id)}>
-              <Primary>〇</Primary>
-            </Button>
+            <CurateButton tokenId={token_id} />
           </div>
         ) : (
-          <Button onClick={() => handleCollect()}>
-            <Purchase>{message}</Purchase>
-          </Button>
+          <PurchaseButton onClick={() => handleCollect()}>{message}</PurchaseButton>
         )}
       </div>
       <div className={styles.container}>
         {!feed && (
           <div>
-            <Button onClick={() => curate(token_id)}>
-              <Primary>〇</Primary>
-            </Button>
+            <CurateButton tokenId={token_id} />
           </div>
         )}
         <div>
           {false && (
-            <Button onClick={() => alert('report')}>
-              <Primary>Report</Primary>
-            </Button>
+            <PrimaryButton onClick={() => alert('report')}>Report</PrimaryButton>
           )}
         </div>
       </div>
