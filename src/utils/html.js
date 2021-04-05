@@ -205,21 +205,6 @@ export function injectCSPMetaTagIntoHTML(html) {
   return `<!DOCTYPE html><html>${doc.documentElement.innerHTML}</html>`
 }
 
-export function getCoverImagePathFromBuffer(buffer) {
-  // buffer -> html
-  const html = new TextDecoder().decode(buffer)
-
-  // html -> doc
-  const parser = new DOMParser()
-  const doc = parser.parseFromString(html, 'text/html')
-
-  const meta = doc.querySelector('meta[property="og:image"]')
-
-  if (!meta) return null
-
-  return meta.getAttribute('content')
-}
-
 export function dataRUIToBuffer(dataURI) {
   const parts = dataURI.split(',')
   const base64 = parts[1]
