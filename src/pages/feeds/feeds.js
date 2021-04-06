@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
-import { GetLatestFeed, GethDAOFeed, GetRandomFeed } from '../../data/api'
+import { GetLatestFeed, GethDAOFeed, GetRandomFeed, GetFeaturedFeed } from '../../data/api'
 import { Page, Container, Padding } from '../../components/layout'
 import { FeedItem } from '../../components/feed-item'
 import { Loading } from '../../components/loading'
@@ -52,6 +52,21 @@ export const Feeds = ({ type = 0 }) => {
         })
     } else if (type === 2) {
       GetRandomFeed({ counter: count })
+        .then((result) => {
+          // filtered isn't guaranteed to always be 10. if we're filtering they might be less.
+          const next = items.concat(result)
+          setItems(next)
+
+          // if original returns less than 10, then there's no more data coming from API
+          if (result.length < 10) {
+            setHasMore(false)
+          }
+        })
+        .catch((e) => {
+          setError(true)
+        })
+    } else if (type === 3) {
+      GetFeaturedFeed({ counter: count })
         .then((result) => {
           // filtered isn't guaranteed to always be 10. if we're filtering they might be less.
           const next = items.concat(result)

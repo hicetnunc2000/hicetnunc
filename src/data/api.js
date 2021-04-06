@@ -71,6 +71,20 @@ export const GethDAOFeed = async ({ counter }) => {
       })
   })
 }
+
+/**
+ * Gets Feed for Featured
+ */
+export const GetFeaturedFeed = async ({ counter }) => {
+  return new Promise((resolve, reject) => {
+    axios
+      .post(process.env.REACT_APP_FEATURED, { counter: counter })
+      .then((res) => {
+        resolve(filterFeeds(res.data.result))
+      })
+  })
+}
+
 /**
  * Get Random Feed
  */
