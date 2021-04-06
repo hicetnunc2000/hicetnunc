@@ -25,7 +25,7 @@ export const Swap = ({ total_amount, owners, token_info, address }) => {
       setMessage('generating swap')
       // swap is valid call API
       console.log(amount, id, price)
-      swap(parseFloat(amount), id, parseFloat(price * 1000000))
+      swap(parseFloat(amount), id, parseFloat(price) * 1000000)
         .then((e) => {
           // when taquito returns a success/fail message
           setProgress(false)
