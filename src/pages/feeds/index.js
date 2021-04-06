@@ -11,3 +11,7 @@ export const Hdao = () => {
 export const Random = () => {
   return <Feeds type={2} />
 }
+
+export const Featured = () => {
+  return <Feeds type={3} />
+}
