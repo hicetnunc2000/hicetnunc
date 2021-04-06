@@ -11,7 +11,8 @@ export const Input = ({
   onChange = () => null,
   disabled,
   label,
-  helpText
+  helpText,
+  value
 }) => {
   return (
     <div className={styles.container}>
@@ -25,6 +26,7 @@ export const Input = ({
           maxLength={maxlength}
           onChange={onChange}
           disabled={disabled}
+          value={value}
         ></input>
         <div className={styles.helpText}>{helpText}</div>
       </label>

@@ -120,12 +120,14 @@ export const Mint = () => {
                 type="text"
                 onChange={(e) => setTitle(e.target.value)}
                 label="TITLE"
+                value={title}
               />
 
               <Input
                 type="text"
                 onChange={(e) => setDescription(e.target.value)}
                 label="DESCRIPTION"
+                value={description}
               />
 
               <Input
@@ -133,6 +135,7 @@ export const Mint = () => {
                 onChange={(e) => setTags(e.target.value)}
                 label="TAGS"
                 helpText="tags (comma separated. example: illustration, digital, crypto)"
+                value={tags}
               />
 
               <Input
@@ -141,6 +144,7 @@ export const Mint = () => {
                 onChange={(e) => setAmount(e.target.value)}
                 label="QUANTITY"
                 helpText="number of OBJKTs to mint"
+                value={amount}
               />
 
               <Input
@@ -150,6 +154,7 @@ export const Mint = () => {
                 onChange={(e) => setRoyalties(e.target.value)}
                 label="ROYALTY"
                 helpText="your royalties after each sale (between 0-25%)"
+                value={royalties}
               />
             </Padding>
           </Container>
