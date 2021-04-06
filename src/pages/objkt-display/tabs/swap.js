@@ -47,8 +47,7 @@ export const Swap = ({ total_amount, owners, token_info, address }) => {
         <Padding>
           <Input
             type="number"
-            label="QUANTITY"
-            helpText="number of OBJKTs"
+            placeholder="OBJKT amount"
             min={1}
             defaultValue={amount}
             max={total_amount - sales}
@@ -57,8 +56,7 @@ export const Swap = ({ total_amount, owners, token_info, address }) => {
           />
           <Input
             type="number"
-            label="PRICE"
-            helpText="price per OBJKT (in tez)"
+            placeholder="price per OBJKT (in tex)"
             min={0}
             max={10000}
             onChange={(e) => setPrice(e.target.value)}
