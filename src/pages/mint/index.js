@@ -204,7 +204,7 @@ export const Mint = () => {
           <Container>
             <Padding>
               <Button onClick={handleMint} fit>
-                <Curate>mint</Curate>
+                <Curate>mint {amount} OBJKTs</Curate>
               </Button>
             </Padding>
           </Container>

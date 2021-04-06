@@ -131,6 +131,9 @@ export default class HicetnuncContextProvider extends Component {
                 this.setState({ op: op.hash })
               })
             )
+            .catch(err => {
+              reject(err)
+            })
         })
       },
 
