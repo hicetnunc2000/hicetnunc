@@ -76,7 +76,10 @@ export const ALLOWED_FILETYPES_LABEL = ALLOWED_FILETYPES.filter(
 export const ALLOWED_COVER_MIMETYPES = [
   MIMETYPE.JPEG,
   MIMETYPE.PNG,
-  MIMETYPE.GIF
+  MIMETYPE.GIF,
 ]
 
 export const ALLOWED_COVER_FILETYPES_LABEL = ['jpeg, png, gif']
+
+export const IPFS_DISPLAY_URI_BLACKCIRCLE =
+  'ipfs://QmNrhZHUaEqxhyLfqoq1mtHSipkWHeT31LNHb1QEbDHgnc'

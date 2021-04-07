@@ -1,4 +1,7 @@
-import { IPFS_DIRECTORY_MIMETYPE } from '../constants'
+import {
+  IPFS_DIRECTORY_MIMETYPE,
+  IPFS_DISPLAY_URI_BLACKCIRCLE,
+} from '../constants'
 
 const createClient = require('ipfs-http-client')
 const Buffer = require('buffer').Buffer
@@ -94,8 +97,7 @@ async function uploadFilesToDirectory(files) {
   files.forEach((file) => {
     form.append('file', file.blob, encodeURIComponent(file.path))
   })
-  const endpoint =
-    `${infuraUrl}/api/v0/add?pin=true&recursive=true&wrap-with-directory=true`
+  const endpoint = `${infuraUrl}/api/v0/add?pin=true&recursive=true&wrap-with-directory=true`
   const res = await axios.post(endpoint, form, {
     headers: { 'Content-Type': 'multipart/form-data' },
   })
@@ -114,7 +116,7 @@ async function uploadMetadataFile({
   address,
   mimeType,
   displayUri = '',
-  thumbnailUri = 'ipfs://QmNrhZHUaEqxhyLfqoq1mtHSipkWHeT31LNHb1QEbDHgnc'
+  thumbnailUri = IPFS_DISPLAY_URI_BLACKCIRCLE,
 }) {
   const ipfs = createClient(infuraUrl)
 
