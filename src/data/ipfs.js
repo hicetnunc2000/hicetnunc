@@ -1,10 +1,14 @@
-import { IPFS_DIRECTORY_MIMETYPE } from '../constants'
+import {
+  IPFS_DIRECTORY_MIMETYPE,
+  IPFS_DISPLAY_URI_BLACKCIRCLE,
+} from '../constants'
 
 const createClient = require('ipfs-http-client')
 const Buffer = require('buffer').Buffer
 const axios = require('axios')
 const readJsonLines = require('read-json-lines-sync').default
-const { getCoverImagePathFromBuffer } = require('../utils/html')
+
+const infuraUrl = 'https://ipfs.infura.io:5001'
 
 export const prepareFile = async ({
   name,
@@ -13,11 +17,25 @@ export const prepareFile = async ({
   address,
   buffer,
   mimeType,
+  cover,
+  thumbnail,
 }) => {
-  const ipfs = createClient('https://ipfs.infura.io:5001')
+  const ipfs = createClient(infuraUrl)
+
+  // upload main file
   const info = await ipfs.add(buffer)
   const hash = info.path
   const cid = `ipfs://${hash}`
+
+  // upload cover image
+  const coverInfo = await ipfs.add(cover.buffer)
+  const coverHash = coverInfo.path
+  const displayUri = `ipfs://${coverHash}`
+
+  // upload thumbnail image
+  const thumbnailInfo = await ipfs.add(thumbnail.buffer)
+  const thumbnailHash = thumbnailInfo.path
+  const thumbnailUri = `ipfs://${thumbnailHash}`
 
   return await uploadMetadataFile({
     name,
@@ -26,6 +44,8 @@ export const prepareFile = async ({
     cid,
     address,
     mimeType,
+    displayUri,
+    thumbnailUri,
   })
 }
 
@@ -35,11 +55,23 @@ export const prepareDirectory = async ({
   tags,
   address,
   files,
+  cover,
+  thumbnail,
 }) => {
-  // upload files
-  const hashes = await uploadFilesToDirectory(files)
-  const cid = `ipfs://${hashes.directory}`
-  const displayUri = hashes.cover ? `ipfs://${hashes.cover}` : ''
+  // upload directory of files
+  const dirHash = await uploadFilesToDirectory(files)
+  const cid = `ipfs://${dirHash}`
+
+  // upload cover image
+  const ipfs = createClient(infuraUrl)
+  const coverInfo = await ipfs.add(cover.buffer)
+  const coverHash = coverInfo.path
+  const displayUri = `ipfs://${coverHash}`
+
+  // upload thumbnail image
+  const thumbnailInfo = await ipfs.add(thumbnail.buffer)
+  const thumbnailHash = thumbnailInfo.path
+  const thumbnailUri = `ipfs://${thumbnailHash}`
 
   return await uploadMetadataFile({
     name,
@@ -49,6 +81,7 @@ export const prepareDirectory = async ({
     address,
     mimeType: IPFS_DIRECTORY_MIMETYPE,
     displayUri,
+    thumbnailUri,
   })
 }
 
@@ -64,33 +97,15 @@ async function uploadFilesToDirectory(files) {
   files.forEach((file) => {
     form.append('file', file.blob, encodeURIComponent(file.path))
   })
-  const endpoint =
-    'https://ipfs.infura.io:5001/api/v0/add?pin=true&recursive=true&wrap-with-directory=true'
+  const endpoint = `${infuraUrl}/api/v0/add?pin=true&recursive=true&wrap-with-directory=true`
   const res = await axios.post(endpoint, form, {
     headers: { 'Content-Type': 'multipart/form-data' },
   })
 
   const data = readJsonLines(res.data)
-
-  // get cover hash if it exists
-  let cover = null
-  const indexFile = files.find((f) => f.path === 'index.html')
-  if (indexFile) {
-    const indexBuffer = await indexFile.blob.arrayBuffer()
-    const coverImagePath = getCoverImagePathFromBuffer(indexBuffer)
-
-    if (coverImagePath) {
-      const coverEntry = data.find((f) => f.Name === coverImagePath)
-      if (coverEntry) {
-        cover = coverEntry.Hash
-      }
-    }
-  }
-
   const rootDir = data.find((e) => e.Name === '')
-  const directory = rootDir.Hash
 
-  return { directory, cover }
+  return rootDir.Hash
 }
 
 async function uploadMetadataFile({
@@ -101,8 +116,9 @@ async function uploadMetadataFile({
   address,
   mimeType,
   displayUri = '',
+  thumbnailUri = IPFS_DISPLAY_URI_BLACKCIRCLE,
 }) {
-  const ipfs = createClient('https://ipfs.infura.io:5001')
+  const ipfs = createClient(infuraUrl)
 
   return await ipfs.add(
     Buffer.from(
@@ -113,9 +129,9 @@ async function uploadMetadataFile({
         symbol: 'OBJKT',
         artifactUri: cid,
         displayUri,
+        thumbnailUri,
         creators: [address],
         formats: [{ uri: cid, mimeType }],
-        thumbnailUri: 'ipfs://QmNrhZHUaEqxhyLfqoq1mtHSipkWHeT31LNHb1QEbDHgnc',
         decimals: 0,
         isBooleanAmount: false,
         shouldPreferSymbol: false,
