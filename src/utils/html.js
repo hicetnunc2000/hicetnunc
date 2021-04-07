@@ -197,12 +197,87 @@ export function injectCSPMetaTagIntoHTML(html) {
       *;
     worker-src
       'self'
-      'unsafe-inline';">
+      'unsafe-inline'
+      blob:;">
   `
   )
 
   // doc -> HTML
   return `<!DOCTYPE html><html>${doc.documentElement.innerHTML}</html>`
+}
+
+export function getCoverImagePathFromBuffer(buffer) {
+  // buffer -> html
+  const html = new TextDecoder().decode(buffer)
+
+  // html -> doc
+  const parser = new DOMParser()
+  const doc = parser.parseFromString(html, 'text/html')
+
+  return getCoverImagePathFromDoc(doc)
+}
+
+function getCoverImagePathFromDoc(doc) {
+  let meta = doc.head.querySelector('meta[property="cover-image"]')
+  if (!meta) {
+    meta = doc.head.querySelector('meta[property="og:image"]')
+  }
+
+  if (!meta) return null
+
+  return meta.getAttribute('content')
+}
+
+export async function validateFiles(files) {
+  // check for index.html file
+  if (!files['index.html']) {
+    return {
+      valid: false,
+      error: 'Missing index.html file',
+    }
+  }
+
+  const pageBlob = files['index.html']
+  let htmlString = await pageBlob.text()
+  const parser = new DOMParser()
+  const doc = parser.parseFromString(htmlString, 'text/html')
+
+  // check for <head> tag
+  if (!doc.head) {
+    return {
+      valid: false,
+      error:
+        'Missing <head> tag in index.html. Please refer to the Interactive OBJKTs Guide..',
+    }
+  }
+
+  // check for cover image
+  // TODO: remove this once we switch to cover imgae upload
+  let coverImagePath = getCoverImagePathFromDoc(doc)
+  if (!coverImagePath) {
+    return {
+      valid: false,
+      error:
+        'Missing cover image <meta> tag in index.html. Please refer to the Interactive OBJKTs Guide.',
+    }
+  }
+
+  // check for cover image itself
+  // TODO: remove this once we switch to cover imgae upload
+  if (coverImagePath.indexOf('./') === 0) {
+    coverImagePath = coverImagePath.replace('./', '')
+  }
+
+  if (!files[coverImagePath]) {
+    return {
+      valid: false,
+      error: `Missing cover image ${coverImagePath}. Please refer to the Interactive OBJKTs Guide.`,
+    }
+  }
+
+  return {
+    valid: true,
+  }
 }
 
 export function dataRUIToBuffer(dataURI) {
