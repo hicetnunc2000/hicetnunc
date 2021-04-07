@@ -39,14 +39,12 @@ export const Mint = () => {
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
   const [tags, setTags] = useState('')
-  const [amount, setAmount] = useState(1)
-  const [royalties, setRoyalties] = useState(10)
+  const [amount, setAmount] = useState()
+  const [royalties, setRoyalties] = useState()
   const [file, setFile] = useState() // the uploaded file
   const [cover, setCover] = useState() // the uploaded or generated cover image
   const [thumbnail, setThumbnail] = useState() // the uploaded or generated cover image
-
   const [message, setMessage] = useState('')
-
   const [needsCover, setNeedsCover] = useState('')
 
   const handleMint = async () => {
@@ -125,7 +123,7 @@ export const Mint = () => {
   const handleFileUpload = async (props) => {
     setFile(props)
 
-    if(props.mimeType.indexOf('image') === 0) {
+    if (props.mimeType.indexOf('image') === 0) {
       setNeedsCover(false)
       const cover = await generateCompressedImage(props, coverOptions)
       setCover(cover)
@@ -154,7 +152,7 @@ export const Mint = () => {
         },
         error(err) {
           reject(err)
-        }
+        },
       })
     })
   }
@@ -163,7 +161,7 @@ export const Mint = () => {
     return new Promise((resolve, reject) => {
       let reader = new FileReader()
       reader.onerror = reject
-      reader.onload = (e) => resolve(reader.result);
+      reader.onload = (e) => resolve(reader.result)
       reader.readAsDataURL(blob)
     })
   }
@@ -244,7 +242,7 @@ export const Mint = () => {
             <Container>
               <Padding>
                 <Upload
-                  label="Upload Cover Image"
+                  label="Upload cover image"
                   allowedTypes={ALLOWED_COVER_MIMETYPES}
                   allowedTypesLabel={ALLOWED_COVER_FILETYPES_LABEL}
                   onChange={handleCoverUpload}
