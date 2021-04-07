@@ -17,13 +17,9 @@ const axios = require('axios')
  */
 export const getInitialData = () => {
   const language = getItem('language') || setItem('language', 'en')
-  const langRoot =
-    process.env.NODE_ENV === 'development'
-      ? '/languages'
-      : 'https://raw.githubusercontent.com/hicetnunc2000/hicetnunc/main/languages'
 
   return Promise.all([
-    axios.get(`${langRoot}/${language}.json`), // loads language file
+    axios.get(`/languages/${language}.json`), // loads language file
     axios.get(process.env.REACT_APP_BLOCKLIST_OBJKT), // loads blocked objkt
     axios.get(process.env.REACT_APP_BLOCKLIST_WALLET), // loads blocked wallets
     axios.get(process.env.REACT_APP_BLOCKLIST_BAN), // blocked wallets (dont allow to visualise in /tz/walletid)

@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { GetLatestFeed, GethDAOFeed, GetRandomFeed } from '../../data/api'
-import { Container, Padding } from '../../components/layout'
+import { Page, Container, Padding } from '../../components/layout'
 import { FeedItem } from '../../components/feed-item'
 import { Loading } from '../../components/loading'
 
@@ -69,7 +69,7 @@ export const Feeds = ({ type = 0 }) => {
   }, [count, type])
 
   return (
-    <>
+    <Page title="">
       <InfiniteScroll
         dataLength={items.length}
         next={loadMore}
@@ -94,6 +94,6 @@ export const Feeds = ({ type = 0 }) => {
           <FeedItem key={`${item.token_id}-${index}`} {...item} />
         ))}
       </InfiniteScroll>
-    </>
+    </Page>
   )
 }
