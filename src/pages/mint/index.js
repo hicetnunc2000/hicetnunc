@@ -193,33 +193,38 @@ export const Mint = () => {
                 type="text"
                 onChange={(e) => setTitle(e.target.value)}
                 placeholder="title"
+                value={title}
               />
 
               <Input
                 type="text"
                 onChange={(e) => setDescription(e.target.value)}
                 placeholder="description"
+                value={description}
               />
 
               <Input
                 type="text"
                 onChange={(e) => setTags(e.target.value)}
                 placeholder="tags (comma separated. example: illustration, digital, crypto)"
+                value={tags}
               />
 
               <Input
                 type="number"
                 min={1}
                 onChange={(e) => setAmount(e.target.value)}
-                placeholder="amount"
+                placeholder="quantity"
+                value={amount}
               />
 
               <Input
-                type="royalties"
+                type="number"
                 min={0}
                 max={25}
                 onChange={(e) => setRoyalties(e.target.value)}
                 placeholder="your royalties after each sale (between 0-25%)"
+                value={royalties}
               />
             </Padding>
           </Container>
@@ -287,7 +292,7 @@ export const Mint = () => {
           <Container>
             <Padding>
               <Button onClick={handleMint} fit>
-                <Curate>mint</Curate>
+                <Curate>mint {amount} OBJKTs</Curate>
               </Button>
             </Padding>
           </Container>
