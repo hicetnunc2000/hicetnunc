@@ -56,7 +56,7 @@ export const Swap = ({ total_amount, owners, token_info, address }) => {
           />
           <Input
             type="number"
-            placeholder="price per OBJKT (in tex)"
+            placeholder="price per OBJKT (in tez)"
             min={0}
             max={10000}
             onChange={(e) => setPrice(e.target.value)}
