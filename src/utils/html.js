@@ -233,7 +233,7 @@ export async function validateFiles(files) {
   if (!files['index.html']) {
     return {
       valid: false,
-      error: 'Missing index.html file'
+      error: 'Missing index.html file',
     }
   }
 
@@ -246,7 +246,8 @@ export async function validateFiles(files) {
   if (!doc.head) {
     return {
       valid: false,
-      error: 'Missing <head> tag in index.html. Please refer to the Interactive OBJKTs Guide..'
+      error:
+        'Missing <head> tag in index.html. Please refer to the Interactive OBJKTs Guide..',
     }
   }
 
@@ -256,7 +257,8 @@ export async function validateFiles(files) {
   if (!coverImagePath) {
     return {
       valid: false,
-      error: 'Missing cover image <meta> tag in index.html. Please refer to the Interactive OBJKTs Guide.'
+      error:
+        'Missing cover image <meta> tag in index.html. Please refer to the Interactive OBJKTs Guide.',
     }
   }
 
@@ -269,12 +271,12 @@ export async function validateFiles(files) {
   if (!files[coverImagePath]) {
     return {
       valid: false,
-      error: `Missing cover image ${coverImagePath}. Please refer to the Interactive OBJKTs Guide.`
+      error: `Missing cover image ${coverImagePath}. Please refer to the Interactive OBJKTs Guide.`,
     }
   }
 
   return {
-    valid: true
+    valid: true,
   }
 }
 
