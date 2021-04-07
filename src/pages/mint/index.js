@@ -24,8 +24,8 @@ export const Mint = () => {
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
   const [tags, setTags] = useState('')
-  const [amount, setAmount] = useState(1)
-  const [royalties, setRoyalties] = useState(10)
+  const [amount, setAmount] = useState()
+  const [royalties, setRoyalties] = useState()
   const [file, setFile] = useState() // the uploaded file
 
   const [message, setMessage] = useState('')
