@@ -1,5 +1,4 @@
 import React from 'react'
-import { Padding } from '../layout'
 import { ButtonLanguage } from '../button-language'
 import { ButtonTheme } from '../button-theme'
 import { getLanguage } from '../../constants'
@@ -10,18 +9,18 @@ export const Footer = () => {
 
   return (
     <footer className={styles.container}>
-      <Padding>
+      <div>
         <div className={styles.copy}>{language.footer.mint}</div>
         <div className={styles.buttons}>
           {false && <ButtonLanguage />}
           <ButtonTheme />
         </div>
-      </Padding>
+      </div>
 
       {false && (
-        <Padding>
+        <div>
           <div className={styles.warning}>{language.footer.warning}</div>
-        </Padding>
+        </div>
       )}
     </footer>
   )
