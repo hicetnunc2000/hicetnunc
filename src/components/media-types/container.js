@@ -40,7 +40,7 @@ export const Container = ({
 
   const toggleFullScreen = () => {
     if (!screenfull.isFullscreen) {
-      screenfull.request()
+      screenfull.request(document.documentElement, {navigationUI: 'hide'})
     } else {
       screenfull.exit()
     }
