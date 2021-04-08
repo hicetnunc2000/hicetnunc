@@ -32,6 +32,9 @@ const thumbnailOptions = {
   maxHeight: 350,
 }
 
+// @crzypathwork change to "true" to activate displayUri and thumbnailUri
+const GENERATE_DISPLAY_AND_THUMBNAIL = false
+
 export const Mint = () => {
   const { mint, getAuth, acc, setAccount } = useContext(HicetnuncContext)
   const history = useHistory()
@@ -87,7 +90,7 @@ export const Mint = () => {
         files,
         cover,
         thumbnail,
-        generateDisplayUri: false, // RAFAEL: muda para "true"
+        generateDisplayUri: GENERATE_DISPLAY_AND_THUMBNAIL,
       })
     } else {
       // process all other files
@@ -100,7 +103,7 @@ export const Mint = () => {
         mimeType: file.mimeType,
         cover,
         thumbnail,
-        generateDisplayUri: false, // RAFAEL: muda para "true"
+        generateDisplayUri: GENERATE_DISPLAY_AND_THUMBNAIL,
       })
     }
 
@@ -125,16 +128,17 @@ export const Mint = () => {
   const handleFileUpload = async (props) => {
     setFile(props)
 
-    // RAFAEL: para testar o displayUri uncomment this
-    // if (props.mimeType.indexOf('image') === 0) {
-    //   setNeedsCover(false)
-    //   const cover = await generateCompressedImage(props, coverOptions)
-    //   setCover(cover)
-    //   const thumb = await generateCompressedImage(props, thumbnailOptions)
-    //   setThumbnail(thumb)
-    // } else {
-    //   setNeedsCover(true)
-    // }
+    if (GENERATE_DISPLAY_AND_THUMBNAIL) {
+      if (props.mimeType.indexOf('image') === 0) {
+        setNeedsCover(false)
+        const cover = await generateCompressedImage(props, coverOptions)
+        setCover(cover)
+        const thumb = await generateCompressedImage(props, thumbnailOptions)
+        setThumbnail(thumb)
+      } else {
+        setNeedsCover(true)
+      }
+    }
   }
 
   const generateCompressedImage = async (props, options) => {
@@ -177,10 +181,16 @@ export const Mint = () => {
   }
 
   const handleValidation = () => {
-    console.log('validattion', amount, file, cover, thumbnail, royalties)
-    if (amount > 0 && file && cover && thumbnail && royalties >= 10) {
-      return false
+    if (GENERATE_DISPLAY_AND_THUMBNAIL) {
+      if (amount > 0 && file && cover && thumbnail && royalties >= 10) {
+        return false
+      }
+    } else {
+      if (amount > 0 && file && royalties >= 10) {
+        return false
+      }
     }
+
     return true
   }
 
