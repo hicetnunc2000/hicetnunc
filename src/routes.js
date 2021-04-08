@@ -4,6 +4,7 @@ import Display from './pages/display'
 import { Latest, Hdao, Random } from './pages/feeds'
 import { Mint } from './pages/mint'
 import { ObjktDisplay } from './pages/objkt-display'
+import { Collections } from './pages/collections'
 
 export const routes = [
   {
@@ -45,5 +46,10 @@ export const routes = [
     exact: false,
     path: '/objkt/:id',
     component: ObjktDisplay,
+  },
+  {
+    exact: false,
+    path: '/collections/:id',
+    component: Collections,
   },
 ]
