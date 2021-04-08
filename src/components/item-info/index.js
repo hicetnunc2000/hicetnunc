@@ -21,11 +21,8 @@ export const ItemInfo = ({
 
   let s = _.minBy(swaps, (o) => Number(o.xtz_per_objkt))
 
-  // const soldOutMessage = 'not for sale'
   var message = ''
-  // console.log(acc)
-  // console.log(s, swaps)
-  //const notForSale = available > 0 || isNaN(editions)
+
   try {
     message =
       swaps[0] !== undefined
