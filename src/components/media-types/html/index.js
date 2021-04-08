@@ -2,9 +2,11 @@ import React, { useContext, useState, useRef, useEffect } from 'react'
 import classnames from 'classnames'
 import { HicetnuncContext } from '../../../context/HicetnuncContext'
 import { Button } from '../../button'
-import { dataRUIToBuffer, prepareFilesFromZIP } from '../../../utils/html'
+import { dataRUIToBuffer, prepareFilesFromZIP, validateFiles } from '../../../utils/html'
 import { VisuallyHidden } from '../../visually-hidden'
 import styles from './index.module.scss'
+
+const uid = Math.round(Math.random() * 100000000).toString()
 
 export const HTMLComponent = ({
   src,
@@ -29,7 +31,38 @@ export const HTMLComponent = ({
 
   // preview
   const iframeRef = useRef(null)
-  const uid = Math.round(Math.random() * 100000000).toString()
+  const unpackedFiles = useRef(null)
+  const unpacking = useRef(false)
+  const [validHTML, setValidHTML] = useState(null)
+  const [validationError, setValidationError] = useState(null)
+
+  const unpackZipFiles = async () => {
+    unpacking.current = true
+
+    const buffer = dataRUIToBuffer(src)
+    const filesArr = await prepareFilesFromZIP(buffer)
+    const files = {}
+    filesArr.forEach((f) => {
+      files[f.path] = f.blob
+    })
+
+    unpackedFiles.current = files
+
+    const result = await validateFiles(unpackedFiles.current)
+    if (result.error) {
+      console.error(result.error)
+      setValidationError(result.error)
+    } else {
+      setValidationError(null)
+    }
+    setValidHTML(result.valid)
+
+    unpacking.current = false
+  }
+
+  if (preview && !unpackedFiles.current && !unpacking.current) {
+    unpackZipFiles()
+  }
 
   useEffect(() => {
     const handler = async (event) => {
@@ -37,16 +70,10 @@ export const HTMLComponent = ({
         return
       }
 
-      const buffer = dataRUIToBuffer(src)
-      const filesArr = await prepareFilesFromZIP(buffer)
-      const files = {}
-      filesArr.forEach((f) => {
-        files[f.path] = f.blob
-      })
       iframeRef.current.contentWindow.postMessage(
         {
           target: 'hicetnunc-html-preview',
-          data: files,
+          data: unpackedFiles.current,
         },
         '*'
       )
@@ -55,7 +82,7 @@ export const HTMLComponent = ({
     window.addEventListener('message', handler)
 
     return () => window.removeEventListener('message', handler)
-  }, [uid, src])
+  }, [src])
 
   const classes = classnames({
     [styles.container]: true,
@@ -63,13 +90,10 @@ export const HTMLComponent = ({
   })
 
   if (preview) {
-    // creator is the viewer in preview
+    // creator is viewer in preview
     _creator_ = _viewer_
 
-    console.log('creator', _creator_)
-    console.log('viewer', _viewer_)
-
-    if (src) {
+    if (validHTML) {
       return (
         <div className={classes}>
           <iframe
@@ -80,8 +104,12 @@ export const HTMLComponent = ({
           />
         </div>
       )
-    } else {
-      return <div className={styles.container}>Loading...</div>
+    } else if (validHTML === false) {
+      return (
+        <div className={styles.error}>
+          Preview Error: {validationError}
+        </div>
+      )
     }
   }
 

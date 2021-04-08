@@ -10,18 +10,18 @@ export const Input = ({
   maxlength = 500,
   onChange = () => null,
   disabled,
-}) => {
-  return (
-    <input
-      type={type}
-      placeholder={placeholder}
-      name={name}
-      min={min}
-      max={max}
-      maxLength={maxlength}
-      onChange={onChange}
-      className={styles.container}
-      disabled={disabled}
-    ></input>
-  )
-}
+  value,
+}) => (
+  <input
+    type={type}
+    placeholder={placeholder}
+    name={name}
+    min={min}
+    max={max}
+    maxLength={maxlength}
+    defaultValue={value}
+    onChange={onChange}
+    className={styles.container}
+    disabled={disabled}
+  />
+)

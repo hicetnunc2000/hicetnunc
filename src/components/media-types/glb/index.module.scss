@@ -21,4 +21,16 @@
     left: 50%;
     transform: translateX(-50%) translateY(-50%);
   }
+
+  .arButton {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    color: var(--text-color);
+    background-color: transparent;
+    border-radius: 4px;
+    border: 2px solid var(--text-color);
+    padding: 4px 8px;
+    cursor: pointer;
+  }
 }
