@@ -20,7 +20,7 @@ const TABS = [
 
 export const ObjktDisplay = () => {
   const { id } = useParams()
-  const { acc, setAccount } = useContext(HicetnuncContext)
+  const context = useContext(HicetnuncContext)
 
   const [loading, setLoading] = useState(true)
   const [tabIndex, setTabIndex] = useState(0)
@@ -29,11 +29,11 @@ export const ObjktDisplay = () => {
 
   useEffect(() => {
     GetOBJKT({ id }).then(async (objkt) => {
-      await setAccount()
+      await context.setAccount()
       setNFT(objkt)
 
       try {
-        setAddress(acc.address)
+        setAddress(context.acc.address)
       } catch (e) {}
 
       setLoading(false)
@@ -71,11 +71,18 @@ export const ObjktDisplay = () => {
           <Container>
             <Padding>
               <Menu>
-                {TABS.map(({ title }, index) => (
-                  <Button key={title} onClick={() => setTabIndex(index)}>
-                    <Primary selected={tabIndex === index}>{title}</Primary>
-                  </Button>
-                ))}
+                {TABS.map((tab, index) => {
+                  if (tab.private && nft.token_info.creators[0] !== address) {
+                    return null
+                  }
+                  return (
+                    <Button key={tab.title} onClick={() => setTabIndex(index)}>
+                      <Primary selected={tabIndex === index}>
+                        {tab.title}
+                      </Primary>
+                    </Button>
+                  )
+                })}
               </Menu>
             </Padding>
           </Container>
