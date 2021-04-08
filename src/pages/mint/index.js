@@ -1,5 +1,6 @@
 import React, { useContext, useState } from 'react'
 import { useHistory } from 'react-router'
+import Compressor from 'compressorjs'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
 import { Page, Container, Padding } from '../../components/layout'
 import { Input } from '../../components/input'
@@ -12,10 +13,24 @@ import { prepareFilesFromZIP } from '../../utils/html'
 import {
   ALLOWED_MIMETYPES,
   ALLOWED_FILETYPES_LABEL,
+  ALLOWED_COVER_MIMETYPES,
+  ALLOWED_COVER_FILETYPES_LABEL,
   MINT_FILESIZE,
   MIMETYPE,
   PATH,
 } from '../../constants'
+
+const coverOptions = {
+  quality: 0.85,
+  maxWidth: 1200,
+  maxHeight: 1200,
+}
+
+const thumbnailOptions = {
+  quality: 0.85,
+  maxWidth: 350,
+  maxHeight: 350,
+}
 
 export const Mint = () => {
   const { mint, getAuth, acc, setAccount } = useContext(HicetnuncContext)
@@ -24,11 +39,13 @@ export const Mint = () => {
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
   const [tags, setTags] = useState('')
-  const [amount, setAmount] = useState(1)
-  const [royalties, setRoyalties] = useState(10)
+  const [amount, setAmount] = useState()
+  const [royalties, setRoyalties] = useState()
   const [file, setFile] = useState() // the uploaded file
-
+  const [cover, setCover] = useState() // the uploaded or generated cover image
+  const [thumbnail, setThumbnail] = useState() // the uploaded or generated cover image
   const [message, setMessage] = useState('')
+  const [needsCover, setNeedsCover] = useState('')
 
   const handleMint = async () => {
     setAccount()
@@ -68,6 +85,8 @@ export const Mint = () => {
         tags,
         address: acc.address,
         files,
+        cover,
+        thumbnail,
       })
     } else {
       // process all other files
@@ -78,6 +97,8 @@ export const Mint = () => {
         address: acc.address,
         buffer: file.buffer,
         mimeType: file.mimeType,
+        cover,
+        thumbnail,
       })
     }
 
@@ -99,12 +120,62 @@ export const Mint = () => {
     setStep(1)
   }
 
-  const handleFileUpload = (props) => {
+  const handleFileUpload = async (props) => {
     setFile(props)
+
+    if (props.mimeType.indexOf('image') === 0) {
+      setNeedsCover(false)
+      const cover = await generateCompressedImage(props, coverOptions)
+      setCover(cover)
+
+      const thumb = await generateCompressedImage(props, thumbnailOptions)
+      setThumbnail(thumb)
+    } else {
+      setNeedsCover(true)
+    }
+  }
+
+  const generateCompressedImage = async (props, options) => {
+    const blob = await compressImage(props.file, options)
+    const mimeType = blob.type
+    const buffer = await blob.arrayBuffer()
+    const reader = await blobToDataURL(blob)
+    return { mimeType, buffer, reader }
+  }
+
+  const compressImage = (file, options) => {
+    return new Promise(async (resolve, reject) => {
+      new Compressor(file, {
+        ...options,
+        success(blob) {
+          resolve(blob)
+        },
+        error(err) {
+          reject(err)
+        },
+      })
+    })
+  }
+
+  const blobToDataURL = async (blob) => {
+    return new Promise((resolve, reject) => {
+      let reader = new FileReader()
+      reader.onerror = reject
+      reader.onload = (e) => resolve(reader.result)
+      reader.readAsDataURL(blob)
+    })
+  }
+
+  const handleCoverUpload = async (props) => {
+    const cover = await generateCompressedImage(props, coverOptions)
+    setCover(cover)
+
+    const thumb = await generateCompressedImage(props, thumbnailOptions)
+    setThumbnail(thumb)
   }
 
   const handleValidation = () => {
-    if (amount > 0 && file) {
+    if (amount > 0 && file && cover && thumbnail) {
       return false
     }
     return true
@@ -120,42 +191,65 @@ export const Mint = () => {
                 type="text"
                 onChange={(e) => setTitle(e.target.value)}
                 placeholder="title"
+                value={title}
               />
 
               <Input
                 type="text"
                 onChange={(e) => setDescription(e.target.value)}
                 placeholder="description"
+                value={description}
               />
 
               <Input
                 type="text"
                 onChange={(e) => setTags(e.target.value)}
                 placeholder="tags (comma separated. example: illustration, digital, crypto)"
+                value={tags}
               />
 
               <Input
                 type="number"
                 min={1}
                 onChange={(e) => setAmount(e.target.value)}
-                placeholder="amount"
+                placeholder="quantity"
+                value={amount}
               />
 
               <Input
-                type="royalties"
+                type="number"
                 min={0}
                 max={25}
                 onChange={(e) => setRoyalties(e.target.value)}
                 placeholder="your royalties after each sale (between 0-25%)"
+                value={royalties}
               />
             </Padding>
           </Container>
 
           <Container>
             <Padding>
-              <Upload label="Upload OBJKT" onChange={handleFileUpload} />
+              <Upload
+                label="Upload OBJKT"
+                allowedTypes={ALLOWED_MIMETYPES}
+                allowedTypesLabel={ALLOWED_FILETYPES_LABEL}
+                onChange={handleFileUpload}
+              />
             </Padding>
           </Container>
+
+          {file && needsCover && (
+            <Container>
+              <Padding>
+                <Upload
+                  label="Upload cover image"
+                  allowedTypes={ALLOWED_COVER_MIMETYPES}
+                  allowedTypesLabel={ALLOWED_COVER_FILETYPES_LABEL}
+                  onChange={handleCoverUpload}
+                />
+              </Padding>
+            </Container>
+          )}
 
           <Container>
             <Padding>
@@ -196,7 +290,7 @@ export const Mint = () => {
           <Container>
             <Padding>
               <Button onClick={handleMint} fit>
-                <Curate>mint</Curate>
+                <Curate>mint {amount} OBJKTs</Curate>
               </Button>
             </Padding>
           </Container>

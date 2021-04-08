@@ -98,79 +98,12 @@
 
       // Replace entire html doc
       async function replaceHtml(data) {
-        if (!data['index.html']) {
-          const msg = 'Missing index.html'
-          alert(msg)
-          throw new Error(msg)
-        }
-
         const pageBlob = data['index.html']
         let htmlString = await pageBlob.text()
-        const parser = new DOMParser()
-        const doc = parser.parseFromString(htmlString, 'text/html')
-
-        // check for index.html
-        if (!doc.head) {
-          const msg = 'index.html is missing <head> tag!'
-          window.alert(msg)
-          throw new Error(msg)
-        }
-
-        // check for cover image
-        const coverImagePath = getCoverImagePath(doc)
-        console.log('cover image:', coverImagePath)
-        if (!coverImagePath) {
-          const msg = 'Missing cover image!'
-          alert(msg)
-          throw new Error(msg)
-        }
-
-        // injecet CSP meta tag
-        htmlString = injectCSP(doc)
 
         document.open();
         document.write(htmlString);
         document.close();
-      }
-
-      function getCoverImagePath(doc) {
-        let meta = doc.head.querySelector('meta[property="cover-image"]')
-        if (!meta) {
-          meta = doc.head.querySelector('meta[property="og:image"]')
-        }
-
-        if (!meta) return null
-
-        return meta.getAttribute('content')
-      }
-
-      function injectCSP(doc) {
-        // remove any existing CSP meta tags
-        const existing = doc.head.querySelectorAll(
-          'meta[http-equiv="Content-Security-Policy"]'
-        )
-        if (existing.length) {
-          for (let i = 0; i < existing.length; i++) {
-            existing[i].remove()
-          }
-        }
-
-        // inject CSP meta tag
-        doc.head.insertAdjacentHTML(
-          'afterbegin',
-          `
-          <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline';">
-        `
-        )
-
-        // doc -> HTML
-        return `<!DOCTYPE html><html>${doc.documentElement.innerHTML}</html>`
-      }
-
-      // Get filename from path
-      function getFilename(path) {
-        const parts = path.split('/')
-        return parts[parts.length - 1]
       }
     </script>
   </body>
