@@ -19,6 +19,7 @@ export const prepareFile = async ({
   mimeType,
   cover,
   thumbnail,
+  generateDisplayUri,
 }) => {
   const ipfs = createClient(infuraUrl)
 
@@ -30,12 +31,14 @@ export const prepareFile = async ({
   // upload cover image
   const coverInfo = await ipfs.add(cover.buffer)
   const coverHash = coverInfo.path
-  const displayUri = `ipfs://${coverHash}`
+  const displayUri = generateDisplayUri ? `ipfs://${coverHash}` : ''
 
   // upload thumbnail image
   const thumbnailInfo = await ipfs.add(thumbnail.buffer)
   const thumbnailHash = thumbnailInfo.path
-  const thumbnailUri = `ipfs://${thumbnailHash}`
+  const thumbnailUri = generateDisplayUri
+    ? `ipfs://${thumbnailHash}`
+    : IPFS_DISPLAY_URI_BLACKCIRCLE
 
   return await uploadMetadataFile({
     name,
@@ -57,6 +60,7 @@ export const prepareDirectory = async ({
   files,
   cover,
   thumbnail,
+  generateDisplayUri,
 }) => {
   // upload directory of files
   const dirHash = await uploadFilesToDirectory(files)
@@ -66,12 +70,14 @@ export const prepareDirectory = async ({
   const ipfs = createClient(infuraUrl)
   const coverInfo = await ipfs.add(cover.buffer)
   const coverHash = coverInfo.path
-  const displayUri = `ipfs://${coverHash}`
+  const displayUri = generateDisplayUri ? `ipfs://${coverHash}` : ''
 
   // upload thumbnail image
   const thumbnailInfo = await ipfs.add(thumbnail.buffer)
   const thumbnailHash = thumbnailInfo.path
-  const thumbnailUri = `ipfs://${thumbnailHash}`
+  const thumbnailUri = generateDisplayUri
+    ? `ipfs://${thumbnailHash}`
+    : IPFS_DISPLAY_URI_BLACKCIRCLE
 
   return await uploadMetadataFile({
     name,

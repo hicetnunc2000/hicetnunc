@@ -45,7 +45,7 @@ export const Mint = () => {
   const [cover, setCover] = useState() // the uploaded or generated cover image
   const [thumbnail, setThumbnail] = useState() // the uploaded or generated cover image
   const [message, setMessage] = useState('')
-  const [needsCover, setNeedsCover] = useState('')
+  const [needsCover, setNeedsCover] = useState(false)
 
   const handleMint = async () => {
     setAccount()
@@ -87,6 +87,7 @@ export const Mint = () => {
         files,
         cover,
         thumbnail,
+        generateDisplayUri: false, // RAFAEL: muda para "true"
       })
     } else {
       // process all other files
@@ -99,6 +100,7 @@ export const Mint = () => {
         mimeType: file.mimeType,
         cover,
         thumbnail,
+        generateDisplayUri: false, // RAFAEL: muda para "true"
       })
     }
 
@@ -123,16 +125,16 @@ export const Mint = () => {
   const handleFileUpload = async (props) => {
     setFile(props)
 
-    if (props.mimeType.indexOf('image') === 0) {
-      setNeedsCover(false)
-      const cover = await generateCompressedImage(props, coverOptions)
-      setCover(cover)
-
-      const thumb = await generateCompressedImage(props, thumbnailOptions)
-      setThumbnail(thumb)
-    } else {
-      setNeedsCover(true)
-    }
+    // RAFAEL: para testar o displayUri uncomment this
+    // if (props.mimeType.indexOf('image') === 0) {
+    //   setNeedsCover(false)
+    //   const cover = await generateCompressedImage(props, coverOptions)
+    //   setCover(cover)
+    //   const thumb = await generateCompressedImage(props, thumbnailOptions)
+    //   setThumbnail(thumb)
+    // } else {
+    //   setNeedsCover(true)
+    // }
   }
 
   const generateCompressedImage = async (props, options) => {
@@ -175,7 +177,8 @@ export const Mint = () => {
   }
 
   const handleValidation = () => {
-    if (amount > 0 && file && cover && thumbnail) {
+    console.log('validattion', amount, file, cover, thumbnail, royalties)
+    if (amount > 0 && file && cover && thumbnail && royalties >= 10) {
       return false
     }
     return true
@@ -204,7 +207,7 @@ export const Mint = () => {
               <Input
                 type="text"
                 onChange={(e) => setTags(e.target.value)}
-                placeholder="tags (comma separated. example: illustration, digital, crypto)"
+                placeholder="tags (comma separated. example: illustration, digital)"
                 value={tags}
               />
 
@@ -218,10 +221,10 @@ export const Mint = () => {
 
               <Input
                 type="number"
-                min={0}
+                min={10}
                 max={25}
                 onChange={(e) => setRoyalties(e.target.value)}
-                placeholder="your royalties after each sale (between 0-25%)"
+                placeholder="your royalties after each sale (between 10-25%)"
                 value={royalties}
               />
             </Padding>
