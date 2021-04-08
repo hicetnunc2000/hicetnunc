@@ -14,7 +14,7 @@ export const Burn = (props) => {
 
   const handleSubmit = () => {
     const r = global.confirm(
-      'Burning will remove all OBJKT#:id from your possession to a burn address.'
+      `Burning will remove all OBJKT#${props.token_id} from your possession to a burn address.`
     )
     console.log(props.token_id)
     console.log(props.acc)
