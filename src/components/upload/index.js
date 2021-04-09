@@ -5,7 +5,12 @@ import styles from './index.module.scss'
 
 const Buffer = require('buffer').Buffer
 
-export const Upload = ({ label, allowedTypes, allowedTypesLabel, onChange = () => null }) => {
+export const Upload = ({
+  label,
+  allowedTypes,
+  allowedTypesLabel,
+  onChange = () => null,
+}) => {
   const language = getLanguage()
   const [title, setTitle] = useState(label)
 
@@ -31,7 +36,12 @@ export const Upload = ({ label, allowedTypes, allowedTypesLabel, onChange = () =
     <div className={styles.container}>
       <label>
         {title}
-        <input type="file" name="file" accept={accept} onChange={onFileChange} />
+        <input
+          type="file"
+          name="file"
+          accept={accept}
+          onChange={onFileChange}
+        />
       </label>
       <div className={styles.allowed}>
         {language.mint.supports}:&nbsp;{allowedTypesLabel}

@@ -4,7 +4,6 @@ import { Button, Primary, Purchase } from '../button'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
 import { walletPreview } from '../../utils/string'
 import styles from './index.module.scss'
-// import { getTotalSales } from '../../utils/sanitise'
 
 const _ = require('lodash')
 
@@ -20,22 +19,10 @@ export const ItemInfo = ({
 }) => {
   const { syncTaquito, collect, curate, acc } = useContext(HicetnuncContext)
 
-  /*  let available = 0
-  if (owners !== undefined) {
-    const kt = `KT1Hkg5qeNhfwpKW4fXvq7HGZB9z2EnmCCA9`
-    available = owners[kt]
-  } */
-
   let s = _.minBy(swaps, (o) => Number(o.xtz_per_objkt))
 
-  // var kt = _.values(_.omitBy(owners, (value, key) => !key.startsWith('KT')))[0]
-  //owners = _.values(_.omitBy(owners, (value, key) => !key.startsWith(token_info.creators[0])))
-
-  // const soldOutMessage = 'not for sale'
   var message = ''
-  // console.log(acc)
-  // console.log(s, swaps)
-  //const notForSale = available > 0 || isNaN(editions)
+
   try {
     message =
       swaps[0] !== undefined
@@ -67,13 +54,10 @@ export const ItemInfo = ({
             <div>
               <p>
                 <span>
-                  Editions: {/*                   {available > 0 ? ( */}
+                  Editions:
                   <span>
                     {swaps[0] !== undefined ? s.objkt_amount : undefined}
                   </span>
-                  {/* /*                   ) : (
-                    <span>{total_amount}</span>
-                  )} */}
                 </span>
               </p>
             </div>

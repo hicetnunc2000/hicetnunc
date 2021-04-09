@@ -38,7 +38,9 @@ export const GLBComponent = ({ src, interactive }) => {
   return (
     <div className={styles.container} ref={ref}>
       <model-viewer {...props} style={{ width, height }}>
-        <button id="ar-button" slot="ar-button">AR</button>
+        <button slot="ar-button" className={styles.arButton}>
+          AR
+        </button>
       </model-viewer>
     </div>
   )
