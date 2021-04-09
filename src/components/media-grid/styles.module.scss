@@ -1,0 +1,32 @@
+@import '../../styles/layout.scss';
+
+.list {
+  display: grid;
+  grid-column-gap: 10px;
+  grid-row-gap: 10px;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  border: 1px dashed red;
+
+  @include respond-to('tablet') {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  @include respond-to('desktop') {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .item {
+    position: relative;
+    grid-column-end: span 1; // 1/1
+    margin-bottom: 40px;
+
+    @include respond-to('tablet') {
+      grid-column-end: span 2; // 2/4
+      margin-bottom: initial;
+    }
+
+    @include respond-to('desktop') {
+      grid-column-end: span 1; // 1/4
+    }
+  }
+}

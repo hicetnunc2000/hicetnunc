@@ -1,6 +1,6 @@
 import React from 'react'
 import { getItem, setItem } from '../../utils/storage'
-import styles from './index.module.scss'
+import styles from './styles.module.scss'
 
 // DO NOT ENABLE THIS JUST YET (Andre)
 const languages = [

@@ -1,0 +1,26 @@
+@import '../../styles/layout.scss';
+@import '../../styles/variables.scss';
+
+.container {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  padding: 4px;
+  width: 20px;
+  height: 20px;
+  background-color: var(--text-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+
+  svg {
+    width: 20px;
+    height: auto;
+
+    path {
+      fill: var(--background-color);
+      transition: fill #{$theme-duration} ease-out;
+    }
+  }
+}

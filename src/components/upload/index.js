@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { getLanguage } from '../../constants'
 import { getMimeType } from '../../utils/sanitise'
-import styles from './index.module.scss'
+import styles from './styles.module.scss'
 
 const Buffer = require('buffer').Buffer
 
