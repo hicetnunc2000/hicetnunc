@@ -8,20 +8,25 @@ export const Input = ({
   min,
   max,
   maxlength = 500,
+  label,
   onChange = () => null,
   disabled,
   value,
 }) => (
-  <input
-    type={type}
-    placeholder={placeholder}
-    name={name}
-    min={min}
-    max={max}
-    maxLength={maxlength}
-    defaultValue={value}
-    onChange={onChange}
-    className={styles.container}
-    disabled={disabled}
-  />
+  <div className={styles.container}>
+    <label>
+      <input
+        type={type}
+        placeholder={placeholder}
+        name={name}
+        min={min}
+        max={max}
+        maxLength={maxlength}
+        defaultValue={value}
+        onChange={onChange}
+        disabled={disabled}
+      />
+      <p>{label}</p>
+    </label>
+  </div>
 )

@@ -22,8 +22,8 @@ import {
 
 const coverOptions = {
   quality: 0.85,
-  maxWidth: 1200,
-  maxHeight: 1200,
+  maxWidth: 1024,
+  maxHeight: 1024,
 }
 
 const thumbnailOptions = {
@@ -204,6 +204,7 @@ export const Mint = () => {
                 type="text"
                 onChange={(e) => setTitle(e.target.value)}
                 placeholder="title"
+                label="title"
                 value={title}
               />
 
@@ -211,6 +212,7 @@ export const Mint = () => {
                 type="text"
                 onChange={(e) => setDescription(e.target.value)}
                 placeholder="description"
+                label="description"
                 value={description}
               />
 
@@ -218,6 +220,7 @@ export const Mint = () => {
                 type="text"
                 onChange={(e) => setTags(e.target.value)}
                 placeholder="tags (comma separated. example: illustration, digital)"
+                label="tags"
                 value={tags}
               />
 
@@ -225,7 +228,8 @@ export const Mint = () => {
                 type="number"
                 min={1}
                 onChange={(e) => setAmount(e.target.value)}
-                placeholder="quantity"
+                placeholder="editions (no. editions)"
+                label="editions"
                 value={amount}
               />
 
@@ -234,7 +238,8 @@ export const Mint = () => {
                 min={10}
                 max={25}
                 onChange={(e) => setRoyalties(e.target.value)}
-                placeholder="your royalties after each sale (between 10-25%)"
+                placeholder="royalties after each sale (between 10-25%)"
+                label="royalties"
                 value={royalties}
               />
             </Padding>
