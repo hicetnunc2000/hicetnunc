@@ -1,6 +1,6 @@
 import React from 'react'
 import { motion } from 'framer-motion'
-import styles from './index.module.scss'
+import styles from './styles.module.scss'
 
 const transition = {
   duration: 0.5,
