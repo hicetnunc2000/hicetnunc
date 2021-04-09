@@ -26,7 +26,7 @@ export const Header = () => {
 
   useEffect(() => {
     context.setAccount()
-    context.setTheme(getItem('theme') || setItem('theme', 'light'))
+    context.setTheme(getItem('theme') || setItem('theme', 'dark'))
   }, [])
 
   // we assume user isn't connected

@@ -9,7 +9,6 @@ import { Identicon } from '../../components/identicons'
 import { walletPreview } from '../../utils/string'
 import { SanitiseOBJKT } from '../../utils/sanitise'
 import { PATH } from '../../constants'
-import { MimeTypeIcon } from '../../components/mimetype-icon'
 import { VisuallyHidden } from '../../components/visually-hidden'
 import { /* GetUserData, */ GetUserMetadata } from '../../data/api'
 import styles from './index.module.scss'
@@ -319,7 +318,6 @@ export default class Display extends Component {
                       to={`${PATH.OBJKT}/${nft.token_id}`}
                     >
                       <div className={styles.container}>
-                        <MimeTypeIcon mimeType={mimeType} uri={uri} />
                         {renderMediaType({
                           mimeType,
                           uri: uri.split('//')[1],
@@ -386,7 +384,6 @@ export default class Display extends Component {
                       to={`${PATH.OBJKT}/${nft.token_id}`}
                     >
                       <div className={styles.container}>
-                        <MimeTypeIcon mimeType={mimeType} uri={uri} />
                         {renderMediaType({
                           mimeType,
                           uri: uri.split('//')[1],
