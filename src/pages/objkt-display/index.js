@@ -26,6 +26,8 @@ export const ObjktDisplay = () => {
   const [tabIndex, setTabIndex] = useState(0)
   const [nft, setNFT] = useState()
 
+  const address = context.acc?.address
+
   useEffect(() => {
     GetOBJKT({ id }).then(async (objkt) => {
       await context.setAccount()
@@ -67,10 +69,7 @@ export const ObjktDisplay = () => {
             <Padding>
               <Menu>
                 {TABS.map((tab, index) => {
-                  if (
-                    tab.private &&
-                    nft.token_info.creators[0] !== context.acc.address
-                  ) {
+                  if (tab.private && nft.token_info.creators[0] !== address) {
                     return null
                   }
                   return (
@@ -85,7 +84,7 @@ export const ObjktDisplay = () => {
             </Padding>
           </Container>
 
-          <Tab {...nft} address={context.acc.address} />
+          <Tab {...nft} address={address} />
         </>
       )}
     </Page>

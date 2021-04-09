@@ -16,8 +16,6 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-TODO.md
-
 .DS_Store
 
 # Elastic Beanstalk Files

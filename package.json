@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "@airgap/beacon-sdk": "^2.2.0",
-    "@babel/core": "^7.13.14",
+    "@babel/core": "^7.13.15",
     "@taquito/beacon-wallet": "^8.0.6-beta.0",
     "@taquito/taquito": "^8.0.6-beta.0",
     "@testing-library/jest-dom": "^5.11.10",
@@ -13,7 +13,7 @@
     "axios": "^0.21.1",
     "base-x": "^3.0.8",
     "buffer": "^6.0.3",
-    "classnames": "^2.3.0",
+    "classnames": "^2.3.1",
     "compressorjs": "^1.0.7",
     "fflate": "^0.6.9",
     "filereader": "^0.10.3",
