@@ -93,7 +93,7 @@ export const Feeds = ({ type = 0 }) => {
       >
         <div>
           {/* OLD WAY */}
-          {false && (
+          {true && (
             <Container>
               <Padding>
                 {items.map((item, index) => (
@@ -103,7 +103,7 @@ export const Feeds = ({ type = 0 }) => {
             </Container>
           )}
           {/* NEW WAY */}
-          <MediaGrid items={items} />
+          {false && <MediaGrid items={items} />}
         </div>
       </InfiniteScroll>
     </Page>
