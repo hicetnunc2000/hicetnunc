@@ -3,6 +3,7 @@ import { Container, Padding } from '../layout'
 import { Button } from '../button'
 import { VisuallyHidden } from '../visually-hidden'
 import { renderMediaType } from '../media-types'
+import { MimeTypeIcon } from '../mimetype-icon'
 import { PATH } from '../../constants'
 import styles from './styles.module.scss'
 
@@ -16,14 +17,17 @@ export const MediaGrid = ({ items }) => {
             const { mimeType, uri } = token_info.formats[0]
 
             return (
-              <Button to={`${PATH.OBJKT}/${token_id}`}>
+              <Button to={`${PATH.OBJKT}/${token_id}`} key={token_id}>
                 <VisuallyHidden>{`Go to OBJKT: ${token_info.name}`}</VisuallyHidden>
-                <div className={styles.container}>
+                <div className={styles.item}>
                   {renderMediaType({
                     mimeType,
                     uri: uri.split('//')[1],
                     metadata: item,
                   })}
+                  <div className={styles.rollover}>
+                    <MimeTypeIcon mimeType={mimeType} />
+                  </div>
                 </div>
               </Button>
             )

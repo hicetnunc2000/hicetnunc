@@ -15,7 +15,7 @@ const TABS = [
   { title: 'info', component: Info },
   { title: 'collectors', component: Collectors },
   { title: 'swap', component: Swap, creatorOnly: true, secondaryMarket: true }, // visible if user is the creator or if user can sell on secondary market
-  { title: 'burn', component: Burn, creatorOnly: true }, // visible if user is the creator
+  { title: 'burn', component: Burn, creatorOnly: true, secondaryMarket: true }, // visible if user is the creator
 ]
 
 export const ObjktDisplay = () => {
