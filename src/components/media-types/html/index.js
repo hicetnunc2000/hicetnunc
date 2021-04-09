@@ -104,7 +104,7 @@ export const HTMLComponent = ({
             ref={iframeRef}
             title="html-zip-embed"
             src={`https://hicetnunc2000.github.io/hicetnunc/gh-pages/html-preview/?uid=${uid}&creator=${_creator_}&viewer=${_viewer_}`}
-            sandbox="allow-downloads allow-scripts allow-same-origin allow-modals"
+            sandbox="allow-scripts allow-same-origin allow-modals"
           />
         </div>
       )
@@ -145,7 +145,7 @@ export const HTMLComponent = ({
       <iframe
         title="html-embed"
         src={`${src}?creator=${_creator_}&viewer=${_viewer_}`}
-        sandbox="allow-downloads allow-scripts allow-same-origin"
+        sandbox="allow-scripts allow-same-origin"
         scrolling="no"
       />
     </div>
