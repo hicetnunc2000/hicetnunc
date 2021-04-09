@@ -1,14 +1,14 @@
 let cache = {}
 
-self.addEventListener('install', function(event) {
+self.addEventListener('install', function (event) {
   event.waitUntil(self.skipWaiting())
 })
 
-self.addEventListener('activate', function(event) {
+self.addEventListener('activate', function (event) {
   event.waitUntil(self.clients.claim())
 })
 
-self.addEventListener('message', event => {
+self.addEventListener('message', (event) => {
   if (event.data && event.data.type === 'resources') {
     cache = {}
     for (let relPath in event.data.payload) {
@@ -19,16 +19,14 @@ self.addEventListener('message', event => {
   }
 })
 
-self.addEventListener('fetch', event => {
+self.addEventListener('fetch', (event) => {
   const path = getURLPath(event.request.url)
   console.log(path)
   if (cache[path]) {
     const res = new Response(cache[path])
     event.respondWith(Promise.resolve(res))
   } else {
-    event.respondWith(
-      fetch(event.request)
-    )
+    event.respondWith(fetch(event.request))
   }
 })
 
