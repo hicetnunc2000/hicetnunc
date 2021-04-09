@@ -1,0 +1,43 @@
+@import '../../styles/layout.scss';
+@import '../../styles/variables.scss';
+
+.list {
+  display: grid;
+  grid-column-gap: 10px;
+  grid-row-gap: 10px;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+
+  @include respond-to('tablet') {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  @include respond-to('desktop') {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .container {
+    position: relative;
+    grid-column-end: span 1; // 1/1
+    margin-bottom: 40px;
+
+    @include respond-to('tablet') {
+      grid-column-end: span 2; // 2/4
+      margin-bottom: initial;
+    }
+
+    @include respond-to('desktop') {
+      grid-column-end: span 1; // 1/4
+    }
+
+    .number {
+      position: absolute;
+      bottom: 6px;
+      right: 6px;
+      padding: 4px;
+      background-color: var(--text-color);
+      color: var(--background-color);
+      transition: background-color #{$theme-duration} ease-out,
+        color #{$theme-duration} ease-out;
+    }
+  }
+}
