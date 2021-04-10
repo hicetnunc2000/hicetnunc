@@ -22,8 +22,8 @@ import {
 
 const coverOptions = {
   quality: 0.85,
-  maxWidth: 1200,
-  maxHeight: 1200,
+  maxWidth: 1024,
+  maxHeight: 1024,
 }
 
 const thumbnailOptions = {
@@ -31,6 +31,9 @@ const thumbnailOptions = {
   maxWidth: 350,
   maxHeight: 350,
 }
+
+// @crzypathwork change to "true" to activate displayUri and thumbnailUri
+const GENERATE_DISPLAY_AND_THUMBNAIL = false
 
 export const Mint = () => {
   const { mint, getAuth, acc, setAccount } = useContext(HicetnuncContext)
@@ -45,7 +48,7 @@ export const Mint = () => {
   const [cover, setCover] = useState() // the uploaded or generated cover image
   const [thumbnail, setThumbnail] = useState() // the uploaded or generated cover image
   const [message, setMessage] = useState('')
-  const [needsCover, setNeedsCover] = useState('')
+  const [needsCover, setNeedsCover] = useState(false)
 
   const handleMint = async () => {
     setAccount()
@@ -87,6 +90,7 @@ export const Mint = () => {
         files,
         cover,
         thumbnail,
+        generateDisplayUri: GENERATE_DISPLAY_AND_THUMBNAIL,
       })
     } else {
       // process all other files
@@ -99,6 +103,7 @@ export const Mint = () => {
         mimeType: file.mimeType,
         cover,
         thumbnail,
+        generateDisplayUri: GENERATE_DISPLAY_AND_THUMBNAIL,
       })
     }
 
@@ -123,15 +128,16 @@ export const Mint = () => {
   const handleFileUpload = async (props) => {
     setFile(props)
 
-    if (props.mimeType.indexOf('image') === 0) {
-      setNeedsCover(false)
-      const cover = await generateCompressedImage(props, coverOptions)
-      setCover(cover)
-
-      const thumb = await generateCompressedImage(props, thumbnailOptions)
-      setThumbnail(thumb)
-    } else {
-      setNeedsCover(true)
+    if (GENERATE_DISPLAY_AND_THUMBNAIL) {
+      if (props.mimeType.indexOf('image') === 0) {
+        setNeedsCover(false)
+        const cover = await generateCompressedImage(props, coverOptions)
+        setCover(cover)
+        const thumb = await generateCompressedImage(props, thumbnailOptions)
+        setThumbnail(thumb)
+      } else {
+        setNeedsCover(true)
+      }
     }
   }
 
@@ -175,9 +181,16 @@ export const Mint = () => {
   }
 
   const handleValidation = () => {
-    if (amount > 0 && file && cover && thumbnail) {
-      return false
+    if (GENERATE_DISPLAY_AND_THUMBNAIL) {
+      if (amount > 0 && file && cover && thumbnail && royalties >= 10) {
+        return false
+      }
+    } else {
+      if (amount > 0 && file && royalties >= 10) {
+        return false
+      }
     }
+
     return true
   }
 
@@ -191,6 +204,7 @@ export const Mint = () => {
                 type="text"
                 onChange={(e) => setTitle(e.target.value)}
                 placeholder="title"
+                label="title"
                 value={title}
               />
 
@@ -198,13 +212,15 @@ export const Mint = () => {
                 type="text"
                 onChange={(e) => setDescription(e.target.value)}
                 placeholder="description"
+                label="description"
                 value={description}
               />
 
               <Input
                 type="text"
                 onChange={(e) => setTags(e.target.value)}
-                placeholder="tags (comma separated. example: illustration, digital, crypto)"
+                placeholder="tags (comma separated. example: illustration, digital)"
+                label="tags"
                 value={tags}
               />
 
@@ -212,16 +228,18 @@ export const Mint = () => {
                 type="number"
                 min={1}
                 onChange={(e) => setAmount(e.target.value)}
-                placeholder="quantity"
+                placeholder="editions (no. editions)"
+                label="editions"
                 value={amount}
               />
 
               <Input
                 type="number"
-                min={0}
+                min={10}
                 max={25}
                 onChange={(e) => setRoyalties(e.target.value)}
-                placeholder="your royalties after each sale (between 0-25%)"
+                placeholder="royalties after each sale (between 10-25%)"
+                label="royalties"
                 value={royalties}
               />
             </Padding>

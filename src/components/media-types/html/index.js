@@ -2,9 +2,13 @@ import React, { useContext, useState, useRef, useEffect } from 'react'
 import classnames from 'classnames'
 import { HicetnuncContext } from '../../../context/HicetnuncContext'
 import { Button } from '../../button'
-import { dataRUIToBuffer, prepareFilesFromZIP, validateFiles } from '../../../utils/html'
+import {
+  dataRUIToBuffer,
+  prepareFilesFromZIP,
+  validateFiles,
+} from '../../../utils/html'
 import { VisuallyHidden } from '../../visually-hidden'
-import styles from './index.module.scss'
+import styles from './styles.module.scss'
 
 const uid = Math.round(Math.random() * 100000000).toString()
 
@@ -106,9 +110,7 @@ export const HTMLComponent = ({
       )
     } else if (validHTML === false) {
       return (
-        <div className={styles.error}>
-          Preview Error: {validationError}
-        </div>
+        <div className={styles.error}>Preview Error: {validationError}</div>
       )
     }
   }

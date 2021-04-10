@@ -10,7 +10,7 @@ import { fadeIn } from '../../utils/motion'
 import { Menu } from '../icons'
 import { walletPreview } from '../../utils/string'
 import { VisuallyHidden } from '../visually-hidden'
-import styles from './style.module.scss'
+import styles from './styles.module.scss'
 import { getItem, setItem } from '../../utils/storage'
 
 /* import { BeaconWallet } from '@taquito/beacon-wallet'
@@ -26,7 +26,7 @@ export const Header = () => {
 
   useEffect(() => {
     context.setAccount()
-    context.setTheme(getItem('theme') || setItem('theme', 'light'))
+    context.setTheme(getItem('theme') || setItem('theme', 'dark'))
   }, [])
 
   // we assume user isn't connected

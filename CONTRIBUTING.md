@@ -17,7 +17,7 @@ In terms of standard its a good practice to first do global imports, then relati
 ```jsx
 import React from 'react' // a global import
 import { Button } from '../button' // a relative import
-import styles from './index.module.scss' // a sass import
+import styles from './styles.module.scss' // a sass import
 
 export const MyComponent = () => {
   return <div className={styles.container}>My Component</div>
