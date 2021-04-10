@@ -53,8 +53,8 @@ export default class Display extends Component {
     })
 
     await axios
-      .post(process.env.REACT_APP_TZ, {
-        tz: this.state.wallet,
+      .get(process.env.REACT_APP_TZ, {
+        params: {tz: this.state.wallet},
       })
       .then(async (res) => {
         this.setState({

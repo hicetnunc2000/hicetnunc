@@ -6,12 +6,18 @@ import { Page, Container, Padding } from '../../components/layout'
 import { FeedItem } from '../../components/feed-item'
 import { Loading } from '../../components/loading'
 
+const customFloor = function(value, roundTo) {
+  return Math.floor(value / roundTo) * roundTo;
+} 
+
+const ONE_MINUTE_MILLIS = 60 * 1000
+
 export const Feeds = ({ type = 0 }) => {
   const [error, setError] = useState(false)
   const [items, setItems] = useState([])
   const [count, setCount] = useState(0)
   const [hasMore, setHasMore] = useState(true)
-
+  const startTime = customFloor(Date.now(), ONE_MINUTE_MILLIS)
   const loadMore = () => {
     setCount(count + 1)
   }
@@ -23,7 +29,7 @@ export const Feeds = ({ type = 0 }) => {
     }
 
     if (type === 0) {
-      GetLatestFeed({ counter: count })
+      GetLatestFeed({ counter: count, max_time: startTime })
         .then((result) => {
           const next = items.concat(result)
           setItems(next)
@@ -66,7 +72,7 @@ export const Feeds = ({ type = 0 }) => {
           setError(true)
         })
     } else if (type === 3) {
-      GetFeaturedFeed({ counter: count })
+      GetFeaturedFeed({ counter: count, max_time: startTime })
         .then((result) => {
           // filtered isn't guaranteed to always be 10. if we're filtering they might be less.
           const next = items.concat(result)
