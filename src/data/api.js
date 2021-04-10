@@ -51,9 +51,9 @@ const filterFeeds = (original) => {
  * Gets Feed for homepage
  * filters it against a blocklist json
  */
-export const GetLatestFeed = async ({ counter }) => {
+export const GetLatestFeed = async ({ counter, max_time }) => {
   return new Promise((resolve, reject) => {
-    axios.post(process.env.REACT_APP_FEED, { counter: counter }).then((res) => {
+    axios.get(process.env.REACT_APP_FEED, { counter: counter, max_time: max_time }).then((res) => {
       resolve(filterFeeds(res.data.result))
     })
   })
@@ -65,7 +65,7 @@ export const GetLatestFeed = async ({ counter }) => {
 export const GethDAOFeed = async ({ counter }) => {
   return new Promise((resolve, reject) => {
     axios
-      .post(process.env.REACT_APP_FEED_HDAO, { counter: counter })
+      .get(process.env.REACT_APP_FEED_HDAO, { params: {counter: counter } })
       .then((res) => {
         resolve(filterFeeds(res.data.result))
       })
@@ -75,10 +75,10 @@ export const GethDAOFeed = async ({ counter }) => {
 /**
  * Gets Feed for Featured
  */
-export const GetFeaturedFeed = async ({ counter }) => {
+export const GetFeaturedFeed = async ({ counter, max_time }) => {
   return new Promise((resolve, reject) => {
     axios
-      .post(process.env.REACT_APP_FEATURED, { counter: counter })
+      .get(process.env.REACT_APP_FEATURED, { counter: counter, max_time: max_time })
       .then((res) => {
         resolve(filterFeeds(res.data.result))
       })
@@ -91,7 +91,7 @@ export const GetFeaturedFeed = async ({ counter }) => {
 export const GetRandomFeed = async ({ counter }) => {
   return new Promise((resolve, reject) => {
     axios
-      .post(process.env.REACT_APP_RANDOM, { counter: counter })
+      .get(process.env.REACT_APP_RANDOM, { params: { counter: counter }})
       .then((res) => {
         resolve(filterFeeds(res.data.result))
       })
@@ -104,8 +104,8 @@ export const GetRandomFeed = async ({ counter }) => {
 export const GetOBJKT = async ({ id }) => {
   return new Promise((resolve, reject) => {
     axios
-      .post(process.env.REACT_APP_OBJKT, {
-        objkt_id: id,
+      .get(process.env.REACT_APP_OBJKT, {
+        params: {id: id} 
       })
       .then((res) => {
         resolve(res.data.result)
