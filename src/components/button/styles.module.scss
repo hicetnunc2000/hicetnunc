@@ -12,7 +12,7 @@
   &:disabled {
     pointer-events: none;
     cursor: unset;
-    opacity: 0.7;
+    opacity: 0.5;
   }
 }
 
@@ -62,17 +62,4 @@
   border-bottom: 2px solid var(--text-color);
   transition: border-color #{$theme-duration} ease-out,
     color #{$theme-duration} ease-out;
-}
-
-.burn {
-  opacity: inherit;
-  margin-bottom: 10px;
-
-  padding: 2px 6px;
-  width: 100%;
-  background-color: red;
-  color: black; // this colour doesn't change
-  border-right: 2px solid var(--text-color);
-  border-bottom: 2px solid var(--text-color);
-  transition: border-color #{$theme-duration} ease-out;
 }

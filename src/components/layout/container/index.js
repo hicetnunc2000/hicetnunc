@@ -1,6 +1,6 @@
 import React from 'react'
 import classnames from 'classnames'
-import styles from './index.module.scss'
+import styles from './styles.module.scss'
 
 export const Container = ({ children = null, large, xlarge }) => {
   const classes = classnames({

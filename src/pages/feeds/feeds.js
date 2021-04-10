@@ -5,6 +5,7 @@ import { GetLatestFeed, GethDAOFeed, GetRandomFeed, GetFeaturedFeed } from '../.
 import { Page, Container, Padding } from '../../components/layout'
 import { FeedItem } from '../../components/feed-item'
 import { Loading } from '../../components/loading'
+import { MediaGrid } from '../../components/media-grid'
 
 const customFloor = function(value, roundTo) {
   return Math.floor(value / roundTo) * roundTo;
@@ -111,9 +112,20 @@ export const Feeds = ({ type = 0 }) => {
           </p>
         }
       >
-        {items.map((item, index) => (
-          <FeedItem key={`${item.token_id}-${index}`} {...item} />
-        ))}
+        <div>
+          {/* OLD WAY */}
+          {true && (
+            <Container>
+              <Padding>
+                {items.map((item, index) => (
+                  <FeedItem key={`${item.token_id}-${index}`} {...item} />
+                ))}
+              </Padding>
+            </Container>
+          )}
+          {/* NEW WAY */}
+          {false && <MediaGrid items={items} />}
+        </div>
       </InfiniteScroll>
     </Page>
   )

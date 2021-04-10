@@ -2,11 +2,9 @@ import React from 'react'
 import { MIMETYPE, IPFS_DIRECTORY_MIMETYPE } from '../../constants'
 import styles from './styles.module.scss'
 
-// temporary disabling this component
-const DONT_USE = true
-
-export const MimeTypeIcon = ({ mimeType, uri }) => {
+export const MimeTypeIcon = ({ mimeType }) => {
   const getIcon = () => {
+    console.log('get icon', mimeType)
     switch (mimeType) {
       /* IMAGES */
       case MIMETYPE.BMP:
@@ -15,12 +13,13 @@ export const MimeTypeIcon = ({ mimeType, uri }) => {
       case MIMETYPE.PNG:
       case MIMETYPE.TIFF:
       case MIMETYPE.WEBP:
-        return (
-          <svg viewBox="0 0 512 512">
-            <path d="M368,224c26.5,0,48-21.5,48-48c0-26.5-21.5-48-48-48c-26.5,0-48,21.5-48,48C320,202.5,341.5,224,368,224z" />
-            <path d="M452,64H60c-15.6,0-28,12.7-28,28.3v327.4c0,15.6,12.4,28.3,28,28.3h392c15.6,0,28-12.7,28-28.3V92.3 C480,76.7,467.6,64,452,64z M348.9,261.7c-3-3.5-7.6-6.2-12.8-6.2c-5.1,0-8.7,2.4-12.8,5.7l-18.7,15.8c-3.9,2.8-7,4.7-11.5,4.7   c-4.3,0-8.2-1.6-11-4.1c-1-0.9-2.8-2.6-4.3-4.1L224,215.3c-4-4.6-10-7.5-16.7-7.5c-6.7,0-12.9,3.3-16.8,7.8L64,368.2V107.7   c1-6.8,6.3-11.7,13.1-11.7h357.7c6.9,0,12.5,5.1,12.9,12l0.3,260.4L348.9,261.7z" />
-          </svg>
-        )
+        return null
+      // return (
+      //   <svg viewBox="0 0 512 512">
+      //     <path d="M368,224c26.5,0,48-21.5,48-48c0-26.5-21.5-48-48-48c-26.5,0-48,21.5-48,48C320,202.5,341.5,224,368,224z" />
+      //     <path d="M452,64H60c-15.6,0-28,12.7-28,28.3v327.4c0,15.6,12.4,28.3,28,28.3h392c15.6,0,28-12.7,28-28.3V92.3 C480,76.7,467.6,64,452,64z M348.9,261.7c-3-3.5-7.6-6.2-12.8-6.2c-5.1,0-8.7,2.4-12.8,5.7l-18.7,15.8c-3.9,2.8-7,4.7-11.5,4.7   c-4.3,0-8.2-1.6-11-4.1c-1-0.9-2.8-2.6-4.3-4.1L224,215.3c-4-4.6-10-7.5-16.7-7.5c-6.7,0-12.9,3.3-16.8,7.8L64,368.2V107.7   c1-6.8,6.3-11.7,13.1-11.7h357.7c6.9,0,12.5,5.1,12.9,12l0.3,260.4L348.9,261.7z" />
+      //   </svg>
+      // )
       /* VECTOR */
       case MIMETYPE.SVG:
         return (
@@ -46,8 +45,8 @@ export const MimeTypeIcon = ({ mimeType, uri }) => {
       case MIMETYPE.QUICKTIME:
       case MIMETYPE.WEBM:
         return (
-          <svg viewBox="0 0 16 18">
-            <path d="M14,0 L14,2 L12,2 L12,0 L4,0 L4,2 L2,2 L2,0 L0,0 L0,18 L2,18 L2,16 L4,16 L4,18 L12,18 L12,16 L14,16 L14,18 L16,18 L16,0 L14,0 L14,0 Z M4,14 L2,14 L2,12 L4,12 L4,14 L4,14 Z M4,10 L2,10 L2,8 L4,8 L4,10 L4,10 Z M4,6 L2,6 L2,4 L4,4 L4,6 L4,6 Z M14,14 L12,14 L12,12 L14,12 L14,14 L14,14 Z M14,10 L12,10 L12,8 L14,8 L14,10 L14,10 Z M14,6 L12,6 L12,4 L14,4 L14,6 L14,6 Z" />
+          <svg width="18" height="18" viewBox="0 0 48 48">
+            <path d="M9.6 46.5c-1 0-2-.3-2.9-.8-1.8-1.1-2.9-2.9-2.9-5.1V7.3c0-2.1 1.1-4 2.9-5.1 1.9-1.1 4.1-1.1 5.9 0l30.1 17.6c1.5.9 2.3 2.4 2.3 4.1 0 1.7-.9 3.2-2.3 4.1L12.6 45.7c-.9.5-2 .8-3 .8z"></path>
           </svg>
         )
       /* 3D */
@@ -71,8 +70,5 @@ export const MimeTypeIcon = ({ mimeType, uri }) => {
     }
   }
 
-  if (DONT_USE) {
-    return null
-  }
   return <div className={styles.container}>{getIcon()}</div>
 }
