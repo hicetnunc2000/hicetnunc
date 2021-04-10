@@ -249,7 +249,6 @@ export const Mint = () => {
             <Padding>
               <Upload
                 label="Upload OBJKT"
-                allowedTypes={ALLOWED_MIMETYPES}
                 allowedTypesLabel={ALLOWED_FILETYPES_LABEL}
                 onChange={handleFileUpload}
               />
