@@ -78,7 +78,7 @@ export const GethDAOFeed = async ({ counter }) => {
 export const GetFeaturedFeed = async ({ counter, max_time }) => {
   return new Promise((resolve, reject) => {
     axios
-      .get(process.env.REACT_APP_FEATURED, { counter: counter, max_time: max_time })
+      .get(process.env.REACT_APP_FEATURED, { params: {counter: counter, max_time: max_time } })
       .then((res) => {
         resolve(filterFeeds(res.data.result))
       })
