@@ -57,7 +57,7 @@ export default class Display extends Component {
       })
       .then(async (res) => {
         this.setState({
-          hdao: res.data.hdao,
+          hdao: res.data.hdao / 1_000_000,
         })
         const sanitised = SanitiseOBJKT(res.data.result)
         console.log(sanitised)
