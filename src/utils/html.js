@@ -138,7 +138,8 @@ export function injectCSPMetaTagIntoHTML(html) {
     script-src
       'self'
       'unsafe-inline'
-      'unsafe-eval';
+      'unsafe-eval'
+      blob:;
     style-src
       'self'
       'unsafe-inline';
