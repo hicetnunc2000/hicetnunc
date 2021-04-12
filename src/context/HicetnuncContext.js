@@ -44,6 +44,10 @@ export default class HicetnuncContextProvider extends Component {
           '--border-color',
           light ? 'rgba(0,0,0,0.1)' : 'rgba(255,255,255,0.3)'
         )
+        root.style.setProperty(
+          '--shadow-color',
+          light ? 'rgba(0,0,0,0.2)' : 'rgba(255,255,255,0.3)'
+        )
 
         this.setState({ theme })
       },

@@ -104,8 +104,8 @@ export const HTMLComponent = ({
             ref={iframeRef}
             title="html-zip-embed"
             src={`https://hicetnunc2000.github.io/hicetnunc/gh-pages/html-preview/?uid=${uid}&creator=${_creator_}&viewer=${_viewer_}`}
-            sandbox="allow-scripts allow-same-origin allow-modals"
-            allow="accelerometer; gyroscope; xr-spatial-tracking;"
+            sandbox="allow-scripts allow-same-origin allow-downloads allow-modals"
+            allow="accelerometer; camera; gyroscope; microphone; xr-spatial-tracking;"
           />
         </div>
       )
@@ -146,8 +146,8 @@ export const HTMLComponent = ({
       <iframe
         title="html-embed"
         src={`${src}?creator=${_creator_}&viewer=${_viewer_}`}
-        sandbox="allow-scripts allow-same-origin"
-        allow="accelerometer; gyroscope; xr-spatial-tracking;"
+        sandbox="allow-scripts allow-same-origin allow-downloads"
+        allow="accelerometer; camera; gyroscope; microphone; xr-spatial-tracking;"
         scrolling="no"
       />
     </div>

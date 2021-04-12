@@ -1,0 +1,14 @@
+.modal-fade-enter {
+  opacity: 0;
+}
+.modal-fade-enter-active {
+  opacity: 1;
+  transition: opacity 250ms ease-out;
+}
+.modal-fade-exit {
+  opacity: 1;
+}
+.modal-fade-exit-active {
+  opacity: 0;
+  transition: opacity 250ms ease-out;
+}
