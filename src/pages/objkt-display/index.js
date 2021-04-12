@@ -79,8 +79,6 @@ export const ObjktDisplay = () => {
                     return null
                   }
 
-                  console.log('an')
-
                   // hide menu if user is NOT the owner
                   // and if user DOESN'T own a copy of the objkt
                   if (
