@@ -26,7 +26,6 @@
 }
 
 .list {
-  column-count: 4;
   column-gap: 1em;
 
   @include respond-to('tablet') {
