@@ -163,6 +163,7 @@ export function injectCSPMetaTagIntoHTML(html) {
       https://cryptonomic-infra.tech
       https://*.infura.io
       https://infura.io
+      blob:
       ws:
       wss:
       bootstrap.libp2p.io
