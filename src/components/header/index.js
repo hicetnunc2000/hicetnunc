@@ -121,9 +121,7 @@ export const Header = () => {
                     </li>
                     <li>
                       <Button onClick={() => handleRoute('/mint')}>
-                        <Primary>
-                          OBJKTs<i style={{ fontSize: '15px' }}>(mint NFTs)</i>
-                        </Primary>
+                        <Primary>OBJKTs</Primary>
                       </Button>
                     </li>
                     <li>
