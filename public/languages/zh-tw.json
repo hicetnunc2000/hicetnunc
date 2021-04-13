@@ -4,7 +4,7 @@
     "menu": [
       { "primary": "○", "route": "/hdao" },
       { "primary": "random", "route": "/random" },
-      { "primary": "OBJKTs", "secondary": "(鑄造 NFTs)", "route": "/mint" },
+      { "primary": "OBJKTs", "route": "/mint" },
       { "primary": "作品管理", "route": "/sync" },
       { "primary": "關於hic et nunc", "route": "/about" }
     ]
