@@ -4,7 +4,7 @@
     "menu": [
       { "primary": "○", "route": "/hdao" },
       { "primary": "casuale", "route": "/random" },
-      { "primary": "OBJKT", "secondary": "(crea NFT)", "route": "/mint" },
+      { "primary": "OBJKT", "route": "/mint" },
       { "primary": "gestisci collezione", "route": "/sync" },
       { "primary": "informazioni aggiuntive", "route": "/about" }
     ]
