@@ -333,7 +333,7 @@ export const Mint = () => {
                 height: 'calc(100vh - 200px)',
               }}
             >
-              preparing OBJKT (NFT)
+              preparing OBJKT
               <Loading />
             </div>
           </Container>
