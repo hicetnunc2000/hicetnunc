@@ -8,7 +8,7 @@ import {
   validateFiles,
 } from '../../../utils/html'
 import { VisuallyHidden } from '../../visually-hidden'
-import styles from './index.module.scss'
+import styles from './styles.module.scss'
 
 const uid = Math.round(Math.random() * 100000000).toString()
 

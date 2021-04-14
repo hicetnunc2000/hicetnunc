@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
-import styles from './index.module.scss'
+import styles from './styles.module.scss'
 
 export const ButtonTheme = () => {
   const context = useContext(HicetnuncContext)

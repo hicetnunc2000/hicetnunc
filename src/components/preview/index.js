@@ -3,7 +3,7 @@ import { Tags } from '../tags'
 import { MIMETYPE } from '../../constants'
 import { renderMediaType } from '../media-types'
 import { HTMLWarning } from '../media-types/html/warning'
-import styles from './index.module.scss'
+import styles from './styles.module.scss'
 
 function isHTML(mimeType) {
   return (
