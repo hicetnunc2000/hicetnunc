@@ -18,13 +18,17 @@ export const GalleryDetail = () => {
       .then((galleries) => {
         const found = galleries.find((e) => e.uid === id)
 
-        fetch(found.endpoint)
-          .then((e) => e.json())
-          .then((data) => {
-            console.log(data)
-            setCollection(data)
-            setLoaded(true)
-          })
+        if (found) {
+          fetch(found.endpoint)
+            .then((e) => e.json())
+            .then((data) => {
+              console.log(data)
+              setCollection(data)
+              setLoaded(true)
+            })
+        } else {
+          alert(`gallery ${id} not found`)
+        }
       })
   }, [id])
 
@@ -66,9 +70,11 @@ export const GalleryDetail = () => {
                 {collection.data.map((artist, i) => {
                   return (
                     <div className={styles.container} key={`artist${i}`}>
-                      <div className={styles.artist}>
-                        <strong>{artist.artist}</strong>
-                      </div>
+                      {artist.artist && (
+                        <div className={styles.artist}>
+                          <strong>{artist.artist}</strong>
+                        </div>
+                      )}
                       <div className={styles.gallery}>
                         {artist.objkt.map((objkt) => {
                           return <Item key={objkt} objkt={objkt} />
