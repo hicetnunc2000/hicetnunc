@@ -9,12 +9,12 @@ import styles from './styles.module.scss'
 
 export const FeedItem = (props) => {
   const { token_info, token_id, owners, swaps, total_amount } = props
-  const { mimeType /*, uri */ } = token_info.formats[0]
+  const { mimeType, uri } = token_info.formats[0]
 
-  const url =
-    token_info.displayUri !== ''
-      ? token_info.displayUri
-      : token_info.artifactUri
+  // const url =
+  //   token_info.displayUri !== ''
+  //     ? token_info.displayUri
+  //     : token_info.artifactUri
 
   return (
     <>
@@ -23,7 +23,7 @@ export const FeedItem = (props) => {
         <div className={styles.container}>
           {renderMediaType({
             mimeType,
-            uri: url.split('//')[1], // uri.split('//')[1],
+            uri: uri.split('//')[1],
             metadata: props,
           })}
         </div>
