@@ -1,7 +1,7 @@
 import React, { useContext } from 'react'
 import classnames from 'classnames'
 import { HicetnuncContext } from '../../../context/HicetnuncContext'
-import styles from './index.module.scss'
+import styles from './styles.module.scss'
 
 export const VectorComponent = ({ src, interactive, preview, token_info }) => {
   const context = useContext(HicetnuncContext)

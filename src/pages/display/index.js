@@ -11,7 +11,7 @@ import { SanitiseOBJKT } from '../../utils/sanitise'
 import { PATH } from '../../constants'
 import { VisuallyHidden } from '../../components/visually-hidden'
 import { /* GetUserData, */ GetUserMetadata } from '../../data/api'
-import styles from './index.module.scss'
+import styles from './styles.module.scss'
 
 const axios = require('axios')
 

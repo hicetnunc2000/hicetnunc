@@ -4,7 +4,7 @@
     "menu": [
       { "primary": "○", "route": "/hdao" },
       { "primary": "random", "route": "/random" },
-      { "primary": "OBJKTs", "secondary": "(NFTs minten)", "route": "/mint" },
+      { "primary": "OBJKTs", "route": "/mint" },
       { "primary": "Sammlung verwalten", "route": "/sync" },
       { "primary": "Über hicetnunc", "route": "/about" }
     ]
@@ -36,7 +36,7 @@
     "title": "hic et nunc",
     "paragraphs": [
       "Diese dezentralisierte Anwendung ermöglicht den Nutzern, dezentralisierte digitale Objekte zu verwalten. Alle Transaktionen werden mittels öffentlicher smart contracts auf der Tezos Blockchain durchgeführt.",
-      "IPFS NFTs können ohne Genehmigung geminted und gehandelt werden. Dieses Webseite wurde als Experiment entwickelt um die Möglichkeiten neuer Crypto-Ökonomien zu erforschen.",
+      "IPFS OBJKTs können ohne Genehmigung geminted und gehandelt werden. Dieses Webseite wurde als Experiment entwickelt um die Möglichkeiten neuer Crypto-Ökonomien zu erforschen.",
       "Uns ist eure Sicherheit und Autonomie wichtig. Bitte verifiziert Informationen wie z.B. das Profil des Künstlers bei Transaktionen.",
       "Für Support, Vernetzung oder Fragen kontaktiert uns per %EMAIL%, %DISCORD%, oder auf %REDDIT%. (bitte in englischer Sprache)",
       "Bitte lest die %WIKI%.",
@@ -73,7 +73,7 @@
       "cta": "Abbrechen"
     },
     "burn": {
-      "title": "Dein NFT wird für immer aus dem Netzwerk gelöscht",
+      "title": "Dein OBJKT wird für immer aus dem Netzwerk gelöscht",
       "cta": "vernichten"
     },
     "confirm": "Bist du sicher?"
