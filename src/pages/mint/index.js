@@ -249,7 +249,6 @@ export const Mint = () => {
             <Padding>
               <Upload
                 label="Upload OBJKT"
-                allowedTypes={ALLOWED_MIMETYPES}
                 allowedTypesLabel={ALLOWED_FILETYPES_LABEL}
                 onChange={handleFileUpload}
               />
@@ -334,7 +333,7 @@ export const Mint = () => {
                 height: 'calc(100vh - 200px)',
               }}
             >
-              preparing OBJKT (NFT)
+              preparing OBJKT
               <Loading />
             </div>
           </Container>
