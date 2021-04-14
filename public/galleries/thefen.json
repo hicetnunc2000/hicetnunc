@@ -4,6 +4,10 @@
   "description": "“The Fen” is a series of coordinated CryptoArt drops to encourage artists and collectors to transition their NFTs to a low-energy consumption blockchain.",
   "data": [
     {
+      "artist": "The Fen announcements",
+      "objkt": [27355]
+    },
+    {
       "artist": "Mario Klingemann",
       "objkt": [7571, 26557, 4202, 13565]
     },
