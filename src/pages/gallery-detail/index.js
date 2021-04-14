@@ -22,7 +22,7 @@ export const GalleryDetail = () => {
           .then((e) => e.json())
           .then((data) => {
             console.log(data)
-            setCollection(data.data)
+            setCollection(data)
             setLoaded(true)
           })
       })
@@ -48,23 +48,22 @@ export const GalleryDetail = () => {
             </Container>
           )}
 
-          <Container>
+          <Container xlarge>
             <Padding>
               <strong>{collection.title}</strong>
             </Padding>
           </Container>
 
-          <Container>
+          <Container xlarge>
             <Padding>
               <p>{collection.description}</p>
             </Padding>
           </Container>
 
-          <Container>
+          <Container xlarge>
             <Padding>
               <div className={styles.container}>
-                {collection.map((artist, i) => {
-                  console.log('artist', artist)
+                {collection.data.map((artist, i) => {
                   return (
                     <div className={styles.container} key={`artist${i}`}>
                       <div className={styles.artist}>
