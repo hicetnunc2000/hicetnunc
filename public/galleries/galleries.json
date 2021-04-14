@@ -1,16 +1,14 @@
 [
   {
     "uid": "objkt4objkt",
-    "endpoint": "/galleries/1.json"
+    "endpoint": "/galleries/objkt4objkt.json"
   },
   {
-    "uid": "pupila-dilatada",
-    "endpoint": "/galleries/2.json"
+    "uid": "pupiladilatada",
+    "endpoint": "/galleries/pupiladilatada.json"
   },
   {
     "uid": "thefen",
-    "endpoint1": "https://raw.githubusercontent.com/joanielemercier/The_fen/main/thefen.json",
-    "endpoint": "https://dl.dropboxusercontent.com/s/owz0tthki0rgret/thefen.json",
-    "endpoint3": "/galleries/thefen.json"
+    "endpoint": "https://dl.dropboxusercontent.com/s/owz0tthki0rgret/thefen.json"
   }
 ]
