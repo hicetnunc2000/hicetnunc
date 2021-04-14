@@ -39,11 +39,14 @@ export const AudioComponent = ({ src }) => {
   return (
     <>
       <div className={classes}>
+        <audio src={src} controls />
         {false && <img src="/test.png" alt="album cover" />}
-        <Visualiser ref={visualiser} src={src} />
-        <div className={styles.icons} onClick={togglePlay}>
-          {play ? <PauseIcon /> : <PlayIcon />}
-        </div>
+        {false && <Visualiser ref={visualiser} src={src} />}
+        {false && (
+          <div className={styles.icons} onClick={togglePlay}>
+            {play ? <PauseIcon /> : <PlayIcon />}
+          </div>
+        )}
       </div>
     </>
   )
