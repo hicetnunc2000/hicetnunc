@@ -1,5 +1,5 @@
 import { Button, Primary } from '../../button'
-import styles from './index.module.scss'
+import styles from './styles.module.scss'
 
 export function HTMLWarning() {
   return (

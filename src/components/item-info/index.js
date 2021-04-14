@@ -3,7 +3,7 @@ import { PATH } from '../../constants'
 import { Button, Primary, Purchase } from '../button'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
 import { walletPreview } from '../../utils/string'
-import styles from './index.module.scss'
+import styles from './styles.module.scss'
 
 const _ = require('lodash')
 

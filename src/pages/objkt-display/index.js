@@ -14,8 +14,8 @@ import { Info, Collectors, Swap, Burn } from './tabs'
 const TABS = [
   { title: 'info', component: Info },
   { title: 'collectors', component: Collectors },
-  { title: 'swap', component: Swap, private: true },
-  { title: 'burn', component: Burn, private: true },
+  { title: 'swap', component: Swap, creatorOnly: true, secondaryMarket: true }, // visible if user is the creator or if user can sell on secondary market
+  { title: 'burn', component: Burn, creatorOnly: true, secondaryMarket: true }, // visible if user is the creator
 ]
 
 export const ObjktDisplay = () => {
@@ -69,9 +69,25 @@ export const ObjktDisplay = () => {
             <Padding>
               <Menu>
                 {TABS.map((tab, index) => {
-                  if (tab.private && nft.token_info.creators[0] !== address) {
+                  // if secondaryMarket is enabled, we need to check if user owns a copy of the objkt.
+                  // if it doesn't don't render tab
+                  if (
+                    tab.secondaryMarket === true &&
+                    Object.keys(nft.owners).length > 0 &&
+                    Object.keys(nft.owners).indexOf(address) === -1
+                  ) {
                     return null
                   }
+
+                  // hide menu if user is NOT the owner
+                  // and if user DOESN'T own a copy of the objkt
+                  if (
+                    tab.creatorOnly &&
+                    nft.token_info.creators[0] !== address
+                  ) {
+                    return null
+                  }
+
                   return (
                     <Button key={tab.title} onClick={() => setTabIndex(index)}>
                       <Primary selected={tabIndex === index}>

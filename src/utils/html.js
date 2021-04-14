@@ -149,12 +149,16 @@ export function injectCSPMetaTagIntoHTML(html) {
       data:
       blob:
       https://ipfs.infura.io
-      https://cloudflare-ipfs.com/;
+      https://cloudflare-ipfs.com/
+      https://ipfs.io/
+      https://gateway.pinata.cloud/;
     font-src
       'self'
       https://ipfs.infura.io
       https://cloudflare-ipfs.com/
-      https://fonts.googleapis.com/;
+      https://fonts.googleapis.com/
+      https://ipfs.io/
+      https://gateway.pinata.cloud/;
     connect-src
       'self'
       https://better-call.dev
@@ -189,12 +193,16 @@ export function injectCSPMetaTagIntoHTML(html) {
       data:
       blob:
       https://ipfs.infura.io
-      https://cloudflare-ipfs.com/;
+      https://cloudflare-ipfs.com/
+      https://ipfs.io/
+      https://gateway.pinata.cloud/;
     prefetch-src
       'self'
       https://ipfs.infura.io
       https://cloudflare-ipfs.com/
-      https://fonts.googleapis.com/;
+      https://fonts.googleapis.com/
+      https://ipfs.io/
+      https://gateway.pinata.cloud/;
     webrtc-src
       *;
     worker-src
