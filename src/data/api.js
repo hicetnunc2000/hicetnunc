@@ -53,7 +53,8 @@ const filterFeeds = (original) => {
  */
 export const GetLatestFeed = async ({ counter, max_time }) => {
   return new Promise((resolve, reject) => {
-    axios.get(process.env.REACT_APP_FEED, { counter: counter, max_time: max_time }).then((res) => {
+    axios.get(process.env.REACT_APP_FEED, { 
+      params: {counter: counter, max_time: max_time }}).then((res) => {
       resolve(filterFeeds(res.data.result))
     })
   })
@@ -65,7 +66,8 @@ export const GetLatestFeed = async ({ counter, max_time }) => {
 export const GethDAOFeed = async ({ counter }) => {
   return new Promise((resolve, reject) => {
     axios
-      .get(process.env.REACT_APP_FEED_HDAO, { params: {counter: counter } })
+      .get(process.env.REACT_APP_FEED_HDAO, {
+        params: {counter: counter } })
       .then((res) => {
         resolve(filterFeeds(res.data.result))
       })
@@ -78,7 +80,8 @@ export const GethDAOFeed = async ({ counter }) => {
 export const GetFeaturedFeed = async ({ counter, max_time }) => {
   return new Promise((resolve, reject) => {
     axios
-      .get(process.env.REACT_APP_FEATURED, { params: {counter: counter, max_time: max_time } })
+      .get(process.env.REACT_APP_FEATURED, {
+        params: {counter: counter, max_time: max_time } })
       .then((res) => {
         resolve(filterFeeds(res.data.result))
       })
@@ -91,7 +94,8 @@ export const GetFeaturedFeed = async ({ counter, max_time }) => {
 export const GetRandomFeed = async ({ counter }) => {
   return new Promise((resolve, reject) => {
     axios
-      .get(process.env.REACT_APP_RANDOM, { params: { counter: counter }})
+      .get(process.env.REACT_APP_RANDOM, {
+        params: { counter: counter }})
       .then((res) => {
         resolve(filterFeeds(res.data.result))
       })
