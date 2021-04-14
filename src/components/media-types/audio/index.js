@@ -1,38 +1,49 @@
-import React, { useEffect, useState } from 'react'
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useEffect, useRef, useState } from 'react'
+import classnames from 'classnames'
 import { PauseIcon, PlayIcon } from './icons'
 import { Visualiser } from './visualiser'
 import styles from './styles.module.scss'
 
-export const AudioComponent = ({ src, token_info }) => {
+export const AudioComponent = ({ src }) => {
+  const visualiser = useRef()
   const [userTouched, setUserTouched] = useState(false)
   const [play, setPlay] = useState(false)
 
   const togglePlay = () => {
-    console.log('toggle play')
-    userTouched(true)
+    setUserTouched(true)
     setPlay(!play)
   }
 
+  // user interaction
   useEffect(() => {
-    // const audio = new Audio()
-    // audio.src = src
-    // audio.controls = false
-    // audio.loop = true
-    // audio.autoplay = true
-    // audio.crossOrigin = 'anonymous'
+    if (userTouched) {
+      visualiser.current.init()
+    }
   }, [userTouched])
 
+  useEffect(() => {
+    if (userTouched) {
+      if (play) {
+        visualiser.current.play()
+      } else {
+        visualiser.current.pause()
+      }
+    }
+  }, [play])
+
+  const classes = classnames({
+    [styles.container]: true,
+    [styles.userTouch]: userTouched,
+  })
   return (
     <>
-      <div className={styles.container}>
+      <div className={classes}>
         {false && <img src="/test.png" alt="album cover" />}
-        {true && <audio title={token_info.name} src={src} controls />}
-        {false && <Visualiser />}
-        {false && (
-          <div className={styles.icons} onClick={togglePlay}>
-            {play ? <PauseIcon /> : <PlayIcon />}
-          </div>
-        )}
+        <Visualiser ref={visualiser} src={src} />
+        <div className={styles.icons} onClick={togglePlay}>
+          {play ? <PauseIcon /> : <PlayIcon />}
+        </div>
       </div>
     </>
   )

@@ -8,7 +8,19 @@
   width: 320px;
   height: 320px;
   margin: 0 auto;
-  // border: 1px dashed white;
+
+  &.userTouch {
+    .icons {
+      opacity: 0;
+      transition: opacity 0.3s ease-in-out;
+    }
+
+    &:hover {
+      .icons {
+        opacity: 1;
+      }
+    }
+  }
 
   img {
     display: none;
@@ -25,10 +37,9 @@
     justify-content: center;
     width: 100%;
     height: 100%;
-    border: 1px dashed red;
 
     svg {
-      width: 80px;
+      width: 50px;
       rect,
       path {
         fill: var(--text-color);
