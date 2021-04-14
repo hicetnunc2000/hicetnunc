@@ -1,6 +1,6 @@
-import React from 'react'
+// import React from 'react'
 
 export const Settings = () => {
   return null
-  return <div>Settings page</div>
+  // return <div>Settings page</div>
 }

@@ -1,7 +1,7 @@
 import React from 'react'
 import { Button, Primary } from '../button'
 import { walletPreview } from '../../utils/string'
-import styles from './index.module.scss'
+import styles from './styles.module.scss'
 
 export const OwnerList = ({ owners }) => (
   <div className={styles.container}>

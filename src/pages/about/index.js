@@ -3,7 +3,7 @@ import { Page, Container, Padding } from '../../components/layout'
 import { Button, Primary } from '../../components/button'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
 import { getLanguage } from '../../constants'
-import styles from './index.module.scss'
+import styles from './styles.module.scss'
 
 export class About extends Component {
   static contextType = HicetnuncContext
