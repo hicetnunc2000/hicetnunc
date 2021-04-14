@@ -3,7 +3,8 @@ import { useParams } from 'react-router'
 import { Page, Container, Padding } from '../../components/layout'
 import { Loading } from '../../components/loading'
 import { Button, Primary } from '../../components/button'
-import styles from './index.module.scss'
+import { Item } from './item'
+import styles from './styles.module.scss'
 
 export const GalleryDetail = () => {
   const { id } = useParams()
@@ -37,13 +38,15 @@ export const GalleryDetail = () => {
         </Container>
       ) : (
         <>
-          <Container>
-            <Padding>
-              <Button to="/galleries">
-                <Primary>back</Primary>
-              </Button>
-            </Padding>
-          </Container>
+          {false && (
+            <Container>
+              <Padding>
+                <Button to="/galleries">
+                  <Primary>back</Primary>
+                </Button>
+              </Padding>
+            </Container>
+          )}
 
           <Container>
             <Padding>
@@ -63,7 +66,16 @@ export const GalleryDetail = () => {
                 {collection.map((artist, i) => {
                   console.log('artist', artist)
                   return (
-                    <div className={styles.container} key={`artist${i}`}></div>
+                    <div className={styles.container} key={`artist${i}`}>
+                      <div className={styles.artist}>
+                        <strong>{artist.artist}</strong>
+                      </div>
+                      <div className={styles.gallery}>
+                        {artist.objkt.map((objkt) => {
+                          return <Item key={objkt} objkt={objkt} />
+                        })}
+                      </div>
+                    </div>
                   )
                 })}
               </div>

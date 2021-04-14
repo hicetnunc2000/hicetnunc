@@ -10,6 +10,7 @@
   {
     "uid": "thefen",
     "endpoint1": "https://raw.githubusercontent.com/joanielemercier/The_fen/main/thefen.json",
-    "endpoint": "https://dl.dropboxusercontent.com/s/owz0tthki0rgret/thefen.json"
+    "endpoint2": "https://dl.dropboxusercontent.com/s/owz0tthki0rgret/thefen.json",
+    "endpoint": "/galleries/thefen.json"
   }
 ]
