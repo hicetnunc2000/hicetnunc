@@ -1,0 +1,14 @@
+[
+  {
+    "uid": "objkt4objkt",
+    "endpoint": "/galleries/objkt4objkt.json"
+  },
+  {
+    "uid": "pupiladilatada",
+    "endpoint": "/galleries/pupiladilatada.json"
+  },
+  {
+    "uid": "thefen",
+    "endpoint": "https://dl.dropboxusercontent.com/s/owz0tthki0rgret/thefen.json"
+  }
+]
