@@ -11,17 +11,24 @@ export const GalleryDetail = () => {
   const [collection, setCollection] = useState([])
 
   useEffect(() => {
-    fetch(`/collections/${id}.json`)
+    // loads gallery to check endpoint file
+    fetch('/galleries/galleries.json')
       .then((e) => e.json())
-      .then((data) => {
-        console.log('collection', data)
-        setCollection(data)
-        setLoaded(true)
+      .then((galleries) => {
+        const found = galleries.find((e) => e.uid === id)
+
+        fetch(found.endpoint)
+          .then((e) => e.json())
+          .then((data) => {
+            console.log(data)
+            setCollection(data.data)
+            setLoaded(true)
+          })
       })
   }, [id])
 
   return (
-    <Page title="collections">
+    <Page title="galleries">
       {!loaded ? (
         <Container>
           <Padding>
@@ -32,8 +39,8 @@ export const GalleryDetail = () => {
         <>
           <Container>
             <Padding>
-              <Button to="/collections">
-                <Primary>back to collections</Primary>
+              <Button to="/galleries">
+                <Primary>back</Primary>
               </Button>
             </Padding>
           </Container>
@@ -52,15 +59,11 @@ export const GalleryDetail = () => {
 
           <Container>
             <Padding>
-              <div className={styles.list}>
-                {collection.objkt.map((nft, i) => {
+              <div className={styles.container}>
+                {collection.map((artist, i) => {
+                  console.log('artist', artist)
                   return (
-                    <div className={styles.container} key={`thumb${i}`}>
-                      <div
-                        style={{ backgroundColor: 'gray', height: '100px' }}
-                      />
-                      <div className={styles.number}>OBJKT#{nft}</div>
-                    </div>
+                    <div className={styles.container} key={`artist${i}`}></div>
                   )
                 })}
               </div>

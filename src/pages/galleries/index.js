@@ -8,19 +8,21 @@ export const Galleries = () => {
   const [collections, setCollections] = useState([])
 
   useEffect(() => {
-    fetch('/collections/collections.json')
+    fetch('/galleries/galleries.json')
       .then((e) => e.json())
       .then((data) => {
-        console.log('collections', data)
+        console.log('galleries', data)
         setCollections(data)
         setLoaded(true)
+
+        //http://www.joanielemercier.com/hicetnunc/thefen.json
       })
   }, [])
   return (
-    <Page title="collections">
+    <Page title="galleries">
       <Container>
         <Padding>
-          <strong>Collections</strong>
+          <strong>galleries</strong>
         </Padding>
       </Container>
       {!loaded ? (
@@ -35,7 +37,7 @@ export const Galleries = () => {
             <Padding>
               {collections.map((c) => {
                 return (
-                  <Button key={c.uid} to={`/collection/${c.uid}`}>
+                  <Button key={c.uid} to={`/galleries/${c.uid}`}>
                     <Primary>{c.title}</Primary>
                   </Button>
                 )
