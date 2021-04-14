@@ -5,7 +5,7 @@ import { Loading } from '../../components/loading'
 import { Button, Primary } from '../../components/button'
 import styles from './index.module.scss'
 
-export const CollectionDetail = () => {
+export const GalleryDetail = () => {
   const { id } = useParams()
   const [loaded, setLoaded] = useState(false)
   const [collection, setCollection] = useState([])

@@ -3,7 +3,7 @@ import { Page, Container, Padding } from '../../components/layout'
 import { Loading } from '../../components/loading'
 import { Button, Primary } from '../../components/button'
 
-export const Collections = () => {
+export const Galleries = () => {
   const [loaded, setLoaded] = useState(false)
   const [collections, setCollections] = useState([])
 
