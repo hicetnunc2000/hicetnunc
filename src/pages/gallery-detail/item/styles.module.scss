@@ -2,5 +2,23 @@
 @import '../../../styles/variables.scss';
 
 .container {
-  border: 1px dashed green;
+  position: relative;
+  display: inline-block;
+  margin: 0 0 1em;
+  width: 100%;
+
+  .image {
+    position: relative;
+
+    .number {
+      position: absolute;
+      bottom: 6px;
+      right: 6px;
+      padding: 4px;
+      background-color: var(--text-color);
+      color: var(--background-color);
+      transition: background-color #{$theme-duration} ease-out,
+        color #{$theme-duration} ease-out;
+    }
+  }
 }
