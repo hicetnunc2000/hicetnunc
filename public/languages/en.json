@@ -4,7 +4,7 @@
     "menu": [
       { "primary": "○", "route": "/hdao" },
       { "primary": "random", "route": "/random" },
-      { "primary": "OBJKTs", "secondary": "(mint NFTs)", "route": "/mint" },
+      { "primary": "OBJKTs", "route": "/mint" },
       { "primary": "manage asseets", "route": "/sync" },
       { "primary": "about", "route": "/about" }
     ]
@@ -37,7 +37,7 @@
     "title": "hic et nunc",
     "paragraphs": [
       "The present decentralized application allows its users to manage decentralized digital assets, serving as a public smart contract infrastructure on Tezos Blockchain.",
-      "IPFS NFTs can be minted and traded by permissionless means. such experiment was designed intending to imagine alternative crypto economies.",
+      "IPFS OBJKTs can be minted and traded by permissionless means. such experiment was designed intending to imagine alternative crypto economies.",
       "We're concerned about your security and autonomy. please verify informations while making transactions.",
       "For consulting, networking or questions get in touch by %EMAIL%, %DISCORD%, or on %REDDIT%.",
       "Please read through our %WIKI%.",
@@ -74,7 +74,7 @@
       "cta": "cancel it"
     },
     "burn": {
-      "title": "Burning your NFT will permanently delete it from the network",
+      "title": "Burning your OBJKT will permanently delete it from the network",
       "cta": "burn it"
     },
     "confirm": "Are you sure?"

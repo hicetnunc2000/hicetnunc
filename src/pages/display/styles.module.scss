@@ -26,32 +26,21 @@
 }
 
 .list {
-  display: grid;
-  grid-column-gap: 10px;
-  grid-row-gap: 10px;
-  grid-template-columns: repeat(1, minmax(0, 1fr));
+  column-gap: 1em;
 
   @include respond-to('tablet') {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    column-count: 3;
   }
 
   @include respond-to('desktop') {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    column-count: 4;
   }
 
   .container {
     position: relative;
-    grid-column-end: span 1; // 1/1
-    margin-bottom: 40px;
-
-    @include respond-to('tablet') {
-      grid-column-end: span 2; // 2/4
-      margin-bottom: initial;
-    }
-
-    @include respond-to('desktop') {
-      grid-column-end: span 1; // 1/4
-    }
+    display: inline-block;
+    margin: 0 0 1em;
+    width: 100%;
 
     .number {
       position: absolute;
