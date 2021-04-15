@@ -1,7 +1,7 @@
 import React from 'react'
 import { Helmet } from 'react-helmet'
 import { VisuallyHidden } from '../../visually-hidden'
-import styles from './index.module.scss'
+import styles from './styles.module.scss'
 
 export const Page = ({ title = 'hic et nunc', children = null }) => {
   return (

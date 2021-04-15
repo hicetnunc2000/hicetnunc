@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import styles from './index.module.scss'
+import styles from './styles.module.scss'
 
 /* DOCS: https://modelviewer.dev/ */
 export const GLBComponent = ({ src, interactive }) => {

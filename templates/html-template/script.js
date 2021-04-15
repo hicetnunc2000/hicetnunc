@@ -9,8 +9,8 @@
 const creator = new URLSearchParams(window.location.search).get('creator')
 const viewer = new URLSearchParams(window.location.search).get('viewer')
 
-console.log('NFT created by', creator)
-console.log('NFT viewed by', viewer)
+console.log('OBJKT created by', creator)
+console.log('OBJKT viewed by', viewer)
 
 // Dont forget to add your own resize handler. hicetnunc expects to get content in the whole width and heght
 // const resize = () => {

@@ -6,14 +6,20 @@ export async function prepareFilesFromZIP(buffer) {
   // unzip files
   let files = await unzipBuffer(buffer)
 
-  // inject CSP meta tag
+  // save raw index file
   const indexBlob = files['index.html']
   files['index_raw.html'] = new Blob([indexBlob], { type: indexBlob.type })
-  const indexBuffer = await indexBlob.arrayBuffer()
-  const safeIndexBuffer = injectCSPMetaTagIntoBuffer(indexBuffer)
-  files['index.html'] = new Blob([safeIndexBuffer], {
-    type: indexBlob.type,
-  })
+
+  // inject CSP meta tag in all html files
+  for (let k in files) {
+    if (k.endsWith('.html') || k.endsWith('.htm')) {
+      const pageBuffer = await files[k].arrayBuffer()
+      const safePageBuffer = injectCSPMetaTagIntoBuffer(pageBuffer)
+      files[k] = new Blob([safePageBuffer], {
+        type: indexBlob.type,
+      })
+    }
+  }
 
   // reformat
   files = Object.entries(files).map((file) => {
@@ -149,12 +155,16 @@ export function injectCSPMetaTagIntoHTML(html) {
       data:
       blob:
       https://ipfs.infura.io
-      https://cloudflare-ipfs.com/;
+      https://cloudflare-ipfs.com/
+      https://ipfs.io/
+      https://gateway.pinata.cloud/;
     font-src
       'self'
       https://ipfs.infura.io
       https://cloudflare-ipfs.com/
-      https://fonts.googleapis.com/;
+      https://fonts.googleapis.com/
+      https://ipfs.io/
+      https://gateway.pinata.cloud/;
     connect-src
       'self'
       https://better-call.dev
@@ -163,6 +173,7 @@ export function injectCSPMetaTagIntoHTML(html) {
       https://cryptonomic-infra.tech
       https://*.infura.io
       https://infura.io
+      blob:
       ws:
       wss:
       bootstrap.libp2p.io
@@ -188,12 +199,16 @@ export function injectCSPMetaTagIntoHTML(html) {
       data:
       blob:
       https://ipfs.infura.io
-      https://cloudflare-ipfs.com/;
+      https://cloudflare-ipfs.com/
+      https://ipfs.io/
+      https://gateway.pinata.cloud/;
     prefetch-src
       'self'
       https://ipfs.infura.io
       https://cloudflare-ipfs.com/
-      https://fonts.googleapis.com/;
+      https://fonts.googleapis.com/
+      https://ipfs.io/
+      https://gateway.pinata.cloud/;
     webrtc-src
       *;
     worker-src

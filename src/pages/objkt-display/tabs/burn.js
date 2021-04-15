@@ -15,7 +15,7 @@ export const Burn = (props) => {
     )
     if (r) {
       setProgress(true)
-      setMessage('burning NFT')
+      setMessage('burning OBJKT')
       burn(props.token_id, props.owners)
     }
   }
