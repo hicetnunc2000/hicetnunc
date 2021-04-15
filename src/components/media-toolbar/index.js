@@ -43,11 +43,11 @@ export const MediaToolbar = (props) => {
               <div className={styles.bg}></div>
               <div className={styles.box}>
                 Interactive OBJKTs can see your wallet address. This lets them
-                do things like generate unique content.
+                do interesting things like generate unique content.
                 <br />
                 <br />
-                Please be mindful of this when allowing features like camera,
-                microphone, and file downloads.
+                Please be mindful of this when allowing features like camera and
+                microphone.
                 <br />
                 <br />
                 <div className={styles.buttons}>
