@@ -8,6 +8,27 @@ import { Button } from '../../../components/button'
 
 import styles from './styles.module.scss'
 
+/**
+ * Get OBJKT detail page with retries
+ */
+export const GetOBJKTStubbornly = async ({ id, tries = 5 }) => {
+  let count = 0
+  while (count < tries) {
+    try {
+      return await GetOBJKT({ id })
+    } catch (err) {
+      if (++count === tries) {
+        throw new Error(err)
+      }
+      await new Promise((resolve) =>
+        setTimeout(() => {
+          resolve()
+        }, 1000)
+      )
+    }
+  }
+}
+
 export const Item = ({ objkt }) => {
   const [data, setData] = useState()
   const { ref, inView } = useInView({
@@ -16,11 +37,10 @@ export const Item = ({ objkt }) => {
   const shown = useRef(false)
 
   useEffect(() => {
-    GetOBJKT({ id: objkt })
+    GetOBJKTStubbornly({ id: objkt })
       .then(async (e) => {
         const { token_info } = e
         const { mimeType, uri } = token_info.formats[0]
-
         setData({ mimeType, uri: uri.split('//')[1], metadata: e })
       })
       .catch((e) => console.log('error loading', objkt))
