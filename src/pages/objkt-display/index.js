@@ -14,8 +14,8 @@ import { Info, Collectors, Swap, Burn } from './tabs'
 const TABS = [
   { title: 'info', component: Info },
   { title: 'collectors', component: Collectors },
-  { title: 'swap', component: Swap, creatorOnly: true, secondaryMarket: true }, // visible if user is the creator or if user can sell on secondary market
-  { title: 'burn', component: Burn, creatorOnly: true, secondaryMarket: true }, // visible if user is the creator
+  { title: 'swap', component: Swap, visibility: ['creator','owner'] }, // visible if user is the creator or if user can sell on secondary market
+  { title: 'burn', component: Burn, visibility: ['creator','owner'] }, // visible if user is the creator or if user can sell on secondary market
 ]
 
 export const ObjktDisplay = () => {
@@ -28,6 +28,21 @@ export const ObjktDisplay = () => {
 
   const address = context.acc?.address
 
+  var roles = []
+  function checkRoles(obj,addr) {
+    if (
+      Object.keys(obj.owners).length > 0 &&
+      Object.keys(obj.owners).indexOf(addr) > -1
+    ) { roles.push('owner') }
+
+    if (
+      obj.token_info.creators[0] === addr
+    ) { roles.push('creator') } 
+    roles = [...new Set(roles)] //dedupe
+
+    return roles
+  }
+    
   useEffect(() => {
     GetOBJKT({ id }).then(async (objkt) => {
       await context.setAccount()
@@ -69,24 +84,12 @@ export const ObjktDisplay = () => {
             <Padding>
               <Menu>
                 {TABS.map((tab, index) => {
-                  // if secondaryMarket is enabled, we need to check if user owns a copy of the objkt.
-                  // if it doesn't don't render tab
+                  checkRoles(nft,address)
                   if (
-                    tab.secondaryMarket === true &&
-                    Object.keys(nft.owners).length > 0 &&
-                    Object.keys(nft.owners).indexOf(address) === -1
+                    (tab.visibility && !roles.some(r=> tab.visibility.includes(r)))
                   ) {
                     return null
-                  }
-
-                  // hide menu if user is NOT the owner
-                  // and if user DOESN'T own a copy of the objkt
-                  if (
-                    tab.creatorOnly &&
-                    nft.token_info.creators[0] !== address
-                  ) {
-                    return null
-                  }
+                  } 
 
                   return (
                     <Button key={tab.title} onClick={() => setTabIndex(index)}>
