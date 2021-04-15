@@ -67,5 +67,6 @@
   },
   "resolutions": {
     "web-encoding": "1.1.4"
-  }
+  },
+  "engines": { "node" : "14.16.1" }
 }
