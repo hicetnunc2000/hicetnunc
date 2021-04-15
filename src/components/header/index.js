@@ -10,7 +10,7 @@ import { fadeIn } from '../../utils/motion'
 import { Menu } from '../icons'
 import { walletPreview } from '../../utils/string'
 import { VisuallyHidden } from '../visually-hidden'
-import styles from './style.module.scss'
+import styles from './styles.module.scss'
 import { getItem, setItem } from '../../utils/storage'
 
 /* import { BeaconWallet } from '@taquito/beacon-wallet'
@@ -121,9 +121,7 @@ export const Header = () => {
                     </li>
                     <li>
                       <Button onClick={() => handleRoute('/mint')}>
-                        <Primary>
-                          OBJKTs<i style={{ fontSize: '15px' }}>(mint NFTs)</i>
-                        </Primary>
+                        <Primary>OBJKTs</Primary>
                       </Button>
                     </li>
                     <li>

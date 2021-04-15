@@ -7,6 +7,7 @@ const createClient = require('ipfs-http-client')
 const Buffer = require('buffer').Buffer
 const axios = require('axios')
 const readJsonLines = require('read-json-lines-sync').default
+const { getCoverImagePathFromBuffer } = require('../utils/html')
 
 const infuraUrl = 'https://ipfs.infura.io:5001'
 
@@ -67,8 +68,8 @@ export const prepareDirectory = async ({
   generateDisplayUri,
 }) => {
   // upload directory of files
-  const dirHash = await uploadFilesToDirectory(files)
-  const cid = `ipfs://${dirHash}`
+  const hashes = await uploadFilesToDirectory(files)
+  const cid = `ipfs://${hashes.directory}`
 
   // upload cover image
   const ipfs = createClient(infuraUrl)
@@ -78,6 +79,9 @@ export const prepareDirectory = async ({
     const coverInfo = await ipfs.add(cover.buffer)
     const coverHash = coverInfo.path
     displayUri = `ipfs://${coverHash}`
+  } else if (hashes.cover) {
+    // TODO: Remove this once generateDisplayUri option is gone
+    displayUri = `ipfs://${hashes.cover}`
   }
 
   // upload thumbnail image
@@ -118,9 +122,28 @@ async function uploadFilesToDirectory(files) {
   })
 
   const data = readJsonLines(res.data)
+
+  // TODO: Remove this once generateDisplayUri option is gone
+  // get cover hash
+  let cover = null
+  const indexFile = files.find((f) => f.path === 'index.html')
+  if (indexFile) {
+    const indexBuffer = await indexFile.blob.arrayBuffer()
+    const coverImagePath = getCoverImagePathFromBuffer(indexBuffer)
+
+    if (coverImagePath) {
+      const coverEntry = data.find((f) => f.Name === coverImagePath)
+      if (coverEntry) {
+        cover = coverEntry.Hash
+      }
+    }
+  }
+
   const rootDir = data.find((e) => e.Name === '')
 
-  return rootDir.Hash
+  const directory = rootDir.Hash
+
+  return { directory, cover }
 }
 
 async function uploadMetadataFile({
