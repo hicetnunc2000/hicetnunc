@@ -20,6 +20,7 @@ export const ItemInfo = ({
   const { syncTaquito, collect, curate, acc } = useContext(HicetnuncContext)
 
   let s = _.minBy(swaps, (o) => Number(o.xtz_per_objkt))
+  let maxPrice = _.maxBy(swaps, (o) => Number(o.xtz_per_objkt))
 
   var message = ''
 
@@ -59,6 +60,9 @@ export const ItemInfo = ({
                     {swaps[0] !== undefined ? s.objkt_amount : undefined}
                   </span>
                 </span>
+              </p>
+              <p>
+                Price range: {(Number(s.xtz_per_objkt) / 1000000).toFixed(2)}-{(Number(maxPrice.xtz_per_objkt) / 1000000).toFixed(2)}
               </p>
             </div>
           )}
