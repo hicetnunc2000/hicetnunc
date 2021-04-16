@@ -120,6 +120,11 @@ export const Header = () => {
                       </Button>
                     </li>
                     <li>
+                      <Button onClick={() => handleRoute('/latest')}>
+                        <Primary>latest</Primary>
+                      </Button>
+                    </li>
+                    <li>
                       <Button onClick={() => handleRoute('/mint')}>
                         <Primary>OBJKTs</Primary>
                       </Button>
