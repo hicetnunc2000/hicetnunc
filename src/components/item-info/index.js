@@ -20,11 +20,14 @@ export const ItemInfo = ({
   const { syncTaquito, collect, curate, acc } = useContext(HicetnuncContext)
   const reducer = (accumulator, currentValue) => parseInt(accumulator) + parseInt(currentValue)
 
+  // subtract burned pieces from total
   let total = _.values(owners).length !== 0 ? _.values(owners).reduce(reducer) : 'X'
+  
+  try {
+    total = total - owners['tz1burnburnburnburnburnburnburjAYjjX']
+  } catch (e) {}
   console.log(total)
-/*   let ed = swaps.length !== 0 ? 
-  console.log(total) */
-  //console.log(swaps.map(e => e.objkt_amount).reduce(reducer))
+
   let ed = swaps.length !== 0 ? swaps.map(e => e.objkt_amount).reduce(reducer) : 'X'
   let s = _.minBy(swaps, (o) => Number(o.xtz_per_objkt))
 
