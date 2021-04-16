@@ -4,8 +4,7 @@ import Display from './pages/display'
 import { Latest, Hdao, Random } from './pages/feeds'
 import { Mint } from './pages/mint'
 import { ObjktDisplay } from './pages/objkt-display'
-// import { Galleries } from './pages/galleries'
-import { GalleryDetail } from './pages/gallery-detail'
+// import { Collections } from './pages/collections'
 
 export const routes = [
   {
@@ -50,12 +49,7 @@ export const routes = [
   },
   // {
   //   exact: false,
-  //   path: '/gallery',
-  //   component: Galleries,
+  //   path: '/collections/:id',
+  //   component: Collections,
   // },
-  {
-    exact: false,
-    path: '/gallery/:id',
-    component: GalleryDetail,
-  },
 ]

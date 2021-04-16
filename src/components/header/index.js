@@ -125,11 +125,6 @@ export const Header = () => {
                       </Button>
                     </li>
                     <li>
-                      <Button onClick={() => handleRoute('/collections')}>
-                        <Primary>collections</Primary>
-                      </Button>
-                    </li>
-                    <li>
                       <Button onClick={() => handleRoute('/sync')}>
                         <Primary>manage assets</Primary>
                       </Button>
