@@ -41,6 +41,10 @@ export const GalleryDetail = () => {
           alert(`gallery ${id} not found`)
         }
       })
+
+    return () => {
+      document.body.style = {}
+    }
   }, [id])
 
   return (
