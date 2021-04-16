@@ -43,7 +43,9 @@ export const ObjktDisplay = () => {
     <Page title={nft?.token_info.name}>
       {loading && (
         <Container>
-          <Loading />
+          <Padding>
+            <Loading />
+          </Padding>
         </Container>
       )}
 
