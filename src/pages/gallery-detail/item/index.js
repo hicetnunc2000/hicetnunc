@@ -3,9 +3,6 @@ import { useInView } from 'react-intersection-observer'
 import { GetOBJKT } from '../../../data/api'
 import { renderMediaType } from '../../../components/media-types'
 import { Loading } from '../../../components/loading'
-import { PATH } from '../../../constants'
-import { Button } from '../../../components/button'
-
 import styles from './styles.module.scss'
 
 /**
@@ -29,7 +26,7 @@ export const GetOBJKTStubbornly = async ({ id, tries = 5 }) => {
   }
 }
 
-export const Item = ({ objkt }) => {
+export const Item = ({ objkt, onClick }) => {
   const [data, setData] = useState()
   const { ref, inView } = useInView({
     rootMargin: '0px 0px 50% 0px',
@@ -41,7 +38,7 @@ export const Item = ({ objkt }) => {
       .then(async (e) => {
         const { token_info } = e
         const { mimeType, uri } = token_info.formats[0]
-        setData({ mimeType, uri: uri.split('//')[1], metadata: e })
+        setData({ ...e, mimeType, uri: uri.split('//')[1], metadata: e })
       })
       .catch((e) => console.log('error loading', objkt))
   }, [objkt])
@@ -52,28 +49,27 @@ export const Item = ({ objkt }) => {
 
   return (
     <div className={styles.container} ref={ref}>
-      <div>
+      <>
         {data ? (
-          <Button to={`${PATH.OBJKT}/${objkt}`} key={objkt}>
-            {inView || shown ? (
-              <div className={styles.image}>
+          <div key={`item-${objkt}`} onClick={() => onClick(data)}>
+            {(inView || shown) && (
+              <div className={styles.image} style={{ pointerEvents: 'none' }}>
                 {renderMediaType({
                   ...data,
-                  shown: shown.current,
-                  inView,
+                  shown: shown.current, //README: What's this?
+                  inView, // README: and this? Not used on renderMediaType
+                  interactive: false,
                 })}
                 <div className={styles.number}>OBJKT#{objkt}</div>
               </div>
-            ) : (
-              <div className={styles.image}>OFFSCREEN</div>
             )}
-          </Button>
+          </div>
         ) : (
           <div>
             <Loading />
           </div>
         )}
-      </div>
+      </>
     </div>
   )
 }

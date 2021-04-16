@@ -1,0 +1,72 @@
+@import '../../../styles/layout.scss';
+@import '../../../styles/variables.scss';
+
+.container {
+  width: 100%;
+  z-index: 2;
+  display: flex;
+
+  @include respond-to('desktop') {
+    width: 1024px;
+  }
+
+  .image {
+    width: 50%;
+    background-color: black;
+  }
+
+  .info {
+    position: relative;
+    width: 50%;
+    padding: 20px;
+    background-color: var(--background-color);
+    color: var(--text-color);
+
+    .number {
+      display: inline-block;
+      padding: 4px;
+      background-color: var(--text-color);
+      color: var(--background-color);
+      margin-bottom: 2rem;
+    }
+
+    .title {
+      font-weight: bold;
+      margin-bottom: 1rem;
+    }
+
+    .description {
+      margin-bottom: 2rem;
+    }
+
+    .collect {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+    }
+
+    .artist {
+      position: absolute;
+      bottom: 20px;
+      left: 20px;
+      display: flex;
+      align-items: center;
+
+      .icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        overflow: hidden;
+        margin-right: 1rem;
+        border: 1px solid black;
+        padding: 1px;
+
+        img {
+          width: 100%;
+          height: auto;
+          border-radius: 50%;
+        }
+      }
+    }
+  }
+}

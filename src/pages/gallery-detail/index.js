@@ -1,15 +1,27 @@
 import React, { useEffect, useState } from 'react'
+import { AnimatePresence } from 'framer-motion'
 import { useParams } from 'react-router'
 import { Page, Container, Padding } from '../../components/layout'
 import { Loading } from '../../components/loading'
 import { Button, Primary } from '../../components/button'
 import { Item } from './item'
+import { ItemModal } from './item-modal'
 import styles from './styles.module.scss'
 
 export const GalleryDetail = () => {
   const { id } = useParams()
   const [loaded, setLoaded] = useState(false)
   const [collection, setCollection] = useState([])
+  const [modal, setModal] = useState()
+
+  const showModal = (info) => {
+    setModal(info)
+    if (info) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style = {}
+    }
+  }
 
   useEffect(() => {
     // loads gallery to check endpoint file
@@ -22,7 +34,6 @@ export const GalleryDetail = () => {
           fetch(found.endpoint)
             .then((e) => e.json())
             .then((data) => {
-              console.log(data)
               setCollection(data)
               setLoaded(true)
             })
@@ -41,7 +52,7 @@ export const GalleryDetail = () => {
           </Padding>
         </Container>
       ) : (
-        <>
+        <div className={styles.container}>
           {false && (
             <Container>
               <Padding>
@@ -52,13 +63,13 @@ export const GalleryDetail = () => {
             </Container>
           )}
 
-          <Container xlarge>
+          <Container>
             <Padding>
               <strong>{collection.title}</strong>
             </Padding>
           </Container>
 
-          <Container xlarge>
+          <Container>
             <Padding>
               <p>{collection.description}</p>
             </Padding>
@@ -66,10 +77,10 @@ export const GalleryDetail = () => {
 
           <Container xlarge>
             <Padding>
-              <div className={styles.container}>
+              <div className={styles.content}>
                 {collection.data.map((artist, i) => {
                   return (
-                    <div className={styles.container} key={`artist${i}`}>
+                    <div className={styles.block} key={`artist${i}`}>
                       {artist.artist && (
                         <div className={styles.artist}>
                           <strong>{artist.artist}</strong>
@@ -77,7 +88,13 @@ export const GalleryDetail = () => {
                       )}
                       <div className={styles.gallery}>
                         {artist.objkt.map((objkt) => {
-                          return <Item key={objkt} objkt={objkt} />
+                          return (
+                            <Item
+                              key={objkt}
+                              objkt={objkt}
+                              onClick={(info) => showModal(info)}
+                            />
+                          )
                         })}
                       </div>
                     </div>
@@ -86,7 +103,19 @@ export const GalleryDetail = () => {
               </div>
             </Padding>
           </Container>
-        </>
+
+          <AnimatePresence>
+            {modal && (
+              <div className={styles.modal}>
+                <div
+                  className={styles.background}
+                  onClick={() => showModal(false)}
+                />
+                <ItemModal info={modal} />
+              </div>
+            )}
+          </AnimatePresence>
+        </div>
       )}
     </Page>
   )
