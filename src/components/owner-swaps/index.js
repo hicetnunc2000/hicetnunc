@@ -3,7 +3,7 @@ import { Button, Primary, Purchase } from '../button'
 import { walletPreview } from '../../utils/string'
 import styles from './styles.module.scss'
 
-export const OwnerSwaps = ({ swaps, handleCollect, acc, cancel }) => (
+export const OwnerSwaps = ({ swaps, handleCollect, acc, cancel, creator }) => (
   <div className={styles.container}>
     {swaps.map((swap, index) => {
       return (
@@ -13,6 +13,8 @@ export const OwnerSwaps = ({ swaps, handleCollect, acc, cancel }) => (
             <Button to={`/tz/${swap.issuer}`}>
               <Primary>{walletPreview(swap.issuer)}</Primary>
             </Button>
+            {(swap.issuer===creator) ? '\u00A0(creator)' : '' }
+            {(swap.issuer===acc?.address) ? '\u00A0(you)' : '' }
           </div>
 
           <div className={styles.buttons}>
