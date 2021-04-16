@@ -347,6 +347,10 @@ export default class HicetnuncContextProvider extends Component {
           title: title,
         })
       },
+
+      currentObjkt: undefined,
+      setCurrentObjkt: (currentObjkt) => this.setState({ currentObjkt }),
+
     }
   }
 
