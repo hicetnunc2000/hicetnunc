@@ -21,11 +21,16 @@ export const ItemInfo = ({
   const reducer = (accumulator, currentValue) => parseInt(accumulator) + parseInt(currentValue)
 
   // subtract burned pieces from total
-  let total = _.values(owners).length !== 0 ? _.values(owners).reduce(reducer) : 'X'
+  let total = 0
   
   try {
-    total = total - owners['tz1burnburnburnburnburnburnburjAYjjX']
-  } catch (e) {}
+    total = _.values(owners).length !== 0 ? _.values(owners).reduce(reducer) : 'X'
+    console.log(total)
+    total = _.keys(owners).includes('tz1burnburnburnburnburnburnburjAYjjX') ? total - owners['tz1burnburnburnburnburnburnburjAYjjX'] : total
+    //total = total - owners['tz1burnburnburnburnburnburnburjAYjjX']
+  } catch (e) {
+    total = _.values(owners).length !== 0 ? _.values(owners).reduce(reducer) : 'X'
+  }
   console.log(total)
 
   let ed = swaps.length !== 0 ? swaps.map(e => e.objkt_amount).reduce(reducer) : 'X'
