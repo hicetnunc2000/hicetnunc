@@ -31,6 +31,7 @@ export const ObjktDisplay = () => {
   useEffect(() => {
     GetOBJKT({ id }).then(async (objkt) => {
       await context.setAccount()
+      await context.setCurrentObjkt(objkt)
       setNFT(objkt)
 
       setLoading(false)
