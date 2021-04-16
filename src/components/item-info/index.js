@@ -18,7 +18,14 @@ export const ItemInfo = ({
   isDetailView,
 }) => {
   const { syncTaquito, collect, curate, acc } = useContext(HicetnuncContext)
+  const reducer = (accumulator, currentValue) => parseInt(accumulator) + parseInt(currentValue)
 
+  let total = _.values(owners).length !== 0 ? _.values(owners).reduce(reducer) : 'X'
+  console.log(total)
+/*   let ed = swaps.length !== 0 ? 
+  console.log(total) */
+  //console.log(swaps.map(e => e.objkt_amount).reduce(reducer))
+  let ed = swaps.length !== 0 ? swaps.map(e => e.objkt_amount).reduce(reducer) : 'X'
   let s = _.minBy(swaps, (o) => Number(o.xtz_per_objkt))
 
   var message = ''
@@ -56,7 +63,7 @@ export const ItemInfo = ({
                 <span>
                   Editions:
                   <span>
-                    {swaps[0] !== undefined ? s.objkt_amount : undefined}
+                    {ed}/{total}
                   </span>
                 </span>
               </p>

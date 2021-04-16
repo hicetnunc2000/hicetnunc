@@ -73,10 +73,10 @@ export const ObjktDisplay = () => {
                 {TABS.map((tab, index) => {
                   // if secondaryMarket is enabled, we need to check if user owns a copy of the objkt.
                   // if it doesn't don't render tab
-                  if (
-                    tab.secondaryMarket === true &&
-                    Object.keys(nft.owners).length > 0 &&
-                    Object.keys(nft.owners).indexOf(address) === -1
+/*                   if (
+                    tab.secondaryMarket === true //&&
+                    //Object.keys(nft.owners).length > 0 &&
+                    //Object.keys(nft.owners).includes(address)
                   ) {
                     return null
                   }
@@ -85,10 +85,10 @@ export const ObjktDisplay = () => {
                   // and if user DOESN'T own a copy of the objkt
                   if (
                     tab.creatorOnly &&
-                    nft.token_info.creators[0] !== address
+                    nft.token_info.creators[0] == address
                   ) {
                     return null
-                  }
+                  } */
 
                   return (
                     <Button key={tab.title} onClick={() => setTabIndex(index)}>
