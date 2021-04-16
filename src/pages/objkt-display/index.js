@@ -43,7 +43,9 @@ export const ObjktDisplay = () => {
     <Page title={nft?.token_info.name}>
       {loading && (
         <Container>
-          <Loading />
+          <Padding>
+            <Loading />
+          </Padding>
         </Container>
       )}
 
@@ -69,21 +71,21 @@ export const ObjktDisplay = () => {
             <Padding>
               <Menu>
                 {TABS.map((tab, index) => {
-                  // hide menu if user is NOT the owner
-                  // and if user DOESN'T own a copy of the objkt
-                  if (
-                    tab.creatorOnly &&
-                    nft.token_info.creators[0] !== address &&
-                    tab.secondaryMarket !== true
-                  ) {
-                    return null
-                  }
-
                   // if secondaryMarket is enabled, we need to check if user owns a copy of the objkt.
                   // if it doesn't don't render tab
                   if (
                     tab.secondaryMarket === true &&
+                    Object.keys(nft.owners).length > 0 &&
                     Object.keys(nft.owners).indexOf(address) === -1
+                  ) {
+                    return null
+                  }
+
+                  // hide menu if user is NOT the owner
+                  // and if user DOESN'T own a copy of the objkt
+                  if (
+                    tab.creatorOnly &&
+                    nft.token_info.creators[0] !== address
                   ) {
                     return null
                   }

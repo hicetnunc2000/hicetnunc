@@ -24,6 +24,8 @@ export const renderMediaType = ({
   uri,
   interactive = false,
   preview = false,
+  shown = null, // only set in gallery item for now
+  inView = null, // only set in gallery item for now
   metadata,
 }) => {
   const path = uri

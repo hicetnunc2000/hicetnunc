@@ -30,18 +30,20 @@ export const Upload = ({
     reader.readAsDataURL(file)
   }
 
-  const accept = allowedTypes.join(',')
+  const props = {
+    type: 'file',
+    name: 'file',
+  }
+
+  if (allowedTypes) {
+    props['accept'] = allowedTypes.join(',')
+  }
 
   return (
     <div className={styles.container}>
       <label>
         {title}
-        <input
-          type="file"
-          name="file"
-          accept={accept}
-          onChange={onFileChange}
-        />
+        <input {...props} onChange={onFileChange} />
       </label>
       <div className={styles.allowed}>
         {language.mint.supports}:&nbsp;{allowedTypesLabel}

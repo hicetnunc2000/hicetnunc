@@ -5,6 +5,7 @@ import { getInitialData } from './data/api'
 import { Header } from './components/header'
 import { Loading as Preloading } from './components/loading'
 import { routes } from './routes'
+import { Settings } from './components/settings'
 
 const App = () => {
   const [loading, setLoading] = useState(true)
@@ -23,6 +24,7 @@ const App = () => {
   return (
     <HicetnuncContextProvider>
       <Header />
+      <Settings />
       <Switch>
         {routes.map(({ exact, path, component: Comp }) => (
           <Route path={path} exact={exact} key={path} component={Comp} />

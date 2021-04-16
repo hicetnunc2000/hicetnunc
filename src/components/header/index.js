@@ -126,11 +126,16 @@ export const Header = () => {
                     </li>
                     <li>
                       <Button onClick={() => handleRoute('/mint')}>
-                        <Primary>
-                          OBJKTs<i style={{ fontSize: '15px' }}>(mint NFTs)</i>
-                        </Primary>
+                        <Primary>OBJKTs</Primary>
                       </Button>
                     </li>
+                    {false && (
+                      <li>
+                        <Button onClick={() => handleRoute('/galleries')}>
+                          <Primary>galleries</Primary>
+                        </Button>
+                      </li>
+                    )}
                     <li>
                       <Button onClick={() => handleRoute('/sync')}>
                         <Primary>manage assets</Primary>
