@@ -1,7 +1,7 @@
 import Sync from './pages/sync'
 import { About } from './pages/about'
 import Display from './pages/display'
-import { Latest, Hdao, Random } from './pages/feeds'
+import { Latest, Hdao, Random, Featured } from './pages/feeds'
 import { Mint } from './pages/mint'
 import { ObjktDisplay } from './pages/objkt-display'
 // import { Galleries } from './pages/galleries'
@@ -11,7 +11,7 @@ export const routes = [
   {
     exact: true,
     path: '/',
-    component: Latest,
+    component: Featured,
   },
   {
     exact: false,
@@ -22,6 +22,11 @@ export const routes = [
     exact: false,
     path: '/random',
     component: Random,
+  },
+  {
+    exact: false,
+    path: '/latest',
+    component: Latest,
   },
   {
     exact: false,
