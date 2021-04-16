@@ -11,6 +11,18 @@ export const ItemModal = ({ info }) => {
   const [name, setName] = useState('')
   const [profile, setProfile] = useState()
 
+  let message = ''
+  try {
+    message =
+      info.swaps[0] !== undefined
+        ? 'collect for ' +
+          Number(info.swaps[0].xtz_per_objkt) / 1000000 +
+          ' tez'
+        : 'not for sale'
+  } catch (e) {
+    message = 'not for sale'
+  }
+
   useEffect(() => {
     const creator = info.token_info.creators[0]
 
@@ -41,8 +53,8 @@ export const ItemModal = ({ info }) => {
         <div className={styles.description}>{info.token_info.description}</div>
 
         <div className={styles.collect}>
-          <Button onClick={() => alert('not working yet')}>
-            <Purchase>collect for X tez</Purchase>
+          <Button to={`${PATH.OBJKT}/${info.objectId}`}>
+            <Purchase>{message}</Purchase>
           </Button>
         </div>
 
