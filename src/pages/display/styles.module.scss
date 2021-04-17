@@ -25,6 +25,21 @@
   }
 }
 
+.tags {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin-bottom: 1em;
+
+  .tag {
+    padding: 0.1em 0.25em;
+    background-color: var(--border-color); // dimgray;
+    margin: 0.1em;
+    color: var(--text-color);
+    cursor: pointer;
+  }
+}
+
 .container {
   position: relative;
   .number {

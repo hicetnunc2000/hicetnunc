@@ -19,6 +19,10 @@ const sortByTokenId = (a, b) => {
   return b.token_id - a.token_id
 }
 
+const uniqueElement = (e, index, array) => {
+  return array.indexOf(e) === index
+}
+
 export default class Display extends Component {
   static contextType = HicetnuncContext
 
@@ -34,6 +38,7 @@ export default class Display extends Component {
     collectionState: false,
     creationsState: true,
     hdao: 0,
+    creationsTags: [],
   }
 
   componentWillMount = async () => {
@@ -67,10 +72,17 @@ export default class Display extends Component {
           (e) => this.state.wallet !== e.token_info.creators[0]
         )
 
+        const creationsTags = creations.map(
+          (e) => e.token_info.tags
+        ).flat()
+
         this.setState({
           creations: creations.sort(sortByTokenId),
           loading: false,
           collection: collection.sort(sortByTokenId),
+          creationsTags: creationsTags.filter(uniqueElement).map((e) => {
+            return {name: e, count: creationsTags.reduce((a, v) => (v === e ? a + 1 : a), 0)}
+          }).sort((a, b) => b.count - a.count)
         })
 
         /*
@@ -273,6 +285,11 @@ export default class Display extends Component {
 
         {this.state.creationsState && (
           <Container xlarge>
+            <div className={styles.tags}>
+              {this.state.creationsTags.map((tag) => {
+                return <div key={tag.name} className={styles.tag}>{tag.name} ({tag.count})</div>
+              })}
+            </div>
             <ResponsiveMasonry>
               {this.state.creations.map((nft, i) => {
                 const { mimeType, uri } = nft.token_info.formats[0]
