@@ -1,8 +1,7 @@
 import React, { useState } from 'react'
+import {AnimatePresence} from 'framer-motion'
 import { Button, Purchase } from '../button'
 import { IPFS_DIRECTORY_MIMETYPE } from '../../constants'
-import { CSSTransition } from 'react-transition-group'
-import '../../styles/transitions.scss'
 import styles from './index.module.scss'
 
 const IFRAME_PERMISSIONS_ALERT_KEY = 'hen:iframe-permissions-alert'
@@ -33,12 +32,9 @@ export const MediaToolbar = (props) => {
           <div className={styles.button} onClick={toggle}>
             i
           </div>
-          <CSSTransition
-            in={open}
-            timeout={250}
-            classNames="modal-fade"
-            unmountOnExit
-          >
+          
+          <AnimatePresence>
+          {open &&
             <div className={styles.modal}>
               <div className={styles.bg}></div>
               <div className={styles.box}>
@@ -57,7 +53,8 @@ export const MediaToolbar = (props) => {
                 </div>
               </div>
             </div>
-          </CSSTransition>
+}
+          </AnimatePresence>
         </div>
       )}
     </div>

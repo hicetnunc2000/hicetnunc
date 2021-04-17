@@ -41,8 +41,9 @@ export const ObjktDisplay = () => {
 
   const Tab = TABS[tabIndex].component
 
+  console.log('nft', nft)
   return (
-    <Page title={nft?.token_info.name}>
+    <Page title={'nft?.token_info.name'}>
       {loading && (
         <Container>
           <Loading />
@@ -74,7 +75,7 @@ export const ObjktDisplay = () => {
                 {TABS.map((tab, index) => {
                   // if secondaryMarket is enabled, we need to check if user owns a copy of the objkt.
                   // if it doesn't don't render tab
-/*                   if (
+                  /*                   if (
                     tab.secondaryMarket === true //&&
                     //Object.keys(nft.owners).length > 0 &&
                     //Object.keys(nft.owners).includes(address)
