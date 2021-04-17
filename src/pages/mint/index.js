@@ -1,6 +1,5 @@
 import React, { useContext, useState } from 'react'
 import { useHistory } from 'react-router'
-import Compressor from 'compressorjs'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
 import { Page, Container, Padding } from '../../components/layout'
 import { Input } from '../../components/input'
@@ -10,6 +9,8 @@ import { Upload } from '../../components/upload'
 import { Preview } from '../../components/preview'
 import { prepareFile, prepareDirectory } from '../../data/ipfs'
 import { prepareFilesFromZIP } from '../../utils/html'
+import { generateCompressedImage } from '../../utils/compress'
+
 import {
   ALLOWED_MIMETYPES,
   ALLOWED_FILETYPES_LABEL,
@@ -131,53 +132,25 @@ export const Mint = () => {
     if (GENERATE_DISPLAY_AND_THUMBNAIL) {
       if (props.mimeType.indexOf('image') === 0) {
         setNeedsCover(false)
-        const cover = await generateCompressedImage(props, coverOptions)
-        setCover(cover)
-        const thumb = await generateCompressedImage(props, thumbnailOptions)
-        setThumbnail(thumb)
+        await generateCoverAndThumbnail(props.file)
       } else {
         setNeedsCover(true)
       }
     }
   }
 
-  const generateCompressedImage = async (props, options) => {
-    const blob = await compressImage(props.file, options)
-    const mimeType = blob.type
-    const buffer = await blob.arrayBuffer()
-    const reader = await blobToDataURL(blob)
-    return { mimeType, buffer, reader }
-  }
-
-  const compressImage = (file, options) => {
-    return new Promise(async (resolve, reject) => {
-      new Compressor(file, {
-        ...options,
-        success(blob) {
-          resolve(blob)
-        },
-        error(err) {
-          reject(err)
-        },
-      })
-    })
-  }
-
-  const blobToDataURL = async (blob) => {
-    return new Promise((resolve, reject) => {
-      let reader = new FileReader()
-      reader.onerror = reject
-      reader.onload = (e) => resolve(reader.result)
-      reader.readAsDataURL(blob)
-    })
-  }
-
   const handleCoverUpload = async (props) => {
-    const cover = await generateCompressedImage(props, coverOptions)
+    await generateCoverAndThumbnail(props.file)
+  }
+
+  const generateCoverAndThumbnail = async (file) => {
+    const cover = await generateCompressedImage(file, coverOptions)
     setCover(cover)
 
-    const thumb = await generateCompressedImage(props, thumbnailOptions)
+    const thumb = await generateCompressedImage(file, thumbnailOptions)
     setThumbnail(thumb)
+
+    console.log(cover, thumb)
   }
 
   const handleValidation = () => {
