@@ -35,6 +35,7 @@ export const ItemInfo = ({
 
   let ed = swaps.length !== 0 ? swaps.map(e => e.objkt_amount).reduce(reducer) : 'X'
   let s = _.minBy(swaps, (o) => Number(o.xtz_per_objkt))
+  let maxPrice = _.maxBy(swaps, (o) => Number(o.xtz_per_objkt))
 
   var message = ''
 
@@ -74,6 +75,9 @@ export const ItemInfo = ({
                     {ed}/{total}
                   </span>
                 </span>
+              </p>
+              <p>
+                Price range: {(Number(s.xtz_per_objkt) / 1000000).toFixed(2)}-{(Number(maxPrice.xtz_per_objkt) / 1000000).toFixed(2)}
               </p>
             </div>
           )}
