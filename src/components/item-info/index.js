@@ -36,7 +36,6 @@ export const ItemInfo = ({
     total =
       _.values(owners).length !== 0 ? _.values(owners).reduce(reducer) : 'X'
   }
-  console.log(total)
 
   let ed =
     swaps.length !== 0 ? swaps.map((e) => e.objkt_amount).reduce(reducer) : 'X'
