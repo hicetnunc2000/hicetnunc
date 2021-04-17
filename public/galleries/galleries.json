@@ -9,7 +9,7 @@
   },
   {
     "uid": "thefen",
-    "endpoint1": "https://dl.dropboxusercontent.com/s/owz0tthki0rgret/thefen.json",
-    "endpoint": "/galleries/thefen.json"
+    "endpoint": "https://dl.dropboxusercontent.com/s/owz0tthki0rgret/thefen.json",
+    "test": "/galleries/thefen.json"
   }
 ]
