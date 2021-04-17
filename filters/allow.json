@@ -1,5 +1,5 @@
 {
-        // whitelist for checker tool by jagracar, may not be used as general whitelist! 
+        // whitelist for checker tool by jagracar, do not use as general whitelist! 
         // bakers
         "tz1SvASb4xmkiM82ijexDHzn6bYakaReBypt" : {"alias": "Anonstake Payouts"},
         "tz1TqU5hwh6CtC8Ps5GYBi7YyawvtKLNCbvQ" : {"alias": "Ateza Payouts"},
