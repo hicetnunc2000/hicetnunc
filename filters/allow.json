@@ -1,6 +1,4 @@
 {
-        // whitelist for checker tool by jagracar, do not use as general whitelist! 
-        // bakers
         "tz1SvASb4xmkiM82ijexDHzn6bYakaReBypt" : {"alias": "Anonstake Payouts"},
         "tz1TqU5hwh6CtC8Ps5GYBi7YyawvtKLNCbvQ" : {"alias": "Ateza Payouts"},
         "tz1Zrqm4TkJwqTxm5TiyVFh6taXG4Wrq7tko" : {"alias": "Bake’n’Rolls Payouts 2"},
@@ -115,8 +113,6 @@
         "tz1aF8E89g1EqqzCmbNCLunTtCtxgkoQUX7N" : {"alias": "0xb1 / PlusMinus Payouts"},
         "tz1WBfwbT66FC6BTLexc2BoyCCBM9LG7pnVW" : {"alias": "888XTZ"},
         "tz1KwdqMQGB75VDnSsLiteFKVX4HNzvbNvjZ" : {"alias": "888XTZ Payouts"},
-        //"" : {"alias": ""},
-        // HEN Users
         "tz1YRG68NdqtAcsFEwTUw6FsSsiBb5kagEDo" : {"alias": "Django Bits"},
         "tz1YJvMiZyXnzvV9pxtAiuCFvaG7XoBZhbUQ" : {"alias": "1x1"},
         "tz1WWnwWZVGEGdP6r6BicgbwnDp1zPYp2Fg3" : {"alias": "guy using photo filters"},
@@ -133,7 +129,6 @@
         "tz1URdfSGhAfbtpEkjWBmpTt3pyLmxdHdPYy" : {"alias": "unknown"},
         "tz1LokyrJHvBXcFMe9LMqLMAaxh8c3h1KVgV" : {"alias": "unknown"},
         "tz1Zwb3i7RBvdMrhoA9vFbNxo6LNmmFb9ML9" : {"alias": "Creator Of"},       
-        // Unknown but produce too many connections
         "tz1PDLiEZfzvRf3kg736PErm56Ty7LDfDbty" : {"alias": "???"},
         "tz1cdYf3HPBbCfawb5mQM23u37rRPYWvNtJJ" : {"alias": "???"},
         "tz28coCoTKt2S12A7PiFrV2KGJ7UoGWqjM79" : {"alias": "???"},
