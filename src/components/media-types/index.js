@@ -12,6 +12,8 @@ import { MIMETYPE, IPFS_DIRECTORY_MIMETYPE } from '../../constants'
 import { Container } from './container'
 
 const CLOUDFLARE = 'https://cloudflare-ipfs.com/ipfs/'
+const PINATA = 'https://gateway.pinata.cloud/ipfs/'
+const IPFS = 'https://ipfs.io/ipfs/'
 
 function getInfuraUrl(hash) {
   const cidv1 = new ipfsClient.CID(hash).toV1()
@@ -81,9 +83,7 @@ export const renderMediaType = ({
     case MIMETYPE.OGV:
     case MIMETYPE.QUICKTIME:
     case MIMETYPE.WEBM:
-      if (!preview) {
-        url = getInfuraUrl(path)
-      }
+      url = preview ? uri : `${PINATA}${path}`
       return (
         <Container interactive={interactive} nofullscreen>
           <VideoComponent src={url} />
@@ -100,6 +100,7 @@ export const renderMediaType = ({
     /* AUDIO */
     case MIMETYPE.MP3:
     case MIMETYPE.OGA:
+      url = preview ? uri : `${PINATA}${path}`
       return (
         <Container interactive={interactive}>
           <AudioComponent {...metadata} src={url} />
