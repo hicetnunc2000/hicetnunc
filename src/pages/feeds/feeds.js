@@ -5,7 +5,6 @@ import { GetLatestFeed, GethDAOFeed, GetRandomFeed } from '../../data/api'
 import { Page, Container, Padding } from '../../components/layout'
 import { FeedItem } from '../../components/feed-item'
 import { Loading } from '../../components/loading'
-import { MediaGrid } from '../../components/media-grid'
 
 export const Feeds = ({ type = 0 }) => {
   const [error, setError] = useState(false)
@@ -92,18 +91,13 @@ export const Feeds = ({ type = 0 }) => {
         }
       >
         <div>
-          {/* OLD WAY */}
-          {true && (
-            <Container>
-              <Padding>
-                {items.map((item, index) => (
-                  <FeedItem key={`${item.token_id}-${index}`} {...item} />
-                ))}
-              </Padding>
-            </Container>
-          )}
-          {/* NEW WAY */}
-          {false && <MediaGrid items={items} />}
+          <Container>
+            <Padding>
+              {items.map((item, index) => (
+                <FeedItem key={`${item.token_id}-${index}`} {...item} />
+              ))}
+            </Padding>
+          </Container>
         </div>
       </InfiniteScroll>
     </Page>
