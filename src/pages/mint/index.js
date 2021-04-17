@@ -131,10 +131,7 @@ export const Mint = () => {
     if (GENERATE_DISPLAY_AND_THUMBNAIL) {
       if (props.mimeType.indexOf('image') === 0) {
         setNeedsCover(false)
-        const cover = await generateCompressedImage(props, coverOptions)
-        setCover(cover)
-        const thumb = await generateCompressedImage(props, thumbnailOptions)
-        setThumbnail(thumb)
+        await generateCoverAndThumbnail(props)
       } else {
         setNeedsCover(true)
       }
@@ -173,6 +170,17 @@ export const Mint = () => {
   }
 
   const handleCoverUpload = async (props) => {
+    await generateCoverAndThumbnail(props)
+  }
+
+  const generateCoverAndThumbnail = async (props) => {
+    // TMP: skip GIFs to avoid making static
+    if (props.mimeType === MIMETYPE.GIF) {
+      setCover(props)
+      setThumbnail(props)
+      return
+    }
+
     const cover = await generateCompressedImage(props, coverOptions)
     setCover(cover)
 
