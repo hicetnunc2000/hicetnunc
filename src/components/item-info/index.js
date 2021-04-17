@@ -17,23 +17,29 @@ export const ItemInfo = ({
   total_amount,
   isDetailView,
 }) => {
+  console.log('swaps', swaps)
   const { syncTaquito, collect, curate, acc } = useContext(HicetnuncContext)
-  const reducer = (accumulator, currentValue) => parseInt(accumulator) + parseInt(currentValue)
+  const reducer = (accumulator, currentValue) =>
+    parseInt(accumulator) + parseInt(currentValue)
 
   // subtract burned pieces from total
   let total = 0
-  
+
   try {
-    total = _.values(owners).length !== 0 ? _.values(owners).reduce(reducer) : 'X'
-    console.log(total)
-    total = _.keys(owners).includes('tz1burnburnburnburnburnburnburjAYjjX') ? total - owners['tz1burnburnburnburnburnburnburjAYjjX'] : total
+    total =
+      _.values(owners).length !== 0 ? _.values(owners).reduce(reducer) : 'X'
+    total = _.keys(owners).includes('tz1burnburnburnburnburnburnburjAYjjX')
+      ? total - owners['tz1burnburnburnburnburnburnburjAYjjX']
+      : total
     //total = total - owners['tz1burnburnburnburnburnburnburjAYjjX']
   } catch (e) {
-    total = _.values(owners).length !== 0 ? _.values(owners).reduce(reducer) : 'X'
+    total =
+      _.values(owners).length !== 0 ? _.values(owners).reduce(reducer) : 'X'
   }
   console.log(total)
 
-  let ed = swaps.length !== 0 ? swaps.map(e => e.objkt_amount).reduce(reducer) : 'X'
+  let ed =
+    swaps.length !== 0 ? swaps.map((e) => e.objkt_amount).reduce(reducer) : 'X'
   let s = _.minBy(swaps, (o) => Number(o.xtz_per_objkt))
   let maxPrice = _.maxBy(swaps, (o) => Number(o.xtz_per_objkt))
 
@@ -56,6 +62,7 @@ export const ItemInfo = ({
     }
   }
 
+  console.log('SSSSS', s)
   return (
     <>
       <div className={styles.container}>
@@ -76,9 +83,12 @@ export const ItemInfo = ({
                   </span>
                 </span>
               </p>
-              <p>
-                Price range: {(Number(s.xtz_per_objkt) / 1000000).toFixed(2)}-{(Number(maxPrice.xtz_per_objkt) / 1000000).toFixed(2)}
-              </p>
+              {false && (
+                <p>
+                  Price range: {(Number(s.xtz_per_objkt) / 1000000).toFixed(2)}-
+                  {(Number(maxPrice.xtz_per_objkt) / 1000000).toFixed(2)}
+                </p>
+              )}
             </div>
           )}
         </div>
