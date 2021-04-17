@@ -126,7 +126,7 @@ export const Header = () => {
                     </li>
                     <li>
                       <Button onClick={() => handleRoute('/mint')}>
-                        <Primary>OBJKTs</Primary>
+                        <Primary>OBJKT<span style={{ fontSize : '16px' }}> (mint)</span></Primary>
                       </Button>
                     </li>
                     {false && (
