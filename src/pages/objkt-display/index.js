@@ -30,18 +30,20 @@ export const ObjktDisplay = () => {
   const address = context.acc?.address
 
   useEffect(() => {
-    GetOBJKT({ id }).then(async (objkt) => {
-      await context.setAccount()
-      await context.setCurrentObjkt(objkt)
-      setNFT(objkt)
+    GetOBJKT({ id })
+      .then(async (objkt) => {
+        console.log('RESPONSE', objkt)
+        await context.setAccount()
+        await context.setCurrentObjkt(objkt)
+        setNFT(objkt)
 
-      setLoading(false)
-    })
+        setLoading(false)
+      })
+      .catch(() => console.log('ANDRE'))
   }, [])
 
   const Tab = TABS[tabIndex].component
 
-  console.log('nft', nft)
   return (
     <Page title={'nft?.token_info.name'}>
       {loading && (
