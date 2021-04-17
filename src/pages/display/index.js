@@ -60,7 +60,6 @@ export default class Display extends Component {
           hdao: res.data.hdao,
         })
         const sanitised = SanitiseOBJKT(res.data.result)
-        console.log(sanitised)
         const creations = sanitised.filter(
           (e) => this.state.wallet === e.token_info.creators[0]
         )
