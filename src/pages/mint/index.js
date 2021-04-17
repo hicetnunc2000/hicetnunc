@@ -34,7 +34,7 @@ const thumbnailOptions = {
 }
 
 // @crzypathwork change to "true" to activate displayUri and thumbnailUri
-const GENERATE_DISPLAY_AND_THUMBNAIL = false
+const GENERATE_DISPLAY_AND_THUMBNAIL = true
 
 export const Mint = () => {
   const { mint, getAuth, acc, setAccount } = useContext(HicetnuncContext)
