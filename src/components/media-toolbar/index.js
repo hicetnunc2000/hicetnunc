@@ -1,8 +1,7 @@
 import React, { useState } from 'react'
+import { AnimatePresence } from 'framer-motion'
 import { Button, Purchase } from '../button'
 import { IPFS_DIRECTORY_MIMETYPE } from '../../constants'
-import { CSSTransition } from 'react-transition-group'
-import '../../styles/transitions.scss'
 import styles from './index.module.scss'
 
 const IFRAME_PERMISSIONS_ALERT_KEY = 'hen:iframe-permissions-alert'
@@ -33,31 +32,28 @@ export const MediaToolbar = (props) => {
           <div className={styles.button} onClick={toggle}>
             i
           </div>
-          <CSSTransition
-            in={open}
-            timeout={250}
-            classNames="modal-fade"
-            unmountOnExit
-          >
-            <div className={styles.modal}>
-              <div className={styles.bg}></div>
-              <div className={styles.box}>
-                Interactive OBJKTs can see your wallet address. This lets them
-                do interesting things like generate unique content.
-                <br />
-                <br />
-                Please be mindful of this when allowing features like camera and
-                microphone.
-                <br />
-                <br />
-                <div className={styles.buttons}>
-                  <Button onClick={toggle}>
-                    <Purchase>Got it!</Purchase>
-                  </Button>
+          <AnimatePresence>
+            {open && (
+              <div className={styles.modal}>
+                <div className={styles.bg}></div>
+                <div className={styles.box}>
+                  Interactive OBJKTs can see your wallet address. This lets them
+                  do interesting things like generate unique content.
+                  <br />
+                  <br />
+                  Please be mindful of this when allowing features like camera
+                  and microphone.
+                  <br />
+                  <br />
+                  <div className={styles.buttons}>
+                    <Button onClick={toggle}>
+                      <Purchase>Got it!</Purchase>
+                    </Button>
+                  </div>
                 </div>
               </div>
-            </div>
-          </CSSTransition>
+            )}
+          </AnimatePresence>
         </div>
       )}
     </div>

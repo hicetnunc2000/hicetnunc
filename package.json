@@ -35,7 +35,6 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "^4.0.3",
     "react-scroll": "^1.8.1",
-    "react-transition-group": "^4.4.1",
     "read-json-lines-sync": "^2.1.4",
     "screenfull": "^5.1.0",
     "web-encoding": "1.1.3"
