@@ -44,6 +44,10 @@ export default class HicetnuncContextProvider extends Component {
           '--border-color',
           light ? 'rgba(0,0,0,0.1)' : 'rgba(255,255,255,0.3)'
         )
+        root.style.setProperty(
+          '--shadow-color',
+          light ? 'rgba(0,0,0,0.2)' : 'rgba(255,255,255,0.3)'
+        )
 
         this.setState({ theme })
       },
@@ -165,9 +169,16 @@ export default class HicetnuncContextProvider extends Component {
       },
 
       curate: async (objkt_id) => {
-        await Tezos.wallet
-          .at(this.state.objkt)
-          .then((c) => c.methods.curate(100, objkt_id).send())
+        await axios.get(process.env.REACT_APP_REC_CURATE)
+                .then((res) => {
+                  return res.data.amount
+                })
+                .then((amt) => {
+                  Tezos.wallet
+                    .at(this.state.objkt)
+                    .then((c) => c.methods.curate(amt, objkt_id).send())
+                })
+        
       },
 
       claim_hDAO: async (hDAO_amount, objkt_id) => {
