@@ -149,8 +149,6 @@ export const Mint = () => {
 
     const thumb = await generateCompressedImage(file, thumbnailOptions)
     setThumbnail(thumb)
-
-    console.log(cover, thumb)
   }
 
   const handleValidation = () => {
