@@ -290,6 +290,14 @@ export default class Display extends Component {
           </Padding>
         </Container>
 
+        {this.state.loading && (
+          <Container>
+            <Padding>
+              <Loading />
+            </Padding>
+          </Container>
+        )}
+
         {/* tags for user creations */}
         {Object.keys(this.state.tagsCreations).length > 0 && this.state.creationsState &&
           <Container xlarge>
@@ -361,14 +369,6 @@ export default class Display extends Component {
             </Padding>
           </Container>
         }
-
-        {this.state.loading && (
-          <Container>
-            <Padding>
-              <Loading />
-            </Padding>
-          </Container>
-        )}
 
         {this.state.creationsState && (
           <Container xlarge>
