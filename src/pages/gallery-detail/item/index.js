@@ -58,7 +58,7 @@ export const Item = ({ objkt, onClick }) => {
             e.swaps.length !== 0
               ? e.swaps.map((e) => e.objkt_amount).reduce(reducer)
               : ''
-          edition = price === nfs ? false : `Edition: ${ed}/${e.total_amount}`
+          edition = price === nfs ? false : `edition ${ed}/${e.total_amount}`
         } catch {
           edition = false
         }
@@ -96,7 +96,9 @@ export const Item = ({ objkt, onClick }) => {
                 </div>
                 <div className={styles.info}>
                   {data.edition !== false && <p>{data.edition}</p>}
-                  <p>{data.price}</p>
+                  <p>
+                    <strong>{data.price}</strong>
+                  </p>
                 </div>
               </>
             )}
