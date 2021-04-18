@@ -95,6 +95,7 @@ export const GalleryDetail = () => {
                               key={objkt}
                               objkt={objkt}
                               onClick={(info) => showModal(info)}
+                              minimal={collection.minimal}
                             />
                           )
                         })}

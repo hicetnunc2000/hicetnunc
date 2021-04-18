@@ -26,7 +26,7 @@ export const GetOBJKTStubbornly = async ({ id, tries = 5 }) => {
   }
 }
 
-export const Item = ({ objkt, onClick }) => {
+export const Item = ({ objkt, onClick, minimal }) => {
   const [data, setData] = useState()
   const { ref, inView } = useInView({
     rootMargin: '0px 0px 50% 0px',
@@ -94,16 +94,18 @@ export const Item = ({ objkt, onClick }) => {
                   })}
                   <div className={styles.number}>OBJKT#{objkt}</div>
                 </div>
-                <div className={styles.info}>
-                  {data.edition !== false && <p>{data.edition}</p>}
-                  <p
-                    style={{
-                      opacity: data.price === nfs ? 0.5 : 1,
-                    }}
-                  >
-                    {data.price}
-                  </p>
-                </div>
+                {minimal !== true && (
+                  <div className={styles.info}>
+                    {data.edition !== false && <p>{data.edition}</p>}
+                    <p
+                      style={{
+                        opacity: data.price === nfs ? 0.5 : 1,
+                      }}
+                    >
+                      {data.price}
+                    </p>
+                  </div>
+                )}
               </>
             )}
           </div>

@@ -9,8 +9,6 @@
   },
   {
     "uid": "thefen",
-    "dropbox": "https://dl.dropboxusercontent.com/s/owz0tthki0rgret/thefen.json",
-    "local": "/galleries/thefen.json",
     "endpoint": "https://raw.githubusercontent.com/joanielemercier/The_fen/main/thefen.json"
   }
 ]
