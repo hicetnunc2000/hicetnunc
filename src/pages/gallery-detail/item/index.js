@@ -32,6 +32,7 @@ export const Item = ({ objkt, onClick }) => {
     rootMargin: '0px 0px 50% 0px',
   })
   const shown = useRef(false)
+  const nfs = 'not for sale'
 
   useEffect(() => {
     GetOBJKTStubbornly({ id: objkt })
@@ -40,7 +41,6 @@ export const Item = ({ objkt, onClick }) => {
         const { mimeType, uri } = token_info.formats[0]
 
         let price = ''
-        const nfs = 'not for sale'
         try {
           const prices = e.swaps.map((s) => parseFloat(s.xtz_per_objkt))
           prices.sort((a, b) => a - b)
@@ -88,15 +88,21 @@ export const Item = ({ objkt, onClick }) => {
                 <div className={styles.image} style={{ pointerEvents: 'none' }}>
                   {renderMediaType({
                     ...data,
-                    shown: shown.current, //README: What's this?
-                    inView, // README: and this? Not used on renderMediaType
+                    shown: shown.current,
+                    inView,
                     interactive: false,
                   })}
                   <div className={styles.number}>OBJKT#{objkt}</div>
                 </div>
                 <div className={styles.info}>
                   {data.edition !== false && <p>{data.edition}</p>}
-                  <p>{data.price}</p>
+                  <p
+                    style={{
+                      opacity: data.price === nfs ? 0.5 : 1,
+                    }}
+                  >
+                    {data.price}
+                  </p>
                 </div>
               </>
             )}
