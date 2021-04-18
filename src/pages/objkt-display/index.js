@@ -27,6 +27,7 @@ export const ObjktDisplay = () => {
   const [nft, setNFT] = useState()
 
   const address = context.acc?.address
+  const proxy = context.getProxy()
 
   useEffect(() => {
     GetOBJKT({ id }).then(async (objkt) => {
@@ -74,7 +75,8 @@ export const ObjktDisplay = () => {
                   if (
                     tab.secondaryMarket === true &&
                     Object.keys(nft.owners).length > 0 &&
-                    Object.keys(nft.owners).indexOf(address) === -1
+                    (Object.keys(nft.owners).indexOf(address) === -1) &&
+                    (Object.keys(nft.owners).indexOf(proxy) === -1)
                   ) {
                     return null
                   }
@@ -83,7 +85,8 @@ export const ObjktDisplay = () => {
                   // and if user DOESN'T own a copy of the objkt
                   if (
                     tab.creatorOnly &&
-                    nft.token_info.creators[0] !== address
+                    (nft.token_info.creators[0] !== address) &&
+                    (nft.token_info.creators[0] !== proxy)
                   ) {
                     return null
                   }
