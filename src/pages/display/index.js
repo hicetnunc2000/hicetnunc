@@ -79,7 +79,7 @@ export default class Display extends Component {
 
         // array compositon is splitted in two just to count tags
         // probably there's a better way
-        let tagsCreationsArray = creations.map( (e) => e.token_info.tags )
+        let tagsCreationsArray = creations.map((e) => e.token_info.tags)
           .flat()
         tagsCreationsArray = tagsCreationsArray.filter(filterUnique)
           .map((e) => {
@@ -290,64 +290,65 @@ export default class Display extends Component {
           </Padding>
         </Container>
 
-        
-        {/* tags used for user creations */}
+        {/* tags for user creations */}
         {Object.keys(this.state.tagsCreations).length > 0 && this.state.creationsState &&
           <Container xlarge>
             <Padding>
-                <Button onClick={() => this.setState({tagsShow: !this.state.tagsShow})}>
-                  <Primary selected={this.state.tagsShow}>
-                    {this.state.tagsShow ? 'hide' : 'show'} tags
-                  </Primary>
-                </Button>
-                {this.state.tagsShow &&
-                  <div className={styles.menu}>
-                    <Button onClick={() => {
-                      const tagsCreations = {...this.state.tagsCreations}
-                      for (const tag in tagsCreations) {
-                        tagsCreations[tag].active = true
-                      }
-                      this.setState({
-                        tagsCreations
-                      });
-                    }}>
-                      <Primary>
-                        enable all
-                      </Primary>
-                    </Button>
-                    <Button onClick={() => {
-                      const tagsCreations = {...this.state.tagsCreations}
-                      for (const tag in tagsCreations) {
-                        tagsCreations[tag].active = false
-                      }
-                      this.setState({
-                        tagsCreations
-                      });
-                    }}>
-                      <Primary>
-                        disable all
-                      </Primary>
-                    </Button>
-                  </div>
-                }
 
+              {/* show/hide tags */}
+              <Button onClick={() => this.setState({ tagsShow: !this.state.tagsShow })}>
+                <Primary selected={this.state.tagsShow}>
+                  {this.state.tagsShow ? 'hide' : 'show'} tags
+                </Primary>
+              </Button>
+
+              {/* tags utilities */}
+              {this.state.tagsShow &&
+                <div className={styles.menu}>
+                  <Button onClick={() => {
+                    const tagsCreations = { ...this.state.tagsCreations }
+                    for (const tag in tagsCreations) {
+                      tagsCreations[tag].active = true
+                    }
+                    this.setState({
+                      tagsCreations
+                    });
+                  }}>
+                    <Primary>enable all</Primary>
+                  </Button>
+                  <Button onClick={() => {
+                    const tagsCreations = { ...this.state.tagsCreations }
+                    for (const tag in tagsCreations) {
+                      tagsCreations[tag].active = false
+                    }
+                    this.setState({
+                      tagsCreations
+                    });
+                  }}>
+                    <Primary>disable all</Primary>
+                  </Button>
+                </div>
+              }
+
+              {/* tags list */}
               {this.state.tagsShow &&
                 <div className={styles.tagList}>
                   {(() => {
                     const tags = []
                     for (const tagName in this.state.tagsCreations) {
                       const tag = this.state.tagsCreations[tagName]
+                      const onClick = () => {
+                        const tagsCreations = { ...this.state.tagsCreations }
+                        tagsCreations[tagName].active = !tagsCreations[tagName].active
+                        this.setState({
+                          tagsCreations
+                        });
+                      }
                       tags.push(
                         <div
                           key={tag.name}
                           className={`${styles.tag} ${tag.active && styles.tagActive}`}
-                          onClick={() => {
-                            const tagsCreations = {...this.state.tagsCreations}
-                            tagsCreations[tagName].active = !tagsCreations[tagName].active
-                            this.setState({
-                              tagsCreations
-                            });
-                          }}
+                          onClick={onClick}
                         >
                           {tag.name} ({tag.count})
                         </div>
