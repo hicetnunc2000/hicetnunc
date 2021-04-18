@@ -22,6 +22,10 @@
     @include respond-to('desktop') {
       width: 60vh;
     }
+
+    > div {
+      width: 100%;
+    }
   }
 
   .info {
