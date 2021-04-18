@@ -79,19 +79,22 @@ export default class Display extends Component {
 
         // array compositon is splitted in two just to count tags
         // probably there's a better way
-        let tagsCreationsArray = creations.map((e) => e.token_info.tags)
-          .flat()
+        const tagsCreations = {}
+        let tagsCreationsArray = creations.map((e) => e.token_info.tags).flat()
         tagsCreationsArray = tagsCreationsArray.filter(filterUnique)
-          .map((e) => {
+          .map((name) => {
+            const countTotal = (total, current) => {
+              return current === name ? total + 1 : total
+            };
+
             return {
-              name: e,
-              count: tagsCreationsArray.reduce((a, v) => (v === e ? a + 1 : a), 0),
+              name: name,
+              count: tagsCreationsArray.reduce(countTotal, 0),
               active: true,
             }
           })
           .sort(sortByCount)
-        const tagsCreations = {}
-        tagsCreationsArray.forEach((tag) => tagsCreations[tag.name] = tag)
+          .forEach((tag) => tagsCreations[tag.name] = tag)
 
         this.setState({
           creations: creations.sort(sortByTokenId),
