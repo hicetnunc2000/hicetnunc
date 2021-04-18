@@ -25,11 +25,11 @@
   }
 }
 
-.tags {
+.tagList {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  margin-bottom: 1em;
+  margin: 1em 0;
 
   .tag {
     padding: 0.1em 0.25em;
@@ -39,7 +39,7 @@
     color: var(--text-color);
   }
 
-  .activeTag {
+  .tagActive {
     background-color: var(--text-color);
     color: var(--background-color);
   }

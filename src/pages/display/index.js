@@ -42,7 +42,8 @@ export default class Display extends Component {
     collectionState: false,
     creationsState: true,
     hdao: 0,
-    creationsTags: {},
+    tagsCreations: {},
+    tagsShow: false,
   }
 
   componentWillMount = async () => {
@@ -78,25 +79,25 @@ export default class Display extends Component {
 
         // array compositon is splitted in two just to count tags
         // probably there's a better way
-        let creationsTagsArray = creations.map( (e) => e.token_info.tags )
+        let tagsCreationsArray = creations.map( (e) => e.token_info.tags )
           .flat()
-        creationsTagsArray = creationsTagsArray.filter(filterUnique)
+        tagsCreationsArray = tagsCreationsArray.filter(filterUnique)
           .map((e) => {
             return {
               name: e,
-              count: creationsTagsArray.reduce((a, v) => (v === e ? a + 1 : a), 0),
+              count: tagsCreationsArray.reduce((a, v) => (v === e ? a + 1 : a), 0),
               active: true,
             }
           })
           .sort(sortByCount)
-        const creationsTags = {}
-        creationsTagsArray.forEach((tag) => creationsTags[tag.name] = tag)
+        const tagsCreations = {}
+        tagsCreationsArray.forEach((tag) => tagsCreations[tag.name] = tag)
 
         this.setState({
           creations: creations.sort(sortByTokenId),
           loading: false,
           collection: collection.sort(sortByTokenId),
-          creationsTags: creationsTags
+          tagsCreations: tagsCreations
         })
 
         /*
@@ -289,6 +290,79 @@ export default class Display extends Component {
           </Padding>
         </Container>
 
+        
+        {/* tags used for user creations */}
+        {Object.keys(this.state.tagsCreations).length > 0 && this.state.creationsState &&
+          <Container xlarge>
+            <Padding>
+              <div className={styles.menu}>
+                <Button onClick={() => this.setState({tagsShow: !this.state.tagsShow})}>
+                  <Primary selected={this.state.tagsShow}>
+                    {this.state.tagsShow ? 'hide' : 'show'} tags
+                  </Primary>
+                </Button>
+                {this.state.tagsShow &&
+                  <>
+                    <Button onClick={() => {
+                      const tagsCreations = {...this.state.tagsCreations}
+                      for (const tag in tagsCreations) {
+                        tagsCreations[tag].active = true
+                      }
+                      this.setState({
+                        tagsCreations
+                      });
+                    }}>
+                      <Primary>
+                        enable all
+                      </Primary>
+                    </Button>
+                    <Button onClick={() => {
+                      const tagsCreations = {...this.state.tagsCreations}
+                      for (const tag in tagsCreations) {
+                        tagsCreations[tag].active = false
+                      }
+                      this.setState({
+                        tagsCreations
+                      });
+                    }}>
+                      <Primary>
+                        disable all
+                      </Primary>
+                    </Button>
+                  </>
+                }
+              </div>
+
+              {this.state.tagsShow &&
+                <div className={styles.tagList}>
+                  {(() => {
+                    const tags = []
+                    for (const tagName in this.state.tagsCreations) {
+                      const tag = this.state.tagsCreations[tagName]
+                      tags.push(
+                        <div
+                          key={tag.name}
+                          className={`${styles.tag} ${tag.active && styles.tagActive}`}
+                          onClick={() => {
+                            const tagsCreations = {...this.state.tagsCreations}
+                            tagsCreations[tagName].active = !tagsCreations[tagName].active
+                            this.setState({
+                              tagsCreations
+                            });
+                          }}
+                        >
+                          {tag.name} ({tag.count})
+                        </div>
+                      )
+                    }
+                    return tags
+                  })()}
+                </div>
+              }
+            </Padding>
+          </Container>
+        }
+
         {this.state.loading && (
           <Container>
             <Padding>
@@ -299,36 +373,11 @@ export default class Display extends Component {
 
         {this.state.creationsState && (
           <Container xlarge>
-            {/* tags used for user creations */}
-            <div className={styles.tags}>
-              {(() => {
-                const tags = []
-                for (const tagName in this.state.creationsTags) {
-                  const tag = this.state.creationsTags[tagName]
-                  tags.push(
-                    <div
-                      key={tag.name}
-                      className={`${styles.tag} ${tag.active && styles.activeTag}`}
-                      onClick={() => {
-                        const creationsTags = {...this.state.creationsTags}
-                        creationsTags[tagName].active = !creationsTags[tagName].active
-                        this.setState({
-                          creationsTags
-                        });
-                      }}
-                    >
-                      {tag.name} ({tag.count})
-                    </div>
-                  )
-                }
-                return tags
-              })()}
-            </div>
             <ResponsiveMasonry>
               {this.state.creations.filter((nft) => {
                 let active = false
                 nft.token_info.tags.forEach((tag) => {
-                  active = active || this.state.creationsTags[tag].active
+                  active = active || this.state.tagsCreations[tag].active
                 })
                 return active
               })
