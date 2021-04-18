@@ -55,6 +55,7 @@ export const VideoComponent = ({ src, interactive, inView }) => {
         ref={domElement}
         className={styles.video}
         autoPlay={inView}
+        playsInline={true}
         muted
         loop
         controls={interactive}
