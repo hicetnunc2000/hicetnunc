@@ -6,6 +6,8 @@ import { Loading } from '../../components/loading'
 import { Button, Primary } from '../../components/button'
 import { Item } from './item'
 import { ItemModal } from './item-modal'
+import { Artist } from './artist'
+import { ResponsiveMasonry } from '../../components/responsive-masonry'
 import styles from './styles.module.scss'
 
 export const GalleryDetail = () => {
@@ -85,12 +87,8 @@ export const GalleryDetail = () => {
                 {collection.data.map((artist, i) => {
                   return (
                     <div className={styles.block} key={`artist${i}`}>
-                      {artist.artist && (
-                        <div className={styles.artist}>
-                          <strong>{artist.artist}</strong>
-                        </div>
-                      )}
-                      <div className={styles.gallery}>
+                      <Artist artist={artist} />
+                      <ResponsiveMasonry>
                         {artist.objkt.map((objkt) => {
                           return (
                             <Item
@@ -100,7 +98,7 @@ export const GalleryDetail = () => {
                             />
                           )
                         })}
-                      </div>
+                      </ResponsiveMasonry>
                     </div>
                   )
                 })}
