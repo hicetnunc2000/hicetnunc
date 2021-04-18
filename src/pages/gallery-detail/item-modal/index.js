@@ -46,23 +46,28 @@ export const ItemModal = ({ info }) => {
         })}
       </div>
       <div className={styles.info}>
-        <Button to={`${PATH.OBJKT}/${info.objectId}`}>
-          <div className={styles.number}>OBJKT#{info.objectId}</div>
-        </Button>
-        <div className={styles.title}>{info.token_info.name}</div>
-        <div className={styles.description}>{info.token_info.description}</div>
-
-        <div className={styles.collect}>
+        <div>
           <Button to={`${PATH.OBJKT}/${info.objectId}`}>
-            <Purchase>{message}</Purchase>
+            <div className={styles.number}>OBJKT#{info.objectId}</div>
           </Button>
-        </div>
-
-        <div className={styles.artist}>
-          <div className={styles.icon}>
-            <img src={profile} alt="profile" />
+          <div className={styles.title}>{info.token_info.name}</div>
+          <div className={styles.description}>
+            {info.token_info.description}
           </div>
-          <strong>{name}</strong>
+
+          <div className={styles.links}>
+            <div className={styles.artist}>
+              <div className={styles.icon}>
+                <img src={profile} alt="profile" />
+              </div>
+              <strong>{name}</strong>
+            </div>
+            <div className={styles.collect}>
+              <Button to={`${PATH.OBJKT}/${info.objectId}`}>
+                <Purchase>{message}</Purchase>
+              </Button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
