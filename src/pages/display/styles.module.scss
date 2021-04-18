@@ -30,6 +30,8 @@
   flex-direction: row;
   flex-wrap: wrap;
   margin: 1em 0;
+  max-height: 20vh;
+  overflow: auto;
 
   .tag {
     padding: 0.1em 0.25em;
@@ -37,11 +39,13 @@
     cursor: pointer;
     background-color: var(--border-color);
     color: var(--text-color);
+    font-weight: 600;
   }
 
   .tagActive {
     background-color: var(--text-color);
     color: var(--background-color);
+    font-weight: 400;
   }
 }
 

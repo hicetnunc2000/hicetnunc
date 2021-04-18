@@ -295,14 +295,13 @@ export default class Display extends Component {
         {Object.keys(this.state.tagsCreations).length > 0 && this.state.creationsState &&
           <Container xlarge>
             <Padding>
-              <div className={styles.menu}>
                 <Button onClick={() => this.setState({tagsShow: !this.state.tagsShow})}>
                   <Primary selected={this.state.tagsShow}>
                     {this.state.tagsShow ? 'hide' : 'show'} tags
                   </Primary>
                 </Button>
                 {this.state.tagsShow &&
-                  <>
+                  <div className={styles.menu}>
                     <Button onClick={() => {
                       const tagsCreations = {...this.state.tagsCreations}
                       for (const tag in tagsCreations) {
@@ -329,9 +328,8 @@ export default class Display extends Component {
                         disable all
                       </Primary>
                     </Button>
-                  </>
+                  </div>
                 }
-              </div>
 
               {this.state.tagsShow &&
                 <div className={styles.tagList}>
