@@ -19,8 +19,12 @@ const sortByTokenId = (a, b) => {
   return b.token_id - a.token_id
 }
 
-const uniqueElement = (e, index, array) => {
+const filterUnique = (e, index, array) => {
   return array.indexOf(e) === index
+}
+
+const sortByCount = (a, b) => {
+  return b.count - a.count
 }
 
 export default class Display extends Component {
@@ -38,7 +42,7 @@ export default class Display extends Component {
     collectionState: false,
     creationsState: true,
     hdao: 0,
-    creationsTags: [],
+    creationsTags: {},
   }
 
   componentWillMount = async () => {
@@ -72,17 +76,27 @@ export default class Display extends Component {
           (e) => this.state.wallet !== e.token_info.creators[0]
         )
 
-        const creationsTags = creations.map(
-          (e) => e.token_info.tags
-        ).flat()
+        // array compositon is splitted in two just to count tags
+        // probably there's a better way
+        let creationsTagsArray = creations.map( (e) => e.token_info.tags )
+          .flat()
+        creationsTagsArray = creationsTagsArray.filter(filterUnique)
+          .map((e) => {
+            return {
+              name: e,
+              count: creationsTagsArray.reduce((a, v) => (v === e ? a + 1 : a), 0),
+              active: true,
+            }
+          })
+          .sort(sortByCount)
+        const creationsTags = {}
+        creationsTagsArray.forEach((tag) => creationsTags[tag.name] = tag)
 
         this.setState({
           creations: creations.sort(sortByTokenId),
           loading: false,
           collection: collection.sort(sortByTokenId),
-          creationsTags: creationsTags.filter(uniqueElement).map((e) => {
-            return {name: e, count: creationsTags.reduce((a, v) => (v === e ? a + 1 : a), 0)}
-          }).sort((a, b) => b.count - a.count)
+          creationsTags: creationsTags
         })
 
         /*
@@ -285,13 +299,40 @@ export default class Display extends Component {
 
         {this.state.creationsState && (
           <Container xlarge>
+            {/* tags used for user creations */}
             <div className={styles.tags}>
-              {this.state.creationsTags.map((tag) => {
-                return <div key={tag.name} className={styles.tag}>{tag.name} ({tag.count})</div>
-              })}
+              {(() => {
+                const tags = []
+                for (const tagName in this.state.creationsTags) {
+                  const tag = this.state.creationsTags[tagName]
+                  tags.push(
+                    <div
+                      key={tag.name}
+                      className={`${styles.tag} ${tag.active && styles.activeTag}`}
+                      onClick={() => {
+                        const creationsTags = {...this.state.creationsTags}
+                        creationsTags[tagName].active = !creationsTags[tagName].active
+                        this.setState({
+                          creationsTags
+                        });
+                      }}
+                    >
+                      {tag.name} ({tag.count})
+                    </div>
+                  )
+                }
+                return tags
+              })()}
             </div>
             <ResponsiveMasonry>
-              {this.state.creations.map((nft, i) => {
+              {this.state.creations.filter((nft) => {
+                let active = false
+                nft.token_info.tags.forEach((tag) => {
+                  active = active || this.state.creationsTags[tag].active
+                })
+                return active
+              })
+              .map((nft, i) => {
                 const { mimeType, uri } = nft.token_info.formats[0]
 
                 return (

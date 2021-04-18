@@ -33,10 +33,15 @@
 
   .tag {
     padding: 0.1em 0.25em;
-    background-color: var(--border-color); // dimgray;
     margin: 0.1em;
-    color: var(--text-color);
     cursor: pointer;
+    background-color: var(--border-color);
+    color: var(--text-color);
+  }
+
+  .activeTag {
+    background-color: var(--text-color);
+    color: var(--background-color);
   }
 }
 
