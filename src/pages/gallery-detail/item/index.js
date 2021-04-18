@@ -96,9 +96,7 @@ export const Item = ({ objkt, onClick }) => {
                 </div>
                 <div className={styles.info}>
                   {data.edition !== false && <p>{data.edition}</p>}
-                  <p>
-                    <strong>{data.price}</strong>
-                  </p>
+                  <p>{data.price}</p>
                 </div>
               </>
             )}
