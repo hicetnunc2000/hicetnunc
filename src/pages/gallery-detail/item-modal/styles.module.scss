@@ -8,17 +8,20 @@
   z-index: 2;
   display: flex;
   flex-direction: column;
+  align-items: center;
 
   .image {
     width: 50vh;
     max-width: 100%;
-    background-color: var(--background-color);
     padding: 20px;
-    margin: 0 auto;
     flex: 1;
     display: flex;
     justify-content: center;
     align-items: center;
+
+    @include respond-to('desktop') {
+      width: 60vh;
+    }
   }
 
   .info {

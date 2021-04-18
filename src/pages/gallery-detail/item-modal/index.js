@@ -13,11 +13,11 @@ export const ItemModal = ({ info }) => {
 
   let message = ''
   try {
+    const prices = info.swaps.map((s) => parseFloat(s.xtz_per_objkt))
+    prices.sort((a, b) => a - b)
     message =
-      info.swaps[0] !== undefined
-        ? 'collect for ' +
-          Number(info.swaps[0].xtz_per_objkt) / 1000000 +
-          ' tez'
+      prices[0] !== undefined
+        ? 'collect for ' + Number(prices[0]) / 1000000 + ' tez'
         : 'not for sale'
   } catch (e) {
     message = 'not for sale'

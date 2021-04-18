@@ -3,6 +3,21 @@
 .container {
   position: relative;
 
+  .close {
+    position: fixed;
+    top: 0;
+    right: 0;
+    padding: 1rem;
+    color: var(--text-color);
+    font-weight: bold;
+    z-index: 2;
+    cursor: pointer;
+
+    @include respond-to('tablet') {
+      padding: 2rem;
+    }
+  }
+
   .content {
     margin: 4rem 0;
   }
@@ -71,7 +86,7 @@
     width: 100%;
     height: 100%;
     z-index: 0;
-    opacity: 1;
+    // opacity: 0.9;
     background-color: var(--background-color);
     z-index: 1;
   }

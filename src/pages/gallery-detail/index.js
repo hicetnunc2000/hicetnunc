@@ -116,6 +116,9 @@ export const GalleryDetail = () => {
                   onClick={() => showModal(false)}
                 />
                 <ItemModal info={modal} />
+                <div className={styles.close} onClick={() => showModal(false)}>
+                  CLOSE X
+                </div>
               </div>
             )}
           </AnimatePresence>
