@@ -103,6 +103,18 @@ export default class HicetnuncContextProvider extends Component {
           .catch((error) => console.log(error))
       },
 
+      proxyAddress: '',
+
+      setProxy: (proxyAddress) => {
+        // setting proxy updates objkt contract as well:
+        this.setState({
+          proxyAddress: proxyAddress,
+          objkt: proxyAddress || 'KT1Hkg5qeNhfwpKW4fXvq7HGZB9z2EnmCCA9'
+        });
+      },
+
+      getProxy: () => this.state.proxyAddress,
+
       objkt: 'KT1Hkg5qeNhfwpKW4fXvq7HGZB9z2EnmCCA9',
 
       mint: async (tz, amount, cid, royalties) => {

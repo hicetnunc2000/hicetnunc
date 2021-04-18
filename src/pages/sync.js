@@ -28,7 +28,7 @@ export default class Sync extends Component {
 
   render() {
     return this.context.acc !== undefined ? (
-      <Redirect to={`/tz/${this.context.acc.address}`} />
+      <Redirect to={`/tz/${this.context.getProxy() || this.context.acc.address}`} />
     ) : (
       <Page title="">
         <Container>
