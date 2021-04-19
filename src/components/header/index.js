@@ -120,22 +120,23 @@ export const Header = () => {
                       </Button>
                     </li>
                     <li>
+                      <Button onClick={() => handleRoute('/galleries')}>
+                        <Primary>galleries</Primary>
+                      </Button>
+                    </li>
+                    <li>
                       <Button onClick={() => handleRoute('/latest')}>
-                        <Primary>latest</Primary>
+                          <Primary>latest</Primary>
                       </Button>
                     </li>
                     <li>
                       <Button onClick={() => handleRoute('/mint')}>
-                        <Primary>OBJKT<span style={{ fontSize : '16px' }}> (mint)</span></Primary>
+                        <Primary>
+                          OBJKT<span style={{ fontSize: '16px' }}> (mint)</span>
+                        </Primary>
                       </Button>
                     </li>
-                    {false && (
-                      <li>
-                        <Button onClick={() => handleRoute('/galleries')}>
-                          <Primary>galleries</Primary>
-                        </Button>
-                      </li>
-                    )}
+
                     <li>
                       <Button onClick={() => handleRoute('/sync')}>
                         <Primary>manage assets</Primary>

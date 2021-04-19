@@ -1,0 +1,33 @@
+@import '../../../styles/layout.scss';
+@import '../../../styles/variables.scss';
+
+.artist {
+  display: flex;
+  align-items: center;
+
+  @include respond-to('tablet') {
+    margin-top: 0;
+  }
+
+  .icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-right: 1rem;
+    border: 1px solid var(--text-color);
+    padding: 1px;
+
+    img {
+      width: 100%;
+      height: auto;
+      border-radius: 50%;
+    }
+  }
+
+  .text {
+    p {
+      color: var(--text-color);
+    }
+  }
+}
