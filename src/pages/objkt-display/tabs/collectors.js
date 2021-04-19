@@ -5,7 +5,7 @@ import { HicetnuncContext } from '../../../context/HicetnuncContext'
 import { OwnerSwaps } from '../../../components/owner-swaps'
 
 export const Collectors = ({ owners, swaps }) => {
-  const { syncTaquito, collect, acc, getAccount, cancel, currentObjkt } = useContext(
+  const { syncTaquito, collect, acc, getAccount, cancel } = useContext(
     HicetnuncContext
   )
 
@@ -39,7 +39,6 @@ export const Collectors = ({ owners, swaps }) => {
               handleCollect={handleCollect}
               acc={acc}
               cancel={cancel}
-              creator={currentObjkt.token_info.creators[0]}
             />
           </Padding>
         </Container>
@@ -50,8 +49,6 @@ export const Collectors = ({ owners, swaps }) => {
           <Padding>
             <OwnerList
             owners={filtered}
-            creator={currentObjkt.token_info.creators[0]}
-            acc={acc}
             />
           </Padding>
         </Container>
