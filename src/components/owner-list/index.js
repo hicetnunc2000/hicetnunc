@@ -11,8 +11,6 @@ export const OwnerList = ({ owners, creator, acc }) => (
         <Button href={`https://hicetnunc.xyz/tz/${wallet}`}>
           <Primary>{walletPreview(wallet)}</Primary>
         </Button>
-        {(wallet===creator) ? '\u00A0(creator)' : '' }
-        {(wallet===acc?.address) ? '\u00A0(you)' : '' }
       </div>
     ))}
   </div>
