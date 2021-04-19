@@ -31,20 +31,22 @@ export const VideoComponent = ({ src, interactive, inView }) => {
         !video.ended &&
         video.readyState > 2
       )
-    const isVideoAvailable = (video) => video.readyState > 2
 
     if (inView) {
       // play
-      if (isVideoAvailable(domElement.current)) {
+      try {
         domElement.current.play()
+      } catch (err) {
+        console.log(err)
       }
     } else {
       // pause
-      if (
-        isVideoAvailable(domElement.current) &&
-        isVideoPlaying(domElement.current)
-      ) {
-        domElement.current.pause()
+      if (isVideoPlaying(domElement.current)) {
+        try {
+          domElement.current.pause()
+        } catch (err) {
+          console.log(err)
+        }
       }
     }
   }, [inView])
@@ -55,6 +57,7 @@ export const VideoComponent = ({ src, interactive, inView }) => {
         ref={domElement}
         className={styles.video}
         autoPlay={inView}
+        playsInline
         muted
         loop
         controls={interactive}
