@@ -119,11 +119,11 @@ export const Header = () => {
                         <Primary>random</Primary>
                       </Button>
                     </li>
-                    <li>
+{/*                     <li>
                       <Button onClick={() => handleRoute('/galleries')}>
                         <Primary>galleries</Primary>
                       </Button>
-                    </li>
+                    </li> */}
                     <li>
                       <Button onClick={() => handleRoute('/mint')}>
                         <Primary>
