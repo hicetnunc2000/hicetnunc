@@ -13,7 +13,7 @@ import { Container } from './container'
 
 const CLOUDFLARE = 'https://cloudflare-ipfs.com/ipfs/'
 const PINATA = 'https://gateway.pinata.cloud/ipfs/'
-const IPFS = 'https://ipfs.io/ipfs/'
+// const IPFS = 'https://ipfs.io/ipfs/'
 
 function getInfuraUrl(hash) {
   const cidv1 = new ipfsClient.CID(hash).toV1()
@@ -21,15 +21,16 @@ function getInfuraUrl(hash) {
   return `https://${subomain}.ipfs.infura-ipfs.io/`
 }
 
-export const renderMediaType = ({
-  mimeType,
-  uri,
-  interactive = false,
-  preview = false,
-  shown = null, // only set in gallery item for now
-  inView = null, // only set in gallery item for now
-  metadata,
-}) => {
+export const renderMediaType = (props) => {
+  const {
+    mimeType,
+    uri,
+    interactive = false,
+    preview = false,
+    shown = null, // only set in gallery item for now
+    inView = null, // only set in gallery item for now
+    metadata,
+  } = props
   const path = uri
   let url = preview ? uri : `${CLOUDFLARE}${path}`
 
