@@ -63,23 +63,16 @@ export class About extends Component {
                   <strong>discord</strong>
                 </Primary>
               </Button>
-              <p>, or on</p>&nbsp;
+              <p>,</p>&nbsp;
               <Button href="https://reddit.com/r/hicetnunc">
                 <Primary>
                   <strong>reddit</strong>
                 </Primary>
               </Button>
-            </div>
-          </Padding>
-        </Container>
-
-        <Container>
-          <Padding>
-            <div className={styles.buttons}>
-              <p>WIKI is available</p>&nbsp;
-              <Button href="https://github.com/hicetnunc2000/hicetnunc/wiki">
+              <p>, or on</p>&nbsp;
+              <Button href="https://t.me/hicetnunc2000">
                 <Primary>
-                  <strong>here</strong>
+                  <strong>telegram</strong>
                 </Primary>
               </Button>
             </div>
@@ -89,10 +82,23 @@ export class About extends Component {
         <Container>
           <Padding>
             <div className={styles.buttons}>
-              <p>Issues can be reported</p>&nbsp;
+              <p>WIKI is available on</p>&nbsp;
+              <Button href="https://github.com/hicetnunc2000/hicetnunc/wiki">
+                <Primary>
+                  <strong>github</strong>
+                </Primary>
+              </Button>
+            </div>
+          </Padding>
+        </Container>
+
+        <Container>
+          <Padding>
+            <div className={styles.buttons}>
+              <p>Report</p>&nbsp;
               <Button href="https://github.com/hicetnunc2000/hicetnunc/issues">
                 <Primary>
-                  <strong>here</strong>
+                  <strong>issues</strong>
                 </Primary>
               </Button>
             </div>
