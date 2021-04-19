@@ -8,6 +8,10 @@ import { PATH } from '../../constants'
 import { ResponsiveMasonry } from '../../components/responsive-masonry'
 import styles from './styles.module.scss'
 
+const sortByTokenId = (a, b) => {
+  return b.token_id - a.token_id
+}
+
 export const Galleries = () => {
   const [loading, setLoading] = useState(true)
   const [data, setData] = useState(false)
@@ -31,6 +35,7 @@ export const Galleries = () => {
             }
           })
         })
+        galleries.sort(sortByTokenId)
       })
 
     return () => {
