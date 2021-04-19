@@ -8,10 +8,11 @@ import { PATH } from '../../constants'
 import { ResponsiveMasonry } from '../../components/responsive-masonry'
 import styles from './styles.module.scss'
 
-const sortByTokenId = (a, b) => {
-  return b.token_id - a.token_id
+const sortByThumbnailTokenId = (a, b) => {
+  const ia = parseInt(a.thumbnail)
+  const ib = parseInt(b.thumbnail)
+  return ia < ib ? 1 : -1
 }
-
 export const Galleries = () => {
   const [loading, setLoading] = useState(true)
   const [data, setData] = useState(false)
@@ -30,12 +31,12 @@ export const Galleries = () => {
             c++
 
             if (c === 3) {
+              g.sort(sortByThumbnailTokenId)
               setData(g)
               setLoading(false)
             }
           })
         })
-        galleries.sort(sortByTokenId)
       })
 
     return () => {
