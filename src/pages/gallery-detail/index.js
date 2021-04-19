@@ -6,6 +6,8 @@ import { Loading } from '../../components/loading'
 import { Button, Primary } from '../../components/button'
 import { Item } from './item'
 import { ItemModal } from './item-modal'
+import { Artist } from './artist'
+import { ResponsiveMasonry } from '../../components/responsive-masonry'
 import styles from './styles.module.scss'
 
 export const GalleryDetail = () => {
@@ -48,7 +50,7 @@ export const GalleryDetail = () => {
   }, [id])
 
   return (
-    <Page title="galleries">
+    <Page title={collection?.title}>
       {!loaded ? (
         <Container>
           <Padding>
@@ -85,22 +87,19 @@ export const GalleryDetail = () => {
                 {collection.data.map((artist, i) => {
                   return (
                     <div className={styles.block} key={`artist${i}`}>
-                      {artist.artist && (
-                        <div className={styles.artist}>
-                          <strong>{artist.artist}</strong>
-                        </div>
-                      )}
-                      <div className={styles.gallery}>
+                      <Artist artist={artist} />
+                      <ResponsiveMasonry>
                         {artist.objkt.map((objkt) => {
                           return (
                             <Item
                               key={objkt}
                               objkt={objkt}
                               onClick={(info) => showModal(info)}
+                              minimal={collection.minimal}
                             />
                           )
                         })}
-                      </div>
+                      </ResponsiveMasonry>
                     </div>
                   )
                 })}
@@ -116,6 +115,9 @@ export const GalleryDetail = () => {
                   onClick={() => showModal(false)}
                 />
                 <ItemModal info={modal} />
+                <div className={styles.close} onClick={() => showModal(false)}>
+                  CLOSE X
+                </div>
               </div>
             )}
           </AnimatePresence>

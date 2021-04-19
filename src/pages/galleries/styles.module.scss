@@ -1,7 +1,7 @@
-@import '../../../styles/layout.scss';
-@import '../../../styles/variables.scss';
+@import '../../styles/layout.scss';
+@import '../../styles/variables.scss';
 
-.container {
+.item {
   position: relative;
   display: inline-block;
   margin: 0 0 1em;
@@ -23,13 +23,8 @@
     }
   }
 
-  .info {
-    // border: 1px dashed black;
-    display: flex;
-    align-items: flex-end;
-    flex-direction: column;
-    padding-top: 10px;
+  .title {
+    font-weight: bold;
     color: var(--text-color);
-    font-size: 12px;
   }
 }
