@@ -17,7 +17,6 @@ export const ItemInfo = ({
   total_amount,
   isDetailView,
 }) => {
-  console.log('swaps', swaps)
   const { syncTaquito, collect, curate, acc } = useContext(HicetnuncContext)
   const reducer = (accumulator, currentValue) =>
     parseInt(accumulator) + parseInt(currentValue)
@@ -61,7 +60,6 @@ export const ItemInfo = ({
     }
   }
 
-  console.log('SSSSS', s)
   return (
     <>
       <div className={styles.container}>
