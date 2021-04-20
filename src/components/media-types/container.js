@@ -3,6 +3,7 @@ import React, { useContext, useEffect, useRef } from 'react'
 import screenfull from 'screenfull'
 import { useInView } from 'react-intersection-observer'
 import classnames from 'classnames'
+import { iOS } from '../../utils/os'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
 import styles from './styles.module.scss'
 
@@ -10,17 +11,6 @@ import styles from './styles.module.scss'
  * Currently fullscreen is disabled on iOS
  * this is mainly because Safari iOS doesn't support fullscreen api.
  */
-const iOS =
-  [
-    'iPad Simulator',
-    'iPhone Simulator',
-    'iPod Simulator',
-    'iPad',
-    'iPhone',
-    'iPod',
-  ].includes(navigator.platform) ||
-  // iPad on iOS 13 detection
-  (navigator.userAgent.includes('Mac') && 'ontouchend' in document)
 
 /**
  * This component handles fullscreen mode
