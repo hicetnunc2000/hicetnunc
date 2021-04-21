@@ -22,3 +22,5 @@ Consider better pagination structure like:
 In order to implement SSR I would suggest we migrate from RCA to Next.js. Next.js acts as a single page application but also as a static site generator. which will allow us to generate html pages for all the objkts.
 
 We can consider other solutions to avoid migration to next.js.
+
+@crzy: we're not chainging to next.js until we have a stable react version for us to experiment with react-native. Then we can think of next.js along native apps.
