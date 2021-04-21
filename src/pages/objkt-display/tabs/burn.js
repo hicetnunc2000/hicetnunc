@@ -26,14 +26,19 @@ export const Burn = (props) => {
         <Padding>
           <p>
             Burning will remove all OBJKT#{props.token_id} from your possession
-            to a burn address.
+            to a burn address. Those that you have swapped (on sale), or 
+            have already been collected by others will not be affected by burn.
+          </p>
+          <p>&nbsp;</p>
+          <p>
+            <strong>NB: This action is not reversable.</strong>
           </p>
         </Padding>
       </Container>
       <Container>
         <Padding>
           <Button onClick={handleSubmit} fit>
-            <Curate>burn it</Curate>
+            <Curate>burn</Curate>
           </Button>
           <div>
             <p>{message}</p>

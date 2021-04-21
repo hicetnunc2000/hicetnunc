@@ -4,6 +4,7 @@ import styles from './styles.module.scss'
 
 export const MimeTypeIcon = ({ mimeType }) => {
   const getIcon = () => {
+    console.log('get icon', mimeType)
     switch (mimeType) {
       /* IMAGES */
       case MIMETYPE.BMP:

@@ -4,10 +4,10 @@ import { useParams } from 'react-router-dom'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
 import { GetOBJKT } from '../../data/api'
 import { Loading } from '../../components/loading'
+import { Button, Primary } from '../../components/button'
 import { Page, Container, Padding } from '../../components/layout'
 import { renderMediaType } from '../../components/media-types'
 import { ItemInfo } from '../../components/item-info'
-import { Button, Primary } from '../../components/button'
 import { Menu } from '../../components/menu'
 import { Info, Collectors, Swap, Burn } from './tabs'
 
@@ -25,15 +25,23 @@ export const ObjktDisplay = () => {
   const [loading, setLoading] = useState(true)
   const [tabIndex, setTabIndex] = useState(0)
   const [nft, setNFT] = useState()
+  const [error, setError] = useState(false)
 
   const address = context.acc?.address
 
   useEffect(() => {
     GetOBJKT({ id }).then(async (objkt) => {
-      await context.setAccount()
-      setNFT(objkt)
+      if (Array.isArray(objkt)) {
+        setError(
+          "There's a problem loading this OBJKT. Please report it on Github."
+        )
+        setLoading(false)
+      } else {
+        await context.setAccount()
+        setNFT(objkt)
 
-      setLoading(false)
+        setLoading(false)
+      }
     })
   }, [])
 
@@ -49,7 +57,22 @@ export const ObjktDisplay = () => {
         </Container>
       )}
 
-      {!loading && (
+      {error && (
+        <Container>
+          <Padding>
+            <p>{error}</p>
+          </Padding>
+          <Padding>
+            <Button href="https://github.com/hicetnunc2000/hicetnunc/issues">
+              <Primary>
+                <strong>Report</strong>
+              </Primary>
+            </Button>
+          </Padding>
+        </Container>
+      )}
+
+      {!loading && !error && (
         <>
           <Container>
             {nft.token_id &&
@@ -73,10 +96,10 @@ export const ObjktDisplay = () => {
                 {TABS.map((tab, index) => {
                   // if secondaryMarket is enabled, we need to check if user owns a copy of the objkt.
                   // if it doesn't don't render tab
-                  if (
-                    tab.secondaryMarket === true &&
-                    Object.keys(nft.owners).length > 0 &&
-                    Object.keys(nft.owners).indexOf(address) === -1
+                  /*                   if (
+                    tab.secondaryMarket === true //&&
+                    //Object.keys(nft.owners).length > 0 &&
+                    //Object.keys(nft.owners).includes(address)
                   ) {
                     return null
                   }
@@ -85,10 +108,10 @@ export const ObjktDisplay = () => {
                   // and if user DOESN'T own a copy of the objkt
                   if (
                     tab.creatorOnly &&
-                    nft.token_info.creators[0] !== address
+                    nft.token_info.creators[0] == address
                   ) {
                     return null
-                  }
+                  } */
 
                   return (
                     <Button key={tab.title} onClick={() => setTabIndex(index)}>

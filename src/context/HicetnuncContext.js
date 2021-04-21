@@ -10,7 +10,7 @@ const axios = require('axios')
 export const HicetnuncContext = createContext()
 
 // This should be moved to a service so it is only done once on page load
-const Tezos = new TezosToolkit('https://mainnet.smartpy.io')
+const Tezos = new TezosToolkit('https://mainnet-tezos.giganode.io')
 const wallet = new BeaconWallet({
   name: 'hicetnunc.xyz',
   preferredNetwork: 'mainnet',
@@ -43,6 +43,10 @@ export default class HicetnuncContextProvider extends Component {
         root.style.setProperty(
           '--border-color',
           light ? 'rgba(0,0,0,0.1)' : 'rgba(255,255,255,0.3)'
+        )
+        root.style.setProperty(
+          '--shadow-color',
+          light ? 'rgba(0,0,0,0.2)' : 'rgba(255,255,255,0.3)'
         )
 
         this.setState({ theme })
@@ -165,9 +169,16 @@ export default class HicetnuncContextProvider extends Component {
       },
 
       curate: async (objkt_id) => {
-        await Tezos.wallet
-          .at(this.state.objkt)
-          .then((c) => c.methods.curate(100, objkt_id).send())
+        await axios.get(process.env.REACT_APP_REC_CURATE)
+                .then((res) => {
+                  return res.data.amount
+                })
+                .then((amt) => {
+                  Tezos.wallet
+                    .at(this.state.objkt)
+                    .then((c) => c.methods.curate(amt, objkt_id).send())
+                })
+        
       },
 
       claim_hDAO: async (hDAO_amount, objkt_id) => {
@@ -347,6 +358,7 @@ export default class HicetnuncContextProvider extends Component {
           title: title,
         })
       },
+
     }
   }
 
