@@ -39,6 +39,12 @@ export default class Display extends Component {
   componentWillMount = async () => {
     this.context.setPath(window.location.pathname)
 
+    if (window.location.pathname.split('/')[3] === "collection") {
+      this.setState( {collectionState: true, creationsState: false })
+    } else {
+      this.setState( {collectionState: false, creationsState: true })
+    }
+
     await GetUserMetadata(this.state.wallet).then((data) => {
       if (data.data.alias) this.setState({ alias: data.data.alias })
       if (data.data.description)
