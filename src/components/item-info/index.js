@@ -2,7 +2,7 @@ import React, { useContext } from 'react'
 import { PATH } from '../../constants'
 import { Button, Primary, Purchase } from '../button'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
-import { walletPreview } from '../../utils/string'
+import { ArtistAddress } from '../artist-address'
 import styles from './styles.module.scss'
 
 const _ = require('lodash')
@@ -36,7 +36,7 @@ export const ItemInfo = ({
       _.values(owners).length !== 0 ? _.values(owners).reduce(reducer) : 'X'
   }
 
-  let ed =
+  let availableEditions =
     swaps.length !== 0 ? swaps.map((e) => e.objkt_amount).reduce(reducer) : 'X'
   let s = _.minBy(swaps, (o) => Number(o.xtz_per_objkt))
   let maxPrice = _.maxBy(swaps, (o) => Number(o.xtz_per_objkt))
@@ -65,9 +65,11 @@ export const ItemInfo = ({
       <div className={styles.container}>
         <div className={styles.edition}>
           <div className={styles.inline}>
-            <p>Issuer:&nbsp;</p>
+            <p>Artist:&nbsp;</p>
             <Button to={`${PATH.ISSUER}/${token_info.creators[0]}`}>
-              <Primary>{walletPreview(token_info.creators[0])}</Primary>
+              <Primary>
+                <ArtistAddress wallet={token_info.creators[0]} />
+              </Primary>
             </Button>
           </div>
           {!feed && (
@@ -76,7 +78,7 @@ export const ItemInfo = ({
                 <span>
                   Editions:
                   <span>
-                    {ed}/{total}
+                    {availableEditions}/{total}
                   </span>
                 </span>
               </p>
