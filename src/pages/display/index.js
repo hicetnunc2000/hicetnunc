@@ -115,11 +115,15 @@ export default class Display extends Component {
       })
   }
 
-  creations = () =>
+  creations = () => {
     this.setState({ collectionState: false, creationsState: true })
+    this.props.history.push(`/tz/${this.state.wallet}`)
+  }
 
-  collection = () =>
+  collection = () => {
     this.setState({ collectionState: true, creationsState: false })
+    this.props.history.push(`/tz/${this.state.wallet}/collection`)
+  }
 
   render() {
     return (
