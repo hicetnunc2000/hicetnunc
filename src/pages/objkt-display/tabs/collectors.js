@@ -8,6 +8,10 @@ export const Collectors = ({ owners, swaps }) => {
   const { syncTaquito, collect, acc, getAccount, cancel } = useContext(
     HicetnuncContext
   )
+
+  // sort swaps in ascending price order
+  swaps = swaps.sort((a, b) => a.xtz_per_objkt.localeCompare(b.xtz_per_objkt, 'en', {numeric: true}));
+
   const filtered =
     (owners &&
       Object.keys(owners)
@@ -43,7 +47,9 @@ export const Collectors = ({ owners, swaps }) => {
       {filtered.length === 0 ? undefined : (
         <Container>
           <Padding>
-            <OwnerList owners={filtered} />
+            <OwnerList
+            owners={filtered}
+            />
           </Padding>
         </Container>
       )}

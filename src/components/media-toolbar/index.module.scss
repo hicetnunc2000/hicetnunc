@@ -1,0 +1,60 @@
+@import '../../styles/variables.scss';
+
+.container {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+
+  > div {
+    padding: 10px;
+  }
+
+  .button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    cursor: pointer;
+    background: var(--border-color);
+    color: var(--text-color);
+  }
+
+  .modal {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1010;
+
+    .bg {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      background: var(--background-color);
+      opacity: 0.75;
+    }
+
+    .box {
+      position: relative;
+      background: var(--background-color);
+      color: var(--text-color);
+      padding: 30px;
+      box-shadow: 0px 4px 16px 2px var(--shadow-color);
+      max-width: 480px;
+
+      .buttons {
+        width: 100%;
+        display: flex;
+        justify-content: flex-end;
+      }
+    }
+  }
+}

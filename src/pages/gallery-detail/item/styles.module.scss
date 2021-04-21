@@ -22,4 +22,14 @@
         color #{$theme-duration} ease-out;
     }
   }
+
+  .info {
+    // border: 1px dashed black;
+    display: flex;
+    align-items: flex-end;
+    flex-direction: column;
+    padding-top: 10px;
+    color: var(--text-color);
+    font-size: 12px;
+  }
 }
