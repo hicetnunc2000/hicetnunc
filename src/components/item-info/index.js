@@ -65,7 +65,7 @@ export const ItemInfo = ({
       <div className={styles.container}>
         <div className={styles.edition}>
           <div className={styles.inline}>
-            <p>Artist:&nbsp;</p>
+            <p>Creator:&nbsp;</p>
             <Button to={`${PATH.ISSUER}/${token_info.creators[0]}`}>
               <Primary>
                 <ArtistAddress wallet={token_info.creators[0]} />
