@@ -6,7 +6,6 @@
   margin: 0 auto;
   margin-bottom: 20px;
   word-break: break-word;
-  // border: 1px dashed $color;
 
   @include respond-to('desktop') {
     width: 50%;
