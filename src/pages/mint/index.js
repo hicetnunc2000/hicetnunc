@@ -1,11 +1,9 @@
 import React, { useContext, useState } from 'react'
-import { useHistory } from 'react-router'
 import Compressor from 'compressorjs'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
 import { Page, Container, Padding } from '../../components/layout'
 import { Input } from '../../components/input'
 import { Button, Curate, Primary } from '../../components/button'
-import { Loading } from '../../components/loading'
 import { Upload } from '../../components/upload'
 import { Preview } from '../../components/preview'
 import { prepareFile, prepareDirectory } from '../../data/ipfs'
@@ -17,7 +15,6 @@ import {
   ALLOWED_COVER_FILETYPES_LABEL,
   MINT_FILESIZE,
   MIMETYPE,
-  PATH,
 } from '../../constants'
 
 const coverOptions = {
@@ -37,7 +34,7 @@ const GENERATE_DISPLAY_AND_THUMBNAIL = false
 
 export const Mint = () => {
   const { mint, getAuth, acc, setAccount } = useContext(HicetnuncContext)
-  const history = useHistory()
+  // const history = useHistory()
   const [step, setStep] = useState(0)
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
@@ -47,7 +44,6 @@ export const Mint = () => {
   const [file, setFile] = useState() // the uploaded file
   const [cover, setCover] = useState() // the uploaded or generated cover image
   const [thumbnail, setThumbnail] = useState() // the uploaded or generated cover image
-  const [message, setMessage] = useState('')
   const [needsCover, setNeedsCover] = useState(false)
 
   const handleMint = async () => {
@@ -107,18 +103,21 @@ export const Mint = () => {
       })
     }
 
+    // OLD CODE FOR REFERENCE
+    // mint(getAuth(), amount, nftCid.path, royalties)
+    //   .then((e) => {
+    //     console.log('mint confirm', e)
+    //     setMessage('Minted successfully')
+    //     // redirect here
+    //     history.push(PATH.FEED)
+    //   })
+    //   .catch((e) => {
+    //     console.log('mint error', e)
+    //     alert('an error occurred')
+    //     setMessage('an error occurred')
+    //   })
+
     mint(getAuth(), amount, nftCid.path, royalties)
-      .then((e) => {
-        console.log('mint confirm', e)
-        setMessage('Minted successfully')
-        // redirect here
-        history.push(PATH.FEED)
-      })
-      .catch((e) => {
-        console.log('mint error', e)
-        alert('an error occurred')
-        setMessage('an error occurred')
-      })
   }
 
   const handlePreview = () => {
@@ -326,33 +325,6 @@ export const Mint = () => {
               <p>Your royalties upon each sale are {royalties}%</p>
             </Padding>
           </Container>
-        </>
-      )}
-
-      {step === 2 && (
-        <>
-          <Container>
-            <div
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                flexDirection: 'column',
-                height: 'calc(100vh - 200px)',
-              }}
-            >
-              preparing OBJKT
-              <Loading />
-            </div>
-          </Container>
-
-          {message && (
-            <Container>
-              <Padding>
-                <p>{message}</p>
-              </Padding>
-            </Container>
-          )}
         </>
       )}
     </Page>
