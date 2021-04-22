@@ -30,6 +30,9 @@ const sortByCount = (a, b) => {
 export default class Display extends Component {
   static contextType = HicetnuncContext
 
+  // unique id for the noTags tag
+  notTags = `NOTAGS-b44b8c5e-8a7f-4ae1-b177-d00a2698d2f3-NOTAGS${Math.random()}`
+
   state = {
     wallet: window.location.pathname.split('/')[2],
     walletPrev: walletPreview(window.location.pathname.split('/')[2]),
@@ -77,10 +80,23 @@ export default class Display extends Component {
           (e) => this.state.wallet !== e.token_info.creators[0]
         )
 
+        // create the tags list and a no-tags element
+        const tagsCreations = {}
+        const noTags = {
+          name: 'NO TAGS',
+          count: 0,
+          active: true,
+        }
+
         // array compositon is splitted in two just to count tags
         // probably there's a better way
-        const tagsCreations = {}
-        let tagsCreationsArray = creations.map((e) => e.token_info.tags).flat()
+        let tagsCreationsArray = creations.map((e) => {
+          // if the creations does not have any tag
+          // it must be counted in noTags tag
+          noTags.count += e.token_info.tags.length === 0 ? 1 : 0
+
+          return e.token_info.tags
+        }).flat()
         tagsCreationsArray = tagsCreationsArray.filter(filterUnique)
           .map((name) => {
             const countTotal = (total, current) => {
@@ -95,6 +111,11 @@ export default class Display extends Component {
           })
           .sort(sortByCount)
           .forEach((tag) => tagsCreations[tag.name] = tag)
+
+        // add noTags tag if necessary
+        if (noTags.count > 0) {
+          tagsCreations[this.notTags] = noTags
+        }
 
         this.setState({
           creations: creations.sort(sortByTokenId),
@@ -377,6 +398,13 @@ export default class Display extends Component {
           <Container xlarge>
             <ResponsiveMasonry>
               {this.state.creations.filter((nft) => {
+
+                // if the nft doesn't have tags is an exception
+                if (nft.token_info.tags.length === 0) {
+                  return this.state.tagsCreations[this.notTags].active
+                }
+
+                // check if any of the nft tags is active
                 let active = false
                 nft.token_info.tags.forEach((tag) => {
                   active = active || this.state.tagsCreations[tag].active
