@@ -1,7 +1,9 @@
 import React, { createContext, Component } from 'react'
+import { withRouter } from 'react-router'
 import { BeaconWallet } from '@taquito/beacon-wallet'
 import { TezosToolkit } from '@taquito/taquito'
 import { setItem } from '../utils/storage'
+import { PATH } from '../constants'
 
 const { NetworkType } = require('@airgap/beacon-sdk')
 var ls = require('local-storage')
@@ -17,7 +19,7 @@ const wallet = new BeaconWallet({
 })
 Tezos.setWalletProvider(wallet)
 
-export default class HicetnuncContextProvider extends Component {
+class HicetnuncContextProviderClass extends Component {
   constructor(props) {
     super(props)
 
@@ -52,6 +54,23 @@ export default class HicetnuncContextProvider extends Component {
         this.setState({ theme })
       },
 
+      // --------------------
+      // feedback component
+      // --------------------
+      feedback: {
+        visible: false, // show or hide the component
+        message: 'OBJKT minted successfully.', // what message to display?
+        progress: true, // do we need to display a progress indicator?
+        confirm: true, // do we display a confirm button?
+        confirmCallback: () => null, // any function to run when the user clicks confirm
+      },
+
+      setFeedback: (props) =>
+        this.setState({ feedback: { ...this.state.feedback, ...props } }),
+
+      // --------------------
+      // feedback component end
+      // --------------------
       pathname: '',
 
       address: '',
@@ -110,35 +129,59 @@ export default class HicetnuncContextProvider extends Component {
       objkt: 'KT1Hkg5qeNhfwpKW4fXvq7HGZB9z2EnmCCA9',
 
       mint: async (tz, amount, cid, royalties) => {
-        return new Promise((resolve, reject) => {
-          Tezos.wallet
-            .at(this.state.objkt)
-            .then((c) =>
-              c.methods
-                .mint_OBJKT(
-                  tz,
-                  parseFloat(amount),
-                  ('ipfs://' + cid)
-                    .split('')
-                    .reduce(
-                      (hex, c) =>
-                        (hex += c.charCodeAt(0).toString(16).padStart(2, '0')),
-                      ''
-                    ),
-                  parseFloat(royalties) * 10
-                )
-                .send({ amount: 0 })
-            )
-            .then((op) =>
-              op.confirmation(1).then(() => {
-                resolve(op)
-                this.setState({ op: op.hash })
-              })
-            )
-            .catch((err) => {
-              reject(err)
-            })
+        // show feedback component with followind message and progress indicator
+        this.state.setFeedback({
+          visible: true,
+          message: 'preparing OBJKT',
+          progress: true,
+          confirm: false,
         })
+
+        // call mint method
+        await Tezos.wallet
+          .at(this.state.objkt)
+          .then((c) =>
+            c.methods
+              .mint_OBJKT(
+                tz,
+                parseFloat(amount),
+                ('ipfs://' + cid)
+                  .split('')
+                  .reduce(
+                    (hex, c) =>
+                      (hex += c.charCodeAt(0).toString(16).padStart(2, '0')),
+                    ''
+                  ),
+                parseFloat(royalties) * 10
+              )
+              .send({ amount: 0 })
+          )
+          .then((op) =>
+            op.confirmation(1).then(() => {
+              // if everything goes okay, show the success message and redirect to profile
+              this.state.setFeedback({
+                message: 'OBJKT minted successfully',
+                progress: false,
+                confirm: true,
+                confirmCallback: () => {
+                  this.setState({ op: op.hash }) // save hash
+                  this.state.setFeedback({ visible: false }) // hide popup
+                  props.history.push(PATH.FEED) // redirect to homepage
+                },
+              })
+            })
+          )
+          .catch((err) => {
+            // if any error happens
+            this.state.setFeedback({
+              message: 'an error occurred ❌',
+              progress: false,
+              confirm: true,
+              confirmCallback: () => {
+                this.state.setFeedback({ visible: false }) // hide popup
+              },
+            })
+          })
       },
 
       collect: async (objkt_amount, swap_id, amount) => {
@@ -169,16 +212,16 @@ export default class HicetnuncContextProvider extends Component {
       },
 
       curate: async (objkt_id) => {
-        await axios.get(process.env.REACT_APP_REC_CURATE)
-                .then((res) => {
-                  return res.data.amount
-                })
-                .then((amt) => {
-                  Tezos.wallet
-                    .at(this.state.objkt)
-                    .then((c) => c.methods.curate(amt, objkt_id).send())
-                })
-        
+        await axios
+          .get(process.env.REACT_APP_REC_CURATE)
+          .then((res) => {
+            return res.data.amount
+          })
+          .then((amt) => {
+            Tezos.wallet
+              .at(this.state.objkt)
+              .then((c) => c.methods.curate(amt, objkt_id).send())
+          })
       },
 
       claim_hDAO: async (hDAO_amount, objkt_id) => {
@@ -358,7 +401,6 @@ export default class HicetnuncContextProvider extends Component {
           title: title,
         })
       },
-
     }
   }
 
@@ -374,3 +416,6 @@ export default class HicetnuncContextProvider extends Component {
     )
   }
 }
+
+const HicetnuncContextProvider = withRouter(HicetnuncContextProviderClass)
+export default HicetnuncContextProvider
