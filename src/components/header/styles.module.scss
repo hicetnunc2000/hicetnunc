@@ -60,7 +60,7 @@
 
 .menu {
   position: fixed;
-  top: 50%;
+  top: 0; // top: 55px; // OLD ALIGNMENT
   left: 0;
   right: 0;
   bottom: 0;
@@ -68,14 +68,16 @@
   color: var(--text-color);
   transition: background-color #{$theme-duration} ease-out,
     color #{$theme-duration} ease-out;
-  z-index: 1000;
+  z-index: 100; // z-index: 1000; // OLD ALIGNMENT
+  display: flex;
+  align-items: center;
 
   .content {
     display: flex;
     justify-content: flex-end;
 
     ul {
-      margin-top: 45px;
+      // margin-top: 45px; // OLD ALIGNMENT
       list-style: none;
 
       li {
