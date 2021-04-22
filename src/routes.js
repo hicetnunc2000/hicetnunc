@@ -6,6 +6,8 @@ import { Mint } from './pages/mint'
 import { ObjktDisplay } from './pages/objkt-display'
 import { Galleries } from './pages/galleries'
 import { GalleryDetail } from './pages/gallery-detail'
+import { Config } from './pages/config'
+import { config } from 'react-transition-group'
 
 export const routes = [
   {
@@ -62,5 +64,10 @@ export const routes = [
     exact: false,
     path: '/gallery/:id',
     component: GalleryDetail,
+  },
+  {
+    exact: false,
+    path: '/config',
+    component: Config,
   },
 ]

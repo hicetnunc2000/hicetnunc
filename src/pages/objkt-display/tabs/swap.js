@@ -19,10 +19,10 @@ export const Swap = ({ total_amount, owners, token_info, address }) => {
   const handleSubmit = () => {
     if (!amount || amount === '' || !price || price === '') {
       // simple validation for now
-      alert('the swap is invalid')
+      alert('invalid input')
     } else {
       setProgress(true)
-      setMessage('generating swap')
+      setMessage('preparing swap')
       // swap is valid call API
       console.log(amount, id, price)
       swap(parseFloat(amount), id, parseFloat(price) * 1000000)
@@ -35,7 +35,7 @@ export const Swap = ({ total_amount, owners, token_info, address }) => {
         })
         .catch((e) => {
           setProgress(false)
-          setMessage('an error occurred')
+          setMessage('error')
         })
     }
   }
@@ -62,7 +62,7 @@ export const Swap = ({ total_amount, owners, token_info, address }) => {
             disabled={progress}
           />
           <Button onClick={handleSubmit} fit disabled={progress}>
-            <Curate>swap it</Curate>
+            <Curate>swap</Curate>
           </Button>
           <div>
             <p>{message}</p>
@@ -74,7 +74,7 @@ export const Swap = ({ total_amount, owners, token_info, address }) => {
       <Container>
         <Padding>
           <p>
-            swaps which carry value are charged with a 2.5% fee for platform
+            swaps which carry values are charged with a 2.5% fee for platform
             maintenance
           </p>
         </Padding>
