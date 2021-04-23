@@ -1,0 +1,80 @@
+<html>
+  <head>
+    <title>Image Scale</title>
+    <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
+    />
+    <meta property="og:image" content="thumbnail.jpg" />
+    <style>
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        overflow: hidden;
+        background-color: black;
+      }
+
+      * {
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+        -moz-osx-font-smoothing: grayscale;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      #app {
+        width: 100vw;
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .container {
+        position: relative;
+      }
+
+      /* landscape uses vw */
+      @media (orientation: landscape) {
+        .container {
+          width: 100vh;
+          height: 100vh;
+        }
+      }
+
+      /* portrait uses vh */
+      @media (orientation: portrait) {
+        .container {
+          width: 100vw;
+          height: 100vw;
+        }
+      }
+
+      .tools {
+        position: fixed;
+        top: 0;
+        right: 0;
+        z-index: 1000;
+      }
+
+      .element {
+        width: fit-content;
+        width: 100%;
+      }
+
+      .element img {
+        width: 100%;
+        opacity: 1;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script src="./index.js"></script>
+  </body>
+</html>
