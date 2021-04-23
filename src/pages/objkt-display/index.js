@@ -10,6 +10,7 @@ import { renderMediaType } from '../../components/media-types'
 import { ItemInfo } from '../../components/item-info'
 import { Menu } from '../../components/menu'
 import { Info, Collectors, Swap, Burn } from './tabs'
+import { MediaToolbar } from '../../components/media-toolbar'
 
 const TABS = [
   { title: 'info', component: Info },
@@ -82,6 +83,7 @@ export const ObjktDisplay = () => {
                 interactive: true,
                 metadata: nft,
               })}
+            <MediaToolbar mimeType={nft.token_info.formats[0].mimeType} />
           </Container>
 
           <Container>
