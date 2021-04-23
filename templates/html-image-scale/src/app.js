@@ -1,6 +1,6 @@
-import React, { Component } from "react"
-import { TransformComponent, TransformWrapper } from "react-zoom-pan-pinch"
-import example_img from "url:./large.jpg"
+import React, { Component } from 'react'
+import { TransformComponent, TransformWrapper } from 'react-zoom-pan-pinch'
+import example_img from 'url:./large.jpg'
 
 export default class App extends Component {
   constructor(props) {
