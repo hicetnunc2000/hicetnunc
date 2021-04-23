@@ -12,12 +12,12 @@ For subsequent runs, you simply need to run `npm start`.
 
 Please remove all the content from folder `dist` and run `npm run build`. This will generate the HTML necessary for your HTML NFT on folder `dist`.
 
-## Gotchas
+## Gotchas
 
 - The reason you should remove the contents of the folder before you run `npm run build` is so you only end up with the necessary files for your NFT since the assets are hashed on every run.
 - Please make sure the exported HTML also doesn't have references to the files with `./filename.jpg` or `/filename.jpg` but `filename.jpg`.
 
-# Publishing
+## Publishing
 
 All HTML content needs to be minted in a zip file. You can have multiple files inside your zip, however there are a few requirements you can't miss.
 
