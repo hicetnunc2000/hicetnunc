@@ -7,6 +7,6 @@
     "filterMaxhDAO": 1000000,
     "filterMaxTez": 500000,
     "filterMaxKol": 500000,
-    "filterWeeklyFreeObjkts": 10
+    "filterWeeklyFreeObjkts": 10,
     "curateDefault": 1000
 }
