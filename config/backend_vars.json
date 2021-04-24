@@ -8,4 +8,5 @@
     "filterMaxTez": 500000,
     "filterMaxKol": 500000,
     "filterWeeklyFreeObjkts": 10
+    "curateDefault": 1000
 }
