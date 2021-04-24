@@ -2,6 +2,7 @@
     "hDaoSwap": "KT1Qm3urGqkRsWsovGzNb2R81c3dSfxpteHG",
     "kolibriSwap": "KT1K4EwTpbvYN9agJdjpyJm4ZZdhpUNKB3F6",
     "disableFilter": false,
+    "disableSwapPrices": true,
     "filterMinhDAO": 2000,
     "filterMaxhDAO": 1000000,
     "filterMaxTez": 500000,
