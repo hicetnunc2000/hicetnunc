@@ -1,0 +1,10 @@
+{
+    "hDaoSwap": "KT1Qm3urGqkRsWsovGzNb2R81c3dSfxpteHG",
+    "kolibriSwap": "KT1K4EwTpbvYN9agJdjpyJm4ZZdhpUNKB3F6",
+    "disableFilter": false,
+    "filterMinhDAO": 1000,
+    "filterMaxhDAO": 1000000,
+    "filterMaxTez": 500000,
+    "filterMaxKol": 500000,
+    "filterWeeklyFreeObjkts": 10
+}
