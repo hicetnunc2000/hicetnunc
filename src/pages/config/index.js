@@ -2,19 +2,15 @@ import React, { Component } from 'react'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
 
 export class Config extends Component {
-    static contextType = HicetnuncContext
+  static contextType = HicetnuncContext
 
-    state = {}
-    
-    componentWillMount = () => console.log('oi')
+  state = {}
 
-    // config alias
-    // config hDAO balance
-    
-    render() {
-        return(
-            <div>
-            </div>
-        )
-    }
+  componentWillMount = () => console.log('oi')
+
+  // config alias
+  // config hDAO balance
+  render() {
+    return <div></div>
+  }
 }

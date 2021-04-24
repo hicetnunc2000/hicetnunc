@@ -7,7 +7,6 @@ import { ObjktDisplay } from './pages/objkt-display'
 import { Galleries } from './pages/galleries'
 import { GalleryDetail } from './pages/gallery-detail'
 import { Config } from './pages/config'
-import { config } from 'react-transition-group'
 import { Search } from './pages/search'
 
 export const routes = [
