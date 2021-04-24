@@ -26,8 +26,8 @@ export const Burn = (props) => {
         <Padding>
           <p>
             Burning will remove all OBJKT#{props.token_id} from your possession
-            to a burn address. Those that you have swapped (on sale), or 
-            have already been collected by others will not be affected by burn.
+            to a burn address. Those that you have swapped (on sale), or have
+            already been collected by others will not be affected by burn.
           </p>
           <p>&nbsp;</p>
           <p>

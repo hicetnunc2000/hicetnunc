@@ -1,16 +1,13 @@
 import React, { Component } from 'react'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
-const axios = require('axios')
+// const axios = require('axios')
 
 export class Search extends Component {
-    static contextType = HicetnuncContext
+  static contextType = HicetnuncContext
 
-    state = {}
+  state = {}
 
-    render() {
-        return(
-            <div>
-            </div>
-        )
-    }
+  render() {
+    return <div></div>
+  }
 }

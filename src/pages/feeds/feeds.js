@@ -1,14 +1,19 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
-import { GetLatestFeed, GethDAOFeed, GetRandomFeed, GetFeaturedFeed } from '../../data/api'
+import {
+  GetLatestFeed,
+  GethDAOFeed,
+  GetRandomFeed,
+  GetFeaturedFeed,
+} from '../../data/api'
 import { Page, Container, Padding } from '../../components/layout'
 import { FeedItem } from '../../components/feed-item'
 import { Loading } from '../../components/loading'
 
-const customFloor = function(value, roundTo) {
-  return Math.floor(value / roundTo) * roundTo;
-} 
+const customFloor = function (value, roundTo) {
+  return Math.floor(value / roundTo) * roundTo
+}
 
 const ONE_MINUTE_MILLIS = 60 * 1000
 
