@@ -1,17 +1,18 @@
 import Sync from './pages/sync'
 import { About } from './pages/about'
 import Display from './pages/display'
-import { Latest, Hdao, Random } from './pages/feeds'
+import { Latest, Hdao, Random, Featured } from './pages/feeds'
 import { Mint } from './pages/mint'
 import { ObjktDisplay } from './pages/objkt-display'
 import { ProxyContract } from './pages/proxy-contract'
-// import { Collections } from './pages/collections'
+import { Galleries } from './pages/galleries'
+import { GalleryDetail } from './pages/gallery-detail'
 
 export const routes = [
   {
     exact: true,
     path: '/',
-    component: Latest,
+    component: Featured,
   },
   {
     exact: false,
@@ -22,6 +23,11 @@ export const routes = [
     exact: false,
     path: '/random',
     component: Random,
+  },
+  {
+    exact: false,
+    path: '/latest',
+    component: Latest,
   },
   {
     exact: false,
@@ -53,9 +59,14 @@ export const routes = [
     path: '/proxy',
     component: ProxyContract,
   },
-  // {
-  //   exact: false,
-  //   path: '/collections/:id',
-  //   component: Collections,
-  // },
+  {
+    exact: false,
+    path: '/galleries',
+    component: Galleries,
+  },
+  {
+    exact: false,
+    path: '/gallery/:id',
+    component: GalleryDetail,
+  },
 ]

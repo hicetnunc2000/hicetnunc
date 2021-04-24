@@ -21,6 +21,7 @@ export const PATH = {
   SYNC: '/sync',
   MINT: '/mint',
   OBJKT: '/objkt',
+  GALLERY: '/gallery',
 }
 
 export const ROUTES = {

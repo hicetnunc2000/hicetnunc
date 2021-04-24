@@ -1,0 +1,11 @@
+.container {
+  svg {
+    path {
+      fill: var(--text-color);
+    }
+
+    &:hover {
+      opacity: 0.7;
+    }
+  }
+}
