@@ -132,8 +132,6 @@ export function injectCSPMetaTagIntoHTML(html) {
     'afterbegin',
     `
     <meta http-equiv="Content-Security-Policy" content="
-    frame-ancestors
-      *;
     upgrade-insecure-requests;
     default-src
       'none';
@@ -209,8 +207,6 @@ export function injectCSPMetaTagIntoHTML(html) {
       https://fonts.googleapis.com/
       https://ipfs.io/
       https://gateway.pinata.cloud/;
-    webrtc-src
-      *;
     worker-src
       'self'
       'unsafe-inline'
