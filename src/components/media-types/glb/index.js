@@ -21,9 +21,11 @@ export const GLBComponent = ({ src, interactive }) => {
   }
 
   const handleResize = () => {
-    const { width, height } = ref.current.getBoundingClientRect()
-    setWidth(width)
-    setHeight(height)
+    if (ref.current) {
+      const { width, height } = ref.current.getBoundingClientRect()
+      setWidth(width)
+      setHeight(height)
+    }
   }
 
   useEffect(() => {

@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import classnames from 'classnames'
 import { Button, Primary } from '../../components/button'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
 import { Page, Container, Padding } from '../../components/layout'
@@ -10,10 +9,15 @@ import { walletPreview } from '../../utils/string'
 import { SanitiseOBJKT } from '../../utils/sanitise'
 import { PATH } from '../../constants'
 import { VisuallyHidden } from '../../components/visually-hidden'
-import { /* GetUserData, */ GetUserMetadata } from '../../data/api'
+import { GetUserMetadata } from '../../data/api'
+import { ResponsiveMasonry } from '../../components/responsive-masonry'
 import styles from './styles.module.scss'
 
 const axios = require('axios')
+
+const sortByTokenId = (a, b) => {
+  return b.token_id - a.token_id
+}
 
 export default class Display extends Component {
   static contextType = HicetnuncContext
@@ -30,10 +34,6 @@ export default class Display extends Component {
     collectionState: false,
     creationsState: true,
     hdao: 0,
-    creationPage: 0,
-    creationItemsPerPage: 12, // 4x3 grid
-    collectionPage: 0,
-    collectionItemsPerPage: 12, // 4x3 grid
   }
 
   componentWillMount = async () => {
@@ -52,25 +52,25 @@ export default class Display extends Component {
     })
 
     await axios
-      .post(process.env.REACT_APP_TZ, {
-        tz: this.state.wallet,
+      .get(process.env.REACT_APP_TZ, {
+        params: {tz: this.state.wallet},
       })
       .then(async (res) => {
         this.setState({
-          hdao: res.data.hdao,
+          hdao: res.data.hdao / 1_000_000,
         })
         const sanitised = SanitiseOBJKT(res.data.result)
-        console.log(sanitised)
         const creations = sanitised.filter(
           (e) => this.state.wallet === e.token_info.creators[0]
         )
         const collection = sanitised.filter(
           (e) => this.state.wallet !== e.token_info.creators[0]
         )
+
         this.setState({
-          creations: creations,
+          creations: creations.sort(sortByTokenId),
           loading: false,
-          collection: collection,
+          collection: collection.sort(sortByTokenId),
         })
 
         /*
@@ -273,134 +273,52 @@ export default class Display extends Component {
 
         {this.state.creationsState && (
           <Container xlarge>
-            {/* PAGINATION NOT READY YET */}
-            {false && (
-              <Padding>
-                <div className={styles.pagination}>
-                  {Array.from(
-                    Array(
-                      Math.ceil(
-                        this.state.creations.length /
-                          this.state.creationItemsPerPage
-                      )
-                    )
-                  ).map((a, i) => {
-                    const itemClasses = classnames({
-                      [styles.item]: true,
-                      [styles.selected]: i === this.state.creationPage,
-                    })
-                    return (
-                      <div
-                        key={`creation-${i}`}
-                        className={itemClasses}
-                        onClick={() => this.setState({ creationPage: i })}
-                      />
-                    )
-                  })}
-                </div>
-              </Padding>
-            )}
-            <div className={styles.list}>
-              {this.state.creations.map(
-                (nft, i) => {
-                  // pagination disabled
-                  // const firstIndex =
-                  //   this.state.creationPage * this.state.creationItemsPerPage
-                  // if (
-                  //   i >= firstIndex &&
-                  //   i < (firstIndex + 1) * this.state.creationItemsPerPage
-                  // ) {
-                  const { mimeType, uri } = nft.token_info.formats[0]
+            <ResponsiveMasonry>
+              {this.state.creations.map((nft, i) => {
+                const { mimeType, uri } = nft.token_info.formats[0]
 
-                  return (
-                    <Button
-                      key={nft.token_id}
-                      to={`${PATH.OBJKT}/${nft.token_id}`}
-                    >
-                      <div className={styles.container}>
-                        {renderMediaType({
-                          mimeType,
-                          uri: uri.split('//')[1],
-                          metadata: nft,
-                        })}
-                        <div className={styles.number}>
-                          OBJKT#{nft.token_id}
-                        </div>
-                      </div>
-                    </Button>
-                  )
-                }
-                //  else {
-                // return null
-                // }}
-              )}
-            </div>
+                return (
+                  <Button
+                    key={nft.token_id}
+                    to={`${PATH.OBJKT}/${nft.token_id}`}
+                  >
+                    <div className={styles.container}>
+                      {renderMediaType({
+                        mimeType,
+                        uri: uri.split('//')[1],
+                        metadata: nft,
+                      })}
+                      <div className={styles.number}>OBJKT#{nft.token_id}</div>
+                    </div>
+                  </Button>
+                )
+              })}
+            </ResponsiveMasonry>
           </Container>
         )}
 
         {this.state.collectionState && (
           <Container xlarge>
-            {/* PAGINATION NOT READY YET */}
-            {false && (
-              <Padding>
-                <div className={styles.pagination}>
-                  {Array.from(
-                    Array(
-                      Math.ceil(
-                        this.state.collection.length /
-                          this.state.collectionItemsPerPage
-                      )
-                    )
-                  ).map((a, i) => {
-                    const itemClasses = classnames({
-                      [styles.item]: true,
-                      [styles.selected]: i === this.state.collectionPage,
-                    })
-                    return (
-                      <div
-                        key={`collection-${i}`}
-                        className={itemClasses}
-                        onClick={() => this.setState({ collectionPage: i })}
-                      />
-                    )
-                  })}
-                </div>
-              </Padding>
-            )}
-            <div className={styles.list}>
-              {this.state.collection.map(
-                (nft, i) => {
-                  // pagination
-                  // const firstIndex =
-                  //   this.state.collectionPage * this.state.collectionItemsPerPage
-                  // if (
-                  //   i >= firstIndex &&
-                  //   i < (firstIndex + 1) * this.state.collectionItemsPerPage
-                  // ) {
-                  const { mimeType, uri } = nft.token_info.formats[0]
-                  return (
-                    <Button
-                      key={nft.token_id}
-                      to={`${PATH.OBJKT}/${nft.token_id}`}
-                    >
-                      <div className={styles.container}>
-                        {renderMediaType({
-                          mimeType,
-                          uri: uri.split('//')[1],
-                          metadata: nft,
-                        })}
-                        <div className={styles.number}>
-                          OBJKT#{nft.token_id}
-                        </div>
-                      </div>
-                    </Button>
-                  )
-                }
-                // else {
-                // return null
-                // }}
-              )}
-            </div>
+            <ResponsiveMasonry>
+              {this.state.collection.map((nft, i) => {
+                const { mimeType, uri } = nft.token_info.formats[0]
+                return (
+                  <Button
+                    key={nft.token_id}
+                    to={`${PATH.OBJKT}/${nft.token_id}`}
+                  >
+                    <div className={styles.container}>
+                      {renderMediaType({
+                        mimeType,
+                        uri: uri.split('//')[1],
+                        metadata: nft,
+                      })}
+                      <div className={styles.number}>OBJKT#{nft.token_id}</div>
+                    </div>
+                  </Button>
+                )
+              })}
+            </ResponsiveMasonry>
           </Container>
         )}
       </Page>

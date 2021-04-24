@@ -1,0 +1,15 @@
+.grid {
+  display: flex;
+  margin-left: -10px;
+  width: auto;
+}
+
+.column {
+  padding-left: 10px;
+  background-clip: padding-box;
+
+  & > * {
+    display: block;
+    margin-bottom: 10px;
+  }
+}
