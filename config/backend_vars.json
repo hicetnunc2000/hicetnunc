@@ -4,9 +4,9 @@
     "disableFilter": false,
     "disableSwapPrices": false,
     "filterMinhDAO": 100,
-    "filterMaxhDAO": 1000000,
-    "filterMaxTez": 500000,
-    "filterMaxKol": 1000000,
-    "filterWeeklyFreeObjkts": 10,
+    "filterMaxhDAO": 10000000,
+    "filterMaxTez": 100000,
+    "filterMaxKol": 100000,
+    "filterWeeklyFreeObjkts": 14,
     "curateDefault": 1000
 }
