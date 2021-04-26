@@ -12,7 +12,7 @@ const axios = require('axios')
 export const HicetnuncContext = createContext()
 
 // This should be moved to a service so it is only done once on page load
-const Tezos = new TezosToolkit('https://mainnet.smartpy.io')
+const Tezos = new TezosToolkit('https://mainnet-tezos.giganode.io')
 const wallet = new BeaconWallet({
   name: 'hicetnunc.xyz',
   preferredNetwork: 'mainnet',
@@ -236,12 +236,8 @@ class HicetnuncContextProviderClass extends Component {
 
       burn: async (objkt_id, amount) => {
         var tz = await wallet.client.getActiveAccount()
-        console.log(
-          'trying to burn',
-          parseInt(amount[tz.address]),
-          'OBJKTs of',
-          parseInt(objkt_id)
-        )
+        console.log('trying to burn', parseInt(amount))
+
         await Tezos.wallet
           .at('KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton')
           .then(async (c) =>
@@ -253,7 +249,7 @@ class HicetnuncContextProviderClass extends Component {
                     {
                       to_: 'tz1burnburnburnburnburnburnburjAYjjX',
                       token_id: parseInt(objkt_id),
-                      amount: parseInt(amount[tz.address]),
+                      amount: parseInt(amount),
                     },
                   ],
                 },

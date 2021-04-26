@@ -3,11 +3,10 @@
 ## Database
 
 Integrate with upcoming db, will be new endpoints in API
-- improves site performance
 - allows to query by tag and query by search
 - allows to automatically generate a displayUri for old objkts (audio, images, etc)
-- proportional UI (menu/minting form/profile/loading)
-- config page (configurable hDAO votes/configurable aliases and profiles)
+- configurable hDAO votes/configurable aliases
+
 
 Consider better pagination structure like:
 ```
