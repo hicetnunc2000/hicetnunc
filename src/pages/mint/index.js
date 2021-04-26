@@ -64,8 +64,6 @@ export const Mint = () => {
 
     setStep(2)
 
-    console.log('Done processing.')
-
     // upload file(s)
     let nftCid
     if ([MIMETYPE.ZIP, MIMETYPE.ZIP1, MIMETYPE.ZIP2].includes(file.mimeType)) {
@@ -140,8 +138,6 @@ export const Mint = () => {
   const generateExtraMedia = async (file) => {
     setProcessingExtraMedia(true)
     const media = await generateCompressedMedia(file)
-    console.log('EXTRA MEDIA')
-    console.log(media)
     setExtraMedia(media)
     setProcessingExtraMedia(false)
   }
