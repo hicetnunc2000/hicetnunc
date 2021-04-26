@@ -12,7 +12,7 @@ const axios = require('axios')
 export const HicetnuncContext = createContext()
 
 // This should be moved to a service so it is only done once on page load
-const Tezos = new TezosToolkit('https://mainnet.smartpy.io')
+const Tezos = new TezosToolkit('https://mainnet-tezos.giganode.io')
 const wallet = new BeaconWallet({
   name: 'hicetnunc.xyz',
   preferredNetwork: 'mainnet',
