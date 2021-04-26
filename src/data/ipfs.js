@@ -173,19 +173,15 @@ async function uploadMetadataFile({
 }
 
 async function uploadExtraMedia(extraMedia) {
-  console.log('uploadExtraMedia called')
   const ipfs = createClient(infuraUrl)
 
   let displayUri = ''
   let thumbnailUri = IPFS_DISPLAY_URI_BLACKCIRCLE
   const formats = []
-  console.log('extraMedia', extraMedia)
   for (const item of extraMedia) {
     const info = await ipfs.add(item.buffer)
     const hash = info.path
-    console.log('item', item)
     const format = getFormatData(item, hash)
-    console.log('format', format)
     formats.push(format)
   }
 
@@ -193,16 +189,10 @@ async function uploadExtraMedia(extraMedia) {
     return formatIsImage(f) && formatLessThanWidth(f, 1200)
   })
 
-  console.log('imageFormats', imageFormats)
-
   if (imageFormats.length !== 0) {
     thumbnailUri = imageFormats[0].uri
     displayUri = imageFormats[imageFormats.length - 1].uri
   }
-
-  console.log('formats', formats)
-  console.log('displayUri', displayUri)
-  console.log('thumbnailUri', thumbnailUri)
 
   return {
     displayUri,
@@ -221,9 +211,6 @@ function formatLessThanWidth(format, width) {
 }
 
 function getFormatData(item, hash) {
-  console.log(item)
-  console.log(item.meta)
-  console.log(item.meta.mimeType)
   const data = {
     mimeType: item.meta.mimeType,
     uri: `ipfs://${hash}`,
@@ -243,9 +230,6 @@ function getFormatData(item, hash) {
   if (item.meta.duration) {
     data.duration = toHHMMSS(item.meta.duration)
   }
-
-  console.log('format data')
-  console.log(data)
 
   return data
 }
