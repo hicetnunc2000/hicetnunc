@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Your title here</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta property="og:image" content="thumbnail.png" />
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        width: 100vw;
+        height: 100vh;
+        overflow: hidden;
+        background: radial-gradient(#efefef, #cccccc);
+      }
+
+      .glslCanvas {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%,-50%);
+        width:100%;
+        height:100%;
+      }
+      ​
+      * {
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+        -moz-osx-font-smoothing: grayscale;
+        -webkit-font-smoothing: antialiased;
+        -webkit-tap-highlight-color: transparent;
+        -webkit-touch-callout: none;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas class="glslCanvas" data-fragment-url="shader.frag" width="500" height="500"></canvas>
+  </body>
+  <script type="text/javascript" src="GlslCanvas.min.js"></script>
+</html>
