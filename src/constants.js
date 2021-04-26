@@ -78,9 +78,10 @@ export const ALLOWED_COVER_MIMETYPES = [
   MIMETYPE.JPEG,
   MIMETYPE.PNG,
   MIMETYPE.GIF,
+  MIMETYPE.MP4,
 ]
 
-export const ALLOWED_COVER_FILETYPES_LABEL = ['jpeg, png, gif']
+export const ALLOWED_COVER_FILETYPES_LABEL = ['jpeg, png, gif, mp4']
 
 export const IPFS_DISPLAY_URI_BLACKCIRCLE =
   'ipfs://QmNrhZHUaEqxhyLfqoq1mtHSipkWHeT31LNHb1QEbDHgnc'
