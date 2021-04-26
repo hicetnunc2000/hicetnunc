@@ -18,8 +18,7 @@ export const prepareFile = async ({
   address,
   buffer,
   mimeType,
-  cover,
-  thumbnail,
+  extraMedia,
   generateDisplayUri,
 }) => {
   const ipfs = createClient(infuraUrl)
@@ -29,20 +28,18 @@ export const prepareFile = async ({
   const hash = info.path
   const cid = `ipfs://${hash}`
 
-  // upload cover image
-  let displayUri = ''
-  if (generateDisplayUri) {
-    const coverInfo = await ipfs.add(cover.buffer)
-    const coverHash = coverInfo.path
-    displayUri = `ipfs://${coverHash}`
-  }
+  // TODO: upload all extra media here
+  // set displayUri and thumbnailUri
 
-  // upload thumbnail image
+  // upload extra media
+  let displayUri = ''
   let thumbnailUri = IPFS_DISPLAY_URI_BLACKCIRCLE
+  let extraFormats = []
   if (generateDisplayUri) {
-    const thumbnailInfo = await ipfs.add(thumbnail.buffer)
-    const thumbnailHash = thumbnailInfo.path
-    thumbnailUri = `ipfs://${thumbnailHash}`
+    const extraMediaMetadata = await uploadExtraMedia(extraMedia)
+    displayUri = extraMediaMetadata.displayUri
+    thumbnailUri = extraMediaMetadata.thumbnailUri
+    extraFormats = extraMediaMetadata.formats
   }
 
   return await uploadMetadataFile({
@@ -54,6 +51,7 @@ export const prepareFile = async ({
     mimeType,
     displayUri,
     thumbnailUri,
+    extraFormats,
   })
 }
 
@@ -63,33 +61,26 @@ export const prepareDirectory = async ({
   tags,
   address,
   files,
-  cover,
-  thumbnail,
+  extraMedia,
   generateDisplayUri,
 }) => {
   // upload directory of files
   const hashes = await uploadFilesToDirectory(files)
   const cid = `ipfs://${hashes.directory}`
 
-  // upload cover image
-  const ipfs = createClient(infuraUrl)
-
+  // upload extra media
   let displayUri = ''
+  let thumbnailUri = IPFS_DISPLAY_URI_BLACKCIRCLE
+  let extraFormats = []
   if (generateDisplayUri) {
-    const coverInfo = await ipfs.add(cover.buffer)
-    const coverHash = coverInfo.path
-    displayUri = `ipfs://${coverHash}`
+    // upload
+    const extraMediaMetadata = await uploadExtraMedia(extraMedia)
+    displayUri = extraMediaMetadata.displayUri
+    thumbnailUri = extraMediaMetadata.thumbnailUri
+    extraFormats = extraMediaMetadata.formats
   } else if (hashes.cover) {
     // TODO: Remove this once generateDisplayUri option is gone
     displayUri = `ipfs://${hashes.cover}`
-  }
-
-  // upload thumbnail image
-  let thumbnailUri = IPFS_DISPLAY_URI_BLACKCIRCLE
-  if (generateDisplayUri) {
-    const thumbnailInfo = await ipfs.add(thumbnail.buffer)
-    const thumbnailHash = thumbnailInfo.path
-    thumbnailUri = `ipfs://${thumbnailHash}`
   }
 
   return await uploadMetadataFile({
@@ -101,6 +92,7 @@ export const prepareDirectory = async ({
     mimeType: IPFS_DIRECTORY_MIMETYPE,
     displayUri,
     thumbnailUri,
+    extraFormats,
   })
 }
 
@@ -155,6 +147,7 @@ async function uploadMetadataFile({
   mimeType,
   displayUri = '',
   thumbnailUri = IPFS_DISPLAY_URI_BLACKCIRCLE,
+  extraFormats = [],
 }) {
   const ipfs = createClient(infuraUrl)
 
@@ -169,11 +162,89 @@ async function uploadMetadataFile({
         displayUri,
         thumbnailUri,
         creators: [address],
-        formats: [{ uri: cid, mimeType }],
+        formats: [{ uri: cid, mimeType }, ...extraFormats],
         decimals: 0,
         isBooleanAmount: false,
         shouldPreferSymbol: false,
       })
     )
   )
+}
+
+async function uploadExtraMedia(extraMedia) {
+  console.log('uploadExtraMedia called')
+  const ipfs = createClient(infuraUrl)
+
+  let displayUri = ''
+  let thumbnailUri = IPFS_DISPLAY_URI_BLACKCIRCLE
+  const formats = []
+  console.log('extraMedia', extraMedia)
+  for (const item of extraMedia) {
+    const info = await ipfs.add(item.buffer)
+    const hash = info.path
+    console.log('item', item)
+    const format = getFormatData(item, hash)
+    console.log('format', format)
+    formats.push(format)
+  }
+
+  const imageFormats = formats.filter((f) => {
+    return formatIsImage(f) && formatLessThanWidth(f, 1200)
+  })
+
+  console.log('imageFormats', imageFormats)
+
+  if (imageFormats.length !== 0) {
+    thumbnailUri = imageFormats[0].uri
+    displayUri = imageFormats[imageFormats.length - 1].uri
+  }
+
+  console.log('formats', formats)
+  console.log('displayUri', displayUri)
+  console.log('thumbnailUri', thumbnailUri)
+
+  return {
+    displayUri,
+    thumbnailUri,
+    formats,
+  }
+}
+
+function formatIsImage(format) {
+  return format.mimeType.indexOf('image') === 0
+}
+
+function formatLessThanWidth(format, width) {
+  const dims = format.dimensions.value.split('x').map((v) => parseInt(v))
+  return dims[0] < width
+}
+
+function getFormatData(item, hash) {
+  console.log(item)
+  console.log(item.meta)
+  console.log(item.meta.mimeType)
+  const data = {
+    mimeType: item.meta.mimeType,
+    uri: `ipfs://${hash}`,
+    hash: hash,
+    fileSize: item.meta.fileSize,
+  }
+
+  if (item.meta.dimensions) {
+    const w = item.meta.dimensions.width
+    const h = item.meta.dimensions.height
+    data.dimensions = {
+      value: `${w}x${h}`,
+      unit: 'px',
+    }
+  }
+
+  if (item.meta.duration) {
+    data.duration = item.meta.duration
+  }
+
+  console.log('format data')
+  console.log(data)
+
+  return data
 }

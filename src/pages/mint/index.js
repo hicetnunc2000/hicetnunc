@@ -8,7 +8,7 @@ import { Upload } from '../../components/upload'
 import { Preview } from '../../components/preview'
 import { prepareFile, prepareDirectory } from '../../data/ipfs'
 import { prepareFilesFromZIP } from '../../utils/html'
-import { generateCompressedImage } from '../../utils/compress'
+import { generateCompressedMedia } from '../../utils/compress'
 
 import {
   ALLOWED_MIMETYPES,
@@ -18,18 +18,6 @@ import {
   MINT_FILESIZE,
   MIMETYPE,
 } from '../../constants'
-
-const coverOptions = {
-  quality: 0.85,
-  maxWidth: 1024,
-  maxHeight: 1024,
-}
-
-const thumbnailOptions = {
-  quality: 0.85,
-  maxWidth: 350,
-  maxHeight: 350,
-}
 
 // @crzypathwork change to "true" to activate displayUri and thumbnailUri
 const GENERATE_DISPLAY_AND_THUMBNAIL = true
@@ -44,9 +32,9 @@ export const Mint = () => {
   const [amount, setAmount] = useState()
   const [royalties, setRoyalties] = useState()
   const [file, setFile] = useState() // the uploaded file
-  const [cover, setCover] = useState() // the uploaded or generated cover image
-  const [thumbnail, setThumbnail] = useState() // the uploaded or generated cover image
-  const [needsCover, setNeedsCover] = useState(false)
+  const [extraMedia, setExtraMedia] = useState() // the uploaded or generated cover image
+  const [processingExtraMedia, setProcessingExtraMedia] = useState(false)
+  const [needsCoverUpload, setNeedsCoverUpload] = useState(false)
 
   const handleMint = async () => {
     setAccount()
@@ -75,6 +63,9 @@ export const Mint = () => {
     // file about to be minted, change to the mint screen
 
     setStep(2)
+
+    console.log('Done processing.')
+
     // upload file(s)
     let nftCid
     if ([MIMETYPE.ZIP, MIMETYPE.ZIP1, MIMETYPE.ZIP2].includes(file.mimeType)) {
@@ -86,8 +77,7 @@ export const Mint = () => {
         tags,
         address: acc.address,
         files,
-        cover,
-        thumbnail,
+        extraMedia,
         generateDisplayUri: GENERATE_DISPLAY_AND_THUMBNAIL,
       })
     } else {
@@ -99,11 +89,11 @@ export const Mint = () => {
         address: acc.address,
         buffer: file.buffer,
         mimeType: file.mimeType,
-        cover,
-        thumbnail,
+        extraMedia,
         generateDisplayUri: GENERATE_DISPLAY_AND_THUMBNAIL,
       })
     }
+    console.log('ntfCid', nftCid)
 
     // OLD CODE FOR REFERENCE
     // mint(getAuth(), amount, nftCid.path, royalties)
@@ -119,7 +109,8 @@ export const Mint = () => {
     //     setMessage('an error occurred')
     //   })
 
-    mint(getAuth(), amount, nftCid.path, royalties)
+    // RE-ENABLE WHEN DONE
+    // mint(getAuth(), amount, nftCid.path, royalties)
   }
 
   const handlePreview = () => {
@@ -130,30 +121,34 @@ export const Mint = () => {
     setFile(props)
 
     if (GENERATE_DISPLAY_AND_THUMBNAIL) {
-      if (props.mimeType.indexOf('image') === 0) {
-        setNeedsCover(false)
-        await generateCoverAndThumbnail(props.file)
+      if (
+        props.mimeType.indexOf('image') === 0 ||
+        props.mimeType.indexOf('video') === 0
+      ) {
+        setNeedsCoverUpload(false)
+        await generateExtraMedia(props.file)
       } else {
-        setNeedsCover(true)
+        setNeedsCoverUpload(true)
       }
     }
   }
 
   const handleCoverUpload = async (props) => {
-    await generateCoverAndThumbnail(props.file)
+    await generateExtraMedia(props.file)
   }
 
-  const generateCoverAndThumbnail = async (file) => {
-    const cover = await generateCompressedImage(file, coverOptions)
-    setCover(cover)
-
-    const thumb = await generateCompressedImage(file, thumbnailOptions)
-    setThumbnail(thumb)
+  const generateExtraMedia = async (file) => {
+    setProcessingExtraMedia(true)
+    const media = await generateCompressedMedia(file)
+    console.log('EXTRA MEDIA')
+    console.log(media)
+    setExtraMedia(media)
+    setProcessingExtraMedia(false)
   }
 
   const handleValidation = () => {
     if (GENERATE_DISPLAY_AND_THUMBNAIL) {
-      if (amount > 0 && file && cover && thumbnail && royalties >= 10) {
+      if (amount > 0 && file && extraMedia && royalties >= 10) {
         return false
       }
     } else {
@@ -226,11 +221,11 @@ export const Mint = () => {
             </Padding>
           </Container>
 
-          {file && needsCover && (
+          {file && needsCoverUpload && (
             <Container>
               <Padding>
                 <Upload
-                  label="Upload cover image"
+                  label="Upload cover image or video"
                   allowedTypes={ALLOWED_COVER_MIMETYPES}
                   allowedTypesLabel={ALLOWED_COVER_FILETYPES_LABEL}
                   onChange={handleCoverUpload}
@@ -238,6 +233,12 @@ export const Mint = () => {
               </Padding>
             </Container>
           )}
+
+          <Container>
+            <Padding>
+              {processingExtraMedia && <div>Processing assets...</div>}
+            </Padding>
+          </Container>
 
           <Container>
             <Padding>
