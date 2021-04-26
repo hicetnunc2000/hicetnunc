@@ -236,12 +236,8 @@ class HicetnuncContextProviderClass extends Component {
 
       burn: async (objkt_id, amount) => {
         var tz = await wallet.client.getActiveAccount()
-        console.log(
-          'trying to burn',
-          parseInt(amount[tz.address]),
-          'OBJKTs of',
-          parseInt(objkt_id)
-        )
+        console.log('trying to burn', parseInt(amount))
+
         await Tezos.wallet
           .at('KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton')
           .then(async (c) =>
@@ -253,7 +249,7 @@ class HicetnuncContextProviderClass extends Component {
                     {
                       to_: 'tz1burnburnburnburnburnburnburjAYjjX',
                       token_id: parseInt(objkt_id),
-                      amount: parseInt(amount[tz.address]),
+                      amount: parseInt(amount),
                     },
                   ],
                 },
