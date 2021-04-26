@@ -8,7 +8,7 @@ const VIDEO_MIMETYPES = [
   MIMETYPE.WEBM,
 ]
 
-const DEBUG = true
+const DEBUG = false
 
 const imageSettings = {
   quality: 4,
@@ -91,9 +91,6 @@ async function generateImage(file, srcMeta, { size, quality, extension }) {
   // use ffmpeg
   ffmpeg.FS('writeFile', inFilename, await fetchFile(file))
 
-  // TODO: What to do in case of video input file? First frame? A few seconds in?
-
-  console.log('srcMeta', srcMeta)
   if (VIDEO_MIMETYPES.includes(srcMeta.mimeType)) {
     // Select middle frame
     const time = toHHMMSS(srcMeta.duration * 0.5)
@@ -152,13 +149,8 @@ async function generateVideo(
   const inFilename = `input`
   const outFilename = `compressed_${size}.${extension}`
 
-  console.log('maxTime', maxTime)
-
   ffmpeg.FS('writeFile', inFilename, await fetchFile(file))
 
-  console.log('Generate video', srcMeta)
-
-  // TODO: Customize command for video
   await ffmpeg.run(
     '-i',
     inFilename,
@@ -221,7 +213,7 @@ function getVideoMetadata(blob) {
         resolve({
           mimeType: blob.type,
           fileSize: blob.size,
-          duration: toHHMMSS(video.duration),
+          duration: video.duration,
           dimensions: {
             width: video.videoWidth,
             height: video.videoHeight,
