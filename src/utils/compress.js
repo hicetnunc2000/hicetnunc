@@ -10,7 +10,7 @@ const VIDEO_MIMETYPES = [
   MIMETYPE.WEBM,
 ]
 
-const DEBUG = false
+const DEBUG = true
 
 const imageSettings = {
   quality: 4, // ffmpeg
@@ -249,8 +249,6 @@ function getImageMetadata(blob) {
       reject(err)
     }
     img.src = URL.createObjectURL(blob)
-
-    if (DEBUG) document.body.appendChild(img)
   })
 }
 
@@ -278,7 +276,5 @@ function getVideoMetadata(blob) {
 
     video.src = URL.createObjectURL(blob)
     video.setAttribute('controls', true)
-
-    if (DEBUG) document.body.appendChild(video)
   })
 }

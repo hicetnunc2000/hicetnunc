@@ -6,6 +6,7 @@ import { Input } from '../../components/input'
 import { Button, Curate, Primary } from '../../components/button'
 import { Upload } from '../../components/upload'
 import { Preview } from '../../components/preview'
+import { MediaAssetsDisplay } from '../../components/media-assets-display'
 import { prepareFile, prepareDirectory } from '../../data/ipfs'
 import { prepareFilesFromZIP } from '../../utils/html'
 import { generateCompressedMedia, FFMPEG_SUPPORTED } from '../../utils/compress'
@@ -139,6 +140,7 @@ export const Mint = () => {
 
   const handleFileUpload = async (props) => {
     setFile(props)
+    setExtraMedia(null)
 
     if (GENERATE_DISPLAY_AND_THUMBNAIL) {
       if (checkNeedsCoverUpload(props.mimeType)) {
@@ -251,13 +253,11 @@ export const Mint = () => {
 
           <Container>
             <Padding>
-              {!FFMPEG_SUPPORTED && (
-                <div>
-                  NOTE: Use the latest Firefox or Chrome to enable video
-                  thumbnails for your OBJKT.
-                </div>
-              )}
-              {processingExtraMedia && <div>Processing assets...</div>}
+              <MediaAssetsDisplay
+                ffmpeg={FFMPEG_SUPPORTED}
+                processing={processingExtraMedia}
+                media={extraMedia}
+              />
             </Padding>
           </Container>
 
