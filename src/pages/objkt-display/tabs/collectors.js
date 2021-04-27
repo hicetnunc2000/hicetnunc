@@ -3,6 +3,7 @@ import { Container, Padding } from '../../../components/layout'
 import { OwnerList } from '../../../components/owner-list'
 import { HicetnuncContext } from '../../../context/HicetnuncContext'
 import { OwnerSwaps } from '../../../components/owner-swaps'
+import { getWalletBlockList } from "../../../constants";
 
 export const Collectors = ({ owners, swaps }) => {
   const { syncTaquito, collect, acc, getAccount, cancel } = useContext(
@@ -14,12 +15,15 @@ export const Collectors = ({ owners, swaps }) => {
     a.xtz_per_objkt.localeCompare(b.xtz_per_objkt, 'en', { numeric: true })
   )
 
+  const wblock = getWalletBlockList();
+
   const filtered =
     (owners &&
       Object.keys(owners)
         .filter((s) => s.startsWith('tz'))
         .filter((s) => parseFloat(owners[s]) > 0) // removes negative owners
         .filter((e) => e !== 'tz1burnburnburnburnburnburnburjAYjjX') // remove burn wallet
+        .filter((s) => !wblock.includes(s)) // removes offers from banned wallets
         .map((s) => ({ amount: owners[s], wallet: s }))) ||
     []
 
