@@ -1,5 +1,6 @@
 import React from 'react'
 import { toHHMMSS } from '../../utils/time'
+import { formatBytes } from '../../utils/sanitise'
 import styles from './styles.module.scss'
 
 export const MediaAssetsDisplay = ({ ffmpeg, processing, media }) => {
@@ -27,13 +28,15 @@ export const MediaAssetsDisplay = ({ ffmpeg, processing, media }) => {
                       )}
                     </div>
                     <div className={styles.meta}>
-                      {item.meta.mimeType}
-                      <br />
-                      {item.meta.dimensions.width} x{' '}
-                      {item.meta.dimensions.height}
+                      <div>{item.meta.mimeType}</div>
+                      <div>
+                        {item.meta.dimensions.width} x{' '}
+                        {item.meta.dimensions.height}
+                      </div>
                       {item.meta.duration && (
                         <div>{toHHMMSS(item.meta.duration)}</div>
                       )}
+                      <div>{formatBytes(item.meta.fileSize)}</div>
                     </div>
                   </div>
                 </div>
