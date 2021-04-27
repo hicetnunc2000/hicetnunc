@@ -1,3 +1,4 @@
+import Compress from 'client-compress'
 import { createFFmpeg, fetchFile } from '@ffmpeg/ffmpeg'
 import { toHHMMSS } from '../utils/time'
 import { MIMETYPE } from '../constants'
@@ -18,14 +19,16 @@ const imageSettings = {
 
 const videoSettings = {
   quality: 4,
-  maxTime: 10,
+  maxTime: 15,
   sizes: [512, 1024],
 }
 
 const ffmpeg = createFFmpeg({ log: DEBUG })
 
+export const FFMPEG_SUPPORTED = typeof SharedArrayBuffer === 'function'
+
 export async function generateCompressedMedia(file) {
-  if (!ffmpeg.isLoaded()) {
+  if (FFMPEG_SUPPORTED && !ffmpeg.isLoaded()) {
     await ffmpeg.load()
   }
 
@@ -39,9 +42,11 @@ export async function generateCompressedMedia(file) {
   const media = []
 
   if (VIDEO_MIMETYPES.includes(file.type)) {
-    // generate JPEGs and MP4s
+    // generate JPEGs, and MP4s when possible
     media.push(await generateImages(file, srcMeta, 'jpg'))
-    media.push(await generateVideos(file, srcMeta, 'mp4'))
+    if (FFMPEG_SUPPORTED) {
+      media.push(await generateVideos(file, srcMeta, 'mp4'))
+    }
   } else if (file.type === MIMETYPE.GIF) {
     // generate GIFs
     media.push(await generateImages(file, srcMeta, 'gif'))
@@ -86,6 +91,26 @@ async function generateVideos(file, srcMeta, extension) {
 }
 
 async function generateImage(file, srcMeta, { size, quality, extension }) {
+  if (FFMPEG_SUPPORTED) {
+    return await generateImageFfmpeg(file, srcMeta, {
+      size,
+      quality,
+      extension,
+    })
+  } else {
+    return await generateImageFallback(file, srcMeta, {
+      size,
+      quality,
+      extension,
+    })
+  }
+}
+
+async function generateImageFfmpeg(
+  file,
+  srcMeta,
+  { size, quality, extension }
+) {
   const inFilename = `input`
   const outFilename = `compressed_${size}.${extension}`
 
@@ -172,6 +197,31 @@ async function generateVideo(
   const reader = await blobToDataURL(blob)
 
   return { meta, buffer, reader }
+}
+
+async function generateImageFallback(
+  file,
+  srcMeta,
+  { size, quality, extension }
+) {
+  // fallback options
+  const options = {
+    quality: 0.85,
+    maxWidth: size,
+  }
+
+  const blob = await compressImage(file, options)
+  const meta = await getImageMetadata(blob)
+  const buffer = await blob.arrayBuffer()
+  const reader = await blobToDataURL(blob)
+  return { meta, buffer, reader }
+}
+
+async function compressImage(file, options) {
+  const compressor = new Compress(options)
+  const results = await compressor.compress([file])
+  const { photo } = results[0]
+  return photo.data
 }
 
 async function blobToDataURL(blob) {
