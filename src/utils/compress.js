@@ -13,13 +13,14 @@ const VIDEO_MIMETYPES = [
 const DEBUG = false
 
 const imageSettings = {
-  quality: 4,
+  quality: 4, // ffmpeg
+  fallbackQuality: 0.85, // client-compress
   sizes: [256, 512, 1024, 2048],
 }
 
 const videoSettings = {
-  quality: 4,
-  maxTime: 15,
+  quality: 4, // ffmpeg
+  maxTime: 15, // seconds
   sizes: [512, 1024],
 }
 
@@ -47,7 +48,7 @@ export async function generateCompressedMedia(file) {
     if (FFMPEG_SUPPORTED) {
       media.push(await generateVideos(file, srcMeta, 'mp4'))
     }
-  } else if (file.type === MIMETYPE.GIF) {
+  } else if (file.type === MIMETYPE.GIF && FFMPEG_SUPPORTED) {
     // generate GIFs
     media.push(await generateImages(file, srcMeta, 'gif'))
   } else {
@@ -60,7 +61,9 @@ export async function generateCompressedMedia(file) {
 
 async function generateImages(file, srcMeta, extension) {
   const images = []
-  const quality = imageSettings.quality
+  const quality = FFMPEG_SUPPORTED
+    ? imageSettings.quality
+    : imageSettings.fallbackQuality
   for (const size of imageSettings.sizes) {
     if (size < srcMeta.dimensions.width) {
       images.push(
@@ -199,14 +202,10 @@ async function generateVideo(
   return { meta, buffer, reader }
 }
 
-async function generateImageFallback(
-  file,
-  srcMeta,
-  { size, quality, extension }
-) {
+async function generateImageFallback(file, srcMeta, { size, quality }) {
   // fallback options
   const options = {
-    quality: 0.85,
+    quality,
     maxWidth: size,
   }
 
