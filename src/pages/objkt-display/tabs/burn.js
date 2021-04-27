@@ -11,7 +11,7 @@ export const Burn = (props) => {
   const [amount, setAmount] = useState('')
   const [progress, setProgress] = useState() // eslint-disable-line
 
-  const totalOwned = parseInt(props.owners[address.address]) // check total the user owns of this token
+  const totalOwned = ( props.owners[address.address] && parseInt(props.owners[address.address]) ) || 0 // check total the user owns of this token
 
   const handleSubmit = () => {
     if (amount === '') {
