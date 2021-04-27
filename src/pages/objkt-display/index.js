@@ -42,8 +42,21 @@ export const ObjktDisplay = () => {
 
         setLoading(false)
       }
-    })
-  }, [])
+    }).catch(e => {
+          if (e.response && e.response.data.error) {
+            setError(`(http ${e.response.data.error.http_status}) ${e.response.data.error.message}`)
+          } else if (e.response && e.response.data) {
+            setError(`(http ${e.response.status}) ${e.response.data}`)
+          } else if (e.request) {
+            setError(`There's a problem loading this OBJKT. Please report it on Github. ${e.message}`)
+          } else {
+            setError(`There's a problem loading this OBJKT. Please report it on Github. ${e}`)
+          }
+          setLoading(false)
+        }
+      )   
+    }
+  , [])
 
   const Tab = TABS[tabIndex].component
 
