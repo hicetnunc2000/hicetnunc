@@ -8,16 +8,30 @@ import { Upload } from '../../components/upload'
 import { Preview } from '../../components/preview'
 import { prepareFile, prepareDirectory } from '../../data/ipfs'
 import { prepareFilesFromZIP } from '../../utils/html'
-import { generateCompressedMedia } from '../../utils/compress'
+import { generateCompressedMedia, FFMPEG_SUPPORTED } from '../../utils/compress'
 
 import {
   ALLOWED_MIMETYPES,
   ALLOWED_FILETYPES_LABEL,
   ALLOWED_COVER_MIMETYPES,
+  ALLOWED_COVER_MIMETYPES_FALLBACK,
   ALLOWED_COVER_FILETYPES_LABEL,
+  ALLOWED_COVER_FILETYPES_LABEL_FALLBACK,
   MINT_FILESIZE,
   MIMETYPE,
 } from '../../constants'
+
+const coverUploadLabel = FFMPEG_SUPPORTED
+  ? 'Upload cover image or video'
+  : 'Upload cover image'
+
+const coverUploadMimetypes = FFMPEG_SUPPORTED
+  ? ALLOWED_COVER_MIMETYPES
+  : ALLOWED_COVER_MIMETYPES_FALLBACK
+
+const coverUploadFileTypesLabel = FFMPEG_SUPPORTED
+  ? ALLOWED_COVER_FILETYPES_LABEL
+  : ALLOWED_COVER_FILETYPES_LABEL_FALLBACK
 
 // @crzypathwork change to "true" to activate displayUri and thumbnailUri
 const GENERATE_DISPLAY_AND_THUMBNAIL = true
@@ -115,14 +129,19 @@ export const Mint = () => {
     setStep(1)
   }
 
+  const checkNeedsCoverUpload = (mimeType) => {
+    if (FFMPEG_SUPPORTED) {
+      return mimeType.indexOf('image') === 0 || mimeType.indexOf('video') === 0
+    } else {
+      return mimeType.indexOf('image') === 0
+    }
+  }
+
   const handleFileUpload = async (props) => {
     setFile(props)
 
     if (GENERATE_DISPLAY_AND_THUMBNAIL) {
-      if (
-        props.mimeType.indexOf('image') === 0 ||
-        props.mimeType.indexOf('video') === 0
-      ) {
+      if (checkNeedsCoverUpload(props.mimeType)) {
         setNeedsCoverUpload(false)
         await generateExtraMedia(props.file)
       } else {
@@ -221,9 +240,9 @@ export const Mint = () => {
             <Container>
               <Padding>
                 <Upload
-                  label="Upload cover image or video"
-                  allowedTypes={ALLOWED_COVER_MIMETYPES}
-                  allowedTypesLabel={ALLOWED_COVER_FILETYPES_LABEL}
+                  label={coverUploadLabel}
+                  allowedTypes={coverUploadMimetypes}
+                  allowedTypesLabel={coverUploadFileTypesLabel}
                   onChange={handleCoverUpload}
                 />
               </Padding>
@@ -232,6 +251,12 @@ export const Mint = () => {
 
           <Container>
             <Padding>
+              {!FFMPEG_SUPPORTED && (
+                <div>
+                  NOTE: Use the latest Firefox or Chrome to enable video
+                  thumbnails for your OBJKT.
+                </div>
+              )}
               {processingExtraMedia && <div>Processing assets...</div>}
             </Padding>
           </Container>
