@@ -23,20 +23,21 @@ export const OwnerSwaps = ({ swaps, handleCollect, acc, cancel }) => {
             </div>
 
             {!banned && (
-                <div className={styles.buttons}>
-              <Button
-                onClick={() => handleCollect(swap.swap_id, swap.xtz_per_objkt)}
-              >
-                <Purchase>
-                  collect for {parseFloat(swap.xtz_per_objkt / 1000000)} tez
-                </Purchase>
-              </Button>
-              {swap.issuer === (acc !== undefined ? acc.address : '') && (
-                <Button onClick={() => cancel(swap.swap_id)}>
-                  <Purchase>cancel</Purchase>
+              <div className={styles.buttons}>
+                <Button
+                  onClick={() => handleCollect(swap.swap_id, swap.xtz_per_objkt)}
+                >
+                  <Purchase>
+                    collect for {parseFloat(swap.xtz_per_objkt / 1000000)} tez
+                  </Purchase>
                 </Button>
-              )}
-            </div>)}
+                {swap.issuer === (acc !== undefined ? acc.address : '') && (
+                  <Button onClick={() => cancel(swap.swap_id)}>
+                    <Purchase>cancel</Purchase>
+                  </Button>
+                )}
+              </div>
+            )}
           </div>
         )
       })}
