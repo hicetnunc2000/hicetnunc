@@ -28,7 +28,7 @@ const ffmpeg = createFFmpeg({ log: DEBUG })
 
 export const FFMPEG_SUPPORTED = typeof SharedArrayBuffer === 'function'
 
-export const generateCompressedMedia = async (file, onProgress) => {
+export const generateCompressedMedia = async (file, onMetadata, onProgress) => {
   if (FFMPEG_SUPPORTED && !ffmpeg.isLoaded()) {
     await ffmpeg.load()
   }
@@ -39,6 +39,8 @@ export const generateCompressedMedia = async (file, onProgress) => {
   } else {
     srcMeta = await getImageMetadata(file)
   }
+
+  onMetadata(srcMeta)
 
   let tasks = []
 

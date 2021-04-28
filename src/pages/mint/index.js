@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useState, useRef } from 'react'
 import { useHistory } from 'react-router'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
 import { Page, Container, Padding } from '../../components/layout'
@@ -47,6 +47,7 @@ export const Mint = () => {
   const [amount, setAmount] = useState()
   const [royalties, setRoyalties] = useState()
   const [file, setFile] = useState() // the uploaded file
+  const fileMetadata = useRef()
   const [extraMedia, setExtraMedia] = useState() // the uploaded or generated cover image
   const [extraMediaProgressMessage, setExtraMediaProgressMessage] = useState()
   const [processingExtraMedia, setProcessingExtraMedia] = useState(false)
@@ -91,6 +92,7 @@ export const Mint = () => {
         tags,
         address: acc.address,
         files,
+        metadata: fileMetadata.current,
         extraMedia,
         generateDisplayUri: GENERATE_DISPLAY_AND_THUMBNAIL,
       })
@@ -102,7 +104,7 @@ export const Mint = () => {
         tags,
         address: acc.address,
         buffer: file.buffer,
-        mimeType: file.mimeType,
+        metadata: fileMetadata.current,
         extraMedia,
         generateDisplayUri: GENERATE_DISPLAY_AND_THUMBNAIL,
       })
@@ -145,6 +147,7 @@ export const Mint = () => {
 
   const handleFileUpload = async (props) => {
     setFile(props)
+    fileMetadata.current = { mimeType: props.mimeType }
     setExtraMedia(null)
 
     if (GENERATE_DISPLAY_AND_THUMBNAIL) {
@@ -164,7 +167,14 @@ export const Mint = () => {
   const generateExtraMedia = async (file) => {
     setProcessingExtraMedia(true)
     try {
-      const media = await generateCompressedMedia(file, (event) => {
+      const onMetadata = (data) => {
+        const type = fileMetadata.current.mimeType
+        if (type.indexOf('image') === 0 || type.indexOf('video') === 0) {
+          fileMetadata.current = data
+        }
+      }
+
+      const onProgress = (event) => {
         if (event.completed) {
           setExtraMediaProgressMessage(null)
         } else {
@@ -172,7 +182,9 @@ export const Mint = () => {
             `generating extra media ${event.current}/${event.total}`
           )
         }
-      })
+      }
+
+      const media = await generateCompressedMedia(file, onMetadata, onProgress)
       setExtraMedia(media)
       setProcessingExtraMedia(false)
     } catch (err) {
@@ -322,7 +334,9 @@ export const Mint = () => {
           <Container>
             <Padding>
               <Button onClick={handleMint} fit>
-                <Curate>mint {amount} OBJKTs</Curate>
+                <Curate>
+                  mint {amount} OBJKT{amount > 1 && 's'}
+                </Curate>
               </Button>
             </Padding>
           </Container>
