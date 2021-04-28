@@ -49,13 +49,13 @@ export const MediaAssetsDisplay = ({ ffmpeg, processing, message, media }) => {
               )
             })}
           </div>
-          {!ffmpeg && (
-            <div>
-              <br />
-              NOTE: Mint with the latest Firefox or Chrome to enable video or
-              animated GIF thumbnails for your OBJKT.
-            </div>
-          )}
+        </div>
+      )}
+      {!ffmpeg && (
+        <div>
+          <br />
+          NOTE: Mint with the latest Firefox or Chrome to enable video or
+          animated GIF thumbnails for your OBJKT.
         </div>
       )}
     </div>
