@@ -15,7 +15,7 @@
     "buffer": "^6.0.3",
     "classnames": "^2.3.1",
     "compressorjs": "^1.0.7",
-    "fflate": "^0.6.9",
+    "fflate": "^0.6.10",
     "filereader": "^0.10.3",
     "framer-motion": "^4.1.8",
     "ipfs-api": "^26.1.2",
