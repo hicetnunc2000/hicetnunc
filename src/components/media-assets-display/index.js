@@ -3,17 +3,23 @@ import { toHHMMSS } from '../../utils/time'
 import { formatBytes } from '../../utils/sanitise'
 import styles from './styles.module.scss'
 
-export const MediaAssetsDisplay = ({ ffmpeg, processing, media }) => {
+export const MediaAssetsDisplay = ({ ffmpeg, processing, message, media }) => {
   const isVideo = (mimeType) => {
     return mimeType.indexOf('video') === 0
   }
 
   return (
     <div className={styles.container}>
-      {processing && <div>Processing media... (this may take some time)</div>}
+      {processing && message && (
+        <div>
+          <span>{message}</span>{' '}
+          <span className={styles.subdued}>(this may take a while)</span>
+        </div>
+      )}
       {media && (
         <div>
-          cover/thumbnail media
+          <span>extra media</span>{' '}
+          <span className={styles.subdued}>(thumbnails, covers, etc)</span>
           <br />
           <div className={styles.media}>
             {media.map((item, index) => {
