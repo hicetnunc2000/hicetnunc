@@ -275,6 +275,7 @@ export const Mint = () => {
             <Padding>
               <MediaAssetsDisplay
                 ffmpeg={FFMPEG_SUPPORTED}
+                fileLoaded={!!file}
                 processing={processingExtraMedia}
                 message={extraMediaProgressMessage}
                 media={extraMedia}
