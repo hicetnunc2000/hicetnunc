@@ -3,7 +3,13 @@ import { toHHMMSS } from '../../utils/time'
 import { formatBytes } from '../../utils/sanitise'
 import styles from './styles.module.scss'
 
-export const MediaAssetsDisplay = ({ ffmpeg, processing, message, media }) => {
+export const MediaAssetsDisplay = ({
+  ffmpeg,
+  fileLoaded,
+  processing,
+  message,
+  media,
+}) => {
   const isVideo = (mimeType) => {
     return mimeType.indexOf('video') === 0
   }
@@ -51,7 +57,7 @@ export const MediaAssetsDisplay = ({ ffmpeg, processing, message, media }) => {
           </div>
         </div>
       )}
-      {!ffmpeg && (
+      {!ffmpeg && fileLoaded && (
         <div>
           <br />
           NOTE: Mint with the latest Firefox or Chrome to enable video or
