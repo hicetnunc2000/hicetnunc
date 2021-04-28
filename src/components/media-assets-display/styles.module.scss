@@ -5,6 +5,11 @@
   width: 100%;
   margin-bottom: 15px;
 
+  .subdued {
+    color: var(--text-color);
+    opacity: 0.4;
+  }
+
   .media {
     display: flex;
     flex-wrap: wrap;

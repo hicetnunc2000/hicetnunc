@@ -48,6 +48,7 @@ export const Mint = () => {
   const [royalties, setRoyalties] = useState()
   const [file, setFile] = useState() // the uploaded file
   const [extraMedia, setExtraMedia] = useState() // the uploaded or generated cover image
+  const [extraMediaProgressMessage, setExtraMediaProgressMessage] = useState()
   const [processingExtraMedia, setProcessingExtraMedia] = useState(false)
   const [needsCoverUpload, setNeedsCoverUpload] = useState(false)
 
@@ -106,7 +107,14 @@ export const Mint = () => {
         generateDisplayUri: GENERATE_DISPLAY_AND_THUMBNAIL,
       })
     }
+
+    // TESTING
     console.log('ntfCid', nftCid)
+    window.open(`https://ipfs.io/ipfs/${nftCid.path}`)
+    window.location.reload()
+
+    // RE-ENABLE WHEN DONE
+    // mint(getAuth(), amount, nftCid.path, royalties)
 
     // OLD CODE FOR REFERENCE
     // mint(getAuth(), amount, nftCid.path, royalties)
@@ -121,9 +129,6 @@ export const Mint = () => {
     //     alert('an error occurred')
     //     setMessage('an error occurred')
     //   })
-
-    // RE-ENABLE WHEN DONE
-    // mint(getAuth(), amount, nftCid.path, royalties)
   }
 
   const handlePreview = () => {
@@ -158,9 +163,24 @@ export const Mint = () => {
 
   const generateExtraMedia = async (file) => {
     setProcessingExtraMedia(true)
-    const media = await generateCompressedMedia(file)
-    setExtraMedia(media)
-    setProcessingExtraMedia(false)
+    try {
+      const media = await generateCompressedMedia(file, (event) => {
+        if (event.completed) {
+          setExtraMediaProgressMessage(null)
+        } else {
+          setExtraMediaProgressMessage(
+            `generating extra media ${event.current}/${event.total}`
+          )
+        }
+      })
+      setExtraMedia(media)
+      setProcessingExtraMedia(false)
+    } catch (err) {
+      window.alert(
+        'There was an error generating extra media. Please see web console'
+      )
+      console.error(err)
+    }
   }
 
   const handleValidation = () => {
@@ -256,6 +276,7 @@ export const Mint = () => {
               <MediaAssetsDisplay
                 ffmpeg={FFMPEG_SUPPORTED}
                 processing={processingExtraMedia}
+                message={extraMediaProgressMessage}
                 media={extraMedia}
               />
             </Padding>

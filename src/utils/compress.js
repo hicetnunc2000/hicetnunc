@@ -28,7 +28,7 @@ const ffmpeg = createFFmpeg({ log: DEBUG })
 
 export const FFMPEG_SUPPORTED = typeof SharedArrayBuffer === 'function'
 
-export async function generateCompressedMedia(file) {
+export const generateCompressedMedia = async (file, onProgress) => {
   if (FFMPEG_SUPPORTED && !ffmpeg.isLoaded()) {
     await ffmpeg.load()
   }
@@ -40,48 +40,72 @@ export async function generateCompressedMedia(file) {
     srcMeta = await getImageMetadata(file)
   }
 
-  const media = []
+  let tasks = []
 
   if (VIDEO_MIMETYPES.includes(file.type)) {
     // generate JPEGs, and MP4s when possible
-    media.push(await generateImages(file, srcMeta, 'jpg'))
+    tasks.push(generateImages(file, srcMeta, 'jpg'))
     if (FFMPEG_SUPPORTED) {
-      media.push(await generateVideos(file, srcMeta, 'mp4'))
+      tasks.push(generateVideos(file, srcMeta, 'mp4'))
     }
   } else if (file.type === MIMETYPE.GIF && FFMPEG_SUPPORTED) {
     // generate GIFs
-    media.push(await generateImages(file, srcMeta, 'gif'))
+    tasks.push(generateImages(file, srcMeta, 'gif'))
   } else {
     // generate JPEGs
-    media.push(await generateImages(file, srcMeta, 'jpg'))
+    tasks.push(generateImages(file, srcMeta, 'jpg'))
   }
 
-  return media.flat()
+  tasks = tasks.flat()
+
+  const total = tasks.length
+  let current = 0
+  let completed = false
+
+  const media = []
+
+  onProgress({
+    total,
+    current,
+    completed,
+  })
+
+  for (const task of tasks) {
+    media.push(await task())
+    if (++current === total) {
+      completed = true
+    }
+    onProgress({
+      total,
+      current,
+      completed,
+    })
+  }
+
+  return media
 }
 
-async function generateImages(file, srcMeta, extension) {
-  const images = []
+const generateImages = (file, srcMeta, extension) => {
+  const tasks = []
   const quality = FFMPEG_SUPPORTED
     ? imageSettings.quality
     : imageSettings.fallbackQuality
   for (const size of imageSettings.sizes) {
     if (size < srcMeta.dimensions.width) {
-      images.push(
-        await generateImage(file, srcMeta, { size, quality, extension })
-      )
+      tasks.push(generateImageTask(file, srcMeta, { size, quality, extension }))
     }
   }
-  return images
+  return tasks
 }
 
-async function generateVideos(file, srcMeta, extension) {
-  const videos = []
+const generateVideos = (file, srcMeta, extension) => {
+  const tasks = []
   const quality = videoSettings.quality
   const maxTime = videoSettings.maxTime
   for (const size of videoSettings.sizes) {
     if (size < srcMeta.dimensions.width) {
-      videos.push(
-        await generateVideo(file, srcMeta, {
+      tasks.push(
+        generateVideoTask(file, srcMeta, {
           size,
           quality,
           maxTime,
@@ -90,30 +114,38 @@ async function generateVideos(file, srcMeta, extension) {
       )
     }
   }
-  return videos
+  return tasks
 }
 
-async function generateImage(file, srcMeta, { size, quality, extension }) {
+const generateImageTask = (file, srcMeta, { size, quality, extension }) => {
+  return () => {
+    return generateImage(file, srcMeta, { size, quality, extension })
+  }
+}
+
+const generateImage = async (file, srcMeta, { size, quality, extension }) => {
+  let result
   if (FFMPEG_SUPPORTED) {
-    return await generateImageFfmpeg(file, srcMeta, {
+    result = await generateImageFfmpeg(file, srcMeta, {
       size,
       quality,
       extension,
     })
   } else {
-    return await generateImageFallback(file, srcMeta, {
+    result = await generateImageFallback(file, srcMeta, {
       size,
       quality,
       extension,
     })
   }
+  return result
 }
 
-async function generateImageFfmpeg(
+const generateImageFfmpeg = async (
   file,
   srcMeta,
   { size, quality, extension }
-) {
+) => {
   const inFilename = `input`
   const outFilename = `compressed_${size}.${extension}`
 
@@ -167,14 +199,25 @@ async function generateImageFfmpeg(
   const meta = await getImageMetadata(blob)
   const buffer = await blob.arrayBuffer()
   const reader = await blobToDataURL(blob)
+
   return { meta, buffer, reader }
 }
 
-async function generateVideo(
+const generateVideoTask = (
   file,
   srcMeta,
   { size, quality, maxTime, extension }
-) {
+) => {
+  return () => {
+    return generateVideo(file, srcMeta, { size, quality, maxTime, extension })
+  }
+}
+
+const generateVideo = async (
+  file,
+  srcMeta,
+  { size, quality, maxTime, extension }
+) => {
   const inFilename = `input`
   const outFilename = `compressed_${size}.${extension}`
 
@@ -202,7 +245,7 @@ async function generateVideo(
   return { meta, buffer, reader }
 }
 
-async function generateImageFallback(file, srcMeta, { size, quality }) {
+const generateImageFallback = async (file, srcMeta, { size, quality }) => {
   // fallback options
   const options = {
     quality,
@@ -213,17 +256,18 @@ async function generateImageFallback(file, srcMeta, { size, quality }) {
   const meta = await getImageMetadata(blob)
   const buffer = await blob.arrayBuffer()
   const reader = await blobToDataURL(blob)
+
   return { meta, buffer, reader }
 }
 
-async function compressImage(file, options) {
+const compressImage = async (file, options) => {
   const compressor = new Compress(options)
   const results = await compressor.compress([file])
   const { photo } = results[0]
   return photo.data
 }
 
-async function blobToDataURL(blob) {
+const blobToDataURL = async (blob) => {
   return new Promise((resolve, reject) => {
     let reader = new FileReader()
     reader.onerror = reject
@@ -232,7 +276,7 @@ async function blobToDataURL(blob) {
   })
 }
 
-function getImageMetadata(blob) {
+const getImageMetadata = (blob) => {
   return new Promise((resolve, reject) => {
     const img = new Image()
     img.onload = () => {
@@ -252,7 +296,7 @@ function getImageMetadata(blob) {
   })
 }
 
-function getVideoMetadata(blob) {
+const getVideoMetadata = (blob) => {
   return new Promise((resolve, reject) => {
     const video = document.createElement('video')
     video.addEventListener(
