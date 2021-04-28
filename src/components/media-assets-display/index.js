@@ -60,8 +60,8 @@ export const MediaAssetsDisplay = ({
       {!ffmpeg && fileLoaded && (
         <div>
           <br />
-          NOTE: Mint with the latest Firefox or Chrome to enable video or
-          animated GIF thumbnails for your OBJKT.
+          NOTE: Mint with the latest Firefox or Chrome desktop browser to enable
+          video or animated GIF thumbnails for your OBJKT.
         </div>
       )}
     </div>
