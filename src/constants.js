@@ -65,12 +65,8 @@ export const ALLOWED_MIMETYPES = Object.keys(MIMETYPE)
   .map((k) => MIMETYPE[k])
   .filter((e) => e !== MIMETYPE.GLTF) // disabling GLTF from new updates
 
-export const ALLOWED_FILETYPES = Object.keys(MIMETYPE)
-
-export const ALLOWED_FILETYPES_LABEL = ALLOWED_FILETYPES.filter(
-  (k) => k !== 'ZIP1'
-)
-  .filter((k) => k !== 'ZIP2')
+export const ALLOWED_FILETYPES_LABEL = Object.keys(MIMETYPE)
+  .filter((k) => !['GLTF', 'ZIP1', 'ZIP2'].includes(k))
   .map((k) => (k === 'ZIP' ? 'HTML (ZIP ARCHIVE)' : k))
   .join(', ')
 
