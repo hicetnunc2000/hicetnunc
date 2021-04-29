@@ -1,0 +1,4 @@
+/*
+  Cross-Origin-Embedder-Policy: require-corp
+  Cross-Origin-Opener-Policy: cross-origin
+  Access-Control-Allow-Origin: *
