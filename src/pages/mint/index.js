@@ -6,10 +6,10 @@ import { Input } from '../../components/input'
 import { Button, Curate, Primary } from '../../components/button'
 import { Upload } from '../../components/upload'
 import { Preview } from '../../components/preview'
+import { MediaCompressorIframe } from '../../components/media-compressor-iframe'
 import { MediaAssetsDisplay } from '../../components/media-assets-display'
 import { prepareFile, prepareDirectory } from '../../data/ipfs'
 import { prepareFilesFromZIP } from '../../utils/html'
-import { generateCompressedMedia, FFMPEG_SUPPORTED } from '../../utils/compress'
 
 import {
   ALLOWED_MIMETYPES,
@@ -22,15 +22,17 @@ import {
   MIMETYPE,
 } from '../../constants'
 
-const coverUploadLabel = FFMPEG_SUPPORTED
+const FFMPEGWASM_SUPPORTED = typeof SharedArrayBuffer === 'function'
+
+const coverUploadLabel = FFMPEGWASM_SUPPORTED
   ? 'Upload cover image or video'
   : 'Upload cover image'
 
-const coverUploadMimetypes = FFMPEG_SUPPORTED
+const coverUploadMimetypes = FFMPEGWASM_SUPPORTED
   ? ALLOWED_COVER_MIMETYPES
   : ALLOWED_COVER_MIMETYPES_FALLBACK
 
-const coverUploadFileTypesLabel = FFMPEG_SUPPORTED
+const coverUploadFileTypesLabel = FFMPEGWASM_SUPPORTED
   ? ALLOWED_COVER_FILETYPES_LABEL
   : ALLOWED_COVER_FILETYPES_LABEL_FALLBACK
 
@@ -47,7 +49,9 @@ export const Mint = () => {
   const [amount, setAmount] = useState()
   const [royalties, setRoyalties] = useState()
   const [file, setFile] = useState() // the uploaded file
-  const fileMetadata = useRef()
+  const [coverFile, setCoverFile] = useState() // the file used to generate cover/thumbnail images
+  const compressorIframe = useRef(null)
+  const fileMetadata = useRef(null)
   const [extraMedia, setExtraMedia] = useState() // the uploaded or generated cover image
   const [extraMediaProgressMessage, setExtraMediaProgressMessage] = useState()
   const [processingExtraMedia, setProcessingExtraMedia] = useState(false)
@@ -137,7 +141,7 @@ export const Mint = () => {
   }
 
   const checkNeedsCoverUpload = (mimeType) => {
-    if (FFMPEG_SUPPORTED) {
+    if (FFMPEGWASM_SUPPORTED) {
       return mimeType.indexOf('image') === 0 || mimeType.indexOf('video') === 0
     } else {
       return mimeType.indexOf('image') === 0
@@ -152,7 +156,8 @@ export const Mint = () => {
     if (GENERATE_DISPLAY_AND_THUMBNAIL) {
       if (checkNeedsCoverUpload(props.mimeType)) {
         setNeedsCoverUpload(false)
-        await generateExtraMedia(props.file)
+        setCoverFile(props.file)
+        setProcessingExtraMedia(true)
       } else {
         setNeedsCoverUpload(true)
       }
@@ -160,38 +165,8 @@ export const Mint = () => {
   }
 
   const handleCoverUpload = async (props) => {
-    await generateExtraMedia(props.file)
-  }
-
-  const generateExtraMedia = async (file) => {
+    setCoverFile(props.file)
     setProcessingExtraMedia(true)
-    try {
-      const onMetadata = (data) => {
-        const type = fileMetadata.current.mimeType
-        if (type.indexOf('image') === 0 || type.indexOf('video') === 0) {
-          fileMetadata.current = data
-        }
-      }
-
-      const onProgress = (event) => {
-        if (event.completed) {
-          setExtraMediaProgressMessage(null)
-        } else {
-          setExtraMediaProgressMessage(
-            `generating extra media ${event.current}/${event.total}`
-          )
-        }
-      }
-
-      const media = await generateCompressedMedia(file, onMetadata, onProgress)
-      setExtraMedia(media)
-      setProcessingExtraMedia(false)
-    } catch (err) {
-      window.alert(
-        'There was an error generating extra media. Please see web console'
-      )
-      console.error(err)
-    }
   }
 
   const handleValidation = () => {
@@ -208,8 +183,43 @@ export const Mint = () => {
     return true
   }
 
+  const onCompressorMetadata = (metadata) => {
+    const type = fileMetadata.current.mimeType
+    if (type.indexOf('image') === 0 || type.indexOf('video') === 0) {
+      fileMetadata.current = metadata
+    }
+  }
+
+  const onCompressorProgress = (progress) => {
+    if (progress.completed) {
+      setExtraMediaProgressMessage(null)
+    } else {
+      setExtraMediaProgressMessage(
+        `generating extra media ${progress.current}/${progress.total}`
+      )
+    }
+  }
+
+  const onCompressorComplete = (results) => {
+    setExtraMedia(results)
+    setProcessingExtraMedia(false)
+  }
+
+  const onCompressorError = (error) => {
+    window.alert('Compression error')
+    console.error(error)
+  }
+
   return (
     <Page title="mint" large>
+      <MediaCompressorIframe
+        ref={compressorIframe}
+        file={coverFile}
+        onMetadata={onCompressorMetadata}
+        onProgress={onCompressorProgress}
+        onComplete={onCompressorComplete}
+        onError={onCompressorError}
+      />
       {step === 0 && (
         <>
           <Container>
@@ -285,7 +295,7 @@ export const Mint = () => {
           <Container>
             <Padding>
               <MediaAssetsDisplay
-                ffmpeg={FFMPEG_SUPPORTED}
+                ffmpeg={FFMPEGWASM_SUPPORTED}
                 fileLoaded={!!file}
                 processing={processingExtraMedia}
                 message={extraMediaProgressMessage}
