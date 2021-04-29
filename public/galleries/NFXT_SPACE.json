@@ -2,6 +2,8 @@
   "title": "NFXT SPACE",
   "uid": "nfxtspace",
   "description": "HERE x NOW x NEXT is the first digital exhibition by Malaysian art collective NFXT. NFXT shares a vision to be a frontier in providing exposure to rising local artists on the global stage of the digital art world, as well as being a community that advocates knowledge sharing and the betterment of people through art.",
+  "staging": "https://hen-fen.netlify.app/gallery/nfxtspace",
+  "minimal": true,
   "data": [
     {
       "artist": "NFXT SPACE announcements",
