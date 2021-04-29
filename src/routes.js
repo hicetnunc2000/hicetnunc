@@ -8,7 +8,7 @@ import { Galleries } from './pages/galleries'
 import { GalleryDetail } from './pages/gallery-detail'
 import { Config } from './pages/config'
 import { Search } from './pages/search'
-import {Tags} from './pages/tags'
+import { Tag } from './pages/tag'
 
 export const routes = [
   {
@@ -78,7 +78,7 @@ export const routes = [
   },
   {
     exact: false,
-    path: '/tags/:id',
-    component: Tags,
+    path: '/tag',
+    component: Tag,
   },
 ]
