@@ -1,7 +1,7 @@
 import { Feeds } from './feeds'
 
 export const Latest = () => {
-  return <Feeds type={0} />
+  return <Feeds type={1} />
 }
 
 export const Hdao = () => {
