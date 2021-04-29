@@ -31,7 +31,6 @@ export const ObjktDisplay = () => {
 
   useEffect(() => {
     GetOBJKT({ id }).then(async (objkt) => {
-
       console.log(objkt)
       if (Array.isArray(objkt)) {
         setError(
