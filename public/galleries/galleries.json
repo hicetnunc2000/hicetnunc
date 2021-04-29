@@ -16,5 +16,11 @@
     "name": "The FEN",
     "endpoint": "https://raw.githubusercontent.com/joanielemercier/The_fen/main/thefen.json",
     "thumbnail": "34413"
+  },
+    {
+    "uid": "nfxtspace",
+    "name": "NFXT SPACE",
+    "endpoint": "/galleries/NFXT_SPACE.json",
+    "thumbnail": "54291"
   }
 ]
