@@ -16,7 +16,7 @@ export const ItemInfo = ({
   feed,
   total_amount,
   hDAO_balance,
-  isDetailView
+  isDetailView,
 }) => {
   const { syncTaquito, collect, curate, acc } = useContext(HicetnuncContext)
   const reducer = (accumulator, currentValue) =>

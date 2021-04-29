@@ -29,13 +29,12 @@ export const FeedItem = (props) => {
         </div>
       </Button>
       <Padding>
-
         {/* 
         
 render only
 
         */}
-        
+
         <ItemInfo
           token_info={token_info}
           owners={owners}
