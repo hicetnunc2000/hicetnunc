@@ -16,7 +16,6 @@ export const Tags = () => {
 
   useEffect(() => {
     GetTags({ tag: id }).then((e) => {
-      console.log('data is', e)
       setData(e)
       setLoaded(true)
     })
