@@ -53,6 +53,8 @@ export const MIMETYPE = {
   GLTF: 'model/gltf+json',
   MP3: 'audio/mpeg',
   OGA: 'audio/ogg',
+  WAV: 'audio/wav',
+  FLAC: 'audio/flac',
   PDF: 'application/pdf',
   ZIP: 'application/zip',
   ZIP1: 'application/x-zip-compressed',
