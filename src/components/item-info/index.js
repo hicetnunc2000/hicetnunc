@@ -15,7 +15,8 @@ export const ItemInfo = ({
   transfered,
   feed,
   total_amount,
-  isDetailView,
+  hDAO_balance,
+  isDetailView
 }) => {
   const { syncTaquito, collect, curate, acc } = useContext(HicetnuncContext)
   const reducer = (accumulator, currentValue) =>
@@ -104,6 +105,7 @@ export const ItemInfo = ({
             <Button onClick={() => curate(token_id)}>
               <Primary>〇</Primary>
             </Button>
+            <div>{hDAO_balance}</div>
           </div>
         ) : (
           <Button onClick={() => handleCollect()}>
