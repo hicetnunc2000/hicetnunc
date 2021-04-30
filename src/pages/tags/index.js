@@ -1,4 +1,6 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react'
+import InfiniteScroll from 'react-infinite-scroll-component'
 import { useParams } from 'react-router'
 import { Button } from '../../components/button'
 import { GetTags } from '../../data/api'
@@ -11,29 +13,64 @@ import styles from './styles.module.scss'
 
 export const Tags = () => {
   const { id } = useParams()
-  const [loaded, setLoaded] = useState(false)
-  const [data, setData] = useState()
+  const [error, setError] = useState(false)
+  const [items, setItems] = useState([])
+  const [count, setCount] = useState(0)
+  const [hasMore, setHasMore] = useState(true)
+
+  const loadMore = () => {
+    setCount(count + 1)
+  }
 
   useEffect(() => {
-    GetTags({ tag: id }).then((e) => {
-      setData(e)
-      setLoaded(true)
-    })
-  }, [id])
+    if (error) {
+      console.log('returning on error')
+      return
+    }
+
+    GetTags({ tag: id, page: count })
+      .then((result) => {
+        const next = items.concat(result)
+        setItems(next)
+
+        // if original returns less than 10, then there's no more data coming from API
+        if (result.length < 10) {
+          setHasMore(false)
+        }
+      })
+      .catch((e) => {
+        setError(true)
+      })
+  }, [count, id])
 
   return (
     <Page title={`Tag ${id}`}>
-      {!loaded ? (
-        <Container>
-          <Padding>
-            <Loading />
-          </Padding>
-        </Container>
-      ) : (
+      <InfiniteScroll
+        dataLength={items.length}
+        next={loadMore}
+        hasMore={hasMore}
+        loader={
+          <Container xlarge>
+            <Padding>
+              <Loading />
+            </Padding>
+          </Container>
+        }
+        endMessage={
+          <Container xlarge>
+            <p>
+              mint mint mint{' '}
+              <span role="img" aria-labelledby={'Sparkles emoji'}>
+                ✨
+              </span>
+            </p>
+          </Container>
+        }
+      >
         <div className={styles.container}>
           <Container xlarge>
             <ResponsiveMasonry>
-              {data.map((nft) => {
+              {items.map((nft) => {
                 const { mimeType, uri } = nft.formats[0]
 
                 return (
@@ -55,7 +92,7 @@ export const Tags = () => {
             </ResponsiveMasonry>
           </Container>
         </div>
-      )}
+      </InfiniteScroll>
     </Page>
   )
 }
