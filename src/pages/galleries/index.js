@@ -30,7 +30,7 @@ export const Galleries = () => {
             g.push(Object.assign({}, found, e))
             c++
 
-            if (c === 3) {
+            if (c === galleries.length) {
               g.sort(sortByThumbnailTokenId)
               setData(g)
               setLoading(false)
