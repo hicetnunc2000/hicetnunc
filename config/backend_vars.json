@@ -3,10 +3,11 @@
   "kolibriSwap": "KT1K4EwTpbvYN9agJdjpyJm4ZZdhpUNKB3F6",
   "disableFilter": false,
   "disableSwapPrices": false,
-  "filterMinhDAO": 100,
+  "filterMinhDAO": 1000,
   "filterMaxhDAO": 10000000,
   "filterMaxTez": 100000,
-  "filterMaxKol": 100000,
+  "filterMaxKol": 150000,
   "filterWeeklyFreeObjkts": 14,
+  "tzktScorehDAOMultiplier": 1.0,
   "curateDefault": 1000
 }

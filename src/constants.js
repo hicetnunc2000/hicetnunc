@@ -22,15 +22,7 @@ export const PATH = {
   MINT: '/mint',
   OBJKT: '/objkt',
   GALLERY: '/gallery',
-}
-
-export const ROUTES = {
-  FEED: { exact: true, path: '/', component: null },
-  ISSUER: { exact: false, path: '/tz/:id', component: null },
-  ABOUT: { exact: false, path: '/about', component: null },
-  SYNC: { exact: false, path: '/sync', component: null },
-  MINT: { exact: false, path: '/mint', component: null },
-  OBJKT: { exact: false, path: '/objkt/:id', component: null },
+  TAGS: '/tags',
 }
 
 export const MINT_MIN_LIMIT = 1
