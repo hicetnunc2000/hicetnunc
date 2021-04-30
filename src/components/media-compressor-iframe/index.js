@@ -1,6 +1,7 @@
 import React, { useRef, useEffect } from 'react'
 
-const COMPRESSOR_URL = 'https://hicetnunc-media-compressor.netlify.app'
+const COMPRESSOR_URL = 'http://localhost:4000'
+// const COMPRESSOR_URL = 'https://hicetnunc-media-compressor.netlify.app'
 
 export const MediaCompressorIframe = React.forwardRef(
   ({ file, onMetadata, onProgress, onComplete, onError }, ref) => {
@@ -10,7 +11,7 @@ export const MediaCompressorIframe = React.forwardRef(
       if (file && !busy.current) {
         busy.current = true
 
-        const target = 'hen-media-compressor'
+        const target = 'hicetnunc-media-compressor'
         const key = 'my-random-key'
         ref.current.contentWindow.postMessage({ target, key, file }, '*')
 
