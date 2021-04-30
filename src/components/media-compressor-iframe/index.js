@@ -1,4 +1,5 @@
 import React, { useRef, useEffect } from 'react'
+import styles from './styles.module.scss'
 
 const COMPRESSOR_URL = 'https://hicetnunc-media-compressor.netlify.app'
 
@@ -44,6 +45,7 @@ export const MediaCompressorIframe = React.forwardRef(
         src={COMPRESSOR_URL}
         width="0"
         height="0"
+        className={styles.hidden}
         allow="cross-origin-isolated"
       />
     )
