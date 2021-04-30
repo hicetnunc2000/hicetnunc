@@ -7,7 +7,7 @@ export class Config extends Component {
 
   state = {}
 
-  componentWillMount = () => console.log('oi')
+  componentWillMount = () => this.context.hDAO_vote
 
   // config alias
   // config hDAO balance

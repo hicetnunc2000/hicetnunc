@@ -399,6 +399,7 @@ class HicetnuncContextProviderClass extends Component {
           title: title,
         })
       },
+      hDAO_vote : ls.get('hDAO_vote')
     }
   }
 
