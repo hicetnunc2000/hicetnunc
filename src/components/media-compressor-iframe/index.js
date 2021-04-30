@@ -1,7 +1,6 @@
 import React, { useRef, useEffect } from 'react'
 
-const COMPRESSOR_URL = 'http://localhost:4000'
-// const COMPRESSOR_URL = 'https://hicetnunc-media-compressor.netlify.app'
+const COMPRESSOR_URL = 'https://hicetnunc-media-compressor.netlify.app'
 
 export const MediaCompressorIframe = React.forwardRef(
   ({ file, onMetadata, onProgress, onComplete, onError }, ref) => {
