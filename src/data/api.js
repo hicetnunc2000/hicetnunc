@@ -125,7 +125,23 @@ export const GetOBJKT = async ({ id }) => {
 }
 
 /**
- * Get User Metaata from tzkt.io
+ * Get OBJKT detail page
+ */
+export const GetTags = async ({ tag }) => {
+  return new Promise((resolve, reject) => {
+    axios
+      .get(process.env.REACT_APP_TAGS, {
+        params: { tag: tag },
+      })
+      .then((res) => {
+        resolve(res.data.result)
+      })
+      .catch((e) => reject(e)) // TODO: send error message to context. have an error component to display the error
+  })
+}
+
+/**
+ * Get User Metadata from tzkt.io
  */
 export const GetUserMetadata = async (walletAddr) => {
   return await axios.get(
