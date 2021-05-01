@@ -60,10 +60,7 @@ export const Mint = () => {
         visible: true,
         message: 'sync your wallet',
         progress: true,
-        confirm: true,
-        confirmCallback: () => {
-          setFeedback({ visible: false })
-        },
+        confirm: false,
       })
 
       await syncTaquito()
@@ -116,6 +113,14 @@ export const Mint = () => {
       // file about to be minted, change to the mint screen
 
       setStep(2)
+
+      setFeedback({
+        visible: true,
+        message: 'preparing OBJKT',
+        progress: true,
+        confirm: false,
+      })
+
       // upload file(s)
       let nftCid
       if (
@@ -149,8 +154,6 @@ export const Mint = () => {
       }
 
       mint(getAuth(), amount, nftCid.path, royalties)
-        .then((e) => {})
-        .catch((e) => console.log('error'))
     }
   }
 

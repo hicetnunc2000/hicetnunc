@@ -160,16 +160,12 @@ class HicetnuncContextProviderClass extends Component {
           )
           .then((op) =>
             op.confirmation(1).then(() => {
+              this.setState({ op: op.hash }) // save hash
               // if everything goes okay, show the success message and redirect to profile
               this.state.setFeedback({
                 message: 'OBJKT minted successfully',
-                progress: false,
-                confirm: true,
-                confirmCallback: () => {
-                  this.setState({ op: op.hash }) // save hash
-                  this.state.setFeedback({ visible: false }) // hide popup
-                  props.history.push(PATH.FEED) // redirect to homepage
-                },
+                progress: true,
+                confirm: false,
               })
             })
           )
@@ -179,9 +175,6 @@ class HicetnuncContextProviderClass extends Component {
               message: 'an error occurred ❌',
               progress: true,
               confirm: false,
-              confirmCallback: () => {
-                this.state.setFeedback({ visible: false }) // hide popup
-              },
             })
           })
       },
