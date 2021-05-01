@@ -1,7 +1,9 @@
 import { useContext } from 'react'
-import { AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
 import { Loading } from '../loading'
+import { Button, Purchase } from '../button'
+import { fadeIn } from '../../utils/motion'
 import styles from './styles.module.scss'
 
 export const FeedbackComponent = () => {
@@ -17,20 +19,20 @@ export const FeedbackComponent = () => {
   return (
     <AnimatePresence>
       {visible && (
-        <div className={styles.container}>
+        <motion.div className={styles.container} {...fadeIn()}>
           <div className={styles.content}>
-            <div className={styles.message}>
-              {progress && <Loading />}
-              {message}
-            </div>
+            {progress && <Loading />}
+            <div className={styles.message}>{message}</div>
 
             {confirm && (
               <div className={styles.buttons}>
-                <button onClick={() => confirmCallback()}>close</button>
+                <Button onClick={() => confirmCallback()}>
+                  <Purchase>close</Purchase>
+                </Button>
               </div>
             )}
           </div>
-        </div>
+        </motion.div>
       )}
     </AnimatePresence>
   )

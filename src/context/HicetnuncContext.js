@@ -177,8 +177,8 @@ class HicetnuncContextProviderClass extends Component {
             // if any error happens
             this.state.setFeedback({
               message: 'an error occurred ❌',
-              progress: false,
-              confirm: true,
+              progress: true,
+              confirm: false,
               confirmCallback: () => {
                 this.state.setFeedback({ visible: false }) // hide popup
               },
@@ -399,7 +399,7 @@ class HicetnuncContextProviderClass extends Component {
           title: title,
         })
       },
-      hDAO_vote : ls.get('hDAO_vote')
+      hDAO_vote: ls.get('hDAO_vote'),
     }
   }
 
