@@ -33,7 +33,14 @@ const thumbnailOptions = {
 const GENERATE_DISPLAY_AND_THUMBNAIL = false
 
 export const Mint = () => {
-  const { mint, getAuth, acc, setAccount } = useContext(HicetnuncContext)
+  const {
+    mint,
+    getAuth,
+    acc,
+    setAccount,
+    setFeedback,
+    syncTaquito,
+  } = useContext(HicetnuncContext)
   // const history = useHistory()
   const [step, setStep] = useState(0)
   const [title, setTitle] = useState('')
@@ -47,77 +54,104 @@ export const Mint = () => {
   const [needsCover, setNeedsCover] = useState(false)
 
   const handleMint = async () => {
-    setAccount()
     if (!acc) {
-      alert('sync')
-      return
-    }
+      // warning for sync
+      setFeedback({
+        visible: true,
+        message: 'sync your wallet',
+        progress: true,
+        confirm: true,
+        confirmCallback: () => {
+          setFeedback({ visible: false })
+        },
+      })
 
-    // check mime type
-    if (ALLOWED_MIMETYPES.indexOf(file.mimeType) === -1) {
-      alert(
-        `File format invalid. supported formats include: ${ALLOWED_FILETYPES_LABEL.toLocaleLowerCase()}`
-      )
-      return
-    }
+      await syncTaquito()
 
-    // check file size
-    const filesize = (file.file.size / 1024 / 1024).toFixed(4)
-    if (filesize > MINT_FILESIZE) {
-      alert(
-        `File too big (${filesize}). Limit is currently set at ${MINT_FILESIZE}MB`
-      )
-      return
-    }
-
-    // file about to be minted, change to the mint screen
-
-    setStep(2)
-    // upload file(s)
-    let nftCid
-    if ([MIMETYPE.ZIP, MIMETYPE.ZIP1, MIMETYPE.ZIP2].includes(file.mimeType)) {
-      const files = await prepareFilesFromZIP(file.buffer)
-
-      nftCid = await prepareDirectory({
-        name: title,
-        description,
-        tags,
-        address: acc.address,
-        files,
-        cover,
-        thumbnail,
-        generateDisplayUri: GENERATE_DISPLAY_AND_THUMBNAIL,
+      setFeedback({
+        visible: false,
       })
     } else {
-      // process all other files
-      nftCid = await prepareFile({
-        name: title,
-        description,
-        tags,
-        address: acc.address,
-        buffer: file.buffer,
-        mimeType: file.mimeType,
-        cover,
-        thumbnail,
-        generateDisplayUri: GENERATE_DISPLAY_AND_THUMBNAIL,
-      })
+      await setAccount()
+
+      // check mime type
+      if (ALLOWED_MIMETYPES.indexOf(file.mimeType) === -1) {
+        // alert(
+        //   `File format invalid. supported formats include: ${ALLOWED_FILETYPES_LABEL.toLocaleLowerCase()}`
+        // )
+
+        setFeedback({
+          visible: true,
+          message: `File format invalid. supported formats include: ${ALLOWED_FILETYPES_LABEL.toLocaleLowerCase()}`,
+          progress: false,
+          confirm: true,
+          confirmCallback: () => {
+            setFeedback({ visible: false })
+          },
+        })
+
+        return
+      }
+
+      // check file size
+      const filesize = (file.file.size / 1024 / 1024).toFixed(4)
+      if (filesize > MINT_FILESIZE) {
+        // alert(
+        //   `File too big (${filesize}). Limit is currently set at ${MINT_FILESIZE}MB`
+        // )
+
+        setFeedback({
+          visible: true,
+          message: `File too big (${filesize}). Limit is currently set at ${MINT_FILESIZE}MB`,
+          progress: false,
+          confirm: true,
+          confirmCallback: () => {
+            setFeedback({ visible: false })
+          },
+        })
+
+        return
+      }
+
+      // file about to be minted, change to the mint screen
+
+      setStep(2)
+      // upload file(s)
+      let nftCid
+      if (
+        [MIMETYPE.ZIP, MIMETYPE.ZIP1, MIMETYPE.ZIP2].includes(file.mimeType)
+      ) {
+        const files = await prepareFilesFromZIP(file.buffer)
+
+        nftCid = await prepareDirectory({
+          name: title,
+          description,
+          tags,
+          address: acc.address,
+          files,
+          cover,
+          thumbnail,
+          generateDisplayUri: GENERATE_DISPLAY_AND_THUMBNAIL,
+        })
+      } else {
+        // process all other files
+        nftCid = await prepareFile({
+          name: title,
+          description,
+          tags,
+          address: acc.address,
+          buffer: file.buffer,
+          mimeType: file.mimeType,
+          cover,
+          thumbnail,
+          generateDisplayUri: GENERATE_DISPLAY_AND_THUMBNAIL,
+        })
+      }
+
+      mint(getAuth(), amount, nftCid.path, royalties)
+        .then((e) => {})
+        .catch((e) => console.log('error'))
     }
-
-    // OLD CODE FOR REFERENCE
-    // mint(getAuth(), amount, nftCid.path, royalties)
-    //   .then((e) => {
-    //     console.log('mint confirm', e)
-    //     setMessage('Minted successfully')
-    //     // redirect here
-    //     history.push(PATH.FEED)
-    //   })
-    //   .catch((e) => {
-    //     console.log('mint error', e)
-    //     alert('an error occurred')
-    //     setMessage('an error occurred')
-    //   })
-
-    mint(getAuth(), amount, nftCid.path, royalties)
   }
 
   const handlePreview = () => {
