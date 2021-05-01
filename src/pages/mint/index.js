@@ -6,35 +6,19 @@ import { Input } from '../../components/input'
 import { Button, Curate, Primary } from '../../components/button'
 import { Upload } from '../../components/upload'
 import { Preview } from '../../components/preview'
-import { MediaCompressorIframe } from '../../components/media-compressor-iframe'
 import { MediaAssetsDisplay } from '../../components/media-assets-display'
 import { prepareFile, prepareDirectory } from '../../data/ipfs'
+import { unzipMedia } from '../../utils/media'
 import { prepareFilesFromZIP } from '../../utils/html'
 
 import {
   ALLOWED_MIMETYPES,
   ALLOWED_FILETYPES_LABEL,
-  ALLOWED_COVER_MIMETYPES,
-  ALLOWED_COVER_MIMETYPES_FALLBACK,
-  ALLOWED_COVER_FILETYPES_LABEL,
-  ALLOWED_COVER_FILETYPES_LABEL_FALLBACK,
   MINT_FILESIZE,
   MIMETYPE,
 } from '../../constants'
 
-const FFMPEGWASM_SUPPORTED = typeof SharedArrayBuffer === 'function'
-
-const coverUploadLabel = FFMPEGWASM_SUPPORTED
-  ? 'Upload cover image or video'
-  : 'Upload cover image'
-
-const coverUploadMimetypes = FFMPEGWASM_SUPPORTED
-  ? ALLOWED_COVER_MIMETYPES
-  : ALLOWED_COVER_MIMETYPES_FALLBACK
-
-const coverUploadFileTypesLabel = FFMPEGWASM_SUPPORTED
-  ? ALLOWED_COVER_FILETYPES_LABEL
-  : ALLOWED_COVER_FILETYPES_LABEL_FALLBACK
+const COMPRESSOR_URL = 'https://hicetnunc-media-compressor.netlify.app'
 
 // @crzypathwork change to "true" to activate displayUri and thumbnailUri
 const GENERATE_DISPLAY_AND_THUMBNAIL = true
@@ -49,13 +33,8 @@ export const Mint = () => {
   const [amount, setAmount] = useState()
   const [royalties, setRoyalties] = useState()
   const [file, setFile] = useState() // the uploaded file
-  const [coverFile, setCoverFile] = useState() // the file used to generate cover/thumbnail images
-  const compressorIframe = useRef(null)
   const fileMetadata = useRef(null)
   const [extraMedia, setExtraMedia] = useState() // the uploaded or generated cover image
-  const [extraMediaProgressMessage, setExtraMediaProgressMessage] = useState()
-  const [processingExtraMedia, setProcessingExtraMedia] = useState(false)
-  const [needsCoverUpload, setNeedsCoverUpload] = useState(false)
 
   const handleMint = async () => {
     setAccount()
@@ -140,33 +119,26 @@ export const Mint = () => {
     setStep(1)
   }
 
-  const checkNeedsCoverUpload = (mimeType) => {
-    if (FFMPEGWASM_SUPPORTED) {
-      return mimeType.indexOf('image') === 0 || mimeType.indexOf('video') === 0
-    } else {
-      return mimeType.indexOf('image') === 0
-    }
-  }
-
   const handleFileUpload = async (props) => {
     setFile(props)
     fileMetadata.current = { mimeType: props.mimeType }
     setExtraMedia(null)
-
-    if (GENERATE_DISPLAY_AND_THUMBNAIL) {
-      if (checkNeedsCoverUpload(props.mimeType)) {
-        setNeedsCoverUpload(false)
-        setCoverFile(props.file)
-        setProcessingExtraMedia(true)
-      } else {
-        setNeedsCoverUpload(true)
-      }
-    }
   }
 
-  const handleCoverUpload = async (props) => {
-    setCoverFile(props.file)
-    setProcessingExtraMedia(true)
+  const handleCoverZipUpload = async (props) => {
+    const error =
+      'No valid media in zip file. Supported types: jpeg, png, gif, mp4'
+    try {
+      const media = await unzipMedia(props.buffer)
+      if (media.length === 0) {
+        alert(error)
+        return
+      }
+
+      setExtraMedia(media)
+    } catch (err) {
+      alert(error)
+    }
   }
 
   const handleValidation = () => {
@@ -183,43 +155,8 @@ export const Mint = () => {
     return true
   }
 
-  const onCompressorMetadata = (metadata) => {
-    const type = fileMetadata.current.mimeType
-    if (type.indexOf('image') === 0 || type.indexOf('video') === 0) {
-      fileMetadata.current = metadata
-    }
-  }
-
-  const onCompressorProgress = (progress) => {
-    if (progress.completed) {
-      setExtraMediaProgressMessage(null)
-    } else {
-      setExtraMediaProgressMessage(
-        `generating extra media ${progress.current}/${progress.total}`
-      )
-    }
-  }
-
-  const onCompressorComplete = (results) => {
-    setExtraMedia(results)
-    setProcessingExtraMedia(false)
-  }
-
-  const onCompressorError = (error) => {
-    window.alert('Compression error')
-    console.error(error)
-  }
-
   return (
     <Page title="mint" large>
-      <MediaCompressorIframe
-        ref={compressorIframe}
-        file={coverFile}
-        onMetadata={onCompressorMetadata}
-        onProgress={onCompressorProgress}
-        onComplete={onCompressorComplete}
-        onError={onCompressorError}
-      />
       {step === 0 && (
         <>
           <Container>
@@ -279,30 +216,28 @@ export const Mint = () => {
             </Padding>
           </Container>
 
-          {file && needsCoverUpload && (
+          {file && (
             <Container>
               <Padding>
+                <div>
+                  Please use{' '}
+                  <a href={COMPRESSOR_URL} target="_blank" rel="noreferrer">
+                    this tool
+                  </a>{' '}
+                  to generate cover/thumbnail assets for your OJBKT, then upload
+                  here.
+                  <br />
+                  <br />
+                </div>
                 <Upload
-                  label={coverUploadLabel}
-                  allowedTypes={coverUploadMimetypes}
-                  allowedTypesLabel={coverUploadFileTypesLabel}
-                  onChange={handleCoverUpload}
+                  label="Upload cover/thumbnail media zip"
+                  allowedTypes={['.zip']}
+                  allowedTypesLabel="zip archive"
+                  onChange={handleCoverZipUpload}
                 />
               </Padding>
             </Container>
           )}
-
-          <Container>
-            <Padding>
-              <MediaAssetsDisplay
-                ffmpeg={FFMPEGWASM_SUPPORTED}
-                fileLoaded={!!file}
-                processing={processingExtraMedia}
-                message={extraMediaProgressMessage}
-                media={extraMedia}
-              />
-            </Padding>
-          </Container>
 
           <Container>
             <Padding>
@@ -337,6 +272,12 @@ export const Mint = () => {
                 description={description}
                 tags={tags}
               />
+            </Padding>
+          </Container>
+
+          <Container>
+            <Padding>
+              <MediaAssetsDisplay media={extraMedia} />
             </Padding>
           </Container>
 
