@@ -228,7 +228,6 @@ export const Mint = () => {
                     style={{
                       textDecoration: 'underline',
                       color: 'inherit',
-                      opacity: 0.4,
                     }}
                   >
                     this tool
