@@ -55,14 +55,8 @@
         }
       }
 
-      .tools {
-        position: fixed;
-        top: 0;
-        right: 0;
-        z-index: 1000;
-      }
-
       .element {
+        position: relative;
         width: fit-content;
         width: 100%;
       }
@@ -70,6 +64,26 @@
       .element img {
         width: 100%;
         opacity: 1;
+      }
+
+      .tools {
+        position: absolute;
+        top: 4px;
+        right: 4px;
+        z-index: 1000;
+      }
+
+      .tools .icon {
+        background-color: black;
+        padding: 4px;
+        border-radius: 4px;
+        margin-bottom: 4px;
+        cursor: pointer;
+      }
+
+      .tools .icon svg {
+        width: 24px;
+        height: 24px;
       }
     </style>
   </head>

@@ -10,7 +10,9 @@ export const Collectors = ({ owners, swaps }) => {
   )
 
   // sort swaps in ascending price order
-  swaps = swaps.sort((a, b) => a.xtz_per_objkt.localeCompare(b.xtz_per_objkt, 'en', {numeric: true}));
+  swaps = swaps.sort((a, b) =>
+    a.xtz_per_objkt.localeCompare(b.xtz_per_objkt, 'en', { numeric: true })
+  )
 
   const filtered =
     (owners &&
@@ -47,9 +49,7 @@ export const Collectors = ({ owners, swaps }) => {
       {filtered.length === 0 ? undefined : (
         <Container>
           <Padding>
-            <OwnerList
-            owners={filtered}
-            />
+            <OwnerList owners={filtered} />
           </Padding>
         </Container>
       )}
