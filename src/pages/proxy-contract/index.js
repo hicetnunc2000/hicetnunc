@@ -1,17 +1,22 @@
-import React, { useState, useContext } from 'react'
+import React, { useState } from 'react'
 import { Page, Container, Padding } from '../../components/layout'
-import { Input } from '../../components/input'
-import { Button, Curate } from '../../components/button'
-import { HicetnuncContext } from '../../context/HicetnuncContext'
+import { Button, Primary } from '../../components/button'
+import { Select, Originate } from './tabs'
+import { Menu } from '../../components/menu'
 
+const TABS = [
+  { title: 'select', component: Select },
+  { title: 'originate', component: Originate },
+]
 
 export const ProxyContract = () => {
-  const { getProxy, setProxy } = useContext(HicetnuncContext)
-  const [newProxyContract, setNewProxy] = useState(getProxy())
+  const [tabIndex, setTabIndex] = useState(0)
+
+  const Tab = TABS[tabIndex].component
 
   // TODO: button to free from proxy contract? (that just makes field empty)
   // TODO: create new smart contract form with separate page?
-  // TODO: how to withdraw? (ideal if it sould be auto-transactions inside Deafult method with maps?)
+  // TODO: add/remove tokens to contract?
   // TODO: validate proxy address?
   // TODO: any way to find all contracts that controlled by user pk?
 
@@ -19,23 +24,22 @@ export const ProxyContract = () => {
     <Page title="proxy">
       <Container>
         <Padding>
-          <Input
-            type="text"
-            onChange={(e) => setNewProxy(e.target.value)}
-            placeholder="proxy contract address"
-            label="proxy contract"
-            value={newProxyContract}
-          />
+          <Menu>
+            {TABS.map((tab, index) => {
+              return (
+                <Button key={tab.title} onClick={() => setTabIndex(index)}>
+                  <Primary selected={tabIndex === index}>
+                    {tab.title}
+                  </Primary>
+                </Button>
+              )
+            })}
+          </Menu>
         </Padding>
       </Container>
 
-      <Container>
-        <Padding>
-          <Button onClick={(e) => setProxy(newProxyContract)} fit>
-            <Curate>Use proxy contract</Curate>
-          </Button>
-        </Padding>
-      </Container>
+      <Tab/>
     </Page>
   )
 }
+
