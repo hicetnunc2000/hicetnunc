@@ -36,10 +36,20 @@ export async function unzipMedia(buffer) {
       meta = await getImageMetadata(blob)
     }
     const reader = await blobToDataURL(blob)
-    media.push({ meta, blob, reader })
+    media.push({ meta, buffer, reader })
   }
 
   return media
+}
+
+export async function getMediaMetadata(blob) {
+  if (blob.type.indexOf('image') === 0) {
+    return await getImageMetadata(blob)
+  } else if (blob.type.indexOf('video') === 0) {
+    return await getVideoMetadata(blob)
+  } else {
+    return { mimeType: blob.type }
+  }
 }
 
 export function getImageMetadata(blob) {
