@@ -58,12 +58,12 @@ export const Tags = () => {
         }
         endMessage={
           <Container xlarge>
-            <p>
+{/*             <p>
               mint mint mint{' '}
               <span role="img" aria-labelledby={'Sparkles emoji'}>
                 ✨
               </span>
-            </p>
+            </p> */}
           </Container>
         }
       >
