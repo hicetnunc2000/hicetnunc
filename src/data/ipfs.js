@@ -34,7 +34,7 @@ export const prepareFile = async ({
   // upload extra media
   let displayUri = ''
   let thumbnailUri = IPFS_DISPLAY_URI_BLACKCIRCLE
-  let formats = []
+  let formats = [originalFormat]
   if (generateDisplayUri) {
     const extraMediaMetadata = await uploadExtraMedia(
       extraMedia,
@@ -42,7 +42,7 @@ export const prepareFile = async ({
     )
     displayUri = extraMediaMetadata.displayUri
     thumbnailUri = extraMediaMetadata.thumbnailUri
-    formats = [originalFormat, ...extraMediaMetadata.formats]
+    formats = formats.concat(extraMediaMetadata.formats)
   }
 
   return await uploadMetadataFile({
@@ -80,7 +80,7 @@ export const prepareDirectory = async ({
   // upload extra media
   let displayUri = ''
   let thumbnailUri = IPFS_DISPLAY_URI_BLACKCIRCLE
-  let formats = []
+  let formats = [originalFormat]
   if (generateDisplayUri) {
     // upload
     const extraMediaMetadata = await uploadExtraMedia(
@@ -89,7 +89,7 @@ export const prepareDirectory = async ({
     )
     displayUri = extraMediaMetadata.displayUri
     thumbnailUri = extraMediaMetadata.thumbnailUri
-    formats = [originalFormat, ...extraMediaMetadata.formats]
+    formats = formats.concat(extraMediaMetadata.formats)
   } else if (hashes.cover) {
     // TODO: Remove this once generateDisplayUri option is gone
     displayUri = `ipfs://${hashes.cover}`

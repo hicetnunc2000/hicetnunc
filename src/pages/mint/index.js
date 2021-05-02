@@ -8,7 +8,7 @@ import { Upload } from '../../components/upload'
 import { Preview } from '../../components/preview'
 import { MediaAssetsDisplay } from '../../components/media-assets-display'
 import { prepareFile, prepareDirectory } from '../../data/ipfs'
-import { unzipMedia } from '../../utils/media'
+import { getMediaMetadata, unzipMedia } from '../../utils/media'
 import { prepareFilesFromZIP } from '../../utils/html'
 
 import {
@@ -121,7 +121,7 @@ export const Mint = () => {
 
   const handleFileUpload = async (props) => {
     setFile(props)
-    fileMetadata.current = { mimeType: props.mimeType }
+    fileMetadata.current = await getMediaMetadata(props.file)
     setExtraMedia(null)
   }
 
@@ -216,12 +216,21 @@ export const Mint = () => {
             </Padding>
           </Container>
 
-          {file && (
+          {file && GENERATE_DISPLAY_AND_THUMBNAIL && (
             <Container>
               <Padding>
                 <div>
                   Please use{' '}
-                  <a href={COMPRESSOR_URL} target="_blank" rel="noreferrer">
+                  <a
+                    href={COMPRESSOR_URL}
+                    target="_blank"
+                    rel="noreferrer"
+                    style={{
+                      textDecoration: 'underline',
+                      color: 'inherit',
+                      opacity: 0.4,
+                    }}
+                  >
                     this tool
                   </a>{' '}
                   to generate cover/thumbnail assets for your OJBKT, then upload
