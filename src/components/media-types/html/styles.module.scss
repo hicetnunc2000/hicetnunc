@@ -46,16 +46,27 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      background: radial-gradient(
-        circle,
-        rgba(255, 255, 255, 0.3) 0%,
-        rgba(0, 0, 0, 0.1) 100%
-      );
+
+      .gradient {
+        position: absolute;
+        top: 0;
+        right: 0;
+        transform: translateY(50%) translateY(-50%);
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(
+          circle,
+          rgba(0, 0, 0, 0.1) 0%,
+          rgba(255, 255, 255, 0.2) 100%
+        );
+      }
 
       svg {
-        position: relative;
+        position: absolute;
+        top: 6px;
+        right: 6px;
         display: flex;
-        width: 30%;
+        width: 30px;
         height: auto;
         margin: 0 auto;
         z-index: 1;
