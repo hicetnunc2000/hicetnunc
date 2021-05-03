@@ -1,0 +1,34 @@
+version: 2
+updates:
+- package-ecosystem: npm
+  directory: "/"
+  schedule:
+    interval: daily
+    time: "08:00"
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: fflate
+    versions:
+    - 0.6.10
+  - dependency-name: "@taquito/taquito"
+    versions:
+    - 8.0.6-beta.0
+    - 8.1.1
+    - 9.0.0
+  - dependency-name: "@taquito/beacon-wallet"
+    versions:
+    - 8.0.6-beta.0
+    - 9.0.0
+  - dependency-name: framer-motion
+    versions:
+    - 3.10.3
+    - 4.1.10
+    - 4.1.5
+    - 4.1.6
+    - 4.1.9
+  - dependency-name: "@testing-library/user-event"
+    versions:
+    - 13.0.13
+  - dependency-name: "@airgap/beacon-sdk"
+    versions:
+    - 2.2.3
