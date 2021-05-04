@@ -1,15 +1,20 @@
 import Sync from './pages/sync'
 import { About } from './pages/about'
 import Display from './pages/display'
-import { Latest, Hdao, Random } from './pages/feeds'
+import { Latest, Hdao, Random, Featured } from './pages/feeds'
 import { Mint } from './pages/mint'
 import { ObjktDisplay } from './pages/objkt-display'
+import { Galleries } from './pages/galleries'
+import { GalleryDetail } from './pages/gallery-detail'
+import { Config } from './pages/config'
+import { Search } from './pages/search'
+import { Tags } from './pages/tags'
 
 export const routes = [
   {
     exact: true,
     path: '/',
-    component: Latest,
+    component: Featured,
   },
   {
     exact: false,
@@ -20,6 +25,11 @@ export const routes = [
     exact: false,
     path: '/random',
     component: Random,
+  },
+  {
+    exact: false,
+    path: '/latest',
+    component: Latest,
   },
   {
     exact: false,
@@ -45,5 +55,30 @@ export const routes = [
     exact: false,
     path: '/objkt/:id',
     component: ObjktDisplay,
+  },
+  {
+    exact: false,
+    path: '/galleries',
+    component: Galleries,
+  },
+  {
+    exact: false,
+    path: '/gallery/:id',
+    component: GalleryDetail,
+  },
+  {
+    exact: false,
+    path: '/config',
+    component: Config,
+  },
+  {
+    exact: false,
+    path: '/search',
+    component: Search,
+  },
+  {
+    exact: false,
+    path: '/tags/:id',
+    component: Tags,
   },
 ]

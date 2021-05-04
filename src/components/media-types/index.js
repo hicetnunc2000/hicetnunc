@@ -12,6 +12,8 @@ import { MIMETYPE, IPFS_DIRECTORY_MIMETYPE } from '../../constants'
 import { Container } from './container'
 
 const CLOUDFLARE = 'https://cloudflare-ipfs.com/ipfs/'
+// const PINATA = 'https://gateway.pinata.cloud/ipfs/'
+const IPFS = 'https://ipfs.io/ipfs/'
 
 function getInfuraUrl(hash) {
   const cidv1 = new ipfsClient.CID(hash).toV1()
@@ -19,13 +21,14 @@ function getInfuraUrl(hash) {
   return `https://${subomain}.ipfs.infura-ipfs.io/`
 }
 
-export const renderMediaType = ({
-  mimeType,
-  uri,
-  interactive = false,
-  preview = false,
-  metadata,
-}) => {
+export const renderMediaType = (props) => {
+  const {
+    mimeType,
+    uri,
+    interactive = false,
+    preview = false,
+    metadata,
+  } = props
   const path = uri
   let url = preview ? uri : `${CLOUDFLARE}${path}`
 
@@ -79,9 +82,7 @@ export const renderMediaType = ({
     case MIMETYPE.OGV:
     case MIMETYPE.QUICKTIME:
     case MIMETYPE.WEBM:
-      if (!preview) {
-        url = getInfuraUrl(path)
-      }
+      url = preview ? uri : `${IPFS}${path}`
       return (
         <Container interactive={interactive} nofullscreen>
           <VideoComponent src={url} />
@@ -98,6 +99,9 @@ export const renderMediaType = ({
     /* AUDIO */
     case MIMETYPE.MP3:
     case MIMETYPE.OGA:
+    case MIMETYPE.FLAC:
+    case MIMETYPE.WAV:  
+      url = preview ? uri : `${IPFS}${path}`
       return (
         <Container interactive={interactive}>
           <AudioComponent {...metadata} src={url} />

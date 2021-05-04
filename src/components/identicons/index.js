@@ -1,6 +1,6 @@
 import React from 'react'
 import base from 'base-x'
-import styles from './index.module.scss'
+import styles from './styles.module.scss'
 
 const alphabet58 = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz'
 const base58 = base(alphabet58)
