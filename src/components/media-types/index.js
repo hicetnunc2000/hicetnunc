@@ -99,6 +99,8 @@ export const renderMediaType = (props) => {
     /* AUDIO */
     case MIMETYPE.MP3:
     case MIMETYPE.OGA:
+    case MIMETYPE.FLAC:
+    case MIMETYPE.WAV:  
       url = preview ? uri : `${IPFS}${path}`
       return (
         <Container interactive={interactive}>

@@ -34,9 +34,9 @@ they will not work locally.
 if the user is not sync, the viewer comes in as false
 
 ```javascript
-const creator = new URLSearchParams(window.location.search).get("creator")
+const creator = new URLSearchParams(window.location.search).get('creator')
 // if the viewer is not authenticated to a wallet, this value will be false
-const viewer = new URLSearchParams(window.location.search).get("viewer")
+const viewer = new URLSearchParams(window.location.search).get('viewer')
 ```
 
 Hope you guys enjoy!
