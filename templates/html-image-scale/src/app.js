@@ -1,6 +1,12 @@
+<<<<<<< HEAD
+import React, { Component } from "react"
+import { TransformComponent, TransformWrapper } from "react-zoom-pan-pinch"
+import example_img from "url:./large.jpg"
+=======
 import React, { Component } from 'react'
 import { TransformComponent, TransformWrapper } from 'react-zoom-pan-pinch'
 import example_img from 'url:./large.jpg'
+>>>>>>> main
 
 export default class App extends Component {
   constructor(props) {
@@ -82,6 +88,26 @@ export default class App extends Component {
             options: { limitToBounds, transformEnabled, disabled },
             ...rest
           }) => (
+<<<<<<< HEAD
+            <React.Fragment>
+              <div className="tools">
+                <button onClick={zoomIn}>zoom in</button>
+                <button onClick={zoomOut}>zoom out</button>
+                <button onClick={resetTransform}>reset</button>
+              </div>
+              <div className="element">
+                {type && (
+                  <TransformComponent>
+                    <img
+                      className="zoom"
+                      src={example_img}
+                      alt="example-element"
+                    />
+                  </TransformComponent>
+                )}
+              </div>
+            </React.Fragment>
+=======
             <div className="element">
               <div className="tools">
                 <div onClick={zoomIn} className="icon">
@@ -194,6 +220,7 @@ export default class App extends Component {
                 </TransformComponent>
               )}
             </div>
+>>>>>>> main
           )}
         </TransformWrapper>
       </div>

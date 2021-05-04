@@ -1,5 +1,11 @@
 [
   {
+    "uid": "cronopios",
+    "name": "Cronopios",
+    "endpoint": "/galleries/cronopios.json",
+    "thumbnail": "54715"
+  },
+  {
     "uid": "objkt4objkt",
     "name": "OBJKT4OBJKT",
     "endpoint": "/galleries/objkt4objkt.json",
