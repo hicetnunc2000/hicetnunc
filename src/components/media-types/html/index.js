@@ -2,9 +2,15 @@ import React, { useContext, useState, useRef, useEffect } from 'react'
 import classnames from 'classnames'
 import { HicetnuncContext } from '../../../context/HicetnuncContext'
 import { Button } from '../../button'
-import { dataRUIToBuffer, prepareFilesFromZIP } from '../../../utils/html'
+import {
+  dataRUIToBuffer,
+  prepareFilesFromZIP,
+  validateFiles,
+} from '../../../utils/html'
 import { VisuallyHidden } from '../../visually-hidden'
-import styles from './index.module.scss'
+import styles from './styles.module.scss'
+
+const uid = Math.round(Math.random() * 100000000).toString()
 
 export const HTMLComponent = ({
   src,
@@ -29,7 +35,38 @@ export const HTMLComponent = ({
 
   // preview
   const iframeRef = useRef(null)
-  const uid = Math.round(Math.random() * 100000000).toString()
+  const unpackedFiles = useRef(null)
+  const unpacking = useRef(false)
+  const [validHTML, setValidHTML] = useState(null)
+  const [validationError, setValidationError] = useState(null)
+
+  const unpackZipFiles = async () => {
+    unpacking.current = true
+
+    const buffer = dataRUIToBuffer(src)
+    const filesArr = await prepareFilesFromZIP(buffer)
+    const files = {}
+    filesArr.forEach((f) => {
+      files[f.path] = f.blob
+    })
+
+    unpackedFiles.current = files
+
+    const result = await validateFiles(unpackedFiles.current)
+    if (result.error) {
+      console.error(result.error)
+      setValidationError(result.error)
+    } else {
+      setValidationError(null)
+    }
+    setValidHTML(result.valid)
+
+    unpacking.current = false
+  }
+
+  if (preview && !unpackedFiles.current && !unpacking.current) {
+    unpackZipFiles()
+  }
 
   useEffect(() => {
     const handler = async (event) => {
@@ -37,16 +74,10 @@ export const HTMLComponent = ({
         return
       }
 
-      const buffer = dataRUIToBuffer(src)
-      const filesArr = await prepareFilesFromZIP(buffer)
-      const files = {}
-      filesArr.forEach((f) => {
-        files[f.path] = f.blob
-      })
       iframeRef.current.contentWindow.postMessage(
         {
           target: 'hicetnunc-html-preview',
-          data: files,
+          data: unpackedFiles.current,
         },
         '*'
       )
@@ -55,7 +86,7 @@ export const HTMLComponent = ({
     window.addEventListener('message', handler)
 
     return () => window.removeEventListener('message', handler)
-  }, [uid, src])
+  }, [src])
 
   const classes = classnames({
     [styles.container]: true,
@@ -63,13 +94,10 @@ export const HTMLComponent = ({
   })
 
   if (preview) {
-    // creator is the viewer in preview
+    // creator is viewer in preview
     _creator_ = _viewer_
 
-    console.log('creator', _creator_)
-    console.log('viewer', _viewer_)
-
-    if (src) {
+    if (validHTML) {
       return (
         <div className={classes}>
           <iframe
@@ -77,11 +105,14 @@ export const HTMLComponent = ({
             title="html-zip-embed"
             src={`https://hicetnunc2000.github.io/hicetnunc/gh-pages/html-preview/?uid=${uid}&creator=${_creator_}&viewer=${_viewer_}`}
             sandbox="allow-scripts allow-same-origin allow-modals"
+            allow="accelerometer; camera; gyroscope; microphone; xr-spatial-tracking;"
           />
         </div>
       )
-    } else {
-      return <div className={styles.container}>Loading...</div>
+    } else if (validHTML === false) {
+      return (
+        <div className={styles.error}>Preview Error: {validationError}</div>
+      )
     }
   }
 
@@ -93,7 +124,7 @@ export const HTMLComponent = ({
           <div className={styles.button}>
             <Button onClick={() => setViewing(true)}>
               <VisuallyHidden>View</VisuallyHidden>
-              <div className={styles.dark} />
+              <div className={styles.gradient} />
               <svg
                 version="1.1"
                 viewBox="0 0 512 512"
@@ -116,6 +147,7 @@ export const HTMLComponent = ({
         title="html-embed"
         src={`${src}?creator=${_creator_}&viewer=${_viewer_}`}
         sandbox="allow-scripts allow-same-origin"
+        allow="accelerometer; camera; gyroscope; microphone; xr-spatial-tracking;"
         scrolling="no"
       />
     </div>

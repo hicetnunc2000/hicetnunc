@@ -4,7 +4,7 @@
     "menu": [
       { "primary": "○", "route": "/hdao" },
       { "primary": "random", "route": "/random" },
-      { "primary": "OBJKTs", "secondary": "(émettre NFTs)", "route": "/mint" },
+      { "primary": "OBJKTs", "route": "/mint" },
       { "primary": "gestion des biens", "route": "/sync" },
       { "primary": "à propos", "route": "/about" }
     ]
@@ -37,7 +37,7 @@
     "title": "hic et nunc",
     "paragraphs": [
       "Cette application décentralisée permet à ses utilisateurs de gérer des biens digitaux décentralisés, comme infrastructure publique de contrats intelligents sur la Blockchain Tezos.",
-      "Les NFTs IPFS peuvent être émis et échangés de façon libre. L'ambition de cet outil est d'imaginer des économies crypto alternatives.",
+      "Les OBJKTs IPFS peuvent être émis et échangés de façon libre. L'ambition de cet outil est d'imaginer des économies crypto alternatives.",
       "Nous faisons attention à votre sécurité et à votre indépendance. Veuillez vérifier vos informations pendant vos transactions.",
       "Si vous avez des questions, besoin de conseils ou souhaitez intégrer la communauté, contactez-nous via %EMAIL%, %DISCORD% ou sur %REDDIT%.",
       "Prenez le temps de consulter la %WIKI%.",
@@ -74,7 +74,7 @@
       "cta": "annuler"
     },
     "burn": {
-      "title": "Brûler votre NFT va l'enlever de façon permanente du réseau",
+      "title": "Brûler votre OBJKT va l'enlever de façon permanente du réseau",
       "cta": "brûler"
     },
     "confirm": "Etes-vous sûr?"

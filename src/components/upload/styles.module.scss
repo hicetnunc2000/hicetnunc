@@ -1,0 +1,32 @@
+.container {
+  margin-bottom: 10px;
+  // border: 1px dashed red;
+
+  label {
+    display: block;
+    width: 100%;
+    padding: 6px;
+    border: 2px dashed var(--text-color);
+    text-align: center;
+    cursor: pointer;
+
+    input {
+      display: none;
+      width: 100%;
+    }
+  }
+
+  .allowed {
+    display: inline-flex;
+    font-size: 12px;
+    padding-top: 6px;
+    text-transform: lowercase;
+    opacity: 0.5;
+
+    & > * {
+      &.selected {
+        font-weight: bold;
+      }
+    }
+  }
+}

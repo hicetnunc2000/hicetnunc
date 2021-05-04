@@ -2,7 +2,7 @@ import React from 'react'
 import { ButtonLanguage } from '../button-language'
 import { ButtonTheme } from '../button-theme'
 import { getLanguage } from '../../constants'
-import styles from './index.module.scss'
+import styles from './styles.module.scss'
 
 export const Footer = () => {
   const language = getLanguage()

@@ -1,0 +1,51 @@
+@import '../../styles/variables.scss';
+
+.container {
+  width: 100%;
+  margin-bottom: 15px;
+  // border: 1px dashed red;
+
+  label {
+    position: relative;
+    width: 100%;
+
+    p {
+      position: absolute;
+      top: 0;
+      left: 0;
+      color: var(--text-color);
+      opacity: 0.7;
+      transition: all 0.2s;
+      pointer-events: none;
+    }
+
+    input {
+      background-color: transparent;
+      width: 100%;
+      padding: 6px 0;
+      border: none;
+      color: var(--text-color);
+      transition: color #{$theme-duration} ease-out;
+      // border-bottom: 1px solid var(--text-color);
+
+      &::placeholder {
+        color: var(--text-color);
+        opacity: 0.4;
+      }
+
+      &:focus {
+        outline: none;
+      }
+
+      &:focus + p,
+      &:not(:placeholder-shown) + p {
+        opacity: 0.4;
+        transform: translateY(-20px);
+      }
+
+      &:focus::placeholder {
+        opacity: 0;
+      }
+    }
+  }
+}

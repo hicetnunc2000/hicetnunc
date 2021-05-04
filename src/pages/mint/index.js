@@ -1,53 +1,40 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useState, useRef } from 'react'
 import { useHistory } from 'react-router'
-import Compressor from 'compressorjs'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
 import { Page, Container, Padding } from '../../components/layout'
 import { Input } from '../../components/input'
 import { Button, Curate, Primary } from '../../components/button'
-import { Loading } from '../../components/loading'
 import { Upload } from '../../components/upload'
 import { Preview } from '../../components/preview'
+import { MediaAssetsDisplay } from '../../components/media-assets-display'
 import { prepareFile, prepareDirectory } from '../../data/ipfs'
+import { getMediaMetadata, unzipMedia } from '../../utils/media'
 import { prepareFilesFromZIP } from '../../utils/html'
+
 import {
   ALLOWED_MIMETYPES,
   ALLOWED_FILETYPES_LABEL,
-  ALLOWED_COVER_MIMETYPES,
-  ALLOWED_COVER_FILETYPES_LABEL,
   MINT_FILESIZE,
   MIMETYPE,
-  PATH,
 } from '../../constants'
 
-const coverOptions = {
-  quality: 0.85,
-  maxWidth: 1200,
-  maxHeight: 1200,
-}
+const COMPRESSOR_URL = 'https://hicetnunc-media-compressor.netlify.app'
 
-const thumbnailOptions = {
-  quality: 0.85,
-  maxWidth: 350,
-  maxHeight: 350,
-}
+// @crzypathwork change to "true" to activate displayUri and thumbnailUri
+const GENERATE_DISPLAY_AND_THUMBNAIL = true
 
 export const Mint = () => {
   const { mint, getAuth, acc, setAccount } = useContext(HicetnuncContext)
-  const history = useHistory()
+  // const history = useHistory()
   const [step, setStep] = useState(0)
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
   const [tags, setTags] = useState('')
-  const [amount, setAmount] = useState(1)
-  const [royalties, setRoyalties] = useState(10)
+  const [amount, setAmount] = useState()
+  const [royalties, setRoyalties] = useState()
   const [file, setFile] = useState() // the uploaded file
-  const [cover, setCover] = useState() // the uploaded or generated cover image
-  const [thumbnail, setThumbnail] = useState() // the uploaded or generated cover image
-
-  const [message, setMessage] = useState('')
-
-  const [needsCover, setNeedsCover] = useState('')
+  const fileMetadata = useRef(null)
+  const [extraMedia, setExtraMedia] = useState() // the uploaded or generated cover image
 
   const handleMint = async () => {
     setAccount()
@@ -76,6 +63,7 @@ export const Mint = () => {
     // file about to be minted, change to the mint screen
 
     setStep(2)
+
     // upload file(s)
     let nftCid
     if ([MIMETYPE.ZIP, MIMETYPE.ZIP1, MIMETYPE.ZIP2].includes(file.mimeType)) {
@@ -87,8 +75,9 @@ export const Mint = () => {
         tags,
         address: acc.address,
         files,
-        cover,
-        thumbnail,
+        metadata: fileMetadata.current,
+        extraMedia,
+        generateDisplayUri: GENERATE_DISPLAY_AND_THUMBNAIL,
       })
     } else {
       // process all other files
@@ -98,24 +87,31 @@ export const Mint = () => {
         tags,
         address: acc.address,
         buffer: file.buffer,
-        mimeType: file.mimeType,
-        cover,
-        thumbnail,
+        metadata: fileMetadata.current,
+        extraMedia,
+        generateDisplayUri: GENERATE_DISPLAY_AND_THUMBNAIL,
       })
     }
 
+    // TESTING
+    // console.log('ntfCid', nftCid)
+    // window.location = `https://ipfs.io/ipfs/${nftCid.path}`
+
     mint(getAuth(), amount, nftCid.path, royalties)
-      .then((e) => {
-        console.log('mint confirm', e)
-        setMessage('Minted successfully')
-        // redirect here
-        history.push(PATH.FEED)
-      })
-      .catch((e) => {
-        console.log('mint error', e)
-        alert('an error occurred')
-        setMessage('an error occurred')
-      })
+
+    // OLD CODE FOR REFERENCE
+    // mint(getAuth(), amount, nftCid.path, royalties)
+    //   .then((e) => {
+    //     console.log('mint confirm', e)
+    //     setMessage('Minted successfully')
+    //     // redirect here
+    //     history.push(PATH.FEED)
+    //   })
+    //   .catch((e) => {
+    //     console.log('mint error', e)
+    //     alert('an error occurred')
+    //     setMessage('an error occurred')
+    //   })
   }
 
   const handlePreview = () => {
@@ -124,67 +120,42 @@ export const Mint = () => {
 
   const handleFileUpload = async (props) => {
     setFile(props)
+    fileMetadata.current = await getMediaMetadata(props.file)
+    setExtraMedia(null)
+  }
 
-    if(props.mimeType.indexOf('image') === 0) {
-      setNeedsCover(false)
-      const cover = await generateCompressedImage(props, coverOptions)
-      setCover(cover)
+  const handleCoverZipUpload = async (props) => {
+    const error =
+      'No valid media in zip file. Supported types: jpeg, png, gif, mp4'
+    try {
+      const media = await unzipMedia(props.buffer)
+      if (media.length === 0) {
+        alert(error)
+        return
+      }
 
-      const thumb = await generateCompressedImage(props, thumbnailOptions)
-      setThumbnail(thumb)
-    } else {
-      setNeedsCover(true)
+      setExtraMedia(media)
+    } catch (err) {
+      alert(error)
     }
-  }
-
-  const generateCompressedImage = async (props, options) => {
-    const blob = await compressImage(props.file, options)
-    const mimeType = blob.type
-    const buffer = await blob.arrayBuffer()
-    const reader = await blobToDataURL(blob)
-    return { mimeType, buffer, reader }
-  }
-
-  const compressImage = (file, options) => {
-    return new Promise(async (resolve, reject) => {
-      new Compressor(file, {
-        ...options,
-        success(blob) {
-          resolve(blob)
-        },
-        error(err) {
-          reject(err)
-        }
-      })
-    })
-  }
-
-  const blobToDataURL = async (blob) => {
-    return new Promise((resolve, reject) => {
-      let reader = new FileReader()
-      reader.onerror = reject
-      reader.onload = (e) => resolve(reader.result);
-      reader.readAsDataURL(blob)
-    })
-  }
-
-  const handleCoverUpload = async (props) => {
-    const cover = await generateCompressedImage(props, coverOptions)
-    setCover(cover)
-
-    const thumb = await generateCompressedImage(props, thumbnailOptions)
-    setThumbnail(thumb)
   }
 
   const handleValidation = () => {
-    if (amount > 0 && file && cover && thumbnail) {
-      return false
+    if (GENERATE_DISPLAY_AND_THUMBNAIL) {
+      if (amount > 0 && file && extraMedia && royalties >= 10) {
+        return false
+      }
+    } else {
+      if (amount > 0 && file && royalties >= 10) {
+        return false
+      }
     }
+
     return true
   }
 
   return (
-    <Page title="mint">
+    <Page title="mint" large>
       {step === 0 && (
         <>
           <Container>
@@ -193,6 +164,7 @@ export const Mint = () => {
                 type="text"
                 onChange={(e) => setTitle(e.target.value)}
                 placeholder="title"
+                label="title"
                 value={title}
               />
 
@@ -200,13 +172,15 @@ export const Mint = () => {
                 type="text"
                 onChange={(e) => setDescription(e.target.value)}
                 placeholder="description"
+                label="description"
                 value={description}
               />
 
               <Input
                 type="text"
                 onChange={(e) => setTags(e.target.value)}
-                placeholder="tags (comma separated. example: illustration, digital, crypto)"
+                placeholder="tags (comma separated. example: illustration, digital)"
+                label="tags"
                 value={tags}
               />
 
@@ -214,16 +188,18 @@ export const Mint = () => {
                 type="number"
                 min={1}
                 onChange={(e) => setAmount(e.target.value)}
-                placeholder="quantity"
+                placeholder="editions (no. editions)"
+                label="editions"
                 value={amount}
               />
 
               <Input
                 type="number"
-                min={0}
+                min={10}
                 max={25}
                 onChange={(e) => setRoyalties(e.target.value)}
-                placeholder="your royalties after each sale (between 0-25%)"
+                placeholder="royalties after each sale (between 10-25%)"
+                label="royalties"
                 value={royalties}
               />
             </Padding>
@@ -233,21 +209,38 @@ export const Mint = () => {
             <Padding>
               <Upload
                 label="Upload OBJKT"
-                allowedTypes={ALLOWED_MIMETYPES}
                 allowedTypesLabel={ALLOWED_FILETYPES_LABEL}
                 onChange={handleFileUpload}
               />
             </Padding>
           </Container>
 
-          {file && needsCover && (
+          {file && GENERATE_DISPLAY_AND_THUMBNAIL && (
             <Container>
               <Padding>
+                <div>
+                  Please use{' '}
+                  <a
+                    href={COMPRESSOR_URL}
+                    target="_blank"
+                    rel="noreferrer"
+                    style={{
+                      textDecoration: 'underline',
+                      color: 'inherit',
+                    }}
+                  >
+                    this tool
+                  </a>{' '}
+                  to generate cover/thumbnail assets for your OJBKT, then upload
+                  here.
+                  <br />
+                  <br />
+                </div>
                 <Upload
-                  label="Upload Cover Image"
-                  allowedTypes={ALLOWED_COVER_MIMETYPES}
-                  allowedTypesLabel={ALLOWED_COVER_FILETYPES_LABEL}
-                  onChange={handleCoverUpload}
+                  label="Upload cover/thumbnail media zip"
+                  allowedTypes={['.zip']}
+                  allowedTypesLabel="zip archive"
+                  onChange={handleCoverZipUpload}
                 />
               </Padding>
             </Container>
@@ -291,8 +284,16 @@ export const Mint = () => {
 
           <Container>
             <Padding>
+              <MediaAssetsDisplay media={extraMedia} />
+            </Padding>
+          </Container>
+
+          <Container>
+            <Padding>
               <Button onClick={handleMint} fit>
-                <Curate>mint {amount} OBJKTs</Curate>
+                <Curate>
+                  mint {amount} OBJKT{amount > 1 && 's'}
+                </Curate>
               </Button>
             </Padding>
           </Container>
@@ -303,33 +304,6 @@ export const Mint = () => {
               <p>Your royalties upon each sale are {royalties}%</p>
             </Padding>
           </Container>
-        </>
-      )}
-
-      {step === 2 && (
-        <>
-          <Container>
-            <div
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                flexDirection: 'column',
-                height: 'calc(100vh - 200px)',
-              }}
-            >
-              preparing OBJKT (NFT)
-              <Loading />
-            </div>
-          </Container>
-
-          {message && (
-            <Container>
-              <Padding>
-                <p>{message}</p>
-              </Padding>
-            </Container>
-          )}
         </>
       )}
     </Page>

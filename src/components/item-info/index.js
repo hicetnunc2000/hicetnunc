@@ -3,8 +3,7 @@ import { PATH } from '../../constants'
 import { Button, Primary, Purchase } from '../button'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
 import { walletPreview } from '../../utils/string'
-import styles from './index.module.scss'
-// import { getTotalSales } from '../../utils/sanitise'
+import styles from './styles.module.scss'
 
 const _ = require('lodash')
 
@@ -16,26 +15,35 @@ export const ItemInfo = ({
   transfered,
   feed,
   total_amount,
+  hDAO_balance,
   isDetailView,
 }) => {
   const { syncTaquito, collect, curate, acc } = useContext(HicetnuncContext)
+  const reducer = (accumulator, currentValue) =>
+    parseInt(accumulator) + parseInt(currentValue)
 
-  /*  let available = 0
-  if (owners !== undefined) {
-    const kt = `KT1Hkg5qeNhfwpKW4fXvq7HGZB9z2EnmCCA9`
-    available = owners[kt]
-  } */
+  // subtract burned pieces from total
+  let total = 0
 
+  try {
+    total =
+      _.values(owners).length !== 0 ? _.values(owners).reduce(reducer) : 'X'
+    total = _.keys(owners).includes('tz1burnburnburnburnburnburnburjAYjjX')
+      ? total - owners['tz1burnburnburnburnburnburnburjAYjjX']
+      : total
+    //total = total - owners['tz1burnburnburnburnburnburnburjAYjjX']
+  } catch (e) {
+    total =
+      _.values(owners).length !== 0 ? _.values(owners).reduce(reducer) : 'X'
+  }
+
+  let ed =
+    swaps.length !== 0 ? swaps.map((e) => e.objkt_amount).reduce(reducer) : 'X'
   let s = _.minBy(swaps, (o) => Number(o.xtz_per_objkt))
+  let maxPrice = _.maxBy(swaps, (o) => Number(o.xtz_per_objkt))
 
-  // var kt = _.values(_.omitBy(owners, (value, key) => !key.startsWith('KT')))[0]
-  //owners = _.values(_.omitBy(owners, (value, key) => !key.startsWith(token_info.creators[0])))
-
-  // const soldOutMessage = 'not for sale'
   var message = ''
-  // console.log(acc)
-  // console.log(s, swaps)
-  //const notForSale = available > 0 || isNaN(editions)
+
   try {
     message =
       swaps[0] !== undefined
@@ -67,15 +75,18 @@ export const ItemInfo = ({
             <div>
               <p>
                 <span>
-                  Editions: {/*                   {available > 0 ? ( */}
+                  Editions:
                   <span>
-                    {swaps[0] !== undefined ? s.objkt_amount : undefined}
+                    {ed}/{total}
                   </span>
-                  {/* /*                   ) : (
-                    <span>{total_amount}</span>
-                  )} */}
                 </span>
               </p>
+              {false && (
+                <p>
+                  Price range: {(Number(s.xtz_per_objkt) / 1000000).toFixed(2)}-
+                  {(Number(maxPrice.xtz_per_objkt) / 1000000).toFixed(2)}
+                </p>
+              )}
             </div>
           )}
         </div>
@@ -94,6 +105,7 @@ export const ItemInfo = ({
             <Button onClick={() => curate(token_id)}>
               <Primary>〇</Primary>
             </Button>
+            <div>{hDAO_balance}</div>
           </div>
         ) : (
           <Button onClick={() => handleCollect()}>

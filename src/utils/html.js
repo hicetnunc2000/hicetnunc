@@ -6,14 +6,20 @@ export async function prepareFilesFromZIP(buffer) {
   // unzip files
   let files = await unzipBuffer(buffer)
 
-  // inject CSP meta tag
+  // save raw index file
   const indexBlob = files['index.html']
   files['index_raw.html'] = new Blob([indexBlob], { type: indexBlob.type })
-  const indexBuffer = await indexBlob.arrayBuffer()
-  const safeIndexBuffer = injectCSPMetaTagIntoBuffer(indexBuffer)
-  files['index.html'] = new Blob([safeIndexBuffer], {
-    type: indexBlob.type,
-  })
+
+  // inject CSP meta tag in all html files
+  for (let k in files) {
+    if (k.endsWith('.html') || k.endsWith('.htm')) {
+      const pageBuffer = await files[k].arrayBuffer()
+      const safePageBuffer = injectCSPMetaTagIntoBuffer(pageBuffer)
+      files[k] = new Blob([safePageBuffer], {
+        type: indexBlob.type,
+      })
+    }
+  }
 
   // reformat
   files = Object.entries(files).map((file) => {
@@ -126,8 +132,6 @@ export function injectCSPMetaTagIntoHTML(html) {
     'afterbegin',
     `
     <meta http-equiv="Content-Security-Policy" content="
-    frame-ancestors
-      *;
     upgrade-insecure-requests;
     default-src
       'none';
@@ -138,7 +142,8 @@ export function injectCSPMetaTagIntoHTML(html) {
     script-src
       'self'
       'unsafe-inline'
-      'unsafe-eval';
+      'unsafe-eval'
+      blob:;
     style-src
       'self'
       'unsafe-inline';
@@ -148,12 +153,16 @@ export function injectCSPMetaTagIntoHTML(html) {
       data:
       blob:
       https://ipfs.infura.io
-      https://cloudflare-ipfs.com/;
+      https://cloudflare-ipfs.com/
+      https://ipfs.io/
+      https://gateway.pinata.cloud/;
     font-src
       'self'
       https://ipfs.infura.io
       https://cloudflare-ipfs.com/
-      https://fonts.googleapis.com/;
+      https://fonts.googleapis.com/
+      https://ipfs.io/
+      https://gateway.pinata.cloud/;
     connect-src
       'self'
       https://better-call.dev
@@ -162,6 +171,7 @@ export function injectCSPMetaTagIntoHTML(html) {
       https://cryptonomic-infra.tech
       https://*.infura.io
       https://infura.io
+      blob:
       ws:
       wss:
       bootstrap.libp2p.io
@@ -187,22 +197,75 @@ export function injectCSPMetaTagIntoHTML(html) {
       data:
       blob:
       https://ipfs.infura.io
-      https://cloudflare-ipfs.com/;
+      https://cloudflare-ipfs.com/
+      https://ipfs.io/
+      https://gateway.pinata.cloud/;
     prefetch-src
       'self'
       https://ipfs.infura.io
       https://cloudflare-ipfs.com/
-      https://fonts.googleapis.com/;
-    webrtc-src
-      *;
+      https://fonts.googleapis.com/
+      https://ipfs.io/
+      https://gateway.pinata.cloud/;
     worker-src
       'self'
-      'unsafe-inline';">
+      'unsafe-inline'
+      blob:;">
   `
   )
 
   // doc -> HTML
   return `<!DOCTYPE html><html>${doc.documentElement.innerHTML}</html>`
+}
+
+export function getCoverImagePathFromBuffer(buffer) {
+  // buffer -> html
+  const html = new TextDecoder().decode(buffer)
+
+  // html -> doc
+  const parser = new DOMParser()
+  const doc = parser.parseFromString(html, 'text/html')
+
+  return getCoverImagePathFromDoc(doc)
+}
+
+function getCoverImagePathFromDoc(doc) {
+  let meta = doc.head.querySelector('meta[property="cover-image"]')
+  if (!meta) {
+    meta = doc.head.querySelector('meta[property="og:image"]')
+  }
+
+  if (!meta) return null
+
+  return meta.getAttribute('content')
+}
+
+export async function validateFiles(files) {
+  // check for index.html file
+  if (!files['index.html']) {
+    return {
+      valid: false,
+      error: 'Missing index.html file',
+    }
+  }
+
+  const pageBlob = files['index.html']
+  let htmlString = await pageBlob.text()
+  const parser = new DOMParser()
+  const doc = parser.parseFromString(htmlString, 'text/html')
+
+  // check for <head> tag
+  if (!doc.head) {
+    return {
+      valid: false,
+      error:
+        'Missing <head> tag in index.html. Please refer to the Interactive OBJKTs Guide..',
+    }
+  }
+
+  return {
+    valid: true,
+  }
 }
 
 export function dataRUIToBuffer(dataURI) {
