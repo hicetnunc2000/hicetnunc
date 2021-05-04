@@ -160,16 +160,12 @@ class HicetnuncContextProviderClass extends Component {
           )
           .then((op) =>
             op.confirmation(1).then(() => {
+              this.setState({ op: op.hash }) // save hash
               // if everything goes okay, show the success message and redirect to profile
               this.state.setFeedback({
                 message: 'OBJKT minted successfully',
-                progress: false,
-                confirm: true,
-                confirmCallback: () => {
-                  this.setState({ op: op.hash }) // save hash
-                  this.state.setFeedback({ visible: false }) // hide popup
-                  props.history.push(PATH.FEED) // redirect to homepage
-                },
+                progress: true,
+                confirm: false,
               })
             })
           )
@@ -177,11 +173,8 @@ class HicetnuncContextProviderClass extends Component {
             // if any error happens
             this.state.setFeedback({
               message: 'an error occurred ❌',
-              progress: false,
-              confirm: true,
-              confirmCallback: () => {
-                this.state.setFeedback({ visible: false }) // hide popup
-              },
+              progress: true,
+              confirm: false,
             })
           })
       },
@@ -399,7 +392,7 @@ class HicetnuncContextProviderClass extends Component {
           title: title,
         })
       },
-      hDAO_vote : ls.get('hDAO_vote')
+      hDAO_vote: ls.get('hDAO_vote'),
     }
   }
 
