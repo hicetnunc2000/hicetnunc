@@ -94,11 +94,10 @@ export const Mint = () => {
     }
 
     // TESTING
-    console.log('ntfCid', nftCid)
-    window.location = `https://ipfs.io/ipfs/${nftCid.path}`
+    // console.log('ntfCid', nftCid)
+    // window.location = `https://ipfs.io/ipfs/${nftCid.path}`
 
-    // RE-ENABLE WHEN DONE
-    // mint(getAuth(), amount, nftCid.path, royalties)
+    mint(getAuth(), amount, nftCid.path, royalties)
 
     // OLD CODE FOR REFERENCE
     // mint(getAuth(), amount, nftCid.path, royalties)
