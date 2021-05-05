@@ -53,10 +53,13 @@ const filterFeeds = (original) => {
  */
 export const GetLatestFeed = async ({ counter, max_time }) => {
   return new Promise((resolve, reject) => {
-    axios.get(process.env.REACT_APP_FEED, { 
-      params: {counter: counter, max_time: max_time }}).then((res) => {
-      resolve(filterFeeds(res.data.result))
-    })
+    axios
+      .get(process.env.REACT_APP_FEED, {
+        params: { counter: counter, max_time: max_time },
+      })
+      .then((res) => {
+        resolve(filterFeeds(res.data.result))
+      })
   })
 }
 
@@ -67,7 +70,8 @@ export const GethDAOFeed = async ({ counter }) => {
   return new Promise((resolve, reject) => {
     axios
       .get(process.env.REACT_APP_FEED_HDAO, {
-        params: {counter: counter } })
+        params: { counter: counter },
+      })
       .then((res) => {
         resolve(filterFeeds(res.data.result))
       })
@@ -81,7 +85,8 @@ export const GetFeaturedFeed = async ({ counter, max_time }) => {
   return new Promise((resolve, reject) => {
     axios
       .get(process.env.REACT_APP_FEATURED, {
-        params: {counter: counter, max_time: max_time } })
+        params: { counter: counter, max_time: max_time },
+      })
       .then((res) => {
         resolve(filterFeeds(res.data.result))
       })
@@ -95,7 +100,8 @@ export const GetRandomFeed = async ({ counter }) => {
   return new Promise((resolve, reject) => {
     axios
       .get(process.env.REACT_APP_RANDOM, {
-        params: { counter: counter }})
+        params: { counter: counter },
+      })
       .then((res) => {
         resolve(filterFeeds(res.data.result))
       })
@@ -109,7 +115,7 @@ export const GetOBJKT = async ({ id }) => {
   return new Promise((resolve, reject) => {
     axios
       .get(process.env.REACT_APP_OBJKT, {
-        params: {id: id} 
+        params: { id: id },
       })
       .then((res) => {
         resolve(res.data.result)
@@ -119,7 +125,23 @@ export const GetOBJKT = async ({ id }) => {
 }
 
 /**
- * Get User Metaata from tzkt.io
+ * Get OBJKT detail page
+ */
+export const GetTags = async ({ tag, page }) => {
+  return new Promise((resolve, reject) => {
+    axios
+      .get(process.env.REACT_APP_TAGS, {
+        params: { tag, page },
+      })
+      .then((res) => {
+        resolve(res.data.result)
+      })
+      .catch((e) => reject(e)) // TODO: send error message to context. have an error component to display the error
+  })
+}
+
+/**
+ * Get User Metadata from tzkt.io
  */
 export const GetUserMetadata = async (walletAddr) => {
   return await axios.get(

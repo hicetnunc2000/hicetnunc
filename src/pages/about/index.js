@@ -22,7 +22,7 @@ export class About extends Component {
 
   render() {
     return (
-      <Page title="about">
+      <Page title="about" large>
         <Container>
           <Padding>
             <strong>hic et nunc</strong>
@@ -89,6 +89,23 @@ export class About extends Component {
                 </Primary>
               </Button>
             </div>
+          </Padding>
+        </Container>
+        <Container>
+          <Padding>
+            <p>Community tools:</p>&nbsp;
+            <Button href="https://projects.stroep.nl/hicetnunc">
+              <Primary>
+                <strong>hicetnunc discovery</strong>
+              </Primary>
+            </Button>
+            {false && (
+              <Button href="https://projects.stroep.nl/hicetnunc">
+                <Primary>
+                  <strong>example tool2</strong>
+                </Primary>
+              </Button>
+            )}
           </Padding>
         </Container>
 

@@ -1,0 +1,39 @@
+.container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--background-color);
+  z-index: 900;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .content {
+    color: var(--text-color);
+    min-width: 300px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+
+    .message {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      margin: 20px 0 50px 0;
+
+      & > * {
+        margin-bottom: 1rem;
+      }
+    }
+
+    .buttons {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+}

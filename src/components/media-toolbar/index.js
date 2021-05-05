@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
-import {AnimatePresence} from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
+import { fadeIn } from '../../utils/motion'
 import { Button, Purchase } from '../button'
 import { IPFS_DIRECTORY_MIMETYPE } from '../../constants'
 import styles from './index.module.scss'
@@ -32,28 +33,28 @@ export const MediaToolbar = (props) => {
           <div className={styles.button} onClick={toggle}>
             i
           </div>
-          
+
           <AnimatePresence>
-          {open &&
-            <div className={styles.modal}>
-              <div className={styles.bg}></div>
-              <div className={styles.box}>
-                Interactive OBJKTs can see your wallet address. This lets them
-                do interesting things like generate unique content.
-                <br />
-                <br />
-                Please be mindful of this when allowing features like camera and
-                microphone.
-                <br />
-                <br />
-                <div className={styles.buttons}>
-                  <Button onClick={toggle}>
-                    <Purchase>Got it!</Purchase>
-                  </Button>
+            {open && (
+              <motion.div className={styles.modal} {...fadeIn()}>
+                <div className={styles.bg}></div>
+                <div className={styles.box}>
+                  Interactive OBJKTs can see your wallet address. This lets them
+                  do interesting things like generate unique content.
+                  <br />
+                  <br />
+                  Please be mindful of this when allowing features like camera
+                  and microphone.
+                  <br />
+                  <br />
+                  <div className={styles.buttons}>
+                    <Button onClick={toggle}>
+                      <Purchase>Got it!</Purchase>
+                    </Button>
+                  </div>
                 </div>
-              </div>
-            </div>
-}
+              </motion.div>
+            )}
           </AnimatePresence>
         </div>
       )}
