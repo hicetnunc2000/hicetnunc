@@ -63,7 +63,6 @@ export const ItemInfo = ({
   }
 
   const curateOrClaim = (id, balance = 0) => {
-    console.log('curate of claim', id, balance)
     // if user is creator and there's hDAO balance
     if (acc.address === token_info.creators[0] && balance > 0) {
       claim_hDAO(balance, id)
