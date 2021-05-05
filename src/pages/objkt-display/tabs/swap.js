@@ -16,6 +16,21 @@ export const Swap = ({ total_amount, owners, token_info, address }) => {
   const [progress, setProgress] = useState(false)
   const [message, setMessage] = useState('')
 
+  const checkPrice = (value) => {
+    if (value <= 0.1) {
+      setPrice(value)
+      setMessage("please note that items intended to be giveaways can be collected in multiple editions and resold in large quantities. please ensure you are happy with the quantity and price chosen before swapping")
+    } else {
+      setPrice(value)
+      setMessage("")
+    }
+
+    if (value == "") {
+      setPrice(value)
+      setMessage("")
+    }
+  }
+
   const handleSubmit = () => {
     if (!amount || amount === '' || !price || price === '') {
       // simple validation for now
@@ -58,7 +73,7 @@ export const Swap = ({ total_amount, owners, token_info, address }) => {
             placeholder="price per OBJKT (in tez)"
             min={0}
             max={10000}
-            onChange={(e) => setPrice(e.target.value)}
+            onChange={(e) => checkPrice(e.target.value)}
             disabled={progress}
           />
           <Button onClick={handleSubmit} fit disabled={progress}>
