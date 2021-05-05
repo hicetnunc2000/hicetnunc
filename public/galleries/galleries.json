@@ -1,9 +1,9 @@
 [
   {
-    "uid": "cronopios",
-    "name": "Cronopios",
-    "endpoint": "/galleries/cronopios.json",
-    "thumbnail": "54715"
+    "uid": "pupiladilatada",
+    "name": "Pupila Dilatada",
+    "endpoint": "/galleries/pupiladilatada.json",
+    "thumbnail": "833"
   },
   {
     "uid": "objkt4objkt",
@@ -12,15 +12,21 @@
     "thumbnail": "12077"
   },
   {
-    "uid": "pupiladilatada",
-    "name": "Pupila Dilatada",
-    "endpoint": "/galleries/pupiladilatada.json",
-    "thumbnail": "833"
-  },
-  {
     "uid": "thefen",
     "name": "The FEN",
     "endpoint": "https://raw.githubusercontent.com/joanielemercier/The_fen/main/thefen.json",
     "thumbnail": "34413"
+  },
+  {
+    "uid": "nfxtspace",
+    "name": "NFXT SPACE",
+    "endpoint": "/galleries/nfxt_space.json",
+    "thumbnail": "54291"
+  },
+  {
+    "uid": "cronopios",
+    "name": "Cronopios",
+    "endpoint": "/galleries/cronopios.json",
+    "thumbnail": "54715"
   }
 ]
