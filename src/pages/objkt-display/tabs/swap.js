@@ -17,7 +17,6 @@ export const Swap = ({ total_amount, owners, token_info, address }) => {
   const [message, setMessage] = useState('')
 
   const checkPrice = (value) => {
-    console.log(value);
     if (value <= 0.1) {
       setMessage("please note that items intended to be giveaways can be collected in multiple editions and resold in large quantities. please ensure you are happy with the quantity and price chosen before swapping")
     } else {
