@@ -120,7 +120,7 @@ export const GetOBJKT = async ({ id }) => {
       .then((res) => {
         resolve(res.data.result)
       })
-      .catch((e) => reject(e)) // TODO: send error message to context. have an error component to display the error
+      .catch((e) => reject(e))
   })
 }
 
