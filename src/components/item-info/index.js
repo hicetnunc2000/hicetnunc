@@ -12,13 +12,15 @@ export const ItemInfo = ({
   token_info,
   owners,
   swaps,
-  transfered,
+  // transfered,
   feed,
-  total_amount,
+  // total_amount,
   hDAO_balance,
   isDetailView,
 }) => {
-  const { syncTaquito, collect, curate, acc } = useContext(HicetnuncContext)
+  const { syncTaquito, collect, curate, claim_hDAO, acc } = useContext(
+    HicetnuncContext
+  )
   const reducer = (accumulator, currentValue) =>
     parseInt(accumulator) + parseInt(currentValue)
 
@@ -31,7 +33,6 @@ export const ItemInfo = ({
     total = _.keys(owners).includes('tz1burnburnburnburnburnburnburjAYjjX')
       ? total - owners['tz1burnburnburnburnburnburnburjAYjjX']
       : total
-    //total = total - owners['tz1burnburnburnburnburnburnburjAYjjX']
   } catch (e) {
     total =
       _.values(owners).length !== 0 ? _.values(owners).reduce(reducer) : 'X'
@@ -59,6 +60,23 @@ export const ItemInfo = ({
     } else {
       collect(1, s.swap_id, s.xtz_per_objkt * 1)
     }
+  }
+
+  const curateOrClaim = (id, balance = 0) => {
+    // if user is creator and there's hDAO balance
+    if (acc.address === token_info.creators[0] && balance > 0) {
+      claim_hDAO(balance, id)
+    } else {
+      curate(id)
+    }
+  }
+
+  const renderHDAObutton = (id, balance) => {
+    return (
+      <Button onClick={() => curateOrClaim(id, balance)}>
+        <Primary>〇{balance ? `(${hDAO_balance})` : ''}</Primary>
+      </Button>
+    )
   }
 
   return (
@@ -101,12 +119,7 @@ export const ItemInfo = ({
           </Button>
         )}
         {feed ? (
-          <div>
-            <Button onClick={() => curate(token_id)}>
-              <Primary>〇</Primary>
-            </Button>
-            <div>{hDAO_balance}</div>
-          </div>
+          <div>{renderHDAObutton(token_id, hDAO_balance)}</div>
         ) : (
           <Button onClick={() => handleCollect()}>
             <Purchase>{message}</Purchase>
@@ -114,20 +127,7 @@ export const ItemInfo = ({
         )}
       </div>
       <div className={styles.container}>
-        {!feed && (
-          <div>
-            <Button onClick={() => curate(token_id)}>
-              <Primary>〇</Primary>
-            </Button>
-          </div>
-        )}
-        <div>
-          {false && (
-            <Button onClick={() => alert('report')}>
-              <Primary>Report</Primary>
-            </Button>
-          )}
-        </div>
+        {!feed && <div>{renderHDAObutton(token_id, hDAO_balance)}</div>}
       </div>
     </>
   )
