@@ -3,7 +3,6 @@ import { withRouter } from 'react-router'
 import { BeaconWallet } from '@taquito/beacon-wallet'
 import { TezosToolkit } from '@taquito/taquito'
 import { setItem } from '../utils/storage'
-import { PATH } from '../constants'
 
 const { NetworkType } = require('@airgap/beacon-sdk')
 var ls = require('local-storage')
@@ -220,6 +219,7 @@ class HicetnuncContextProviderClass extends Component {
       },
 
       claim_hDAO: async (hDAO_amount, objkt_id) => {
+        console.log('claiming', hDAO_amount, objkt_id)
         await Tezos.wallet
           .at('KT1TybhR7XraG75JFYKSrh7KnxukMBT5dor6')
           .then((c) => {
