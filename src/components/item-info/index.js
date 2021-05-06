@@ -74,7 +74,7 @@ export const ItemInfo = ({
   const renderHDAObutton = (id, balance) => {
     return (
       <Button onClick={() => curateOrClaim(id, balance)}>
-        <Primary>〇{balance ? `(${hDAO_balance})` : ''}</Primary>
+        <Primary>〇{balance ? ` ${hDAO_balance}` : ''}</Primary>
       </Button>
     )
   }

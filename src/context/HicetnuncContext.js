@@ -3,6 +3,7 @@ import { withRouter } from 'react-router'
 import { BeaconWallet } from '@taquito/beacon-wallet'
 import { TezosToolkit } from '@taquito/taquito'
 import { setItem } from '../utils/storage'
+import { KeyStoreUtils } from 'conseiljs-softsigner'
 
 const { NetworkType } = require('@airgap/beacon-sdk')
 var ls = require('local-storage')
@@ -60,7 +61,7 @@ class HicetnuncContextProviderClass extends Component {
       // --------------------
       feedback: {
         visible: false, // show or hide the component
-        message: 'OBJKT minted successfully.', // what message to display?
+        message: 'OBJKT minted', // what message to display?
         progress: true, // do we need to display a progress indicator?
         confirm: true, // do we display a confirm button?
         confirmCallback: () => null, // any function to run when the user clicks confirm
@@ -214,7 +215,7 @@ class HicetnuncContextProviderClass extends Component {
           .then((amt) => {
             Tezos.wallet
               .at(this.state.objkt)
-              .then((c) => c.methods.curate(amt, objkt_id).send())
+              .then((c) => c.methods.curate(ls.get('hDAO_config') != null ? parseInt(ls.get('hDAO_config')) : amt, objkt_id).send())
           })
       },
 
@@ -260,6 +261,15 @@ class HicetnuncContextProviderClass extends Component {
             c.methods.cancel_swap(parseFloat(swap_id)).send({ amount: 0 })
           )
           .catch((e) => e)
+      },
+
+      sign: async (payload) => {
+        const signedPayload = await wallet.client.requestSignPayload(payload);
+        const signature = signedPayload
+        console.log(signature.signature, payload.payload, await wallet.getPKH())
+        const r = await KeyStoreUtils.checkSignature(signature.signature, payload.payload, await wallet.getPKH())
+        // await axios.get('https://tezos-prod.cryptonomic-infra.tech/chains/main/blocks/head/context/contracts/tz1MoQCkE6kcB6CxwFjBRf9XrbxpkELFZE1u/manager_key').then(res => res.data)
+        console.log(r)
       },
 
       load: false,
