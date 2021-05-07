@@ -31,18 +31,33 @@ export default class Display extends Component {
     objkts: [],
     creations: [],
     collection: [],
-    collectionState: false,
+    swaps: [],
     creationsState: true,
+    collectionState: false,
+    swapsState: false,
     hdao: 0,
   }
 
   componentWillMount = async () => {
     this.context.setPath(window.location.pathname)
-
-    if (window.location.pathname.split('/')[3] === "collection") {
-      this.setState( {collectionState: true, creationsState: false })
-    } else {
-      this.setState( {collectionState: false, creationsState: true })
+    if (window.location.pathname.split('/')[3] === 'creations') {
+      this.setState({
+        creationsState: true,
+        collectionState: false,
+        swapsState: false,
+      })
+    } else if (window.location.pathname.split('/')[3] === 'collection') {
+      this.setState({
+        creationsState: false,
+        collectionState: true,
+        swapsState: false,
+      })
+    } else if (window.location.pathname.split('/')[3] === 'swaps') {
+      this.setState({
+        creationsState: false,
+        collectionState: false,
+        swapsState: true,
+      })
     }
 
     await GetUserMetadata(this.state.wallet).then((data) => {
@@ -65,7 +80,9 @@ export default class Display extends Component {
         this.setState({
           hdao: res.data.hdao / 1_000_000,
         })
+
         const sanitised = SanitiseOBJKT(res.data.result)
+        console.log('sanitised', sanitised)
         const creations = sanitised.filter(
           (e) => this.state.wallet === e.token_info.creators[0]
         )
