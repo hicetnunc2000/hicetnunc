@@ -19,15 +19,17 @@ export const Swap = ({ total_amount, owners, token_info, address }) => {
   const checkPrice = (value) => {
     if (value <= 0.1) {
       setPrice(value)
-      setMessage("please note that items intended to be giveaways can be collected in multiple editions and resold in large quantities. please ensure you are happy with the quantity and price chosen before swapping")
+      setMessage(
+        'please note that items intended to be giveaways can be collected in multiple editions and resold in large quantities. please ensure you are happy with the quantity and price chosen before swapping'
+      )
     } else {
       setPrice(value)
-      setMessage("")
+      setMessage('')
     }
 
-    if (value == "") {
+    if (value == '') {
       setPrice(value)
-      setMessage("")
+      setMessage('')
     }
   }
 

@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
 import { Container, Padding, Page } from '../../components/layout'
-import { RequestSignPayloadInput, SigningType } from "@airgap/beacon-sdk"
-import { char2Bytes } from "@taquito/utils"
+import { RequestSignPayloadInput, SigningType } from '@airgap/beacon-sdk'
+import { char2Bytes } from '@taquito/utils'
 
 const ls = require('local-storage')
 /* .split('')
@@ -16,7 +16,7 @@ export class Config extends Component {
 
   state = {
     vote: 0,
-    string: ''
+    string: '',
   }
 
   componentWillMount = () => this.context.hDAO_vote
@@ -36,17 +36,22 @@ export class Config extends Component {
   // config alias
 
   alias_config = async () => {
-
-    const bytes = "05" + char2Bytes(JSON.stringify({ alias: this.state.alias, description: this.state.description }))
+    const bytes =
+      '05' +
+      char2Bytes(
+        JSON.stringify({
+          alias: this.state.alias,
+          description: this.state.description,
+        })
+      )
     console.log(bytes)
     const payload = {
       signingType: SigningType.MICHELINE,
       payload: bytes,
-      sourceAddress: this.context.addr
+      sourceAddress: this.context.addr,
     }
     console.log(payload)
     this.context.sign(payload)
-
   }
 
   hDAO_config = () => {
@@ -64,8 +69,15 @@ export class Config extends Component {
               <button onClick={this.alias_config}>config</button>
             </div> */}
             <div>
-              <input type="text" name="vote" onChange={this.handleChange} placeholder='○'></input>
-              <p style={{ fontSize: '12px' }}>hic et nunc DAO ○ curation parameter</p>
+              <input
+                type="text"
+                name="vote"
+                onChange={this.handleChange}
+                placeholder="○"
+              ></input>
+              <p style={{ fontSize: '12px' }}>
+                hic et nunc DAO ○ curation parameter
+              </p>
               <button onClick={this.hDAO_config}>config</button>
             </div>
             {/*             <div>
