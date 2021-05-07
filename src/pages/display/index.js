@@ -128,7 +128,7 @@ export default class Display extends Component {
 
   render() {
     return (
-      <Page title={this.state.wallet}>
+      <Page title={this.state.alias}>
         <Container>
           <Padding>
             <div className={styles.profile}>
