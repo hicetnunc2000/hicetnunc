@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
 import { Container, Padding, Page } from '../../components/layout'
-import { RequestSignPayloadInput, SigningType } from '@airgap/beacon-sdk'
+import { SigningType } from '@airgap/beacon-sdk'
 import { char2Bytes } from '@taquito/utils'
 
 const ls = require('local-storage')

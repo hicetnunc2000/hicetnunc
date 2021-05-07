@@ -31,10 +31,10 @@ export default class Display extends Component {
     objkts: [],
     creations: [],
     collection: [],
-    swaps: [],
+    market: [],
     creationsState: true,
     collectionState: false,
-    swapsState: false,
+    marketState: false,
     hdao: 0,
   }
 
@@ -44,19 +44,19 @@ export default class Display extends Component {
       this.setState({
         creationsState: true,
         collectionState: false,
-        swapsState: false,
+        marketState: false,
       })
     } else if (window.location.pathname.split('/')[3] === 'collection') {
       this.setState({
         creationsState: false,
         collectionState: true,
-        swapsState: false,
+        marketState: false,
       })
-    } else if (window.location.pathname.split('/')[3] === 'swaps') {
+    } else if (window.location.pathname.split('/')[3] === 'market') {
       this.setState({
         creationsState: false,
         collectionState: false,
-        swapsState: true,
+        marketState: true,
       })
     }
 
@@ -90,11 +90,28 @@ export default class Display extends Component {
           (e) => this.state.wallet !== e.token_info.creators[0]
         )
 
+        const market = {}
+
+        // filter market that were created by the user
+        Object.keys(res.data.swaps).forEach((e) => {
+          const id = Number(e)
+
+          const found = sanitised.find((e) => {
+            return e.token_id === id
+          })
+
+          // if OBJKT wasn't found on the creations then its a swap of someone
+          // else OBJKT.
+          if (!found) {
+            market[e] = res.data.swaps[e]
+          }
+        })
+
         this.setState({
           creations: creations.sort(sortByTokenId),
           loading: false,
           collection: collection.sort(sortByTokenId),
-          swaps: res.data.swaps,
+          market,
         })
       })
   }
@@ -103,7 +120,7 @@ export default class Display extends Component {
     this.setState({
       creationsState: true,
       collectionState: false,
-      swapsState: false,
+      marketState: false,
     })
     this.props.history.push(`/tz/${this.state.wallet}`)
   }
@@ -112,18 +129,18 @@ export default class Display extends Component {
     this.setState({
       creationsState: false,
       collectionState: true,
-      swapsState: false,
+      marketState: false,
     })
     this.props.history.push(`/tz/${this.state.wallet}/collection`)
   }
 
-  swaps = () => {
+  market = () => {
     this.setState({
       creationsState: false,
       collectionState: false,
-      swapsState: true,
+      marketState: true,
     })
-    this.props.history.push(`/tz/${this.state.wallet}/swaps`)
+    this.props.history.push(`/tz/${this.state.wallet}/market`)
   }
 
   render() {
@@ -271,8 +288,8 @@ export default class Display extends Component {
                 </Primary>
               </Button>
 
-              <Button onClick={this.swaps}>
-                <Primary selected={this.state.swapsState}>swaps</Primary>
+              <Button onClick={this.market}>
+                <Primary selected={this.state.marketState}>market</Primary>
               </Button>
             </div>
           </Padding>
@@ -286,7 +303,7 @@ export default class Display extends Component {
           </Container>
         )}
 
-        {this.state.creationsState && (
+        {!this.state.loading && this.state.creationsState && (
           <Container xlarge>
             <ResponsiveMasonry>
               {this.state.creations.map((nft, i) => {
@@ -312,7 +329,7 @@ export default class Display extends Component {
           </Container>
         )}
 
-        {this.state.collectionState && (
+        {!this.state.loading && this.state.collectionState && (
           <Container xlarge>
             <ResponsiveMasonry>
               {this.state.collection.map((nft, i) => {
@@ -337,9 +354,18 @@ export default class Display extends Component {
           </Container>
         )}
 
-        {this.state.swapsState && (
+        {!this.state.loading && this.state.marketState && (
           <>
-            {Object.keys(this.state.swaps).map((key) => {
+            {Object.keys(this.state.market).length === 0 && (
+              <Container>
+                <Padding>
+                  <p>
+                    You currently don't have any OBJKT on the secondary market.
+                  </p>
+                </Padding>
+              </Container>
+            )}
+            {Object.keys(this.state.market).map((key) => {
               return (
                 <Container key={key}>
                   <Padding>
