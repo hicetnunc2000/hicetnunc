@@ -215,7 +215,16 @@ class HicetnuncContextProviderClass extends Component {
           .then((amt) => {
             Tezos.wallet
               .at(this.state.objkt)
-              .then((c) => c.methods.curate(ls.get('hDAO_config') != null ? parseInt(ls.get('hDAO_config')) : amt, objkt_id).send())
+              .then((c) =>
+                c.methods
+                  .curate(
+                    ls.get('hDAO_config') != null
+                      ? parseInt(ls.get('hDAO_config'))
+                      : amt,
+                    objkt_id
+                  )
+                  .send()
+              )
           })
       },
 
@@ -264,10 +273,14 @@ class HicetnuncContextProviderClass extends Component {
       },
 
       sign: async (payload) => {
-        const signedPayload = await wallet.client.requestSignPayload(payload);
+        const signedPayload = await wallet.client.requestSignPayload(payload)
         const signature = signedPayload
         console.log(signature.signature, payload.payload, await wallet.getPKH())
-        const r = await KeyStoreUtils.checkSignature(signature.signature, payload.payload, await wallet.getPKH())
+        const r = await KeyStoreUtils.checkSignature(
+          signature.signature,
+          payload.payload,
+          await wallet.getPKH()
+        )
         // await axios.get('https://tezos-prod.cryptonomic-infra.tech/chains/main/blocks/head/context/contracts/tz1MoQCkE6kcB6CxwFjBRf9XrbxpkELFZE1u/manager_key').then(res => res.data)
         console.log(r)
       },
