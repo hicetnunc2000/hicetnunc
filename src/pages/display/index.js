@@ -82,7 +82,7 @@ export default class Display extends Component {
         })
 
         const sanitised = SanitiseOBJKT(res.data.result)
-        console.log('sanitised', sanitised)
+
         const creations = sanitised.filter(
           (e) => this.state.wallet === e.token_info.creators[0]
         )
@@ -94,52 +94,36 @@ export default class Display extends Component {
           creations: creations.sort(sortByTokenId),
           loading: false,
           collection: collection.sort(sortByTokenId),
+          swaps: res.data.swaps,
         })
-
-        /*
-        let totalCreations = creations.length
-        let total = 0
-                 const loadOwners = async (id, index) => {
-          const owners = await axios
-            .get(
-              `https://api.better-call.dev/v1/contract/mainnet/KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton/tokens/holders?token_id=${id}`
-            )
-            .then((res) => res.data)
-          // add owners to creations array
-          creations[index].owners = [...Object.keys(owners)]
-          total++
-          // all loaded
-          if (total === totalCreations) {
-            this.setState({
-              objkts: sanitised,
-              creations: creations.filter(
-                (e) =>
-                  e.owners.indexOf('tz1burnburnburnburnburnburnburjAYjjX') ===
-                  -1
-              ),
-              collection: sanitised.filter(
-                (e) => this.state.wallet !== e.token_info.creators[0]
-              ),
-              loading: false,
-            })
-          }
-        }
-        // load all owners
-        for (let i = 0; i < creations.length; i++) {
-          loadOwners(creations[i].token_id, i)
-          console.log()
-        } */
       })
   }
 
   creations = () => {
-    this.setState({ collectionState: false, creationsState: true })
+    this.setState({
+      creationsState: true,
+      collectionState: false,
+      swapsState: false,
+    })
     this.props.history.push(`/tz/${this.state.wallet}`)
   }
 
   collection = () => {
-    this.setState({ collectionState: true, creationsState: false })
+    this.setState({
+      creationsState: false,
+      collectionState: true,
+      swapsState: false,
+    })
     this.props.history.push(`/tz/${this.state.wallet}/collection`)
+  }
+
+  swaps = () => {
+    this.setState({
+      creationsState: false,
+      collectionState: false,
+      swapsState: true,
+    })
+    this.props.history.push(`/tz/${this.state.wallet}/swaps`)
   }
 
   render() {
@@ -286,6 +270,10 @@ export default class Display extends Component {
                   collection
                 </Primary>
               </Button>
+
+              <Button onClick={this.swaps}>
+                <Primary selected={this.state.swapsState}>swaps</Primary>
+              </Button>
             </div>
           </Padding>
         </Container>
@@ -347,6 +335,24 @@ export default class Display extends Component {
               })}
             </ResponsiveMasonry>
           </Container>
+        )}
+
+        {this.state.swapsState && (
+          <>
+            {Object.keys(this.state.swaps).map((key) => {
+              return (
+                <Container key={key}>
+                  <Padding>
+                    <Button to={`${PATH.OBJKT}/${key}`}>
+                      <Primary>
+                        <strong>OBJKT#{key}</strong>
+                      </Primary>
+                    </Button>
+                  </Padding>
+                </Container>
+              )
+            })}
+          </>
         )}
       </Page>
     )
