@@ -257,6 +257,7 @@ export const Mint = () => {
                 onChange={(e) => setDescription(e.target.value)}
                 placeholder="description"
                 label="description"
+                maxlength="2000"
                 value={description}
               />
 
