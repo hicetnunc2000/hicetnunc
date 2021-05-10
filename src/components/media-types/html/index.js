@@ -148,7 +148,6 @@ export const HTMLComponent = ({
         src={`${src}?creator=${_creator_}&viewer=${_viewer_}`}
         sandbox="allow-scripts allow-same-origin"
         allow="accelerometer; camera; gyroscope; microphone; xr-spatial-tracking;"
-        scrolling="no"
       />
     </div>
   )
