@@ -61,11 +61,8 @@ export const renderMediaType = (props) => {
         url = getInfuraUrl(path)
       }
       let displayUri = ''
-      if (metadata && metadata.token_info && metadata.token_info.displayUri) {
-        displayUri = metadata.token_info.displayUri.replace(
-          'ipfs://',
-          CLOUDFLARE
-        )
+      if (metadata && metadata.display_uri) {
+        displayUri = metadata.display_uri.replace('ipfs://', CLOUDFLARE)
       }
       return (
         <Container interactive={interactive}>
