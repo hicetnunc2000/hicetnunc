@@ -6,7 +6,7 @@
     "@airgap/beacon-sdk": "^2.2.6",
     "@babel/core": "^7.14.0",
     "@taquito/beacon-wallet": "^9.0.0",
-    "@taquito/taquito": "^9.0.0",
+    "@taquito/taquito": "^9.0.1",
     "@testing-library/jest-dom": "^5.12.0",
     "@testing-library/react": "^11.2.6",
     "@testing-library/user-event": "^13.1.8",
