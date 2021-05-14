@@ -31,13 +31,34 @@ export default class Display extends Component {
     objkts: [],
     creations: [],
     collection: [],
-    collectionState: false,
+    market: [],
     creationsState: true,
+    collectionState: false,
+    marketState: false,
     hdao: 0,
   }
 
   componentWillMount = async () => {
     this.context.setPath(window.location.pathname)
+    if (window.location.pathname.split('/')[3] === 'creations') {
+      this.setState({
+        creationsState: true,
+        collectionState: false,
+        marketState: false,
+      })
+    } else if (window.location.pathname.split('/')[3] === 'collection') {
+      this.setState({
+        creationsState: false,
+        collectionState: true,
+        marketState: false,
+      })
+    } else if (window.location.pathname.split('/')[3] === 'market') {
+      this.setState({
+        creationsState: false,
+        collectionState: false,
+        marketState: true,
+      })
+    }
 
     await GetUserMetadata(this.state.wallet).then((data) => {
       if (data.data.alias) this.setState({ alias: data.data.alias })
@@ -60,7 +81,9 @@ export default class Display extends Component {
         this.setState({
           hdao: res.data.hdao / 1_000_000,
         })
+
         const sanitised = SanitiseOBJKT(res.data.result)
+
         const creations = sanitised.filter(
           (e) => this.state.wallet === e.token_info.creators[0]
         )
@@ -68,57 +91,62 @@ export default class Display extends Component {
           (e) => this.state.wallet !== e.token_info.creators[0]
         )
 
+        const market = {}
+
+        // filter market that were created by the user
+        Object.keys(res.data.swaps).forEach((e) => {
+          const id = Number(e)
+
+          const found = sanitised.find((e) => {
+            return e.token_id === id
+          })
+
+          // if OBJKT wasn't found on the creations then its a swap of someone
+          // else OBJKT.
+          if (!found) {
+            market[e] = res.data.swaps[e]
+          }
+        })
+
         this.setState({
           creations: creations.sort(sortByTokenId),
           loading: false,
           collection: collection.sort(sortByTokenId),
+          market,
         })
-
-        /*
-        let totalCreations = creations.length
-        let total = 0
-                 const loadOwners = async (id, index) => {
-          const owners = await axios
-            .get(
-              `https://api.better-call.dev/v1/contract/mainnet/KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton/tokens/holders?token_id=${id}`
-            )
-            .then((res) => res.data)
-          // add owners to creations array
-          creations[index].owners = [...Object.keys(owners)]
-          total++
-          // all loaded
-          if (total === totalCreations) {
-            this.setState({
-              objkts: sanitised,
-              creations: creations.filter(
-                (e) =>
-                  e.owners.indexOf('tz1burnburnburnburnburnburnburjAYjjX') ===
-                  -1
-              ),
-              collection: sanitised.filter(
-                (e) => this.state.wallet !== e.token_info.creators[0]
-              ),
-              loading: false,
-            })
-          }
-        }
-        // load all owners
-        for (let i = 0; i < creations.length; i++) {
-          loadOwners(creations[i].token_id, i)
-          console.log()
-        } */
       })
   }
 
-  creations = () =>
-    this.setState({ collectionState: false, creationsState: true })
+  creations = () => {
+    this.setState({
+      creationsState: true,
+      collectionState: false,
+      marketState: false,
+    })
+    this.props.history.push(`/tz/${this.state.wallet}`)
+  }
 
-  collection = () =>
-    this.setState({ collectionState: true, creationsState: false })
+  collection = () => {
+    this.setState({
+      creationsState: false,
+      collectionState: true,
+      marketState: false,
+    })
+    this.props.history.push(`/tz/${this.state.wallet}/collection`)
+  }
+
+  market = () => {
+    this.setState({
+      creationsState: false,
+      collectionState: false,
+      marketState: true,
+    })
+    this.props.history.push(`/tz/${this.state.wallet}/market`)
+  }
 
   render() {
     return (
-      <Page title={this.state.wallet}>
+      <Page title={this.state.alias}>
         <Container>
           <Padding>
             <div className={styles.profile}>
@@ -279,6 +307,10 @@ export default class Display extends Component {
                   collection
                 </Primary>
               </Button>
+
+              <Button onClick={this.market}>
+                <Primary selected={this.state.marketState}>market</Primary>
+              </Button>
             </div>
           </Padding>
         </Container>
@@ -291,7 +323,7 @@ export default class Display extends Component {
           </Container>
         )}
 
-        {this.state.creationsState && (
+        {!this.state.loading && this.state.creationsState && (
           <Container xlarge>
             <ResponsiveMasonry>
               {this.state.creations.map((nft, i) => {
@@ -317,7 +349,7 @@ export default class Display extends Component {
           </Container>
         )}
 
-        {this.state.collectionState && (
+        {!this.state.loading && this.state.collectionState && (
           <Container xlarge>
             <ResponsiveMasonry>
               {this.state.collection.map((nft, i) => {
@@ -340,6 +372,33 @@ export default class Display extends Component {
               })}
             </ResponsiveMasonry>
           </Container>
+        )}
+
+        {!this.state.loading && this.state.marketState && (
+          <>
+            {Object.keys(this.state.market).length === 0 && (
+              <Container>
+                <Padding>
+                  <p>
+                    You currently don't have any OBJKT on the secondary market.
+                  </p>
+                </Padding>
+              </Container>
+            )}
+            {Object.keys(this.state.market).map((key) => {
+              return (
+                <Container key={key}>
+                  <Padding>
+                    <Button to={`${PATH.OBJKT}/${key}`}>
+                      <Primary>
+                        <strong>OBJKT#{key}</strong>
+                      </Primary>
+                    </Button>
+                  </Padding>
+                </Container>
+              )
+            })}
+          </>
         )}
       </Page>
     )
