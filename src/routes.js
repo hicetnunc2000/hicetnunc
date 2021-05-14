@@ -33,7 +33,7 @@ export const routes = [
   },
   {
     exact: false,
-    path: '/tz/:id',
+    path: '/tz/:id/:collection?',
     component: Display,
   },
   {
