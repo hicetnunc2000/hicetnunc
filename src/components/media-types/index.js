@@ -69,7 +69,6 @@ export const renderMediaType = (props) => {
         )
       }
 
-      console.log('andre', displayUri)
       // new
       // if (metadata && metadata.display_uri) {
       //   displayUri = metadata.display_uri.replace('ipfs://', CLOUDFLARE)
