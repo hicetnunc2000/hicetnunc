@@ -95,16 +95,21 @@ export default class Display extends Component {
 
         // filter market that were created by the user
         Object.keys(res.data.swaps).forEach((e) => {
-          const id = Number(e)
+          // all swaps include swaps on OBJKT you purchased and OBJKT you minted.
+          // setting it to false will only display OBJKT that you purchased and put up for sale
+          // but will NOT include your own art.
+          const allSwaps = true
 
-          const found = sanitised.find((e) => {
-            return e.token_id === id
-          })
-
-          // if OBJKT wasn't found on the creations then its a swap of someone
-          // else OBJKT.
-          if (!found) {
+          if (allSwaps) {
             market[e] = res.data.swaps[e]
+          } else {
+            const id = Number(e)
+            const found = sanitised.find((e) => {
+              return e.token_id === id
+            })
+            if (!found) {
+              market[e] = res.data.swaps[e]
+            }
           }
         })
 
