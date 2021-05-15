@@ -1,15 +1,21 @@
+import { update } from "lodash";
+
 let urlParams = new URLSearchParams(window.location.search);
 const urlTag = 't'
 
   // push the state in URL
 const updateHistory = () => {
-  window.history.pushState("", "",
+  window.history.replaceState("", "",
     `${window.location.origin}${window.location.pathname}?${urlParams}${window.location.hash}`
   )
 }
 
 export const getTags = () => {
   return urlParams.getAll(urlTag)
+}
+
+export const existsTags = () => {
+  return urlParams.getAll(urlTag).length > 0
 }
 
 export const setTag = (tag) => {
@@ -32,5 +38,10 @@ export const unsetTag = (tag) => {
   // replace current parameters
   urlParams = newUrlParams
 
+  updateHistory()
+}
+
+export const removeAllTags = () => {
+  urlParams.delete(urlTag)
   updateHistory()
 }

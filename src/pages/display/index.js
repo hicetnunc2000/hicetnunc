@@ -11,21 +11,14 @@ import { PATH } from '../../constants'
 import { VisuallyHidden } from '../../components/visually-hidden'
 import { GetUserMetadata } from '../../data/api'
 import { ResponsiveMasonry } from '../../components/responsive-masonry'
-import { getTags, setTag, unsetTag } from './query'
+import { buildTagObjects } from './tagHelper'
+import { TagBar } from './tagBar'
 import styles from './styles.module.scss'
 
 const axios = require('axios')
 
 const sortByTokenId = (a, b) => {
   return b.token_id - a.token_id
-}
-
-const filterUnique = (e, index, array) => {
-  return array.indexOf(e) === index
-}
-
-const sortByCount = (a, b) => {
-  return b.count - a.count
 }
 
 export default class Display extends Component {
@@ -103,25 +96,7 @@ export default class Display extends Component {
         )
 
         // create the tags list
-        const tagsCreations = {}
-
-        // array compositon is splitted in two just to count tags
-        // probably there's a better way
-        let tagsCreationsArray = creations.map(e => e.token_info.tags).flat()
-        tagsCreationsArray = tagsCreationsArray.filter(filterUnique)
-          .map((name) => {
-            const countTotal = (total, current) => {
-              return current === name ? total + 1 : total
-            };
-
-            return {
-              name: name,
-              count: tagsCreationsArray.reduce(countTotal, 0),
-              active: true,
-            }
-          })
-          .sort(sortByCount)
-          .forEach((tag) => tagsCreations[tag.name] = tag)
+        const tagsCreations = buildTagObjects(creations)
 
         const market = {}
 
@@ -365,87 +340,14 @@ export default class Display extends Component {
         {Object.keys(this.state.tagsCreations).length > 0 && this.state.creationsState &&
           <Container xlarge>
             <Padding>
-
-              {/* show/hide tags */}
-              <Button onClick={() => this.setState({ tagsShow: !this.state.tagsShow })}>
-                <Primary selected={this.state.tagsShow}>
-                  {this.state.tagsShow ? 'hide' : 'show'} tags
-                </Primary>
-              </Button>
-
-              {/* tags utilities */}
-              {this.state.tagsShow &&
-                <div className={styles.menu}>
-
-                  {/* enable all tags button */}
-                  <Button onClick={() => {
-                    const tagsCreations = { ...this.state.tagsCreations }
-                    for (const tag in tagsCreations) {
-                      tagsCreations[tag].active = true
-                    }
-                    this.setState({
-                      tagsCreations
-                    });
-                  }}>
-                    <Primary>enable all</Primary>
-                  </Button>
-
-                  {/* disable all tags button */}
-                  <Button onClick={() => {
-                    const tagsCreations = { ...this.state.tagsCreations }
-                    for (const tag in tagsCreations) {
-                      tagsCreations[tag].active = false
-                    }
-                    this.setState({
-                      tagsCreations
-                    });
-                  }}>
-                    <Primary>disable all</Primary>
-                  </Button>
-                </div>
-              }
-
-              {/* tags list */}
-              {this.state.tagsShow &&
-                <div className={styles.tagList}>
-                  {(() => {
-                    const tags = []
-                    for (const tagName in this.state.tagsCreations) {
-                      const tag = this.state.tagsCreations[tagName]
-
-                      // update state and url params on click
-                      const onClick = () => {
-                        const tagsCreations = { ...this.state.tagsCreations }
-                        tagsCreations[tagName].active = !tagsCreations[tagName].active
-                        this.setState({
-                          tagsCreations
-                        }, () => {
-                          if (tagsCreations[tagName].active) {
-                            setTag(tagName)
-                            return
-                          }
-                          unsetTag(tagName)
-                        });
-                      }
-
-                      // add tag button to returned array
-                      tags.push(
-                        <div
-                          key={tag.name}
-                          className={`${styles.tag} ${tag.active && styles.tagActive}`}
-                          onClick={onClick}
-                        >
-                          {/* an objkt with no tags contains a single tag with an empty string as name, display NO TAGS button */}
-                          {tag.name.length > 0 ? tag.name : "NO TAGS"} ({tag.count})
-                        </div>
-                      )
-                    }
-
-                    // return tag buttons array
-                    return tags
-                  })()}
-                </div>
-              }
+              <TagBar
+                tags={this.state.tagsCreations}
+                onUpdate={(newTags) => {
+                  this.setState({
+                    tagsCreations: newTags
+                  })
+                }}
+              ></TagBar>
             </Padding>
           </Container>
         }
