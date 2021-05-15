@@ -11,6 +11,7 @@ import { PATH } from '../../constants'
 import { VisuallyHidden } from '../../components/visually-hidden'
 import { GetUserMetadata } from '../../data/api'
 import { ResponsiveMasonry } from '../../components/responsive-masonry'
+import { getTags, setTag, unsetTag } from './query'
 import styles from './styles.module.scss'
 
 const axios = require('axios')
@@ -45,7 +46,7 @@ export default class Display extends Component {
     marketState: false,
     hdao: 0,
     tagsCreations: {},
-    tagsShow: false,
+    tagsShow: true,
   }
 
   componentWillMount = async () => {
@@ -375,6 +376,8 @@ export default class Display extends Component {
               {/* tags utilities */}
               {this.state.tagsShow &&
                 <div className={styles.menu}>
+
+                  {/* enable all tags button */}
                   <Button onClick={() => {
                     const tagsCreations = { ...this.state.tagsCreations }
                     for (const tag in tagsCreations) {
@@ -386,6 +389,8 @@ export default class Display extends Component {
                   }}>
                     <Primary>enable all</Primary>
                   </Button>
+
+                  {/* disable all tags button */}
                   <Button onClick={() => {
                     const tagsCreations = { ...this.state.tagsCreations }
                     for (const tag in tagsCreations) {
@@ -407,24 +412,36 @@ export default class Display extends Component {
                     const tags = []
                     for (const tagName in this.state.tagsCreations) {
                       const tag = this.state.tagsCreations[tagName]
+
+                      // update state and url params on click
                       const onClick = () => {
                         const tagsCreations = { ...this.state.tagsCreations }
                         tagsCreations[tagName].active = !tagsCreations[tagName].active
                         this.setState({
                           tagsCreations
+                        }, () => {
+                          if (tagsCreations[tagName].active) {
+                            setTag(tagName)
+                            return
+                          }
+                          unsetTag(tagName)
                         });
                       }
+
+                      // add tag button to returned array
                       tags.push(
                         <div
                           key={tag.name}
                           className={`${styles.tag} ${tag.active && styles.tagActive}`}
                           onClick={onClick}
                         >
-                          {/* an objkt with no tags contains a single tag with an empty string as name */}
+                          {/* an objkt with no tags contains a single tag with an empty string as name, display NO TAGS button */}
                           {tag.name.length > 0 ? tag.name : "NO TAGS"} ({tag.count})
                         </div>
                       )
                     }
+
+                    // return tag buttons array
                     return tags
                   })()}
                 </div>
