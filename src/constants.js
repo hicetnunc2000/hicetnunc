@@ -18,6 +18,7 @@ export const PATH = {
   FEED: '/',
   ISSUER: '/tz',
   ABOUT: '/about',
+  FAQ: '/faq',
   SYNC: '/sync',
   MINT: '/mint',
   OBJKT: '/objkt',
