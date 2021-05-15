@@ -3,25 +3,20 @@ import { HicetnuncContext } from '../../context/HicetnuncContext'
 import { Container, Padding, Page } from '../../components/layout'
 import { SigningType } from '@airgap/beacon-sdk'
 import { char2Bytes } from '@taquito/utils'
-const createClient = require('ipfs-http-client')
+const { create } = require('ipfs-http-client')
 const infuraUrl = 'https://ipfs.infura.io:5001'
 
 const ls = require('local-storage')
-/* .split('')
-                  .reduce(
-                    (hex, c) =>
-                      (hex += c.charCodeAt(0).toString(16).padStart(2, '0')),
-                    ''
-                  ) */
+
 export class Config extends Component {
   static contextType = HicetnuncContext
 
   state = {
     vote: 0,
-    personax: '',
+    subjkt: '',
     description: '',
     social_media: '',
-    personaxUri: ''
+    subjktUri: '' // uploads image
   }
 
   componentWillMount = () => {
@@ -35,12 +30,16 @@ export class Config extends Component {
 
   // config personax
 
-  personax_config = async () => {
+  subjkt_config = async () => {
 
-    const ipfs = createClient(infuraUrl)
+    const ipfs = create(infuraUrl)
 
-    this.context.registry(this.state.personax, await ipfs.add(Buffer.from(JSON.stringify({ description: this.state.description }))))
-    /*     const bytes =
+    this.context.registry(this.state.subjkt, await ipfs.add(Buffer.from(JSON.stringify({ description: this.state.description }))))
+    /*     
+
+    signature study
+    
+    const bytes =
           '05' +
           char2Bytes(
             JSON.stringify({
@@ -55,7 +54,9 @@ export class Config extends Component {
           sourceAddress: this.context.addr,
         }
         console.log(payload)
-        this.context.sign(payload) */
+        this.context.sign(payload) 
+        
+        */
   }
 
   hDAO_operators = () => {
@@ -67,18 +68,20 @@ export class Config extends Component {
     ls.set('hDAO_config', this.state.vote)
   }
 
+  // delete account
+
   render() {
     return (
       <Page>
         <Container>
           <Padding>
             <div>
-              <button onClick={this.hDAO_operators}>allow ○ operators</button>
+              <button onClick={this.hDAO_operators}>allow subjkt operators ○</button>
             </div>
             <div>
-              <input type="text" name="personax" onChange={this.handleChange} placeholder='personax'></input><br />
+              <input type="text" name="subjkt" onChange={this.handleChange} placeholder='subjkt'></input><br />
               <input type="text" name="description" onChange={this.handleChange} placeholder='description'></input><br />
-              <button onClick={this.personax_config}>config</button>
+              <button onClick={this.subjkt_config}>config</button>
             </div>
             <div>
               <input
@@ -92,9 +95,6 @@ export class Config extends Component {
               </p>
               <button onClick={this.hDAO_config}>config</button>
             </div>
-            {/*             <div>
-              <p>allow ○ operators</p>
-            </div> */}
           </Padding>
         </Container>
       </Page>
