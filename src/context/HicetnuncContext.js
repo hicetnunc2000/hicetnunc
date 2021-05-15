@@ -30,7 +30,7 @@ class HicetnuncContextProviderClass extends Component {
       // smart contracts
 
       hDAO : "KT1AFA2mwNUMNd4SsujE1YYp29vd8BZejyKW",
-      personax : "KT1C9M5vwnhdJnZjPRj5P7LgkuVQjj6uYWWo",
+      subjkt : "KT1P69B8exDGuqNysBweuZJSqAmaD4dU3gtU",
       objkt : 'KT1Hkg5qeNhfwpKW4fXvq7HGZB9z2EnmCCA9',
 
       // fullscreen. DO NOT CHANGE!
@@ -291,12 +291,12 @@ class HicetnuncContextProviderClass extends Component {
       },
 
       registry : async (alias, metadata) => {
-        return await Tezos.wallet.at(this.state.personax).then(c => c.methods.registry(alias.split('')
+        return await Tezos.wallet.at(this.state.subjkt).then(c => c.methods.registry(alias.split('')
         .reduce(
           (hex, c) =>
             (hex += c.charCodeAt(0).toString(16).padStart(2, '0')),
           ''
-        ), ("ipfs://" + metadata).split('')
+        ), ("ipfs://" + metadata.path).split('')
         .reduce(
           (hex, c) =>
             (hex += c.charCodeAt(0).toString(16).padStart(2, '0')),
@@ -309,7 +309,7 @@ class HicetnuncContextProviderClass extends Component {
           {
             add_operator: {
               owner: address,
-              operator: this.state.personax,
+              operator: this.state.subjkt,
               token_id: 0,
             },
           },
