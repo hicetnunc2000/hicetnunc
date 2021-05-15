@@ -146,6 +146,11 @@ export const Header = () => {
                         <Primary>about</Primary>
                       </Button>
                     </li>
+                    <li>
+                      <Button onClick={() => handleRoute('/faq')}>
+                        <Primary>faq</Primary>
+                      </Button>
+                    </li>
                   </ul>
                 </nav>
               </Padding>
