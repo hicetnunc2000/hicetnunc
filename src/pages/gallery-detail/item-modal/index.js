@@ -5,33 +5,29 @@ import { renderMediaType } from '../../../components/media-types'
 import { Button, Purchase } from '../../../components/button'
 import { PATH } from '../../../constants'
 import { GetUserMetadata } from '../../../data/api'
+import { ArtistLogo } from '../artist-icon'
 import styles from './styles.module.scss'
 
 export const ItemModal = ({ info }) => {
-  const [name, setName] = useState('')
-  const [profile, setProfile] = useState()
+  const [data, setData] = useState(false)
+  const creator = info.token_info.creators[0]
 
   let message = ''
   try {
+    const prices = info.swaps.map((s) => parseFloat(s.xtz_per_objkt))
+    prices.sort((a, b) => a - b)
     message =
-      info.swaps[0] !== undefined
-        ? 'collect for ' +
-          Number(info.swaps[0].xtz_per_objkt) / 1000000 +
-          ' tez'
+      prices[0] !== undefined
+        ? 'collect for ' + Number(prices[0]) / 1000000 + ' tez'
         : 'not for sale'
   } catch (e) {
     message = 'not for sale'
   }
 
   useEffect(() => {
-    const creator = info.token_info.creators[0]
-
     async function fetchData() {
-      await GetUserMetadata(creator).then((data) => {
-        setProfile(
-          `https://services.tzkt.io/v1/avatars2/${info.token_info.creators[0]}`
-        )
-        setName(data.data.alias)
+      await GetUserMetadata(creator).then((response) => {
+        setData(response.data)
       })
     }
     fetchData()
@@ -46,23 +42,32 @@ export const ItemModal = ({ info }) => {
         })}
       </div>
       <div className={styles.info}>
-        <Button to={`${PATH.OBJKT}/${info.objectId}`}>
-          <div className={styles.number}>OBJKT#{info.objectId}</div>
-        </Button>
-        <div className={styles.title}>{info.token_info.name}</div>
-        <div className={styles.description}>{info.token_info.description}</div>
-
-        <div className={styles.collect}>
+        <div>
           <Button to={`${PATH.OBJKT}/${info.objectId}`}>
-            <Purchase>{message}</Purchase>
+            <div className={styles.number}>OBJKT#{info.objectId}</div>
           </Button>
-        </div>
-
-        <div className={styles.artist}>
-          <div className={styles.icon}>
-            <img src={profile} alt="profile" />
+          <div className={styles.title}>{info.token_info.name}</div>
+          <div className={styles.description}>
+            {info.token_info.description}
           </div>
-          <strong>{name}</strong>
+
+          <div className={styles.links}>
+            <ArtistLogo
+              wallet={creator}
+              name={data.alias}
+              site={data.site}
+              telegram={data.telegram}
+              twitter={data.twitter}
+              github={data.github}
+              reddit={data.reddit}
+            />
+
+            <div className={styles.collect}>
+              <Button to={`${PATH.OBJKT}/${info.objectId}`}>
+                <Purchase>{message}</Purchase>
+              </Button>
+            </div>
+          </div>
         </div>
       </div>
     </div>

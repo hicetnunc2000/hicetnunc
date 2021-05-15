@@ -124,7 +124,7 @@ export const HTMLComponent = ({
           <div className={styles.button}>
             <Button onClick={() => setViewing(true)}>
               <VisuallyHidden>View</VisuallyHidden>
-              <div className={styles.dark} />
+              <div className={styles.gradient} />
               <svg
                 version="1.1"
                 viewBox="0 0 512 512"
@@ -148,7 +148,6 @@ export const HTMLComponent = ({
         src={`${src}?creator=${_creator_}&viewer=${_viewer_}`}
         sandbox="allow-scripts allow-same-origin"
         allow="accelerometer; camera; gyroscope; microphone; xr-spatial-tracking;"
-        scrolling="no"
       />
     </div>
   )

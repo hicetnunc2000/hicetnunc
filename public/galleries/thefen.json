@@ -3,31 +3,12 @@
   "uid": "thefen",
   "description": "“The Fen” is a series of coordinated CryptoArt drops to encourage artists and collectors to transition their NFTs to a low-energy consumption blockchain.",
   "staging": "https://hen-fen.netlify.app/gallery/thefen",
+  "minimal": false,
   "data": [
     {
       "artist": "The Fen announcements",
       "wallet": "tz1foxWsEdPqWjMFe5G7z2FGmEiCwLpZSnZx",
       "objkt": [34413, 27355]
-    },
-    {
-      "artist": "Mario Klingemann",
-      "wallet": "tz1hb9PiWxQEf6J9xevPsUM6dkuCLnhDMvsp",
-      "objkt": [7571, 26557, 4202, 13565]
-    },
-    {
-      "artist": "Shantell Martin",
-      "wallet": "tz1YTFrRNKg9FgFUXU5Q8VGFhwrDghGRPPdL",
-      "objkt": [27975, 22369, 21199, 23400]
-    },
-    {
-      "artist": "Ruben Fro",
-      "wallet": "tz1cjn8DAkb7FsCHMJsJq17uRFWhCrGxnzqd",
-      "objkt": [10345, 8413, 7025, 6496]
-    },
-    {
-      "artist": "Andre Venancio",
-      "wallet": "tz1eht4WAjkqU7kaupJd8qCDmec9HuKfGf68",
-      "objkt": [33956]
     }
   ]
 }

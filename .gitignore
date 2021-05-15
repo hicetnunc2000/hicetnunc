@@ -38,3 +38,12 @@ amplifyconfiguration.json
 amplify-build-config.json
 amplify-gradle-config.json
 amplifytools.xcconfig
+
+# templates
+templates/html-image-scale/package-lock.json
+templates/html-image-scale/node_modules
+templates/html-image-scale/dist
+templates/html-image-scale/.parcel-cache
+
+# contributor specific (local) folders
+.andre

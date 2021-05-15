@@ -5,12 +5,14 @@ import { HicetnuncContext } from '../../../context/HicetnuncContext'
 import { OwnerSwaps } from '../../../components/owner-swaps'
 
 export const Collectors = ({ owners, swaps }) => {
-  const { syncTaquito, collect, acc, getAccount, cancel, currentObjkt } = useContext(
+  const { syncTaquito, collect, acc, getAccount, cancel } = useContext(
     HicetnuncContext
   )
 
   // sort swaps in ascending price order
-  swaps = swaps.sort((a, b) => a.xtz_per_objkt.localeCompare(b.xtz_per_objkt, 'en', {numeric: true}));
+  swaps = swaps.sort((a, b) =>
+    a.xtz_per_objkt.localeCompare(b.xtz_per_objkt, 'en', { numeric: true })
+  )
 
   const filtered =
     (owners &&
@@ -39,7 +41,6 @@ export const Collectors = ({ owners, swaps }) => {
               handleCollect={handleCollect}
               acc={acc}
               cancel={cancel}
-              creator={currentObjkt.token_info.creators[0]}
             />
           </Padding>
         </Container>
@@ -48,11 +49,7 @@ export const Collectors = ({ owners, swaps }) => {
       {filtered.length === 0 ? undefined : (
         <Container>
           <Padding>
-            <OwnerList
-            owners={filtered}
-            creator={currentObjkt.token_info.creators[0]}
-            acc={acc}
-            />
+            <OwnerList owners={filtered} />
           </Padding>
         </Container>
       )}

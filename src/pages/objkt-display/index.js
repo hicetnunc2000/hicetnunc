@@ -30,19 +30,39 @@ export const ObjktDisplay = () => {
   const address = context.acc?.address
 
   useEffect(() => {
-    GetOBJKT({ id }).then(async (objkt) => {
-      if (Array.isArray(objkt)) {
-        setError(
-          "There's a problem loading this OBJKT. Please report it on Github."
-        )
-        setLoading(false)
-      } else {
-        await context.setAccount()
-        setNFT(objkt)
+    GetOBJKT({ id })
+      .then(async (objkt) => {
+        console.log(objkt)
+        if (Array.isArray(objkt)) {
+          setError(
+            "There's a problem loading this OBJKT. Please report it on Github."
+          )
+          setLoading(false)
+        } else {
+          await context.setAccount()
+          setNFT(objkt)
 
+          setLoading(false)
+        }
+      })
+      .catch((e) => {
+        if (e.response && e.response.data.error) {
+          setError(
+            `(http ${e.response.data.error.http_status}) ${e.response.data.error.message}`
+          )
+        } else if (e.response && e.response.data) {
+          setError(`(http ${e.response.status}) ${e.response.data}`)
+        } else if (e.request) {
+          setError(
+            `There's a problem loading this OBJKT. Please report it on Github. ${e.message}`
+          )
+        } else {
+          setError(
+            `There's a problem loading this OBJKT. Please report it on Github. ${e}`
+          )
+        }
         setLoading(false)
-      }
-    })
+      })
   }, [])
 
   const Tab = TABS[tabIndex].component

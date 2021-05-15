@@ -1,15 +1,20 @@
 [
   {
-    "uid": "objkt4objkt",
-    "endpoint": "/galleries/objkt4objkt.json"
+    "uid": "pupiladilatada",
+    "name": "Pupila Dilatada",
+    "endpoint": "/galleries/pupiladilatada.json",
+    "thumbnail": "833"
   },
   {
-    "uid": "pupiladilatada",
-    "endpoint": "/galleries/pupiladilatada.json"
+    "uid": "objkt4objkt",
+    "name": "OBJKT4OBJKT",
+    "endpoint": "/galleries/objkt4objkt.json",
+    "thumbnail": "12077"
   },
   {
     "uid": "thefen",
-    "endpoint": "https://github.com/joanielemercier/The_fen/blob/main/thefen.json",
-    "test": "/galleries/thefen.json"
+    "name": "The FEN",
+    "endpoint": "https://raw.githubusercontent.com/joanielemercier/The_fen/main/thefen.json",
+    "thumbnail": "34413"
   }
 ]

@@ -21,15 +21,8 @@ export const PATH = {
   SYNC: '/sync',
   MINT: '/mint',
   OBJKT: '/objkt',
-}
-
-export const ROUTES = {
-  FEED: { exact: true, path: '/', component: null },
-  ISSUER: { exact: false, path: '/tz/:id', component: null },
-  ABOUT: { exact: false, path: '/about', component: null },
-  SYNC: { exact: false, path: '/sync', component: null },
-  MINT: { exact: false, path: '/mint', component: null },
-  OBJKT: { exact: false, path: '/objkt/:id', component: null },
+  GALLERY: '/gallery',
+  TAGS: '/tags',
 }
 
 export const MINT_MIN_LIMIT = 1
@@ -52,6 +45,8 @@ export const MIMETYPE = {
   GLTF: 'model/gltf+json',
   MP3: 'audio/mpeg',
   OGA: 'audio/ogg',
+  WAV: 'audio/wav',
+  FLAC: 'audio/flac',
   PDF: 'application/pdf',
   ZIP: 'application/zip',
   ZIP1: 'application/x-zip-compressed',
@@ -64,13 +59,10 @@ export const ALLOWED_MIMETYPES = Object.keys(MIMETYPE)
   .map((k) => MIMETYPE[k])
   .filter((e) => e !== MIMETYPE.GLTF) // disabling GLTF from new updates
 
-export const ALLOWED_FILETYPES = Object.keys(MIMETYPE)
-
-export const ALLOWED_FILETYPES_LABEL = ALLOWED_FILETYPES.filter(
-  (k) => k !== 'ZIP1'
-)
-  .filter((k) => k !== 'ZIP2')
-  .map((k) => (k === 'ZIP' ? 'HTML (ZIP ARCHIVE)' : k))
+export const ALLOWED_FILETYPES_LABEL = Object.entries(MIMETYPE)
+  .filter((e) => ALLOWED_MIMETYPES.includes(e[1]))
+  .filter((e) => !['ZIP1', 'ZIP2'].includes(e[0]))
+  .map((e) => (e[0] === 'ZIP' ? 'HTML (ZIP ARCHIVE)' : e[0]))
   .join(', ')
 
 export const ALLOWED_COVER_MIMETYPES = [
