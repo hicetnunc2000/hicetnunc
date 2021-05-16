@@ -1,10 +1,12 @@
 import React, { useState } from 'react'
-import { Button, Primary } from '../../components/button'
-import { removeAllTags, setTag, unsetTag, existsTags } from './query'
-import styles from './styles.module.scss'
+import { Button, Primary } from '../../../components/button'
+import { disableAllTags, enableAllTags, setTagParam, unsetTagParam, existsTagsParam } from './functions'
+import styles from '../styles.module.scss'
 
 export const TagBar = ({tags, onUpdate}) => {
-  const [show, setShow] = useState(true)
+  // by default the bar is closed
+  // but is open when tags params exists
+  const [show, setShow] = useState(existsTagsParam())
 
   return (<>
     {/* show/hide tags */}
@@ -20,24 +22,14 @@ export const TagBar = ({tags, onUpdate}) => {
 
         {/* enable all tags button */}
         <Button onClick={() => {
-          const tagsCreations = { ...tags }
-          for (const tag in tagsCreations) {
-            tagsCreations[tag].active = true
-            setTag(tag)
-          }
-          onUpdate(tagsCreations)
+          onUpdate(enableAllTags(tags))
         }}>
           <Primary>enable all</Primary>
         </Button>
 
         {/* disable all tags button */}
         <Button onClick={() => {
-          const tagsCreations = { ...tags }
-          for (const tag in tagsCreations) {
-            tagsCreations[tag].active = false
-          }
-          removeAllTags()
-          onUpdate(tagsCreations)
+          onUpdate(disableAllTags(tags))
         }}>
           <Primary>disable all</Primary>
         </Button>
@@ -57,10 +49,10 @@ export const TagBar = ({tags, onUpdate}) => {
               const tagsCreations = { ...tags }
 
               // if URL does not contains tags then create them
-              if (!existsTags()) {
+              if (!existsTagsParam()) {
                 for (const tag in tagsCreations) {
                   if (tagsCreations[tag].active) {
-                    setTag(tag)
+                    setTagParam(tag)
                   }
                 }
               }
@@ -70,9 +62,9 @@ export const TagBar = ({tags, onUpdate}) => {
 
               // update URL tags
               if (tagsCreations[tagName].active) {
-                setTag(tagName)
+                setTagParam(tagName)
               } else {
-                unsetTag(tagName)
+                unsetTagParam(tagName)
               }
 
               onUpdate(tagsCreations)

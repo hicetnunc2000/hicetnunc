@@ -11,8 +11,8 @@ import { PATH } from '../../constants'
 import { VisuallyHidden } from '../../components/visually-hidden'
 import { GetUserMetadata } from '../../data/api'
 import { ResponsiveMasonry } from '../../components/responsive-masonry'
-import { buildTagObjects } from './tagHelper'
-import { TagBar } from './tagBar'
+import { buildTagObjects, enableAllTags } from './tagBar/functions'
+import { TagBar } from './tagBar/'
 import styles from './styles.module.scss'
 
 const axios = require('axios')
@@ -39,7 +39,7 @@ export default class Display extends Component {
     marketState: false,
     hdao: 0,
     tagsCreations: {},
-    tagsShow: true,
+    tagsCollection: {},
   }
 
   componentWillMount = async () => {
@@ -97,6 +97,7 @@ export default class Display extends Component {
 
         // create the tags list
         const tagsCreations = buildTagObjects(creations)
+        const tagsCollection = buildTagObjects(collection)
 
         const market = {}
 
@@ -124,7 +125,8 @@ export default class Display extends Component {
           creations: creations.sort(sortByTokenId),
           loading: false,
           collection: collection.sort(sortByTokenId),
-          tagsCreations: tagsCreations,
+          tagsCreations,
+          tagsCollection,
           market,
         })
       })
@@ -137,6 +139,7 @@ export default class Display extends Component {
       marketState: false,
     })
     this.props.history.push(`/tz/${this.state.wallet}`)
+    enableAllTags(this.state.tagsCreations)
   }
 
   collection = () => {
@@ -146,6 +149,7 @@ export default class Display extends Component {
       marketState: false,
     })
     this.props.history.push(`/tz/${this.state.wallet}/collection`)
+    enableAllTags(this.state.tagsCollection)
   }
 
   market = () => {
@@ -352,11 +356,28 @@ export default class Display extends Component {
           </Container>
         }
 
+        {/* tags for collection */}
+        {Object.keys(this.state.tagsCollection).length > 0 && this.state.collectionState &&
+          <Container xlarge>
+            <Padding>
+              <TagBar
+                tags={this.state.tagsCollection}
+                onUpdate={(updatedTags) => {
+                  this.setState({
+                    tagsCollection: updatedTags
+                  })
+                }}
+              ></TagBar>
+            </Padding>
+          </Container>
+        }
+
         {!this.state.loading && this.state.creationsState && (
           <Container xlarge>
             <ResponsiveMasonry>
               {this.state.creations.filter((nft) => {
-                // check if any of the nft tag is active
+                // check if any of the nft's tag is active
+                // and filter out inactive tags
                 let active = false
                 nft.token_info.tags.forEach((tag) => {
                   active = active || this.state.tagsCreations[tag].active
@@ -389,7 +410,16 @@ export default class Display extends Component {
         {!this.state.loading && this.state.collectionState && (
           <Container xlarge>
             <ResponsiveMasonry>
-              {this.state.collection.map((nft, i) => {
+              {this.state.collection.filter((nft) => {
+                // check if any of the nft's tag is active
+                // and filter out inactive tags
+                let active = false
+                nft.token_info.tags.forEach((tag) => {
+                  active = active || this.state.tagsCollection[tag].active
+                })
+                return active
+              })
+              .map((nft, i) => {
                 const { mimeType, uri } = nft.token_info.formats[0]
                 return (
                   <Button
