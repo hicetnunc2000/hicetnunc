@@ -82,7 +82,6 @@ class XRControllerModel extends Object3D {
 					valueNode.visible = value;
 
 				} else if ( valueNodeProperty === MotionControllerConstants.VisualResponseProperty.TRANSFORM ) {
-
 					valueNode.quaternion.slerpQuaternions(
 						minNode.quaternion,
 						maxNode.quaternion,
