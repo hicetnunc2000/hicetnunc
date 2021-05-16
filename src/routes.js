@@ -1,5 +1,6 @@
 import Sync from './pages/sync'
 import { About } from './pages/about'
+import { FAQ } from './pages/faq'
 import Display from './pages/display'
 import { Latest, Hdao, Random, Featured } from './pages/feeds'
 import { Mint } from './pages/mint'
@@ -40,6 +41,11 @@ export const routes = [
     exact: false,
     path: '/about',
     component: About,
+  },
+  {
+    exact: false,
+    path: '/faq',
+    component: FAQ,
   },
   {
     exact: false,
