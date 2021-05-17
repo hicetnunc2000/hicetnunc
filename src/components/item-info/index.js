@@ -18,9 +18,8 @@ export const ItemInfo = ({
   hDAO_balance,
   isDetailView,
 }) => {
-  const { syncTaquito, collect, curate, claim_hDAO, acc } = useContext(
-    HicetnuncContext
-  )
+  const { syncTaquito, collect, curate, claim_hDAO, acc } =
+    useContext(HicetnuncContext)
   const reducer = (accumulator, currentValue) =>
     parseInt(accumulator) + parseInt(currentValue)
 
@@ -75,8 +74,21 @@ export const ItemInfo = ({
     return (
       <Button onClick={() => curateOrClaim(id, balance)}>
         <Primary>
-          <span className={styles.top} data-position={'top'} data-tooltip={(acc.address === token_info.creators[0] && parseInt(hDAO_balance) > 0) ? 'collect hDAO' : 'curate'}>〇</span>
-          {(balance && balance !== -1) ? ` ${parseInt(hDAO_balance)/1000000}` : ''}
+          <span
+            className={styles.top}
+            data-position={'top'}
+            data-tooltip={
+              acc.address === token_info.creators[0] &&
+              parseInt(hDAO_balance) > 0
+                ? 'collect hDAO'
+                : 'curate'
+            }
+          >
+            〇
+          </span>
+          {balance && balance !== -1
+            ? ` ${parseInt(hDAO_balance) / 1000000}`
+            : ''}
         </Primary>
       </Button>
     )
@@ -116,7 +128,9 @@ export const ItemInfo = ({
             <Button to={`${PATH.OBJKT}/${token_id}`} disabled={isDetailView}>
               <Primary>OBJKT#{token_id}</Primary>
             </Button>
-            <div style={{ paddingLeft: '20px', marginBottom: '2px' }}>{renderHDAObutton(token_id, hDAO_balance)}</div>
+            <div style={{ paddingLeft: '20px', marginBottom: '2px' }}>
+              {renderHDAObutton(token_id, hDAO_balance)}
+            </div>
           </div>
         )}
       </div>
