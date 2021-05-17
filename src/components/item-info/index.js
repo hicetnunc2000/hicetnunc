@@ -74,7 +74,7 @@ export const ItemInfo = ({
   const renderHDAObutton = (id, balance) => {
     return (
       <Button onClick={() => curateOrClaim(id, balance)}>
-        <Primary>〇{balance ? ` ${hDAO_balance}` : ''}</Primary>
+        <Primary><span className={styles.top} data-position={'top'} data-tooltip={'curate'}>〇</span>{balance ? ` ${hDAO_balance}` : ''}</Primary>
       </Button>
     )
   }
@@ -108,22 +108,23 @@ export const ItemInfo = ({
             </div>
           )}
         </div>
-      </div>
-
-      <div className={styles.container}>
-        {isDetailView ? (
-          <p>OBJKT#{token_id}</p>
-        ) : (
-          <Button to={`${PATH.OBJKT}/${token_id}`} disabled={isDetailView}>
-            <Primary>OBJKT#{token_id}</Primary>
-          </Button>
+        {feed && (
+          <div className={styles.objktContainer}>
+            <Button to={`${PATH.OBJKT}/${token_id}`} disabled={isDetailView}>
+              <Primary>OBJKT#{token_id}</Primary>
+            </Button>
+            <div style={{ paddingLeft: '20px', marginBottom: '2px' }}>{renderHDAObutton(token_id, hDAO_balance)}</div>
+          </div>
         )}
-        {feed ? (
-          <div>{renderHDAObutton(token_id, hDAO_balance)}</div>
-        ) : (
-          <Button onClick={() => handleCollect()}>
-            <Purchase>{message}</Purchase>
-          </Button>
+      </div>
+      <div className={styles.container}>
+        {isDetailView && (
+          <div className={styles.container}>
+            <p>OBJKT#{token_id}</p>
+            <Button onClick={() => handleCollect()}>
+              <Purchase>{message}</Purchase>
+            </Button>
+          </div>
         )}
       </div>
       <div className={styles.container}>
