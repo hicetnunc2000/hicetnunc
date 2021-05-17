@@ -29,7 +29,7 @@
     "react-dom": "^17.0.1",
     "react-helmet": "^6.1.0",
     "react-infinite-scroll-component": "^6.1.0",
-    "react-intersection-observer": "^8.31.1",
+    "react-intersection-observer": "^8.32.0",
     "react-lazy-load-image-component": "^1.5.1",
     "react-masonry-css": "^1.0.16",
     "react-player": "^2.8.2",
