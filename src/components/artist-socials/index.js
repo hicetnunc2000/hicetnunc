@@ -2,7 +2,14 @@ import { Button } from '../button'
 import { VisuallyHidden } from '../visually-hidden'
 import styles from './styles.module.scss'
 
-export const ArtistSocials = ({ site, telegram, twitter, instagram, github, reddit }) => {
+export const ArtistSocials = ({
+  site,
+  telegram,
+  twitter,
+  instagram,
+  github,
+  reddit,
+}) => {
   return (
     <div className={styles.container}>
       {site && (
