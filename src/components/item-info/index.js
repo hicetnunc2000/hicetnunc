@@ -74,7 +74,10 @@ export const ItemInfo = ({
   const renderHDAObutton = (id, balance) => {
     return (
       <Button onClick={() => curateOrClaim(id, balance)}>
-        <Primary><span className={styles.top} data-position={'top'} data-tooltip={'curate'}>〇</span>{(balance && balance !== -1) ? ` ${parseInt(hDAO_balance)/1000000}` : ''}</Primary>
+        <Primary>
+          <span className={styles.top} data-position={'top'} data-tooltip={(acc.address === token_info.creators[0] && parseInt(hDAO_balance) > 0) ? 'collect hDAO' : 'curate'}>〇</span>
+          {(balance && balance !== -1) ? ` ${parseInt(hDAO_balance)/1000000}` : ''}
+        </Primary>
       </Button>
     )
   }
