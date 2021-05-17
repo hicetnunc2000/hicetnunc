@@ -49,14 +49,14 @@ export class FAQ extends Component {
                   <strong>how do I add/change the price of my OBJKT?</strong>
                 </Primary>
               </Button>
-            </div>    
+            </div>
             <div className={styles.buttons}>
               <Button href="https://github.com/hicetnunc2000/hicetnunc/wiki/How-to-burn-%F0%9F%94%A5">
                 <Primary>
                   <strong>how do I burn my OBJKT?</strong>
                 </Primary>
               </Button>
-            </div>     
+            </div>
             <div className={styles.buttons}>
               <Button href="https://github.com/hicetnunc2000/hicetnunc/wiki/How-to-resell-%F0%9F%8F%AA">
                 <Primary>
@@ -70,7 +70,7 @@ export class FAQ extends Component {
                   <strong>what is hDAO ○?</strong>
                 </Primary>
               </Button>
-            </div>                
+            </div>
           </Padding>
         </Container>
         <Container>
@@ -95,7 +95,7 @@ export class FAQ extends Component {
                   <strong>useful tools</strong>
                 </Primary>
               </Button>
-            </div>                           
+            </div>
           </Padding>
         </Container>
         <Container>
@@ -106,7 +106,7 @@ export class FAQ extends Component {
                   <strong>português</strong>
                 </Primary>
               </Button>
-            </div>     
+            </div>
           </Padding>
         </Container>
       </Page>

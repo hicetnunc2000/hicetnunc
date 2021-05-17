@@ -26,12 +26,11 @@ class HicetnuncContextProviderClass extends Component {
     super(props)
 
     this.state = {
-
       // smart contracts
 
-      hDAO : "KT1AFA2mwNUMNd4SsujE1YYp29vd8BZejyKW",
-      subjkt : "KT1P69B8exDGuqNysBweuZJSqAmaD4dU3gtU",
-      objkt : 'KT1Hkg5qeNhfwpKW4fXvq7HGZB9z2EnmCCA9',
+      hDAO: 'KT1AFA2mwNUMNd4SsujE1YYp29vd8BZejyKW',
+      subjkt: 'KT1P69B8exDGuqNysBweuZJSqAmaD4dU3gtU',
+      objkt: 'KT1Hkg5qeNhfwpKW4fXvq7HGZB9z2EnmCCA9',
 
       // fullscreen. DO NOT CHANGE!
       fullscreen: false,
@@ -290,30 +289,43 @@ class HicetnuncContextProviderClass extends Component {
         console.log(r)
       },
 
-      registry : async (alias, metadata) => {
-        return await Tezos.wallet.at(this.state.subjkt).then(c => c.methods.registry(alias.split('')
-        .reduce(
-          (hex, c) =>
-            (hex += c.charCodeAt(0).toString(16).padStart(2, '0')),
-          ''
-        ), ("ipfs://" + metadata.path).split('')
-        .reduce(
-          (hex, c) =>
-            (hex += c.charCodeAt(0).toString(16).padStart(2, '0')),
-          ''
-        )).send({ amount : 0 }))
+      registry: async (alias, metadata) => {
+        return await Tezos.wallet.at(this.state.subjkt).then((c) =>
+          c.methods
+            .registry(
+              alias
+                .split('')
+                .reduce(
+                  (hex, c) =>
+                    (hex += c.charCodeAt(0).toString(16).padStart(2, '0')),
+                  ''
+                ),
+              ('ipfs://' + metadata.path)
+                .split('')
+                .reduce(
+                  (hex, c) =>
+                    (hex += c.charCodeAt(0).toString(16).padStart(2, '0')),
+                  ''
+                )
+            )
+            .send({ amount: 0 })
+        )
       },
 
-      hDAO_update_operators : async (address) => {
-        return await Tezos.wallet.at(this.state.hDAO).then(c => c.methods.update_operators([
-          {
-            add_operator: {
-              owner: address,
-              operator: this.state.subjkt,
-              token_id: 0,
-            },
-          },
-        ]).send({ amount : 0 }))
+      hDAO_update_operators: async (address) => {
+        return await Tezos.wallet.at(this.state.hDAO).then((c) =>
+          c.methods
+            .update_operators([
+              {
+                add_operator: {
+                  owner: address,
+                  operator: this.state.subjkt,
+                  token_id: 0,
+                },
+              },
+            ])
+            .send({ amount: 0 })
+        )
       },
 
       load: false,

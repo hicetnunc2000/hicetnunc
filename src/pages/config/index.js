@@ -16,7 +16,7 @@ export class Config extends Component {
     subjkt: '',
     description: '',
     social_media: '',
-    subjktUri: '' // uploads image
+    subjktUri: '', // uploads image
   }
 
   componentWillMount = () => {
@@ -31,10 +31,14 @@ export class Config extends Component {
   // config personax
 
   subjkt_config = async () => {
-
     const ipfs = create(infuraUrl)
 
-    this.context.registry(this.state.subjkt, await ipfs.add(Buffer.from(JSON.stringify({ description: this.state.description }))))
+    this.context.registry(
+      this.state.subjkt,
+      await ipfs.add(
+        Buffer.from(JSON.stringify({ description: this.state.description }))
+      )
+    )
     /*     
 
     signature study
@@ -76,11 +80,25 @@ export class Config extends Component {
         <Container>
           <Padding>
             <div>
-              <button onClick={this.hDAO_operators}>allow subjkt operators ○</button>
+              <button onClick={this.hDAO_operators}>
+                allow subjkt operators ○
+              </button>
             </div>
             <div>
-              <input type="text" name="subjkt" onChange={this.handleChange} placeholder='subjkt'></input><br />
-              <input type="text" name="description" onChange={this.handleChange} placeholder='description'></input><br />
+              <input
+                type="text"
+                name="subjkt"
+                onChange={this.handleChange}
+                placeholder="subjkt"
+              ></input>
+              <br />
+              <input
+                type="text"
+                name="description"
+                onChange={this.handleChange}
+                placeholder="description"
+              ></input>
+              <br />
               <button onClick={this.subjkt_config}>config</button>
             </div>
             <div>
