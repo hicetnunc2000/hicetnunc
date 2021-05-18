@@ -10,6 +10,7 @@ export const Input = ({
   maxlength = 500,
   label,
   onChange = () => null,
+  onBlur = () => null,
   disabled,
   value,
 }) => (
@@ -24,6 +25,7 @@ export const Input = ({
         maxLength={maxlength}
         defaultValue={value}
         onChange={onChange}
+        onBlur={onBlur}
         disabled={disabled}
       />
       <p>{label}</p>

@@ -15,6 +15,9 @@ import {
   ALLOWED_COVER_FILETYPES_LABEL,
   MINT_FILESIZE,
   MIMETYPE,
+  MAX_EDITIONS,
+  MIN_ROYALTIES,
+  MAX_ROYALTIES,
 } from '../../constants'
 
 const coverOptions = {
@@ -218,17 +221,26 @@ export const Mint = () => {
     setThumbnail(thumb)
   }
 
+  const limitNumericField  = async (target, minValue, maxValue) => {
+    if(target.value === '') target.value = ''; // Seems redundant but actually cleans up e.g. '234e'
+    target.value = Math.round(Math.max(Math.min(target.value, maxValue), minValue));
+  }
+
   const handleValidation = () => {
+    if (amount <= 0 ||
+        amount > MAX_EDITIONS ||
+        royalties < MIN_ROYALTIES ||
+        royalties > MAX_ROYALTIES ||
+        !file) {
+      return true;
+    }
     if (GENERATE_DISPLAY_AND_THUMBNAIL) {
-      if (amount > 0 && file && cover && thumbnail && royalties >= 10) {
+      if (cover && thumbnail) {
         return false
       }
     } else {
-      if (amount > 0 && file && royalties >= 10) {
-        return false
-      }
+      return false
     }
-
     return true
   }
 
@@ -266,18 +278,21 @@ export const Mint = () => {
               <Input
                 type="number"
                 min={1}
-                onChange={(e) => setAmount(e.target.value)}
-                placeholder="editions (no. editions)"
+                max={MAX_EDITIONS}
+                onChange={(e) => setAmount(e.target.value) }
+                onBlur={ (e) => { limitNumericField(e.target, 1, MAX_EDITIONS); setAmount(e.target.value) } }
+                placeholder={`editions (no. editions, 1-${MAX_EDITIONS})`}
                 label="editions"
                 value={amount}
               />
 
               <Input
                 type="number"
-                min={10}
-                max={25}
-                onChange={(e) => setRoyalties(e.target.value)}
-                placeholder="royalties after each sale (between 10-25%)"
+                min={MIN_ROYALTIES}
+                max={MAX_ROYALTIES}
+                onChange={(e) => setRoyalties(e.target.value) }
+                onBlur={ (e) => { limitNumericField(e.target, MIN_ROYALTIES, MAX_ROYALTIES); setRoyalties(e.target.value) } }
+                placeholder={`royalties after each sale (between ${MIN_ROYALTIES}-${MAX_ROYALTIES}%)`}
                 label="royalties"
                 value={royalties}
               />

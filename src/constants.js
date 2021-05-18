@@ -74,5 +74,11 @@ export const ALLOWED_COVER_MIMETYPES = [
 
 export const ALLOWED_COVER_FILETYPES_LABEL = ['jpeg, png, gif']
 
+export const MAX_EDITIONS = 10000  // Limited by contract
+
+export const MIN_ROYALTIES = 10    // Limited by contract
+
+export const MAX_ROYALTIES = 25    // Limited by contract
+
 export const IPFS_DISPLAY_URI_BLACKCIRCLE =
   'ipfs://QmNrhZHUaEqxhyLfqoq1mtHSipkWHeT31LNHb1QEbDHgnc'
