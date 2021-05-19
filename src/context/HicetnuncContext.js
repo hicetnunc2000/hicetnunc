@@ -8,6 +8,7 @@ import { KeyStoreUtils } from 'conseiljs-softsigner'
 const { NetworkType } = require('@airgap/beacon-sdk')
 var ls = require('local-storage')
 const axios = require('axios')
+const eztz = require('eztz-lib')
 
 export const HicetnuncContext = createContext()
 
@@ -276,16 +277,18 @@ class HicetnuncContextProviderClass extends Component {
           .catch((e) => e)
       },
 
-      sign: async (payload) => {
+      signStr: async (payload) => {
         const signedPayload = await wallet.client.requestSignPayload(payload)
+        console.log(signedPayload, payload)
         const signature = signedPayload
         console.log(signature.signature, payload.payload, await wallet.getPKH())
-        const r = await KeyStoreUtils.checkSignature(
+/*         const r = await KeyStoreUtils.checkSignature(
           signature.signature,
           payload.payload,
-          await wallet.getPKH()
-        )
-        // await axios.get('https://tezos-prod.cryptonomic-infra.tech/chains/main/blocks/head/context/contracts/tz1MoQCkE6kcB6CxwFjBRf9XrbxpkELFZE1u/manager_key').then(res => res.data)
+          await axios.get(`https://tezos-prod.cryptonomic-infra.tech/chains/main/blocks/head/context/contracts/${await wallet.getPKH()}/manager_key`).then(res => res.data)
+        ) */
+
+        const r = await eztz.crypto.verify((payload.payload).toString(), signature.signature, await axios.get(`https://tezos-prod.cryptonomic-infra.tech/chains/main/blocks/head/context/contracts/${await wallet.getPKH()}/manager_key`))
         console.log(r)
       },
 
