@@ -1,6 +1,18 @@
+import {
+  ALLOWED_MIMETYPES,
+  ALLOWED_FILETYPES_LABEL,
+  ALLOWED_COVER_MIMETYPES,
+  ALLOWED_COVER_FILETYPES_LABEL,
+  MINT_FILESIZE,
+  MIMETYPE,
+} from '../../constants'
 import React, { Component } from 'react'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
 import { Container, Padding, Page } from '../../components/layout'
+import { Input } from '../../components/input'
+import { Button, Curate, Primary } from '../../components/button'
+import { Upload } from '../../components/upload'
+
 import { SigningType } from '@airgap/beacon-sdk'
 import { char2Bytes } from '@taquito/utils'
 const { create } = require('ipfs-http-client')
@@ -72,6 +84,21 @@ export class Config extends Component {
     ls.set('hDAO_config', this.state.vote)
   }
 
+  // signature tests
+
+  sign = () => {
+    console.log(this.context.addr)
+    this.context.signStr({
+      /*       payload : "05" + char2Bytes(this.state.str) */
+      payload: (this.state.str).split('')
+        .reduce(
+          (hex, c) =>
+            (hex += c.charCodeAt(0).toString(16).padStart(2, '0')),
+          ''
+        )
+/*         sourceAddress: this.context.addr,
+ */      })
+  }
   // delete account
 
   render() {
@@ -99,20 +126,32 @@ export class Config extends Component {
                 placeholder="description"
               ></input>
               <br />
+              {/* social media */}
+              <Container>
+                <Padding>
+                  <Upload
+                    label="SUBJKT image"
+                  />
+                </Padding>
+              </Container>
               <button onClick={this.subjkt_config}>config</button>
             </div>
             <div>
-              <input
+              <Input
                 type="text"
                 name="vote"
                 onChange={this.handleChange}
                 placeholder="○"
-              ></input>
+              />
               <p style={{ fontSize: '12px' }}>
                 hic et nunc DAO ○ curation parameter
               </p>
-              <button onClick={this.hDAO_config}>config</button>
+              <Button onClick={this.hDAO_config} fit >config</Button>
             </div>
+{/*             <div>
+              <input type="text" name="str" onChange={this.handleChange} placeholder="sign"></input>
+              <button onClick={this.sign}>sign</button>
+            </div> */}
           </Padding>
         </Container>
       </Page>

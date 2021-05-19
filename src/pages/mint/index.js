@@ -361,7 +361,7 @@ export const Mint = () => {
           <Container>
             <Padding>
               <Button onClick={handleMint} fit>
-                <Curate>mint {amount} OBJKTs</Curate>
+                <Curate>mint OBJKT</Curate>
               </Button>
             </Padding>
           </Container>
