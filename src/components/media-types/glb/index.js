@@ -17,6 +17,7 @@ export const GLBComponent = ({ src, interactive }) => {
 
   if (interactive) {
     props['ar'] = true
+    props['ar-modes'] = 'webxr scene-viewer quick-look'
     props['camera-controls'] = true
   }
 
