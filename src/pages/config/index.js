@@ -90,14 +90,15 @@ export class Config extends Component {
     console.log(this.context.addr)
     this.context.signStr({
       /*       payload : "05" + char2Bytes(this.state.str) */
-      payload: (this.state.str).split('')
+      payload: this.state.str
+        .split('')
         .reduce(
-          (hex, c) =>
-            (hex += c.charCodeAt(0).toString(16).padStart(2, '0')),
+          (hex, c) => (hex += c.charCodeAt(0).toString(16).padStart(2, '0')),
           ''
-        )
-/*         sourceAddress: this.context.addr,
- */      })
+        ),
+      /*         sourceAddress: this.context.addr,
+       */
+    })
   }
   // delete account
 
@@ -129,9 +130,7 @@ export class Config extends Component {
               {/* social media */}
               <Container>
                 <Padding>
-                  <Upload
-                    label="SUBJKT image"
-                  />
+                  <Upload label="SUBJKT image" />
                 </Padding>
               </Container>
               <button onClick={this.subjkt_config}>config</button>
@@ -146,9 +145,11 @@ export class Config extends Component {
               <p style={{ fontSize: '12px' }}>
                 hic et nunc DAO ○ curation parameter
               </p>
-              <Button onClick={this.hDAO_config} fit >config</Button>
+              <Button onClick={this.hDAO_config} fit>
+                config
+              </Button>
             </div>
-{/*             <div>
+            {/*             <div>
               <input type="text" name="str" onChange={this.handleChange} placeholder="sign"></input>
               <button onClick={this.sign}>sign</button>
             </div> */}
