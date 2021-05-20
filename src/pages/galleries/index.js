@@ -15,7 +15,7 @@ const sortByThumbnailTokenId = (a, b) => {
 }
 export const Galleries = () => {
   /* const [loading, setLoading] = useState(true) */
-  const [data, setData] = useState(false)
+  const [data, setData] = useState([])
 
   useEffect(() => {
     // loads gallery to check endpoint file
@@ -45,35 +45,35 @@ export const Galleries = () => {
   }, [])
   return (
     <Page title="Galleries">
-        <Container xlarge>
-          <Padding>
-            <ResponsiveMasonry>
-              {data.map((e) => {
-                const { token_info } = e
-                const { mimeType, uri } = token_info.formats[0]
+      <Container xlarge>
+        <Padding>
+          <ResponsiveMasonry>
+            {data.map((e) => {
+              const { token_info } = e
+              const { mimeType, uri } = token_info.formats[0]
 
-                return (
-                  <Button key={e.uid} to={`${PATH.GALLERY}/${e.uid}`}>
-                    <div className={styles.item}>
-                      <div
-                        style={{ pointerEvents: 'none' }}
-                        className={styles.image}
-                      >
-                        {renderMediaType({
-                          uri: uri.split('//')[1],
-                          mimeType,
-                          metadata: e,
-                          interactive: false,
-                        })}
-                        <div className={styles.number}>{e.name}</div>
-                      </div>
+              return (
+                <Button key={e.uid} to={`${PATH.GALLERY}/${e.uid}`}>
+                  <div className={styles.item}>
+                    <div
+                      style={{ pointerEvents: 'none' }}
+                      className={styles.image}
+                    >
+                      {renderMediaType({
+                        uri: uri.split('//')[1],
+                        mimeType,
+                        metadata: e,
+                        interactive: false,
+                      })}
+                      <div className={styles.number}>{e.name}</div>
                     </div>
-                  </Button>
-                )
-              })}
-            </ResponsiveMasonry>
-          </Padding>
-        </Container>
+                  </div>
+                </Button>
+              )
+            })}
+          </ResponsiveMasonry>
+        </Padding>
+      </Container>
     </Page>
   )
 }
