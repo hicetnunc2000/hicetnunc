@@ -87,4 +87,9 @@ export const routes = [
     path: '/tags/:id',
     component: Tags,
   },
+  {
+    exact: false,
+    path: '/:id',
+    component: Display,
+  },
 ]
