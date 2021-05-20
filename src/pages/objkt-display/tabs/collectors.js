@@ -5,9 +5,8 @@ import { HicetnuncContext } from '../../../context/HicetnuncContext'
 import { OwnerSwaps } from '../../../components/owner-swaps'
 
 export const Collectors = ({ owners, swaps }) => {
-  const { syncTaquito, collect, acc, getAccount, cancel } = useContext(
-    HicetnuncContext
-  )
+  const { syncTaquito, collect, acc, getAccount, cancel } =
+    useContext(HicetnuncContext)
 
   // sort swaps in ascending price order
   swaps = swaps.sort((a, b) =>
