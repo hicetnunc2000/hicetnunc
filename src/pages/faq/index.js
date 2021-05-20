@@ -98,7 +98,7 @@ export class FAQ extends Component {
             </div>
           </Padding>
         </Container>
-        <Container>
+{/*         <Container>
           <Padding>
             <div className={styles.buttons}>
               <Button href="https://github.com/hicetnunc2000/hicetnunc/wiki/pt:Home">
@@ -108,7 +108,7 @@ export class FAQ extends Component {
               </Button>
             </div>
           </Padding>
-        </Container>
+        </Container> */}
       </Page>
     )
   }
