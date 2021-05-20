@@ -24,8 +24,11 @@ export default class Display extends Component {
 
   state = {
     wallet: '',
-    walletPrev: (window.location.pathname).split('/')[1] === 'tz' ? walletPreview(window.location.pathname.split('/')[2]): (window.location.pathname).split('/')[1],
-    subjkt : '',
+    walletPrev:
+      window.location.pathname.split('/')[1] === 'tz'
+        ? walletPreview(window.location.pathname.split('/')[2])
+        : window.location.pathname.split('/')[1],
+    subjkt: '',
     render: false,
     loading: true,
     results: [],
@@ -40,38 +43,46 @@ export default class Display extends Component {
   }
 
   componentWillMount = async () => {
-    console.log((window.location.pathname).split('/'))
+    console.log(window.location.pathname.split('/'))
 
-    if ((window.location.pathname).split('/')[1] === 'tz') {
+    if (window.location.pathname.split('/')[1] === 'tz') {
       this.setState({
-        wallet : window.location.pathname.split('/')[2],
-        walletPreview : walletPreview(window.location.pathname.split('/')[2])
+        wallet: window.location.pathname.split('/')[2],
+        walletPreview: walletPreview(window.location.pathname.split('/')[2]),
       })
 
-      await GetUserMetadata(window.location.pathname.split('/')[2]).then((data) => {
-        if (data.data.alias) this.setState({ alias: data.data.alias })
-        if (data.data.description)
-          this.setState({ description: data.data.description })
-        if (data.data.site) this.setState({ site: data.data.site })
-        if (data.data.telegram) this.setState({ telegram: data.data.telegram })
-        if (data.data.twitter) this.setState({ twitter: data.data.twitter })
-        if (data.data.github) this.setState({ github: data.data.github })
-        if (data.data.reddit) this.setState({ reddit: data.data.reddit })
-        if (data.data.instagram) this.setState({ instagram: data.data.instagram })
-        if (data.data.logo) this.setState({ logo: data.data.logo })
-      })
+      await GetUserMetadata(window.location.pathname.split('/')[2]).then(
+        (data) => {
+          if (data.data.alias) this.setState({ alias: data.data.alias })
+          if (data.data.description)
+            this.setState({ description: data.data.description })
+          if (data.data.site) this.setState({ site: data.data.site })
+          if (data.data.telegram)
+            this.setState({ telegram: data.data.telegram })
+          if (data.data.twitter) this.setState({ twitter: data.data.twitter })
+          if (data.data.github) this.setState({ github: data.data.github })
+          if (data.data.reddit) this.setState({ reddit: data.data.reddit })
+          if (data.data.instagram)
+            this.setState({ instagram: data.data.instagram })
+          if (data.data.logo) this.setState({ logo: data.data.logo })
+        }
+      )
     } else {
-      await axios.post(process.env.REACT_APP_SUBJKT, { subjkt : (window.location.pathname).split('/')[1]}).then(res => {
-        this.setState({
-          wallet : res.data.result[0].tz,
-          walletPrev: (window.location.pathname).split('/')[1],
-          subjkt : (window.location.pathname).split('/')[1]
+      await axios
+        .post(process.env.REACT_APP_SUBJKT, {
+          subjkt: window.location.pathname.split('/')[1],
         })
-      })
+        .then((res) => {
+          this.setState({
+            wallet: res.data.result[0].tz,
+            walletPrev: window.location.pathname.split('/')[1],
+            subjkt: window.location.pathname.split('/')[1],
+          })
+        })
     }
 
     this.context.setPath(window.location.pathname)
-/*     if (window.location.pathname.split('/')[3] === 'creations') {
+    /*     if (window.location.pathname.split('/')[3] === 'creations') {
       this.setState({
         creationsState: true,
         collectionState: false,

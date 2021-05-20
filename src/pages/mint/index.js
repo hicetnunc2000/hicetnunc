@@ -33,14 +33,8 @@ const thumbnailOptions = {
 const GENERATE_DISPLAY_AND_THUMBNAIL = false
 
 export const Mint = () => {
-  const {
-    mint,
-    getAuth,
-    acc,
-    setAccount,
-    setFeedback,
-    syncTaquito,
-  } = useContext(HicetnuncContext)
+  const { mint, getAuth, acc, setAccount, setFeedback, syncTaquito } =
+    useContext(HicetnuncContext)
   // const history = useHistory()
   const [step, setStep] = useState(0)
   const [title, setTitle] = useState('')

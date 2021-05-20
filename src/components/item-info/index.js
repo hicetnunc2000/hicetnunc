@@ -18,9 +18,8 @@ export const ItemInfo = ({
   hDAO_balance,
   isDetailView,
 }) => {
-  const { syncTaquito, collect, curate, claim_hDAO, acc } = useContext(
-    HicetnuncContext
-  )
+  const { syncTaquito, collect, curate, claim_hDAO, acc } =
+    useContext(HicetnuncContext)
   const reducer = (accumulator, currentValue) =>
     parseInt(accumulator) + parseInt(currentValue)
 

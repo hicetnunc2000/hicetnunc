@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Button } from '../../components/button'
 import { Page, Container, Padding } from '../../components/layout'
-import { Loading } from '../../components/loading'
 import { GetOBJKT } from '../../data/api'
 import { renderMediaType } from '../../components/media-types'
 import { PATH } from '../../constants'
@@ -14,7 +13,6 @@ const sortByThumbnailTokenId = (a, b) => {
   return ia < ib ? 1 : -1
 }
 export const Galleries = () => {
-  /* const [loading, setLoading] = useState(true) */
   const [data, setData] = useState([])
 
   useEffect(() => {
@@ -33,7 +31,6 @@ export const Galleries = () => {
             if (c === galleries.length) {
               g.sort(sortByThumbnailTokenId)
               setData(g)
-              /* setLoading(false) */
             }
           })
         })
