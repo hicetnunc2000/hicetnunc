@@ -282,13 +282,19 @@ class HicetnuncContextProviderClass extends Component {
         console.log(signedPayload, payload)
         const signature = signedPayload
         console.log(signature.signature, payload.payload, await wallet.getPKH())
-/*         const r = await KeyStoreUtils.checkSignature(
+        /*         const r = await KeyStoreUtils.checkSignature(
           signature.signature,
           payload.payload,
           await axios.get(`https://tezos-prod.cryptonomic-infra.tech/chains/main/blocks/head/context/contracts/${await wallet.getPKH()}/manager_key`).then(res => res.data)
         ) */
 
-        const r = await eztz.crypto.verify((payload.payload).toString(), signature.signature, await axios.get(`https://tezos-prod.cryptonomic-infra.tech/chains/main/blocks/head/context/contracts/${await wallet.getPKH()}/manager_key`))
+        const r = await eztz.crypto.verify(
+          payload.payload.toString(),
+          signature.signature,
+          await axios.get(
+            `https://tezos-prod.cryptonomic-infra.tech/chains/main/blocks/head/context/contracts/${await wallet.getPKH()}/manager_key`
+          )
+        )
         console.log(r)
       },
 

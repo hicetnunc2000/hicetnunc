@@ -8,13 +8,8 @@ import styles from './styles.module.scss'
 
 export const FeedbackComponent = () => {
   const context = useContext(HicetnuncContext)
-  const {
-    visible,
-    message,
-    progress,
-    confirm,
-    confirmCallback,
-  } = context.feedback
+  const { visible, message, progress, confirm, confirmCallback } =
+    context.feedback
 
   return (
     <AnimatePresence>
