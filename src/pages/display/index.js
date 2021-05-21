@@ -342,7 +342,7 @@ export default class Display extends Component {
                 </Primary>
               </Button>
 
-              {/*               <Button onClick={this.market}>
+              {/* <Button onClick={this.market}>
                 <Primary selected={this.state.marketState}>market</Primary>
               </Button> */}
             </div>
