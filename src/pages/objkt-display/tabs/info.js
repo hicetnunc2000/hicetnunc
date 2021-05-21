@@ -10,31 +10,41 @@ export const Info = ({ token_info }) => {
 
   return (
     <>
-      <Container>
-        <Padding>TITLE</Padding>
-        <Padding>{name}</Padding>
-      </Container>
+      <article>
+        <header>
+          <Container>
+            <Padding>TITLE</Padding>
+            <Padding><h1>{name}</h1></Padding>
+          </Container>
+        </header>
 
-      <Container>
-        <Padding>DESCRIPTION</Padding>
-        <Padding>{description}</Padding>
-      </Container>
+        <header>
+          <Container>
+            <Padding>DESCRIPTION</Padding>
+            <Padding><p>{description}</p></Padding>
+          </Container>
+        </header>
 
-      <Container>
-        <Padding>
-          <Tags tags={tags} />
-        </Padding>
-      </Container>
+        <nav>
+          <Container>
+            <Padding>
+                <Tags tags={tags} />
+            </Padding>
+          </Container>
+        </nav>
 
-      <Container>
-        <Padding>MEDIA</Padding>
-        <Padding>mimetype: {formats[0].mimeType}</Padding>
-        <Padding>
-          <Button href={formats[0].uri.replace('ipfs://', CLOUDFLARE)}>
-            <Primary>ipfs</Primary>
-          </Button>
-        </Padding>
-      </Container>
+        <footer>
+          <Container>
+            <Padding>MEDIA</Padding>
+            <Padding>mimetype: {formats[0].mimeType}</Padding>
+            <Padding>
+              <Button href={formats[0].uri.replace('ipfs://', CLOUDFLARE)}>
+                <Primary>ipfs</Primary>
+              </Button>
+            </Padding>
+          </Container>
+        </footer>
+      </article>
     </>
   )
 }

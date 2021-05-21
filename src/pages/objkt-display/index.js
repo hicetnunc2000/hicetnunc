@@ -110,40 +110,42 @@ export const ObjktDisplay = () => {
             </Padding>
           </Container>
 
-          <Container>
-            <Padding>
-              <Menu>
-                {TABS.map((tab, index) => {
-                  // if secondaryMarket is enabled, we need to check if user owns a copy of the objkt.
-                  // if it doesn't don't render tab
-                  /*                   if (
-                    tab.secondaryMarket === true //&&
-                    //Object.keys(nft.owners).length > 0 &&
-                    //Object.keys(nft.owners).includes(address)
-                  ) {
-                    return null
-                  }
+          <nav>
+            <Container>
+              <Padding>
+                <Menu>
+                  {TABS.map((tab, index) => {
+                    // if secondaryMarket is enabled, we need to check if user owns a copy of the objkt.
+                    // if it doesn't don't render tab
+                    /*                   if (
+                      tab.secondaryMarket === true //&&
+                      //Object.keys(nft.owners).length > 0 &&
+                      //Object.keys(nft.owners).includes(address)
+                    ) {
+                      return null
+                    }
 
-                  // hide menu if user is NOT the owner
-                  // and if user DOESN'T own a copy of the objkt
-                  if (
-                    tab.creatorOnly &&
-                    nft.token_info.creators[0] == address
-                  ) {
-                    return null
-                  } */
+                    // hide menu if user is NOT the owner
+                    // and if user DOESN'T own a copy of the objkt
+                    if (
+                      tab.creatorOnly &&
+                      nft.token_info.creators[0] == address
+                    ) {
+                      return null
+                    } */
 
-                  return (
-                    <Button key={tab.title} onClick={() => setTabIndex(index)}>
-                      <Primary selected={tabIndex === index}>
-                        {tab.title}
-                      </Primary>
-                    </Button>
-                  )
-                })}
-              </Menu>
-            </Padding>
-          </Container>
+                    return (
+                      <Button key={tab.title} onClick={() => setTabIndex(index)}>
+                        <Primary selected={tabIndex === index}>
+                          {tab.title}
+                        </Primary>
+                      </Button>
+                    )
+                  })}
+                </Menu>
+              </Padding>
+            </Container>
+          </nav>
 
           <Tab {...nft} address={address} />
         </>
