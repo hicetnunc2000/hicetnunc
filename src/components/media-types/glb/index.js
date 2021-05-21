@@ -13,6 +13,7 @@ export const GLBComponent = ({ src, interactive }) => {
     autoplay: true,
     'auto-rotate': true,
     'data-js-focus-visible': true,
+    'interaction-prompt': 'none'
   }
 
   if (interactive) {
