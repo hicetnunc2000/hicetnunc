@@ -40,10 +40,15 @@ export class Config extends Component {
     console.log(this.state)
   }
 
-  // config personax
+  // config subjkt
 
   subjkt_config = async () => {
-    const ipfs = create(infuraUrl)
+    const ipfs = create(infuraUrl)    
+    const [file] = this.state.selectedFile
+
+    const buffer = Buffer.from(await file.arrayBuffer())
+
+    this.setState({ avatar : 'ipfs://' + (await ipfs.add(buffer)).path })
 
     this.context.registry(
       this.state.subjkt,
@@ -75,6 +80,15 @@ export class Config extends Component {
         */
   }
 
+  // upload file
+
+  onFileChange = event => {
+    
+    this.setState({       selectedFile: event.target.files,
+      fileTitle: event.target.files[0].name })
+  
+  }
+  
   hDAO_operators = () => {
     this.context.hDAO_update_operators(this.context.acc.address)
   }
@@ -130,7 +144,7 @@ export class Config extends Component {
               {/* social media */}
               <Container>
                 <Padding>
-                  <Upload label="SUBJKT image" />
+                  <input type="file" onChange={this.onFileChange} />
                 </Padding>
               </Container>
               <button onClick={this.subjkt_config}>config</button>

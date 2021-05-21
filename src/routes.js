@@ -72,6 +72,10 @@ export const routes = [
     path: '/gallery/:id',
     component: GalleryDetail,
   },
+
+  //
+  //add condition for verifying if user is synced
+  ///////////////
   {
     exact: false,
     path: '/config',
