@@ -43,8 +43,6 @@ export default class Display extends Component {
   }
 
   componentWillMount = async () => {
-    console.log(window.location.pathname.split('/'))
-
     if (window.location.pathname.split('/')[1] === 'tz') {
       this.setState({
         wallet: window.location.pathname.split('/')[2],
