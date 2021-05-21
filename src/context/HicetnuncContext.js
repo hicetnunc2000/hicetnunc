@@ -172,6 +172,13 @@ class HicetnuncContextProviderClass extends Component {
                 progress: true,
                 confirm: false,
               })
+
+              // hide after 1 second
+              setTimeout(() => {
+                this.state.setFeedback({
+                  visible: false,
+                })
+              }, 1000)
             })
           )
           .catch((err) => {
@@ -181,6 +188,13 @@ class HicetnuncContextProviderClass extends Component {
               progress: true,
               confirm: false,
             })
+
+            // hide after 1 second
+            setTimeout(() => {
+              this.state.setFeedback({
+                visible: false,
+              })
+            }, 1000)
           })
       },
 
