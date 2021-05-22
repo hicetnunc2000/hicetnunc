@@ -126,7 +126,8 @@ export const ObjktDisplay = () => {
                     )
                     if (
                       Object.keys(nft.owners).includes(address) === false &&
-                      nft.token_info.creators.includes(address) === false
+                      nft.token_info.creators.includes(address) === false &&
+                      nft.token_info.creators.includes(proxy) === false
                     ) {
                       // user is not the creator now owns a copy of the object. hide
 
