@@ -10,6 +10,7 @@ import { renderMediaType } from '../../components/media-types'
 import { ItemInfo } from '../../components/item-info'
 import { Menu } from '../../components/menu'
 import { Info, Collectors, Swap, Burn } from './tabs'
+import { TwitterCard } from './twitter-card'
 
 const TABS = [
   { title: 'info', component: Info }, // public tab
@@ -93,6 +94,7 @@ export const ObjktDisplay = () => {
 
       {!loading && !error && (
         <>
+          <TwitterCard nft={nft} />
           <Container>
             {nft.token_id &&
               renderMediaType({
