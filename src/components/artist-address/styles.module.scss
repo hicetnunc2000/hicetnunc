@@ -1,0 +1,18 @@
+@import '../../styles/layout.scss';
+@import '../../styles/variables.scss';
+
+.artist {
+  display: flex;
+  align-items: center;
+}
+
+.icon {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin-right: 5px;
+  img {
+    width: 100%;
+  }
+}
