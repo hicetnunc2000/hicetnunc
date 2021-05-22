@@ -14,20 +14,26 @@
   .content {
     color: var(--text-color);
     min-width: 300px;
-    // border: 1px dashed black;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
 
     .message {
       display: flex;
       align-items: center;
       justify-content: center;
       flex-direction: column;
+      margin: 20px 0 50px 0;
+
+      & > * {
+        margin-bottom: 1rem;
+      }
     }
 
     .buttons {
       display: flex;
       align-items: center;
       justify-content: center;
-      margin-top: 50px;
     }
   }
 }

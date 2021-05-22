@@ -12,8 +12,8 @@ import { MIMETYPE, IPFS_DIRECTORY_MIMETYPE } from '../../constants'
 import { Container } from './container'
 
 const CLOUDFLARE = 'https://cloudflare-ipfs.com/ipfs/'
-const PINATA = 'https://gateway.pinata.cloud/ipfs/'
-// const IPFS = 'https://ipfs.io/ipfs/'
+// const PINATA = 'https://gateway.pinata.cloud/ipfs/'
+const IPFS = 'https://ipfs.io/ipfs/'
 
 function getInfuraUrl(hash) {
   const cidv1 = new ipfsClient.CID(hash).toV1()
@@ -27,8 +27,6 @@ export const renderMediaType = (props) => {
     uri,
     interactive = false,
     preview = false,
-    shown = null, // only set in gallery item for now
-    inView = null, // only set in gallery item for now
     metadata,
   } = props
   const path = uri
@@ -63,12 +61,19 @@ export const renderMediaType = (props) => {
         url = getInfuraUrl(path)
       }
       let displayUri = ''
+      // old
       if (metadata && metadata.token_info && metadata.token_info.displayUri) {
         displayUri = metadata.token_info.displayUri.replace(
           'ipfs://',
           CLOUDFLARE
         )
       }
+
+      // new
+      // if (metadata && metadata.display_uri) {
+      //   displayUri = metadata.display_uri.replace('ipfs://', CLOUDFLARE)
+      // }
+
       return (
         <Container interactive={interactive}>
           <HTMLComponent
@@ -84,7 +89,7 @@ export const renderMediaType = (props) => {
     case MIMETYPE.OGV:
     case MIMETYPE.QUICKTIME:
     case MIMETYPE.WEBM:
-      url = preview ? uri : `${PINATA}${path}`
+      url = preview ? uri : `${IPFS}${path}`
       return (
         <Container interactive={interactive} nofullscreen>
           <VideoComponent src={url} />
@@ -101,7 +106,9 @@ export const renderMediaType = (props) => {
     /* AUDIO */
     case MIMETYPE.MP3:
     case MIMETYPE.OGA:
-      url = preview ? uri : `${PINATA}${path}`
+    case MIMETYPE.FLAC:
+    case MIMETYPE.WAV:
+      url = preview ? uri : `${IPFS}${path}`
       return (
         <Container interactive={interactive}>
           <AudioComponent {...metadata} src={url} />

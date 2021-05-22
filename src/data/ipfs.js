@@ -3,7 +3,7 @@ import {
   IPFS_DISPLAY_URI_BLACKCIRCLE,
 } from '../constants'
 
-const createClient = require('ipfs-http-client')
+const { create } = require('ipfs-http-client')
 const Buffer = require('buffer').Buffer
 const axios = require('axios')
 const readJsonLines = require('read-json-lines-sync').default
@@ -22,7 +22,7 @@ export const prepareFile = async ({
   thumbnail,
   generateDisplayUri,
 }) => {
-  const ipfs = createClient(infuraUrl)
+  const ipfs = create(infuraUrl)
 
   // upload main file
   const info = await ipfs.add(buffer)
@@ -72,7 +72,7 @@ export const prepareDirectory = async ({
   const cid = `ipfs://${hashes.directory}`
 
   // upload cover image
-  const ipfs = createClient(infuraUrl)
+  const ipfs = create(infuraUrl)
 
   let displayUri = ''
   if (generateDisplayUri) {
@@ -156,7 +156,7 @@ async function uploadMetadataFile({
   displayUri = '',
   thumbnailUri = IPFS_DISPLAY_URI_BLACKCIRCLE,
 }) {
-  const ipfs = createClient(infuraUrl)
+  const ipfs = create(infuraUrl)
 
   return await ipfs.add(
     Buffer.from(

@@ -23,7 +23,6 @@ export default class Sync extends Component {
     } else {
       await this.context.setAccount()
     }
-    console.log(this.context)
   }
 
   render() {
