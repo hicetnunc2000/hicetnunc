@@ -155,7 +155,7 @@ export const Mint = () => {
         })
       }
 
-      mint(getAuth(), amount, nftCid.path, royalties)
+      mint(minterAddress, amount, nftCid.path, royalties)
     }
   }
 
