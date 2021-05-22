@@ -1,0 +1,33 @@
+{
+    "title": "Cronopios",
+    "uid": "cronopios",
+    "description": "“A Cronopio is a flower. Two are a garden.” — Julio Cortázar",
+    "staging": "https://hen-fen.netlify.app/gallery/cronopios",
+    "minimal": false,
+    "data": [
+        {
+            "artist": "Collaborations",
+            "objkt": [23001, 53662]
+        },
+        {
+            "artist": "Solo Works",
+            "objkt": [15770,
+                      44707,
+                      4419,
+                      8971,
+                      48250,
+                      12738,
+                      49195,
+                      49800,
+                      41087,
+                      27795,
+                      52143,
+                      1149,
+                      18194,
+                      46422,
+                      47787,
+                      7986,
+                      50099]
+        }
+    ]
+}
