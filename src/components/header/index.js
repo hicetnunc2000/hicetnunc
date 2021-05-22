@@ -144,7 +144,7 @@ export const Header = () => {
                     </li> */}
                     <li>
                       <Button onClick={() => handleRoute('/proxy')}>
-                        <Primary>proxy contracts</Primary>
+                        <Primary>collaborations</Primary>
                       </Button>
                     </li>
                     <li>

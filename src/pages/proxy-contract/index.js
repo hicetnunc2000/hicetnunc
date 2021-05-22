@@ -5,8 +5,8 @@ import { Select, Originate } from './tabs'
 import { Menu } from '../../components/menu'
 
 const TABS = [
-  { title: 'select', component: Select },
-  { title: 'originate', component: Originate },
+  { title: 'use collaboration', component: Select },
+  { title: 'create collaboration', component: Originate },
 ]
 
 export const ProxyContract = () => {
