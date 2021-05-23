@@ -28,15 +28,16 @@ export const TipJar = ({ tips, setTips }) => {
     const _updateTip = (index, percentage) => {
         const updatedTips = [...tips]
 
+        // toggle if it's the same value
+        const shouldRemove = updatedTips[index] ? (updatedTips[index].percentage === percentage) : false
+
         updatedTips[index] = {
             ...tips[index],
-            percentage,
+            percentage: shouldRemove ? undefined : percentage,
         }
 
         setTips(updatedTips)
     }
-
-    console.log(tips)
 
     return (
         <div className={styles.mt12}>
