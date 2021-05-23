@@ -36,7 +36,8 @@ export const Header = () => {
   if (context.acc?.address) {
     // is menu closed?
     if (context.collapsed) {
-      button = walletPreview(context.acc.address)
+      const proxyAddress = context.proxyAddress ? ' (' + context.proxyAddress + ')' : ''
+      button = walletPreview(context.acc.address) + proxyAddress
     } else {
       // menu is open
       button = 'unsync'
@@ -120,8 +121,15 @@ export const Header = () => {
                       </Button>
                     </li>
                     <li>
+                      <Button onClick={() => handleRoute('/galleries')}>
+                        <Primary>galleries</Primary>
+                      </Button>
+                    </li>
+                    <li>
                       <Button onClick={() => handleRoute('/mint')}>
-                        <Primary>OBJKTs</Primary>
+                        <Primary>
+                          OBJKT<span style={{ fontSize: '16px' }}> (mint)</span>
+                        </Primary>
                       </Button>
                     </li>
                     <li>
@@ -134,9 +142,24 @@ export const Header = () => {
                         <Primary>manage assets</Primary>
                       </Button>
                     </li>
+                    {/*                     <li>
+                      <Button onClick={() => handleRoute('/config')}>
+                        <Primary>config</Primary>
+                      </Button>
+                    </li> */}
+                    <li>
+                      <Button onClick={() => handleRoute('/collaborate')}>
+                        <Primary>collaborate</Primary>
+                      </Button>
+                    </li>
                     <li>
                       <Button onClick={() => handleRoute('/about')}>
                         <Primary>about</Primary>
+                      </Button>
+                    </li>
+                    <li>
+                      <Button onClick={() => handleRoute('/faq')}>
+                        <Primary>faq</Primary>
                       </Button>
                     </li>
                   </ul>

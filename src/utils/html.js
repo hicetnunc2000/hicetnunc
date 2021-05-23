@@ -132,8 +132,6 @@ export function injectCSPMetaTagIntoHTML(html) {
     'afterbegin',
     `
     <meta http-equiv="Content-Security-Policy" content="
-    frame-ancestors
-      *;
     upgrade-insecure-requests;
     default-src
       'none';
@@ -209,8 +207,6 @@ export function injectCSPMetaTagIntoHTML(html) {
       https://fonts.googleapis.com/
       https://ipfs.io/
       https://gateway.pinata.cloud/;
-    webrtc-src
-      *;
     worker-src
       'self'
       'unsafe-inline'
@@ -264,30 +260,6 @@ export async function validateFiles(files) {
       valid: false,
       error:
         'Missing <head> tag in index.html. Please refer to the Interactive OBJKTs Guide..',
-    }
-  }
-
-  // check for cover image
-  // TODO: remove this once we switch to cover imgae upload
-  let coverImagePath = getCoverImagePathFromDoc(doc)
-  if (!coverImagePath) {
-    return {
-      valid: false,
-      error:
-        'Missing cover image <meta> tag in index.html. Please refer to the Interactive OBJKTs Guide.',
-    }
-  }
-
-  // check for cover image itself
-  // TODO: remove this once we switch to cover imgae upload
-  if (coverImagePath.indexOf('./') === 0) {
-    coverImagePath = coverImagePath.replace('./', '')
-  }
-
-  if (!files[coverImagePath]) {
-    return {
-      valid: false,
-      error: `Missing cover image ${coverImagePath}. Please refer to the Interactive OBJKTs Guide.`,
     }
   }
 

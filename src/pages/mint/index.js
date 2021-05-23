@@ -1,11 +1,9 @@
 import React, { useContext, useState } from 'react'
-import { useHistory } from 'react-router'
 import Compressor from 'compressorjs'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
 import { Page, Container, Padding } from '../../components/layout'
 import { Input } from '../../components/input'
 import { Button, Curate, Primary } from '../../components/button'
-import { Loading } from '../../components/loading'
 import { Upload } from '../../components/upload'
 import { Preview } from '../../components/preview'
 import { prepareFile, prepareDirectory } from '../../data/ipfs'
@@ -17,7 +15,9 @@ import {
   ALLOWED_COVER_FILETYPES_LABEL,
   MINT_FILESIZE,
   MIMETYPE,
-  PATH,
+  MAX_EDITIONS,
+  MIN_ROYALTIES,
+  MAX_ROYALTIES,
 } from '../../constants'
 
 const coverOptions = {
@@ -36,8 +36,9 @@ const thumbnailOptions = {
 const GENERATE_DISPLAY_AND_THUMBNAIL = false
 
 export const Mint = () => {
-  const { mint, getAuth, acc, setAccount } = useContext(HicetnuncContext)
-  const history = useHistory()
+  const { mint, getAuth, acc, setAccount, getProxy, setFeedback, syncTaquito } =
+    useContext(HicetnuncContext)
+  // const history = useHistory()
   const [step, setStep] = useState(0)
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
@@ -47,78 +48,115 @@ export const Mint = () => {
   const [file, setFile] = useState() // the uploaded file
   const [cover, setCover] = useState() // the uploaded or generated cover image
   const [thumbnail, setThumbnail] = useState() // the uploaded or generated cover image
-  const [message, setMessage] = useState('')
   const [needsCover, setNeedsCover] = useState(false)
 
   const handleMint = async () => {
-    setAccount()
     if (!acc) {
-      alert('sync')
-      return
-    }
+      // warning for sync
+      setFeedback({
+        visible: true,
+        message: 'sync your wallet',
+        progress: true,
+        confirm: false,
+      })
 
-    // check mime type
-    if (ALLOWED_MIMETYPES.indexOf(file.mimeType) === -1) {
-      alert(
-        `File format invalid. supported formats include: ${ALLOWED_FILETYPES_LABEL.toLocaleLowerCase()}`
-      )
-      return
-    }
+      await syncTaquito()
 
-    // check file size
-    const filesize = (file.file.size / 1024 / 1024).toFixed(4)
-    if (filesize > MINT_FILESIZE) {
-      alert(
-        `File too big (${filesize}). Limit is currently set at ${MINT_FILESIZE}MB`
-      )
-      return
-    }
-
-    // file about to be minted, change to the mint screen
-
-    setStep(2)
-    // upload file(s)
-    let nftCid
-    if ([MIMETYPE.ZIP, MIMETYPE.ZIP1, MIMETYPE.ZIP2].includes(file.mimeType)) {
-      const files = await prepareFilesFromZIP(file.buffer)
-
-      nftCid = await prepareDirectory({
-        name: title,
-        description,
-        tags,
-        address: acc.address,
-        files,
-        cover,
-        thumbnail,
-        generateDisplayUri: GENERATE_DISPLAY_AND_THUMBNAIL,
+      setFeedback({
+        visible: false,
       })
     } else {
-      // process all other files
-      nftCid = await prepareFile({
-        name: title,
-        description,
-        tags,
-        address: acc.address,
-        buffer: file.buffer,
-        mimeType: file.mimeType,
-        cover,
-        thumbnail,
-        generateDisplayUri: GENERATE_DISPLAY_AND_THUMBNAIL,
-      })
-    }
+      await setAccount()
 
-    mint(getAuth(), amount, nftCid.path, royalties)
-      .then((e) => {
-        console.log('mint confirm', e)
-        setMessage('Minted successfully')
-        // redirect here
-        history.push(PATH.FEED)
+      // check mime type
+      if (ALLOWED_MIMETYPES.indexOf(file.mimeType) === -1) {
+        // alert(
+        //   `File format invalid. supported formats include: ${ALLOWED_FILETYPES_LABEL.toLocaleLowerCase()}`
+        // )
+
+        setFeedback({
+          visible: true,
+          message: `File format invalid. supported formats include: ${ALLOWED_FILETYPES_LABEL.toLocaleLowerCase()}`,
+          progress: false,
+          confirm: true,
+          confirmCallback: () => {
+            setFeedback({ visible: false })
+          },
+        })
+
+        return
+      }
+
+      // check file size
+      const filesize = (file.file.size / 1024 / 1024).toFixed(4)
+      if (filesize > MINT_FILESIZE) {
+        // alert(
+        //   `File too big (${filesize}). Limit is currently set at ${MINT_FILESIZE}MB`
+        // )
+
+        setFeedback({
+          visible: true,
+          message: `File too big (${filesize}). Limit is currently set at ${MINT_FILESIZE}MB`,
+          progress: false,
+          confirm: true,
+          confirmCallback: () => {
+            setFeedback({ visible: false })
+          },
+        })
+
+        return
+      }
+
+      // file about to be minted, change to the mint screen
+
+      setStep(2)
+
+      setFeedback({
+        visible: true,
+        message: 'preparing OBJKT',
+        progress: true,
+        confirm: false,
       })
-      .catch((e) => {
-        console.log('mint error', e)
-        alert('an error occurred')
-        setMessage('an error occurred')
-      })
+
+      // if proxyContract is selected, using it as a the miterAddress:
+      const minterAddress = getProxy() || acc.address
+      // ztepler: I have not understand the difference between acc.address and getAuth here
+      //    so I am using acc.address (minterAddress) in both nftCid.address and in mint call
+
+      // upload file(s)
+      let nftCid
+      if (
+        [MIMETYPE.ZIP, MIMETYPE.ZIP1, MIMETYPE.ZIP2].includes(file.mimeType)
+      ) {
+        const files = await prepareFilesFromZIP(file.buffer)
+
+        nftCid = await prepareDirectory({
+          name: title,
+          description,
+          tags,
+          address: minterAddress,
+          files,
+          cover,
+          thumbnail,
+          generateDisplayUri: GENERATE_DISPLAY_AND_THUMBNAIL,
+        })
+      } else {
+        // process all other files
+        nftCid = await prepareFile({
+          name: title,
+          description,
+          tags,
+          address: minterAddress,
+          buffer: file.buffer,
+          mimeType: file.mimeType,
+          cover,
+          thumbnail,
+          generateDisplayUri: GENERATE_DISPLAY_AND_THUMBNAIL,
+        })
+      }
+
+      mint(minterAddress, amount, nftCid.path, royalties)
+    }
   }
 
   const handlePreview = () => {
@@ -131,10 +169,7 @@ export const Mint = () => {
     if (GENERATE_DISPLAY_AND_THUMBNAIL) {
       if (props.mimeType.indexOf('image') === 0) {
         setNeedsCover(false)
-        const cover = await generateCompressedImage(props, coverOptions)
-        setCover(cover)
-        const thumb = await generateCompressedImage(props, thumbnailOptions)
-        setThumbnail(thumb)
+        await generateCoverAndThumbnail(props)
       } else {
         setNeedsCover(true)
       }
@@ -173,6 +208,17 @@ export const Mint = () => {
   }
 
   const handleCoverUpload = async (props) => {
+    await generateCoverAndThumbnail(props)
+  }
+
+  const generateCoverAndThumbnail = async (props) => {
+    // TMP: skip GIFs to avoid making static
+    if (props.mimeType === MIMETYPE.GIF) {
+      setCover(props)
+      setThumbnail(props)
+      return
+    }
+
     const cover = await generateCompressedImage(props, coverOptions)
     setCover(cover)
 
@@ -180,22 +226,31 @@ export const Mint = () => {
     setThumbnail(thumb)
   }
 
+  const limitNumericField  = async (target, minValue, maxValue) => {
+    if(target.value === '') target.value = ''; // Seems redundant but actually cleans up e.g. '234e'
+    target.value = Math.round(Math.max(Math.min(target.value, maxValue), minValue));
+  }
+
   const handleValidation = () => {
+    if (amount <= 0 ||
+        amount > MAX_EDITIONS ||
+        royalties < MIN_ROYALTIES ||
+        royalties > MAX_ROYALTIES ||
+        !file) {
+      return true;
+    }
     if (GENERATE_DISPLAY_AND_THUMBNAIL) {
-      if (amount > 0 && file && cover && thumbnail && royalties >= 10) {
+      if (cover && thumbnail) {
         return false
       }
     } else {
-      if (amount > 0 && file && royalties >= 10) {
-        return false
-      }
+      return false
     }
-
     return true
   }
 
   return (
-    <Page title="mint">
+    <Page title="mint" large>
       {step === 0 && (
         <>
           <Container>
@@ -213,6 +268,7 @@ export const Mint = () => {
                 onChange={(e) => setDescription(e.target.value)}
                 placeholder="description"
                 label="description"
+                maxlength="2000"
                 value={description}
               />
 
@@ -227,18 +283,21 @@ export const Mint = () => {
               <Input
                 type="number"
                 min={1}
-                onChange={(e) => setAmount(e.target.value)}
-                placeholder="editions (no. editions)"
+                max={MAX_EDITIONS}
+                onChange={(e) => setAmount(e.target.value) }
+                onBlur={ (e) => { limitNumericField(e.target, 1, MAX_EDITIONS); setAmount(e.target.value) } }
+                placeholder={`editions (no. editions, 1-${MAX_EDITIONS})`}
                 label="editions"
                 value={amount}
               />
 
               <Input
                 type="number"
-                min={10}
-                max={25}
-                onChange={(e) => setRoyalties(e.target.value)}
-                placeholder="royalties after each sale (between 10-25%)"
+                min={MIN_ROYALTIES}
+                max={MAX_ROYALTIES}
+                onChange={(e) => setRoyalties(e.target.value) }
+                onBlur={ (e) => { limitNumericField(e.target, MIN_ROYALTIES, MAX_ROYALTIES); setRoyalties(e.target.value) } }
+                placeholder={`royalties after each sale (between ${MIN_ROYALTIES}-${MAX_ROYALTIES}%)`}
                 label="royalties"
                 value={royalties}
               />
@@ -307,7 +366,7 @@ export const Mint = () => {
           <Container>
             <Padding>
               <Button onClick={handleMint} fit>
-                <Curate>mint {amount} OBJKTs</Curate>
+                <Curate>mint OBJKT</Curate>
               </Button>
             </Padding>
           </Container>
@@ -318,33 +377,6 @@ export const Mint = () => {
               <p>Your royalties upon each sale are {royalties}%</p>
             </Padding>
           </Container>
-        </>
-      )}
-
-      {step === 2 && (
-        <>
-          <Container>
-            <div
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                flexDirection: 'column',
-                height: 'calc(100vh - 200px)',
-              }}
-            >
-              preparing OBJKT
-              <Loading />
-            </div>
-          </Container>
-
-          {message && (
-            <Container>
-              <Padding>
-                <p>{message}</p>
-              </Padding>
-            </Container>
-          )}
         </>
       )}
     </Page>

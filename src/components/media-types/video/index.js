@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from 'react'
+import { iOS } from '../../../utils/os'
 import styles from './styles.module.scss'
 
 export const VideoComponent = ({ src, interactive, inView }) => {
@@ -24,6 +25,9 @@ export const VideoComponent = ({ src, interactive, inView }) => {
     //       })
     //   }
     // }
+
+    const isVideoAvailable = (video) => iOS || video.readyState > 2
+
     const isVideoPlaying = (video) =>
       !!(
         video.currentTime > 0 &&
@@ -31,12 +35,15 @@ export const VideoComponent = ({ src, interactive, inView }) => {
         !video.ended &&
         video.readyState > 2
       )
-    const isVideoAvailable = (video) => video.readyState > 2
 
     if (inView) {
       // play
       if (isVideoAvailable(domElement.current)) {
-        domElement.current.play()
+        try {
+          domElement.current.play()
+        } catch (err) {
+          console.log(err)
+        }
       }
     } else {
       // pause
@@ -44,7 +51,11 @@ export const VideoComponent = ({ src, interactive, inView }) => {
         isVideoAvailable(domElement.current) &&
         isVideoPlaying(domElement.current)
       ) {
-        domElement.current.pause()
+        try {
+          domElement.current.pause()
+        } catch (err) {
+          console.log(err)
+        }
       }
     }
   }, [inView])
@@ -54,7 +65,8 @@ export const VideoComponent = ({ src, interactive, inView }) => {
       <video
         ref={domElement}
         className={styles.video}
-        autoPlay={interactive}
+        autoPlay={inView}
+        playsInline
         muted
         loop
         controls={interactive}

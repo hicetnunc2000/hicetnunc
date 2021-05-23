@@ -51,11 +51,15 @@ const filterFeeds = (original) => {
  * Gets Feed for homepage
  * filters it against a blocklist json
  */
-export const GetLatestFeed = async ({ counter }) => {
+export const GetLatestFeed = async ({ counter, max_time }) => {
   return new Promise((resolve, reject) => {
-    axios.post(process.env.REACT_APP_FEED, { counter: counter }).then((res) => {
-      resolve(filterFeeds(res.data.result))
-    })
+    axios
+      .get(process.env.REACT_APP_FEED, {
+        params: { counter: counter, max_time: max_time },
+      })
+      .then((res) => {
+        resolve(filterFeeds(res.data.result))
+      })
   })
 }
 
@@ -65,19 +69,39 @@ export const GetLatestFeed = async ({ counter }) => {
 export const GethDAOFeed = async ({ counter }) => {
   return new Promise((resolve, reject) => {
     axios
-      .post(process.env.REACT_APP_FEED_HDAO, { counter: counter })
+      .get(process.env.REACT_APP_FEED_HDAO, {
+        params: { counter: counter },
+      })
       .then((res) => {
         resolve(filterFeeds(res.data.result))
       })
   })
 }
+
+/**
+ * Gets Feed for Featured
+ */
+export const GetFeaturedFeed = async ({ counter, max_time }) => {
+  return new Promise((resolve, reject) => {
+    axios
+      .get(process.env.REACT_APP_FEATURED, {
+        params: { counter: counter, max_time: max_time },
+      })
+      .then((res) => {
+        resolve(filterFeeds(res.data.result))
+      })
+  })
+}
+
 /**
  * Get Random Feed
  */
 export const GetRandomFeed = async ({ counter }) => {
   return new Promise((resolve, reject) => {
     axios
-      .post(process.env.REACT_APP_RANDOM, { counter: counter })
+      .get(process.env.REACT_APP_RANDOM, {
+        params: { counter: counter },
+      })
       .then((res) => {
         resolve(filterFeeds(res.data.result))
       })
@@ -90,8 +114,24 @@ export const GetRandomFeed = async ({ counter }) => {
 export const GetOBJKT = async ({ id }) => {
   return new Promise((resolve, reject) => {
     axios
-      .post(process.env.REACT_APP_OBJKT, {
-        objkt_id: id,
+      .get(process.env.REACT_APP_OBJKT, {
+        params: { id: id },
+      })
+      .then((res) => {
+        resolve(res.data.result)
+      })
+      .catch((e) => reject(e))
+  })
+}
+
+/**
+ * Get OBJKT detail page
+ */
+export const GetTags = async ({ tag, page }) => {
+  return new Promise((resolve, reject) => {
+    axios
+      .get(process.env.REACT_APP_TAGS, {
+        params: { tag, page },
       })
       .then((res) => {
         resolve(res.data.result)
@@ -101,7 +141,7 @@ export const GetOBJKT = async ({ id }) => {
 }
 
 /**
- * Get User Metaata from tzkt.io
+ * Get User Metadata from tzkt.io
  */
 export const GetUserMetadata = async (walletAddr) => {
   return await axios.get(

@@ -4,6 +4,7 @@ import HicetnuncContextProvider from './context/HicetnuncContext'
 import { getInitialData } from './data/api'
 import { Header } from './components/header'
 import { Loading as Preloading } from './components/loading'
+import { FeedbackComponent } from './components/feedback'
 import { routes } from './routes'
 
 const App = () => {
@@ -23,6 +24,7 @@ const App = () => {
   return (
     <HicetnuncContextProvider>
       <Header />
+      <FeedbackComponent />
       <Switch>
         {routes.map(({ exact, path, component: Comp }) => (
           <Route path={path} exact={exact} key={path} component={Comp} />
