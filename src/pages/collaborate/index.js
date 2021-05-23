@@ -1,15 +1,15 @@
 import React, { useState } from 'react'
 import { Page, Container, Padding } from '../../components/layout'
 import { Button, Primary } from '../../components/button'
-import { Select, Originate } from './tabs'
+import { Select, CreateCollaboration } from './tabs'
 import { Menu } from '../../components/menu'
 
 const TABS = [
   { title: 'use collaboration', component: Select },
-  { title: 'create collaboration', component: Originate },
+  { title: 'create collaboration', component: CreateCollaboration },
 ]
 
-export const ProxyContract = () => {
+export const Collaborate = () => {
   const [tabIndex, setTabIndex] = useState(0)
 
   const Tab = TABS[tabIndex].component
