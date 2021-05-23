@@ -1,7 +1,7 @@
 import React, { createContext, Component } from 'react'
 import { withRouter } from 'react-router'
 import { BeaconWallet } from '@taquito/beacon-wallet'
-import { TezosToolkit } from '@taquito/taquito'
+import { TezosToolkit, MichelsonMap } from '@taquito/taquito'
 import { setItem } from '../utils/storage'
 import { KeyStoreUtils } from 'conseiljs-softsigner'
 
@@ -496,6 +496,29 @@ class HicetnuncContextProviderClass extends Component {
         })
       },
       hDAO_vote: ls.get('hDAO_vote'),
+
+      proxyFactoryAddress: 'KT1UmgaFQgHrqEb4kPK4GoeHyu7YBfGu3rd4',
+      originateProxy: async (administratorAddress, shares) => {
+        /*const params = {
+          administrator: administratorAddress,
+          // shares: MichelsonMap.fromLiteral(shares)
+          shares: shares
+        };*/
+
+        console.log('shares', shares)
+
+        return await Tezos.wallet
+          .at(this.state.proxyFactoryAddress)
+          .then((c) =>
+            c.methods
+              .default(
+                administratorAddress,
+                MichelsonMap.fromLiteral(shares)
+              )
+              .send({ amount: 0 })
+          )
+          .catch((e) => console.log(e))
+      },
     }
   }
 
