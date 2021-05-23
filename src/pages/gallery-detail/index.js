@@ -25,7 +25,39 @@ export const GalleryDetail = () => {
     }
   }
 
+
   useEffect(() => {
+    const maxItems = 100
+
+    const isBigGallery = (gData) => {
+      return (
+        gData.length === 1
+        && gData[0].objkt
+        && gData[0].objkt.length > maxItems)
+    }
+
+    const loadDefault = (collectionData) => {
+      setCollection(collectionData)
+      setLoaded(true)
+    }
+
+    const loadPartial = (collectionData) => {
+      const {data} = collectionData
+      setCollection(collectionData)
+      setLoaded(true)
+    }
+
+    const galleryJSONLoaded = (collectionData) => {
+      const {data} = collectionData
+      console.dir(data)
+      if (isBigGallery(data)){
+        loadDefault(collectionData)
+      }
+      else {
+        loadPartial(collectionData)
+      }
+    }
+
     // loads gallery to check endpoint file
     fetch('/galleries/galleries.json')
       .then((e) => e.json())
@@ -35,10 +67,7 @@ export const GalleryDetail = () => {
         if (found) {
           fetch(found.endpoint)
             .then((e) => e.json())
-            .then((data) => {
-              setCollection(data)
-              setLoaded(true)
-            })
+            .then(galleryJSONLoaded)
         } else {
           alert(`gallery ${id} not found`)
         }
