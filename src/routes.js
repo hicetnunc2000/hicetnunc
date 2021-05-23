@@ -4,6 +4,7 @@ import Display from './pages/display'
 import { Latest, Hdao, Random } from './pages/feeds'
 import { Mint } from './pages/mint'
 import { ObjktDisplay } from './pages/objkt-display'
+import { Collaborate } from './pages/collaborate'
 // import { Collections } from './pages/collections'
 
 export const routes = [
@@ -41,6 +42,11 @@ export const routes = [
     exact: false,
     path: '/mint',
     component: Mint,
+  },
+  {
+    exact: false,
+    path: '/collaborate',
+    component: Collaborate,
   },
   {
     exact: false,
