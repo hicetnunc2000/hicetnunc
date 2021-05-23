@@ -2,7 +2,7 @@
 export const ossProjects = [
     {
         name: 'Hicathon',
-        address: 'tz1ecr3NoPwvbJQSQXFJrk1cYGcDsJmmKEG7',
+        address: 'tz1ecr3NoPwvbJQSQXFJrk1cYGcDsJmmKEG5',
     },
     {
         name: 'three.js',
