@@ -55,7 +55,6 @@ export const Collaborate = () => {
     }
 
     const calculateSplits = () => {
-
         if (autoSplit) {
             const royaltiesPerCollaborator = availablePercentage / addresses.length
             const updatedCollabs = [...collaborators].map(collaborator => ({
@@ -123,12 +122,6 @@ export const Collaborate = () => {
         // 
     }, [collaborators])
 
-    // useEffect(() => {
-    //     const tipsTotal = collaborators.reduce((remaining, collab) => {
-    //         return remaining - (collab.percentage || 0)
-    //     }, 100)
-    // }, [tips])
-
     const onUpdate = (index, collabData) => {
         const updatedCollabs = [...collaborators]
         updatedCollabs[index] = collabData
@@ -144,10 +137,7 @@ export const Collaborate = () => {
             <Container>
                 <Padding>
                     <h1 className={styles.mb}><strong>add collaborator tz addresses below</strong></h1>
-                    {/* {collaborators.length === 0 && (
-                        <h1 className={styles.mb}><strong>add collaborator tz addresses below</strong></h1>
-                    )} */}
-
+                
                     <div className={styles.mb}>
                         <label htmlFor="auto-split" className={styles.checkbox}>
                             <input id="auto-split" type="checkbox" checked={autoSplit} onChange={() => setAutoSplit(!autoSplit)} /> Auto-split to multiple addresses
