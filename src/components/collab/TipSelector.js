@@ -3,18 +3,20 @@ import { tipOptions } from './constants'
 import classNames from 'classnames'
 
 export const TipSelector = ({ tip, index, onUpdate }) => {
-    <div className={styles.tipSelect}>
-        {tipOptions.map(percentage => {
-            const selected = tip ? tip.percentage == percentage : false
-            const className = classNames(styles.btn, {
-                [styles.selected]: selected,
-            })
+    return (
+        <div className={styles.tipSelect}>
+            {tipOptions.map(percentage => {
+                const selected = tip ? tip.percentage == percentage : false
+                const className = classNames(styles.btn, {
+                    [styles.selected]: selected,
+                })
 
-            return (
-                <button className={className} key={`btn-${percentage}`} onClick={() => onUpdate(index, percentage)}>
-                    {percentage}%
-                </button>
-            )
-        })}
-    </div>
+                return (
+                    <button className={className} key={`btn-${percentage}`} onClick={() => onUpdate(index, percentage)}>
+                        {percentage}%
+                    </button>
+                )
+            })}
+        </div>
+    )
 }

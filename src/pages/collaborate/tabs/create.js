@@ -25,10 +25,11 @@ export const CreateCollaboration = () => {
     // Proxy contract creation
     const { originateProxy } = useContext(HicetnuncContext)
 
+    // Take tips off the top
     const availablePercentage = 100 - tips.reduce((amount, t) => (t.percentage || 0) + amount, 0)
 
     // Check for completed entries
-    const completeCollaborators = collaborators.filter(c => c.percentage && c.address)
+    const validCollaborators = collaborators.filter(c => c.percentage && c.address)
 
     const addCollaborator = (collaborator) => {
         setCollaborators([...collaborators, collaborator])
@@ -58,7 +59,6 @@ export const CreateCollaboration = () => {
     }
 
     const calculateSplits = () => {
-        
         if (autoSplit) {
             const royaltiesPerCollaborator = availablePercentage / addresses.length
             const updatedCollabs = [...collaborators].map(collaborator => ({
@@ -114,7 +114,7 @@ export const CreateCollaboration = () => {
             }
         }
 
-        if (completeCollaborators.length === 0 && collaborators.length === 1) {
+        if (validCollaborators.length === 0 && collaborators.length === 1) {
             setCollaborators([])
         } else {
             calculateSplits()
@@ -142,14 +142,23 @@ export const CreateCollaboration = () => {
         // 100% in the sum)
         let shares = {}
 
-        Object.values(collaborators).forEach(
+
+        const validTips = tips.filter(t => t.percentage).map(t => ({
+            address: t.address,
+            percentage: t.percentage,
+        }));
+
+        // Merge collaborators with tips
+        const allParticipants = validCollaborators.concat(validTips)
+
+        Object.values(allParticipants).forEach(
             value => shares[value['address']] = parseFloat(
                 Math.floor(value['percentage']) * 1000))
 
         console.log('shares', shares)
 
         // performing call to the blockchain using taquito:
-        await originateProxy(administratorAddress, shares)
+        // await originateProxy(administratorAddress, shares)
     }
 
     return (
@@ -168,7 +177,8 @@ export const CreateCollaboration = () => {
                         <tbody>
                             {collaborators.map((collaborator, index) => {
                                 const { address, percentage } = collaborator
-                                const showRemoveButton = (address && percentage && index < collaborators.length - 1)
+                                const showRemoveButton = (address && percentage && (index < collaborators.length - 1 || autoSplit))
+                                const showAddButton = index === collaborators.length - 1 && !autoSplit
 
                                 return (
                                     <CollaboratorRow
@@ -177,7 +187,7 @@ export const CreateCollaboration = () => {
                                         remainingPercentage={remainingPercentage}
                                         onUpdate={(collabData) => onUpdate(index, collabData)}
                                         onRemove={showRemoveButton ? () => removeCollaborator(index) : null}
-                                        onAdd={index === collaborators.length - 1 ? addCollaborator : null}
+                                        onAdd={showAddButton ? addCollaborator : null}
                                         minimalView={showTipJar}
                                     />
                                 )
@@ -196,9 +206,9 @@ export const CreateCollaboration = () => {
                         />
                     )}
 
-                    {completeCollaborators.length > 0 && !showTipJar && (
-                        <Button onClick={() => setShowTipJar(true)} disabled={completeCollaborators.length < 2}>
-                            <Primary>add {completeCollaborators.length} collaborator{completeCollaborators.length > 1 ? 's' : ''}</Primary>
+                    {validCollaborators.length > 0 && !showTipJar && (
+                        <Button onClick={() => setShowTipJar(true)} disabled={validCollaborators.length < 2}>
+                            <Primary>add {validCollaborators.length} collaborator{validCollaborators.length > 1 ? 's' : ''}</Primary>
                         </Button>
                     )}
 
@@ -206,7 +216,7 @@ export const CreateCollaboration = () => {
                         <TipJar tips={tips} setTips={setTips} />
                     )}
 
-                    {completeCollaborators.length > 0 && showTipJar && (
+                    {validCollaborators.length > 0 && showTipJar && (
                         <Padding>
                             <Button onClick={(e) => originateContract()} fit>
                                 <Curate>Create new collaborative contract</Curate>
