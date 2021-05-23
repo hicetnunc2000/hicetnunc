@@ -158,7 +158,7 @@ export const CreateCollaboration = () => {
         console.log('shares', shares)
 
         // performing call to the blockchain using taquito:
-        // await originateProxy(administratorAddress, shares)
+        await originateProxy(administratorAddress, shares)
     }
 
     return (
@@ -207,22 +207,22 @@ export const CreateCollaboration = () => {
                     )}
 
                     {validCollaborators.length > 0 && !showTipJar && (
-                        <Button onClick={() => setShowTipJar(true)} disabled={validCollaborators.length < 2}>
-                            <Primary>add {validCollaborators.length} collaborator{validCollaborators.length > 1 ? 's' : ''}</Primary>
-                        </Button>
+                        <div>
+                            <Button onClick={() => setShowTipJar(true)} disabled={validCollaborators.length < 2}>
+                                <Primary>add {validCollaborators.length} collaborator{validCollaborators.length > 1 ? 's' : ''}</Primary>
+                            </Button>
+                        </div>
                     )}
 
                     {showTipJar && (
                         <TipJar tips={tips} setTips={setTips} />
                     )}
 
-                    {validCollaborators.length > 0 && showTipJar && (
-                        <Padding>
-                            <Button onClick={(e) => originateContract()} fit>
-                                <Curate>Create new collaborative contract</Curate>
-                            </Button>
-                        </Padding>
-                    )}
+                    <div className={styles.mt12}>
+                        <Button onClick={(e) => originateContract()} disabled={!showTipJar}>
+                            <Curate>Create new collaborative contract</Curate>
+                        </Button>
+                    </div>
 
                 </Padding>
 
