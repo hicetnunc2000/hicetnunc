@@ -16,5 +16,11 @@
     "name": "The FEN",
     "endpoint": "https://raw.githubusercontent.com/joanielemercier/The_fen/main/thefen.json",
     "thumbnail": "34413"
+  },
+  {
+    "uid": "hicathon",
+    "name": "hicathon",
+    "endpoint": "/galleries/hicathon.json",
+    "thumbnail": "93229"
   }
 ]
