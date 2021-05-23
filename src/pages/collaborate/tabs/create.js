@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react'
-import { Button, Primary } from '../../../components/button';
+import { useEffect, useState, useContext } from 'react'
+import { HicetnuncContext } from '../../../context/HicetnuncContext'
+import { Button, Curate, Primary } from '../../../components/button';
 import { Page, Container, Padding } from '../../../components/layout'
 import { CollaboratorRow } from '../CollaboratorRow'
 import styles from '../styles.module.scss'
@@ -21,6 +22,7 @@ export const CreateCollaboration = () => {
     const [textInput, setTextInput] = useState('')
     const [addresses, setAddresses] = useState([])
     const [showTipJar, setShowTipJar] = useState(false)
+    const { originateProxy } = useContext(HicetnuncContext)
 
     // Check for completed entries
     const completeCollaborators = collaborators.filter(c => c.percentage && c.address)
@@ -131,6 +133,26 @@ export const CreateCollaboration = () => {
         setCollaborators([...updatedCollabs])
     }
 
+    const originateContract = async () => {
+      // TODO: need some UI to select admin contract
+      // now using first address as a administrator
+      const administartorAddress = collaborators[0]['address']
+
+      // shares should be object where keys are addresses and
+      // values are natural numbers (it is not required to have
+      // 100% in the sum)
+      let shares = {}
+
+      Object.values(collaborators).forEach(
+        value => shares[value['address']] = parseFloat(
+          Math.floor(value['percentage']) * 1000))
+
+      console.log('shares', shares)
+
+      // performing call to the blockchain using taquito:
+      await originateProxy(administartorAddress, shares)
+    }
+
     return (
         <Page title="Collaborate">
             <Container>
@@ -188,6 +210,10 @@ export const CreateCollaboration = () => {
                         <TipJar tips={tips} setTips={setTips} />
                     )}
 
+                </Padding>
+                <Padding>
+                  <Button onClick={(e) => originateContract()} fit> <Curate>Create new collaborative contract</Curate>
+                  </Button>
                 </Padding>
             </Container>
         </Page>
