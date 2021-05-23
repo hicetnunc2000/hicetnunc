@@ -1,0 +1,106 @@
+@import '../../styles/layout.scss';
+@import '../../styles/variables.scss';
+
+.input {
+  background: none;
+  color: var(--text-color);
+}
+
+.input:focus {
+  outline: none;
+}
+
+.textarea {
+  width: 100%;
+  padding: 0.5em;
+  background: none;
+  color: var(--text-color);
+  margin-bottom: 1em;
+}
+
+.textarea:focus {
+  outline: none;
+}
+
+.table {
+  width: 100%;
+}
+
+.addressCell {
+  width: 60%;
+  vertical-align:top;
+  padding-bottom: 6px;
+}
+
+.percentageCell {
+  width: 30%;
+  vertical-align:top;
+  padding-bottom: 6px;
+  padding-right: 20px;
+}
+
+.actionCell {
+  width: 10%;
+  padding-top: 6px;
+  vertical-align:top;
+  text-align:right;
+}
+
+.mb {
+  margin-bottom: 1em;
+}
+
+.mt12 {
+  margin-top: 3em;
+}
+
+.mb12 {
+  margin-bottom: 3em;
+}
+
+.checkbox {
+  display: inline-block;
+  margin-bottom: 1em;
+}
+
+.list {
+  list-style: none;
+}
+
+.list li {
+  margin-bottom: 6px;
+}
+
+.check {
+  margin-right: 10px;
+}
+
+.flex {
+  display: flex;
+}
+
+.flexBetween {
+  display: flex;
+  justify-content: space-between;
+}
+
+.tipSelect button {
+  padding-left: 10px;
+  padding-right: 10px;
+  margin-left: 10px;
+}
+
+.btn {
+  background: none;
+  color: white;
+  border: none;
+  padding-left:6px;
+  padding-right:6px;
+  font-size: 1em;
+  cursor: pointer;
+}
+
+.selected {
+  background: white;
+  color: black;
+}
