@@ -1,5 +1,6 @@
 import React from 'react'
 import { Button } from '../button'
+import styles from './styles.module.scss'
 
 const DefaultSharingUrl = 'http://objkt.link'
 
@@ -27,13 +28,14 @@ const ShareIcon = () => {
 }
 
 export const ShareLink = ({token_id}) => {
-  console.log(token_id)
   return(
-    <span data-position={'top'} data-tooltip='copy sharing url'>
-      <Button onClick={() => copySharingURL(token_id)}>
-        <ShareIcon />
-      </Button>
+    <span
+      className={styles.ShareLink}
+      data-position={'top'}
+      data-tooltip='copy sharing url'>
+        <Button onClick={() => copySharingURL(token_id)}>
+          <ShareIcon />
+        </Button>
     </span>
   )
-
 }
