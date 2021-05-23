@@ -1,3 +1,5 @@
+// THIS FILE SHOULD BE REMOVED
+// it replaced with create.js
 import { MichelsonMap } from '@taquito/taquito'
 
 import React, { useContext, useState } from 'react'

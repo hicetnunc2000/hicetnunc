@@ -143,8 +143,8 @@ export const Header = () => {
                       </Button>
                     </li> */}
                     <li>
-                      <Button onClick={() => handleRoute('/proxy')}>
-                        <Primary>collaborations</Primary>
+                      <Button onClick={() => handleRoute('/collaborate')}>
+                        <Primary>collaborate</Primary>
                       </Button>
                     </li>
                     <li>

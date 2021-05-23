@@ -5,7 +5,7 @@ import Display from './pages/display'
 import { Latest, Hdao, Random, Featured } from './pages/feeds'
 import { Mint } from './pages/mint'
 import { ObjktDisplay } from './pages/objkt-display'
-import { ProxyContract } from './pages/proxy-contract'
+import { Collaborate } from './pages/collaborate'
 import { Galleries } from './pages/galleries'
 import { GalleryDetail } from './pages/gallery-detail'
 import { Config } from './pages/config'
@@ -65,8 +65,8 @@ export const routes = [
   },
   {
     exact: false,
-    path: '/proxy',
-    component: ProxyContract,
+    path: '/collaborate',
+    component: Collaborate,
   },
   {
     exact: false,
