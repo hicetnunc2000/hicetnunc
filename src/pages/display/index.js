@@ -51,18 +51,18 @@ export default class Display extends Component {
 
       await GetUserMetadata(window.location.pathname.split('/')[2]).then(
         (data) => {
-          if (data.data.alias) this.setState({ alias: data.data.alias })
-          if (data.data.description)
-            this.setState({ description: data.data.description })
-          if (data.data.site) this.setState({ site: data.data.site })
-          if (data.data.telegram)
-            this.setState({ telegram: data.data.telegram })
-          if (data.data.twitter) this.setState({ twitter: data.data.twitter })
-          if (data.data.github) this.setState({ github: data.data.github })
-          if (data.data.reddit) this.setState({ reddit: data.data.reddit })
-          if (data.data.instagram)
-            this.setState({ instagram: data.data.instagram })
-          if (data.data.logo) this.setState({ logo: data.data.logo })
+          if (data.alias) this.setState({ alias: data.alias })
+          if (data.description)
+            this.setState({ description: data.description })
+          if (data.site) this.setState({ site: data.site })
+          if (data.telegram)
+            this.setState({ telegram: data.telegram })
+          if (data.twitter) this.setState({ twitter: data.twitter })
+          if (data.github) this.setState({ github: data.github })
+          if (data.reddit) this.setState({ reddit: data.reddit })
+          if (data.instagram)
+            this.setState({ instagram: data.instagram })
+          if (data.logo) this.setState({ logo: data.logo })
         }
       )
     } else {

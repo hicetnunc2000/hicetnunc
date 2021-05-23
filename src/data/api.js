@@ -144,7 +144,13 @@ export const GetTags = async ({ tag, page }) => {
  * Get User Metadata from tzkt.io
  */
 export const GetUserMetadata = async (walletAddr) => {
-  return await axios.get(
-    `https://api.tzkt.io/v1/accounts/${walletAddr}/metadata`
-  )
+  const res =  await axios.get(
+    `https://api.tzprofiles.com/${walletAddr}`
+  );
+  if(res.length === 0 ) return {};
+
+  const details = JSON.parse(res[0][1]).credentialSubject;
+  details.twitter = JSON.parse(res[1][1]).credentialSubject.sameAs;
+    
+  return details;
 }
