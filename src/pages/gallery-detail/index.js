@@ -8,6 +8,7 @@ import { Item } from './item'
 import { ItemModal } from './item-modal'
 import { Artist } from './artist'
 import { ResponsiveMasonry } from '../../components/responsive-masonry'
+import { shuffle } from "../../utils/array"
 import styles from './styles.module.scss'
 
 export const GalleryDetail = () => {
@@ -28,12 +29,13 @@ export const GalleryDetail = () => {
 
   useEffect(() => {
     const maxItems = 100
+    const truncationSize = 40
 
-    const isBigGallery = (gData) => {
+    const isBigGallery = (galleryData) => {
       return (
-        gData.length === 1
-        && gData[0].objkt
-        && gData[0].objkt.length > maxItems)
+        galleryData.length === 1
+        && galleryData[0].objkt
+        && (galleryData[0].objkt.length > maxItems))
     }
 
     const loadDefault = (collectionData) => {
@@ -43,18 +45,19 @@ export const GalleryDetail = () => {
 
     const loadPartial = (collectionData) => {
       const {data} = collectionData
+      shuffle(data[0].objkt)
+      data[0].objkt = data[0].objkt.slice(0,truncationSize)
       setCollection(collectionData)
       setLoaded(true)
     }
 
     const galleryJSONLoaded = (collectionData) => {
       const {data} = collectionData
-      console.dir(data)
       if (isBigGallery(data)){
-        loadDefault(collectionData)
+        loadPartial(collectionData)
       }
       else {
-        loadPartial(collectionData)
+        loadDefault(collectionData)
       }
     }
 
