@@ -1,7 +1,7 @@
 import { useEffect, useState, useContext } from 'react'
 import { HicetnuncContext } from '../../../context/HicetnuncContext'
 import { Button, Curate, Primary } from '../../../components/button'
-import { Page, Container, Padding } from '../../../components/layout'
+import { Container, Padding } from '../../../components/layout'
 import { CollaboratorRow } from '../../../components/collab/CollaboratorRow'
 import { TipJar } from '../../../components/collab/TipJar';
 import styles from '../styles.module.scss'
@@ -11,12 +11,12 @@ export const CreateCollaboration = () => {
     const template = {
         address: '',
         percentage: undefined,
+        share: undefined, // For calculuating post tips
     }
 
     // Local state
     const [collaborators, setCollaborators] = useState([])
     const [tips, setTips] = useState([])
-    const [remainingPercentage, setRemainingPercentage] = useState(100)
     const [autoSplit, setAutoSplit] = useState(false)
     const [textInput, setTextInput] = useState('')
     const [addresses, setAddresses] = useState([])
@@ -28,11 +28,17 @@ export const CreateCollaboration = () => {
     // Take tips off the top
     const availablePercentage = 100 - tips.reduce((amount, t) => (t.percentage || 0) + amount, 0)
 
+    // Add up everything else
+    const totalAllocated = Math.min(collaborators.reduce((total, c) => total + (Number(c.percentage) || 0), 0), 100)
+
     // Check for completed entries
     const validCollaborators = collaborators.filter(c => c.percentage && c.address)
 
-    const addCollaborator = (collaborator) => {
-        setCollaborators([...collaborators, collaborator])
+    // Add / remove collabs
+    const addCollaborator = () => {
+        if (totalAllocated < 100) {
+            setCollaborators([...collaborators, {...template}])
+        }
     }
 
     const removeCollaborator = (index) => {
@@ -59,22 +65,33 @@ export const CreateCollaboration = () => {
     }
 
     const calculateSplits = () => {
+
+        if (!collaborators.length) {
+            return false;
+        }
+
+        let updatedCollaborators;
+
         if (autoSplit) {
-            const royaltiesPerCollaborator = availablePercentage / addresses.length
-            const updatedCollabs = [...collaborators].map(collaborator => ({
+            const royaltiesPerCollaborator = availablePercentage / validCollaborators.length
+
+            // Even split
+            updatedCollaborators = [...collaborators].map(collaborator => ({
                 address: collaborator.address,
                 percentage: royaltiesPerCollaborator,
+                share: royaltiesPerCollaborator,
             }))
 
-            setCollaborators(updatedCollabs)
         } else {
 
-            const remaining = collaborators.reduce((remaining, collab) => {
-                return remaining - (collab.percentage || 0)
-            }, availablePercentage)
-
-            setRemainingPercentage(remaining)
+            // Map the percentages to the available amounts
+            updatedCollaborators = collaborators.map(collaborator => ({
+                ...collaborator,
+                share: collaborator.percentage/100 * availablePercentage,
+            }))
         }
+
+        setCollaborators(updatedCollaborators)
     }
 
     const parseAddresses = (input) => {
@@ -95,6 +112,7 @@ export const CreateCollaboration = () => {
         const collaborators = addresses.map(address => ({
             address,
             percentage: royaltiesPerCollaborator,
+            share: royaltiesPerCollaborator,
         }))
 
         setCollaborators(collaborators)
@@ -122,13 +140,14 @@ export const CreateCollaboration = () => {
 
     }, [autoSplit, availablePercentage])
 
-    useEffect(() => {
-        // 
-    }, [collaborators])
-
     const onUpdate = (index, collabData) => {
         const updatedCollabs = [...collaborators]
-        updatedCollabs[index] = collabData
+        
+        updatedCollabs[index] = {
+            ...collabData,
+            share: collabData.percentage/100 * availablePercentage,
+        }
+
         setCollaborators([...updatedCollabs])
     }
 
@@ -136,16 +155,15 @@ export const CreateCollaboration = () => {
         // TODO: need some UI to select admin contract
         // now using first address as a administrator
         const administratorAddress = collaborators[0]['address']
-
+        
         // shares should be object where keys are addresses and
         // values are natural numbers (it is not required to have
         // 100% in the sum)
         let shares = {}
 
-
         const validTips = tips.filter(t => t.percentage).map(t => ({
             address: t.address,
-            percentage: t.percentage,
+            share: t.percentage,
         }));
 
         // Merge collaborators with tips
@@ -153,80 +171,90 @@ export const CreateCollaboration = () => {
 
         Object.values(allParticipants).forEach(
             value => shares[value['address']] = parseFloat(
-                Math.floor(value['percentage']) * 1000))
+                Math.floor(value['share']) * 1000))
 
-        console.log('shares', shares)
+        console.log('create.js::originateContract - shares', shares)
 
         // performing call to the blockchain using taquito:
         await originateProxy(administratorAddress, shares)
     }
 
     return (
-        <Page title="Collaborate">
-            <Container>
-                <Padding>
-                    <h1 className={styles.mb}><strong>add collaborator tz addresses below</strong></h1>
 
-                    <div className={styles.mb}>
-                        <label htmlFor="auto-split" className={styles.checkbox}>
-                            <input id="auto-split" type="checkbox" checked={autoSplit} onChange={() => setAutoSplit(!autoSplit)} /> Auto-split to multiple addresses
-                        </label>
+        <Container>
+            <Padding>
+                <h1 className={styles.mb}><strong>add collaborators</strong></h1>
+
+                <div className={styles.mb}>
+                    <label htmlFor="auto-split" className={styles.checkbox}>
+                        <input id="auto-split" type="checkbox" checked={autoSplit} onChange={() => setAutoSplit(!autoSplit)} /> Auto-split to multiple addresses
+                    </label>
+                </div>
+
+                <table className={styles.table}>
+                    <tbody>
+                        {collaborators.map((collaborator, index) => {
+                            const { address, percentage } = collaborator
+                            const showRemoveButton = (address && percentage && (index < collaborators.length - 1 || autoSplit || totalAllocated === 100))
+                            const showAddButton = index === collaborators.length - 1 && !autoSplit && totalAllocated < 100
+
+                            return (
+                                <CollaboratorRow
+                                    key={`collaborator-${index}`}
+                                    collaborator={collaborator}
+                                    availablePercentage={availablePercentage}
+                                    remainingPercentage={availablePercentage - totalAllocated}
+                                    onUpdate={(collabData) => onUpdate(index, collabData)}
+                                    onRemove={showRemoveButton ? () => removeCollaborator(index) : null}
+                                    onAdd={showAddButton ? addCollaborator : null}
+                                    minimalView={showTipJar}
+                                />
+                            )
+                        })}
+                    </tbody>
+                </table>
+
+                {autoSplit && !showTipJar && (
+                    <textarea
+                        className={styles.textarea}
+                        rows={2}
+                        autoFocus
+                        placeholder="Paste multiple tz... addresses"
+                        value={textInput}
+                        onChange={event => setTextInput(event.target.value)}
+                    />
+                )}
+
+                {totalAllocated > 0 && collaborators.length > 1 && validCollaborators.length > 0 && (
+                    <div>
+                        <p>{totalAllocated}% allocated</p>
+                        { totalAllocated < 100 && (
+                            <p><em>Please make sure your shares add up to 100%</em></p>
+                        )}
                     </div>
+                )}
 
-                    <table className={styles.table}>
-                        <tbody>
-                            {collaborators.map((collaborator, index) => {
-                                const { address, percentage } = collaborator
-                                const showRemoveButton = (address && percentage && (index < collaborators.length - 1 || autoSplit))
-                                const showAddButton = index === collaborators.length - 1 && !autoSplit
-
-                                return (
-                                    <CollaboratorRow
-                                        key={`collaborator-${index}`}
-                                        collaborator={collaborator}
-                                        remainingPercentage={remainingPercentage}
-                                        onUpdate={(collabData) => onUpdate(index, collabData)}
-                                        onRemove={showRemoveButton ? () => removeCollaborator(index) : null}
-                                        onAdd={showAddButton ? addCollaborator : null}
-                                        minimalView={showTipJar}
-                                    />
-                                )
-                            })}
-                        </tbody>
-                    </table>
-
-                    {autoSplit && !showTipJar && (
-                        <textarea
-                            className={styles.textarea}
-                            rows={2}
-                            autoFocus
-                            placeholder="Paste multiple tz... addresses"
-                            value={textInput}
-                            onChange={event => setTextInput(event.target.value)}
-                        />
-                    )}
-
-                    {validCollaborators.length > 0 && !showTipJar && (
-                        <div>
-                            <Button onClick={() => setShowTipJar(true)} disabled={validCollaborators.length < 2}>
-                                <Primary>add {validCollaborators.length} collaborator{validCollaborators.length > 1 ? 's' : ''}</Primary>
-                            </Button>
-                        </div>
-                    )}
-
-                    {showTipJar && (
-                        <TipJar tips={tips} setTips={setTips} />
-                    )}
-
+                {validCollaborators.length > 0 && !showTipJar && (
                     <div className={styles.mt12}>
-                        <Button onClick={(e) => originateContract()} disabled={!showTipJar}>
-                            <Curate>Create new collaborative contract</Curate>
+                        <Button onClick={() => setShowTipJar(true)} disabled={totalAllocated < 100}>
+                            <Primary>add {validCollaborators.length} collaborator{validCollaborators.length > 1 ? 's' : ''}</Primary>
                         </Button>
                     </div>
+                )}
 
-                </Padding>
+                {showTipJar && (
+                    <TipJar tips={tips} setTips={setTips} />
+                )}
 
-            </Container>
-        </Page>
+                <div className={styles.mt12}>
+                    <Button onClick={(e) => originateContract()} disabled={!showTipJar}>
+                        <Curate>Create new collaborative contract</Curate>
+                    </Button>
+                </div>
+
+            </Padding>
+
+        </Container>
+
     )
 }

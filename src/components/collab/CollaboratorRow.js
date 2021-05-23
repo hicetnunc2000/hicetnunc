@@ -15,6 +15,7 @@ export const CollaboratorRow = ({ collaborator, remainingPercentage, onUpdate, o
     }, [collaborator])
 
     const _update = (field, value) => {
+
         const updatedCollaborator = {
             ...collaborator,
             [field]: value,
@@ -40,7 +41,7 @@ export const CollaboratorRow = ({ collaborator, remainingPercentage, onUpdate, o
     return minimalView ? (
         <tr className={styles.row}>
             <td className={styles.addressCell}>{ address }</td>
-            <td className={styles.percentageCell}>{ percentage }%</td>
+            <td className={styles.percentageCell}>{ collaborator.share }%</td>
         </tr>
     ) : (
         <tr className={styles.row}>
@@ -54,7 +55,7 @@ export const CollaboratorRow = ({ collaborator, remainingPercentage, onUpdate, o
                             value={address || ''}
                             autoFocus
                         />
-                        <p>address</p>
+                        <p>address { !address ? `(tz... or KT...)` : '' }</p>
                     </label>
                 </div>
             </td>
@@ -69,7 +70,7 @@ export const CollaboratorRow = ({ collaborator, remainingPercentage, onUpdate, o
                             onKeyDown={ _onKeyDown }
                             placeholder={`share (1-${remainingPercentage}%)`}
                             label={'share (%)'}
-                            value={ limit(percentage) || '' }
+                            value={ percentage || '' }
                         />
                         <p>share</p>
                     </label>
