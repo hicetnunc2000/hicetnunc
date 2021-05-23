@@ -48,3 +48,5 @@ templates/html-image-scale/.parcel-cache
 # contributor specific (local) folders
 .andre
 .next
+# Local Netlify folder
+.netlify
