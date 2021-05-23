@@ -28,33 +28,25 @@ export const GalleryDetail = () => {
 
 
   useEffect(() => {
-    const maxItems = 100
-    const truncationSize = 40
-
-    const isBigGallery = (galleryData) => {
-      return (
-        galleryData.length === 1
-        && galleryData[0].objkt
-        && (galleryData[0].objkt.length > maxItems))
-    }
+    const defaultSampleSize = 40
 
     const loadDefault = (collectionData) => {
       setCollection(collectionData)
       setLoaded(true)
     }
 
-    const loadPartial = (collectionData) => {
+    const loadRandomSelection = (collectionData) => {
       const {data} = collectionData
+      const maxSize = collectionData.maxSize ? collectionData.maxSize : defaultSampleSize
       shuffle(data[0].objkt)
-      data[0].objkt = data[0].objkt.slice(0,truncationSize)
+      data[0].objkt = data[0].objkt.slice(0, maxSize)
       setCollection(collectionData)
       setLoaded(true)
     }
 
     const galleryJSONLoaded = (collectionData) => {
-      const {data} = collectionData
-      if (isBigGallery(data)){
-        loadPartial(collectionData)
+      if (collectionData.useRandomSample){
+        loadRandomSelection(collectionData)
       }
       else {
         loadDefault(collectionData)

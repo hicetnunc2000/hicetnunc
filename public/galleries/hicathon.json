@@ -3,6 +3,8 @@
   "uid": "hicathon",
   "description": "hicathon - 22-23 May 2021. Art donated by the community to support hic et nunc.",
   "minimal": true,
+	"useRandomSample": true,
+	"maxSize": 40,
   "data": [
     {
 		"objkt": [
