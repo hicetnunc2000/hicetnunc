@@ -2,6 +2,7 @@ import styles from './styles.module.scss'
 import { Button, Secondary } from "../../components/button"
 import { ossProjects, tipOptions } from './constants'
 import classNames from 'classnames'
+import { TipSelector } from './TipSelector'
 
 export const TipJar = ({ tips, setTips }) => {
 
@@ -58,24 +59,7 @@ export const TipJar = ({ tips, setTips }) => {
                                     </div>
                                 </label>
 
-                                {isChecked && (
-                                    <div className={styles.tipSelect}>
-                                        {tipOptions.map((percentage, index) => {
-
-                                            const selected = tips[projectIndex] ? tips[projectIndex].percentage == percentage : false
-
-                                            const className = classNames(styles.btn, {
-                                                [styles.selected]: selected,
-                                            })
-
-                                            return (
-                                                <button className={className} key={`btn-${index}`} onClick={() => _updateTip(projectIndex, percentage)}>
-                                                    {percentage}%
-                                                </button>
-                                            )
-                                        })}
-                                    </div>
-                                )}
+                                {isChecked && <TipSelector tip={ tips[projectIndex] } index={ projectIndex } onUpdate={ _updateTip } />}
                             </div>
                         </li>
                     )

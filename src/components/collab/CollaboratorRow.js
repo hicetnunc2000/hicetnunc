@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react"
 import { Button, Secondary } from "../../components/button"
-import { Input } from "../../components/input"
 import styles from './styles.module.scss'
 import inputStyles from '../../components/input/styles.module.scss'
 import classNames from "classnames"
@@ -15,7 +14,6 @@ export const CollaboratorRow = ({ collaborator, remainingPercentage, onUpdate, o
         setPercentage(collaborator.percentage)
     }, [collaborator])
 
-
     const _update = (field, value) => {
         const updatedCollaborator = {
             ...collaborator,
@@ -27,7 +25,6 @@ export const CollaboratorRow = ({ collaborator, remainingPercentage, onUpdate, o
     
     const limit = (input) => {
         const limited = Math.min(remainingPercentage, Number(input))
-        // return (Math.round(limited * 100) / 100);
         return limited;
     }
 
