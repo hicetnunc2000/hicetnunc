@@ -15,7 +15,6 @@ export const CollaboratorRow = ({ collaborator, remainingPercentage, onUpdate, o
         setPercentage(collaborator.percentage)
     }, [collaborator])
 
-
     const _update = (field, value) => {
         const updatedCollaborator = {
             ...collaborator,
@@ -27,18 +26,20 @@ export const CollaboratorRow = ({ collaborator, remainingPercentage, onUpdate, o
 
     const limit = (input) => {
         const limited = Math.min(remainingPercentage, Number(input))
-        // return (Math.round(limited * 100) / 100);
+
+        // TODO: display this better - recurring digits etc.
+
         return limited;
     }
 
     // Combine H=N styles with module
     const cellClass = classNames(inputStyles.container, styles.input);
 
-    const _onKeyDown = (event) => {
-        if (event.keyCode === 13 && onAdd) {
-            onAdd(collaborator)
-        }
-    }
+    // const _onKeyDown = (event) => {
+    //     if (event.keyCode === 13 && onAdd) {
+    //         onAdd()
+    //     }
+    // }
 
     return minimalView ? (
         <tr className={styles.row}>
@@ -69,7 +70,6 @@ export const CollaboratorRow = ({ collaborator, remainingPercentage, onUpdate, o
                             min={1}
                             max={100}
                             onChange={event => _update('percentage', event.target.value)}
-                            onKeyDown={ _onKeyDown }
                             placeholder={`share (1-${remainingPercentage}%)`}
                             label={'share (%)'}
                             value={ limit(percentage) || '' }
