@@ -112,7 +112,10 @@ export default class Display extends Component {
         const sanitised = SanitiseOBJKT(res.data.result)
 
         const creations = sanitised.filter(
-          (e) => (this.state.wallet === e.token_info.creators[0]) && (e.action !== 'Received')
+          (e) => {
+            console.log(e)
+
+            return (this.state.wallet === e.token_info.creators[0])/*  && (e.action !== 'Received') */}
         )
         const collection = sanitised.filter(
           (e) => this.state.wallet !== e.token_info.creators[0]
