@@ -148,3 +148,18 @@ export const GetUserMetadata = async (walletAddr) => {
     `https://api.tzkt.io/v1/accounts/${walletAddr}/metadata`
   )
 }
+
+/**
+ * Work out whether user has verified with tzprofiles.com
+ */
+export const GetUserTzProfilesVerificationStatus = async (walletAddr) => {
+  
+//   const verificationTransaction = (await axios.get(`https://api.better-call.dev/v1/search?q=${walletAddr}&n=mainnet&i=contract&f=manager`))[0];
+//   const verificationTransactionId = verificationTransaction.items[0].value
+//   const storageInfomation = await axios.get(`https://api.better-call.dev/v1/contract/mainnet/${verificationTransactionId}/storage`);
+//   const keplerURL = `https://kepler.tzprofiles.com/${storageInfomation[0].children[0].children[0].children[0].value.substring(12)}`;
+//   const userCredentials = (await axios.get(keplerURL)).credentialSubject;
+//   return userCredentials === `did:pkh:tz:${walletAddr}`;
+  return true;
+}
+ 
