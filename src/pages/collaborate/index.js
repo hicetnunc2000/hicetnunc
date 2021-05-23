@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
-import { Button, Primary } from '../../components/button';
+import { CollaboratorRow } from '../../components/collab/CollaboratorRow'
 import { Page, Container, Padding } from '../../components/layout'
-import { CollaboratorRow } from './CollaboratorRow'
+import { Button, Primary } from '../../components/button';
+import { TipJar } from '../../components/collab/TipJar';
 import styles from './styles.module.scss'
-import { TipJar } from './TipJar';
 
 export const Collaborate = () => {
 
@@ -17,14 +17,15 @@ export const Collaborate = () => {
     const [tips, setTips] = useState([])
     const [remainingPercentage, setRemainingPercentage] = useState(100)
     const [autoSplit, setAutoSplit] = useState(false)
-    const [lineCount, setLineCount] = useState(2)
     const [textInput, setTextInput] = useState('')
     const [addresses, setAddresses] = useState([])
     const [showTipJar, setShowTipJar] = useState(false)
 
+    // Take tips off the top
+    const availablePercentage = 100 - tips.reduce((amount, t) => (t.percentage || 0) + amount, 0)
+
     // Check for completed entries
     const completeCollaborators = collaborators.filter(c => c.percentage && c.address)
-
 
     const addCollaborator = (collaborator) => {
         setCollaborators([...collaborators, collaborator])
@@ -56,7 +57,7 @@ export const Collaborate = () => {
     const calculateSplits = () => {
 
         if (autoSplit) {
-            const royaltiesPerCollaborator = 100 / addresses.length
+            const royaltiesPerCollaborator = availablePercentage / addresses.length
             const updatedCollabs = [...collaborators].map(collaborator => ({
                 address: collaborator.address,
                 percentage: royaltiesPerCollaborator,
@@ -67,7 +68,7 @@ export const Collaborate = () => {
 
             const remaining = collaborators.reduce((remaining, collab) => {
                 return remaining - (collab.percentage || 0)
-            }, 100)
+            }, availablePercentage)
 
             setRemainingPercentage(remaining)
         }
@@ -80,9 +81,6 @@ export const Collaborate = () => {
 
         // Add new addresses
         const combinedAddresses = updatedAddresses.concat(newAddresses)
-
-        // Update the size of the textbox to show all pasted
-        setLineCount(lines.length)
 
         // If we have addresses, create the collab
         setAddresses(combinedAddresses)
@@ -119,16 +117,26 @@ export const Collaborate = () => {
             calculateSplits()
         }
 
-    }, [autoSplit])
+    }, [autoSplit, availablePercentage])
 
     useEffect(() => {
         // 
     }, [collaborators])
 
+    // useEffect(() => {
+    //     const tipsTotal = collaborators.reduce((remaining, collab) => {
+    //         return remaining - (collab.percentage || 0)
+    //     }, 100)
+    // }, [tips])
+
     const onUpdate = (index, collabData) => {
         const updatedCollabs = [...collaborators]
         updatedCollabs[index] = collabData
         setCollaborators([...updatedCollabs])
+    }
+
+    const create = () => {
+        // We are done here
     }
 
     return (
@@ -186,6 +194,15 @@ export const Collaborate = () => {
 
                     {showTipJar && (
                         <TipJar tips={tips} setTips={setTips} />
+                    )}
+
+
+                    {completeCollaborators.length > 0 && showTipJar && (
+                        <div className={styles.mt12}>
+                            <Button onClick={ create } disabled={completeCollaborators.length < 2}>
+                                <Primary><strong>create collaboration</strong></Primary>
+                            </Button>
+                        </div>
                     )}
 
                 </Padding>
