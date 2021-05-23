@@ -17,13 +17,16 @@ export const GLBComponent = ({ src, interactive }) => {
 
   if (interactive) {
     props['ar'] = true
+    props['ar-modes'] = 'webxr scene-viewer quick-look'
     props['camera-controls'] = true
   }
 
   const handleResize = () => {
-    const { width, height } = ref.current.getBoundingClientRect()
-    setWidth(width)
-    setHeight(height)
+    if (ref.current) {
+      const { width, height } = ref.current.getBoundingClientRect()
+      setWidth(width)
+      setHeight(height)
+    }
   }
 
   useEffect(() => {

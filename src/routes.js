@@ -1,17 +1,22 @@
 import Sync from './pages/sync'
 import { About } from './pages/about'
+import { FAQ } from './pages/faq'
 import Display from './pages/display'
-import { Latest, Hdao, Random } from './pages/feeds'
+import { Latest, Hdao, Random, Featured } from './pages/feeds'
 import { Mint } from './pages/mint'
 import { ObjktDisplay } from './pages/objkt-display'
 import { Collaborate } from './pages/collaborate'
-// import { Collections } from './pages/collections'
+import { Galleries } from './pages/galleries'
+import { GalleryDetail } from './pages/gallery-detail'
+import { Config } from './pages/config'
+import { Search } from './pages/search'
+import { Tags } from './pages/tags'
 
 export const routes = [
   {
     exact: true,
     path: '/',
-    component: Latest,
+    component: Featured,
   },
   {
     exact: false,
@@ -25,13 +30,23 @@ export const routes = [
   },
   {
     exact: false,
-    path: '/tz/:id',
+    path: '/latest',
+    component: Latest,
+  },
+  {
+    exact: false,
+    path: '/tz/:id/:collection?',
     component: Display,
   },
   {
     exact: false,
     path: '/about',
     component: About,
+  },
+  {
+    exact: false,
+    path: '/faq',
+    component: FAQ,
   },
   {
     exact: false,
@@ -53,9 +68,39 @@ export const routes = [
     path: '/objkt/:id',
     component: ObjktDisplay,
   },
-  // {
-  //   exact: false,
-  //   path: '/collections/:id',
-  //   component: Collections,
-  // },
+  {
+    exact: false,
+    path: '/collaborate',
+    component: Collaborate,
+  },
+  {
+    exact: false,
+    path: '/galleries',
+    component: Galleries,
+  },
+  {
+    exact: false,
+    path: '/gallery/:id',
+    component: GalleryDetail,
+  },
+  {
+    exact: false,
+    path: '/config',
+    component: Config,
+  },
+  {
+    exact: false,
+    path: '/search',
+    component: Search,
+  },
+  {
+    exact: false,
+    path: '/tags/:id',
+    component: Tags,
+  },
+  {
+    exact: false,
+    path: '/:id',
+    component: Display,
+  },
 ]
