@@ -93,7 +93,7 @@ export const routes = [
   },
   {
     exact: false,
-    path: '/:id',
+    path: '/:id/:collection?',
     component: Display,
   },
 ]
