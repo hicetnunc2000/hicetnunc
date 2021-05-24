@@ -142,16 +142,6 @@ export const Header = () => {
                         <Primary>manage assets</Primary>
                       </Button>
                     </li>
-                    {/*                     <li>
-                      <Button onClick={() => handleRoute('/config')}>
-                        <Primary>config</Primary>
-                      </Button>
-                    </li> */}
-                    <li>
-                      <Button onClick={() => handleRoute('/collaborate')}>
-                        <Primary>collaborate</Primary>
-                      </Button>
-                    </li>
                     <li>
                       <Button onClick={() => handleRoute('/about')}>
                         <Primary>about</Primary>
