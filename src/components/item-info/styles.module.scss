@@ -47,48 +47,12 @@
 span[data-tooltip].top {
 	&:before,
 	&:after {
-		transform: translateY(10px);
+		transform: translate(-50%, 10px);
 	}
 	
 	&:hover:after,
 	&:hover:before {
-		transform: translateY(0px);
-	}
-}
-
-span[data-tooltip].right {
-	&:before,
-	&:after {
-		transform: translateX(0px);
-	}
-	
-	&:hover:after,
-	&:hover:before {
-		transform: translateX(10px);
-	}
-}
-
-span[data-tooltip].bottom {
-	&:before,
-	&:after {
-		transform: translateY(-10px);
-	}
-	
-	&:hover:after,
-	&:hover:before {
-		transform: translateY(0px);
-	}
-}
-
-span[data-tooltip].left {
-	&:before,
-	&:after {
-		transform: translateX(0px);
-	}
-	
-	&:hover:after,
-	&:hover:before {
-		transform: translateX(-10px);
+		transform: translate(-50%, 0px);
 	}
 }
 
@@ -120,6 +84,7 @@ span[data-tooltip] {
 	&:after {
 		width: 0;
 		height: 0;
+		left: 50%;
 		border: 6px solid transparent;
 		content: '';
 	}
@@ -128,13 +93,13 @@ span[data-tooltip] {
 	&:hover:before {
 		visibility: visible;
 		opacity: 1;
-		transform: translateY(0px);
+		transform: translate(-50%, 0px);
 	}
 }
 
 span[data-tooltip][data-position="top"]:before {
 	bottom: 100%;
-	left: -175%;
+	left: 50%;
 	margin-bottom: 9px;
 }
 
@@ -142,6 +107,5 @@ span[data-tooltip][data-position="top"]:after {
 	border-top-color: var(--text-color);;
 	border-bottom: none;
 	bottom: 101%;
-	left: calc(50% - 6px);
 	margin-bottom: 4px;
 }
