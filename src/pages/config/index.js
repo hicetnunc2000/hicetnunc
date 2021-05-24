@@ -166,7 +166,7 @@ export class Config extends Component {
               <p style={{ fontSize: '12px' }}>
                 hic et nunc DAO ○ curation parameter
               </p>
-              <button onClick={this.hDAO_config}>
+              <button style={{ border : 'none' }} onClick={this.hDAO_config}>
                 config
               </button>
             </div>
