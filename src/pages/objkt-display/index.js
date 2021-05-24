@@ -134,11 +134,11 @@ export const ObjktDisplay = () => {
                   }
 
                   return (
-                      <Button key={tab.title} onClick={() => setTabIndex(index)}>
-                        <Primary selected={tabIndex === index}>
-                          {tab.title}
-                        </Primary>
-                      </Button>
+                    <Button key={tab.title} onClick={() => setTabIndex(index)}>
+                      <Primary selected={tabIndex === index}>
+                        {tab.title}
+                      </Primary>
+                    </Button>
                   )
                 })}
               </Menu>
