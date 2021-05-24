@@ -1,3 +1,6 @@
+@import '../../styles/variables.scss';
+@import '../../styles/layout.scss';
+
 .container {
   display: flex;
   align-items: center;
@@ -23,6 +26,21 @@
   .inline {
     display: flex;
     align-items: center;
+  }
+}
+
+.hdaoButton {
+	margin-bottom: 2px;
+	padding-left: 20px;
+}
+
+.issuer {
+	@include respond-to('phone') {
+		display: none;
+  }
+
+  @include respond-to('tablet') {
+		display: block;
   }
 }
 
@@ -114,10 +132,9 @@ span[data-tooltip] {
 	}
 }
 
-// top tooltip
 span[data-tooltip][data-position="top"]:before {
 	bottom: 100%;
-	left: -195%;
+	left: -175%;
 	margin-bottom: 9px;
 }
 
