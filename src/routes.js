@@ -70,11 +70,6 @@ export const routes = [
   },
   {
     exact: false,
-    path: '/collaborate',
-    component: Collaborate,
-  },
-  {
-    exact: false,
     path: '/galleries',
     component: Galleries,
   },

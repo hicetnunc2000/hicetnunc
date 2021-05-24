@@ -6,7 +6,7 @@ export const ossProjects = [
     },
     {
         name: 'three.js',
-        address: 'tz1UAY5RSuG6nRJhdHDVMVSg9Lt2pSZez5JR', // Mr Doob
+        address: 'tz1ZUohCAkGjp7vPjQcC4VWcpgYZR1t3Si5C',
     },
     {
         name: 'Processing',
