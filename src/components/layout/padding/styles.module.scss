@@ -1,4 +1,14 @@
+@import '../../../styles/variables.scss';
+@import '../../../styles/layout.scss';
+
 .container {
-  padding: 0 20px;
   // border: 1px dashed green;
+
+  @include respond-to('phone') {
+    padding: 0 10px;
+  }
+
+  @include respond-to('tablet') {
+    padding: 0 20px;
+  }
 }
