@@ -23,8 +23,12 @@ export default class Display extends Component {
   static contextType = HicetnuncContext
 
   state = {
-    wallet: window.location.pathname.split('/')[2],
-    walletPrev: walletPreview(window.location.pathname.split('/')[2]),
+    wallet: '',
+    walletPrev:
+      window.location.pathname.split('/')[1] === 'tz'
+        ? walletPreview(window.location.pathname.split('/')[2])
+        : window.location.pathname.split('/')[1],
+    subjkt: '',
     render: false,
     loading: true,
     results: [],
@@ -39,8 +43,44 @@ export default class Display extends Component {
   }
 
   componentWillMount = async () => {
+    if (window.location.pathname.split('/')[1] === 'tz') {
+      this.setState({
+        wallet: window.location.pathname.split('/')[2],
+        walletPreview: walletPreview(window.location.pathname.split('/')[2]),
+      })
+
+      await GetUserMetadata(window.location.pathname.split('/')[2]).then(
+        (data) => {
+          if (data.data.alias) this.setState({ alias: data.data.alias })
+          if (data.data.description)
+            this.setState({ description: data.data.description })
+          if (data.data.site) this.setState({ site: data.data.site })
+          if (data.data.telegram)
+            this.setState({ telegram: data.data.telegram })
+          if (data.data.twitter) this.setState({ twitter: data.data.twitter })
+          if (data.data.github) this.setState({ github: data.data.github })
+          if (data.data.reddit) this.setState({ reddit: data.data.reddit })
+          if (data.data.instagram)
+            this.setState({ instagram: data.data.instagram })
+          if (data.data.logo) this.setState({ logo: data.data.logo })
+        }
+      )
+    } else {
+      await axios
+        .post(process.env.REACT_APP_SUBJKT, {
+          subjkt: window.location.pathname.split('/')[1],
+        })
+        .then((res) => {
+          this.setState({
+            wallet: res.data.result[0].tz,
+            walletPrev: window.location.pathname.split('/')[1],
+            subjkt: window.location.pathname.split('/')[1],
+          })
+        })
+    }
+
     this.context.setPath(window.location.pathname)
-    if (window.location.pathname.split('/')[3] === 'creations') {
+    /*     if (window.location.pathname.split('/')[3] === 'creations') {
       this.setState({
         creationsState: true,
         collectionState: false,
@@ -58,20 +98,7 @@ export default class Display extends Component {
         collectionState: false,
         marketState: true,
       })
-    }
-
-    await GetUserMetadata(this.state.wallet).then((data) => {
-      if (data.data.alias) this.setState({ alias: data.data.alias })
-      if (data.data.description)
-        this.setState({ description: data.data.description })
-      if (data.data.site) this.setState({ site: data.data.site })
-      if (data.data.telegram) this.setState({ telegram: data.data.telegram })
-      if (data.data.twitter) this.setState({ twitter: data.data.twitter })
-      if (data.data.github) this.setState({ github: data.data.github })
-      if (data.data.reddit) this.setState({ reddit: data.data.reddit })
-      if (data.data.instagram) this.setState({ instagram: data.data.instagram })
-      if (data.data.logo) this.setState({ logo: data.data.logo })
-    })
+    } */
 
     await axios
       .get(process.env.REACT_APP_TZ, {
@@ -128,7 +155,7 @@ export default class Display extends Component {
       collectionState: false,
       marketState: false,
     })
-    this.props.history.push(`/tz/${this.state.wallet}`)
+    //this.props.history.push(`/tz/${this.state.wallet}`)
   }
 
   collection = () => {
@@ -137,7 +164,7 @@ export default class Display extends Component {
       collectionState: true,
       marketState: false,
     })
-    this.props.history.push(`/tz/${this.state.wallet}/collection`)
+    //this.props.history.push(`/tz/${this.state.wallet}/collection`)
   }
 
   market = () => {
@@ -146,7 +173,7 @@ export default class Display extends Component {
       collectionState: false,
       marketState: true,
     })
-    this.props.history.push(`/tz/${this.state.wallet}/market`)
+    //this.props.history.push(`/tz/${this.state.wallet}/market`)
   }
 
   render() {
@@ -205,7 +232,7 @@ export default class Display extends Component {
                           marginRight: '10px',
                         }}
                       >
-                        <path d="M6,13.9l0.2-3.8L13.1,4c0.3-0.3-0.1-0.4-0.5-0.2L4.2,9.2L0.6,8c-0.8-0.2-0.8-0.8,0.2-1.2l14.2-5.5c0.6-0.3,1.3,0.2,1,1.2l-2.4,11.4c-0.2,0.8-0.7,1-1.3,0.6l-3.7-2.7l-1.8,1.7C6.6,13.7,6.4,13.9,6,13.9z"></path>
+                        <path d="M9.78,18.65L10.06,14.42L17.74,7.5C18.08,7.19 17.67,7.04 17.22,7.31L7.74,13.3L3.64,12C2.76,11.75 2.75,11.14 3.84,10.7L19.81,4.54C20.54,4.21 21.24,4.72 20.96,5.84L18.24,18.65C18.05,19.56 17.5,19.78 16.74,19.36L12.6,16.3L10.61,18.23C10.38,18.46 10.19,18.65 9.78,18.65Z"></path>
                       </svg>
                     </Button>
                   )}
@@ -313,7 +340,7 @@ export default class Display extends Component {
                 </Primary>
               </Button>
 
-              {/*               <Button onClick={this.market}>
+              {/* <Button onClick={this.market}>
                 <Primary selected={this.state.marketState}>market</Primary>
               </Button> */}
             </div>

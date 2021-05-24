@@ -63,7 +63,7 @@ export const ItemInfo = ({
 
   const curateOrClaim = (id, balance = 0) => {
     // if user is creator and there's hDAO balance
-    if (acc.address === token_info.creators[0] && balance > 0) {
+    if (acc && acc.address === token_info.creators[0] && balance > 0) {
       claim_hDAO(balance, id)
     } else {
       curate(id)
@@ -78,7 +78,7 @@ export const ItemInfo = ({
             className={styles.top}
             data-position={'top'}
             data-tooltip={
-              acc.address === token_info.creators[0] &&
+              acc && acc.address === token_info.creators[0] &&
               parseInt(hDAO_balance) > 0
                 ? 'collect hDAO'
                 : 'curate'
