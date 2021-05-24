@@ -14,24 +14,22 @@ export const Info = ({ token_info }) => {
         <header>
           <Container>
             <Padding>TITLE</Padding>
-            <Padding><h1>{name}</h1></Padding>
+            <Padding><h2>{name}</h2></Padding>
           </Container>
-        </header>
 
-        <header>
           <Container>
             <Padding>DESCRIPTION</Padding>
             <Padding><p>{description}</p></Padding>
           </Container>
-        </header>
 
-        <nav>
-          <Container>
-            <Padding>
-                <Tags tags={tags} />
-            </Padding>
-          </Container>
-        </nav>
+          <nav>
+            <Container>
+              <Padding>
+                  <Tags tags={tags} />
+              </Padding>
+            </Container>
+          </nav>
+        </header>
 
         <footer>
           <Container>

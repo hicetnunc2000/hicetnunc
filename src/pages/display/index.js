@@ -100,6 +100,8 @@ export default class Display extends Component {
       })
     } */
 
+/*     await axios.get('http://localhost:3002/tz_owner', { params : { tz : this.state.wallet }}).then(res => console.log(res.data))
+    await axios.get('http://localhost:3002/tz_creator', { params : this.state.wallet }).then(res => console.log(res.data)) */
     await axios
       .get(process.env.REACT_APP_TZ, {
         params: { tz: this.state.wallet },
@@ -112,7 +114,10 @@ export default class Display extends Component {
         const sanitised = SanitiseOBJKT(res.data.result)
 
         const creations = sanitised.filter(
-          (e) => this.state.wallet === e.token_info.creators[0]
+          (e) => {
+            console.log(e)
+
+            return (this.state.wallet === e.token_info.creators[0])/*  && (e.action !== 'Received') */}
         )
         const collection = sanitised.filter(
           (e) => this.state.wallet !== e.token_info.creators[0]
@@ -372,7 +377,9 @@ export default class Display extends Component {
                         uri: uri.split('//')[1],
                         metadata: nft,
                       })}
-                      <div className={styles.number}>OBJKT#{nft.token_id}</div>
+                      {/* hover objkt info */}
+
+                      {/* <div className={styles.number}>OBJKT#{nft.token_id}</div> */}
                     </div>
                   </Button>
                 )
@@ -397,7 +404,7 @@ export default class Display extends Component {
                         uri: uri.split('//')[1],
                         metadata: nft,
                       })}
-                      <div className={styles.number}>OBJKT#{nft.token_id}</div>
+                      {/* <div className={styles.number}>OBJKT#{nft.token_id}</div> */}
                     </div>
                   </Button>
                 )
