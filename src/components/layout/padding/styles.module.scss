@@ -3,12 +3,5 @@
 
 .container {
   // border: 1px dashed green;
-
-  @include respond-to('phone') {
-    padding: 0 10px;
-  }
-
-  @include respond-to('tablet') {
-    padding: 0 20px;
-  }
+  padding: 0 20px;
 }
