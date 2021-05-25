@@ -139,7 +139,7 @@ export const Mint = () => {
           generateDisplayUri: GENERATE_DISPLAY_AND_THUMBNAIL,
         })
       }
-      
+
       mint(getAuth(), amount, nftCid.path, royalties)
     }
   }
@@ -188,8 +188,8 @@ export const Mint = () => {
       return true
     }
     if (GENERATE_DISPLAY_AND_THUMBNAIL && !extraMedia) {
-     return true
-    } 
+      return true
+    }
     return false
   }
 
@@ -340,13 +340,7 @@ export const Mint = () => {
           <Container>
             <Padding>
               <Button onClick={handleMint} fit>
-<<<<<<< HEAD
-                <Curate>
-                  mint {amount} OBJKT{amount > 1 && 's'}
-                </Curate>
-=======
                 <Curate>mint OBJKT</Curate>
->>>>>>> develop
               </Button>
             </Padding>
           </Container>
