@@ -37,7 +37,6 @@ export class Config extends Component {
 
   handleChange = (e) => {
     this.setState({ [e.target.name]: e.target.value })
-    console.log(this.state)
   }
 
   // config subjkt
@@ -124,17 +123,17 @@ export class Config extends Component {
         <Container>
           <Padding>
 
-            <div>
+{/*             <div>
               <button onClick={this.hDAO_operators}>
                 allow subjkt operators ○
               </button>
-            </div>
+            </div> */}
             <div>
               <input
                 type="text"
                 name="subjkt"
                 onChange={this.handleChange}
-                placeholder="subjkt"
+                placeholder="SUBJKT"
               ></input>
               <br />
               <input
@@ -153,7 +152,7 @@ export class Config extends Component {
                   <input type="file" onChange={this.onFileChange} />
                 </Padding>
               </Container> */}
-              <button onClick={this.subjkt_config}>config</button>
+              <button onClick={this.subjkt_config}>config SUBJKT</button>
             </div>
 
             <div style={{ paddingTop: '15%' }}>
@@ -167,7 +166,7 @@ export class Config extends Component {
                 hic et nunc DAO ○ curation parameter
               </p>
               <button onClick={this.hDAO_config}>
-                config
+                config ○
               </button>
             </div>
             {/*             <div>
