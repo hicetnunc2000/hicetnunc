@@ -10,7 +10,7 @@
 /build
 /amplify
 # misc
-.env_prod
+#.env_prod
 
 npm-debug.log*
 yarn-debug.log*
