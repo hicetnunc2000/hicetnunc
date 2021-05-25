@@ -16,6 +16,9 @@ import {
   ALLOWED_FILETYPES_LABEL,
   MINT_FILESIZE,
   MIMETYPE,
+  MAX_EDITIONS,
+  MIN_ROYALTIES,
+  MAX_ROYALTIES,
 } from '../../constants'
 
 const COMPRESSOR_URL = 'https://hicetnunc-media-compressor.netlify.app'
@@ -24,7 +27,8 @@ const COMPRESSOR_URL = 'https://hicetnunc-media-compressor.netlify.app'
 const GENERATE_DISPLAY_AND_THUMBNAIL = true
 
 export const Mint = () => {
-  const { mint, getAuth, acc, setAccount } = useContext(HicetnuncContext)
+  const { mint, getAuth, acc, setAccount, setFeedback, syncTaquito } =
+    useContext(HicetnuncContext)
   // const history = useHistory()
   const [step, setStep] = useState(0)
   const [title, setTitle] = useState('')
@@ -37,81 +41,107 @@ export const Mint = () => {
   const [extraMedia, setExtraMedia] = useState() // the uploaded or generated cover image
 
   const handleMint = async () => {
-    setAccount()
     if (!acc) {
-      alert('sync')
-      return
-    }
+      // warning for sync
+      setFeedback({
+        visible: true,
+        message: 'sync your wallet',
+        progress: true,
+        confirm: false,
+      })
 
-    // check mime type
-    if (ALLOWED_MIMETYPES.indexOf(file.mimeType) === -1) {
-      alert(
-        `File format invalid. supported formats include: ${ALLOWED_FILETYPES_LABEL.toLocaleLowerCase()}`
-      )
-      return
-    }
+      await syncTaquito()
 
-    // check file size
-    const filesize = (file.file.size / 1024 / 1024).toFixed(4)
-    if (filesize > MINT_FILESIZE) {
-      alert(
-        `File too big (${filesize}). Limit is currently set at ${MINT_FILESIZE}MB`
-      )
-      return
-    }
-
-    // file about to be minted, change to the mint screen
-
-    setStep(2)
-
-    // upload file(s)
-    let nftCid
-    if ([MIMETYPE.ZIP, MIMETYPE.ZIP1, MIMETYPE.ZIP2].includes(file.mimeType)) {
-      const files = await prepareFilesFromZIP(file.buffer)
-
-      nftCid = await prepareDirectory({
-        name: title,
-        description,
-        tags,
-        address: acc.address,
-        files,
-        metadata: fileMetadata.current,
-        extraMedia,
-        generateDisplayUri: GENERATE_DISPLAY_AND_THUMBNAIL,
+      setFeedback({
+        visible: false,
       })
     } else {
-      // process all other files
-      nftCid = await prepareFile({
-        name: title,
-        description,
-        tags,
-        address: acc.address,
-        buffer: file.buffer,
-        metadata: fileMetadata.current,
-        extraMedia,
-        generateDisplayUri: GENERATE_DISPLAY_AND_THUMBNAIL,
+      await setAccount()
+
+      // check mime type
+      if (ALLOWED_MIMETYPES.indexOf(file.mimeType) === -1) {
+        // alert(
+        //   `File format invalid. supported formats include: ${ALLOWED_FILETYPES_LABEL.toLocaleLowerCase()}`
+        // )
+
+        setFeedback({
+          visible: true,
+          message: `File format invalid. supported formats include: ${ALLOWED_FILETYPES_LABEL.toLocaleLowerCase()}`,
+          progress: false,
+          confirm: true,
+          confirmCallback: () => {
+            setFeedback({ visible: false })
+          },
+        })
+
+        return
+      }
+
+      // check file size
+      const filesize = (file.file.size / 1024 / 1024).toFixed(4)
+      if (filesize > MINT_FILESIZE) {
+        // alert(
+        //   `File too big (${filesize}). Limit is currently set at ${MINT_FILESIZE}MB`
+        // )
+
+        setFeedback({
+          visible: true,
+          message: `File too big (${filesize}). Limit is currently set at ${MINT_FILESIZE}MB`,
+          progress: false,
+          confirm: true,
+          confirmCallback: () => {
+            setFeedback({ visible: false })
+          },
+        })
+
+        return
+      }
+
+      // file about to be minted, change to the mint screen
+
+      setStep(2)
+
+      setFeedback({
+        visible: true,
+        message: 'preparing OBJKT',
+        progress: true,
+        confirm: false,
       })
+
+      // upload file(s)
+      let nftCid
+      if (
+        [MIMETYPE.ZIP, MIMETYPE.ZIP1, MIMETYPE.ZIP2].includes(file.mimeType)
+      ) {
+        const files = await prepareFilesFromZIP(file.buffer)
+
+        nftCid = await prepareDirectory({
+          name: title,
+          description,
+          tags,
+          address: acc.address,
+          files,
+          metadata: fileMetadata.current,
+          extraMedia,
+          generateDisplayUri: GENERATE_DISPLAY_AND_THUMBNAIL,
+        })
+      } else {
+        // process all other files
+        nftCid = await prepareFile({
+          name: title,
+          description,
+          tags,
+          address: acc.address,
+          buffer: file.buffer,
+          mimeType: file.mimeType,
+          metadata: fileMetadata.current,
+          extraMedia,
+          generateDisplayUri: GENERATE_DISPLAY_AND_THUMBNAIL,
+        })
+      }
+
+      mint(getAuth(), amount, nftCid.path, royalties)
     }
-
-    // TESTING
-    // console.log('ntfCid', nftCid)
-    // window.location = `https://ipfs.io/ipfs/${nftCid.path}`
-
-    mint(getAuth(), amount, nftCid.path, royalties)
-
-    // OLD CODE FOR REFERENCE
-    // mint(getAuth(), amount, nftCid.path, royalties)
-    //   .then((e) => {
-    //     console.log('mint confirm', e)
-    //     setMessage('Minted successfully')
-    //     // redirect here
-    //     history.push(PATH.FEED)
-    //   })
-    //   .catch((e) => {
-    //     console.log('mint error', e)
-    //     alert('an error occurred')
-    //     setMessage('an error occurred')
-    //   })
   }
 
   const handlePreview = () => {
@@ -140,18 +170,27 @@ export const Mint = () => {
     }
   }
 
-  const handleValidation = () => {
-    if (GENERATE_DISPLAY_AND_THUMBNAIL) {
-      if (amount > 0 && file && extraMedia && royalties >= 10) {
-        return false
-      }
-    } else {
-      if (amount > 0 && file && royalties >= 10) {
-        return false
-      }
-    }
+  const limitNumericField = async (target, minValue, maxValue) => {
+    if (target.value === '') target.value = '' // Seems redundant but actually cleans up e.g. '234e'
+    target.value = Math.round(
+      Math.max(Math.min(target.value, maxValue), minValue)
+    )
+  }
 
-    return true
+  const handleValidation = () => {
+    if (
+      amount <= 0 ||
+      amount > MAX_EDITIONS ||
+      royalties < MIN_ROYALTIES ||
+      royalties > MAX_ROYALTIES ||
+      !file
+    ) {
+      return true
+    }
+    if (GENERATE_DISPLAY_AND_THUMBNAIL && !extraMedia) {
+      return true
+    }
+    return false
   }
 
   return (
@@ -173,6 +212,7 @@ export const Mint = () => {
                 onChange={(e) => setDescription(e.target.value)}
                 placeholder="description"
                 label="description"
+                maxlength="2000"
                 value={description}
               />
 
@@ -187,18 +227,27 @@ export const Mint = () => {
               <Input
                 type="number"
                 min={1}
+                max={MAX_EDITIONS}
                 onChange={(e) => setAmount(e.target.value)}
-                placeholder="editions (no. editions)"
+                onBlur={(e) => {
+                  limitNumericField(e.target, 1, MAX_EDITIONS)
+                  setAmount(e.target.value)
+                }}
+                placeholder={`editions (no. editions, 1-${MAX_EDITIONS})`}
                 label="editions"
                 value={amount}
               />
 
               <Input
                 type="number"
-                min={10}
-                max={25}
+                min={MIN_ROYALTIES}
+                max={MAX_ROYALTIES}
                 onChange={(e) => setRoyalties(e.target.value)}
-                placeholder="royalties after each sale (between 10-25%)"
+                onBlur={(e) => {
+                  limitNumericField(e.target, MIN_ROYALTIES, MAX_ROYALTIES)
+                  setRoyalties(e.target.value)
+                }}
+                placeholder={`royalties after each sale (between ${MIN_ROYALTIES}-${MAX_ROYALTIES}%)`}
                 label="royalties"
                 value={royalties}
               />
@@ -291,9 +340,7 @@ export const Mint = () => {
           <Container>
             <Padding>
               <Button onClick={handleMint} fit>
-                <Curate>
-                  mint {amount} OBJKT{amount > 1 && 's'}
-                </Curate>
+                <Curate>mint OBJKT</Curate>
               </Button>
             </Padding>
           </Container>
