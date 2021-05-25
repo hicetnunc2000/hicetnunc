@@ -3,11 +3,12 @@ import { withRouter } from 'react-router'
 import { BeaconWallet } from '@taquito/beacon-wallet'
 import { TezosToolkit } from '@taquito/taquito'
 import { setItem } from '../utils/storage'
-import { PATH } from '../constants'
+import { KeyStoreUtils } from 'conseiljs-softsigner'
 
 const { NetworkType } = require('@airgap/beacon-sdk')
 var ls = require('local-storage')
 const axios = require('axios')
+const eztz = require('eztz-lib')
 
 export const HicetnuncContext = createContext()
 
@@ -26,6 +27,12 @@ class HicetnuncContextProviderClass extends Component {
     super(props)
 
     this.state = {
+      // smart contracts
+
+      hDAO: 'KT1AFA2mwNUMNd4SsujE1YYp29vd8BZejyKW',
+      subjkt: 'KT1P69B8exDGuqNysBweuZJSqAmaD4dU3gtU',
+      objkt: 'KT1Hkg5qeNhfwpKW4fXvq7HGZB9z2EnmCCA9',
+
       // fullscreen. DO NOT CHANGE!
       fullscreen: false,
       setFullscreen: (fullscreen) => this.setState({ fullscreen }),
@@ -61,7 +68,7 @@ class HicetnuncContextProviderClass extends Component {
       // --------------------
       feedback: {
         visible: false, // show or hide the component
-        message: 'OBJKT minted successfully.', // what message to display?
+        message: 'OBJKT minted', // what message to display?
         progress: true, // do we need to display a progress indicator?
         confirm: true, // do we display a confirm button?
         confirmCallback: () => null, // any function to run when the user clicks confirm
@@ -128,8 +135,6 @@ class HicetnuncContextProviderClass extends Component {
           .catch((error) => console.log(error))
       },
 
-      objkt: 'KT1Hkg5qeNhfwpKW4fXvq7HGZB9z2EnmCCA9',
-
       mint: async (tz, amount, cid, royalties) => {
         // show feedback component with followind message and progress indicator
         this.state.setFeedback({
@@ -160,29 +165,36 @@ class HicetnuncContextProviderClass extends Component {
           )
           .then((op) =>
             op.confirmation(1).then(() => {
+              this.setState({ op: op.hash }) // save hash
               // if everything goes okay, show the success message and redirect to profile
               this.state.setFeedback({
                 message: 'OBJKT minted successfully',
-                progress: false,
-                confirm: true,
-                confirmCallback: () => {
-                  this.setState({ op: op.hash }) // save hash
-                  this.state.setFeedback({ visible: false }) // hide popup
-                  props.history.push(PATH.FEED) // redirect to homepage
-                },
+                progress: true,
+                confirm: false,
               })
+
+              // hide after 1 second
+              setTimeout(() => {
+                this.state.setFeedback({
+                  visible: false,
+                })
+              }, 1000)
             })
           )
           .catch((err) => {
             // if any error happens
             this.state.setFeedback({
               message: 'an error occurred ❌',
-              progress: false,
-              confirm: true,
-              confirmCallback: () => {
-                this.state.setFeedback({ visible: false }) // hide popup
-              },
+              progress: true,
+              confirm: false,
             })
+
+            // hide after 1 second
+            setTimeout(() => {
+              this.state.setFeedback({
+                visible: false,
+              })
+            }, 1000)
           })
       },
 
@@ -222,11 +234,21 @@ class HicetnuncContextProviderClass extends Component {
           .then((amt) => {
             Tezos.wallet
               .at(this.state.objkt)
-              .then((c) => c.methods.curate(amt, objkt_id).send())
+              .then((c) =>
+                c.methods
+                  .curate(
+                    ls.get('hDAO_config') != null
+                      ? parseInt(ls.get('hDAO_config'))
+                      : amt,
+                    objkt_id
+                  )
+                  .send()
+              )
           })
       },
 
       claim_hDAO: async (hDAO_amount, objkt_id) => {
+        console.log('claiming', hDAO_amount, objkt_id)
         await Tezos.wallet
           .at('KT1TybhR7XraG75JFYKSrh7KnxukMBT5dor6')
           .then((c) => {
@@ -267,6 +289,66 @@ class HicetnuncContextProviderClass extends Component {
             c.methods.cancel_swap(parseFloat(swap_id)).send({ amount: 0 })
           )
           .catch((e) => e)
+      },
+
+      signStr: async (payload) => {
+        const signedPayload = await wallet.client.requestSignPayload(payload)
+        console.log(signedPayload, payload)
+        const signature = signedPayload
+        console.log(signature.signature, payload.payload, await wallet.getPKH())
+        /*         const r = await KeyStoreUtils.checkSignature(
+          signature.signature,
+          payload.payload,
+          await axios.get(`https://tezos-prod.cryptonomic-infra.tech/chains/main/blocks/head/context/contracts/${await wallet.getPKH()}/manager_key`).then(res => res.data)
+        ) */
+
+        const r = await eztz.crypto.verify(
+          payload.payload.toString(),
+          signature.signature,
+          await axios.get(
+            `https://tezos-prod.cryptonomic-infra.tech/chains/main/blocks/head/context/contracts/${await wallet.getPKH()}/manager_key`
+          )
+        )
+        console.log(r)
+      },
+
+      registry: async (alias, metadata) => {
+        return await Tezos.wallet.at(this.state.subjkt).then((c) =>
+          c.methods
+            .registry(
+              alias
+                .split('')
+                .reduce(
+                  (hex, c) =>
+                    (hex += c.charCodeAt(0).toString(16).padStart(2, '0')),
+                  ''
+                ),
+              ('ipfs://' + metadata.path)
+                .split('')
+                .reduce(
+                  (hex, c) =>
+                    (hex += c.charCodeAt(0).toString(16).padStart(2, '0')),
+                  ''
+                )
+            )
+            .send({ amount: 0 })
+        )
+      },
+
+      hDAO_update_operators: async (address) => {
+        return await Tezos.wallet.at(this.state.hDAO).then((c) =>
+          c.methods
+            .update_operators([
+              {
+                add_operator: {
+                  owner: address,
+                  operator: this.state.subjkt,
+                  token_id: 0,
+                },
+              },
+            ])
+            .send({ amount: 0 })
+        )
       },
 
       load: false,
@@ -399,7 +481,7 @@ class HicetnuncContextProviderClass extends Component {
           title: title,
         })
       },
-      hDAO_vote : ls.get('hDAO_vote')
+      hDAO_vote: ls.get('hDAO_vote'),
     }
   }
 

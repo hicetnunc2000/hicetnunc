@@ -91,6 +91,23 @@ export class About extends Component {
             </div>
           </Padding>
         </Container>
+        <Container>
+          <Padding>
+            <p>Community tools:</p>&nbsp;
+            <Button href="https://projects.stroep.nl/hicetnunc">
+              <Primary>
+                <strong>hicetnunc discovery</strong>
+              </Primary>
+            </Button>
+            {false && (
+              <Button href="https://projects.stroep.nl/hicetnunc">
+                <Primary>
+                  <strong>example tool2</strong>
+                </Primary>
+              </Button>
+            )}
+          </Padding>
+        </Container>
 
         <Container>
           <Padding>
