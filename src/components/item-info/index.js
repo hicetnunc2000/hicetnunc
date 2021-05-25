@@ -96,57 +96,61 @@ export const ItemInfo = ({
 
   return (
     <>
-      <div className={styles.container}>
-        <div className={styles.edition}>
-          <div className={styles.inline}>
-            <p className={styles.issuer}>Issuer:&nbsp;</p>
-            <Button to={`${PATH.ISSUER}/${token_info.creators[0]}`}>
-              <Primary>{walletPreview(token_info.creators[0])}</Primary>
-            </Button>
-          </div>
-          {!feed && (
-            <div>
-              <p>
-                <span>
-                  Editions:
-                  <span>
-                    {ed}/{total}
-                  </span>
-                </span>
-              </p>
-              {false && (
+      <article>
+        <footer className={styles.container}>
+          <div className={styles.edition}>
+            <div className={styles.inline}>
+              <p className={styles.issuer}>Issuer:&nbsp;</p>
+              <Button to={`${PATH.ISSUER}/${token_info.creators[0]}`}>
+                <Primary>{walletPreview(token_info.creators[0])}</Primary>
+              </Button>
+            </div>
+            {!feed && (
+              <div>
                 <p>
-                  Price range: {(Number(s.xtz_per_objkt) / 1000000).toFixed(2)}-
-                  {(Number(maxPrice.xtz_per_objkt) / 1000000).toFixed(2)}
+                  <span>
+                    Editions:
+                    <span>
+                      {ed}/{total}
+                    </span>
+                  </span>
                 </p>
-              )}
+                {false && (
+                  <p>
+                    Price range: {(Number(s.xtz_per_objkt) / 1000000).toFixed(2)}-
+                    {(Number(maxPrice.xtz_per_objkt) / 1000000).toFixed(2)}
+                  </p>
+                )}
+              </div>
+            )}
+          </div>
+          {feed && (
+            <div className={styles.objktContainer}>
+              <Button to={`${PATH.OBJKT}/${token_id}`} disabled={isDetailView}>
+                <Primary>OBJKT#{token_id}</Primary>
+              </Button>
+              <div className={styles.hdaoButton}>
+                {renderHDAObutton(token_id, hDAO_balance)}
+              </div>
             </div>
           )}
-        </div>
-        {feed && (
-          <div className={styles.objktContainer}>
-            <Button to={`${PATH.OBJKT}/${token_id}`} disabled={isDetailView}>
-              <Primary>OBJKT#{token_id}</Primary>
-            </Button>
-            <div className={styles.hdaoButton}>
-              {renderHDAObutton(token_id, hDAO_balance)}
+        </footer>
+        <header className={styles.container}>
+          {isDetailView && (
+            <div className={styles.container}>
+              <h1>OBJKT#{token_id}</h1>
+              <nav>
+                <Button onClick={() => handleCollect()}>
+                  <Purchase>{message}</Purchase>
+                </Button>
+              </nav>
             </div>
-          </div>
-        )}
-      </div>
-      <div className={styles.container}>
-        {isDetailView && (
-          <div className={styles.container}>
-            <p>OBJKT#{token_id}</p>
-            <Button onClick={() => handleCollect()}>
-              <Purchase>{message}</Purchase>
-            </Button>
-          </div>
-        )}
-      </div>
-      <div className={styles.container}>
-        {!feed && <div>{renderHDAObutton(token_id, hDAO_balance)}</div>}
-      </div>
+          )}
+        </header>
+        <aside className={styles.container}>
+          {!feed && <div>{renderHDAObutton(token_id, hDAO_balance)}</div>}
+        </aside>
+      </article>
     </>
   )
 }

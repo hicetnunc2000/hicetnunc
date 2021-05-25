@@ -65,9 +65,9 @@ export const Burn = (props) => {
       <Container>
         <Padding>
           <p>
-            Burning will transfer the OBJKTs from your possession to a burn address. Once
-            in the burn address, the OBJKT can't be recovered or sold. You can
-            only burn tokens that you own. If you have them swapped, you first
+            Burning will transfer from your possession to a burn address. Once
+            in the burn address, OBJKT they can't be recovered or sold. You can
+            only burn tokens that you own. If you have them on a swap, you first
             need to cancel that swap before you try to burn them.
           </p>
           <br />
