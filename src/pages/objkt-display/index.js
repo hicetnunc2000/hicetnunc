@@ -12,10 +12,10 @@ import { Menu } from '../../components/menu'
 import { Info, Collectors, Swap, Burn } from './tabs'
 
 const TABS = [
-  { title: 'info', component: Info },
-  { title: 'collectors', component: Collectors },
-  { title: 'swap', component: Swap, creatorOnly: true, secondaryMarket: true }, // visible if user is the creator or if user can sell on secondary market
-  { title: 'burn', component: Burn, creatorOnly: true, secondaryMarket: true }, // visible if user is the creator
+  { title: 'info', component: Info }, // public tab
+  { title: 'collectors', component: Collectors }, // public tab
+  { title: 'swap', component: Swap, private: true }, // private tab (users only see if they are the creators or own a copy)
+  { title: 'burn', component: Burn, private: true }, // private tab (users only see if they are the creators or own a copy)
 ]
 
 export const ObjktDisplay = () => {
@@ -30,20 +30,38 @@ export const ObjktDisplay = () => {
   const address = context.acc?.address
 
   useEffect(() => {
-    GetOBJKT({ id }).then(async (objkt) => {
-      console.log(objkt)
-      if (Array.isArray(objkt)) {
-        setError(
-          "There's a problem loading this OBJKT. Please report it on Github."
-        )
-        setLoading(false)
-      } else {
-        await context.setAccount()
-        setNFT(objkt)
+    GetOBJKT({ id })
+      .then(async (objkt) => {
+        if (Array.isArray(objkt)) {
+          setError(
+            "There's a problem loading this OBJKT. Please report it on Github."
+          )
+          setLoading(false)
+        } else {
+          await context.setAccount()
+          setNFT(objkt)
 
+          setLoading(false)
+        }
+      })
+      .catch((e) => {
+        if (e.response && e.response.data.error) {
+          setError(
+            `(http ${e.response.data.error.http_status}) ${e.response.data.error.message}`
+          )
+        } else if (e.response && e.response.data) {
+          setError(`(http ${e.response.status}) ${e.response.data}`)
+        } else if (e.request) {
+          setError(
+            `There's a problem loading this OBJKT. Please report it on Github. ${e.message}`
+          )
+        } else {
+          setError(
+            `There's a problem loading this OBJKT. Please report it on Github. ${e}`
+          )
+        }
         setLoading(false)
-      }
-    })
+      })
   }, [])
 
   const Tab = TABS[tabIndex].component
@@ -95,24 +113,25 @@ export const ObjktDisplay = () => {
             <Padding>
               <Menu>
                 {TABS.map((tab, index) => {
-                  // if secondaryMarket is enabled, we need to check if user owns a copy of the objkt.
-                  // if it doesn't don't render tab
-                  /*                   if (
-                    tab.secondaryMarket === true //&&
-                    //Object.keys(nft.owners).length > 0 &&
-                    //Object.keys(nft.owners).includes(address)
-                  ) {
-                    return null
-                  }
+                  // if nft.owners exist and this is a private route, try to hide the tab.
+                  // if nft.owners fails, always show route!
+                  if (nft?.owners && tab.private) {
+                    console.log(
+                      Object.keys(nft.owners).includes(address),
+                      nft.token_info.creators.includes(address),
+                      'valid',
+                      Object.keys(nft.owners).includes(address) ||
+                        nft.token_info.creators.includes(address)
+                    )
+                    if (
+                      Object.keys(nft.owners).includes(address) === false &&
+                      nft.token_info.creators.includes(address) === false
+                    ) {
+                      // user is not the creator now owns a copy of the object. hide
 
-                  // hide menu if user is NOT the owner
-                  // and if user DOESN'T own a copy of the objkt
-                  if (
-                    tab.creatorOnly &&
-                    nft.token_info.creators[0] == address
-                  ) {
-                    return null
-                  } */
+                      return null
+                    }
+                  }
 
                   return (
                     <Button key={tab.title} onClick={() => setTabIndex(index)}>

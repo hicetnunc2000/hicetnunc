@@ -1,15 +1,15 @@
 [
   {
-    "uid": "objkt4objkt",
-    "name": "OBJKT4OBJKT",
-    "endpoint": "/galleries/objkt4objkt.json",
-    "thumbnail": "12077"
-  },
-  {
     "uid": "pupiladilatada",
     "name": "Pupila Dilatada",
     "endpoint": "/galleries/pupiladilatada.json",
     "thumbnail": "833"
+  },
+  {
+    "uid": "objkt4objkt",
+    "name": "OBJKT4OBJKT",
+    "endpoint": "/galleries/objkt4objkt.json",
+    "thumbnail": "12077"
   },
   {
     "uid": "thefen",

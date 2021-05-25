@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Button } from '../../components/button'
 import { Page, Container, Padding } from '../../components/layout'
-import { Loading } from '../../components/loading'
 import { GetOBJKT } from '../../data/api'
 import { renderMediaType } from '../../components/media-types'
 import { PATH } from '../../constants'
@@ -14,8 +13,7 @@ const sortByThumbnailTokenId = (a, b) => {
   return ia < ib ? 1 : -1
 }
 export const Galleries = () => {
-  const [loading, setLoading] = useState(true)
-  const [data, setData] = useState(false)
+  const [data, setData] = useState([])
 
   useEffect(() => {
     // loads gallery to check endpoint file
@@ -33,7 +31,6 @@ export const Galleries = () => {
             if (c === galleries.length) {
               g.sort(sortByThumbnailTokenId)
               setData(g)
-              setLoading(false)
             }
           })
         })
@@ -45,43 +42,35 @@ export const Galleries = () => {
   }, [])
   return (
     <Page title="Galleries">
-      {loading ? (
-        <Container>
-          <Padding>
-            <Loading />
-          </Padding>
-        </Container>
-      ) : (
-        <Container xlarge>
-          <Padding>
-            <ResponsiveMasonry>
-              {data.map((e) => {
-                const { token_info } = e
-                const { mimeType, uri } = token_info.formats[0]
+      <Container xlarge>
+        <Padding>
+          <ResponsiveMasonry>
+            {data.map((e) => {
+              const { token_info } = e
+              const { mimeType, uri } = token_info.formats[0]
 
-                return (
-                  <Button key={e.uid} to={`${PATH.GALLERY}/${e.uid}`}>
-                    <div className={styles.item}>
-                      <div
-                        style={{ pointerEvents: 'none' }}
-                        className={styles.image}
-                      >
-                        {renderMediaType({
-                          uri: uri.split('//')[1],
-                          mimeType,
-                          metadata: e,
-                          interactive: false,
-                        })}
-                        <div className={styles.number}>{e.name}</div>
-                      </div>
+              return (
+                <Button key={e.uid} to={`${PATH.GALLERY}/${e.uid}`}>
+                  <div className={styles.item}>
+                    <div
+                      style={{ pointerEvents: 'none' }}
+                      className={styles.image}
+                    >
+                      {renderMediaType({
+                        uri: uri.split('//')[1],
+                        mimeType,
+                        metadata: e,
+                        interactive: false,
+                      })}
+                      <div className={styles.number}>{e.name}</div>
                     </div>
-                  </Button>
-                )
-              })}
-            </ResponsiveMasonry>
-          </Padding>
-        </Container>
-      )}
+                  </div>
+                </Button>
+              )
+            })}
+          </ResponsiveMasonry>
+        </Padding>
+      </Container>
     </Page>
   )
 }

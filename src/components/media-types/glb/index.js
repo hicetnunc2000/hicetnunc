@@ -13,10 +13,12 @@ export const GLBComponent = ({ src, interactive }) => {
     autoplay: true,
     'auto-rotate': true,
     'data-js-focus-visible': true,
+    'interaction-prompt': 'none'
   }
 
   if (interactive) {
     props['ar'] = true
+    props['ar-modes'] = 'webxr scene-viewer quick-look'
     props['camera-controls'] = true
   }
 

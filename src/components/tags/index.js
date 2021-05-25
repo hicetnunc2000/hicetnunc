@@ -7,10 +7,13 @@ export const Tags = ({ tags }) => {
   return (
     <div className={styles.container}>
       {tags
-        .filter((e) => e === '')
+        .filter((e) => e !== '')
         .map((tag, index) => {
           return (
-            <Button key={`tag${tag}${index}`} to={`${PATH.TAGS}/${tag}`}>
+            <Button
+              key={`tag${tag}${index}`}
+              to={`${PATH.TAGS}/${encodeURI(tag)}`}
+            >
               <div className={styles.tag}>{tag}</div>
             </Button>
           )

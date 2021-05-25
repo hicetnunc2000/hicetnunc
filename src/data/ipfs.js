@@ -4,7 +4,7 @@ import {
   IPFS_DISPLAY_URI_BLACKCIRCLE,
 } from '../constants'
 
-const createClient = require('ipfs-http-client')
+const { create } = require('ipfs-http-client')
 const Buffer = require('buffer').Buffer
 const axios = require('axios')
 const readJsonLines = require('read-json-lines-sync').default
@@ -22,7 +22,7 @@ export const prepareFile = async ({
   extraMedia,
   generateDisplayUri,
 }) => {
-  const ipfs = createClient(infuraUrl)
+  const ipfs = create(infuraUrl)
 
   // upload main file
   const info = await ipfs.add(buffer)
@@ -41,7 +41,6 @@ export const prepareFile = async ({
       originalFormat
     )
     displayUri = extraMediaMetadata.displayUri
-    thumbnailUri = extraMediaMetadata.thumbnailUri
     formats = formats.concat(extraMediaMetadata.formats)
   }
 
@@ -88,7 +87,6 @@ export const prepareDirectory = async ({
       originalFormat
     )
     displayUri = extraMediaMetadata.displayUri
-    thumbnailUri = extraMediaMetadata.thumbnailUri
     formats = formats.concat(extraMediaMetadata.formats)
   } else if (hashes.cover) {
     // TODO: Remove this once generateDisplayUri option is gone
@@ -159,7 +157,7 @@ async function uploadMetadataFile({
   thumbnailUri = IPFS_DISPLAY_URI_BLACKCIRCLE,
   formats = [],
 }) {
-  const ipfs = createClient(infuraUrl)
+  const ipfs = create(infuraUrl)
 
   return await ipfs.add(
     Buffer.from(
@@ -182,7 +180,7 @@ async function uploadMetadataFile({
 }
 
 async function uploadExtraMedia(extraMedia, originalFormat) {
-  const ipfs = createClient(infuraUrl)
+  const ipfs = create(infuraUrl)
 
   let displayUri = ''
   let thumbnailUri = IPFS_DISPLAY_URI_BLACKCIRCLE
