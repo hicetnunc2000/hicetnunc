@@ -23,33 +23,133 @@ export default class Display extends Component {
   static contextType = HicetnuncContext
 
   state = {
-    wallet: window.location.pathname.split('/')[2],
-    walletPrev: walletPreview(window.location.pathname.split('/')[2]),
+    wallet: '',
+    walletPrev:
+      window.location.pathname.split('/')[1] === 'tz'
+        ? walletPreview(window.location.pathname.split('/')[2])
+        : window.location.pathname.split('/')[1],
+    subjkt: '',
     render: false,
     loading: true,
     results: [],
     objkts: [],
     creations: [],
     collection: [],
-    collectionState: false,
+    market: [],
     creationsState: true,
+    collectionState: false,
+    marketState: false,
     hdao: 0,
   }
 
   componentWillMount = async () => {
+    const id = window.location.pathname.split('/')[1]
+    if (id === 'tz') {
+      const wallet = window.location.pathname.split('/')[2]
+      this.setState({
+        wallet,
+        walletPreview: walletPreview(wallet),
+      })
+
+      await GetUserMetadata(wallet).then((data) => {
+        const {
+          alias,
+          description,
+          site,
+          telegram,
+          twitter,
+          github,
+          reddit,
+          instagram,
+          logo,
+        } = data.data
+        if (data.data.alias) this.setState({ alias })
+        if (data.data.description) this.setState({ description })
+        if (data.data.site) this.setState({ site })
+        if (data.data.telegram) this.setState({ telegram })
+        if (data.data.twitter) this.setState({ twitter })
+        if (data.data.github) this.setState({ github })
+        if (data.data.reddit) this.setState({ reddit })
+        if (data.data.instagram) this.setState({ instagram })
+        if (data.data.logo) this.setState({ logo })
+      })
+
+      this.onReady()
+    } else {
+      await axios
+        .post(process.env.REACT_APP_SUBJKT, {
+          subjkt: id,
+        })
+        .then((res) => {
+          if (res.data.result.length === 0) {
+            // if alias is not found, redirect to homepage
+            this.props.history.push('/')
+          } else {
+            this.setState({
+              wallet: res.data.result[0].tz,
+              walletPrev: id,
+              subjkt: id,
+            })
+
+            this.onReady()
+          }
+        })
+    }
+  }
+
+  // called if there's no redirect
+  onReady = async () => {
     this.context.setPath(window.location.pathname)
 
-    await GetUserMetadata(this.state.wallet).then((data) => {
-      if (data.data.alias) this.setState({ alias: data.data.alias })
-      if (data.data.description)
-        this.setState({ description: data.data.description })
-      if (data.data.site) this.setState({ site: data.data.site })
-      if (data.data.twitter) this.setState({ twitter: data.data.twitter })
-      if (data.data.github) this.setState({ github: data.data.github })
-      if (data.data.reddit) this.setState({ reddit: data.data.reddit })
-      if (data.data.instagram) this.setState({ instagram: data.data.instagram })
-      if (data.data.logo) this.setState({ logo: data.data.logo })
-    })
+    // based on route, define initial state
+    if (this.state.subjkt !== '') {
+      // if alias route
+      if (window.location.pathname.split('/')[2] === 'creations') {
+        this.setState({
+          creationsState: true,
+          collectionState: false,
+          marketState: false,
+        })
+      } else if (window.location.pathname.split('/')[2] === 'collection') {
+        this.setState({
+          creationsState: false,
+          collectionState: true,
+          marketState: false,
+        })
+      } else if (window.location.pathname.split('/')[2] === 'market') {
+        this.setState({
+          creationsState: false,
+          collectionState: false,
+          marketState: true,
+        })
+      }
+    } else {
+      // if tz/wallethash route
+      if (window.location.pathname.split('/')[3] === 'creations') {
+        this.setState({
+          creationsState: true,
+          collectionState: false,
+          marketState: false,
+        })
+      } else if (window.location.pathname.split('/')[3] === 'collection') {
+        this.setState({
+          creationsState: false,
+          collectionState: true,
+          marketState: false,
+        })
+      } else if (window.location.pathname.split('/')[3] === 'market') {
+        this.setState({
+          creationsState: false,
+          collectionState: false,
+          marketState: true,
+        })
+      }
+    }
+
+    /*
+    await axios.get('http://localhost:3002/tz_owner', { params : { tz : this.state.wallet }}).then(res => console.log(res.data))
+    await axios.get('http://localhost:3002/tz_creator', { params : this.state.wallet }).then(res => console.log(res.data))
+    */
 
     await axios
       .get(process.env.REACT_APP_TZ, {
@@ -59,65 +159,100 @@ export default class Display extends Component {
         this.setState({
           hdao: res.data.hdao / 1_000_000,
         })
+
         const sanitised = SanitiseOBJKT(res.data.result)
-        const creations = sanitised.filter(
-          (e) => this.state.wallet === e.token_info.creators[0]
-        )
+
+        const creations = sanitised.filter((e) => {
+          return (
+            this.state.wallet === e.token_info.creators[0]
+          ) /*  && (e.action !== 'Received') */
+        })
         const collection = sanitised.filter(
           (e) => this.state.wallet !== e.token_info.creators[0]
         )
+
+        const market = {}
+
+        // filter market that were created by the user
+        Object.keys(res.data.swaps).forEach((e) => {
+          // all swaps include swaps on OBJKT you purchased and OBJKT you minted.
+          // setting it to false will only display OBJKT that you purchased and put up for sale
+          // but will NOT include your own art.
+          const allSwaps = true
+
+          if (allSwaps) {
+            market[e] = res.data.swaps[e]
+          } else {
+            const id = Number(e)
+            const found = sanitised.find((e) => {
+              return e.token_id === id
+            })
+            if (!found) {
+              market[e] = res.data.swaps[e]
+            }
+          }
+        })
 
         this.setState({
           creations: creations.sort(sortByTokenId),
           loading: false,
           collection: collection.sort(sortByTokenId),
+          market,
         })
-
-        /*
-        let totalCreations = creations.length
-        let total = 0
-                 const loadOwners = async (id, index) => {
-          const owners = await axios
-            .get(
-              `https://api.better-call.dev/v1/contract/mainnet/KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton/tokens/holders?token_id=${id}`
-            )
-            .then((res) => res.data)
-          // add owners to creations array
-          creations[index].owners = [...Object.keys(owners)]
-          total++
-          // all loaded
-          if (total === totalCreations) {
-            this.setState({
-              objkts: sanitised,
-              creations: creations.filter(
-                (e) =>
-                  e.owners.indexOf('tz1burnburnburnburnburnburnburjAYjjX') ===
-                  -1
-              ),
-              collection: sanitised.filter(
-                (e) => this.state.wallet !== e.token_info.creators[0]
-              ),
-              loading: false,
-            })
-          }
-        }
-        // load all owners
-        for (let i = 0; i < creations.length; i++) {
-          loadOwners(creations[i].token_id, i)
-          console.log()
-        } */
       })
   }
 
-  creations = () =>
-    this.setState({ collectionState: false, creationsState: true })
+  creations = () => {
+    this.setState({
+      creationsState: true,
+      collectionState: false,
+      marketState: false,
+    })
 
-  collection = () =>
-    this.setState({ collectionState: true, creationsState: false })
+    if (this.state.subjkt !== '') {
+      // if alias route
+      this.props.history.push(`/${this.state.subjkt}/creations`)
+    } else {
+      // if tz/wallethash route
+      this.props.history.push(`/tz/${this.state.wallet}/creations`)
+    }
+  }
+
+  collection = () => {
+    this.setState({
+      creationsState: false,
+      collectionState: true,
+      marketState: false,
+    })
+
+    if (this.state.subjkt !== '') {
+      // if alias route
+      this.props.history.push(`/${this.state.subjkt}/collection`)
+    } else {
+      // if tz/wallethash route
+      this.props.history.push(`/tz/${this.state.wallet}/collection`)
+    }
+  }
+
+  market = () => {
+    this.setState({
+      creationsState: false,
+      collectionState: false,
+      marketState: true,
+    })
+
+    if (this.state.subjkt !== '') {
+      // if alias route
+      this.props.history.push(`/${this.state.subjkt}/market`)
+    } else {
+      // if tz/wallethash route
+      this.props.history.push(`/tz/${this.state.wallet}/market`)
+    }
+  }
 
   render() {
     return (
-      <Page title={this.state.wallet}>
+      <Page title={this.state.alias}>
         <Container>
           <Padding>
             <div className={styles.profile}>
@@ -153,6 +288,25 @@ export default class Display extends Component {
                         }}
                       >
                         <path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm7.5-6.923c-.67.204-1.335.82-1.887 1.855A7.97 7.97 0 0 0 5.145 4H7.5V1.077zM4.09 4a9.267 9.267 0 0 1 .64-1.539 6.7 6.7 0 0 1 .597-.933A7.025 7.025 0 0 0 2.255 4H4.09zm-.582 3.5c.03-.877.138-1.718.312-2.5H1.674a6.958 6.958 0 0 0-.656 2.5h2.49zM4.847 5a12.5 12.5 0 0 0-.338 2.5H7.5V5H4.847zM8.5 5v2.5h2.99a12.495 12.495 0 0 0-.337-2.5H8.5zM4.51 8.5a12.5 12.5 0 0 0 .337 2.5H7.5V8.5H4.51zm3.99 0V11h2.653c.187-.765.306-1.608.338-2.5H8.5zM5.145 12c.138.386.295.744.468 1.068.552 1.035 1.218 1.65 1.887 1.855V12H5.145zm.182 2.472a6.696 6.696 0 0 1-.597-.933A9.268 9.268 0 0 1 4.09 12H2.255a7.024 7.024 0 0 0 3.072 2.472zM3.82 11a13.652 13.652 0 0 1-.312-2.5h-2.49c.062.89.291 1.733.656 2.5H3.82zm6.853 3.472A7.024 7.024 0 0 0 13.745 12H11.91a9.27 9.27 0 0 1-.64 1.539 6.688 6.688 0 0 1-.597.933zM8.5 12v2.923c.67-.204 1.335-.82 1.887-1.855.173-.324.33-.682.468-1.068H8.5zm3.68-1h2.146c.365-.767.594-1.61.656-2.5h-2.49a13.65 13.65 0 0 1-.312 2.5zm2.802-3.5a6.959 6.959 0 0 0-.656-2.5H12.18c.174.782.282 1.623.312 2.5h2.49zM11.27 2.461c.247.464.462.98.64 1.539h1.835a7.024 7.024 0 0 0-3.072-2.472c.218.284.418.598.597.933zM10.855 4a7.966 7.966 0 0 0-.468-1.068C9.835 1.897 9.17 1.282 8.5 1.077V4h2.355z" />
+                      </svg>
+                    </Button>
+                  )}
+                  {this.state.telegram && (
+                    <Button href={`https://t.me/${this.state.telegram}`}>
+                      <VisuallyHidden>{`https://t.me/${this.state.telegram}`}</VisuallyHidden>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="16"
+                        height="16"
+                        fill="currentColor"
+                        viewBox="0 0 16 16"
+                        style={{
+                          fill: 'var(--text-color)',
+                          stroke: 'transparent',
+                          marginRight: '10px',
+                        }}
+                      >
+                        <path d="M9.78,18.65L10.06,14.42L17.74,7.5C18.08,7.19 17.67,7.04 17.22,7.31L7.74,13.3L3.64,12C2.76,11.75 2.75,11.14 3.84,10.7L19.81,4.54C20.54,4.21 21.24,4.72 20.96,5.84L18.24,18.65C18.05,19.56 17.5,19.78 16.74,19.36L12.6,16.3L10.61,18.23C10.38,18.46 10.19,18.65 9.78,18.65Z"></path>
                       </svg>
                     </Button>
                   )}
@@ -259,6 +413,10 @@ export default class Display extends Component {
                   collection
                 </Primary>
               </Button>
+
+              <Button onClick={this.market}>
+                <Primary selected={this.state.marketState}>market</Primary>
+              </Button>
             </div>
           </Padding>
         </Container>
@@ -271,7 +429,7 @@ export default class Display extends Component {
           </Container>
         )}
 
-        {this.state.creationsState && (
+        {!this.state.loading && this.state.creationsState && (
           <Container xlarge>
             <ResponsiveMasonry>
               {this.state.creations.map((nft, i) => {
@@ -288,7 +446,6 @@ export default class Display extends Component {
                         uri: uri.split('//')[1],
                         metadata: nft,
                       })}
-                      <div className={styles.number}>OBJKT#{nft.token_id}</div>
                     </div>
                   </Button>
                 )
@@ -297,7 +454,7 @@ export default class Display extends Component {
           </Container>
         )}
 
-        {this.state.collectionState && (
+        {!this.state.loading && this.state.collectionState && (
           <Container xlarge>
             <ResponsiveMasonry>
               {this.state.collection.map((nft, i) => {
@@ -313,13 +470,39 @@ export default class Display extends Component {
                         uri: uri.split('//')[1],
                         metadata: nft,
                       })}
-                      <div className={styles.number}>OBJKT#{nft.token_id}</div>
                     </div>
                   </Button>
                 )
               })}
             </ResponsiveMasonry>
           </Container>
+        )}
+
+        {!this.state.loading && this.state.marketState && (
+          <>
+            {Object.keys(this.state.market).length === 0 && (
+              <Container>
+                <Padding>
+                  <p>
+                    You currently don't have any OBJKT on the secondary market.
+                  </p>
+                </Padding>
+              </Container>
+            )}
+            {Object.keys(this.state.market).map((key) => {
+              return (
+                <Container key={key}>
+                  <Padding>
+                    <Button to={`${PATH.OBJKT}/${key}`}>
+                      <Primary>
+                        <strong>OBJKT#{key}</strong>
+                      </Primary>
+                    </Button>
+                  </Padding>
+                </Container>
+              )
+            })}
+          </>
         )}
       </Page>
     )

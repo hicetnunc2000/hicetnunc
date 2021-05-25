@@ -56,6 +56,7 @@ export const ItemModal = ({ info }) => {
               wallet={creator}
               name={data.alias}
               site={data.site}
+              telegram={data.telegram}
               twitter={data.twitter}
               github={data.github}
               reddit={data.reddit}
