@@ -39,11 +39,12 @@ export const prepareFile = async ({
 
   // upload thumbnail image
   let thumbnailUri = IPFS_DISPLAY_URI_BLACKCIRCLE
-  if (generateDisplayUri) {
-    const thumbnailInfo = await ipfs.add(thumbnail.buffer)
-    const thumbnailHash = thumbnailInfo.path
-    thumbnailUri = `ipfs://${thumbnailHash}`
-  }
+  // @crzypatch works wants the thumbnailUri to be the black circle
+  // if (generateDisplayUri) {
+  //   const thumbnailInfo = await ipfs.add(thumbnail.buffer)
+  //   const thumbnailHash = thumbnailInfo.path
+  //   thumbnailUri = `ipfs://${thumbnailHash}`
+  // }
 
   return await uploadMetadataFile({
     name,
