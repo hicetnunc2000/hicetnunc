@@ -128,7 +128,7 @@ export const ItemInfo = ({
             <Button to={`${PATH.OBJKT}/${token_id}`} disabled={isDetailView}>
               <Primary>OBJKT#{token_id}</Primary>
             </Button>
-            <div style={{ paddingLeft: '20px', marginBottom: '2px' }}>
+            <div style={{ paddingLeft: '20px'}}>
               {renderHDAObutton(token_id, hDAO_balance)}
             </div>
           </div>
