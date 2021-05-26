@@ -33,7 +33,7 @@ const thumbnailOptions = {
 }
 
 // @crzypathwork change to "true" to activate displayUri and thumbnailUri
-const GENERATE_DISPLAY_AND_THUMBNAIL = false
+const GENERATE_DISPLAY_AND_THUMBNAIL = true
 
 export const Mint = () => {
   const { mint, getAuth, acc, setAccount, setFeedback, syncTaquito } =
@@ -221,18 +221,22 @@ export const Mint = () => {
     setThumbnail(thumb)
   }
 
-  const limitNumericField  = async (target, minValue, maxValue) => {
-    if(target.value === '') target.value = ''; // Seems redundant but actually cleans up e.g. '234e'
-    target.value = Math.round(Math.max(Math.min(target.value, maxValue), minValue));
+  const limitNumericField = async (target, minValue, maxValue) => {
+    if (target.value === '') target.value = '' // Seems redundant but actually cleans up e.g. '234e'
+    target.value = Math.round(
+      Math.max(Math.min(target.value, maxValue), minValue)
+    )
   }
 
   const handleValidation = () => {
-    if (amount <= 0 ||
-        amount > MAX_EDITIONS ||
-        royalties < MIN_ROYALTIES ||
-        royalties > MAX_ROYALTIES ||
-        !file) {
-      return true;
+    if (
+      amount <= 0 ||
+      amount > MAX_EDITIONS ||
+      royalties < MIN_ROYALTIES ||
+      royalties > MAX_ROYALTIES ||
+      !file
+    ) {
+      return true
     }
     if (GENERATE_DISPLAY_AND_THUMBNAIL) {
       if (cover && thumbnail) {
@@ -279,8 +283,11 @@ export const Mint = () => {
                 type="number"
                 min={1}
                 max={MAX_EDITIONS}
-                onChange={(e) => setAmount(e.target.value) }
-                onBlur={ (e) => { limitNumericField(e.target, 1, MAX_EDITIONS); setAmount(e.target.value) } }
+                onChange={(e) => setAmount(e.target.value)}
+                onBlur={(e) => {
+                  limitNumericField(e.target, 1, MAX_EDITIONS)
+                  setAmount(e.target.value)
+                }}
                 placeholder={`editions (no. editions, 1-${MAX_EDITIONS})`}
                 label="editions"
                 value={amount}
@@ -290,8 +297,11 @@ export const Mint = () => {
                 type="number"
                 min={MIN_ROYALTIES}
                 max={MAX_ROYALTIES}
-                onChange={(e) => setRoyalties(e.target.value) }
-                onBlur={ (e) => { limitNumericField(e.target, MIN_ROYALTIES, MAX_ROYALTIES); setRoyalties(e.target.value) } }
+                onChange={(e) => setRoyalties(e.target.value)}
+                onBlur={(e) => {
+                  limitNumericField(e.target, MIN_ROYALTIES, MAX_ROYALTIES)
+                  setRoyalties(e.target.value)
+                }}
                 placeholder={`royalties after each sale (between ${MIN_ROYALTIES}-${MAX_ROYALTIES}%)`}
                 label="royalties"
                 value={royalties}
