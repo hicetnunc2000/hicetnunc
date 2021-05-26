@@ -18,7 +18,7 @@
     "conseiljs-softsigner": "^5.0.4-1",
     "eztz": "^1.1.2",
     "eztz-lib": "^0.1.2",
-    "fflate": "^0.6.9",
+    "fflate": "^0.7.0",
     "filereader": "^0.10.3",
     "framer-motion": "^4.1.16",
     "ipfs-api": "^26.1.2",
