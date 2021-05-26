@@ -96,8 +96,8 @@ export const ItemInfo = ({
 
   return (
     <>
-      <article>
-        <footer className={styles.container}>
+      <div>
+        <div className={styles.container}>
           <div className={styles.edition}>
             <div className={styles.inline}>
               <p className={styles.issuer}>Issuer:&nbsp;</p>
@@ -134,8 +134,8 @@ export const ItemInfo = ({
               </div>
             </div>
           )}
-        </footer>
-        <header className={styles.container}>
+        </div>
+        <div className={styles.container}>
           {isDetailView && (
             <div className={styles.container}>
               <h1>OBJKT#{token_id}</h1>
@@ -146,11 +146,11 @@ export const ItemInfo = ({
               </nav>
             </div>
           )}
-        </header>
-        <aside className={styles.container}>
+        </div>
+        <div className={styles.container}>
           {!feed && <div>{renderHDAObutton(token_id, hDAO_balance)}</div>}
-        </aside>
-      </article>
+        </div>
+      </div>
     </>
   )
 }

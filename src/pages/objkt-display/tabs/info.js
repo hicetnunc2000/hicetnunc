@@ -10,7 +10,7 @@ export const Info = ({ token_info }) => {
 
   return (
     <>
-      <article>
+      <div>
         <Container>
           <Padding>TITLE</Padding>
           <Padding><h2>{name}</h2></Padding>
@@ -29,7 +29,7 @@ export const Info = ({ token_info }) => {
           </Container>
         </nav>
 
-        <footer>
+        <div>
           <Container>
             <Padding>MEDIA</Padding>
             <Padding>mimetype: {formats[0].mimeType}</Padding>
@@ -39,8 +39,8 @@ export const Info = ({ token_info }) => {
               </Button>
             </Padding>
           </Container>
-        </footer>
-      </article>
+        </div>
+      </div>
     </>
   )
 }
