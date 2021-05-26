@@ -1,0 +1,25 @@
+.simple-select {
+  position: relative;
+  vertical-align: bottom;
+  cursor: pointer;
+  &.selectOpen .simple-select-options {
+    display: block;
+  }
+  &.selectClosed .simple-select-options {
+    display: none;
+  }
+  .fieldset {
+    position: relative;
+    width: 100%;
+    color: var(--text-color);
+    font-weight: bold;
+    margin-top: 0.55em;
+    padding: 0.2em 0.2em 0.2em 0.2em; 
+    padding-right: 0em;
+    min-height: 2.2em;
+    min-width: 50px;
+  
+    display: flex;
+    align-items: center;
+  }
+}

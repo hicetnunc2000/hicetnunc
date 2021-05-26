@@ -1,0 +1,32 @@
+.simple-select .cancelContainer {
+  display: none;
+  margin: 0.5em 0.5em 0.5em 0.5em;
+}
+.simple-select.valueSelected .cancelContainer {
+  display: inline-block;
+}
+.cancelContainer {
+  display: inline-block;
+  position: relative;
+  cursor: pointer;
+  height: 20px;
+  &:hover .cancelContent {
+    color: lightgray;
+  }
+
+  &:active .cancelContent {
+    color: lightblue;
+  }
+}
+
+.cancelContent {
+  display: inline-block;
+  height: 20px;
+  svg {
+    fill: #aaa;
+    transition: fill 0.15s ease;
+    &:hover {
+      fill: darkslategray;
+    }
+  }
+}

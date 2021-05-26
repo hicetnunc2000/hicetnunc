@@ -1,0 +1,27 @@
+.simple-select .simple-select-options {
+  --display: none;
+  text-align: left;
+
+  position: absolute;
+  background-color: var(--background-color);
+  top: 100%;
+  left: 0;
+
+  width: 100%; 
+
+  z-index: 1000;
+  div {
+    padding: 0.5em 0 0.5em 0.5em;
+    cursor: pointer;
+  }
+  div.focused_option {
+    background-color: var(--background-color);
+  }
+  div:hover {
+    background-color: var(--text-color);
+    color: var(--background-color);
+  }
+  div:active {
+    background-color: var(--background-color);
+  }
+}

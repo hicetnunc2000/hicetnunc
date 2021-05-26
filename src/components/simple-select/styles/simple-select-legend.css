@@ -1,0 +1,19 @@
+.simple-select .fieldset .legend {
+  /*these 3 defs are totally for style. I also like having no border.*/
+  border: 0px solid slategray;
+  background: white;
+  font-style: italic;
+  color: #555;
+
+  /*these 3 defs are what makes the legend overlap the top edge of the selection container.*/
+  position: absolute;
+  top: 0;
+  transform: translateY(-50%);
+
+  /*basic placement of the legend*/
+  padding: 0 0.5em;
+  margin-left: 0.5em;
+}
+.simple-select.roundedCorners .fieldset .legend {
+  border-radius: 0.5em;
+}
