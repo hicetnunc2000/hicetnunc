@@ -414,9 +414,9 @@ export default class Display extends Component {
                 </Primary>
               </Button>
 
-              <Button onClick={this.market}>
+{/*               <Button onClick={this.market}>
                 <Primary selected={this.state.marketState}>market</Primary>
-              </Button>
+              </Button> */}
             </div>
           </Padding>
         </Container>
@@ -484,7 +484,7 @@ export default class Display extends Component {
               <Container>
                 <Padding>
                   <p>
-                    You currently don't have any OBJKT on the secondary market.
+                    You currently don't have any OBJKT on the market.
                   </p>
                 </Padding>
               </Container>
