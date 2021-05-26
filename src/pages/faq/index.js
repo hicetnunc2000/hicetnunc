@@ -83,6 +83,13 @@ export class FAQ extends Component {
               </Button>
             </div>
             <div className={styles.buttons}>
+              <Button href="https://github.com/hicetnunc2000/hicetnunc/wiki/Maintenance-fees">
+                <Primary>
+                  <strong>maintenance fees</strong>
+                </Primary>
+              </Button>
+            </div>
+            <div className={styles.buttons}>
               <Button href="https://github.com/hicetnunc2000/hicetnunc/wiki/Troubleshooting">
                 <Primary>
                   <strong>troubleshooting</strong>
