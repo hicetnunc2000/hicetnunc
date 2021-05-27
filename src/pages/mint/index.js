@@ -256,6 +256,7 @@ export const Mint = () => {
             <Padding>
               <Input
                 type="text"
+                name="objkt_title"
                 onChange={(e) => setTitle(e.target.value)}
                 placeholder="title"
                 label="title"
@@ -264,6 +265,7 @@ export const Mint = () => {
 
               <Input
                 type="text"
+                name="objkt_description"
                 onChange={(e) => setDescription(e.target.value)}
                 placeholder="description"
                 label="description"
@@ -273,6 +275,7 @@ export const Mint = () => {
 
               <Input
                 type="text"
+                name="objkt_tags"
                 onChange={(e) => setTags(e.target.value)}
                 placeholder="tags (comma separated. example: illustration, digital)"
                 label="tags"
@@ -281,6 +284,7 @@ export const Mint = () => {
 
               <Input
                 type="number"
+                name="objkt_editions"
                 min={1}
                 max={MAX_EDITIONS}
                 onChange={(e) => setAmount(e.target.value)}
@@ -295,6 +299,7 @@ export const Mint = () => {
 
               <Input
                 type="number"
+                name="objkt_royalties"
                 min={MIN_ROYALTIES}
                 max={MAX_ROYALTIES}
                 onChange={(e) => setRoyalties(e.target.value)}
