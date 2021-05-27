@@ -28,7 +28,7 @@ export const Tags = () => {
       return
     }
 
-    GetTags({ tag: id, page: count })
+    GetTags({ tag: id, counter: count })
       .then((result) => {
         const next = items.concat(result)
         setItems(next)
@@ -84,7 +84,7 @@ export const Tags = () => {
                         uri: uri.split('//')[1],
                         metadata: nft,
                       })}
-                      <div className={styles.number}>OBJKT#{nft.token_id}</div>
+                      {/* <div className={styles.number}>OBJKT#{nft.token_id}</div> */}
                     </div>
                   </Button>
                 )
