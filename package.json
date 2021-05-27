@@ -22,7 +22,7 @@
     "filereader": "^0.10.3",
     "framer-motion": "^4.1.16",
     "ipfs-api": "^26.1.2",
-    "ipfs-http-client": "^50.0.0",
+    "ipfs-http-client": "^50.1.0",
     "local-storage": "^2.0.0",
     "lodash": "^4.17.21",
     "mime-types": "^2.1.30",
