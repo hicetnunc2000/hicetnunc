@@ -14,11 +14,55 @@ import { ResponsiveMasonry } from '../../components/responsive-masonry'
 import styles from './styles.module.scss'
 
 const axios = require('axios')
+const fetch = require('node-fetch')
 
 const sortByTokenId = (a, b) => {
   return b.token_id - a.token_id
 }
+const query = `
+  query creatorGallery($address: String!) {
+    hic_et_nunc_token(where: {creator: {address: {_eq: $address}}}) {
+      id
+      artifact_uri
+      thumbnail_uri
+      timestamp
+      mime
+      title
+      description
+      supply
+      token_tags {
+        tag {
+          tag
+        }
+      }
+    }
+  }
+`;
 
+      async function fetchGraphQL(operationsDoc, operationName, variables) {
+        const result = await fetch(
+          "https://api.hicdex.com/v1/graphql",
+          {
+            method: "POST",
+            body: JSON.stringify({
+              query: operationsDoc,
+              variables: variables,
+              operationName: operationName
+            })
+          }
+        );
+        return await result.json()
+      }
+
+      async function doFetch(addr) {
+        const { errors, data } = await fetchGraphQL(query, "creatorGallery", { "address": addr });
+        if (errors) {
+          console.error(errors);
+        }
+        const result = data.hic_et_nunc_swap
+        console.log({ result })
+        return result
+      }
 export default class Display extends Component {
   static contextType = HicetnuncContext
 
@@ -94,7 +138,10 @@ export default class Display extends Component {
             this.onReady()
           }
         })
+
+     
     }
+    /* doFetch(window.location.pathname.split('/')[2]) */
   }
 
   // called if there's no redirect
@@ -414,7 +461,7 @@ export default class Display extends Component {
                 </Primary>
               </Button>
 
-{/*               <Button onClick={this.market}>
+              {/*               <Button onClick={this.market}>
                 <Primary selected={this.state.marketState}>market</Primary>
               </Button> */}
             </div>

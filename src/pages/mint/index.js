@@ -211,10 +211,11 @@ export const Mint = () => {
               <Input
                 type="text"
                 name="objkt_description"
+                style={{ whiteSpace: 'pre' }}
                 onChange={(e) => setDescription(e.target.value)}
                 placeholder="description"
                 label="description"
-                maxlength="2000"
+                maxlength="5000"
                 value={description}
               />
 
