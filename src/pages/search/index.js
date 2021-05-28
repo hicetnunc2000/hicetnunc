@@ -23,7 +23,6 @@ export class Search extends Component {
   search = async () => {
 
     // search for alias
-    // regex search
     // 
 
     console.log(this.state.search)
