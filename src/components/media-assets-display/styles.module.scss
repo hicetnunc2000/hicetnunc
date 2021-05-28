@@ -1,0 +1,39 @@
+@import '../../styles/variables.scss';
+@import '../../styles/layout.scss';
+
+.container {
+  width: 100%;
+  margin-bottom: 15px;
+
+  .subdued {
+    color: var(--text-color);
+    opacity: 0.4;
+  }
+
+  .media {
+    display: flex;
+    flex-wrap: wrap;
+
+    .item {
+      width: 50%;
+
+      @include respond-to('tablet') {
+        width: 33.3333%;
+      }
+
+      .inner {
+        margin: 5px;
+
+        img,
+        video {
+          width: 100%;
+        }
+
+        .meta {
+          font-size: 12px;
+          opacity: 0.5;
+        }
+      }
+    }
+  }
+}
