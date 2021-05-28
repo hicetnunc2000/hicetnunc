@@ -1,18 +1,19 @@
-import React, { useContext, useState } from 'react'
-import Compressor from 'compressorjs'
+import React, { useContext, useState, useRef } from 'react'
+import { useHistory } from 'react-router'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
 import { Page, Container, Padding } from '../../components/layout'
 import { Input } from '../../components/input'
 import { Button, Curate, Primary } from '../../components/button'
 import { Upload } from '../../components/upload'
 import { Preview } from '../../components/preview'
+import { MediaAssetsDisplay } from '../../components/media-assets-display'
 import { prepareFile, prepareDirectory } from '../../data/ipfs'
+import { getMediaMetadata, unzipMedia } from '../../utils/media'
 import { prepareFilesFromZIP } from '../../utils/html'
+
 import {
   ALLOWED_MIMETYPES,
   ALLOWED_FILETYPES_LABEL,
-  ALLOWED_COVER_MIMETYPES,
-  ALLOWED_COVER_FILETYPES_LABEL,
   MINT_FILESIZE,
   MIMETYPE,
   MAX_EDITIONS,
@@ -20,17 +21,7 @@ import {
   MAX_ROYALTIES,
 } from '../../constants'
 
-const coverOptions = {
-  quality: 0.85,
-  maxWidth: 1024,
-  maxHeight: 1024,
-}
-
-const thumbnailOptions = {
-  quality: 0.85,
-  maxWidth: 350,
-  maxHeight: 350,
-}
+const COMPRESSOR_URL = 'https://hicetnunc-media-compressor.netlify.app'
 
 // @crzypathwork change to "true" to activate displayUri and thumbnailUri
 const GENERATE_DISPLAY_AND_THUMBNAIL = true
@@ -46,9 +37,8 @@ export const Mint = () => {
   const [amount, setAmount] = useState()
   const [royalties, setRoyalties] = useState()
   const [file, setFile] = useState() // the uploaded file
-  const [cover, setCover] = useState() // the uploaded or generated cover image
-  const [thumbnail, setThumbnail] = useState() // the uploaded or generated cover image
-  const [needsCover, setNeedsCover] = useState(false)
+  const fileMetadata = useRef(null)
+  const [extraMedia, setExtraMedia] = useState() // the uploaded or generated cover image
 
   const handleMint = async () => {
     if (!acc) {
@@ -131,8 +121,8 @@ export const Mint = () => {
           tags,
           address: acc.address,
           files,
-          cover,
-          thumbnail,
+          metadata: fileMetadata.current,
+          extraMedia,
           generateDisplayUri: GENERATE_DISPLAY_AND_THUMBNAIL,
         })
       } else {
@@ -144,8 +134,8 @@ export const Mint = () => {
           address: acc.address,
           buffer: file.buffer,
           mimeType: file.mimeType,
-          cover,
-          thumbnail,
+          metadata: fileMetadata.current,
+          extraMedia,
           generateDisplayUri: GENERATE_DISPLAY_AND_THUMBNAIL,
         })
       }
@@ -160,65 +150,24 @@ export const Mint = () => {
 
   const handleFileUpload = async (props) => {
     setFile(props)
+    fileMetadata.current = await getMediaMetadata(props.file)
+    setExtraMedia(null)
+  }
 
-    if (GENERATE_DISPLAY_AND_THUMBNAIL) {
-      if (props.mimeType.indexOf('image') === 0) {
-        setNeedsCover(false)
-        await generateCoverAndThumbnail(props)
-      } else {
-        setNeedsCover(true)
+  const handleCoverZipUpload = async (props) => {
+    const error =
+      'No valid media in zip file. Supported types: jpeg, png, gif, mp4'
+    try {
+      const media = await unzipMedia(props.buffer)
+      if (media.length === 0) {
+        alert(error)
+        return
       }
+
+      setExtraMedia(media)
+    } catch (err) {
+      alert(error)
     }
-  }
-
-  const generateCompressedImage = async (props, options) => {
-    const blob = await compressImage(props.file, options)
-    const mimeType = blob.type
-    const buffer = await blob.arrayBuffer()
-    const reader = await blobToDataURL(blob)
-    return { mimeType, buffer, reader }
-  }
-
-  const compressImage = (file, options) => {
-    return new Promise(async (resolve, reject) => {
-      new Compressor(file, {
-        ...options,
-        success(blob) {
-          resolve(blob)
-        },
-        error(err) {
-          reject(err)
-        },
-      })
-    })
-  }
-
-  const blobToDataURL = async (blob) => {
-    return new Promise((resolve, reject) => {
-      let reader = new FileReader()
-      reader.onerror = reject
-      reader.onload = (e) => resolve(reader.result)
-      reader.readAsDataURL(blob)
-    })
-  }
-
-  const handleCoverUpload = async (props) => {
-    await generateCoverAndThumbnail(props)
-  }
-
-  const generateCoverAndThumbnail = async (props) => {
-    // TMP: skip GIFs to avoid making static
-    if (props.mimeType === MIMETYPE.GIF) {
-      setCover(props)
-      setThumbnail(props)
-      return
-    }
-
-    const cover = await generateCompressedImage(props, coverOptions)
-    setCover(cover)
-
-    const thumb = await generateCompressedImage(props, thumbnailOptions)
-    setThumbnail(thumb)
   }
 
   const limitNumericField = async (target, minValue, maxValue) => {
@@ -238,14 +187,10 @@ export const Mint = () => {
     ) {
       return true
     }
-    if (GENERATE_DISPLAY_AND_THUMBNAIL) {
-      if (cover && thumbnail) {
-        return false
-      }
-    } else {
-      return false
+    if (GENERATE_DISPLAY_AND_THUMBNAIL && !extraMedia) {
+      return true
     }
-    return true
+    return false
   }
 
   return (
@@ -324,14 +269,32 @@ export const Mint = () => {
             </Padding>
           </Container>
 
-          {file && needsCover && (
+          {file && GENERATE_DISPLAY_AND_THUMBNAIL && (
             <Container>
               <Padding>
+                <div>
+                  Please use{' '}
+                  <a
+                    href={COMPRESSOR_URL}
+                    target="_blank"
+                    rel="noreferrer"
+                    style={{
+                      textDecoration: 'underline',
+                      color: 'inherit',
+                    }}
+                  >
+                    this tool
+                  </a>{' '}
+                  to generate cover/thumbnail assets for your OJBKT, then upload
+                  here.
+                  <br />
+                  <br />
+                </div>
                 <Upload
-                  label="Upload cover image"
-                  allowedTypes={ALLOWED_COVER_MIMETYPES}
-                  allowedTypesLabel={ALLOWED_COVER_FILETYPES_LABEL}
-                  onChange={handleCoverUpload}
+                  label="Upload cover/thumbnail media zip"
+                  allowedTypes={['.zip']}
+                  allowedTypesLabel="zip archive"
+                  onChange={handleCoverZipUpload}
                 />
               </Padding>
             </Container>
@@ -370,6 +333,12 @@ export const Mint = () => {
                 description={description}
                 tags={tags}
               />
+            </Padding>
+          </Container>
+
+          <Container>
+            <Padding>
+              <MediaAssetsDisplay media={extraMedia} />
             </Padding>
           </Container>
 
