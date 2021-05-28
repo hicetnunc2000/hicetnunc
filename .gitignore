@@ -10,7 +10,7 @@
 /build
 /amplify
 # misc
-.env_prod
+#.env_prod
 
 npm-debug.log*
 yarn-debug.log*
@@ -50,3 +50,4 @@ templates/html-image-scale/.parcel-cache
 .next
 # Local Netlify folder
 .netlify
+

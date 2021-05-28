@@ -37,18 +37,17 @@ export class Config extends Component {
 
   handleChange = (e) => {
     this.setState({ [e.target.name]: e.target.value })
-    console.log(this.state)
   }
 
   // config subjkt
 
   subjkt_config = async () => {
-    const ipfs = create(infuraUrl)    
-    const [file] = this.state.selectedFile
+    const ipfs = create(infuraUrl)
+/*     const [file] = this.state.selectedFile
 
     const buffer = Buffer.from(await file.arrayBuffer())
 
-    this.setState({ avatar : 'ipfs://' + (await ipfs.add(buffer)).path })
+    this.setState({ avatar: 'ipfs://' + (await ipfs.add(buffer)).path }) */
 
     this.context.registry(
       this.state.subjkt,
@@ -56,39 +55,19 @@ export class Config extends Component {
         Buffer.from(JSON.stringify({ description: this.state.description }))
       )
     )
-    /*     
-
-    signature study
-    
-    const bytes =
-          '05' +
-          char2Bytes(
-            JSON.stringify({
-              alias: this.state.alias,
-              description: this.state.description,
-            })
-          )
-        console.log(bytes)
-        const payload = {
-          signingType: SigningType.MICHELINE,
-          payload: bytes,
-          sourceAddress: this.context.addr,
-        }
-        console.log(payload)
-        this.context.sign(payload) 
-        
-        */
   }
 
   // upload file
 
   onFileChange = event => {
-    
-    this.setState({       selectedFile: event.target.files,
-      fileTitle: event.target.files[0].name })
-  
+
+    this.setState({
+      selectedFile: event.target.files,
+      fileTitle: event.target.files[0].name
+    })
+
   }
-  
+
   hDAO_operators = () => {
     this.context.hDAO_update_operators(this.context.acc.address)
   }
@@ -98,7 +77,28 @@ export class Config extends Component {
     ls.set('hDAO_config', this.state.vote)
   }
 
-  // signature tests
+  /*     
+
+   signature studies
+   
+   const bytes =
+         '05' +
+         char2Bytes(
+           JSON.stringify({
+             alias: this.state.alias,
+             description: this.state.description,
+           })
+         )
+       console.log(bytes)
+       const payload = {
+         signingType: SigningType.MICHELINE,
+         payload: bytes,
+         sourceAddress: this.context.addr,
+       }
+       console.log(payload)
+       this.context.sign(payload) 
+       
+       */
 
   sign = () => {
     console.log(this.context.addr)
@@ -114,6 +114,7 @@ export class Config extends Component {
        */
     })
   }
+
   // delete account
 
   render() {
@@ -121,17 +122,18 @@ export class Config extends Component {
       <Page>
         <Container>
           <Padding>
-            <div>
+
+{/*             <div>
               <button onClick={this.hDAO_operators}>
                 allow subjkt operators ○
               </button>
-            </div>
+            </div> */}
             <div>
               <input
                 type="text"
                 name="subjkt"
                 onChange={this.handleChange}
-                placeholder="subjkt"
+                placeholder="SUBJKT"
               ></input>
               <br />
               <input
@@ -141,27 +143,31 @@ export class Config extends Component {
                 placeholder="description"
               ></input>
               <br />
+
+
               {/* social media */}
+{/* 
               <Container>
                 <Padding>
                   <input type="file" onChange={this.onFileChange} />
                 </Padding>
-              </Container>
-              <button onClick={this.subjkt_config}>config</button>
+              </Container> */}
+              <button onClick={this.subjkt_config}>config SUBJKT</button>
             </div>
-            <div>
-              <Input
+
+            <div style={{ paddingTop: '15%' }}>
+              <input
                 type="text"
                 name="vote"
                 onChange={this.handleChange}
-                placeholder="○"
-              />
+                placeholder="μ○"
+              ></input>
               <p style={{ fontSize: '12px' }}>
                 hic et nunc DAO ○ curation parameter
               </p>
-              <Button onClick={this.hDAO_config} fit>
-                config
-              </Button>
+              <button onClick={this.hDAO_config}>
+                config ○
+              </button>
             </div>
             {/*             <div>
               <input type="text" name="str" onChange={this.handleChange} placeholder="sign"></input>

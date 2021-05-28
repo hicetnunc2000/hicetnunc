@@ -100,7 +100,7 @@ export const ItemInfo = ({
       <div className={styles.container}>
         <div className={styles.edition}>
           <div className={styles.inline}>
-            <p>Issuer:&nbsp;</p>
+            <p className={styles.issuer}>Issuer:&nbsp;</p>
             <Button to={`${PATH.ISSUER}/${token_info.creators[0]}`}>
               <Primary>{walletPreview(token_info.creators[0])}</Primary>
             </Button>
@@ -129,7 +129,7 @@ export const ItemInfo = ({
             <Button to={`${PATH.OBJKT}/${token_id}`} disabled={isDetailView}>
               <Primary>OBJKT#{token_id}</Primary>
             </Button>
-            <div style={{ paddingLeft: '20px', marginBottom: '2px' }}>
+            <div className={styles.hdaoButton}>
               {renderHDAObutton(token_id, hDAO_balance)}
             </div>
           </div>
