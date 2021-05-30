@@ -18,6 +18,12 @@ export const SanitiseOBJKT = (objkt) => {
   })
 }
 
+export const SanitizeDipDup = (objkt) => {
+  objkt.token_id = objkt.owner
+  objkt.artifactUri = objkt.artifact_uri
+  return objkt
+}
+
 // check for mymetype using FileReader API (should read any file including binaries)
 export const getMimeType = (file) => {
   return new Promise((resolve) => {
