@@ -69,6 +69,13 @@ export const renderMediaType = (props) => {
         )
       }
 
+      if (metadata && metadata.thumbnail_uri !== 'ipfs://QmNrhZHUaEqxhyLfqoq1mtHSipkWHeT31LNHb1QEbDHgnc') {
+        displayUri = metadata.thumbnail_uri.replace(
+          'ipfs://',
+          CLOUDFLARE
+        )
+      }
+
       // new
       // if (metadata && metadata.display_uri) {
       //   displayUri = metadata.display_uri.replace('ipfs://', CLOUDFLARE)
