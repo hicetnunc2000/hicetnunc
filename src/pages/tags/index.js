@@ -83,6 +83,7 @@ export const Tags = () => {
                         mimeType,
                         uri: uri.split('//')[1],
                         metadata: nft,
+                        pdfscroll: false
                       })}
                       <div className={styles.number}>OBJKT#{nft.token_id}</div>
                     </div>

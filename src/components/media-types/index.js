@@ -28,6 +28,7 @@ export const renderMediaType = (props) => {
     interactive = false,
     preview = false,
     metadata,
+    pdfscroll = true
   } = props
   const path = uri
   let url = preview ? uri : `${CLOUDFLARE}${path}`
@@ -118,7 +119,7 @@ export const renderMediaType = (props) => {
     case MIMETYPE.PDF:
       return (
         <Container interactive={interactive}>
-          <PdfComponent src={url} />
+          <PdfComponent src={url} pdfscroll={pdfscroll} />
         </Container>
       )
     default:

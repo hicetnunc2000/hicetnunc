@@ -445,6 +445,7 @@ export default class Display extends Component {
                         mimeType,
                         uri: uri.split('//')[1],
                         metadata: nft,
+                        pdfscroll: false
                       })}
                     </div>
                   </Button>
@@ -469,6 +470,7 @@ export default class Display extends Component {
                         mimeType,
                         uri: uri.split('//')[1],
                         metadata: nft,
+                        pdfscroll: false
                       })}
                     </div>
                   </Button>
