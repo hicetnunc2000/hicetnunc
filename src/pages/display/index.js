@@ -68,9 +68,10 @@ async function fetchCollection(addr) {
 
 const query_creations = `
 query creatorGallery($address: String!) {
-  hic_et_nunc_token(where: {creator: {address: {_eq: $address}}, _not: {token_holders: {holder: {address: {_eq: "tz1burnburnburnburnburnburnburjAYjjX"}}}}}) {
+  hic_et_nunc_token(where: {creator: {address: {_eq: $address}}, supply: {_gt: 0}}, order_by: {id: desc}) {
     id
     artifact_uri
+    display_uri
     thumbnail_uri
     timestamp
     mime
@@ -254,13 +255,14 @@ export default class Display extends Component {
 
     const creations = await fetchCreations(addr)
     const collection = await fetchCollection(addr)
+    console.log(creations)
     console.log(collection)
     // market
 
     this.setState({
-      creations: creations.sort(sortByTokenId),
+      creations: creations,
       loading: false,
-      collection: collection.sort(sortByTokenId),
+      collection: collection,
       /* market, */
     })
 
