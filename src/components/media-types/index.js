@@ -65,16 +65,25 @@ export const renderMediaType = (props) => {
       if (metadata && metadata.token_info && metadata.token_info.displayUri) {
         displayUri = metadata.token_info.displayUri.replace(
           'ipfs://',
-          CLOUDFLARE
+          IPFS
         )
       }
 
-      if (metadata && metadata.thumbnail_uri !== 'ipfs://QmNrhZHUaEqxhyLfqoq1mtHSipkWHeT31LNHb1QEbDHgnc') {
+      if (metadata && metadata.thumbnail_uri && metadata.thumbnail_uri !== 'ipfs://QmNrhZHUaEqxhyLfqoq1mtHSipkWHeT31LNHb1QEbDHgnc') {
         displayUri = metadata.thumbnail_uri.replace(
           'ipfs://',
-          CLOUDFLARE
+          IPFS
         )
+
+        if (metadata.display_uri) {
+          displayUri = metadata.thumbnail_uri.replace(
+            'ipfs://',
+            IPFS
+          )
+        }
       }
+
+      console.log(displayUri)
 
       // new
       // if (metadata && metadata.display_uri) {
