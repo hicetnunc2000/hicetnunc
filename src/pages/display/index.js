@@ -248,7 +248,7 @@ export default class Display extends Component {
     if (window.location.pathname.split('/')[1] === 'tz') {
       addr = window.location.pathname.split('/')[2]
     } else {
-      addr = await axios.post(process.env.REACT_APP_SUBJKT, { subjkt : window.location.pathname.split('/')[1]}).then(res => res.data.result[0].tzl)
+      addr = await axios.post(process.env.REACT_APP_SUBJKT, { subjkt : window.location.pathname.split('/')[1]}).then(res => res.data.result[0].tz)
       console.log(addr)
     }
 
