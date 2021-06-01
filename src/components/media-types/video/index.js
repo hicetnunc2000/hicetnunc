@@ -71,6 +71,7 @@ export const VideoComponent = ({ src, interactive, inView }) => {
         loop
         controls={interactive}
         src={src}
+        loading="lazy"
       />
     </div>
   )
