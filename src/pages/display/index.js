@@ -56,8 +56,8 @@ async function fetchCollectionGraphQL(operationsDoc, operationName, variables) {
   return await result.json();
 }
 
-async function fetchCollection() {
-  const { errors, data } = await fetchCollectionGraphQL(query_collection, "collectorGallery", {"address":"tz1Y1j7FK1X9Rrv2VdPz5bXoU7SszF8W1RnK"});
+async function fetchCollection(addr) {
+  const { errors, data } = await fetchCollectionGraphQL(query_collection, "collectorGallery", { "address": addr });
   if (errors) {
     console.error(errors);
   }
@@ -189,7 +189,9 @@ export default class Display extends Component {
 
 
     }
-    
+
+    console.log(window.location.pathname.split('/'))
+
   }
 
   // called if there's no redirect
@@ -241,28 +243,27 @@ export default class Display extends Component {
       }
     }
 
-    await axios
-      .get(process.env.REACT_APP_TZ, {
-        params: { tz: this.state.wallet },
-      })
-      .then(async (res) => {
-        this.setState({
-          hdao: res.data.hdao / 1_000_000,
-        })
+    let addr = ''
 
+    if (window.location.pathname.split('/')[1] === 'tz') {
+      addr = window.location.pathname.split('/')[2]
+    } else {
+      addr = await axios.post(process.env.REACT_APP_SUBJKT, { subjkt : window.location.pathname.split('/')[1]}).then(res => res.data.result[0].tzl)
+      console.log(addr)
+    }
 
-        const creations = await fetchCreations(window.location.pathname.split('/')[2])
-        const collection = await fetchCollection(window.location.pathname.split('/')[2])
-        console.log(collection)
-        // market
+    const creations = await fetchCreations(addr)
+    const collection = await fetchCollection(addr)
+    console.log(collection)
+    // market
 
-        this.setState({
-          creations: creations.sort(sortByTokenId),
-          loading: false,
-          collection: collection.sort(sortByTokenId),
-          /* market, */
-        })
-      })
+    this.setState({
+      creations: creations.sort(sortByTokenId),
+      loading: false,
+      collection: collection.sort(sortByTokenId),
+      /* market, */
+    })
+
   }
 
   creations = () => {
