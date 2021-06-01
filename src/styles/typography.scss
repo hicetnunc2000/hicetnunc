@@ -1,9 +1,10 @@
 @font-face {
-  font-family: 'OCR A Std';
-  src: url('fonts/OCR-A-Std-Regular.eot');
-  src: url('fonts/OCR-A-Std-Regular.eot?#iefix') format('embedded-opentype'),
-    url('fonts/OCR-A-Std-Regular.woff2') format('woff2'),
-    url('fonts/OCR-A-Std-Regular.woff') format('woff'),
-    url('fonts/OCR-A-Std-Regular.ttf') format('truetype'),
-    url('fonts/OCR-A-Std-Regular.svg#OCR A Std') format('svg');
+  font-family: 'basier_circle_monoregular';
+  src: url('fonts/basiercirclemono-regular-webfont.eot');
+  src: url('fonts/basiercirclemono-regular-webfont.eot?#iefix') format('embedded-opentype'),
+       url('fonts/basiercirclemono-regular-webfont.woff2') format('woff2'),
+       url('fonts/basiercirclemono-regular-webfont.woff') format('woff'),
+       url('fonts/basiercirclemono-regular-webfont.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
 }
