@@ -6,7 +6,7 @@ import { Loading } from '../../components/loading'
 import { renderMediaType } from '../../components/media-types'
 import { Identicon } from '../../components/identicons'
 import { walletPreview } from '../../utils/string'
-import { SanitiseOBJKT } from '../../utils/sanitise'
+import { SanitiseOBJKT, SanitizeDipDup } from '../../utils/sanitise'
 import { PATH } from '../../constants'
 import { VisuallyHidden } from '../../components/visually-hidden'
 import { GetUserMetadata } from '../../data/api'
@@ -17,11 +17,12 @@ const axios = require('axios')
 const fetch = require('node-fetch')
 
 const sortByTokenId = (a, b) => {
-  return b.token_id - a.token_id
+  return b.id - a.id
 }
-const query = `
-  query creatorGallery($address: String!) {
-    hic_et_nunc_token(where: {creator: {address: {_eq: $address}}}) {
+
+const query_collection = `
+  query collectorGallery($address: String!) {
+    hic_et_nunc_token(where: {trades: {buyer: {address: {_eq: $address}}}}) {
       id
       artifact_uri
       thumbnail_uri
@@ -39,30 +40,78 @@ const query = `
   }
 `;
 
-      async function fetchGraphQL(operationsDoc, operationName, variables) {
-        const result = await fetch(
-          "https://api.hicdex.com/v1/graphql",
-          {
-            method: "POST",
-            body: JSON.stringify({
-              query: operationsDoc,
-              variables: variables,
-              operationName: operationName
-            })
-          }
-        );
-        return await result.json()
-      }
+async function fetchCollectionGraphQL(operationsDoc, operationName, variables) {
+  const result = await fetch(
+    "https://api.hicdex.com/v1/graphql",
+    {
+      method: "POST",
+      body: JSON.stringify({
+        query: operationsDoc,
+        variables: variables,
+        operationName: operationName
+      })
+    }
+  );
 
-      async function doFetch(addr) {
-        const { errors, data } = await fetchGraphQL(query, "creatorGallery", { "address": addr });
-        if (errors) {
-          console.error(errors);
-        }
-        const result = data.hic_et_nunc_swap
-        console.log({ result })
-        return result
+  return await result.json();
+}
+
+async function fetchCollection(addr) {
+  const { errors, data } = await fetchCollectionGraphQL(query_collection, "collectorGallery", { "address": addr });
+  if (errors) {
+    console.error(errors);
+  }
+  const result = data.hic_et_nunc_token
+  console.log({ result })
+  return result
+}
+
+const query_creations = `
+query creatorGallery($address: String!) {
+  hic_et_nunc_token(where: {creator: {address: {_eq: $address}}, supply: {_gt: 0}}, order_by: {id: desc}) {
+    id
+    artifact_uri
+    display_uri
+    thumbnail_uri
+    timestamp
+    mime
+    title
+    description
+    supply
+    token_tags {
+      tag {
+        tag
       }
+    }
+  }
+}
+`;
+
+async function fetchCreationsGraphQL(operationsDoc, operationName, variables) {
+  const result = await fetch(
+    "https://api.hicdex.com/v1/graphql",
+    {
+      method: "POST",
+      body: JSON.stringify({
+        query: operationsDoc,
+        variables: variables,
+        operationName: operationName
+      })
+    }
+  );
+  return await result.json()
+}
+
+async function fetchCreations(addr) {
+  const { errors, data } = await fetchCreationsGraphQL(query_creations, "creatorGallery", { "address": addr });
+  if (errors) {
+    console.error(errors);
+  }
+  const result = data.hic_et_nunc_token
+  /* console.log({ result }) */
+  return result
+}
+
 export default class Display extends Component {
   static contextType = HicetnuncContext
 
@@ -139,9 +188,11 @@ export default class Display extends Component {
           }
         })
 
-     
+
     }
-    /* doFetch(window.location.pathname.split('/')[2]) */
+
+    console.log(window.location.pathname.split('/'))
+
   }
 
   // called if there's no redirect
@@ -193,60 +244,28 @@ export default class Display extends Component {
       }
     }
 
-    /*
-    await axios.get('http://localhost:3002/tz_owner', { params : { tz : this.state.wallet }}).then(res => console.log(res.data))
-    await axios.get('http://localhost:3002/tz_creator', { params : this.state.wallet }).then(res => console.log(res.data))
-    */
+    let addr = ''
 
-    await axios
-      .get(process.env.REACT_APP_TZ, {
-        params: { tz: this.state.wallet },
-      })
-      .then(async (res) => {
-        this.setState({
-          hdao: res.data.hdao / 1_000_000,
-        })
+    if (window.location.pathname.split('/')[1] === 'tz') {
+      addr = window.location.pathname.split('/')[2]
+    } else {
+      addr = await axios.post(process.env.REACT_APP_SUBJKT, { subjkt : window.location.pathname.split('/')[1]}).then(res => res.data.result[0].tz)
+      console.log(addr)
+    }
 
-        const sanitised = SanitiseOBJKT(res.data.result)
+    const creations = await fetchCreations(addr)
+    const collection = await fetchCollection(addr)
+    console.log(creations)
+    console.log(collection)
+    // market
 
-        const creations = sanitised.filter((e) => {
-          return (
-            this.state.wallet === e.token_info.creators[0]
-          ) /*  && (e.action !== 'Received') */
-        })
-        const collection = sanitised.filter(
-          (e) => this.state.wallet !== e.token_info.creators[0]
-        )
+    this.setState({
+      creations: creations,
+      loading: false,
+      collection: collection,
+      /* market, */
+    })
 
-        const market = {}
-
-        // filter market that were created by the user
-        Object.keys(res.data.swaps).forEach((e) => {
-          // all swaps include swaps on OBJKT you purchased and OBJKT you minted.
-          // setting it to false will only display OBJKT that you purchased and put up for sale
-          // but will NOT include your own art.
-          const allSwaps = true
-
-          if (allSwaps) {
-            market[e] = res.data.swaps[e]
-          } else {
-            const id = Number(e)
-            const found = sanitised.find((e) => {
-              return e.token_id === id
-            })
-            if (!found) {
-              market[e] = res.data.swaps[e]
-            }
-          }
-        })
-
-        this.setState({
-          creations: creations.sort(sortByTokenId),
-          loading: false,
-          collection: collection.sort(sortByTokenId),
-          market,
-        })
-      })
   }
 
   creations = () => {
@@ -480,12 +499,13 @@ export default class Display extends Component {
           <Container xlarge>
             <ResponsiveMasonry>
               {this.state.creations.map((nft, i) => {
-                const { mimeType, uri } = nft.token_info.formats[0]
+                const mimeType = nft.mime
+                const uri = nft.artifact_uri
 
                 return (
                   <Button
-                    key={nft.token_id}
-                    to={`${PATH.OBJKT}/${nft.token_id}`}
+                    key={nft.id}
+                    to={`${PATH.OBJKT}/${nft.id}`}
                   >
                     <div className={styles.container}>
                       {renderMediaType({
@@ -505,11 +525,12 @@ export default class Display extends Component {
           <Container xlarge>
             <ResponsiveMasonry>
               {this.state.collection.map((nft, i) => {
-                const { mimeType, uri } = nft.token_info.formats[0]
+                const mimeType = nft.mime
+                const uri = nft.artifact_uri
                 return (
                   <Button
-                    key={nft.token_id}
-                    to={`${PATH.OBJKT}/${nft.token_id}`}
+                    key={nft.id}
+                    to={`${PATH.OBJKT}/${nft.id}`}
                   >
                     <div className={styles.container}>
                       {renderMediaType({
