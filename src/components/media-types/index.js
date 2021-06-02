@@ -69,18 +69,11 @@ export const renderMediaType = (props) => {
         )
       }
 
-      if (metadata && metadata.thumbnail_uri && metadata.thumbnail_uri !== 'ipfs://QmNrhZHUaEqxhyLfqoq1mtHSipkWHeT31LNHb1QEbDHgnc') {
-        displayUri = metadata.thumbnail_uri.replace(
+      if (metadata.display_uri && metadata.display_uri !== "") {
+        displayUri = metadata.display_uri.replace(
           'ipfs://',
           IPFS
         )
-
-        if (metadata.display_uri) {
-          displayUri = metadata.thumbnail_uri.replace(
-            'ipfs://',
-            IPFS
-          )
-        }
       }
 
       console.log(displayUri)

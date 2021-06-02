@@ -21,10 +21,12 @@ const sortByTokenId = (a, b) => {
 }
 
 const query_collection = `
-  query collectorGallery($address: String!) {
-    hic_et_nunc_token(where: {trades: {buyer: {address: {_eq: $address}}}}) {
+query collectorGallery($address: String!) {
+  hic_et_nunc_token_holder(where: {holder_id: {_eq: $address}}, order_by: {token_id: desc}) {
+    token {
       id
       artifact_uri
+      display_uri
       thumbnail_uri
       timestamp
       mime
@@ -36,8 +38,12 @@ const query_collection = `
           tag
         }
       }
+      creator {
+        address
+      }
     }
   }
+}
 `;
 
 async function fetchCollectionGraphQL(operationsDoc, operationName, variables) {
@@ -61,7 +67,7 @@ async function fetchCollection(addr) {
   if (errors) {
     console.error(errors);
   }
-  const result = data.hic_et_nunc_token
+  const result = data.hic_et_nunc_token_holder
   console.log({ result })
   return result
 }
@@ -249,14 +255,14 @@ export default class Display extends Component {
     if (window.location.pathname.split('/')[1] === 'tz') {
       addr = window.location.pathname.split('/')[2]
     } else {
-      addr = await axios.post(process.env.REACT_APP_SUBJKT, { subjkt : window.location.pathname.split('/')[1]}).then(res => res.data.result[0].tz)
+      addr = await axios.post(process.env.REACT_APP_SUBJKT, { subjkt: window.location.pathname.split('/')[1] }).then(res => res.data.result[0].tz)
       console.log(addr)
     }
 
     const creations = await fetchCreations(addr)
     const collection = await fetchCollection(addr)
     console.log(creations)
-    console.log(collection)
+    console.log('collection', collection)
     // market
 
     this.setState({
@@ -499,6 +505,7 @@ export default class Display extends Component {
           <Container xlarge>
             <ResponsiveMasonry>
               {this.state.creations.map((nft, i) => {
+                console.log(nft)
                 const mimeType = nft.mime
                 const uri = nft.artifact_uri
 
@@ -525,18 +532,19 @@ export default class Display extends Component {
           <Container xlarge>
             <ResponsiveMasonry>
               {this.state.collection.map((nft, i) => {
-                const mimeType = nft.mime
-                const uri = nft.artifact_uri
+                console.log(nft)
+                const mimeType = nft.token.mime
+                const uri = nft.token.artifact_uri
                 return (
                   <Button
-                    key={nft.id}
-                    to={`${PATH.OBJKT}/${nft.id}`}
+                    key={nft.token.id}
+                    to={`${PATH.OBJKT}/${nft.token.id}`}
                   >
                     <div className={styles.container}>
                       {renderMediaType({
                         mimeType,
                         uri: uri.split('//')[1],
-                        metadata: nft,
+                        metadata: nft.token,
                       })}
                     </div>
                   </Button>
