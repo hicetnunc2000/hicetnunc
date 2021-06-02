@@ -56,7 +56,7 @@
     "eject": "react-scripts eject",
     "eb:prod": "npm run build && npm run start:prod",
     "prettier": "prettier --write \"./src/**/*.{js,jsx}\"",
-    "storybook": "start-storybook -p",
+    "storybook": "start-storybook",
     "build-storybook": "build-storybook -s storybook-static"
   },
   "eslintConfig": {
