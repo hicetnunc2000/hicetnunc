@@ -22,7 +22,7 @@ const sortByTokenId = (a, b) => {
 
 const query_collection = `
 query collectorGallery($address: String!) {
-  hic_et_nunc_token_holder(where: {holder_id: {_eq: $address}, token: {creator: {address: {_neq: $address}}}}, order_by: {token_id: desc}) {
+  hic_et_nunc_token_holder(where: {holder_id: {_eq: $address}, token: {creator: {address: {_neq: $address}}}, quantity: {_gt: "0"}}, order_by: {token_id: desc}) {
     token {
       id
       artifact_uri
