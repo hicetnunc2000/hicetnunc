@@ -4,7 +4,7 @@ import styles from './styles.module.scss'
 export const UnknownComponent = ({ mimeType }) => {
   return (
     <div className={styles.container}>
-      <div className={styles.square}>{mimeType} NOT SUPPORTED (yet)</div>
+      <div className={styles.square}>{mimeType} Media type not supported</div>
     </div>
   )
 }
