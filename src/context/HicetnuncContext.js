@@ -21,7 +21,7 @@ const Tezos = new TezosToolkit('https://mainnet.smartpy.io')
 // storage fee adjustment
 
 
-export class PatchedBeaconWallet extends BeaconWallet {
+/* export class PatchedBeaconWallet extends BeaconWallet {
   async sendOperations(params) {
     const account = await this.client.getActiveAccount();
     if (!account) {
@@ -47,8 +47,14 @@ function modifyFeeAndLimit(op) {
   }
   return rest;
 }
+ */
 
-const wallet = new PatchedBeaconWallet({
+/* const wallet = new PatchedBeaconWallet({
+  name: 'hicetnunc.xyz',
+  preferredNetwork: 'mainnet',
+}) */
+
+const wallet = new BeaconWallet({
   name: 'hicetnunc.xyz',
   preferredNetwork: 'mainnet',
 })
