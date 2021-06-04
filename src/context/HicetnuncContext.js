@@ -5,7 +5,7 @@ import { TezosToolkit } from '@taquito/taquito'
 import { setItem } from '../utils/storage'
 import { KeyStoreUtils } from 'conseiljs-softsigner'
 import { PermissionScope } from '@airgap/beacon-sdk'
-
+import { UnitValue } from '@taquito/michelson-encoder'
 
 const { NetworkType } = require('@airgap/beacon-sdk')
 var ls = require('local-storage')
@@ -71,7 +71,7 @@ class HicetnuncContextProviderClass extends Component {
       hDAO: 'KT1AFA2mwNUMNd4SsujE1YYp29vd8BZejyKW',
       subjkt: 'KT1My1wDZHDGweCrJnQJi3wcFaS67iksirvj',
       objkt: 'KT1Hkg5qeNhfwpKW4fXvq7HGZB9z2EnmCCA9',
-
+      unregistry: 'KT1MirRvstfYwjPPuyphBazSddgp8i1d8k8a',
       // fullscreen. DO NOT CHANGE!
       fullscreen: false,
       setFullscreen: (fullscreen) => this.setState({ fullscreen }),
@@ -388,6 +388,12 @@ class HicetnuncContextProviderClass extends Component {
             ])
             .send({ amount: 0 })
         )
+      },
+
+      unregister : async () => {
+        return await Tezos.wallet.at(this.state.unregistry).then((c) => {
+          c.methods.sign(undefined).send({amount : 0})
+        })
       },
 
       load: false,
