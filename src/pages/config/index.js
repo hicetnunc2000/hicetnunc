@@ -178,6 +178,7 @@ export class Config extends Component {
 
             <div style={{ paddingTop: '5%' }}>
               <button onClick={this.unregister}>unregister</button>
+              {/* this action may affect collectors. consider it carefully */}
             </div>
           </Padding>
         </Container>
