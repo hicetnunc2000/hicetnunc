@@ -21,7 +21,7 @@ const Tezos = new TezosToolkit('https://mainnet.smartpy.io')
 // storage fee adjustment
 
 
-/* export class PatchedBeaconWallet extends BeaconWallet {
+export class PatchedBeaconWallet extends BeaconWallet {
   async sendOperations(params) {
     const account = await this.client.getActiveAccount();
     if (!account) {
@@ -43,21 +43,21 @@ function modifyFeeAndLimit(op) {
   const { fee, gas_limit, storage_limit, ...rest } = op;
   
   if (op.parameters && (op.parameters.entrypoint === "swap") || (op.parameters.entrypoint === "mint_OBJKT") || (op.parameters.entrypoint === "collect")) {
-    rest.storage_limit = 310;
+    rest.storage_limit = '310'
   }
   return rest;
 }
- */
 
-/* const wallet = new PatchedBeaconWallet({
-  name: 'hicetnunc.xyz',
-  preferredNetwork: 'mainnet',
-}) */
 
-const wallet = new BeaconWallet({
+const wallet = new PatchedBeaconWallet({
   name: 'hicetnunc.xyz',
   preferredNetwork: 'mainnet',
 })
+
+/* const wallet = new BeaconWallet({
+  name: 'hicetnunc.xyz',
+  preferredNetwork: 'mainnet',
+}) */
 
 Tezos.setWalletProvider(wallet)
 
