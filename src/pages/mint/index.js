@@ -1,18 +1,19 @@
-import React, { useContext, useState } from 'react'
-import Compressor from 'compressorjs'
+import React, { useContext, useState, useRef } from 'react'
+import { useHistory } from 'react-router'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
 import { Page, Container, Padding } from '../../components/layout'
 import { Input } from '../../components/input'
 import { Button, Curate, Primary } from '../../components/button'
 import { Upload } from '../../components/upload'
 import { Preview } from '../../components/preview'
+import { MediaAssetsDisplay } from '../../components/media-assets-display'
 import { prepareFile, prepareDirectory } from '../../data/ipfs'
+import { getMediaMetadata, unzipMedia } from '../../utils/media'
 import { prepareFilesFromZIP } from '../../utils/html'
+
 import {
   ALLOWED_MIMETYPES,
   ALLOWED_FILETYPES_LABEL,
-  ALLOWED_COVER_MIMETYPES,
-  ALLOWED_COVER_FILETYPES_LABEL,
   MINT_FILESIZE,
   MIMETYPE,
   MAX_EDITIONS,
@@ -20,20 +21,10 @@ import {
   MAX_ROYALTIES,
 } from '../../constants'
 
-const coverOptions = {
-  quality: 0.85,
-  maxWidth: 1024,
-  maxHeight: 1024,
-}
-
-const thumbnailOptions = {
-  quality: 0.85,
-  maxWidth: 350,
-  maxHeight: 350,
-}
+const COMPRESSOR_URL = 'https://hicetnunc-media-compressor.netlify.app'
 
 // @crzypathwork change to "true" to activate displayUri and thumbnailUri
-const GENERATE_DISPLAY_AND_THUMBNAIL = false
+const GENERATE_DISPLAY_AND_THUMBNAIL = true
 
 export const Mint = () => {
   const { mint, getAuth, acc, setAccount, getProxy, setFeedback, syncTaquito } =
@@ -46,9 +37,8 @@ export const Mint = () => {
   const [amount, setAmount] = useState()
   const [royalties, setRoyalties] = useState()
   const [file, setFile] = useState() // the uploaded file
-  const [cover, setCover] = useState() // the uploaded or generated cover image
-  const [thumbnail, setThumbnail] = useState() // the uploaded or generated cover image
-  const [needsCover, setNeedsCover] = useState(false)
+  const fileMetadata = useRef(null)
+  const [extraMedia, setExtraMedia] = useState() // the uploaded or generated cover image
 
   const handleMint = async () => {
     if (!acc) {
@@ -136,8 +126,8 @@ export const Mint = () => {
           tags,
           address: minterAddress,
           files,
-          cover,
-          thumbnail,
+          metadata: fileMetadata.current,
+          extraMedia,
           generateDisplayUri: GENERATE_DISPLAY_AND_THUMBNAIL,
         })
       } else {
@@ -149,8 +139,8 @@ export const Mint = () => {
           address: minterAddress,
           buffer: file.buffer,
           mimeType: file.mimeType,
-          cover,
-          thumbnail,
+          metadata: fileMetadata.current,
+          extraMedia,
           generateDisplayUri: GENERATE_DISPLAY_AND_THUMBNAIL,
         })
       }
@@ -165,88 +155,47 @@ export const Mint = () => {
 
   const handleFileUpload = async (props) => {
     setFile(props)
+    fileMetadata.current = await getMediaMetadata(props.file)
+    setExtraMedia(null)
+  }
 
-    if (GENERATE_DISPLAY_AND_THUMBNAIL) {
-      if (props.mimeType.indexOf('image') === 0) {
-        setNeedsCover(false)
-        await generateCoverAndThumbnail(props)
-      } else {
-        setNeedsCover(true)
+  const handleCoverZipUpload = async (props) => {
+    const error =
+      'No valid media in zip file. Supported types: jpeg, png, gif, mp4'
+    try {
+      const media = await unzipMedia(props.buffer)
+      if (media.length === 0) {
+        alert(error)
+        return
       }
+
+      setExtraMedia(media)
+    } catch (err) {
+      alert(error)
     }
   }
 
-  const generateCompressedImage = async (props, options) => {
-    const blob = await compressImage(props.file, options)
-    const mimeType = blob.type
-    const buffer = await blob.arrayBuffer()
-    const reader = await blobToDataURL(blob)
-    return { mimeType, buffer, reader }
-  }
-
-  const compressImage = (file, options) => {
-    return new Promise(async (resolve, reject) => {
-      new Compressor(file, {
-        ...options,
-        success(blob) {
-          resolve(blob)
-        },
-        error(err) {
-          reject(err)
-        },
-      })
-    })
-  }
-
-  const blobToDataURL = async (blob) => {
-    return new Promise((resolve, reject) => {
-      let reader = new FileReader()
-      reader.onerror = reject
-      reader.onload = (e) => resolve(reader.result)
-      reader.readAsDataURL(blob)
-    })
-  }
-
-  const handleCoverUpload = async (props) => {
-    await generateCoverAndThumbnail(props)
-  }
-
-  const generateCoverAndThumbnail = async (props) => {
-    // TMP: skip GIFs to avoid making static
-    if (props.mimeType === MIMETYPE.GIF) {
-      setCover(props)
-      setThumbnail(props)
-      return
-    }
-
-    const cover = await generateCompressedImage(props, coverOptions)
-    setCover(cover)
-
-    const thumb = await generateCompressedImage(props, thumbnailOptions)
-    setThumbnail(thumb)
-  }
-
-  const limitNumericField  = async (target, minValue, maxValue) => {
-    if(target.value === '') target.value = ''; // Seems redundant but actually cleans up e.g. '234e'
-    target.value = Math.round(Math.max(Math.min(target.value, maxValue), minValue));
+  const limitNumericField = async (target, minValue, maxValue) => {
+    if (target.value === '') target.value = '' // Seems redundant but actually cleans up e.g. '234e'
+    target.value = Math.round(
+      Math.max(Math.min(target.value, maxValue), minValue)
+    )
   }
 
   const handleValidation = () => {
-    if (amount <= 0 ||
-        amount > MAX_EDITIONS ||
-        royalties < MIN_ROYALTIES ||
-        royalties > MAX_ROYALTIES ||
-        !file) {
-      return true;
+    if (
+      amount <= 0 ||
+      amount > MAX_EDITIONS ||
+      royalties < MIN_ROYALTIES ||
+      royalties > MAX_ROYALTIES ||
+      !file
+    ) {
+      return true
     }
-    if (GENERATE_DISPLAY_AND_THUMBNAIL) {
-      if (cover && thumbnail) {
-        return false
-      }
-    } else {
-      return false
+    if (GENERATE_DISPLAY_AND_THUMBNAIL && !extraMedia) {
+      return true
     }
-    return true
+    return false
   }
 
   return (
@@ -257,6 +206,7 @@ export const Mint = () => {
             <Padding>
               <Input
                 type="text"
+                name="objkt_title"
                 onChange={(e) => setTitle(e.target.value)}
                 placeholder="title"
                 label="title"
@@ -265,15 +215,18 @@ export const Mint = () => {
 
               <Input
                 type="text"
+                name="objkt_description"
+                style={{ whiteSpace: 'pre' }}
                 onChange={(e) => setDescription(e.target.value)}
                 placeholder="description"
                 label="description"
-                maxlength="2000"
+                maxlength="5000"
                 value={description}
               />
 
               <Input
                 type="text"
+                name="objkt_tags"
                 onChange={(e) => setTags(e.target.value)}
                 placeholder="tags (comma separated. example: illustration, digital)"
                 label="tags"
@@ -282,10 +235,14 @@ export const Mint = () => {
 
               <Input
                 type="number"
+                name="objkt_editions"
                 min={1}
                 max={MAX_EDITIONS}
-                onChange={(e) => setAmount(e.target.value) }
-                onBlur={ (e) => { limitNumericField(e.target, 1, MAX_EDITIONS); setAmount(e.target.value) } }
+                onChange={(e) => setAmount(e.target.value)}
+                onBlur={(e) => {
+                  limitNumericField(e.target, 1, MAX_EDITIONS)
+                  setAmount(e.target.value)
+                }}
                 placeholder={`editions (no. editions, 1-${MAX_EDITIONS})`}
                 label="editions"
                 value={amount}
@@ -293,10 +250,14 @@ export const Mint = () => {
 
               <Input
                 type="number"
+                name="objkt_royalties"
                 min={MIN_ROYALTIES}
                 max={MAX_ROYALTIES}
-                onChange={(e) => setRoyalties(e.target.value) }
-                onBlur={ (e) => { limitNumericField(e.target, MIN_ROYALTIES, MAX_ROYALTIES); setRoyalties(e.target.value) } }
+                onChange={(e) => setRoyalties(e.target.value)}
+                onBlur={(e) => {
+                  limitNumericField(e.target, MIN_ROYALTIES, MAX_ROYALTIES)
+                  setRoyalties(e.target.value)
+                }}
                 placeholder={`royalties after each sale (between ${MIN_ROYALTIES}-${MAX_ROYALTIES}%)`}
                 label="royalties"
                 value={royalties}
@@ -314,14 +275,32 @@ export const Mint = () => {
             </Padding>
           </Container>
 
-          {file && needsCover && (
+          {file && GENERATE_DISPLAY_AND_THUMBNAIL && (
             <Container>
               <Padding>
+                <div>
+                  Please use{' '}
+                  <a
+                    href={COMPRESSOR_URL}
+                    target="_blank"
+                    rel="noreferrer"
+                    style={{
+                      textDecoration: 'underline',
+                      color: 'inherit',
+                    }}
+                  >
+                    this tool
+                  </a>{' '}
+                  to generate cover/thumbnail assets for your OJBKT, then upload
+                  here.
+                  <br />
+                  <br />
+                </div>
                 <Upload
-                  label="Upload cover image"
-                  allowedTypes={ALLOWED_COVER_MIMETYPES}
-                  allowedTypesLabel={ALLOWED_COVER_FILETYPES_LABEL}
-                  onChange={handleCoverUpload}
+                  label="Upload cover/thumbnail media zip"
+                  allowedTypes={['.zip']}
+                  allowedTypesLabel="zip archive"
+                  onChange={handleCoverZipUpload}
                 />
               </Padding>
             </Container>
@@ -360,6 +339,12 @@ export const Mint = () => {
                 description={description}
                 tags={tags}
               />
+            </Padding>
+          </Container>
+
+          <Container>
+            <Padding>
+              <MediaAssetsDisplay media={extraMedia} />
             </Padding>
           </Container>
 
