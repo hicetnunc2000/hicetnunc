@@ -118,6 +118,7 @@ export const GetOBJKT = async ({ id }) => {
         params: { id: id },
       })
       .then((res) => {
+        console.log(res.data)
         resolve(res.data.result)
       })
       .catch((e) => reject(e))
@@ -127,13 +128,14 @@ export const GetOBJKT = async ({ id }) => {
 /**
  * Get OBJKT detail page
  */
-export const GetTags = async ({ tag, page }) => {
+export const GetTags = async ({ tag, counter }) => {
   return new Promise((resolve, reject) => {
     axios
-      .get(process.env.REACT_APP_TAGS, {
-        params: { tag, page },
-      })
+      .post(process.env.REACT_APP_TAGS, 
+        { tag : tag, counter : counter }
+      )
       .then((res) => {
+        console.log(res.data)
         resolve(res.data.result)
       })
       .catch((e) => reject(e)) // TODO: send error message to context. have an error component to display the error
