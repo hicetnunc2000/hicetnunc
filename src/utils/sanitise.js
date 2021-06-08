@@ -96,3 +96,15 @@ export const formatBytes = (bytes, decimals = 2) => {
 
   return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i]
 }
+
+export const GetIPFSLink = (hash) => {
+  const CLOUDFLARE = 'https://cloudflare-ipfs.com/ipfs/'
+  // const PINATA = 'https://gateway.pinata.cloud/ipfs/'
+  const IPFS = 'https://ipfs.io/ipfs/'
+
+  function getInfuraUrl(hash) {
+    const cidv1 = new ipfsClient.CID(hash).toV1()
+    const subomain = cidv1.toString()
+    return `https://${subomain}.ipfs.infura-ipfs.io/`
+  }
+}
