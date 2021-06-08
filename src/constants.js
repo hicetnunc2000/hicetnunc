@@ -81,5 +81,6 @@ export const MIN_ROYALTIES = 10 // Limited by contract
 
 export const MAX_ROYALTIES = 25 // Limited by contract
 
+// ? the name of this should be IPFS_THUMBNAIL_URI
 export const IPFS_DISPLAY_URI_BLACKCIRCLE =
   'ipfs://QmNrhZHUaEqxhyLfqoq1mtHSipkWHeT31LNHb1QEbDHgnc'
