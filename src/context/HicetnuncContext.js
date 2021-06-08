@@ -1,9 +1,11 @@
 import React, { createContext, Component } from 'react'
 import { withRouter } from 'react-router'
-import { BeaconWallet } from '@taquito/beacon-wallet'
+import { BeaconWallet, BeaconWalletNotInitialized } from '@taquito/beacon-wallet'
 import { TezosToolkit } from '@taquito/taquito'
 import { setItem } from '../utils/storage'
 import { KeyStoreUtils } from 'conseiljs-softsigner'
+import { PermissionScope } from '@airgap/beacon-sdk'
+import { UnitValue } from '@taquito/michelson-encoder'
 
 const { NetworkType } = require('@airgap/beacon-sdk')
 var ls = require('local-storage')
@@ -16,10 +18,47 @@ export const HicetnuncContext = createContext()
 //const Tezos = new TezosToolkit('https://mainnet-tezos.giganode.io')
 const Tezos = new TezosToolkit('https://mainnet.smartpy.io')
 
+// storage fee adjustment
+
+
+/* export class PatchedBeaconWallet extends BeaconWallet {
+  async sendOperations(params) {
+    const account = await this.client.getActiveAccount();
+    if (!account) {
+      throw new BeaconWalletNotInitialized();
+    }
+    const permissions = account.scopes;
+    this.validateRequiredScopesOrFail(permissions, [PermissionScope.OPERATION_REQUEST]);
+
+    const { transactionHash } = await this.client.requestOperation({
+      operationDetails: params.map(op => ({
+        ...modifyFeeAndLimit(op),
+      })),
+    });
+    return transactionHash;
+  }
+}
+
+function modifyFeeAndLimit(op) {
+  const { fee, gas_limit, storage_limit, ...rest } = op;
+  
+  if (op.parameters && (op.parameters.entrypoint === "swap") || (op.parameters.entrypoint === "mint_OBJKT") || (op.parameters.entrypoint === "collect")) {
+    rest.storage_limit = 310
+  }
+  return rest;
+}
+
+
+const wallet = new PatchedBeaconWallet({
+  name: 'hicetnunc.xyz',
+  preferredNetwork: 'mainnet',
+}) */
+
 const wallet = new BeaconWallet({
   name: 'hicetnunc.xyz',
   preferredNetwork: 'mainnet',
 })
+
 Tezos.setWalletProvider(wallet)
 
 class HicetnuncContextProviderClass extends Component {
@@ -32,7 +71,7 @@ class HicetnuncContextProviderClass extends Component {
       hDAO: 'KT1AFA2mwNUMNd4SsujE1YYp29vd8BZejyKW',
       subjkt: 'KT1My1wDZHDGweCrJnQJi3wcFaS67iksirvj',
       objkt: 'KT1Hkg5qeNhfwpKW4fXvq7HGZB9z2EnmCCA9',
-
+      unregistry: 'KT1MirRvstfYwjPPuyphBazSddgp8i1d8k8a',
       // fullscreen. DO NOT CHANGE!
       fullscreen: false,
       setFullscreen: (fullscreen) => this.setState({ fullscreen }),
@@ -349,6 +388,12 @@ class HicetnuncContextProviderClass extends Component {
             ])
             .send({ amount: 0 })
         )
+      },
+
+      unregister : async () => {
+        return await Tezos.wallet.at(this.state.unregistry).then((c) => {
+          c.methods.sign(undefined).send({amount : 0})
+        })
       },
 
       load: false,

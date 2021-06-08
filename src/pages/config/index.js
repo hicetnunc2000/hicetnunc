@@ -72,6 +72,8 @@ export class Config extends Component {
     this.context.hDAO_update_operators(this.context.acc.address)
   }
 
+  unregister = () => this.context.unregister()
+
   hDAO_config = () => {
     // convert float to 10^6
     ls.set('hDAO_config', this.state.vote)
@@ -128,7 +130,7 @@ export class Config extends Component {
                 allow subjkt operators ○
               </button>
             </div> */}
-            <div>
+            <div style={{ paddingTop: '15%' }}>
               <input
                 type="text"
                 name="subjkt"
@@ -155,7 +157,7 @@ export class Config extends Component {
               <button onClick={this.subjkt_config}>config SUBJKT</button>
             </div>
 
-            <div style={{ paddingTop: '15%' }}>
+            <div style={{ paddingTop: '5%' }}>
               <input
                 type="text"
                 name="vote"
@@ -173,6 +175,11 @@ export class Config extends Component {
               <input type="text" name="str" onChange={this.handleChange} placeholder="sign"></input>
               <button onClick={this.sign}>sign</button>
             </div> */}
+
+            <div style={{ paddingTop: '5%' }}>
+              <button onClick={this.unregister}>unregister</button>
+              {/* this action may affect collectors. consider it carefully */}
+            </div>
           </Padding>
         </Container>
       </Page>
