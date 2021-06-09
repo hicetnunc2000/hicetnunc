@@ -4,6 +4,6 @@ import styles from './styles.module.scss'
 
 export const ImageComponent = ({ src }) => (
   <div className={styles.container}>
-    <LazyLoadImage className={styles.image} src={src} alt="💥" />
+    <LazyLoadImage className={styles.image} src={src} alt="💥" loading="lazy" />
   </div>
 )
