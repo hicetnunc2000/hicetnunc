@@ -23,6 +23,13 @@
       width: 100%;
     }
 
+    .media {
+      min-height: 60vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
     .info {
       display: flex;
       flex-direction: column;

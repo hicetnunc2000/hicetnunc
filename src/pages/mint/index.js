@@ -264,7 +264,7 @@ export const Mint = () => {
 
               <Input
                 type="text"
-                style={{ whiteSpace : 'pre' }}
+                style={{ whiteSpace: 'pre' }}
                 onChange={(e) => setDescription(e.target.value)}
                 placeholder="description"
                 label="description"
