@@ -94,13 +94,23 @@ export const ObjktDisplay = () => {
       {!loading && !error && (
         <>
           <Container>
-            {nft.token_id &&
-              renderMediaType({
-                mimeType: nft.token_info.formats[0].mimeType,
-                uri: nft.token_info.formats[0].uri.split('//')[1],
-                interactive: true,
-                metadata: nft,
-              })}
+            <div
+              style={{
+                position: 'relative',
+                minHeight: '60vh',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              {nft.token_id &&
+                renderMediaType({
+                  mimeType: nft.token_info.formats[0].mimeType,
+                  uri: nft.token_info.formats[0].uri.split('//')[1],
+                  interactive: true,
+                  metadata: nft,
+                })}
+            </div>
           </Container>
 
           <Container>

@@ -85,7 +85,12 @@ export const Container = ({
   })
 
   return (
-    <div ref={ref}>
+    <div
+      ref={ref}
+      style={{
+        width: '100%',
+      }}
+    >
       <div ref={domElement} className={classes}>
         {interactive && !iOS && !nofullscreen && (
           <div onClick={toggleFullScreen} className={styles.icon}>
