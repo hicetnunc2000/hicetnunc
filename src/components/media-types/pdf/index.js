@@ -6,7 +6,8 @@ export const PdfComponent = ({ src }) => (
     <iframe
       title="hic et nunc PDF renderer"
       src={`${src}#zoom=50`}
-      scrolling="no"
+      scrolling="no" 
+      loading="lazy" 
     />
   </div>
 )
