@@ -17,6 +17,9 @@ export const ItemInfo = ({
   // total_amount,
   hDAO_balance,
   isDetailView,
+  id,
+  creator_id,
+  display_uri
 }) => {
   const { syncTaquito, collect, curate, claim_hDAO, acc } =
     useContext(HicetnuncContext)
@@ -26,127 +29,160 @@ export const ItemInfo = ({
   // subtract burned pieces from total
   let total = 0
 
-  try {
-    total =
-      _.values(owners).length !== 0 ? _.values(owners).reduce(reducer) : 'X'
-    total = _.keys(owners).includes('tz1burnburnburnburnburnburnburjAYjjX')
-      ? total - owners['tz1burnburnburnburnburnburnburjAYjjX']
-      : total
-  } catch (e) {
-    total =
-      _.values(owners).length !== 0 ? _.values(owners).reduce(reducer) : 'X'
-  }
-
-  let ed =
-    swaps.length !== 0 ? swaps.map((e) => e.objkt_amount).reduce(reducer) : 'X'
-  let s = _.minBy(swaps, (o) => Number(o.xtz_per_objkt))
-  let maxPrice = _.maxBy(swaps, (o) => Number(o.xtz_per_objkt))
-
-  var message = ''
-
-  try {
-    message =
-      swaps[0] !== undefined
-        ? 'collect for ' + Number(s.xtz_per_objkt) / 1000000 + ' tez'
-        : 'not for sale'
-  } catch (e) {
-    message = 'not for sale'
-  }
-
-  const handleCollect = () => {
-    if (acc == null) {
-      syncTaquito()
-    } else {
-      collect(1, s.swap_id, s.xtz_per_objkt * 1)
+  if (!feed) {
+    try {
+      total =
+        _.values(owners).length !== 0 ? _.values(owners).reduce(reducer) : 'X'
+      total = _.keys(owners).includes('tz1burnburnburnburnburnburnburjAYjjX')
+        ? total - owners['tz1burnburnburnburnburnburnburjAYjjX']
+        : total
+    } catch (e) {
+      total =
+        _.values(owners).length !== 0 ? _.values(owners).reduce(reducer) : 'X'
     }
-  }
 
-  const curateOrClaim = (id, balance = 0) => {
-    // if user is creator and there's hDAO balance
-    if (acc && acc.address === token_info.creators[0] && balance > 0) {
-      claim_hDAO(balance, id)
-    } else {
-      curate(id)
+    let ed =
+      swaps.length !== 0 ? swaps.map((e) => e.objkt_amount).reduce(reducer) : 'X'
+    let s = _.minBy(swaps, (o) => Number(o.xtz_per_objkt))
+    let maxPrice = _.maxBy(swaps, (o) => Number(o.xtz_per_objkt))
+
+    var message = ''
+
+    try {
+      message =
+        swaps[0] !== undefined
+          ? 'collect for ' + Number(s.xtz_per_objkt) / 1000000 + ' tez'
+          : 'not for sale'
+    } catch (e) {
+      message = 'not for sale'
     }
-  }
 
-  const renderHDAObutton = (id, balance) => {
-    return (
-      <Button onClick={() => curateOrClaim(id, balance)}>
-        <Primary>
-          <span
-            className={styles.top}
-            data-position={'top'}
-            data-tooltip={
-              acc && acc.address === token_info.creators[0] &&
-              parseInt(hDAO_balance) > 0
-                ? 'collect hDAO'
-                : 'curate'
-            }
-          >
-            〇
+
+    const handleCollect = () => {
+      if (acc == null) {
+        syncTaquito()
+      } else {
+        collect(1, s.swap_id, s.xtz_per_objkt * 1)
+      }
+
+    }
+
+    const curateOrClaim = (id, balance = 0) => {
+      // if user is creator and there's hDAO balance
+      if (acc && acc.address === token_info.creators[0] && balance > 0) {
+        claim_hDAO(balance, id)
+      } else {
+        curate(id)
+      }
+    }
+
+    const renderHDAObutton = (id, balance) => {
+      return (
+        <Button onClick={() => curateOrClaim(id, balance)}>
+          <Primary>
+            <span
+              className={styles.top}
+              data-position={'top'}
+              data-tooltip={
+                acc && acc.address === token_info.creators[0] &&
+                  parseInt(hDAO_balance) > 0
+                  ? 'collect hDAO'
+                  : 'curate'
+              }
+            >
+              〇
           </span>
-          {balance && balance !== -1
-            ? ` ${parseInt(hDAO_balance) / 1000000}`
-            : ''}
-        </Primary>
-      </Button>
-    )
-  }
+            {balance && balance !== -1
+              ? ` ${parseInt(hDAO_balance) / 1000000}`
+              : ''}
+          </Primary>
+        </Button>
+      )
+    }
 
-  return (
-    <>
-      <div className={styles.container}>
-        <div className={styles.edition}>
-          <div className={styles.inline}>
-            <p className={styles.issuer}>Issuer:&nbsp;</p>
-            <Button to={`${PATH.ISSUER}/${token_info.creators[0]}`}>
-              <Primary>{walletPreview(token_info.creators[0])}</Primary>
-            </Button>
-          </div>
-          {!feed && (
-            <div>
-              <p>
-                <span>
-                  Editions:
-                  <span>
-                    {ed}/{total}
-                  </span>
-                </span>
-              </p>
-              {false && (
+    return (
+      <>
+        <div className={styles.container}>
+          <div className={styles.edition}>
+            <div className={styles.inline}>
+              <p className={styles.issuer}>Issuer:&nbsp;</p>
+              <Button to={`${PATH.ISSUER}/${token_info.creators[0]}`}>
+                <Primary>{walletPreview(token_info.creators[0])}</Primary>
+              </Button>
+            </div>
+            {!feed && (
+              <div>
                 <p>
-                  Price range: {(Number(s.xtz_per_objkt) / 1000000).toFixed(2)}-
-                  {(Number(maxPrice.xtz_per_objkt) / 1000000).toFixed(2)}
+                  <span>
+                    Editions:
+                  <span>
+                      {ed}/{total}
+                    </span>
+                  </span>
                 </p>
-              )}
+                {false && (
+                  <p>
+                    Price range: {(Number(s.xtz_per_objkt) / 1000000).toFixed(2)}-
+                    {(Number(maxPrice.xtz_per_objkt) / 1000000).toFixed(2)}
+                  </p>
+                )}
+              </div>
+            )}
+          </div>
+          {feed && (
+            <div className={styles.objktContainer}>
+              <Button to={`${PATH.OBJKT}/${token_id}`} disabled={isDetailView}>
+                <Primary>OBJKT#{token_id}</Primary>
+              </Button>
+              <div className={styles.hdaoButton}>
+                {renderHDAObutton(token_id, hDAO_balance)}
+              </div>
             </div>
           )}
         </div>
-        {feed && (
-          <div className={styles.objktContainer}>
-            <Button to={`${PATH.OBJKT}/${token_id}`} disabled={isDetailView}>
-              <Primary>OBJKT#{token_id}</Primary>
-            </Button>
-            <div className={styles.hdaoButton}>
-              {renderHDAObutton(token_id, hDAO_balance)}
+        <div className={styles.container}>
+          {isDetailView && (
+            <div className={styles.container}>
+              <p>OBJKT#{token_id}</p>
+              <Button onClick={() => handleCollect()}>
+                <Purchase>{message}</Purchase>
+              </Button>
             </div>
-          </div>
-        )}
-      </div>
-      <div className={styles.container}>
-        {isDetailView && (
-          <div className={styles.container}>
-            <p>OBJKT#{token_id}</p>
-            <Button onClick={() => handleCollect()}>
-              <Purchase>{message}</Purchase>
-            </Button>
-          </div>
-        )}
-      </div>
-      <div className={styles.container}>
-        {!feed && <div>{renderHDAObutton(token_id, hDAO_balance)}</div>}
-      </div>
-    </>
-  )
+          )}
+        </div>
+        <div className={styles.container}>
+          {!feed && <div>{renderHDAObutton(token_id, hDAO_balance)}</div>}
+        </div>
+      </>
+    )
+  } else {
+
+    const renderHDAO = (id) => {
+      return (
+        <Button onClick={() => curate(id)}>
+          <Primary>
+            <span
+              className={styles.top}
+              data-position={'top'}
+              data-tooltip={'curate'}
+            >
+              〇
+            </span>
+          </Primary>
+        </Button>
+      )
+    }
+
+    return(
+    <div className={styles.objktContainer}>
+      <Button to={`${PATH.ISSUER}/${creator_id}`}>
+        <Primary>{walletPreview(creator_id)}</Primary>
+      </Button>
+      <Button to={`${PATH.OBJKT}/${id}`} disabled={isDetailView}>
+        <Primary>OBJKT#{id}</Primary>
+      </Button>
+      <div>{renderHDAO(id)}</div>
+    </div>
+    )
+  }
 }

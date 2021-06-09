@@ -142,6 +142,17 @@ export const GetTags = async ({ tag, counter }) => {
   })
 }
 
+const tagQuery = `query ObjktsByTag($tag: String = "3d", $lastId: bigint = 99999999) {
+  hic_et_nunc_token(where: {token_tags: {tag: {tag: {_eq: $tag}}}, id: {_lt: $lastId}, supply: {_gt: "0"}}, limit: 250, order_by: {id: desc}) {
+    id
+    title
+  }
+}`
+
+export const GetTagsGraphQL = async ({ tag }) => {
+
+}
+
 /**
  * Get User Metadata from tzkt.io
  */

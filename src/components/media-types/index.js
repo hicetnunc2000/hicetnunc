@@ -62,7 +62,6 @@ export const renderMediaType = (props) => {
       }
       let displayUri = ''
 
-
       if (metadata && metadata.token_info && metadata.token_info.displayUri) {
         displayUri = metadata.token_info.displayUri.replace('ipfs://', IPFS)
       }
