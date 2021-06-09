@@ -27,9 +27,7 @@ export const Preview = ({ title, description, mimeType, uri, tags }) => {
         })}
       </div>
       <div className={styles.info}>
-        <div>TITLE</div>
         <div className={styles.title}>{title}</div>
-        <div>DESCRIPTION</div>
         <div className={styles.description}>{description}</div>
         <Tags tags={t} />
       </div>
