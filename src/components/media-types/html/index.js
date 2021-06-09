@@ -18,12 +18,14 @@ export const HTMLComponent = ({
   preview,
   token_info,
   displayUri,
+  objectId,
 }) => {
   const context = useContext(HicetnuncContext)
   const [viewing, setViewing] = useState(interactive)
 
   let _creator_ = false
   let _viewer_ = false
+  let _objectId_ = objectId
 
   if (token_info && token_info.creators[0]) {
     _creator_ = token_info.creators[0]
@@ -103,7 +105,7 @@ export const HTMLComponent = ({
           <iframe
             ref={iframeRef}
             title="html-zip-embed"
-            src={`https://hicetnunc2000.github.io/hicetnunc/gh-pages/html-preview/?uid=${uid}&creator=${_creator_}&viewer=${_viewer_}`}
+            src={`https://hicetnunc2000.github.io/hicetnunc/gh-pages/html-preview/?uid=${uid}&creator=${_creator_}&viewer=${_viewer_}&objkt=${_objectId_}`}
             sandbox="allow-scripts allow-same-origin allow-modals"
             allow="accelerometer; camera; gyroscope; microphone; xr-spatial-tracking;"
           />
@@ -159,7 +161,7 @@ export const HTMLComponent = ({
     <div className={classes}>
       <iframe
         title="html-embed"
-        src={`${src}?creator=${_creator_}&viewer=${_viewer_}`}
+        src={`${src}?creator=${_creator_}&viewer=${_viewer_}&objkt=${_objectId_}`}
         sandbox="allow-scripts allow-same-origin"
         allow="accelerometer; camera; gyroscope; microphone; xr-spatial-tracking;"
       />
