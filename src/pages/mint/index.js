@@ -249,7 +249,7 @@ export const Mint = () => {
   }
 
   return (
-    <Page title="mint" large>
+    <Page title="mint">
       {step === 0 && (
         <>
           <Container>
