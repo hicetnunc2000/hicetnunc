@@ -163,7 +163,8 @@ export const HTMLComponent = ({
         title="html-embed"
         src={`${src}?creator=${_creator_}&viewer=${_viewer_}&objkt=${_objectId_}`}
         sandbox="allow-scripts allow-same-origin"
-        allow="accelerometer; camera; gyroscope; microphone; xr-spatial-tracking;"
+        allow="accelerometer; camera; gyroscope; microphone; xr-spatial-tracking;" 
+        loading="lazy"
       />
     </div>
   )
