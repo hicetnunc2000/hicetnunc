@@ -11,6 +11,7 @@ import {
 } from '../constants'
 
 const axios = require('axios')
+const fetch = require('node-fetch')
 
 /**
  * This loads the initial data (language.json, o.json, w.json, b.json)
@@ -144,11 +145,35 @@ const tagQuery = `query ObjktsByTag($tag: String = "3d", $lastId: bigint = 99999
   hic_et_nunc_token(where: {token_tags: {tag: {tag: {_eq: $tag}}}, id: {_lt: $lastId}, supply: {_gt: "0"}}, limit: 250, order_by: {id: desc}) {
     id
     title
+    artifact_uri
+    display_uri
+    creator_id
   }
 }`
 
-export const GetTagsGraphQL = async ({ tag }) => {
+async function fetchGraphQL(operationsDoc, operationName, variables) {
+  const result = await fetch(
+    "https://api.hicdex.com/v1/graphql",
+    {
+      method: "POST",
+      body: JSON.stringify({
+        query: operationsDoc,
+        variables: variables,
+        operationName: operationName
+      })
+    }
+  );
 
+  return await result.json();
+}
+export const GetTagsGraphQL = async (tag) => {
+  const { errors, data } = await fetchGraphQL(tagQuery, "ObjktsByTag", { "tag": tag });
+  if (errors) {
+    console.error(errors);
+  }
+  const result = data.hic_et_nunc_token
+  console.log({ result })
+  return result
 }
 
 /**

@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { useParams } from 'react-router'
 import { Button } from '../../components/button'
-import { GetTags } from '../../data/api'
+import { GetTags, GetTagsGraphQL } from '../../data/api'
 import { ResponsiveMasonry } from '../../components/responsive-masonry'
 import { Loading } from '../../components/loading'
 import { renderMediaType } from '../../components/media-types'
@@ -27,7 +27,7 @@ export const Tags = () => {
       console.log('returning on error')
       return
     }
-
+    GetTagsGraphQL(id)
     GetTags({ tag: id, counter: count })
       .then((result) => {
         const next = items.concat(result)
