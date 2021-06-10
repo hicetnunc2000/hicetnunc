@@ -35,7 +35,8 @@ export const VectorComponent = ({ src, interactive, preview, token_info }) => {
         title="hic et nunc SVG renderer"
         src={iframeSrc}
         sandbox="allow-scripts"
-        scrolling="no"
+        scrolling="no" 
+        loading="lazy"
       />
     </div>
   )
