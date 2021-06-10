@@ -202,7 +202,7 @@ class HicetnuncContextProviderClass extends Component {
                   ),
                 parseFloat(royalties) * 10
               )
-              .send({ amount: 0 })
+              .send({ amount: 0, storageLimit: 310 })
           )
           .then((op) =>
             op.confirmation(1).then(() => {
@@ -245,7 +245,7 @@ class HicetnuncContextProviderClass extends Component {
           .then((c) =>
             c.methods
               .collect(parseFloat(objkt_amount), parseFloat(swap_id))
-              .send({ amount: parseFloat(amount), mutez: true })
+              .send({ amount: parseFloat(amount), mutez: true, storageLimit: 310 })
           )
           .catch((e) => e)
       },
@@ -261,7 +261,7 @@ class HicetnuncContextProviderClass extends Component {
                 parseFloat(objkt_id),
                 parseFloat(xtz_per_objkt)
               )
-              .send({ amount: 0 })
+              .send({ amount: 0, storageLimit: 310 })
           )
           .catch((e) => e)
       },
