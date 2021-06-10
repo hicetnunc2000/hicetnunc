@@ -327,7 +327,7 @@ class HicetnuncContextProviderClass extends Component {
         return await Tezos.wallet
           .at(this.state.objkt)
           .then((c) =>
-            c.methods.cancel_swap(parseFloat(swap_id)).send({ amount: 0 })
+            c.methods.cancel_swap(parseFloat(swap_id)).send({ amount: 0, storageLimit: 310 })
           )
           .catch((e) => e)
       },
