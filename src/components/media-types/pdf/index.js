@@ -7,7 +7,8 @@ export const PdfComponent = ({ src }) => (
       title="hic et nunc PDF renderer"
       src={`${src}#zoom=50`}
       scrolling="no" 
-      loading="lazy" 
+      loading="lazy"
+      sandbox="allow-scripts"
     />
   </div>
 )
