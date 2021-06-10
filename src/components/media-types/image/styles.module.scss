@@ -9,15 +9,14 @@
 
   .image {
     display: block;
-    width: 100%;
+    width: auto;
+    max-width: 100%;
     height: auto;
     margin: 0 auto;
 
     @include respond-to('tablet') {
       max-height: 60vh;
-      width: auto;
       height: initial;
-      max-width: 100%;
     }
   }
 }
