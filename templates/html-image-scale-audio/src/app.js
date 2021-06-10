@@ -239,7 +239,7 @@ export default class App extends Component {
           </TransformWrapper>
         </div>
         <div style={{ position: 'absolute', top: '50%', left: '50%' }}>
-          <audio ref={this.domElement} style={{ border: '1px dashed red' }}>
+          <audio ref={this.domElement} loop>
             <source src="audio.mp3" type="audio/mpeg" />
           </audio>
         </div>
