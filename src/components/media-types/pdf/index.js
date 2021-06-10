@@ -8,7 +8,7 @@ export const PdfComponent = ({ src }) => (
       src={`${src}#zoom=50`}
       scrolling="no" 
       loading="lazy"
-      sandbox
+      sandbox="allow-scripts"
     />
   </div>
 )
