@@ -9,7 +9,6 @@
   &:after {
     content: '';
     display: block;
-    padding-bottom: 100%;
   }
 
   iframe {
@@ -20,5 +19,29 @@
     height: 100%;
     transform: translateX(-50%) translateY(-50%);
     border: none;
+  }
+  canvas{
+    max-width: 100%;
+    margin: 0 auto;
+    height: auto!important;
+  }
+  .pdfNav {
+    margin: 6px;
+    text-align: center;
+    font-size: 0.8em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    button {
+      margin: 6px;
+      background:  var(--background-color);
+      color: white;
+      border: 1px solid var(--text-color);
+      cursor: pointer;
+      &:disabled {
+        opacity: 0.5;
+        cursor: initial;
+      }
+    }
   }
 }
