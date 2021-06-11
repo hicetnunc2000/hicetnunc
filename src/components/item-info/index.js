@@ -3,6 +3,7 @@ import { PATH } from '../../constants'
 import { Button, Primary, Purchase } from '../button'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
 import { walletPreview } from '../../utils/string'
+import { ShareLink } from './share-link'
 import styles from './styles.module.scss'
 
 const _ = require('lodash')
@@ -137,7 +138,10 @@ export const ItemInfo = ({
       <div className={styles.container}>
         {isDetailView && (
           <div className={styles.container}>
-            <p>OBJKT#{token_id}</p>
+            <p>
+              OBJKT#{token_id}
+              <ShareLink token_id={token_id} />
+            </p>
             <Button onClick={() => handleCollect()}>
               <Purchase>{message}</Purchase>
             </Button>
