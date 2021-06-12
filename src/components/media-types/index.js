@@ -119,7 +119,7 @@ export const renderMediaType = (props) => {
     case MIMETYPE.PDF:
       return (
         <Container interactive={interactive}>
-          <PdfComponent src={url} />
+          <PdfComponent src={url} interactive={interactive} />
         </Container>
       )
     default:
