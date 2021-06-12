@@ -11,6 +11,8 @@ import { Page, Container, Padding } from '../../components/layout'
 import { FeedItem } from '../../components/feed-item'
 import { Loading } from '../../components/loading'
 
+const axios = require('axios')
+
 const customFloor = function (value, roundTo) {
   return Math.floor(value / roundTo) * roundTo
 }
@@ -21,13 +23,14 @@ export const Feeds = ({ type = 0 }) => {
   const [error, setError] = useState(false)
   const [items, setItems] = useState([])
   const [count, setCount] = useState(0)
+  const [lastId, setId] = useState(999999)
   const [hasMore, setHasMore] = useState(true)
   const startTime = customFloor(Date.now(), ONE_MINUTE_MILLIS)
   const loadMore = () => {
     setCount(count + 1)
   }
 
-  useEffect(() => {
+  useEffect(async () => {
     if (error) {
       console.log('returning on error')
       return
@@ -66,6 +69,8 @@ export const Feeds = ({ type = 0 }) => {
         .then((result) => {
           // filtered isn't guaranteed to always be 10. if we're filtering they might be less.
           const next = items.concat(result)
+
+          next.map(e => console.log(e))
           setItems(next)
 
           // if original returns less than 10, then there's no more data coming from API
@@ -77,7 +82,12 @@ export const Feeds = ({ type = 0 }) => {
           setError(true)
         })
     } else if (type === 3) {
-      GetFeaturedFeed({ counter: count, max_time: startTime })
+
+      let result = await axios.post(process.env.REACT_APP_GRAPHQL_FEED, { lastId : lastId }).then(res => res.data)
+      console.log(result)
+      const next = items.concat(result)
+      setItems(next)
+/*       GetFeaturedFeed({ counter: count, max_time: startTime })
         .then((result) => {
           // filtered isn't guaranteed to always be 10. if we're filtering they might be less.
           const next = items.concat(result)
@@ -90,7 +100,7 @@ export const Feeds = ({ type = 0 }) => {
         })
         .catch((e) => {
           setError(true)
-        })
+        }) */
     }
   }, [count, type])
 
@@ -120,7 +130,7 @@ export const Feeds = ({ type = 0 }) => {
           <Container>
             <Padding>
               {items.map((item, index) => (
-                <FeedItem key={`${item.token_id}-${index}`} {...item} />
+                <FeedItem key={`${item.id}-${index}`} {...item} />
               ))}
             </Padding>
           </Container>

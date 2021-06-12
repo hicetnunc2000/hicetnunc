@@ -19,6 +19,7 @@ import {
   MIN_ROYALTIES,
   MAX_ROYALTIES,
 } from '../../constants'
+import { Tags } from '../../components/tags'
 
 const coverOptions = {
   quality: 0.85,
