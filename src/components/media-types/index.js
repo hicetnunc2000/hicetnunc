@@ -30,8 +30,7 @@ export const renderMediaType = (props) => {
     metadata,
   } = props
   const path = uri
-  let url = preview ? uri : `${CLOUDFLARE}${path}`
-
+  let url = preview ? uri : `${IPFS}${path}`
   switch (mimeType) {
     /* IMAGES */
     case MIMETYPE.BMP:
