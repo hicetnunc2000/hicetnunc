@@ -123,12 +123,14 @@ export const Header = () => {
                     />
                   </mask>
                   <g mask="url(#mask0)">
-                    <path d="M74 16.6667H0V20H74V16.6667Z" fill="#750787"/>
-                    <path d="M74 13.3333H0V16.6667H74V13.3333Z" fill="#004DFF"/>
-                    <path d="M74 10H0V13.3333H74V10Z" fill="#008026"/>
-                    <path d="M74 6.66667H0V10H74V6.66667Z" fill="#FFED00"/>
-                    <path d="M74 3.33333H0V6.66667H74V3.33333Z" fill="#FF8C00"/>
-                    <path d="M74 0H0V3.33333H74V0Z" fill="#E40303"/>
+                    <path d="M74 17.5H0V20H74V17.5Z" fill="#750787" />
+                    <path d="M74 15H0V17.5H74V15Z" fill="#004DFF" />
+                    <path d="M74 12.5H0V15H74V12.5Z" fill="#008026" />
+                    <path d="M74 10H0V12.5H74V10Z" fill="#FFED00" />
+                    <path d="M74 7.5H0V10H74V7.5Z" fill="#FF8C00" />
+                    <path d="M74 5H0V7.5H74V5Z" fill="#E40303" />
+                    <path d="M74 2.5H0V5H74V2.5Z" fill="#725123" />
+                    <path d="M74 0H0V2.5H74V0Z" fill="black" />
                   </g>
                 </svg>
               )}
