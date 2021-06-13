@@ -11,10 +11,16 @@ export const Burn = (props) => {
   const [amount, setAmount] = useState('')
   const [progress, setProgress] = useState() // eslint-disable-line
 
-  const totalOwned =
-    (props.owners[address?.address] &&
+  console.log(props.token_holders.map(e => e.holder_id))
+  const totalOwned = 0
+  console.log(address)
+  if (props.token_holders.map(e => e.holder_id).includes([address?.address])) {
+    totalOwned = props.token_holders.map(e => e.holder_id)[address.address]
+  } 
+/*   const totalOwned =
+    (props.token_holders.map(e => e.holder_id)[address?.address] &&
       parseInt(props.owners[address?.address])) ||
-    0 // check total the user owns of this token
+    0 // check total the user owns of this token */
 
   const handleSubmit = () => {
     if (amount === '') {
@@ -22,20 +28,20 @@ export const Burn = (props) => {
       return
     }
 
-    if (amount > totalOwned) {
+/*     if (amount > totalOwned) {
       alert(
-        `Error: You're trying to burn ${amount}, but you only own ${totalOwned}.`
+        `Error: You're trying to burn ${amount}, but you only own ${0}.`
       )
       return
-    }
+    } */
 
     const r = global.confirm(
-      `Are you sure you want to burn ${amount} of ${totalOwned}?`
+      `Are you sure you want to burn ${amount} of ${0}?`
     )
     if (r) {
       setProgress(true)
       setMessage('burning OBJKT')
-      burn(props.token_id, amount)
+      burn(props.id, amount)
     }
   }
 
@@ -44,7 +50,7 @@ export const Burn = (props) => {
       <Container>
         <Padding>
           <p>
-            You own {totalOwned} editions of OBJKT#{props.token_id}. How many
+            You own {totalOwned} editions of OBJKT#{props.id}. How many
             would you like to burn?
           </p>
         </Padding>
