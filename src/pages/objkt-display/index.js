@@ -10,6 +10,7 @@ import { renderMediaType } from '../../components/media-types'
 import { ItemInfo } from '../../components/item-info'
 import { Menu } from '../../components/menu'
 import { Info, Collectors, Swap, Burn } from './tabs'
+const axios = require('axios')
 
 const TABS = [
   { title: 'info', component: Info }, // public tab
@@ -29,8 +30,14 @@ export const ObjktDisplay = () => {
 
   const address = context.acc?.address
 
-  useEffect(() => {
-    GetOBJKT({ id })
+  useEffect(async () => {
+    //await axios.post(process.env.REACT_APP_GRAPHQL_OBJKT, { id : id }).then(res => console.log(res.data))
+    await axios.post(process.env.REACT_APP_GRAPHQL_OBJKT, { id : id }).then(async res => {
+      await context.setAccount()
+      setNFT(res.data)
+      setLoading(false)
+    })
+/*     GetOBJKT({ id })
       .then(async (objkt) => {
         if (Array.isArray(objkt)) {
           setError(
@@ -61,13 +68,13 @@ export const ObjktDisplay = () => {
           )
         }
         setLoading(false)
-      })
+      }) */
   }, [])
 
   const Tab = TABS[tabIndex].component
 
   return (
-    <Page title={nft?.token_info.name}>
+    <Page title={nft?.name}>
       {loading && (
         <Container>
           <Padding>
@@ -91,16 +98,26 @@ export const ObjktDisplay = () => {
         </Container>
       )}
 
-      {!loading && !error && (
+      {!loading && (
         <>
           <Container>
-            {nft.token_id &&
-              renderMediaType({
-                mimeType: nft.token_info.formats[0].mimeType,
-                uri: nft.token_info.formats[0].uri.split('//')[1],
-                interactive: true,
-                metadata: nft,
-              })}
+            <div
+              style={{
+                position: 'relative',
+                minHeight: '60vh',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              {
+                renderMediaType({
+                  mimeType: nft.mime,
+                  uri: nft.artifact_uri.split('//')[1],
+                  interactive: true,
+                  metadata: nft,
+                })}
+            </div>
           </Container>
 
           <Container>
@@ -115,17 +132,14 @@ export const ObjktDisplay = () => {
                 {TABS.map((tab, index) => {
                   // if nft.owners exist and this is a private route, try to hide the tab.
                   // if nft.owners fails, always show route!
-                  if (nft?.owners && tab.private) {
-                    console.log(
-                      Object.keys(nft.owners).includes(address),
-                      nft.token_info.creators.includes(address),
-                      'valid',
-                      Object.keys(nft.owners).includes(address) ||
-                        nft.token_info.creators.includes(address)
-                    )
+                  if (nft?.token_holders && tab.private) {
+
+                    let holders_arr = nft.token_holders.map(e => e.holder_id)
+                    console.log(holders_arr)
+ 
                     if (
-                      Object.keys(nft.owners).includes(address) === false &&
-                      nft.token_info.creators.includes(address) === false
+                      holders_arr.includes(address) === false &&
+                      nft.creator.address !== address
                     ) {
                       // user is not the creator now owns a copy of the object. hide
 

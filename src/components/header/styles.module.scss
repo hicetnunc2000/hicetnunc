@@ -34,7 +34,7 @@
 
       svg {
         height: 20px;
-        fill: var(--text-color);
+        // fill: var(--text-color);
         transition: fill #{$theme-duration} ease-out;
       }
     }
