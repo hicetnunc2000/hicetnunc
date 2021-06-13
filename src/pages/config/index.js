@@ -130,7 +130,7 @@ export class Config extends Component {
                 allow subjkt operators ○
               </button>
             </div> */}
-            {/*             <div style={{ paddingTop: '15%' }}>
+            <div style={{ paddingTop: '15%' }}>
               <input
                 type="text"
                 name="subjkt"
@@ -144,18 +144,9 @@ export class Config extends Component {
                 onChange={this.handleChange}
                 placeholder="description"
               ></input>
-              <br /> */}
-
-
-            {/* social media */}
-            {/* 
-              <Container>
-                <Padding>
-                  <input type="file" onChange={this.onFileChange} />
-                </Padding>
-              </Container> */}
-            {/*               <button onClick={this.subjkt_config}>config SUBJKT</button>
-            </div> */}
+              <br />
+              <button style={{ border: 'none', borderBottom: '3px solid black', borderRight: '3px solid black' }} onClick={this.subjkt_config}>config SUBJKT</button>
+            </div>
             <div style={{ paddingTop: '5%' }}>
               <input
                 type="text"

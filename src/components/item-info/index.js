@@ -26,18 +26,14 @@ export const ItemInfo = ({
     useContext(HicetnuncContext)
   const reducer = (accumulator, currentValue) =>
     parseInt(accumulator) + parseInt(currentValue)
-  console.log(id)
 
   if (isDetailView) {
     // subtract burned pieces from total
     let total = 0
 
-    console.log('detail view', token_holders, supply)
     total = supply
     let ed = token_holders.filter(e => e.holder_id === 'KT1Hkg5qeNhfwpKW4fXvq7HGZB9z2EnmCCA9').length > 0 ? token_holders.filter(e => e.holder_id === 'KT1Hkg5qeNhfwpKW4fXvq7HGZB9z2EnmCCA9')[0].quantity : 'X'
-    console.log('ed', ed)
 
-    console.log('swaps', swaps)
     let s = _.minBy(swaps, (o) => Number(o.price))
     let maxPrice = _.maxBy(swaps, (o) => Number(o.price))
 
@@ -129,7 +125,21 @@ export const ItemInfo = ({
                 <Purchase>{message}</Purchase>
               </Button>
             </div>
+
           )}
+        </div>
+        <div>
+          <Button onClick={() => curate(id)}>
+            <Primary>
+              <span
+                className={styles.top}
+                data-position={'top'}
+                data-tooltip={'curate'}
+              >
+                〇
+              </span>
+            </Primary>
+          </Button>
         </div>
       </>
     )
@@ -148,16 +158,16 @@ export const ItemInfo = ({
             </Button>
           </div>
           <Button onClick={() => curate(id)}>
-          <Primary>
-            <span
-              className={styles.top}
-              data-position={'top'}
-              data-tooltip={'curate'}
-            >
-              〇
-            </span>
-          </Primary>
-        </Button>
+            <Primary>
+              <span
+                className={styles.top}
+                data-position={'top'}
+                data-tooltip={'curate'}
+              >
+                〇
+              </span>
+            </Primary>
+          </Button>
         </div>
       </div>
     )

@@ -11,6 +11,8 @@ import { Page, Container, Padding } from '../../components/layout'
 import { PATH } from '../../constants'
 import styles from './styles.module.scss'
 
+const axios = require('axios')
+
 export const Tags = () => {
   const { id } = useParams()
   const [error, setError] = useState(false)
@@ -22,11 +24,13 @@ export const Tags = () => {
     setCount(count + 1)
   }
 
-  useEffect(() => {
+  useEffect(async () => {
     if (error) {
       console.log('returning on error')
       return
     }
+
+    await axios.post(process.env.REACT_APP_GRAPHQL_TAGS, { tag : id }).then(res => console.log(res.data))
 
     GetTags({ tag: id, counter: count })
       .then((result) => {

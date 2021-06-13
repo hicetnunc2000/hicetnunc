@@ -4,15 +4,17 @@ import { OwnerList } from '../../../components/owner-list'
 import { HicetnuncContext } from '../../../context/HicetnuncContext'
 import { OwnerSwaps } from '../../../components/owner-swaps'
 
+const _ = require('lodash')
+
 export const Collectors = ({ owners, swaps, token_holders }) => {
   const { syncTaquito, collect, acc, getAccount, cancel } =
     useContext(HicetnuncContext)
     console.log(swaps)
     console.log('holders', token_holders)
+
   // sort swaps in ascending price order
-  swaps = swaps.sort((a, b) =>
-    a.price.localeCompare(b.price, 'en', { numeric: true })
-  )
+
+  swaps = _.orderBy(swaps, 'price', 'asc')
 
 /*   const filtered =
     (owners &&
