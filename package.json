@@ -8,7 +8,7 @@
     "@taquito/beacon-wallet": "^9.1.0",
     "@taquito/michelson-encoder": "^9.1.0",
     "@taquito/taquito": "^9.1.0",
-    "@testing-library/jest-dom": "^5.12.0",
+    "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^13.1.9",
     "axios": "^0.21.1",
