@@ -12,23 +12,17 @@ import styles from './styles.module.scss'
 
 const uid = Math.round(Math.random() * 100000000).toString()
 
-export const HTMLComponent = ({
-  src,
-  interactive,
-  preview,
-  token_info,
-  displayUri,
-  objectId,
-}) => {
+export const HTMLComponent = (props) => {
+  const { src, interactive, preview, creator, displayUri, id } = props
   const context = useContext(HicetnuncContext)
   const [viewing, setViewing] = useState(interactive)
 
   let _creator_ = false
   let _viewer_ = false
-  let _objectId_ = objectId
+  let _objectId_ = String(id)
 
-  if (token_info && token_info.creators[0]) {
-    _creator_ = token_info.creators[0]
+  if (creator && creator.address) {
+    _creator_ = creator.address
   }
 
   if (context.address && context.address.address) {
@@ -163,7 +157,7 @@ export const HTMLComponent = ({
         title="html-embed"
         src={`${src}?creator=${_creator_}&viewer=${_viewer_}&objkt=${_objectId_}`}
         sandbox="allow-scripts allow-same-origin"
-        allow="accelerometer; camera; gyroscope; microphone; xr-spatial-tracking;" 
+        allow="accelerometer; camera; gyroscope; microphone; xr-spatial-tracking;"
         loading="lazy"
       />
     </div>
