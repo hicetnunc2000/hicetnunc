@@ -4,14 +4,10 @@ import { HicetnuncContext } from '../../context/HicetnuncContext'
 import { Page, Container, Padding } from '../../components/layout'
 import { Loading } from '../../components/loading'
 import { renderMediaType } from '../../components/media-types'
-import { Identicon } from '../../components/identicons'
-import { walletPreview } from '../../utils/string'
-import { SanitiseOBJKT, SanitizeDipDup } from '../../utils/sanitise'
 import { PATH } from '../../constants'
-import { VisuallyHidden } from '../../components/visually-hidden'
-import { GetUserMetadata } from '../../data/api'
 import { ResponsiveMasonry } from '../../components/responsive-masonry'
 import styles from './styles.module.scss'
+import { forEach } from 'lodash'
 
 const axios = require('axios')
 const fetch = require('node-fetch')
@@ -37,7 +33,7 @@ query creatorGallery($address: String!) {
 }
 `;
 
-async function fetchCreationsGraphQL(operationsDoc, operationName, variables) {
+async function fetchFrensCreationsGraphQL(operationsDoc, operationName, variables) {
   const result = await fetch(
     "https://api.hicdex.com/v1/graphql",
     {
@@ -52,14 +48,83 @@ async function fetchCreationsGraphQL(operationsDoc, operationName, variables) {
   return await result.json()
 }
 
-async function fetchCreations(addr) {
-  const { errors, data } = await fetchCreationsGraphQL(query_creations, "creatorGallery", { "address": addr });
+async function fetchFrensCreations(frensAddresses) {
+  
+  const { errors, data } = await fetchFrensCreationsGraphQL(query_creations, "creatorGallery", { "address": frensAddresses[0] });
   if (errors) {
     console.error(errors);
   }
   const result = data.hic_et_nunc_token
   /* console.log({ result }) */
   return result
+}
+
+const query_frens = `
+  query collectorGallery($address: String!) {
+    hic_et_nunc_token_holder(where: {holder_id: {_eq: $address}, quantity: {_gt: "0"}, token: {supply: {_gt: "0"}}}, order_by: {id: desc}) {
+      token {
+        id
+        artifact_uri
+        display_uri
+        thumbnail_uri
+        timestamp
+        mime
+        title
+        description
+        supply
+        token_tags {
+          tag {
+            tag
+          }
+        }
+        creator {
+          address
+        }
+      }
+    }
+  }
+`;
+
+async function fetchFrensGraphQL(operationsDoc, operationName, variables) {
+  const result = await fetch(
+    "https://api.hicdex.com/v1/graphql",
+    {
+      method: "POST",
+      body: JSON.stringify({
+        query: operationsDoc,
+        variables: variables,
+        operationName: operationName
+      })
+    }
+  );
+
+  return await result.json();
+}
+
+async function fetchAllFrens(addr) {
+  const { errors, data } = await fetchFrensGraphQL(query_frens, "collectorGallery", {"address":addr});
+  if (errors) {
+    console.error(errors);
+  }
+  let results = data.hic_et_nunc_token_holder.map(function(result) {
+    return result['token'];
+  });
+
+  console.log({ results })
+
+  let frensAddresses = []
+
+  results.forEach(function(result) {
+    frensAddresses.push(result.creator.address);
+  })
+
+  let frensAddressesFiltered = frensAddresses.filter((item,index) =>{
+    return frensAddresses.indexOf(item) === index;
+  })
+
+  console.log({ frensAddressesFiltered })
+
+  return frensAddressesFiltered
 }
 
 export default class Display extends Component {
@@ -104,18 +169,20 @@ export default class Display extends Component {
     this.context.setPath(window.location.pathname)
 
     let addr = ''
-
+    
     if (window.location.pathname.split('/')[1] === 'tz') {
       addr = window.location.pathname.split('/')[2]
     }
 
     //fetch collection promise, return addresses
     //fetch creations of collection wallet addresses
-    const creations = await fetchCreations(addr)
-    console.log(creations)
+    const frensAddresses = await fetchAllFrens(addr);
+    console.log(frensAddresses)
+    const frensCreations = await fetchFrensCreations(frensAddresses)
+    //console.log(creations)
 
     this.setState({
-      creations: creations,
+      creations: frensCreations,
       loading: false,
     })
 
