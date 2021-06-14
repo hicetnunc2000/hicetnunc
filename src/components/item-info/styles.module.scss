@@ -5,7 +5,8 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding-top: 10px;
+  padding-top: 20px;
+  padding-bottom: 40px;
   word-break: normal;
   width: 100%;
 }
@@ -14,6 +15,10 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+
+  & > * {
+    margin-left: 10px;
+  }
 }
 
 .edition {
@@ -30,82 +35,82 @@
 }
 
 .hdaoButton {
-	margin-bottom: 2px;
-	padding-left: 20px;
+  margin-bottom: 2px;
+  padding-left: 20px;
 }
 
 .issuer {
-	@include respond-to('phone') {
-		display: none;
+  @include respond-to('phone') {
+    display: none;
   }
 
   @include respond-to('tablet') {
-		display: block;
+    display: block;
   }
 }
 
 span[data-tooltip].top {
-	&:before,
-	&:after {
-		transform: translate(-50%, 10px);
-	}
-	
-	&:hover:after,
-	&:hover:before {
-		transform: translate(-50%, 0px);
-	}
+  &:before,
+  &:after {
+    transform: translate(-50%, 10px);
+  }
+
+  &:hover:after,
+  &:hover:before {
+    transform: translate(-50%, 0px);
+  }
 }
 
 span[data-tooltip] {
-	position: relative;
+  position: relative;
 
-	&:after,
-	&:before {
-		position: absolute;
-		visibility: hidden;
-		opacity: 1;
-		transition: transform 200ms ease, opacity 200ms;
-		z-index: 99;
-	}
+  &:after,
+  &:before {
+    position: absolute;
+    visibility: hidden;
+    opacity: 1;
+    transition: transform 200ms ease, opacity 200ms;
+    z-index: 99;
+  }
 
-	&:before {
-		content: attr(data-tooltip);
+  &:before {
+    content: attr(data-tooltip);
     background-color: var(--text-color);
-		color: var(--background-color);
-		font-size: 12px;
-		font-weight: bold;
-		padding: 10px 15px;
-		border-radius: 10px;
-		white-space: nowrap;
-		text-decoration: none;
-		letter-spacing: 1px;
-	}
+    color: var(--background-color);
+    font-size: 12px;
+    font-weight: bold;
+    padding: 10px 15px;
+    border-radius: 10px;
+    white-space: nowrap;
+    text-decoration: none;
+    letter-spacing: 1px;
+  }
 
-	&:after {
-		width: 0;
-		height: 0;
-		left: 50%;
-		border: 6px solid transparent;
-		content: '';
-	}
+  &:after {
+    width: 0;
+    height: 0;
+    left: 50%;
+    border: 6px solid transparent;
+    content: '';
+  }
 
-	&:hover:after,
-	&:hover:before {
-		visibility: visible;
-		opacity: 1;
-		transform: translate(-50%, 0px);
-	}
+  &:hover:after,
+  &:hover:before {
+    visibility: visible;
+    opacity: 1;
+    transform: translate(-50%, 0px);
+  }
 }
 
-span[data-tooltip][data-position="top"]:before {
-	bottom: 100%;
-	left: 50%;
-	margin-bottom: 9px;
+span[data-tooltip][data-position='top']:before {
+  bottom: 100%;
+  left: 50%;
+  margin-bottom: 9px;
 }
 
-span[data-tooltip][data-position="top"]:after {
-	border-top-color: var(--text-color);;
-	border-bottom: none;
-	bottom: 101%;
-	margin-bottom: 4px;
+span[data-tooltip][data-position='top']:after {
+  border-top-color: var(--text-color);
+  border-bottom: none;
+  bottom: 101%;
+  margin-bottom: 4px;
 }
