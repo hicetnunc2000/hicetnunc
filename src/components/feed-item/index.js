@@ -45,7 +45,7 @@ export const FeedItem = (props) => {
             <div className={styles.container}>
               {renderMediaType({
                 mimeType: mime,
-                uri: mime == 'video/mp4' || mime == 'model/gltf-binary' ? artifact_uri.split('//')[1] : (display_uri !== '' ? display_uri.split('//')[1] : artifact_uri.split('//')[1]),
+                uri: mime == 'video/mp4' ? artifact_uri.split('//')[1] : (display_uri !== '' ? display_uri.split('//')[1] : artifact_uri.split('//')[1]),
                 metadata: props,
               })}
             </div>
