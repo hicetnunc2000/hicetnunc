@@ -130,6 +130,9 @@ export class Config extends Component {
                 allow subjkt operators ○
               </button>
             </div> */}
+            <div>
+              <div style={{backgroundColor:'black', height:'0.5px'}}></div>
+            </div>
             <div style={{ paddingTop: '15%' }}>
               <input
                 type="text"
