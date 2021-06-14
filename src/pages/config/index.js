@@ -43,11 +43,11 @@ export class Config extends Component {
 
   subjkt_config = async () => {
     const ipfs = create(infuraUrl)
-/*     const [file] = this.state.selectedFile
-
-    const buffer = Buffer.from(await file.arrayBuffer())
-
-    this.setState({ avatar: 'ipfs://' + (await ipfs.add(buffer)).path }) */
+    /*     const [file] = this.state.selectedFile
+    
+        const buffer = Buffer.from(await file.arrayBuffer())
+    
+        this.setState({ avatar: 'ipfs://' + (await ipfs.add(buffer)).path }) */
 
     this.context.registry(
       this.state.subjkt,
@@ -125,11 +125,14 @@ export class Config extends Component {
         <Container>
           <Padding>
 
-{/*             <div>
+            {/*             <div>
               <button onClick={this.hDAO_operators}>
                 allow subjkt operators ○
               </button>
             </div> */}
+            <div>
+              <div style={{backgroundColor:'black', height:'0.5px'}}></div>
+            </div>
             <div style={{ paddingTop: '15%' }}>
               <input
                 type="text"
@@ -145,18 +148,8 @@ export class Config extends Component {
                 placeholder="description"
               ></input>
               <br />
-
-
-              {/* social media */}
-{/* 
-              <Container>
-                <Padding>
-                  <input type="file" onChange={this.onFileChange} />
-                </Padding>
-              </Container> */}
-              <button onClick={this.subjkt_config}>config SUBJKT</button>
+              <button style={{ border: 'none', borderBottom: '3px solid black', borderRight: '3px solid black' }} onClick={this.subjkt_config}>config SUBJKT</button>
             </div>
-
             <div style={{ paddingTop: '5%' }}>
               <input
                 type="text"
@@ -167,7 +160,7 @@ export class Config extends Component {
               <p style={{ fontSize: '12px' }}>
                 hic et nunc DAO ○ curation parameter
               </p>
-              <button onClick={this.hDAO_config}>
+              <button style={{ border: 'none', borderBottom: '3px solid black', borderRight: '3px solid black' }} onClick={this.hDAO_config}>
                 config ○
               </button>
             </div>
@@ -176,10 +169,11 @@ export class Config extends Component {
               <button onClick={this.sign}>sign</button>
             </div> */}
 
-            <div style={{ paddingTop: '5%' }}>
+            {/* this action may affect collectors. consider it carefully */}
+
+            {/*             <div style={{ paddingTop: '5%' }}>
               <button onClick={this.unregister}>unregister</button>
-              {/* this action may affect collectors. consider it carefully */}
-            </div>
+            </div> */}
           </Padding>
         </Container>
       </Page>
