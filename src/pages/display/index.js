@@ -20,6 +20,8 @@ const sortByTokenId = (a, b) => {
   return b.id - a.id
 }
 
+const getRestrictedAddresses = async () => await axios.get('https://raw.githubusercontent.com/hicetnunc2000/hicetnunc/main/filters/w.json').then(res => res.data)
+
 const query_collection = `
 query collectorGallery($address: String!) {
   hic_et_nunc_token_holder(where: {holder_id: {_eq: $address}, token: {creator: {address: {_neq: $address}}}, quantity: {_gt: "0"}}, order_by: {token_id: desc}) {
@@ -258,9 +260,15 @@ export default class Display extends Component {
       addr = await axios.post(process.env.REACT_APP_SUBJKT, { subjkt: window.location.pathname.split('/')[1] }).then(res => res.data.result[0].tz)
       console.log(addr)
     }
+    let list = await getRestrictedAddresses()
 
-    const creations = await fetchCreations(addr)
-    const collection = await fetchCollection(addr)
+    let creations = []
+    let collection = []
+    if (!list.includes(addr)) {
+      creations = await fetchCreations(addr)
+      collection = await fetchCollection(addr)
+    }
+
     console.log(creations)
     console.log('collection', collection)
     // market
