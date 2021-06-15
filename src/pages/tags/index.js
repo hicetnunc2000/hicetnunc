@@ -30,8 +30,11 @@ export const Tags = () => {
       return
     }
 
-    await axios.post(process.env.REACT_APP_GRAPHQL_TAGS, { tag : id }).then(res => console.log(res.data))
+    const next = items.concat(await axios.post(process.env.REACT_APP_GRAPHQL_TAGS, { tag : id }).then(res => res.data))
+    next.map(e => console.log(e))
+    setItems(next)
 
+    /* 
     GetTags({ tag: id, counter: count })
       .then((result) => {
         const next = items.concat(result)
@@ -44,7 +47,7 @@ export const Tags = () => {
       })
       .catch((e) => {
         setError(true)
-      })
+      }) */
   }, [count, id])
 
   return (
@@ -75,17 +78,17 @@ export const Tags = () => {
           <Container xlarge>
             <ResponsiveMasonry>
               {items.map((nft) => {
-                const { mimeType, uri } = nft.formats[0]
-
+                const { mime, artifact_uri, display_uri } = nft
+                console.log(nft)
                 return (
                   <Button
-                    key={nft.token_id}
-                    to={`${PATH.OBJKT}/${nft.token_id}`}
+                    key={nft.id}
+                    to={`${PATH.OBJKT}/${nft.id}`}
                   >
                     <div className={styles.container}>
                       {renderMediaType({
-                        mimeType,
-                        uri: uri.split('//')[1],
+                        mime,
+                        uri: display_uri ? display_uri.split('//')[1] : artifact_uri.split('//')[1],
                         metadata: nft,
                       })}
                       {/* <div className={styles.number}>OBJKT#{nft.token_id}</div> */}

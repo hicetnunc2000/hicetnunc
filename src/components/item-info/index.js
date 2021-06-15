@@ -1,4 +1,3 @@
-/* eslint-disable */
 import React, { useContext } from 'react'
 import { PATH } from '../../constants'
 import { Button, Primary, Purchase } from '../button'
@@ -33,14 +32,7 @@ export const ItemInfo = ({
     let total = 0
 
     total = supply
-    let ed =
-      token_holders.filter(
-        (e) => e.holder_id === 'KT1Hkg5qeNhfwpKW4fXvq7HGZB9z2EnmCCA9'
-      ).length > 0
-        ? token_holders.filter(
-            (e) => e.holder_id === 'KT1Hkg5qeNhfwpKW4fXvq7HGZB9z2EnmCCA9'
-          )[0].quantity
-        : 'X'
+    let ed = token_holders.filter(e => e.holder_id === 'KT1Hkg5qeNhfwpKW4fXvq7HGZB9z2EnmCCA9').length > 0 ? token_holders.filter(e => e.holder_id === 'KT1Hkg5qeNhfwpKW4fXvq7HGZB9z2EnmCCA9')[0].quantity : 'X'
 
     let s = _.minBy(swaps, (o) => Number(o.price))
     let maxPrice = _.maxBy(swaps, (o) => Number(o.price))
@@ -55,6 +47,7 @@ export const ItemInfo = ({
     } catch (e) {
       message = 'not for sale'
     }
+
 
     const handleCollect = () => {
       if (acc == null) {
@@ -94,16 +87,13 @@ export const ItemInfo = ({
         <div className={styles.container}>
           <div className={styles.edition}>
             <div className={styles.inline}>
-              <Button
-                to={`${PATH.ISSUER}/${
-                  creator.name ? creator.name : creator.address
-                }`}
-              >
-                {creator.name ? (
-                  <Primary>{creator.name}</Primary>
-                ) : (
-                  <Primary>{walletPreview(creator.address)}</Primary>
-                )}
+              <Button to={creator.name ? `/${creator.name}` : `/tz/${creator.address}` }>
+                {
+                  creator.name ?
+                    <Primary>{creator.name}</Primary>
+                    :
+                    <Primary>{walletPreview(creator.address)}</Primary>
+                }
               </Button>
             </div>
             {!feed && (
@@ -127,14 +117,17 @@ export const ItemInfo = ({
             </div>
           )}
         </div>
-        {isDetailView && (
-          <div className={styles.container}>
-            <p>OBJKT#{id}</p>
-            <Button onClick={() => handleCollect()}>
-              <Purchase>{message}</Purchase>
-            </Button>
-          </div>
-        )}
+        <div className={styles.container}>
+          {isDetailView && (
+            <div className={styles.container}>
+              <p>OBJKT#{id}</p>
+              <Button onClick={() => handleCollect()}>
+                <Purchase>{message}</Purchase>
+              </Button>
+            </div>
+
+          )}
+        </div>
         <div>
           <Button onClick={() => curate(id)}>
             <Primary>
@@ -163,18 +156,18 @@ export const ItemInfo = ({
             <Button to={`${PATH.OBJKT}/${id}`}>
               <Primary>OBJKT#{id}</Primary>
             </Button>
-            <Button onClick={() => curate(id)}>
-              <Primary>
-                <span
-                  className={styles.top}
-                  data-position={'top'}
-                  data-tooltip={'curate'}
-                >
-                  <strong>〇</strong>
-                </span>
-              </Primary>
-            </Button>
           </div>
+          <Button onClick={() => curate(id)}>
+            <Primary>
+              <span
+                className={styles.top}
+                data-position={'top'}
+                data-tooltip={'curate'}
+              >
+                〇
+              </span>
+            </Primary>
+          </Button>
         </div>
       </div>
     )
