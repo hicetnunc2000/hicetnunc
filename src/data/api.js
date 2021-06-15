@@ -11,6 +11,7 @@ import {
 } from '../constants'
 
 const axios = require('axios')
+const fetch = require('node-fetch')
 
 /**
  * This loads the initial data (language.json, o.json, w.json, b.json)
@@ -118,7 +119,7 @@ export const GetOBJKT = async ({ id }) => {
         params: { id: id },
       })
       .then((res) => {
-        console.log(res.data)
+        // console.log(res.data)
         resolve(res.data.result)
       })
       .catch((e) => reject(e))
@@ -131,11 +132,9 @@ export const GetOBJKT = async ({ id }) => {
 export const GetTags = async ({ tag, counter }) => {
   return new Promise((resolve, reject) => {
     axios
-      .post(process.env.REACT_APP_TAGS, 
-        { tag : tag, counter : counter }
-      )
+      .post(process.env.REACT_APP_TAGS, { tag: tag, counter: counter })
       .then((res) => {
-        console.log(res.data)
+        // console.log(res.data)
         resolve(res.data.result)
       })
       .catch((e) => reject(e)) // TODO: send error message to context. have an error component to display the error
@@ -143,10 +142,48 @@ export const GetTags = async ({ tag, counter }) => {
 }
 
 /**
- * Get User Metadata from tzkt.io
+ * Get User claims from their tzprofile
+ */
+const GetUserClaims = async (walletAddr) => {
+  return await axios.post('https://indexer.tzprofiles.com/v1/graphql', {
+    query: `query MyQuery { tzprofiles_by_pk(account: \"${walletAddr}\") { valid_claims } }`,
+    variables: null,
+    operationName: 'MyQuery',
+  })
+}
+
+/**
+ * Get User Metadata
  */
 export const GetUserMetadata = async (walletAddr) => {
-  return await axios.get(
+  let tzktData = await axios.get(
     `https://api.tzkt.io/v1/accounts/${walletAddr}/metadata`
   )
+
+  let tzpData = {}
+  try {
+    let claims = await GetUserClaims(walletAddr)
+    if (claims.data.data.tzprofiles_by_pk !== null)
+      for (const claim of claims.data.data.tzprofiles_by_pk.valid_claims) {
+        let claimJSON = JSON.parse(claim[1])
+        if (claimJSON.type.includes('TwitterVerification')) {
+          if (!tzktData.data || !tzktData.data.twitter ) {
+            tzpData['twitter'] = claimJSON.evidence.handle
+          }
+        } else if (claimJSON.type.includes('BasicProfile')) {
+          if (claimJSON.credentialSubject.alias !== "" && !(tzktData.data && tzktData.data.alias))
+            tzpData['alias'] = claimJSON.credentialSubject.alias
+          tzpData['tzprofile'] = walletAddr
+        }
+      }
+  } catch (e) {
+    console.error(e, e.stack);
+  }
+
+  if (tzktData.data !== '') {
+    tzktData.data = { ...tzpData, ...tzktData.data }
+  } else if (tzpData) {
+    tzktData.data = tzpData
+  }
+  return tzktData
 }

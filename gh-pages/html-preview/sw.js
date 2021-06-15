@@ -21,7 +21,7 @@ self.addEventListener('message', (event) => {
 
 self.addEventListener('fetch', (event) => {
   const path = getURLPath(event.request.url)
-  console.log(path)
+  // console.log(path)
   if (cache[path]) {
     const res = new Response(cache[path])
     event.respondWith(Promise.resolve(res))

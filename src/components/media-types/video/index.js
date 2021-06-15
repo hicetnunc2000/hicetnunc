@@ -42,7 +42,7 @@ export const VideoComponent = ({ src, interactive, inView }) => {
         try {
           domElement.current.play()
         } catch (err) {
-          console.log(err)
+          console.error(err)
         }
       }
     } else {
@@ -54,7 +54,7 @@ export const VideoComponent = ({ src, interactive, inView }) => {
         try {
           domElement.current.pause()
         } catch (err) {
-          console.log(err)
+          console.error(err)
         }
       }
     }
@@ -71,6 +71,7 @@ export const VideoComponent = ({ src, interactive, inView }) => {
         loop
         controls={interactive}
         src={src}
+        loading="lazy"
       />
     </div>
   )

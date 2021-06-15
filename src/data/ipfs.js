@@ -1,7 +1,7 @@
 import { toHHMMSS } from '../utils/time'
 import {
   IPFS_DIRECTORY_MIMETYPE,
-  IPFS_DISPLAY_URI_BLACKCIRCLE,
+  IPFS_DEFAULT_THUMBNAIL_URI,
 } from '../constants'
 
 const { create } = require('ipfs-http-client')
@@ -33,7 +33,7 @@ export const prepareFile = async ({
 
   // upload extra media
   let displayUri = ''
-  let thumbnailUri = IPFS_DISPLAY_URI_BLACKCIRCLE
+  let thumbnailUri = IPFS_DEFAULT_THUMBNAIL_URI
   let formats = [originalFormat]
   if (generateDisplayUri) {
     const extraMediaMetadata = await uploadExtraMedia(
@@ -78,7 +78,7 @@ export const prepareDirectory = async ({
 
   // upload extra media
   let displayUri = ''
-  let thumbnailUri = IPFS_DISPLAY_URI_BLACKCIRCLE
+  let thumbnailUri = IPFS_DEFAULT_THUMBNAIL_URI
   let formats = [originalFormat]
   if (generateDisplayUri) {
     // upload
@@ -154,7 +154,7 @@ async function uploadMetadataFile({
   cid,
   address,
   displayUri = '',
-  thumbnailUri = IPFS_DISPLAY_URI_BLACKCIRCLE,
+  thumbnailUri = IPFS_DEFAULT_THUMBNAIL_URI,
   formats = [],
 }) {
   const ipfs = create(infuraUrl)
@@ -183,7 +183,7 @@ async function uploadExtraMedia(extraMedia, originalFormat) {
   const ipfs = create(infuraUrl)
 
   let displayUri = ''
-  let thumbnailUri = IPFS_DISPLAY_URI_BLACKCIRCLE
+  let thumbnailUri = IPFS_DEFAULT_THUMBNAIL_URI
   const formats = []
 
   for (const item of extraMedia) {
