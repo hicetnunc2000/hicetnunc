@@ -9,12 +9,13 @@ export const VectorComponent = ({
   previewUri,
   creator,
   objkt,
-  interactive,
+  onDetailView,
+  preview,
 }) => {
   const context = useContext(HicetnuncContext)
   const classes = classnames({
     [styles.container]: true,
-    [styles.interactive]: interactive,
+    [styles.interactive]: onDetailView,
   })
 
   let _creator_ = false
@@ -34,9 +35,9 @@ export const VectorComponent = ({
   }
 
   let path
-  if (previewUri) {
+  if (preview) {
     // can't pass creator/viewer query params to data URI
-    path = `${previewUri}?creator=${_creator_}&viewer=${_viewer_}&objkt=${_objkt_}`
+    path = previewUri
   } else {
     path = `${artifactUri}?creator=${_creator_}&viewer=${_viewer_}&objkt=${_objkt_}`
   }
@@ -48,7 +49,6 @@ export const VectorComponent = ({
         src={path}
         sandbox="allow-scripts"
         scrolling="no"
-        loading="lazy"
       />
     </div>
   )

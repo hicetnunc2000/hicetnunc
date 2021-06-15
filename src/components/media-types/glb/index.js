@@ -1,14 +1,20 @@
 import React, { useEffect, useRef, useState } from 'react'
 import styles from './styles.module.scss'
 
-export const GLBComponent = ({ artifactUri, displayUri, onDetailView }) => {
+export const GLBComponent = ({
+  artifactUri,
+  displayUri,
+  previewUri,
+  preview,
+  onDetailView,
+}) => {
   const ref = useRef()
   const [width, setWidth] = useState('100px')
   const [height, setHeight] = useState('100px')
 
   const props = {
     className: styles.glb,
-    src: artifactUri,
+    src: preview ? previewUri : artifactUri,
     autoplay: true,
     'auto-rotate': true,
     'data-js-focus-visible': true,

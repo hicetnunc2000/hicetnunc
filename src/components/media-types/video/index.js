@@ -5,6 +5,8 @@ import styles from './styles.module.scss'
 export const VideoComponent = ({
   artifactUri,
   displayUri,
+  previewUri,
+  preview,
   interactive,
   inView,
 }) => {
@@ -55,7 +57,7 @@ export const VideoComponent = ({
         muted
         loop
         controls={interactive}
-        src={artifactUri}
+        src={preview ? previewUri : artifactUri}
         poster={displayUri}
       />
     </div>

@@ -12,7 +12,14 @@ import { MIMETYPE, IPFS_DIRECTORY_MIMETYPE } from '../../constants'
 import { Container } from './container'
 
 // converts an ipfs hash to ipfs url
-const HashToURL = (hash = '', type) => {
+const HashToURL = (hash, type) => {
+  // when on preview the hash might be undefined.
+  // its safe to return empty string as whatever called HashToURL is not going to be used
+  // artifactUri or displayUri
+  if (hash === undefined) {
+    return ''
+  }
+
   switch (type) {
     case 'CLOUDFLARE':
       return hash.replace('ipfs://', 'https://cloudflare-ipfs.com/ipfs/')
@@ -113,6 +120,7 @@ export const renderMediaType = ({
             artifactUri={parsedArtifactUri}
             displayUri={parsedDisplayUri}
             previewUri={previewUri}
+            preview={preview}
             creator={creator}
             objkt={objkt}
             onDetailView={interactive}
@@ -125,6 +133,12 @@ export const renderMediaType = ({
     case MIMETYPE.ZIP:
     case MIMETYPE.ZIP1:
     case MIMETYPE.ZIP2:
+      console.log(
+        'trying to render an html',
+        artifactUri,
+        displayUri,
+        previewUri
+      )
       parsedArtifactUri = HashToURL(artifactUri, 'INFURA')
       parsedDisplayUri = HashToURL(displayUri, 'IPFS')
 
@@ -156,6 +170,7 @@ export const renderMediaType = ({
             artifactUri={parsedArtifactUri}
             displayUri={parsedDisplayUri}
             previewUri={previewUri}
+            preview={preview}
             onDetailView={interactive}
           />
         </Container>
@@ -171,6 +186,7 @@ export const renderMediaType = ({
             artifactUri={parsedArtifactUri}
             displayUri={parsedDisplayUri}
             previewUri={previewUri}
+            preview={preview}
             onDetailView={interactive}
           />
         </Container>
@@ -189,6 +205,7 @@ export const renderMediaType = ({
             artifactUri={parsedArtifactUri}
             displayUri={parsedDisplayUri}
             previewUri={previewUri}
+            preview={preview}
             onDetailView={interactive}
           />
         </Container>
@@ -203,6 +220,7 @@ export const renderMediaType = ({
             artifactUri={parsedArtifactUri}
             displayUri={parsedDisplayUri}
             previewUri={previewUri}
+            preview={preview}
             onDetailView={interactive}
           />
         </Container>
