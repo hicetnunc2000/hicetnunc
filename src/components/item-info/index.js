@@ -126,17 +126,16 @@ export const ItemInfo = ({
             </div>
           )}
         </div>
-        <div className={styles.container}>
-          {isDetailView && (
-            <div className={styles.container}>
-              <p>OBJKT#{id}</p>
-              <Button onClick={() => handleCollect()}>
-                <Purchase>{message}</Purchase>
-              </Button>
-            </div>
-          )}
-        </div>
-        <div>
+
+        {isDetailView && (
+          <div className={styles.spread}>
+            <p>OBJKT#{id}</p>
+            <Button onClick={() => handleCollect()}>
+              <Purchase>{message}</Purchase>
+            </Button>
+          </div>
+        )}
+        <div className={styles.spread}>
           <Button onClick={() => curate(id)}>
             <Primary>
               <span

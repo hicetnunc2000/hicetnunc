@@ -11,6 +11,12 @@
   width: 100%;
 }
 
+.spread {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
 .objktContainer {
   display: flex;
   align-items: center;
