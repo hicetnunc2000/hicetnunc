@@ -1,12 +1,7 @@
 import React, { Component } from 'react'
-import { Button, Primary } from '../../components/button'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
 import { Page, Container, Padding } from '../../components/layout'
 import { Loading } from '../../components/loading'
-import { renderMediaType } from '../../components/media-types'
-import { PATH } from '../../constants'
-import styles from './styles.module.scss'
-import InfiniteScroll from 'react-infinite-scroll-component'
 import { FeedItem } from '../../components/feed-item'
 
 const axios = require('axios')
@@ -207,7 +202,7 @@ export default class Friends extends Component {
     }
 
     const frenCreations = await getLatestByFrens()
-    console.log(frenCreations)
+    // console.log(frenCreations)
 
     this.setState({
       creations: frenCreations,
