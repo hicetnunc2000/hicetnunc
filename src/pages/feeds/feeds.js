@@ -1,11 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable */
 import React, { useEffect, useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import {
   GetLatestFeed,
-  GethDAOFeed,
-  GetRandomFeed,
-  GetFeaturedFeed,
+  // GethDAOFeed,
+  // GetRandomFeed,
+  // GetFeaturedFeed,
 } from '../../data/api'
 import { Page, Container, Padding } from '../../components/layout'
 import { FeedItem } from '../../components/feed-item'

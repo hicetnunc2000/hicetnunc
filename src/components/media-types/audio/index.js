@@ -5,7 +5,7 @@ import { PauseIcon, PlayIcon } from './icons'
 import { Visualiser } from './visualiser'
 import styles from './styles.module.scss'
 
-export const AudioComponent = ({ src }) => {
+export const AudioComponent = ({ artifactUri, displayUri }) => {
   const visualiser = useRef()
   const [userTouched, setUserTouched] = useState(false)
   const [play, setPlay] = useState(false)
@@ -36,12 +36,14 @@ export const AudioComponent = ({ src }) => {
     [styles.container]: true,
     [styles.userTouch]: userTouched,
   })
+
+  console.log(displayUri)
   return (
     <>
       <div className={classes}>
-        <audio src={src} controls />
-        {false && <img src="/test.png" alt="album cover" />}
-        {false && <Visualiser ref={visualiser} src={src} />}
+        {true && <audio src={artifactUri} controls />}
+        {false && <img src={displayUri} alt="album cover" />}
+        {false && <Visualiser ref={visualiser} src={artifactUri} />}
         {false && (
           <div className={styles.icons} onClick={togglePlay}>
             {play ? <PauseIcon /> : <PlayIcon />}

@@ -6,7 +6,6 @@ import { Loading } from '../../components/loading'
 import { renderMediaType } from '../../components/media-types'
 import { Identicon } from '../../components/identicons'
 import { walletPreview } from '../../utils/string'
-import { SanitiseOBJKT, SanitizeDipDup } from '../../utils/sanitise'
 import { PATH } from '../../constants'
 import { VisuallyHidden } from '../../components/visually-hidden'
 import { GetUserMetadata } from '../../data/api'
@@ -15,10 +14,6 @@ import styles from './styles.module.scss'
 
 const axios = require('axios')
 const fetch = require('node-fetch')
-
-const sortByTokenId = (a, b) => {
-  return b.id - a.id
-}
 
 const query_collection = `
 query collectorGallery($address: String!) {
@@ -44,31 +39,31 @@ query collectorGallery($address: String!) {
     }
   }
 }
-`;
+`
 
 async function fetchCollectionGraphQL(operationsDoc, operationName, variables) {
-  const result = await fetch(
-    "https://api.hicdex.com/v1/graphql",
-    {
-      method: "POST",
-      body: JSON.stringify({
-        query: operationsDoc,
-        variables: variables,
-        operationName: operationName
-      })
-    }
-  );
+  const result = await fetch('https://api.hicdex.com/v1/graphql', {
+    method: 'POST',
+    body: JSON.stringify({
+      query: operationsDoc,
+      variables: variables,
+      operationName: operationName,
+    }),
+  })
 
-  return await result.json();
+  return await result.json()
 }
 
 async function fetchCollection(addr) {
-  const { errors, data } = await fetchCollectionGraphQL(query_collection, "collectorGallery", { "address": addr });
+  const { errors, data } = await fetchCollectionGraphQL(
+    query_collection,
+    'collectorGallery',
+    { address: addr }
+  )
   if (errors) {
-    console.error(errors);
+    console.error(errors)
   }
   const result = data.hic_et_nunc_token_holder
-  console.log({ result })
   return result
 }
 
@@ -91,30 +86,30 @@ query creatorGallery($address: String!) {
     }
   }
 }
-`;
+`
 
 async function fetchCreationsGraphQL(operationsDoc, operationName, variables) {
-  const result = await fetch(
-    "https://api.hicdex.com/v1/graphql",
-    {
-      method: "POST",
-      body: JSON.stringify({
-        query: operationsDoc,
-        variables: variables,
-        operationName: operationName
-      })
-    }
-  );
+  const result = await fetch('https://api.hicdex.com/v1/graphql', {
+    method: 'POST',
+    body: JSON.stringify({
+      query: operationsDoc,
+      variables: variables,
+      operationName: operationName,
+    }),
+  })
   return await result.json()
 }
 
 async function fetchCreations(addr) {
-  const { errors, data } = await fetchCreationsGraphQL(query_creations, "creatorGallery", { "address": addr });
+  const { errors, data } = await fetchCreationsGraphQL(
+    query_creations,
+    'creatorGallery',
+    { address: addr }
+  )
   if (errors) {
-    console.error(errors);
+    console.error(errors)
   }
   const result = data.hic_et_nunc_token
-  /* console.log({ result }) */
   return result
 }
 
@@ -193,12 +188,7 @@ export default class Display extends Component {
             this.onReady()
           }
         })
-
-
     }
-
-    console.log(window.location.pathname.split('/'))
-
   }
 
   // called if there's no redirect
@@ -255,15 +245,15 @@ export default class Display extends Component {
     if (window.location.pathname.split('/')[1] === 'tz') {
       addr = window.location.pathname.split('/')[2]
     } else {
-      addr = await axios.post(process.env.REACT_APP_SUBJKT, { subjkt: window.location.pathname.split('/')[1] }).then(res => res.data.result[0].tz)
-      console.log(addr)
+      addr = await axios
+        .post(process.env.REACT_APP_SUBJKT, {
+          subjkt: window.location.pathname.split('/')[1],
+        })
+        .then((res) => res.data.result[0].tz)
     }
 
     const creations = await fetchCreations(addr)
     const collection = await fetchCollection(addr)
-    console.log(creations)
-    console.log('collection', collection)
-    // market
 
     this.setState({
       creations: creations,
@@ -271,7 +261,6 @@ export default class Display extends Component {
       collection: collection,
       /* market, */
     })
-
   }
 
   creations = () => {
@@ -486,9 +475,11 @@ export default class Display extends Component {
                 </Primary>
               </Button>
 
-              {/*               <Button onClick={this.market}>
-                <Primary selected={this.state.marketState}>market</Primary>
-              </Button> */}
+              {false && (
+                <Button onClick={this.market}>
+                  <Primary selected={this.state.marketState}>market</Primary>
+                </Button>
+              )}
             </div>
           </Padding>
         </Container>
@@ -504,21 +495,14 @@ export default class Display extends Component {
         {!this.state.loading && this.state.creationsState && (
           <Container xlarge>
             <ResponsiveMasonry>
-              {this.state.creations.map((nft, i) => {
-                console.log(nft)
-                const mimeType = nft.mime
-                const uri = nft.artifact_uri
-
+              {this.state.creations.map((nft) => {
                 return (
-                  <Button
-                    key={nft.id}
-                    to={`${PATH.OBJKT}/${nft.id}`}
-                  >
+                  <Button key={nft.id} to={`${PATH.OBJKT}/${nft.id}`}>
                     <div className={styles.container}>
                       {renderMediaType({
-                        mimeType,
-                        uri: uri.split('//')[1],
-                        metadata: nft,
+                        mimeType: nft.mime,
+                        artifactUri: nft.artifact_uri,
+                        displayUri: nft.display_uri,
                       })}
                     </div>
                   </Button>
@@ -531,10 +515,7 @@ export default class Display extends Component {
         {!this.state.loading && this.state.collectionState && (
           <Container xlarge>
             <ResponsiveMasonry>
-              {this.state.collection.map((nft, i) => {
-                console.log(nft)
-                const mimeType = nft.token.mime
-                const uri = nft.token.artifact_uri
+              {this.state.collection.map((nft) => {
                 return (
                   <Button
                     key={nft.token.id}
@@ -542,9 +523,9 @@ export default class Display extends Component {
                   >
                     <div className={styles.container}>
                       {renderMediaType({
-                        mimeType,
-                        uri: uri.split('//')[1],
-                        metadata: nft.token,
+                        mimeType: nft.token.mime,
+                        artifactUri: nft.token.artifact_uri,
+                        displayUri: nft.token.display_uri,
                       })}
                     </div>
                   </Button>
@@ -559,9 +540,7 @@ export default class Display extends Component {
             {Object.keys(this.state.market).length === 0 && (
               <Container>
                 <Padding>
-                  <p>
-                    You currently don't have any OBJKT on the market.
-                  </p>
+                  <p>You currently don't have any OBJKT on the market.</p>
                 </Padding>
               </Container>
             )}

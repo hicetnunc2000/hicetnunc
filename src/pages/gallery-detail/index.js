@@ -54,6 +54,7 @@ export const GalleryDetail = () => {
       {!loaded ? (
         <Container>
           <Padding>
+            <Loading />
           </Padding>
         </Container>
       ) : (

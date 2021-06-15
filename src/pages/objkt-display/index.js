@@ -2,7 +2,6 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
-import { GetOBJKT } from '../../data/api'
 import { Loading } from '../../components/loading'
 import { Button, Primary } from '../../components/button'
 import { Page, Container, Padding } from '../../components/layout'
@@ -26,49 +25,17 @@ export const ObjktDisplay = () => {
   const [loading, setLoading] = useState(true)
   const [tabIndex, setTabIndex] = useState(0)
   const [nft, setNFT] = useState()
-  const [error, setError] = useState(false)
 
   const address = context.acc?.address
 
   useEffect(async () => {
-    //await axios.post(process.env.REACT_APP_GRAPHQL_OBJKT, { id : id }).then(res => console.log(res.data))
-    await axios.post(process.env.REACT_APP_GRAPHQL_OBJKT, { id : id }).then(async res => {
-      await context.setAccount()
-      setNFT(res.data)
-      setLoading(false)
-    })
-/*     GetOBJKT({ id })
-      .then(async (objkt) => {
-        if (Array.isArray(objkt)) {
-          setError(
-            "There's a problem loading this OBJKT. Please report it on Github."
-          )
-          setLoading(false)
-        } else {
-          await context.setAccount()
-          setNFT(objkt)
-
-          setLoading(false)
-        }
-      })
-      .catch((e) => {
-        if (e.response && e.response.data.error) {
-          setError(
-            `(http ${e.response.data.error.http_status}) ${e.response.data.error.message}`
-          )
-        } else if (e.response && e.response.data) {
-          setError(`(http ${e.response.status}) ${e.response.data}`)
-        } else if (e.request) {
-          setError(
-            `There's a problem loading this OBJKT. Please report it on Github. ${e.message}`
-          )
-        } else {
-          setError(
-            `There's a problem loading this OBJKT. Please report it on Github. ${e}`
-          )
-        }
+    await axios
+      .post(process.env.REACT_APP_GRAPHQL_OBJKT, { id: id })
+      .then(async (res) => {
+        await context.setAccount()
+        setNFT(res.data)
         setLoading(false)
-      }) */
+      })
   }, [])
 
   const Tab = TABS[tabIndex].component
@@ -79,21 +46,6 @@ export const ObjktDisplay = () => {
         <Container>
           <Padding>
             <Loading />
-          </Padding>
-        </Container>
-      )}
-
-      {error && (
-        <Container>
-          <Padding>
-            <p>{error}</p>
-          </Padding>
-          <Padding>
-            <Button href="https://github.com/hicetnunc2000/hicetnunc/issues">
-              <Primary>
-                <strong>Report</strong>
-              </Primary>
-            </Button>
           </Padding>
         </Container>
       )}
@@ -110,13 +62,14 @@ export const ObjktDisplay = () => {
                 justifyContent: 'center',
               }}
             >
-              {
-                renderMediaType({
-                  mimeType: nft.mime,
-                  uri: nft.artifact_uri.split('//')[1],
-                  interactive: true,
-                  metadata: nft,
-                })}
+              {renderMediaType({
+                mimeType: nft.mime,
+                artifactUri: nft.artifact_uri,
+                displayUri: nft.display_uri,
+                creator: nft.creator.address,
+                objkt: String(nft.id),
+                interactive: true,
+              })}
             </div>
           </Container>
 
@@ -133,10 +86,8 @@ export const ObjktDisplay = () => {
                   // if nft.owners exist and this is a private route, try to hide the tab.
                   // if nft.owners fails, always show route!
                   if (nft?.token_holders && tab.private) {
+                    let holders_arr = nft.token_holders.map((e) => e.holder_id)
 
-                    let holders_arr = nft.token_holders.map(e => e.holder_id)
-                    console.log(holders_arr)
- 
                     if (
                       holders_arr.includes(address) === false &&
                       nft.creator.address !== address

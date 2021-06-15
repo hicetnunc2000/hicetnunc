@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { createContext, Component } from 'react'
 import { withRouter } from 'react-router'
 import {
@@ -245,7 +246,11 @@ class HicetnuncContextProviderClass extends Component {
           .then((c) =>
             c.methods
               .collect(parseFloat(objkt_amount), parseFloat(swap_id))
-              .send({ amount: parseFloat(amount), mutez: true, storageLimit: 310 })
+              .send({
+                amount: parseFloat(amount),
+                mutez: true,
+                storageLimit: 310,
+              })
           )
           .catch((e) => e)
       },
@@ -327,7 +332,9 @@ class HicetnuncContextProviderClass extends Component {
         return await Tezos.wallet
           .at(this.state.objkt)
           .then((c) =>
-            c.methods.cancel_swap(parseFloat(swap_id)).send({ amount: 0, storageLimit: 310 })
+            c.methods
+              .cancel_swap(parseFloat(swap_id))
+              .send({ amount: 0, storageLimit: 310 })
           )
           .catch((e) => e)
       },

@@ -5,7 +5,6 @@ import { Container, Padding } from '../../../components/layout'
 import { Loading } from '../../../components/loading'
 import { Input } from '../../../components/input'
 import { Button, Curate } from '../../../components/button'
-import { getTotalSales } from '../../../utils/sanitise'
 
 export const Swap = ({ total_amount, owners, token_info, address }) => {
   const { id } = useParams()
