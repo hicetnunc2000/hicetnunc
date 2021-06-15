@@ -9,22 +9,20 @@ import styles from './styles.module.scss'
 
 export const FeedItem = (props) => {
   return (
-    <div style={{ border: '1px dashed black' }}>
-      <Padding>
-        <Button to={`${PATH.OBJKT}/${props.id}`}>
-          <VisuallyHidden>{`Go to OBJKT: ${props.title}`}</VisuallyHidden>
-          <div className={styles.container}>
-            {renderMediaType({
-              mimeType: props.mime,
-              artifactUri: props.artifact_uri,
-              displayUri: props.display_uri,
-              creator: props.creator_id,
-              objkt: String(props.id),
-            })}
-          </div>
-        </Button>
-        <ItemInfo {...props} />
-      </Padding>
-    </div>
+    <Padding>
+      <Button to={`${PATH.OBJKT}/${props.id}`}>
+        <VisuallyHidden>{`Go to OBJKT: ${props.title}`}</VisuallyHidden>
+        <div className={styles.container}>
+          {renderMediaType({
+            mimeType: props.mime,
+            artifactUri: props.artifact_uri,
+            displayUri: props.display_uri,
+            creator: props.creator_id,
+            objkt: String(props.id),
+          })}
+        </div>
+      </Button>
+      <ItemInfo {...props} />
+    </Padding>
   )
 }
