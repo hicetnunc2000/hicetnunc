@@ -87,7 +87,7 @@ export const ItemInfo = ({
         <div className={styles.container}>
           <div className={styles.edition}>
             <div className={styles.inline}>
-              <Button to={`${PATH.ISSUER}/${creator.name ? creator.name : creator.address}`}>
+              <Button to={`/${creator.name ? creator.name : creator.address}`}>
                 {
                   creator.name ?
                     <Primary>{creator.name}</Primary>
