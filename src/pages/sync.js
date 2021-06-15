@@ -1,21 +1,22 @@
-import React, { Component } from 'react'
+import React, { Component, useEffect } from 'react'
 import { Redirect } from 'react-router-dom'
 import { HicetnuncContext } from '../context/HicetnuncContext'
 import { Page, Container, Padding } from '../components/layout'
 import { LoadingContainer } from '../components/loading'
 import { Button, Primary } from '../components/button'
+import { useLocation } from "react-router-dom";
 
 export default class Sync extends Component {
   constructor(props) {
     super(props)
 
     this.state = {
-      addr: '',
+      addr: ''
     }
   }
 
   static contextType = HicetnuncContext
-
+  
   componentWillMount = async () => {
     if (this.context.acc == null) {
       await this.context.syncTaquito()
@@ -27,7 +28,7 @@ export default class Sync extends Component {
 
   render() {
     return this.context.acc !== undefined ? (
-      <Redirect to={`/friends/${this.context.acc.address}`} />
+        <Redirect to={`/${this.props.location.state}/${this.context.acc.address}`} />
     ) : (
       <Page title="">
         <Container>
