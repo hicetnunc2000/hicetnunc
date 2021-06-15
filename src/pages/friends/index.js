@@ -7,6 +7,7 @@ import { renderMediaType } from '../../components/media-types'
 import { PATH } from '../../constants'
 import styles from './styles.module.scss'
 import InfiniteScroll from 'react-infinite-scroll-component'
+import { FeedItem } from '../../components/feed-item'
 
 const axios = require('axios')
 const fetch = require('node-fetch')
@@ -223,36 +224,16 @@ export default class Friends extends Component {
             </Padding>
           </Container>
         )}
-
-        {!this.state.loading && (
-            <div>
-              {this.state.creations.map((nft, i) => {
-                const mimeType = nft.mime
-                const uri = nft.artifact_uri
-
-                return (
-                  <Container>
-                    <Padding>
-                      <div>
-                        <Button
-                          key={nft.id}
-                          to={`${PATH.OBJKT}/${nft.id}`}
-                        >
-                          <div className={styles.container}>
-                            {renderMediaType({
-                              mimeType,
-                              uri: uri.split('//')[1],
-                              metadata: nft,
-                            })}
-                          </div>
-                        </Button>
-                      </div>
-                    </Padding>
-                  </Container>
-                )
-              })}
-            </div>
-        )}
+        
+        <div>
+          <Container>
+            <Padding>
+              {this.state.creations.map((item, index) => (
+                <FeedItem key={`${item.id}-${index}`} {...item} />
+              ))}
+            </Padding>
+          </Container>
+        </div>
       </Page>
     )
   }
