@@ -30,8 +30,7 @@ export const renderMediaType = (props) => {
     metadata,
   } = props
   const path = uri
-  let url = preview ? uri : `${CLOUDFLARE}${path}`
-
+  let url = preview ? uri : `${IPFS}${path}`
   switch (mimeType) {
     /* IMAGES */
     case MIMETYPE.BMP:
@@ -61,29 +60,15 @@ export const renderMediaType = (props) => {
         url = getInfuraUrl(path)
       }
       let displayUri = ''
-      // old
+
       if (metadata && metadata.token_info && metadata.token_info.displayUri) {
-        displayUri = metadata.token_info.displayUri.replace(
-          'ipfs://',
-          IPFS
-        )
+        displayUri = metadata.token_info.displayUri.replace('ipfs://', IPFS)
       }
 
-      if (metadata && metadata.thumbnail_uri && metadata.thumbnail_uri !== 'ipfs://QmNrhZHUaEqxhyLfqoq1mtHSipkWHeT31LNHb1QEbDHgnc') {
-        displayUri = metadata.thumbnail_uri.replace(
-          'ipfs://',
-          IPFS
-        )
-
-        if (metadata.display_uri) {
-          displayUri = metadata.thumbnail_uri.replace(
-            'ipfs://',
-            IPFS
-          )
-        }
+      if (metadata && metadata.display_uri && metadata.display_uri !== '') {
+        displayUri = metadata.display_uri.replace('ipfs://', IPFS)
       }
-
-      console.log(displayUri)
+      // console.log(displayUri)
 
       // new
       // if (metadata && metadata.display_uri) {
@@ -134,7 +119,7 @@ export const renderMediaType = (props) => {
     case MIMETYPE.PDF:
       return (
         <Container interactive={interactive}>
-          <PdfComponent src={url} />
+          <PdfComponent src={url} interactive={interactive} />
         </Container>
       )
     default:
