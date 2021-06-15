@@ -24,6 +24,7 @@ function getInfuraUrl(hash) {
 export const renderMediaType = (props) => {
   const {
     mimeType,
+    mime,
     uri,
     interactive = false,
     preview = false,
@@ -31,7 +32,7 @@ export const renderMediaType = (props) => {
   } = props
   const path = uri
   let url = preview ? uri : `${IPFS}${path}`
-  switch (mimeType) {
+  switch (mimeType || mime) {
     /* IMAGES */
     case MIMETYPE.BMP:
     case MIMETYPE.GIF:
