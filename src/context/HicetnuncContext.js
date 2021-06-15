@@ -74,7 +74,15 @@ class HicetnuncContextProviderClass extends Component {
       hDAO: 'KT1AFA2mwNUMNd4SsujE1YYp29vd8BZejyKW',
       subjkt: 'KT1My1wDZHDGweCrJnQJi3wcFaS67iksirvj',
       objkt: 'KT1Hkg5qeNhfwpKW4fXvq7HGZB9z2EnmCCA9',
-      unregistry: 'KT1MirRvstfYwjPPuyphBazSddgp8i1d8k8a',
+      unregistry: 'KT18xby6bb1ur1dKe7i6YVrBaksP4AgtuLES',
+      market: 'KT1WbY7vTYx1vbgG7PkKgHwcw87Vz781ydmg',
+
+      // market 
+
+      collectMarket : async (swap_id, amount) => {
+
+      },
+
       // fullscreen. DO NOT CHANGE!
       fullscreen: false,
       setFullscreen: (fullscreen) => this.setState({ fullscreen }),
