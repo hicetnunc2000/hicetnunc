@@ -24,6 +24,9 @@ query creatorGallery($address: String!) {
     title
     description
     supply
+    creator {
+      address
+    }
     token_tags {
       tag {
         tag
@@ -204,7 +207,7 @@ export default class Friends extends Component {
     }
 
     const frenCreations = await getLatestByFrens()
-    // console.log(frenCreations)
+    console.log(frenCreations)
 
     this.setState({
       creations: frenCreations,
@@ -224,12 +227,11 @@ export default class Friends extends Component {
             </Padding>
           </Container>
         )}
-        
         <div>
           <Container>
             <Padding>
               {this.state.creations.map((item, index) => (
-                <FeedItem key={`${item.id}-${index}`} {...item} />
+                <FeedItem key={`${item.id}-${index}`} {...item} creator_id={item.creator.address} />
               ))}
             </Padding>
           </Container>
