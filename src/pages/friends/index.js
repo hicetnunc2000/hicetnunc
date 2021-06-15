@@ -5,15 +5,12 @@ import { Page, Container, Padding } from '../../components/layout'
 import { Loading } from '../../components/loading'
 import { renderMediaType } from '../../components/media-types'
 import { PATH } from '../../constants'
-import { ResponsiveMasonry } from '../../components/responsive-masonry'
 import styles from './styles.module.scss'
-import { forEach } from 'lodash'
-import { ExposedPromiseStatus } from '@airgap/beacon-sdk/dist/cjs/utils/exposed-promise'
 
 const axios = require('axios')
 const fetch = require('node-fetch')
 
-const query_creations = `
+const query_frenCreations = `
 query creatorGallery($address: String!) {
   hic_et_nunc_token(limit: 3, where: {creator: {address: {_eq: $address}}, supply: {_gt: 0}}, order_by: {id: desc}) {
     id
@@ -51,7 +48,7 @@ async function fetchFrenCreationsGraphQL(operationsDoc, operationName, variables
 
 async function fetchFrenCreations(frensAddress) {
   
-  const { errors, data } = await fetchFrenCreationsGraphQL(query_creations, "creatorGallery", { "address": frensAddress });
+  const { errors, data } = await fetchFrenCreationsGraphQL(query_frenCreations, "creatorGallery", { "address": frensAddress });
   if (errors) {
     console.error(errors);
   }
@@ -156,6 +153,7 @@ export default class Display extends Component {
 
   componentWillMount = async () => {
     const id = window.location.pathname.split('/')[1]
+    console.log("this.context.acc " + this.context.acc)
     if (id === 'tz') {
       const wallet = window.location.pathname.split('/')[2]
       this.setState({

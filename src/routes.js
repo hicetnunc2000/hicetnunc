@@ -2,6 +2,7 @@ import Sync from './pages/sync'
 import { About } from './pages/about'
 import { FAQ } from './pages/faq'
 import Display from './pages/display'
+import Friends from './pages/friends'
 import { Latest, Hdao, Random, Featured } from './pages/feeds'
 import { Mint } from './pages/mint'
 import { ObjktDisplay } from './pages/objkt-display'
@@ -34,8 +35,8 @@ export const routes = [
   },
   {
     exact: false,
-    path: '/tz/:id/:collection?',
-    component: Display,
+    path: '/friends',
+    component: Friends,
   },
   {
     exact: false,
@@ -93,7 +94,7 @@ export const routes = [
   },
   {
     exact: false,
-    path: '/:id/:collection?',
-    component: Display,
+    path: '/friends',
+    component: Friends,
   },
 ]
