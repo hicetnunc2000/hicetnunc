@@ -35,7 +35,12 @@ export const routes = [
   },
   {
     exact: false,
-    path: '/friends',
+    path: '/tz/:id/:collection?',
+    component: Display,
+  },
+  {
+    exact: false,
+    path: '/friends/:id',
     component: Friends,
   },
   {
@@ -94,7 +99,12 @@ export const routes = [
   },
   {
     exact: false,
-    path: '/friends',
+    path: '/friends/:id',
     component: Friends,
   },
+  {
+    exact: false,
+    path: '/tz/:id/:collection?',
+    component: Display,
+  }
 ]

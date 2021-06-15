@@ -141,7 +141,7 @@ async function sortCreations(creations) {
   return allFrenCreations  
 }
 
-export default class Display extends Component {
+export default class Friends extends Component {
   static contextType = HicetnuncContext
 
   state = {
@@ -153,13 +153,13 @@ export default class Display extends Component {
 
   componentWillMount = async () => {
     const id = window.location.pathname.split('/')[1]
-    console.log("this.context.acc " + this.context.acc)
-    if (id === 'tz') {
+
+    if (id === 'friends') {
       const wallet = window.location.pathname.split('/')[2]
       this.setState({
         wallet,
       })
-
+      console.log('ok')
       this.onReady()
     } else {
       await axios
@@ -179,18 +179,18 @@ export default class Display extends Component {
     //console.log(window.location.pathname.split('/'))
   }
 
-
   // called if there's no redirect
   onReady = async () => {
     this.context.setPath(window.location.pathname)
-
     let myWalletAddr = ''
     
-    if (window.location.pathname.split('/')[1] === 'tz') {
+    if (window.location.pathname.split('/')[1] === 'friends') {
       myWalletAddr = window.location.pathname.split('/')[2]
     }
 
-    const creations = await fetchFrenCreations(myWalletAddr)
+    console.log(myWalletAddr)
+
+    // const creations = await fetchFrenCreations(myWalletAddr)
     // console.log(creations)
 
     const getLatestByFrens = async () => {
@@ -203,10 +203,10 @@ export default class Display extends Component {
         })
 
         const allCreations = await Promise.all(allCreationsPromise)
-        console.log(allCreations)
+        // console.log(allCreations)
         
         const allSortedCreations = await sortCreations(allCreations);
-        console.log(allSortedCreations)
+        // console.log(allSortedCreations)
         
         return allSortedCreations
 
@@ -216,7 +216,7 @@ export default class Display extends Component {
     }
 
     const frenCreations = await getLatestByFrens()
-    console.log(frenCreations)
+    // console.log(frenCreations)
 
     this.setState({
       creations: frenCreations,
