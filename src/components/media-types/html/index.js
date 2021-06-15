@@ -124,7 +124,6 @@ export const HTMLComponent = (props) => {
   }
 
   if (!onDetailView) {
-    console.log('NOT onDetailView')
     return (
       <div className={classes}>
         <div className={styles.preview}>

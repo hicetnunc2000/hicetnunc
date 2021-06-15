@@ -33,18 +33,19 @@ export const ObjktDisplay = () => {
 
   useEffect(async () => {
     //await axios.post(process.env.REACT_APP_GRAPHQL_OBJKT, { id : id }).then(res => console.log(res.data))
-    await axios.post(process.env.REACT_APP_GRAPHQL_OBJKT, { id : id }).then(async res => {
-      await context.setAccount()
-      
-      if (getWalletBlockList().includes(res.data.creator.address)) {
-        setError('Object is restricted and/or from a copyminter')
-      } else {
-        setNFT(res.data)
-      }
-      setLoading(false)
+    await axios
+      .post(process.env.REACT_APP_GRAPHQL_OBJKT, { id: id })
+      .then(async (res) => {
+        await context.setAccount()
 
-    })
-/*     GetOBJKT({ id })
+        if (getWalletBlockList().includes(res.data.creator.address)) {
+          setError('Object is restricted and/or from a copyminter')
+        } else {
+          setNFT(res.data)
+        }
+        setLoading(false)
+      })
+    /*     GetOBJKT({ id })
       .then(async (objkt) => {
         if (Array.isArray(objkt)) {
           setError(
@@ -117,13 +118,12 @@ export const ObjktDisplay = () => {
                 justifyContent: 'center',
               }}
             >
-              {
-                renderMediaType({
-                  mimeType: nft.mime,
-                  uri: nft.artifact_uri.split('//')[1],
-                  interactive: true,
-                  metadata: nft,
-                })}
+              {renderMediaType({
+                mimeType: nft.mime,
+                artifactUri: nft.artifact_uri,
+                displayUri: nft.display_uri,
+                interactive: true,
+              })}
             </div>
           </Container>
 
@@ -140,10 +140,9 @@ export const ObjktDisplay = () => {
                   // if nft.owners exist and this is a private route, try to hide the tab.
                   // if nft.owners fails, always show route!
                   if (nft?.token_holders && tab.private) {
-
-                    let holders_arr = nft.token_holders.map(e => e.holder_id)
+                    let holders_arr = nft.token_holders.map((e) => e.holder_id)
                     console.log(holders_arr)
- 
+
                     if (
                       holders_arr.includes(address) === false &&
                       nft.creator.address !== address

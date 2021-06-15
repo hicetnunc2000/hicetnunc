@@ -98,13 +98,14 @@ export const renderMediaType = ({
     case MIMETYPE.WEBP:
       parsedArtifactUri = HashToURL(artifactUri, 'IPFS')
       parsedDisplayUri = HashToURL(displayUri, 'IPFS')
+      // when its a GIF we always load the artifactUri by triggering `onDetailView` to be `true`.
       return (
         <Container interactive={interactive}>
           <ImageComponent
             artifactUri={parsedArtifactUri}
             displayUri={parsedDisplayUri}
             previewUri={previewUri}
-            onDetailView={interactive}
+            onDetailView={interactive || mimeType === MIMETYPE.GIF}
             preview={preview}
           />
         </Container>
