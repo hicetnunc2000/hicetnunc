@@ -3,6 +3,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
 import { GetOBJKT } from '../../data/api'
+import { getWalletBlockList } from '../../constants'
 import { Loading } from '../../components/loading'
 import { Button, Primary } from '../../components/button'
 import { Page, Container, Padding } from '../../components/layout'
@@ -34,8 +35,14 @@ export const ObjktDisplay = () => {
     //await axios.post(process.env.REACT_APP_GRAPHQL_OBJKT, { id : id }).then(res => console.log(res.data))
     await axios.post(process.env.REACT_APP_GRAPHQL_OBJKT, { id : id }).then(async res => {
       await context.setAccount()
-      setNFT(res.data)
+      
+      if (getWalletBlockList().includes(res.data.creator.address)) {
+        setError('Object is restricted and/or from a copyminter')
+      } else {
+        setNFT(res.data)
+      }
       setLoading(false)
+
     })
 /*     GetOBJKT({ id })
       .then(async (objkt) => {
@@ -98,7 +105,7 @@ export const ObjktDisplay = () => {
         </Container>
       )}
 
-      {!loading && (
+      {!loading && !error && (
         <>
           <Container>
             <div
