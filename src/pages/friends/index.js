@@ -6,6 +6,7 @@ import { Loading } from '../../components/loading'
 import { renderMediaType } from '../../components/media-types'
 import { PATH } from '../../constants'
 import styles from './styles.module.scss'
+import InfiniteScroll from 'react-infinite-scroll-component'
 
 const axios = require('axios')
 const fetch = require('node-fetch')
@@ -47,13 +48,11 @@ async function fetchFrenCreationsGraphQL(operationsDoc, operationName, variables
 }
 
 async function fetchFrenCreations(frensAddress) {
-  
   const { errors, data } = await fetchFrenCreationsGraphQL(query_frenCreations, "creatorGallery", { "address": frensAddress });
   if (errors) {
     console.error(errors);
   }
   const result = data.hic_et_nunc_token
-  /* console.log({ result }) */
   return result
 }
 
@@ -108,8 +107,6 @@ async function fetchAllFrensAddresses(myWalletAddr) {
     return result['token'];
   });
 
-  // console.log({ results })
-
   let frensAddresses = []
 
   results.forEach(function(result) {
@@ -159,7 +156,6 @@ export default class Friends extends Component {
       this.setState({
         wallet,
       })
-      console.log('ok')
       this.onReady()
     } else {
       await axios
@@ -176,7 +172,6 @@ export default class Friends extends Component {
           }
         })
     }
-    //console.log(window.location.pathname.split('/'))
   }
 
   // called if there's no redirect
@@ -188,11 +183,6 @@ export default class Friends extends Component {
       myWalletAddr = window.location.pathname.split('/')[2]
     }
 
-    console.log(myWalletAddr)
-
-    // const creations = await fetchFrenCreations(myWalletAddr)
-    // console.log(creations)
-
     const getLatestByFrens = async () => {
       try {
         const frensAddresses = await fetchAllFrensAddresses(myWalletAddr);
@@ -203,10 +193,7 @@ export default class Friends extends Component {
         })
 
         const allCreations = await Promise.all(allCreationsPromise)
-        // console.log(allCreations)
-        
         const allSortedCreations = await sortCreations(allCreations);
-        // console.log(allSortedCreations)
         
         return allSortedCreations
 
@@ -238,29 +225,33 @@ export default class Friends extends Component {
         )}
 
         {!this.state.loading && (
-          <Container>
             <div>
               {this.state.creations.map((nft, i) => {
                 const mimeType = nft.mime
                 const uri = nft.artifact_uri
 
                 return (
-                  <Button
-                    key={nft.id}
-                    to={`${PATH.OBJKT}/${nft.id}`}
-                  >
-                    <div className={styles.container}>
-                      {renderMediaType({
-                        mimeType,
-                        uri: uri.split('//')[1],
-                        metadata: nft,
-                      })}
-                    </div>
-                  </Button>
+                  <Container>
+                    <Padding>
+                      <div>
+                        <Button
+                          key={nft.id}
+                          to={`${PATH.OBJKT}/${nft.id}`}
+                        >
+                          <div className={styles.container}>
+                            {renderMediaType({
+                              mimeType,
+                              uri: uri.split('//')[1],
+                              metadata: nft,
+                            })}
+                          </div>
+                        </Button>
+                      </div>
+                    </Padding>
+                  </Container>
                 )
               })}
             </div>
-          </Container>
         )}
       </Page>
     )
