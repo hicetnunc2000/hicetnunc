@@ -48,8 +48,9 @@ query collectorGallery($address: String!) {
 }
 `;
 
-async function fetchCollectionGraphQL(operationsDoc, operationName, variables) {
-  const result = await fetch(
+async function fetchGraphQL(operationsDoc, operationName, variables) {
+
+  let result = await fetch(
     "https://api.hicdex.com/v1/graphql",
     {
       method: "POST",
@@ -58,14 +59,12 @@ async function fetchCollectionGraphQL(operationsDoc, operationName, variables) {
         variables: variables,
         operationName: operationName
       })
-    }
-  );
-
+    })
   return await result.json();
 }
 
 async function fetchCollection(addr) {
-  const { errors, data } = await fetchCollectionGraphQL(query_collection, "collectorGallery", { "address": addr });
+  const { errors, data } = await fetchGraphQL(query_collection, "collectorGallery", { "address": addr });
   if (errors) {
     console.error(errors);
   }
@@ -95,23 +94,28 @@ query creatorGallery($address: String!) {
 }
 `;
 
-async function fetchCreationsGraphQL(operationsDoc, operationName, variables) {
-  const result = await fetch(
-    "https://api.hicdex.com/v1/graphql",
-    {
-      method: "POST",
-      body: JSON.stringify({
-        query: operationsDoc,
-        variables: variables,
-        operationName: operationName
-      })
-    }
-  );
-  return await result.json()
+const query_subjkts = `
+query subjktsQuery($subjkt: String!) {
+  hic_et_nunc_holder(where: { name: {_eq: $subjkt}}) {
+    address
+    name
+    metadata
+  }
+}
+`
+
+async function fetchSubjkts(subjkt) {
+  const { errors, data } = await fetchGraphQL(query_subjkts, "subjktsQuery", { "subjkt" : subjkt });
+  if (errors) {
+    console.error(errors);
+  }
+  const result = data.hic_et_nunc_holder
+  /* console.log({ result }) */
+  return result
 }
 
 async function fetchCreations(addr) {
-  const { errors, data } = await fetchCreationsGraphQL(query_creations, "creatorGallery", { "address": addr });
+  const { errors, data } = await fetchGraphQL(query_creations, "creatorGallery", { "address": addr });
   if (errors) {
     console.error(errors);
   }
@@ -177,6 +181,8 @@ export default class Display extends Component {
 
       this.onReady()
     } else {
+
+
       await axios
         .post(process.env.REACT_APP_SUBJKT, {
           subjkt: id,
@@ -257,8 +263,11 @@ export default class Display extends Component {
     if (window.location.pathname.split('/')[1] === 'tz') {
       addr = window.location.pathname.split('/')[2]
     } else {
-      addr = await axios.post(process.env.REACT_APP_SUBJKT, { subjkt: window.location.pathname.split('/')[1] }).then(res => res.data.result[0].tz)
-      console.log(addr)
+
+      let res = await fetchSubjkts(window.location.pathname.split('/')[1])
+      console.log(res)
+      addr = res[0].address
+
     }
     let list = await getRestrictedAddresses()
 
