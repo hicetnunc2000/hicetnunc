@@ -13,9 +13,9 @@ import styles from './styles.module.scss'
 const uid = Math.round(Math.random() * 100000000).toString()
 
 export const HTMLComponent = (props) => {
-  const { src, interactive, preview, creator, displayUri, id } = props
+  const { artifactUri, displayUri, creator, id, onDetailView, preview } = props
   const context = useContext(HicetnuncContext)
-  const [viewing, setViewing] = useState(interactive)
+  const [viewing, setViewing] = useState(onDetailView)
 
   let _creator_ = false
   let _viewer_ = false
@@ -39,7 +39,7 @@ export const HTMLComponent = (props) => {
   const unpackZipFiles = async () => {
     unpacking.current = true
 
-    const buffer = dataRUIToBuffer(src)
+    const buffer = dataRUIToBuffer(artifactUri)
     const filesArr = await prepareFilesFromZIP(buffer)
     const files = {}
     filesArr.forEach((f) => {
@@ -82,11 +82,11 @@ export const HTMLComponent = (props) => {
     window.addEventListener('message', handler)
 
     return () => window.removeEventListener('message', handler)
-  }, [src])
+  }, [artifactUri])
 
   const classes = classnames({
     [styles.container]: true,
-    [styles.interactive]: interactive,
+    [styles.interactive]: onDetailView,
   })
 
   if (preview) {
@@ -155,7 +155,7 @@ export const HTMLComponent = (props) => {
     <div className={classes}>
       <iframe
         title="html-embed"
-        src={`${src}?creator=${_creator_}&viewer=${_viewer_}&objkt=${_objectId_}`}
+        src={`${artifactUri}?creator=${_creator_}&viewer=${_viewer_}&objkt=${_objectId_}`}
         sandbox="allow-scripts allow-same-origin"
         allow="accelerometer; camera; gyroscope; microphone; xr-spatial-tracking;"
         loading="lazy"

@@ -3,7 +3,14 @@ import classnames from 'classnames'
 import { HicetnuncContext } from '../../../context/HicetnuncContext'
 import styles from './styles.module.scss'
 
-export const VectorComponent = ({ src, interactive, preview, token_info }) => {
+export const VectorComponent = ({
+  artifactUri,
+  displayUri,
+  previewUri,
+  creator,
+  objkt,
+  interactive,
+}) => {
   const context = useContext(HicetnuncContext)
   const classes = classnames({
     [styles.container]: true,
@@ -12,30 +19,35 @@ export const VectorComponent = ({ src, interactive, preview, token_info }) => {
 
   let _creator_ = false
   let _viewer_ = false
+  let _objkt_ = false
 
-  if (token_info && token_info.creators[0]) {
-    _creator_ = token_info.creators[0]
+  if (creator) {
+    _creator_ = creator
   }
 
   if (context.address && context.address.address) {
     _viewer_ = context.address.address
   }
 
-  let iframeSrc
-  if (preview) {
+  if (objkt) {
+    _objkt_ = objkt
+  }
+
+  let path
+  if (previewUri) {
     // can't pass creator/viewer query params to data URI
-    iframeSrc = src
+    path = `${previewUri}?creator=${_creator_}&viewer=${_viewer_}&objkt=${_objkt_}`
   } else {
-    iframeSrc = `${src}?creator=${_creator_}&viewer=${_viewer_}`
+    path = `${artifactUri}?creator=${_creator_}&viewer=${_viewer_}&objkt=${_objkt_}`
   }
 
   return (
     <div className={classes}>
       <iframe
         title="hic et nunc SVG renderer"
-        src={iframeSrc}
+        src={path}
         sandbox="allow-scripts"
-        scrolling="no" 
+        scrolling="no"
         loading="lazy"
       />
     </div>

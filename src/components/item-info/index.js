@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { useContext } from 'react'
 import { PATH } from '../../constants'
 import { Button, Primary, Purchase } from '../button'
