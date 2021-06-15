@@ -186,6 +186,11 @@ export const Header = () => {
                         <Primary>manage assets</Primary>
                       </Button>
                     </li>
+                    <li>
+                      <Button onClick={() => handleRoute('/sync')}>
+                        <Primary>friends</Primary>
+                      </Button>
+                    </li>
 {/*                     {context.acc?.address ?
                       <li>
                         <Button onClick={() => handleRoute('/config')}>
