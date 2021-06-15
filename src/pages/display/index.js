@@ -105,7 +105,7 @@ query subjktsQuery($subjkt: String!) {
 `
 
 async function fetchSubjkts(subjkt) {
-  const { errors, data } = await fetchGraphQL(query_subjkts, "subjktsQuery", { "subjkt" : subjkt });
+  const { errors, data } = await fetchGraphQL(query_subjkts, "subjktsQuery", { "subjkt": subjkt });
   if (errors) {
     console.error(errors);
   }
@@ -149,6 +149,7 @@ export default class Display extends Component {
 
   componentWillMount = async () => {
     const id = window.location.pathname.split('/')[1]
+    console.log(window.location.pathname.split('/'))
     if (id === 'tz') {
       const wallet = window.location.pathname.split('/')[2]
       this.setState({
@@ -183,29 +184,46 @@ export default class Display extends Component {
     } else {
 
 
-      await axios
-        .post(process.env.REACT_APP_SUBJKT, {
-          subjkt: id,
-        })
-        .then((res) => {
-          if (res.data.result.length === 0) {
-            // if alias is not found, redirect to homepage
-            this.props.history.push('/')
-          } else {
-            this.setState({
-              wallet: res.data.result[0].tz,
-              walletPrev: id,
-              subjkt: id,
-            })
+      let res = await fetchSubjkts(window.location.pathname.split('/')[1])
+      console.log(res)
 
-            this.onReady()
-          }
-        })
+      this.setState({
+        wallet: res[0].address,
+        walletPreview: walletPreview(res[0].address)
+      })
+
+      await GetUserMetadata(this.state.wallet).then((data) => {
+        const {
+          alias,
+          description,
+          site,
+          telegram,
+          twitter,
+          github,
+          reddit,
+          instagram,
+          logo,
+        } = data.data
+        if (data.data.alias) this.setState({ alias })
+        if (data.data.description) this.setState({ description })
+        if (data.data.site) this.setState({ site })
+        if (data.data.telegram) this.setState({ telegram })
+        if (data.data.twitter) this.setState({ twitter })
+        if (data.data.github) this.setState({ github })
+        if (data.data.reddit) this.setState({ reddit })
+        if (data.data.instagram) this.setState({ instagram })
+        if (data.data.logo) this.setState({ logo })
+        this.onReady()
+
+      })
 
 
     }
 
-    console.log(window.location.pathname.split('/'))
+
+
+
+
 
   }
 
@@ -267,6 +285,14 @@ export default class Display extends Component {
       let res = await fetchSubjkts(window.location.pathname.split('/')[1])
       console.log(res)
       addr = res[0].address
+
+      this.setState({ subjkt : res[0].name, walletPrev: walletPreview(addr) })
+      if (!this.state.alias) {
+        this.setState({
+          addr: res[0].address,
+          description: res[0].metadata.description
+        })
+      }
 
     }
     let list = await getRestrictedAddresses()
@@ -348,11 +374,17 @@ export default class Display extends Component {
               <Identicon address={this.state.wallet} logo={this.state.logo} />
 
               <div className={styles.info}>
-                {this.state.alias && (
+                {this.state.alias && !(this.state.subjkt) ? (
                   <p>
                     <strong>{this.state.alias}</strong>
                   </p>
-                )}
+                ) :
+                  <p>
+                    <strong>
+                      {this.state.subjkt}
+                    </strong>
+                  </p>
+                }
                 {this.state.description && <p>{this.state.description}</p>}
                 <Button href={`https://tzkt.io/${this.state.wallet}`}>
                   <Primary>{this.state.walletPrev}</Primary>

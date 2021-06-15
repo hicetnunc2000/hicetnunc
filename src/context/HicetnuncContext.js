@@ -74,7 +74,14 @@ class HicetnuncContextProviderClass extends Component {
       subjkt: 'KT1My1wDZHDGweCrJnQJi3wcFaS67iksirvj',
       objkt: 'KT1Hkg5qeNhfwpKW4fXvq7HGZB9z2EnmCCA9',
       unregistry: 'KT18xby6bb1ur1dKe7i6YVrBaksP4AgtuLES',
-      
+      market: 'KT1WbY7vTYx1vbgG7PkKgHwcw87Vz781ydmg',
+
+      // market 
+
+      collectMarket : async (swap_id, amount) => {
+
+      },
+
       // fullscreen. DO NOT CHANGE!
       fullscreen: false,
       setFullscreen: (fullscreen) => this.setState({ fullscreen }),
