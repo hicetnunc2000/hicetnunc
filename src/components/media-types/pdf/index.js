@@ -5,7 +5,13 @@ import { Button, Primary } from '../../button'
 import 'react-pdf/dist/esm/Page/AnnotationLayer.css'
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`
 
-export const PdfComponent = ({ src, onDetailView }) => {
+export const PdfComponent = ({
+  artifactUri,
+  displayUri,
+  previewUri,
+  preview,
+  onDetailView,
+}) => {
   const [numPages, setNumPages] = useState(null)
   const [pageNumber, setPageNumber] = useState(1)
 
@@ -32,7 +38,7 @@ export const PdfComponent = ({ src, onDetailView }) => {
   return (
     <div className={styles.container}>
       <Document
-        file={src}
+        file={preview ? previewUri : artifactUri}
         onLoadSuccess={onDocumentLoadSuccess}
         onItemClick={onItemClick}
       >

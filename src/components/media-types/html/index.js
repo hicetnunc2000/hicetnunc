@@ -13,13 +13,20 @@ import styles from './styles.module.scss'
 const uid = Math.round(Math.random() * 100000000).toString()
 
 export const HTMLComponent = (props) => {
-  const { artifactUri, displayUri, creator, id, onDetailView, preview } = props
+  const {
+    artifactUri,
+    displayUri,
+    previewUri,
+    creator,
+    id,
+    onDetailView,
+    preview,
+  } = props
   const context = useContext(HicetnuncContext)
-  const [viewing, setViewing] = useState(onDetailView)
 
   let _creator_ = false
   let _viewer_ = false
-  let _objectId_ = String(id)
+  let _objectId_ = false
 
   if (creator && creator.address) {
     _creator_ = creator.address
@@ -27,6 +34,10 @@ export const HTMLComponent = (props) => {
 
   if (context.address && context.address.address) {
     _viewer_ = context.address.address
+  }
+
+  if (id) {
+    _objectId_ = String(id)
   }
 
   // preview
@@ -39,7 +50,7 @@ export const HTMLComponent = (props) => {
   const unpackZipFiles = async () => {
     unpacking.current = true
 
-    const buffer = dataRUIToBuffer(artifactUri)
+    const buffer = dataRUIToBuffer(previewUri)
     const filesArr = await prepareFilesFromZIP(buffer)
     const files = {}
     filesArr.forEach((f) => {
@@ -82,7 +93,7 @@ export const HTMLComponent = (props) => {
     window.addEventListener('message', handler)
 
     return () => window.removeEventListener('message', handler)
-  }, [artifactUri])
+  }, [previewUri])
 
   const classes = classnames({
     [styles.container]: true,
@@ -112,13 +123,14 @@ export const HTMLComponent = (props) => {
     }
   }
 
-  if (!viewing) {
+  if (!onDetailView) {
+    console.log('NOT onDetailView')
     return (
       <div className={classes}>
         <div className={styles.preview}>
           <img src={displayUri} alt="thumbnail" />
           <div className={styles.button}>
-            <Button onClick={() => setViewing(true)}>
+            <Button>
               <VisuallyHidden>View</VisuallyHidden>
               <svg
                 width="30"
@@ -151,6 +163,7 @@ export const HTMLComponent = (props) => {
     )
   }
 
+  console.log('HTML')
   return (
     <div className={classes}>
       <iframe
@@ -158,7 +171,6 @@ export const HTMLComponent = (props) => {
         src={`${artifactUri}?creator=${_creator_}&viewer=${_viewer_}&objkt=${_objectId_}`}
         sandbox="allow-scripts allow-same-origin"
         allow="accelerometer; camera; gyroscope; microphone; xr-spatial-tracking;"
-        loading="lazy"
       />
     </div>
   )

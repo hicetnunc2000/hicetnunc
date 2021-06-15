@@ -5,7 +5,12 @@ import { PauseIcon, PlayIcon } from './icons'
 import { Visualiser } from './visualiser'
 import styles from './styles.module.scss'
 
-export const AudioComponent = ({ artifactUri, displayUri }) => {
+export const AudioComponent = ({
+  artifactUri,
+  displayUri,
+  previewUri,
+  preview,
+}) => {
   const visualiser = useRef()
   const [userTouched, setUserTouched] = useState(false)
   const [play, setPlay] = useState(false)
@@ -37,11 +42,10 @@ export const AudioComponent = ({ artifactUri, displayUri }) => {
     [styles.userTouch]: userTouched,
   })
 
-  console.log(displayUri)
   return (
     <>
       <div className={classes}>
-        {true && <audio src={artifactUri} controls />}
+        {true && <audio src={preview ? previewUri : artifactUri} controls />}
         {false && <img src={displayUri} alt="album cover" />}
         {false && <Visualiser ref={visualiser} src={artifactUri} />}
         {false && (
