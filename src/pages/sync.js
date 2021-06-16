@@ -15,7 +15,7 @@ export default class Sync extends Component {
   }
 
   static contextType = HicetnuncContext
-
+  
   componentWillMount = async () => {
     if (this.context.acc == null) {
       await this.context.syncTaquito()
@@ -27,7 +27,7 @@ export default class Sync extends Component {
 
   render() {
     return this.context.acc !== undefined ? (
-      <Redirect to={`/tz/${this.context.acc.address}`} />
+      <Redirect to={`/${this.props.location.state}/${this.context.acc.address}`} />
     ) : (
       <Page title="">
         <Container>
