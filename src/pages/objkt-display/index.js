@@ -115,6 +115,7 @@ export const ObjktDisplay = () => {
                 mimeType: nft.mime,
                 artifactUri: nft.artifact_uri,
                 displayUri: nft.display_uri,
+                creator: nft.creator,
                 interactive: true,
               })}
             </div>
