@@ -82,9 +82,6 @@ export const renderMediaType = ({
   // when previewing during mint process
   preview = false,
 }) => {
-  // const path = uri
-  // let url = preview ? uri : `${IPFS}${path}`
-
   let parsedArtifactUri
   let parsedDisplayUri
 
@@ -134,15 +131,8 @@ export const renderMediaType = ({
     case MIMETYPE.ZIP:
     case MIMETYPE.ZIP1:
     case MIMETYPE.ZIP2:
-      console.log(
-        'trying to render an html',
-        artifactUri,
-        displayUri,
-        previewUri
-      )
       parsedArtifactUri = HashToURL(artifactUri, 'INFURA')
       parsedDisplayUri = HashToURL(displayUri, 'IPFS')
-
       return (
         <Container interactive={interactive}>
           <HTMLComponent
@@ -163,8 +153,6 @@ export const renderMediaType = ({
     case MIMETYPE.WEBM:
       parsedArtifactUri = HashToURL(artifactUri, 'IPFS')
       parsedDisplayUri = HashToURL(displayUri, 'IPFS')
-      // TODO: check this
-      // url = preview ? uri : `${IPFS}${path}`
       return (
         <Container interactive={interactive} nofullscreen>
           <VideoComponent
@@ -199,7 +187,6 @@ export const renderMediaType = ({
     case MIMETYPE.WAV:
       parsedArtifactUri = HashToURL(artifactUri, 'IPFS')
       parsedDisplayUri = HashToURL(displayUri, 'IPFS')
-      // url = preview ? uri : `${IPFS}${path}`
       return (
         <Container interactive={interactive}>
           <AudioComponent
