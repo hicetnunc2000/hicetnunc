@@ -105,6 +105,18 @@ query subjktsQuery($subjkt: String!) {
   hic_et_nunc_holder(where: { name: {_eq: $subjkt}}) {
     address
     name
+    hdao_balance
+    metadata
+  }
+}
+`
+
+const query_tz = `
+query addressQuery($address: String!) {
+  hic_et_nunc_holder(where: { address: {_eq: $address}}) {
+    address
+    name
+    hdao_balance
     metadata
   }
 }
@@ -555,9 +567,9 @@ export default class Display extends Component {
                 </Primary>
               </Button>
 
-              {/*               <Button onClick={this.market}>
-                <Primary selected={this.state.marketState}>market</Primary>
-              </Button> */}
+              <Button onClick={this.market}>
+                <Primary selected={this.state.v1}>v1 swaps</Primary>
+              </Button>
             </div>
           </Padding>
         </Container>
