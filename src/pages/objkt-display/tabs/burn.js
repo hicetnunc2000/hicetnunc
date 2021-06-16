@@ -11,13 +11,13 @@ export const Burn = (props) => {
   const [amount, setAmount] = useState('')
   const [progress, setProgress] = useState() // eslint-disable-line
 
-  console.log(props.token_holders.map(e => e.holder_id))
-  const totalOwned = 0
-  console.log(address)
-  if (props.token_holders.map(e => e.holder_id).includes([address?.address])) {
-    totalOwned = props.token_holders.map(e => e.holder_id)[address.address]
-  } 
-/*   const totalOwned =
+  let totalOwned = 0
+  if (
+    props.token_holders.map((e) => e.holder_id).includes([address?.address])
+  ) {
+    totalOwned = props.token_holders.map((e) => e.holder_id)[address.address]
+  }
+  /*   const totalOwned =
     (props.token_holders.map(e => e.holder_id)[address?.address] &&
       parseInt(props.owners[address?.address])) ||
     0 // check total the user owns of this token */
@@ -28,16 +28,14 @@ export const Burn = (props) => {
       return
     }
 
-/*     if (amount > totalOwned) {
+    /*     if (amount > totalOwned) {
       alert(
         `Error: You're trying to burn ${amount}, but you only own ${0}.`
       )
       return
     } */
 
-    const r = global.confirm(
-      `Are you sure you want to burn ${amount} of ${0}?`
-    )
+    const r = global.confirm(`Are you sure you want to burn ${amount} of ${0}?`)
     if (r) {
       setProgress(true)
       setMessage('burning OBJKT')
@@ -50,8 +48,8 @@ export const Burn = (props) => {
       <Container>
         <Padding>
           <p>
-            You own {totalOwned} editions of OBJKT#{props.id}. How many
-            would you like to burn?
+            You own {totalOwned} editions of OBJKT#{props.id}. How many would
+            you like to burn?
           </p>
         </Padding>
       </Container>
@@ -70,11 +68,12 @@ export const Burn = (props) => {
 
       <Container>
         <Padding>
-          <p style={{ fontSize : '14px' }}>
-            Burning will transfer the OBJKTs from your possession to a burn address. Once
-            in the burn address, the OBJKT can't be recovered or sold. You can
-            only burn tokens that you own. If you have them swapped, you first
-            need to cancel that swap before you try to burn them.
+          <p style={{ fontSize: '14px' }}>
+            Burning will transfer the OBJKTs from your possession to a burn
+            address. Once in the burn address, the OBJKT can't be recovered or
+            sold. You can only burn tokens that you own. If you have them
+            swapped, you first need to cancel that swap before you try to burn
+            them.
           </p>
           <br />
           <p>

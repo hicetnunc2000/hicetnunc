@@ -1,22 +1,27 @@
 import React, { useEffect, useRef, useState } from 'react'
 import styles from './styles.module.scss'
 
-/* DOCS: https://modelviewer.dev/ */
-export const GLBComponent = ({ src, interactive }) => {
+export const GLBComponent = ({
+  artifactUri,
+  displayUri,
+  previewUri,
+  preview,
+  onDetailView,
+}) => {
   const ref = useRef()
   const [width, setWidth] = useState('100px')
   const [height, setHeight] = useState('100px')
 
   const props = {
     className: styles.glb,
-    src,
+    src: preview ? previewUri : artifactUri,
     autoplay: true,
     'auto-rotate': true,
     'data-js-focus-visible': true,
-    'interaction-prompt': 'none'
+    'interaction-prompt': 'none',
   }
 
-  if (interactive) {
+  if (onDetailView) {
     props['ar'] = true
     props['ar-modes'] = 'webxr scene-viewer quick-look'
     props['camera-controls'] = true

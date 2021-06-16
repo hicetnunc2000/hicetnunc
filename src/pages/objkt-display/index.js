@@ -2,6 +2,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
+import { getWalletBlockList } from '../../constants'
 import { Loading } from '../../components/loading'
 import { Button, Primary } from '../../components/button'
 import { Page, Container, Padding } from '../../components/layout'
@@ -10,6 +11,7 @@ import { ItemInfo } from '../../components/item-info'
 import { Menu } from '../../components/menu'
 import { Info, Collectors, Swap, Burn } from './tabs'
 import styles from './styles.module.scss'
+
 const axios = require('axios')
 
 const TABS = [
@@ -36,7 +38,12 @@ export const ObjktDisplay = () => {
       .post(process.env.REACT_APP_GRAPHQL_OBJKT, { id: id })
       .then(async (res) => {
         await context.setAccount()
-        setNFT(res.data)
+
+        if (getWalletBlockList().includes(res.data.creator.address)) {
+          setError('Object is restricted and/or from a copyminter')
+        } else {
+          setNFT(res.data)
+        }
         setLoading(false)
       })
     /*     GetOBJKT({ id })
@@ -106,9 +113,9 @@ export const ObjktDisplay = () => {
             <div className={styles.image}>
               {renderMediaType({
                 mimeType: nft.mime,
-                uri: nft.artifact_uri.split('//')[1],
+                artifactUri: nft.artifact_uri,
+                displayUri: nft.display_uri,
                 interactive: true,
-                metadata: nft,
               })}
             </div>
             <div className={styles.info}>

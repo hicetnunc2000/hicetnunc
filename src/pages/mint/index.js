@@ -18,7 +18,6 @@ import {
   MIN_ROYALTIES,
   MAX_ROYALTIES,
 } from '../../constants'
-import { Tags } from '../../components/tags'
 
 const COMPRESSOR_URL = 'https://hicetnunc-media-compressor.netlify.app'
 
@@ -192,7 +191,7 @@ export const Mint = () => {
   }
 
   return (
-    <Page title="mint">
+    <Page title="mint" large>
       {step === 0 && (
         <>
           <Container>
@@ -322,7 +321,7 @@ export const Mint = () => {
             <Padding>
               <Preview
                 mimeType={file.mimeType}
-                uri={file.reader}
+                previewUri={file.reader}
                 title={title}
                 description={description}
                 tags={tags}

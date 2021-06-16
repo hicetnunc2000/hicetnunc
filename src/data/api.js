@@ -11,7 +11,6 @@ import {
 } from '../constants'
 
 const axios = require('axios')
-const fetch = require('node-fetch')
 
 /**
  * This loads the initial data (language.json, o.json, w.json, b.json)
