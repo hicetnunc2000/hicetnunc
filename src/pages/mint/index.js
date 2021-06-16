@@ -19,7 +19,6 @@ import {
   MIN_ROYALTIES,
   MAX_ROYALTIES,
 } from '../../constants'
-import { Tags } from '../../components/tags'
 
 const coverOptions = {
   quality: 0.85,
@@ -362,7 +361,7 @@ export const Mint = () => {
             <Padding>
               <Preview
                 mimeType={file.mimeType}
-                uri={file.reader}
+                previewUri={file.reader}
                 title={title}
                 description={description}
                 tags={tags}

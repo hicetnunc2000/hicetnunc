@@ -13,7 +13,7 @@ function isHTML(mimeType) {
   )
 }
 
-export const Preview = ({ title, description, mimeType, uri, tags }) => {
+export const Preview = ({ title, description, mimeType, previewUri, tags }) => {
   const token_tags = tags !== '' ? tags.replace(/\s/g, '').split(',') : []
   return (
     <div className={styles.container}>
@@ -21,7 +21,7 @@ export const Preview = ({ title, description, mimeType, uri, tags }) => {
       <div className={styles.media}>
         {renderMediaType({
           mimeType,
-          uri,
+          previewUri,
           interactive: true,
           preview: true,
         })}

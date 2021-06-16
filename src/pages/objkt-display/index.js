@@ -2,6 +2,8 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
+import { GetOBJKT } from '../../data/api'
+import { getWalletBlockList } from '../../constants'
 import { Loading } from '../../components/loading'
 import { Button, Primary } from '../../components/button'
 import { Page, Container, Padding } from '../../components/layout'
@@ -9,7 +11,6 @@ import { renderMediaType } from '../../components/media-types'
 import { ItemInfo } from '../../components/item-info'
 import { Menu } from '../../components/menu'
 import { Info, Collectors, Swap, Burn } from './tabs'
-import styles from './styles.module.scss'
 const axios = require('axios')
 
 const TABS = [
@@ -36,7 +37,12 @@ export const ObjktDisplay = () => {
       .post(process.env.REACT_APP_GRAPHQL_OBJKT, { id: id })
       .then(async (res) => {
         await context.setAccount()
-        setNFT(res.data)
+
+        if (getWalletBlockList().includes(res.data.creator.address)) {
+          setError('Object is restricted and/or from a copyminter')
+        } else {
+          setNFT(res.data)
+        }
         setLoading(false)
       })
     /*     GetOBJKT({ id })
@@ -100,63 +106,66 @@ export const ObjktDisplay = () => {
         </Container>
       )}
 
-      {!loading && (
+      {!loading && !error && (
         <>
-          <div className={styles.container}>
-            <div className={styles.image}>
+          <Container>
+            <div
+              style={{
+                position: 'relative',
+                minHeight: '60vh',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
               {renderMediaType({
                 mimeType: nft.mime,
-                uri: nft.artifact_uri.split('//')[1],
+                artifactUri: nft.artifact_uri,
+                displayUri: nft.display_uri,
                 interactive: true,
-                metadata: nft,
               })}
             </div>
-            <div className={styles.info}>
-              <Container>
-                <Padding>
-                  <ItemInfo {...nft} isDetailView />
-                </Padding>
-              </Container>
+          </Container>
 
-              <Container>
-                <Padding>
-                  <Menu>
-                    {TABS.map((tab, index) => {
-                      // if nft.owners exist and this is a private route, try to hide the tab.
-                      // if nft.owners fails, always show route!
-                      if (nft?.token_holders && tab.private) {
-                        let holders_arr = nft.token_holders.map(
-                          (e) => e.holder_id
-                        )
+          <Container>
+            <Padding>
+              <ItemInfo {...nft} isDetailView />
+            </Padding>
+          </Container>
 
-                        if (
-                          holders_arr.includes(address) === false &&
-                          nft.creator.address !== address
-                        ) {
-                          // user is not the creator now owns a copy of the object. hide
+          <Container>
+            <Padding>
+              <Menu>
+                {TABS.map((tab, index) => {
+                  // if nft.owners exist and this is a private route, try to hide the tab.
+                  // if nft.owners fails, always show route!
+                  if (nft?.token_holders && tab.private) {
+                    let holders_arr = nft.token_holders.map((e) => e.holder_id)
+                    console.log(holders_arr)
 
-                          return null
-                        }
-                      }
+                    if (
+                      holders_arr.includes(address) === false &&
+                      nft.creator.address !== address
+                    ) {
+                      // user is not the creator now owns a copy of the object. hide
 
-                      return (
-                        <Button
-                          key={tab.title}
-                          onClick={() => setTabIndex(index)}
-                        >
-                          <Primary selected={tabIndex === index}>
-                            {tab.title}
-                          </Primary>
-                        </Button>
-                      )
-                    })}
-                  </Menu>
-                </Padding>
-              </Container>
+                      return null
+                    }
+                  }
 
-              <Tab {...nft} address={address} />
-            </div>
-          </div>
+                  return (
+                    <Button key={tab.title} onClick={() => setTabIndex(index)}>
+                      <Primary selected={tabIndex === index}>
+                        {tab.title}
+                      </Primary>
+                    </Button>
+                  )
+                })}
+              </Menu>
+            </Padding>
+          </Container>
+
+          <Tab {...nft} address={address} />
         </>
       )}
     </Page>
