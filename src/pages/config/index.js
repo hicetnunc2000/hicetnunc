@@ -1,3 +1,4 @@
+/* eslint-disable */
 import {
   ALLOWED_MIMETYPES,
   ALLOWED_FILETYPES_LABEL,
@@ -59,13 +60,11 @@ export class Config extends Component {
 
   // upload file
 
-  onFileChange = event => {
-
+  onFileChange = (event) => {
     this.setState({
       selectedFile: event.target.files,
-      fileTitle: event.target.files[0].name
+      fileTitle: event.target.files[0].name,
     })
-
   }
 
   hDAO_operators = () => {
@@ -124,14 +123,13 @@ export class Config extends Component {
       <Page>
         <Container>
           <Padding>
-
             {/*             <div>
               <button onClick={this.hDAO_operators}>
                 allow subjkt operators ○
               </button>
             </div> */}
             <div>
-              <div style={{backgroundColor:'black', height:'0.5px'}}></div>
+              <div style={{ backgroundColor: 'black', height: '0.5px' }}></div>
             </div>
             <div style={{ paddingTop: '15%' }}>
               <input
@@ -148,7 +146,16 @@ export class Config extends Component {
                 placeholder="description"
               ></input>
               <br />
-              <button style={{ border: 'none', borderBottom: '3px solid black', borderRight: '3px solid black' }} onClick={this.subjkt_config}>config SUBJKT</button>
+              <button
+                style={{
+                  border: 'none',
+                  borderBottom: '3px solid black',
+                  borderRight: '3px solid black',
+                }}
+                onClick={this.subjkt_config}
+              >
+                config SUBJKT
+              </button>
             </div>
             <div style={{ paddingTop: '5%' }}>
               <input
@@ -160,7 +167,14 @@ export class Config extends Component {
               <p style={{ fontSize: '12px' }}>
                 hic et nunc DAO ○ curation parameter
               </p>
-              <button style={{ border: 'none', borderBottom: '3px solid black', borderRight: '3px solid black' }} onClick={this.hDAO_config}>
+              <button
+                style={{
+                  border: 'none',
+                  borderBottom: '3px solid black',
+                  borderRight: '3px solid black',
+                }}
+                onClick={this.hDAO_config}
+              >
                 config ○
               </button>
             </div>

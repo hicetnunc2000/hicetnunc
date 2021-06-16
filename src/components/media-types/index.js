@@ -11,26 +11,80 @@ import { PdfComponent } from './pdf'
 import { MIMETYPE, IPFS_DIRECTORY_MIMETYPE } from '../../constants'
 import { Container } from './container'
 
-const CLOUDFLARE = 'https://cloudflare-ipfs.com/ipfs/'
-// const PINATA = 'https://gateway.pinata.cloud/ipfs/'
-const IPFS = 'https://ipfs.io/ipfs/'
+// converts an ipfs hash to ipfs url
+const HashToURL = (hash, type) => {
+  // when on preview the hash might be undefined.
+  // its safe to return empty string as whatever called HashToURL is not going to be used
+  // artifactUri or displayUri
+  if (hash === undefined) {
+    return ''
+  }
 
-function getInfuraUrl(hash) {
-  const cidv1 = new ipfsClient.CID(hash).toV1()
-  const subomain = cidv1.toString()
-  return `https://${subomain}.ipfs.infura-ipfs.io/`
+  switch (type) {
+    case 'CLOUDFLARE':
+      return hash.replace('ipfs://', 'https://cloudflare-ipfs.com/ipfs/')
+    case 'PINATA':
+      return hash.replace('ipfs://', 'https://gateway.pinata.cloud/ipfs/')
+    case 'IPFS':
+      return hash.replace('ipfs://', 'https://ipfs.io/ipfs/')
+    case 'INFURA':
+      var cidv1 = new ipfsClient.CID(hash.replace('ipfs://', '')).toV1()
+      var subomain = cidv1.toString()
+      return `https://${subomain}.ipfs.infura-ipfs.io/`
+    default:
+      console.error('please specify type')
+      return hash
+  }
 }
 
-export const renderMediaType = (props) => {
-  const {
-    mimeType,
-    uri,
-    interactive = false,
-    preview = false,
-    metadata,
-  } = props
-  const path = uri
-  let url = preview ? uri : `${IPFS}${path}`
+/*
+
+README:
+renderMediaType requires the following props being passed individually.
+Once all API have the same structure we can pass the whole object, but right now
+there's a mix of GraphQL and API and they have different structures, so passing
+the props one by one helps avoid bugs
+
+MANDATORY FIELDS:
+- mimeType (mimetype)
+- artifactUri (ipfs link)
+- displayUri (ipfs link)
+
+OPTIONAL FIELDS:
+- creator (creator wallet)
+- objkt (objkt number)
+- interactive (boolean)
+- preview (boolean)
+ */
+
+export const renderMediaType = ({
+  // the objkt mimeType (used to choose what renderer to use)
+  mimeType,
+
+  // artifactUri holds the file the user uploaded
+  artifactUri,
+
+  // displayUri might be sometimes undefined or '', but when present its a lower resolution of the artifactUri for faster loading
+  displayUri,
+
+  // previewUri is used when previewing on mint page
+  previewUri,
+
+  // the wallet id of the creator
+  creator,
+
+  // the objkt id so interactive NFT's can call API's
+  objkt,
+
+  // if the NFT is on the objkt detail page this value is true. otherwise is false
+  interactive = false,
+
+  // when previewing during mint process
+  preview = false,
+}) => {
+  let parsedArtifactUri
+  let parsedDisplayUri
+
   switch (mimeType) {
     /* IMAGES */
     case MIMETYPE.BMP:
@@ -39,49 +93,56 @@ export const renderMediaType = (props) => {
     case MIMETYPE.PNG:
     case MIMETYPE.TIFF:
     case MIMETYPE.WEBP:
+      parsedArtifactUri = HashToURL(artifactUri, 'IPFS')
+      parsedDisplayUri = HashToURL(displayUri, 'IPFS')
+      // when its a GIF we always load the artifactUri by triggering `onDetailView` to be `true`.
       return (
         <Container interactive={interactive}>
-          <ImageComponent src={url} />
+          <ImageComponent
+            artifactUri={parsedArtifactUri}
+            displayUri={parsedDisplayUri}
+            previewUri={previewUri}
+            onDetailView={interactive || mimeType === MIMETYPE.GIF}
+            preview={preview}
+          />
         </Container>
       )
+
     /* VECTOR */
     case MIMETYPE.SVG:
+      parsedArtifactUri = HashToURL(artifactUri, 'IPFS')
+      parsedDisplayUri = HashToURL(displayUri, 'IPFS')
       return (
         <Container interactive={interactive}>
-          <VectorComponent {...metadata} src={url} preview={preview} />
+          <VectorComponent
+            artifactUri={parsedArtifactUri}
+            displayUri={parsedDisplayUri}
+            previewUri={previewUri}
+            preview={preview}
+            creator={creator}
+            objkt={objkt}
+            onDetailView={interactive}
+          />
         </Container>
       )
+
     /* HTML ZIP */
     case IPFS_DIRECTORY_MIMETYPE:
     case MIMETYPE.ZIP:
     case MIMETYPE.ZIP1:
     case MIMETYPE.ZIP2:
-      if (!preview) {
-        url = getInfuraUrl(path)
-      }
-      let displayUri = ''
-
-      if (metadata && metadata.token_info && metadata.token_info.displayUri) {
-        displayUri = metadata.token_info.displayUri.replace('ipfs://', IPFS)
-      }
-
-      if (metadata && metadata.display_uri && metadata.display_uri !== '') {
-        displayUri = metadata.display_uri.replace('ipfs://', IPFS)
-      }
-      // console.log(displayUri)
-
-      // new
-      // if (metadata && metadata.display_uri) {
-      //   displayUri = metadata.display_uri.replace('ipfs://', CLOUDFLARE)
-      // }
-
+      parsedArtifactUri = HashToURL(artifactUri, 'INFURA')
+      parsedDisplayUri = HashToURL(displayUri, 'IPFS')
       return (
         <Container interactive={interactive}>
           <HTMLComponent
-            {...metadata}
-            src={url}
+            artifactUri={parsedArtifactUri}
+            displayUri={parsedDisplayUri}
+            previewUri={previewUri}
+            creator={creator}
+            objkt={objkt}
             preview={preview}
-            displayUri={displayUri}
+            onDetailView={interactive}
           />
         </Container>
       )
@@ -90,18 +151,33 @@ export const renderMediaType = (props) => {
     case MIMETYPE.OGV:
     case MIMETYPE.QUICKTIME:
     case MIMETYPE.WEBM:
-      url = preview ? uri : `${IPFS}${path}`
+      parsedArtifactUri = HashToURL(artifactUri, 'IPFS')
+      parsedDisplayUri = HashToURL(displayUri, 'IPFS')
       return (
         <Container interactive={interactive} nofullscreen>
-          <VideoComponent src={url} />
+          <VideoComponent
+            artifactUri={parsedArtifactUri}
+            displayUri={parsedDisplayUri}
+            previewUri={previewUri}
+            preview={preview}
+            onDetailView={interactive}
+          />
         </Container>
       )
     /* 3D */
     case MIMETYPE.GLB:
     case MIMETYPE.GLTF:
+      parsedArtifactUri = HashToURL(artifactUri, 'IPFS')
+      parsedDisplayUri = HashToURL(displayUri, 'IPFS')
       return (
         <Container interactive={interactive}>
-          <GLBComponent src={url} />
+          <GLBComponent
+            artifactUri={parsedArtifactUri}
+            displayUri={parsedDisplayUri}
+            previewUri={previewUri}
+            preview={preview}
+            onDetailView={interactive}
+          />
         </Container>
       )
     /* AUDIO */
@@ -109,17 +185,32 @@ export const renderMediaType = (props) => {
     case MIMETYPE.OGA:
     case MIMETYPE.FLAC:
     case MIMETYPE.WAV:
-      url = preview ? uri : `${IPFS}${path}`
+      parsedArtifactUri = HashToURL(artifactUri, 'IPFS')
+      parsedDisplayUri = HashToURL(displayUri, 'IPFS')
       return (
         <Container interactive={interactive}>
-          <AudioComponent {...metadata} src={url} />
+          <AudioComponent
+            artifactUri={parsedArtifactUri}
+            displayUri={parsedDisplayUri}
+            previewUri={previewUri}
+            preview={preview}
+            onDetailView={interactive}
+          />
         </Container>
       )
     /* PDF */
     case MIMETYPE.PDF:
+      parsedArtifactUri = HashToURL(artifactUri, 'IPFS')
+      parsedDisplayUri = HashToURL(displayUri, 'IPFS')
       return (
         <Container interactive={interactive}>
-          <PdfComponent src={url} interactive={interactive} />
+          <PdfComponent
+            artifactUri={parsedArtifactUri}
+            displayUri={parsedDisplayUri}
+            previewUri={previewUri}
+            preview={preview}
+            onDetailView={interactive}
+          />
         </Container>
       )
     default:
