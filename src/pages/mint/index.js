@@ -139,10 +139,7 @@ export const Mint = () => {
         })
       }
 
-      // TESTING
-      console.log('nftCid', nftCid)
-
-      // mint(getAuth(), amount, nftCid.path, royalties)
+      mint(getAuth(), amount, nftCid.path, royalties)
     }
   }
 
