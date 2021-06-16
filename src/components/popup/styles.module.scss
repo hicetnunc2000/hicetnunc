@@ -1,0 +1,95 @@
+@import '../../styles/variables.scss';
+
+.popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+
+    z-index: 10;
+
+    .popup__inner {
+        border-radius: 3px;
+        box-shadow: 10px 10px 25px var(--shadow-color);
+        position: relative;
+        
+        width: 100%;
+        max-width: 640px;
+        max-height: 440px;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: var(--text-color);
+        background-color: var(--background-color);
+
+        display: flex;
+        flex-direction: row;
+
+        padding: 32px;
+        bottom: 32px;
+        button.close__btn {
+            position: fixed;
+            border: none;
+            cursor: pointer;
+            text-align: center;
+            display: inline-block;
+            height: fit-content;
+            width: 1.5em;
+            top: 0.5rem;
+            right: 0.5rem;
+            background-color: transparent;
+            color: var(--text-color);
+        }
+
+        .popup__fixed {
+            margin-top: -32px;
+            position: fixed;
+            height: 100%;
+            padding-top: 32px;
+            padding-bottom: 32px;
+            .display__icon {
+                display: flex;
+                margin-top: -32px;
+                position: fixed;
+                height: 100%;
+                padding-top: 32px;
+                padding-bottom: 32px;
+            }
+        }
+        .popup__content {
+            padding-left: 64px;
+            padding-right: 16px;
+            position: relative;
+            width: 100%;
+            max-width: 560px;
+            max-height: 400px;
+
+            overflow-y: scroll;
+            .popup__title {
+                padding-top: 16px;
+                padding-bottom: 16px;
+            }
+        }
+        .popup__content::-webkit-scrollbar {
+            display: none;
+        }
+    }
+}
+
+.popup__icons {
+    display: fixed;
+    top: auto;
+    bottom: auto;
+    fill: var(--text-color);
+    width: 30px;
+    height: auto;
+}
+.popup__icons__hen {
+    display: fixed;
+    top: auto;
+    bottom: auto;
+    fill: var(--text-color);
+    width: 30px;
+    height: auto;
+}
