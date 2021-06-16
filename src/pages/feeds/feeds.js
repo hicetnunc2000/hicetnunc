@@ -20,7 +20,7 @@ const customFloor = function (value, roundTo) {
 
 const ONE_MINUTE_MILLIS = 60 * 1000
 
-export const Feeds = ({ type = 0 }) => {
+export const Feeds = ({ type }) => {
   const [error, setError] = useState(false)
   const [items, setItems] = useState([])
   const [count, setCount] = useState(0)
@@ -28,18 +28,14 @@ export const Feeds = ({ type = 0 }) => {
   const [offset, setOffset] = useState(0)
   const [hasMore, setHasMore] = useState(true)
   const startTime = customFloor(Date.now(), ONE_MINUTE_MILLIS)
+
   const loadMore = async () => {
+    console.log(type)
     if (type === 1) {
       await getHdaoFeed()
     }
     if (type === 2) await getRandomFeed()
-    if (type === 3)
-      getLatest(
-        Math.min.apply(
-          Math,
-          items.map((e) => e.id)
-        )
-      )
+    if (type === 3) getLatest(Math.min.apply(Math, items.map(e => e.id)))
   }
 
   useEffect(async () => {
@@ -47,7 +43,7 @@ export const Feeds = ({ type = 0 }) => {
       console.log('returning on error')
       return
     }
-
+    console.log(type)
     if (type === 0) {
       GetLatestFeed({ counter: count, max_time: startTime })
         .then((result) => {
@@ -70,12 +66,11 @@ export const Feeds = ({ type = 0 }) => {
       let result = await axios
         .post(process.env.REACT_APP_GRAPHQL_FEED, { lastId: lastId })
         .then((res) => res.data)
-
+      console.log(result)
+      setId(Math.min.apply(Math, result.map((e) => e.id)))
       const next = result.concat(result)
       setItems(next)
-      if (result.length < 10) {
-        setHasMore(false)
-      }
+
       /*       GetFeaturedFeed({ counter: count, max_time: startTime })
         .then((result) => {
           // filtered isn't guaranteed to always be 10. if we're filtering they might be less.
@@ -94,6 +89,7 @@ export const Feeds = ({ type = 0 }) => {
   }, [count, type])
 
   const getLatest = async (id) => {
+    console.log(id)
     let result = await axios
       .post(process.env.REACT_APP_GRAPHQL_FEED, { lastId: id })
       .then((res) => res.data)
