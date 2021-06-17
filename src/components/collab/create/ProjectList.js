@@ -1,10 +1,8 @@
 import { useState } from 'react'
+import classNames from 'classnames'
 import { Secondary } from '../../button'
-import { Container } from '../../media-types/container'
 import styles from '../styles.module.scss'
 import { ossProjects } from '../constants'
-import classNames from 'classnames'
-import { Padding } from '../../layout'
 
 export const ProjectList = ({ benefactors, onSelect }) => {
     const [showList, setShowList] = useState(false)

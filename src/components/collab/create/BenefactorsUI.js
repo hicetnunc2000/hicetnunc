@@ -1,4 +1,4 @@
-import { useState, useEffect, Fragment } from "react"
+import { useState, Fragment } from "react"
 import styles from '../styles.module.scss'
 import { Button, Purchase, Secondary } from "../../button"
 import { BenefactorRow, collaboratorTemplate } from "../"
@@ -70,10 +70,12 @@ export const BenefactorsUI = ({ benefactors, setBenefactors, onSelectPercentage,
     })
     const notesClass = classNames(styles.muted, {
         [styles.mb1]: benefactors.length === 0,
-        [styles.mb2]:  benefactors.length > 0,
+        [styles.mb2]: benefactors.length > 0,
     })
 
     const validBenefactors = benefactors.filter(b => b.address && b.shares)
+    const lastBenefactor = benefactors[benefactors.length - 1]
+    const disableAddButton = lastBenefactor ? (!lastBenefactor.address) : true
 
     return (
         <Fragment>
@@ -102,11 +104,21 @@ export const BenefactorsUI = ({ benefactors, setBenefactors, onSelectPercentage,
                                     onRemove={() => removeBenefactor(index)}
                                     onAdd={addBenefactor}
                                     onPasteMulti={setMultilineContent}
-                                    onSelectPercentage={ percentage => onSelectPercentage(index, percentage) }
+                                    onSelectPercentage={percentage => onSelectPercentage(index, percentage)}
                                 />
                             )
                         })}
                     </tbody>
+                    
+                    {benefactors.filter(b => b.address).length > 0 && (
+                        <tfoot>
+                            <tr>
+                                <td>
+                                    <button className={styles.btn} onClick={() => addBenefactor()} disabled={disableAddButton}>add another benefactor</button>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    )}
                 </table>
             )}
 

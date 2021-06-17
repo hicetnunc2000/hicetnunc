@@ -59,10 +59,11 @@
 
 .muted {
   opacity: 0.5;
+}
 
-  &:hover {
-    opacity: 1;
-  }
+a.muted:hover,
+button.muted:hover {
+  opacity: 1;
 }
 
 // .checkbox {

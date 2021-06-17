@@ -9,12 +9,14 @@ export const CollaboratorTable = ({ collaborators, setCollaborators, availableSh
     const [multilineInput, setMultilineInput] = useState('')
     const [autoSplit, setAutoSplit] = useState(false)
 
-    // Extract valid collaborators
-    const validCollaborators = collaborators.filter(c => c.shares && c.address)
-
     // Add collaborator
     const addCollaborator = () => {
         setCollaborators([...collaborators, { ...collaboratorTemplate }])
+
+        // If we are in minimal view, go back to full editing mode
+        if (minimalView) {
+            onEdit()
+        }
     }
 
     // Remove collaborator
@@ -56,69 +58,20 @@ export const CollaboratorTable = ({ collaborators, setCollaborators, availableSh
             setCollaborators(allCollaborators)
             setMultilineInput('')
         }
-    }, [multilineInput, collaborators, setCollaborators, setAutoSplit])
 
-
-
-    const calculateSplits = () => {
-        if (!collaborators.length) {
-            return false;
+        if (collaborators.length === 0) {
+            if (!autoSplit) {
+                setCollaborators([{ ...collaboratorTemplate }])
+            }
         }
-
-        let updatedCollaborators;
-
-        if (autoSplit) {
-            const sharesPerCollaborator = availableShares / validCollaborators.length
-
-            // Even split
-            updatedCollaborators = collaborators.map(collaborator => ({
-                address: collaborator.address,
-                shares: sharesPerCollaborator,
-            }))
-        } else {
-            // Map the percentages to the available amounts
-            updatedCollaborators = collaborators.map(collaborator => ({
-                ...collaborator,
-                shares: collaborator.shares / 100 * availableShares,
-            }))
-        }
-
-        setCollaborators(updatedCollaborators)
-    }
-
-    // When the available percentage changes or we get an autosplit
-    // after multiline paste, recalculate the split
-    // useEffect(() => {
-    //     if (collaborators.length === 0) {
-    //         if (!autoSplit) {
-    //             setCollaborators([{ ...collaboratorTemplate }])
-    //         }
-    //     }
-
-    //     if (validCollaborators.length === 0 && collaborators.length === 1) {
-    //         setCollaborators([])
-    //     } else {
-    //         calculateSplits()
-    //     }
-    // }, [autoSplit, availablePercentage])
-
-    if (collaborators.length === 0) {
-        if (!autoSplit) {
-            setCollaborators([{ ...collaboratorTemplate }])
-        }
-    }
-
-    // if (validCollaborators.length === 0 && collaborators.length === 1) {
-    //     setCollaborators([])
-    // } else {
-    //     calculateSplits()
-    // }
+        
+    }, [multilineInput, collaborators, setCollaborators, autoSplit, setAutoSplit])
 
     const lastCollab = collaborators[collaborators.length - 1]
     const disableAddButton = lastCollab ? (!lastCollab.address) : true
 
     return (
-        <div className={minimalView ? styles.borderBottom : null}>
+        <div>
             <table className={styles.table}>
                 <tbody>
                     {collaborators.map((collaborator, index) => {
@@ -141,7 +94,7 @@ export const CollaboratorTable = ({ collaborators, setCollaborators, availableSh
                 {collaborators.filter(c => c.address).length > 0 && (
                     <tfoot>
                         <tr>
-                            <td>
+                            <td colSpan={minimalView ? 2 : 3}>
                                 <button className={styles.btn} onClick={() => addCollaborator()} disabled={disableAddButton}>add another collaborator</button>
                             </td>
                         </tr>
