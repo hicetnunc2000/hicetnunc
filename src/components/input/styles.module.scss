@@ -26,6 +26,7 @@
       border: none;
       color: var(--text-color);
       transition: color #{$theme-duration} ease-out;
+      letter-spacing: 0.015em;
       // border-bottom: 1px solid var(--text-color);
 
       &::placeholder {

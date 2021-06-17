@@ -39,30 +39,30 @@ const query = `
   }
 `;
 
-      async function fetchGraphQL(operationsDoc, operationName, variables) {
-        const result = await fetch(
-          "https://api.hicdex.com/v1/graphql",
-          {
-            method: "POST",
-            body: JSON.stringify({
-              query: operationsDoc,
-              variables: variables,
-              operationName: operationName
-            })
-          }
-        );
-        return await result.json()
-      }
+async function fetchGraphQL(operationsDoc, operationName, variables) {
+  const result = await fetch(
+    "https://api.hicdex.com/v1/graphql",
+    {
+      method: "POST",
+      body: JSON.stringify({
+        query: operationsDoc,
+        variables: variables,
+        operationName: operationName
+      })
+    }
+  );
+  return await result.json()
+}
 
-      async function doFetch(addr) {
-        const { errors, data } = await fetchGraphQL(query, "creatorGallery", { "address": addr });
-        if (errors) {
-          console.error(errors);
-        }
-        const result = data.hic_et_nunc_swap
-        console.log({ result })
-        return result
-      }
+async function doFetch(addr) {
+  const { errors, data } = await fetchGraphQL(query, "creatorGallery", { "address": addr });
+  if (errors) {
+    console.error(errors);
+  }
+  const result = data.hic_et_nunc_swap
+  console.log({ result })
+  return result
+}
 export default class Display extends Component {
   static contextType = HicetnuncContext
 
@@ -139,59 +139,24 @@ export default class Display extends Component {
           }
         })
 
-     
+
     }
     /* doFetch(window.location.pathname.split('/')[2]) */
   }
 
   // called if there's no redirect
   onReady = async () => {
-    this.context.setPath(window.location.pathname)
+    const { pathname } = window.location
 
-    // based on route, define initial state
-    if (this.state.subjkt !== '') {
-      // if alias route
-      if (window.location.pathname.split('/')[2] === 'creations') {
-        this.setState({
-          creationsState: true,
-          collectionState: false,
-          marketState: false,
-        })
-      } else if (window.location.pathname.split('/')[2] === 'collection') {
-        this.setState({
-          creationsState: false,
-          collectionState: true,
-          marketState: false,
-        })
-      } else if (window.location.pathname.split('/')[2] === 'market') {
-        this.setState({
-          creationsState: false,
-          collectionState: false,
-          marketState: true,
-        })
-      }
-    } else {
-      // if tz/wallethash route
-      if (window.location.pathname.split('/')[3] === 'creations') {
-        this.setState({
-          creationsState: true,
-          collectionState: false,
-          marketState: false,
-        })
-      } else if (window.location.pathname.split('/')[3] === 'collection') {
-        this.setState({
-          creationsState: false,
-          collectionState: true,
-          marketState: false,
-        })
-      } else if (window.location.pathname.split('/')[3] === 'market') {
-        this.setState({
-          creationsState: false,
-          collectionState: false,
-          marketState: true,
-        })
-      }
-    }
+    this.context.setPath(pathname)
+    const uriComponentIndex = this.state.subjkt !== '' ? 2 : 3
+    const slug = pathname.split('/')[uriComponentIndex]
+
+    this.setState({
+      creationsState: slug === 'creations',
+      collectionState: slug === 'collection',
+      marketState: slug === 'market',
+    })
 
     /*
     await axios.get('http://localhost:3002/tz_owner', { params : { tz : this.state.wallet }}).then(res => console.log(res.data))
