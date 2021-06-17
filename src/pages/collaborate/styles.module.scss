@@ -1,105 +1,113 @@
 @import '../../styles/layout.scss';
 @import '../../styles/variables.scss';
 
-.input {
-  background: none;
-  color: var(--text-color);
+// .input {
+//   background: none;
+//   color: var(--text-color);
+// }
+
+// .input:focus {
+//   outline: none;
+// }
+
+// .textarea {
+//   width: 100%;
+//   padding: 0.5em;
+//   background: none;
+//   color: var(--text-color);
+//   margin-bottom: 1em;
+// }
+
+// .textarea:focus {
+//   outline: none;
+// }
+
+// .table {
+//   width: 100%;
+//   margin-top: 20px;
+// }
+
+// .addressCell {
+//   width: 60%;
+//   vertical-align:top;
+//   padding-bottom: 6px;
+// }
+
+// .percentageCell {
+//   width: 30%;
+//   vertical-align:top;
+//   padding-bottom: 6px;
+//   padding-right: 20px;
+// }
+
+// .actionCell {
+//   width: 10%;
+//   padding-top: 6px;
+//   vertical-align:top;
+//   text-align:right;
+// }
+
+@for $i from 1 through 3 {
+  .mb#{$i} {
+    margin-bottom: #{$i}em;
+  }
+  
+  .mt#{$i} {
+    margin-bottom: #{$i}em;
+  } 
 }
 
-.input:focus {
-  outline: none;
+.muted {
+  opacity: 0.5;
+
+  &:hover {
+    opacity: 1;
+  }
 }
 
-.textarea {
-  width: 100%;
-  padding: 0.5em;
-  background: none;
-  color: var(--text-color);
-  margin-bottom: 1em;
-}
+// .checkbox {
+//   display: inline-block;
+//   margin-bottom: 1em;
+// }
 
-.textarea:focus {
-  outline: none;
-}
+// .check {
+//   margin-right: 10px;
+// }
 
-.table {
-  width: 100%;
-}
+// .flex {
+//   display: flex;
+// }
 
-.addressCell {
-  width: 60%;
-  vertical-align:top;
-  padding-bottom: 6px;
-}
+// .flexBetween {
+//   display: flex;
+//   justify-content: space-between;
+// }
 
-.percentageCell {
-  width: 30%;
-  vertical-align:top;
-  padding-bottom: 6px;
-  padding-right: 20px;
-}
+// .tipSelect button {
+//   padding-left: 10px;
+//   padding-right: 10px;
+//   margin-left: 10px;
+// }
 
-.actionCell {
-  width: 10%;
-  padding-top: 6px;
-  vertical-align:top;
-  text-align:right;
-}
+// .btn {
+//   background: none;
+//   color: white;
+//   border: none;
+//   padding:6px;
+//   font-size: 1em;
+//   cursor: pointer;
+// }
 
-.mb {
-  margin-bottom: 1em;
-}
+// .btnSecondary {
+//   color: white;
+//   border-bottom: 1px solid white;
+//   border-right: 1px solid white;
+//   padding:6px;
+//   font-size: 1em;
+//   cursor: pointer;
+// }
 
-.mt12 {
-  margin-top: 3em;
-}
-
-.mb12 {
-  margin-bottom: 3em;
-}
-
-.checkbox {
-  display: inline-block;
-  margin-bottom: 1em;
-}
-
-.list {
-  list-style: none;
-}
-
-.list li {
-  margin-bottom: 6px;
-}
-
-.check {
-  margin-right: 10px;
-}
-
-.flex {
-  display: flex;
-}
-
-.flexBetween {
-  display: flex;
-  justify-content: space-between;
-}
-
-.tipSelect button {
-  padding-left: 10px;
-  padding-right: 10px;
-  margin-left: 10px;
-}
-
-.btn {
-  background: none;
-  color: white;
-  border: none;
-  padding:6px;
-  font-size: 1em;
-  cursor: pointer;
-}
-
-.selected {
-  background: white;
-  color: black;
-}
+// .selected {
+//   background: white;
+//   color: black;
+// }

@@ -3,7 +3,16 @@
 
 .input {
   background: none;
+  letter-spacing: 0.015em;
   color: var(--text-color);
+}
+
+.link {
+  color: var(--text-color);
+
+  &:hover {
+    text-decoration: underline;
+  }
 }
 
 .input:focus {
@@ -22,40 +31,92 @@
   outline: none;
 }
 
-.table {
+.table,
+.reviewTable,
+.row {
   width: 100%;
 }
 
+.table th,
+.reviewTable th {
+  text-align: left;
+  color: #666;
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+}
+
+.reviewTable td {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border-top: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.borderBottom {
+  padding-bottom: 1em;
+  border-bottom: 1px solid var(--border-color);
+}
+
 .addressCell {
-  width: 60%;
-  vertical-align:top;
+  width: 48em;
+  vertical-align: top;
+  padding-bottom: 6px;
+}
+
+.cellWithPadding {
+  vertical-align: top;
   padding-bottom: 6px;
 }
 
 .percentageCell {
-  width: 30%;
-  vertical-align:top;
+  width: 12em;
+  vertical-align: top;
   padding-bottom: 6px;
   padding-right: 20px;
 }
 
 .actionCell {
-  width: 10%;
   padding-top: 6px;
-  vertical-align:top;
-  text-align:right;
+  vertical-align: top;
+  text-align: right;
 }
 
-.mb {
-  margin-bottom: 1em;
+.actionCell button {
+  width: 12px;
+  opacity: 0.7;
+
+  &:hover {
+    opacity: 1;
+  }
 }
 
-.mt12 {
-  margin-top: 3em;
+.absolute {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 1em !important;
 }
 
-.mb12 {
-  margin-bottom: 3em;
+.alignRight {
+  text-align: right;
+  padding-right: 3em;
+}
+
+.projectList {
+  position: relative;
+  width: 66%;
+  padding: 0.5em;
+  border: 1px dashed var(--border-color);
+}
+
+@for $i from 1 through 3 {
+  .mt#{$i} {
+    margin-top: #{$i}em;
+  }
+
+  .mb#{$i} {
+    margin-bottom: #{$i}em;
+  }
 }
 
 .checkbox {
@@ -64,11 +125,14 @@
 }
 
 .list {
+  // margin-top: 1em;
   list-style: none;
 }
 
 .list li {
+  // height: 1.5em;
   margin-bottom: 6px;
+  padding-left: 1em;
 }
 
 .check {
@@ -85,22 +149,106 @@
 }
 
 .tipSelect button {
-  padding-left: 10px;
-  padding-right: 10px;
-  margin-left: 10px;
+  // font-size: 1em;
+  padding: 3px;
+  margin-right: 8px;
+  border: 1px solid transparent;
+  color: var(--text-color);
+  border-bottom: 1px solid var(--border-color);
+  border-right: 1px solid var(--border-color);
+  background: none;
+
+  &:hover {
+    border: 1px solid var(--text-color);
+  }
 }
 
 .btn {
   background: none;
-  color: white;
+  color: var(--text-color);
   border: none;
-  padding-left:6px;
-  padding-right:6px;
+  padding: 6px 0 6px 0;
   font-size: 1em;
   cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
+  }
+
+  &.disabled,
+  &:disabled {
+    pointer-events: none;
+    cursor: unset;
+    opacity: 0.5;
+  }
 }
 
 .selected {
   background: white;
   color: black;
+}
+
+.muted {
+  opacity: 0.5;
+}
+
+.secondary {
+  padding: 2px 6px;
+  color: var(--text-color);
+  border-right: 2px solid var(--text-color);
+  border-bottom: 2px solid var(--text-color);
+  transition: border-color #{$theme-duration} ease-out,
+    color #{$theme-duration} ease-out;
+}
+
+.textInput {
+  resize: none;
+  background: none;
+  border: none;
+  border-bottom: 1px solid var(--border-color);
+  overflow: hidden;
+  color: var(--text-color);
+  width: 90%;
+  padding: 6px 0;
+  vertical-align: middle;
+  transition: color #{$theme-duration} ease-out;
+
+  + p {
+    letter-spacing: 0;
+  }
+
+  &::placeholder {
+    color: var(--text-color);
+    opacity: 0.4;
+  }
+
+  &:focus {
+    outline: none;
+  }
+
+  &:focus + p,
+  &:not(:placeholder-shown) + p {
+    opacity: 0.4;
+    transform: translateY(-20px);
+  }
+
+  &:focus::placeholder {
+    opacity: 0;
+  }
+}
+
+.relative {
+  position: relative;
+}
+
+.collabInfo {
+  position: absolute;
+  top: 100%;
+  left: 0;
+}
+
+.descriptive {
+  margin-bottom: 2em;
+  line-height: 1.5;
+  color: #999;
 }

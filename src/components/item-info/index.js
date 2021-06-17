@@ -4,6 +4,7 @@ import { Button, Primary, Purchase } from '../button'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
 import { walletPreview } from '../../utils/string'
 import styles from './styles.module.scss'
+import { CollabIssuerInfo } from '../collab/show/CollabIssuerInfo'
 
 const _ = require('lodash')
 
@@ -79,7 +80,7 @@ export const ItemInfo = ({
             data-position={'top'}
             data-tooltip={
               acc && acc.address === token_info.creators[0] &&
-              parseInt(hDAO_balance) > 0
+                parseInt(hDAO_balance) > 0
                 ? 'collect hDAO'
                 : 'curate'
             }
@@ -94,15 +95,26 @@ export const ItemInfo = ({
     )
   }
 
+  // the issuer path depends on whether it's a collab address (KT) or individual (tz)
+  const { ISSUER, COLLAB } = PATH
+  const creatorAddress = token_info.creators[0]
+  const isCollab = creatorAddress.substring(0, 2) === 'KT'
+  const issuerPath = isCollab ? COLLAB : ISSUER
+
   return (
     <>
       <div className={styles.container}>
         <div className={styles.edition}>
           <div className={styles.inline}>
-            <p className={styles.issuer}>Issuer:&nbsp;</p>
-            <Button to={`${PATH.ISSUER}/${token_info.creators[0]}`}>
-              <Primary>{walletPreview(token_info.creators[0])}</Primary>
-            </Button>
+            <p className={styles.issuer}>{isCollab ? 'Collaboration:' : 'Issuer:'}&nbsp;</p>
+            {isCollab && (
+              <CollabIssuerInfo address={ creatorAddress } />
+            )}
+            {!isCollab && (
+              <Button to={`${issuerPath}/${creatorAddress}`}>
+                <Primary>{walletPreview(creatorAddress)}</Primary>
+              </Button>
+            )}
           </div>
           {!feed && (
             <div>
