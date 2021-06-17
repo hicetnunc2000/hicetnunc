@@ -5,15 +5,28 @@ import styles from '../styles.module.scss'
 import inputStyles from '../../../components/input/styles.module.scss'
 import classNames from "classnames"
 import { CloseIcon } from ".."
+import { GetUserMetadata } from "../../../data/api"
 
 export const BenefactorRow = ({ benefactor, onUpdate, onAdd, onRemove, onPasteMulti, onSelectPercentage, minimalView }) => {
 
+    const [meta, setMeta] = useState()
     const [address, setAddress] = useState(benefactor.address)
     const [shares, setShares] = useState(benefactor.shares)
 
     useEffect(() => {
-        setAddress(benefactor.address)
-        setShares(benefactor.shares)
+        const { address, shares } = benefactor
+        
+        if (!meta && address) {
+            GetUserMetadata(address)
+            .then(({ data }) => setMeta(data))
+        }
+
+        if (meta && !address) {
+            setMeta()
+        }
+
+        setAddress(address)
+        setShares(shares)
     }, [benefactor])
 
     const _update = (field, value) => {
@@ -47,8 +60,8 @@ export const BenefactorRow = ({ benefactor, onUpdate, onAdd, onRemove, onPasteMu
     // the benefactor data will contain the name of the project
     // otherwise just show "address" and the KT or tz hint if not populated
 
-    const placeholderText = benefactor.name || `address ${!address ? `(tz... or KT...)` : ''}`
-
+    const benefactorName = meta ? meta.alias : null
+    const placeholderText = benefactorName || `address ${!address ? `(tz... or KT...)` : ''}`
 
     /**
      * In some situations we may want to show less UI information

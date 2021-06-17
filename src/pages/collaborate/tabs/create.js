@@ -40,13 +40,12 @@ export const CreateCollaboration = () => {
 
     // When the user clicks a percentage button in the benefactors UI
     const _calculateShares = (index, percentage) => {
-
         const benefactor = benefactors[index]
         const updatedBenefactors = [...benefactors]
 
         updatedBenefactors[index] = {
             ...benefactor,
-            shares: Math.floor(totalShares * percentage / 100),
+            shares: Math.ceil(totalShares * percentage / 100),
         }
 
         // Now what's left?
@@ -80,7 +79,7 @@ export const CreateCollaboration = () => {
         (
             <Container>
                 <Padding>
-                    <h1 className={validCollaborators.length === 0 ? styles.mb1 : styles.mb3}>
+                    <h1 className={validCollaborators.length === 0 ? styles.mb1 : styles.mb2}>
                         <strong>core collaborators</strong>
                     </h1>
 
