@@ -37,6 +37,11 @@
         // fill: var(--text-color);
         transition: fill #{$theme-duration} ease-out;
       }
+
+      img {
+        width: auto;
+        height: 35px;
+      }
     }
 
     .right {
