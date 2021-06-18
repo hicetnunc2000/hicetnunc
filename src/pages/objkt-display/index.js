@@ -81,7 +81,6 @@ export const ObjktDisplay = () => {
   }, [])
 
   const Tab = TABS[tabIndex].component
-
   return (
     <Page title={nft?.name}>
       {loading && (
@@ -116,6 +115,7 @@ export const ObjktDisplay = () => {
                 artifactUri: nft.artifact_uri,
                 displayUri: nft.display_uri,
                 creator: nft.creator,
+                objkt: nft.id,
                 interactive: true,
               })}
             </div>
