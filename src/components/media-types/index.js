@@ -29,8 +29,8 @@ const HashToURL = (hash, type) => {
       return hash.replace('ipfs://', 'https://ipfs.io/ipfs/')
     case 'INFURA':
       var cidv1 = new ipfsClient.CID(hash.replace('ipfs://', '')).toV1()
-      var subomain = cidv1.toString()
-      return `https://${subomain}.ipfs.infura-ipfs.io/`
+      var subdomain = cidv1.toBaseEncodedString('base32')
+      return `https://${subdomain}.ipfs.infura-ipfs.io/`
     default:
       console.error('please specify type')
       return hash
