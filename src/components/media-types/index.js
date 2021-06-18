@@ -131,8 +131,8 @@ export const renderMediaType = ({
     case MIMETYPE.ZIP:
     case MIMETYPE.ZIP1:
     case MIMETYPE.ZIP2:
-      parsedArtifactUri = HashToURL(artifactUri, 'IPFS')
-      parsedDisplayUri = HashToURL(displayUri, 'IPFS')
+      parsedArtifactUri = HashToURL(artifactUri, 'CLOUDFLARE')
+      parsedDisplayUri = HashToURL(displayUri, 'CLOUDFLARE')
       return (
         <Container interactive={interactive}>
           <HTMLComponent
