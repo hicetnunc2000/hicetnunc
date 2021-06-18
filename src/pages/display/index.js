@@ -114,14 +114,6 @@ query subjktsQuery($subjkt: String!) {
 }
 `
 
-// const query_creatorHdao = `
-// query creatorGallery($address: String!) {
-//   hic_et_nunc_holder(where: {creator: {_eq: $address}}) {
-//     hdao_balance,
-//     address
-//   }
-// }
-// `
 async function fetchSubjkts(subjkt) {
   const { errors, data } = await fetchGraphQL(query_subjkts, 'subjktsQuery', {
     subjkt: subjkt,
@@ -144,23 +136,9 @@ async function fetchCreations(addr) {
     console.error(errors)
   }
   const result = data.hic_et_nunc_token
-  console.log({ result })
+  // console.log({ result })
   return result
 }
-
-// async function fetchCreatorHdao(addr) {
-//   const { errors, data } = await fetchGraphQL(
-//     query_creatorHdao,
-//     'creatorGallery',
-//     { address: addr }
-//   )
-//   if (errors) {
-//     console.error(errors)
-//   }
-//   const result = data.hic_et_nunc_token
-//   console.log({ result })
-//   return result
-// }
 
 export default class Display extends Component {
   static contextType = HicetnuncContext
@@ -222,13 +200,7 @@ export default class Display extends Component {
 
       this.onReady()
       
-      // let res = await fetchCreatorHdao(wallet)
-      // console.log("ashfoasjdf " + res)
-
     } else {
-      let res = await fetchSubjkts(window.location.pathname.split('/')[1])
-      console.log(res)
-
       this.setState({
         wallet: res[0].address,
         walletPreview: walletPreview(res[0].address),
@@ -315,7 +287,7 @@ export default class Display extends Component {
       addr = window.location.pathname.split('/')[2]
     } else {
       let res = await fetchSubjkts(window.location.pathname.split('/')[1])
-      console.log(res)
+      // console.log(res)
       addr = res[0].address
 
       this.setState({ subjkt: res[0].name, walletPrev: walletPreview(addr) })
