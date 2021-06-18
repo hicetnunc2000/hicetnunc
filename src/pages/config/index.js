@@ -1,20 +1,15 @@
-import {
-  ALLOWED_MIMETYPES,
-  ALLOWED_FILETYPES_LABEL,
-  ALLOWED_COVER_MIMETYPES,
-  ALLOWED_COVER_FILETYPES_LABEL,
-  MINT_FILESIZE,
-  MIMETYPE,
-} from '../../constants'
+/* eslint-disable */
+
 import React, { Component } from 'react'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
 import { Container, Padding, Page } from '../../components/layout'
-import { Input } from '../../components/input'
-import { Button, Curate, Primary } from '../../components/button'
+import { Input, Textarea } from '../../components/input'
+import { Button, Curate } from '../../components/button'
 import { Upload } from '../../components/upload'
 
 import { SigningType } from '@airgap/beacon-sdk'
 import { char2Bytes } from '@taquito/utils'
+import styles from './styles.module.scss'
 const { create } = require('ipfs-http-client')
 const infuraUrl = 'https://ipfs.infura.io:5001'
 
@@ -36,6 +31,7 @@ export class Config extends Component {
   }
 
   handleChange = (e) => {
+    console.log('set', e.target.name, 'to', e.target.value)
     this.setState({ [e.target.name]: e.target.value })
   }
 
@@ -43,11 +39,11 @@ export class Config extends Component {
 
   subjkt_config = async () => {
     const ipfs = create(infuraUrl)
-/*     const [file] = this.state.selectedFile
-
-    const buffer = Buffer.from(await file.arrayBuffer())
-
-    this.setState({ avatar: 'ipfs://' + (await ipfs.add(buffer)).path }) */
+    /*     const [file] = this.state.selectedFile
+    
+        const buffer = Buffer.from(await file.arrayBuffer())
+    
+        this.setState({ avatar: 'ipfs://' + (await ipfs.add(buffer)).path }) */
 
     this.context.registry(
       this.state.subjkt,
@@ -59,13 +55,11 @@ export class Config extends Component {
 
   // upload file
 
-  onFileChange = event => {
-
+  onFileChange = (event) => {
     this.setState({
       selectedFile: event.target.files,
-      fileTitle: event.target.files[0].name
+      fileTitle: event.target.files[0].name,
     })
-
   }
 
   hDAO_operators = () => {
@@ -124,62 +118,41 @@ export class Config extends Component {
       <Page>
         <Container>
           <Padding>
+            <Input
+              name="subjkt"
+              onChange={this.handleChange}
+              placeholder="Username"
+              label="Username"
+              value={this.state.subjkt}
+            />
+            <Input
+              name="description"
+              onChange={this.handleChange}
+              placeholder="Description"
+              label="Description"
+              value={this.state.description}
+            />
+            <Button onClick={this.subjkt_config}>
+              <Curate>Save Profile</Curate>
+            </Button>
+          </Padding>
+        </Container>
 
-{/*             <div>
-              <button onClick={this.hDAO_operators}>
-                allow subjkt operators ○
-              </button>
-            </div> */}
-            <div style={{ paddingTop: '15%' }}>
-              <input
-                type="text"
-                name="subjkt"
-                onChange={this.handleChange}
-                placeholder="SUBJKT"
-              ></input>
-              <br />
-              <input
-                type="text"
-                name="description"
-                onChange={this.handleChange}
-                placeholder="description"
-              ></input>
-              <br />
+        <Container>
+          <Padding>
+            <Input
+              name="vote"
+              onChange={this.handleChange}
+              placeholder="hDAO Curation"
+              label="hDAO Curation"
+              value={undefined}
+            />
 
+            <Button onClick={this.hDAO_config}>
+              <Curate>Save ○</Curate>
+            </Button>
 
-              {/* social media */}
-{/* 
-              <Container>
-                <Padding>
-                  <input type="file" onChange={this.onFileChange} />
-                </Padding>
-              </Container> */}
-              <button onClick={this.subjkt_config}>config SUBJKT</button>
-            </div>
-
-            <div style={{ paddingTop: '5%' }}>
-              <input
-                type="text"
-                name="vote"
-                onChange={this.handleChange}
-                placeholder="μ○"
-              ></input>
-              <p style={{ fontSize: '12px' }}>
-                hic et nunc DAO ○ curation parameter
-              </p>
-              <button onClick={this.hDAO_config}>
-                config ○
-              </button>
-            </div>
-            {/*             <div>
-              <input type="text" name="str" onChange={this.handleChange} placeholder="sign"></input>
-              <button onClick={this.sign}>sign</button>
-            </div> */}
-
-            <div style={{ paddingTop: '5%' }}>
-              <button onClick={this.unregister}>unregister</button>
-              {/* this action may affect collectors. consider it carefully */}
-            </div>
+            <p>hic et nunc DAO ○ curation parameter</p>
           </Padding>
         </Container>
       </Page>

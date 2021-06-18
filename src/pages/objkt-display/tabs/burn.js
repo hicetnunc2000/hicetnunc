@@ -11,10 +11,14 @@ export const Burn = (props) => {
   const [amount, setAmount] = useState('')
   const [progress, setProgress] = useState() // eslint-disable-line
 
-  const totalOwned =
-    (props.owners[address?.address] &&
-      parseInt(props.owners[address?.address])) ||
-    0 // check total the user owns of this token
+  let totalOwned = 0
+
+  const found = props.token_holders.find(
+    (e) => e.holder_id === address?.address
+  )
+  if (found) {
+    totalOwned = found.quantity
+  }
 
   const handleSubmit = () => {
     if (amount === '') {
@@ -35,7 +39,7 @@ export const Burn = (props) => {
     if (r) {
       setProgress(true)
       setMessage('burning OBJKT')
-      burn(props.token_id, amount)
+      burn(props.id, amount)
     }
   }
 
@@ -44,8 +48,8 @@ export const Burn = (props) => {
       <Container>
         <Padding>
           <p>
-            You own {totalOwned} editions of OBJKT#{props.token_id}. How many
-            would you like to burn?
+            You own {totalOwned} editions of OBJKT#{props.id}. How many would
+            you like to burn?
           </p>
         </Padding>
       </Container>
@@ -64,11 +68,12 @@ export const Burn = (props) => {
 
       <Container>
         <Padding>
-          <p style={{ fontSize : '14px' }}>
-            Burning will transfer the OBJKTs from your possession to a burn address. Once
-            in the burn address, the OBJKT can't be recovered or sold. You can
-            only burn tokens that you own. If you have them swapped, you first
-            need to cancel that swap before you try to burn them.
+          <p style={{ fontSize: '14px' }}>
+            Burning will transfer the OBJKTs from your possession to a burn
+            address. Once in the burn address, the OBJKT can't be recovered or
+            sold. You can only burn tokens that you own. If you have them
+            swapped, you first need to cancel that swap before you try to burn
+            them.
           </p>
           <br />
           <p>

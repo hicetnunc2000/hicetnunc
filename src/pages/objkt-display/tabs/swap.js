@@ -5,14 +5,12 @@ import { Container, Padding } from '../../../components/layout'
 import { Loading } from '../../../components/loading'
 import { Input } from '../../../components/input'
 import { Button, Curate } from '../../../components/button'
-import { getTotalSales } from '../../../utils/sanitise'
 
 export const Swap = ({ total_amount, owners, token_info, address }) => {
   const { id } = useParams()
   const { swap } = useContext(HicetnuncContext)
   const [amount, setAmount] = useState()
   const [price, setPrice] = useState()
-  const sales = getTotalSales({ owners, creators: token_info.creators })
   const [progress, setProgress] = useState(false)
   const [message, setMessage] = useState('')
 
@@ -65,7 +63,7 @@ export const Swap = ({ total_amount, owners, token_info, address }) => {
             placeholder="OBJKT amount"
             min={1}
             defaultValue={amount}
-            max={total_amount - sales}
+            /* max={total_amount - sales} */
             onChange={(e) => setAmount(e.target.value)}
             disabled={progress}
           />
