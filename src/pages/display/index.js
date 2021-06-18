@@ -179,7 +179,7 @@ async function fetchTz(addr) {
     console.error(errors)
   }
   const result = data.hic_et_nunc_holder
-  console.log({ result })
+  // console.log({ result })
   return result
 }
 
