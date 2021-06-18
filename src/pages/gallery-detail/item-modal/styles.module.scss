@@ -23,8 +23,8 @@
   }
 
   .image {
-    width: 50vh;
-    max-width: 100%;
+    width: 100%;
+    max-width: 1024px;
     margin: 0 auto;
     padding: 50px 20px;
     flex: 1;
@@ -33,7 +33,7 @@
     align-items: center;
 
     @include respond-to('desktop') {
-      width: 60vh;
+      // width: 60vh;
     }
 
     > div {
