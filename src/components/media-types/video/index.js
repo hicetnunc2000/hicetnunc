@@ -2,30 +2,17 @@ import React, { useEffect, useRef } from 'react'
 import { iOS } from '../../../utils/os'
 import styles from './styles.module.scss'
 
-export const VideoComponent = ({ src, interactive, inView }) => {
+export const VideoComponent = ({
+  artifactUri,
+  displayUri,
+  previewUri,
+  preview,
+  interactive,
+  inView,
+}) => {
   const domElement = useRef()
 
   useEffect(() => {
-    // https://developers.google.com/web/updates/2017/06/play-request-was-interrupted
-    // let promise
-    // if (inView) {
-    //   promise = domElement.current.play()
-    // } else {
-    //   if (promise !== undefined) {
-    //     promise
-    //       .then(() => {
-    //         // Automatic playback started!
-    //         // Show playing UI.
-    //         // We can now safely pause video...
-    //         domElement.current.pause()
-    //       })
-    //       .catch((error) => {
-    //         // Auto-play was prevented
-    //         // Show paused UI.
-    //       })
-    //   }
-    // }
-
     const isVideoAvailable = (video) => iOS || video.readyState > 2
 
     const isVideoPlaying = (video) =>
@@ -42,7 +29,7 @@ export const VideoComponent = ({ src, interactive, inView }) => {
         try {
           domElement.current.play()
         } catch (err) {
-          console.log(err)
+          console.error(err)
         }
       }
     } else {
@@ -54,7 +41,7 @@ export const VideoComponent = ({ src, interactive, inView }) => {
         try {
           domElement.current.pause()
         } catch (err) {
-          console.log(err)
+          console.error(err)
         }
       }
     }
@@ -70,8 +57,8 @@ export const VideoComponent = ({ src, interactive, inView }) => {
         muted
         loop
         controls={interactive}
-        src={src}
-        loading="lazy"
+        src={preview ? previewUri : artifactUri}
+        poster={displayUri}
       />
     </div>
   )

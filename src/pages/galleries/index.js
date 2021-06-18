@@ -40,6 +40,7 @@ export const Galleries = () => {
       document.body.style = {}
     }
   }, [])
+
   return (
     <Page title="Galleries">
       <Container xlarge>
@@ -47,8 +48,6 @@ export const Galleries = () => {
           <ResponsiveMasonry>
             {data.map((e) => {
               const { token_info } = e
-              const { mimeType, uri } = token_info.formats[0]
-
               return (
                 <Button key={e.uid} to={`${PATH.GALLERY}/${e.uid}`}>
                   <div className={styles.item}>
@@ -57,9 +56,11 @@ export const Galleries = () => {
                       className={styles.image}
                     >
                       {renderMediaType({
-                        uri: uri.split('//')[1],
-                        mimeType,
-                        metadata: e,
+                        mimeType: token_info.formats[0].mimeType,
+                        artifactUri: token_info.artifactUri,
+                        displayUri: token_info.displayUri,
+                        creator: token_info.creators[0],
+                        objkt: e.token_id,
                         interactive: false,
                       })}
                       <div className={styles.number}>{e.name}</div>

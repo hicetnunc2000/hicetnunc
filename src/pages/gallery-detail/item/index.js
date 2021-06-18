@@ -8,7 +8,7 @@ import styles from './styles.module.scss'
 /**
  * Get OBJKT detail page with retries
  */
-export const GetOBJKTStubbornly = async ({ id, tries = 5 }) => {
+export const GetOBJKTStubbornly = async ({ id, tries = 3 }) => {
   let count = 0
   while (count < tries) {
     try {
@@ -87,10 +87,11 @@ export const Item = ({ objkt, onClick, minimal }) => {
               <>
                 <div className={styles.image} style={{ pointerEvents: 'none' }}>
                   {renderMediaType({
-                    ...data,
-                    shown: shown.current,
-                    inView,
-                    interactive: false,
+                    mimeType: data.mimeType,
+                    artifactUri: data.token_info.artifactUri,
+                    displayUri: data.token_info.displayUri,
+                    creator: data.token_info.creators[0],
+                    objkt: data.token_id,
                   })}
                   <div className={styles.number}>OBJKT#{objkt}</div>
                 </div>
@@ -111,7 +112,7 @@ export const Item = ({ objkt, onClick, minimal }) => {
           </div>
         ) : (
           <div>
-            <Loading />
+            {/* <Loading /> */}
           </div>
         )}
       </>

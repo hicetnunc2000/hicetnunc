@@ -8,42 +8,21 @@ import { VisuallyHidden } from '../visually-hidden'
 import styles from './styles.module.scss'
 
 export const FeedItem = (props) => {
-  const { token_info, token_id, owners, swaps, total_amount } = props
-  const { mimeType, uri } = token_info.formats[0]
-
-  // const url =
-  //   token_info.displayUri !== ''
-  //     ? token_info.displayUri
-  //     : token_info.artifactUri
-
   return (
-    <>
-      <Button to={`${PATH.OBJKT}/${token_id}`}>
-        <VisuallyHidden>{`Go to OBJKT: ${token_info.name}`}</VisuallyHidden>
+    <Padding>
+      <Button to={`${PATH.OBJKT}/${props.id}`}>
+        <VisuallyHidden>{`Go to OBJKT: ${props.title}`}</VisuallyHidden>
         <div className={styles.container}>
           {renderMediaType({
-            mimeType,
-            uri: uri.split('//')[1],
-            metadata: props,
+            mimeType: props.mime,
+            artifactUri: props.artifact_uri,
+            displayUri: props.display_uri,
+            creator: props.creator_id,
+            objkt: String(props.id),
           })}
         </div>
       </Button>
-      <Padding>
-        {/* 
-        
-render only
-
-        */}
-
-        <ItemInfo
-          token_info={token_info}
-          owners={owners}
-          token_id={token_id}
-          swaps={swaps}
-          total_amount={total_amount}
-          feed={true}
-        />
-      </Padding>
-    </>
+      <ItemInfo {...props} />
+    </Padding>
   )
 }

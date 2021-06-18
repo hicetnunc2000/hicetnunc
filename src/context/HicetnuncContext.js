@@ -1,6 +1,10 @@
+/* eslint-disable */
 import React, { createContext, Component } from 'react'
 import { withRouter } from 'react-router'
-import { BeaconWallet, BeaconWalletNotInitialized } from '@taquito/beacon-wallet'
+import {
+  BeaconWallet,
+  BeaconWalletNotInitialized,
+} from '@taquito/beacon-wallet'
 import { TezosToolkit } from '@taquito/taquito'
 import { setItem } from '../utils/storage'
 import { KeyStoreUtils } from 'conseiljs-softsigner'
@@ -19,7 +23,6 @@ export const HicetnuncContext = createContext()
 const Tezos = new TezosToolkit('https://mainnet.smartpy.io')
 
 // storage fee adjustment
-
 
 /* export class PatchedBeaconWallet extends BeaconWallet {
   async sendOperations(params) {
@@ -71,7 +74,15 @@ class HicetnuncContextProviderClass extends Component {
       hDAO: 'KT1AFA2mwNUMNd4SsujE1YYp29vd8BZejyKW',
       subjkt: 'KT1My1wDZHDGweCrJnQJi3wcFaS67iksirvj',
       objkt: 'KT1Hkg5qeNhfwpKW4fXvq7HGZB9z2EnmCCA9',
-      unregistry: 'KT1MirRvstfYwjPPuyphBazSddgp8i1d8k8a',
+      unregistry: 'KT18xby6bb1ur1dKe7i6YVrBaksP4AgtuLES',
+      market: 'KT1WbY7vTYx1vbgG7PkKgHwcw87Vz781ydmg',
+
+      // market 
+
+      collectMarket : async (swap_id, amount) => {
+
+      },
+
       // fullscreen. DO NOT CHANGE!
       fullscreen: false,
       setFullscreen: (fullscreen) => this.setState({ fullscreen }),
@@ -200,7 +211,7 @@ class HicetnuncContextProviderClass extends Component {
                   ),
                 parseFloat(royalties) * 10
               )
-              .send({ amount: 0 })
+              .send({ amount: 0, storageLimit: 310 })
           )
           .then((op) =>
             op.confirmation(1).then(() => {
@@ -243,13 +254,17 @@ class HicetnuncContextProviderClass extends Component {
           .then((c) =>
             c.methods
               .collect(parseFloat(objkt_amount), parseFloat(swap_id))
-              .send({ amount: parseFloat(amount), mutez: true })
+              .send({
+                amount: parseFloat(amount),
+                mutez: true,
+                storageLimit: 310,
+              })
           )
           .catch((e) => e)
       },
 
       swap: async (objkt_amount, objkt_id, xtz_per_objkt) => {
-        console.log(objkt_amount)
+        // console.log(objkt_amount)
         return await Tezos.wallet
           .at(this.state.objkt)
           .then((c) =>
@@ -259,7 +274,7 @@ class HicetnuncContextProviderClass extends Component {
                 parseFloat(objkt_id),
                 parseFloat(xtz_per_objkt)
               )
-              .send({ amount: 0 })
+              .send({ amount: 0, storageLimit: 310 })
           )
           .catch((e) => e)
       },
@@ -287,7 +302,7 @@ class HicetnuncContextProviderClass extends Component {
       },
 
       claim_hDAO: async (hDAO_amount, objkt_id) => {
-        console.log('claiming', hDAO_amount, objkt_id)
+        // console.log('claiming', hDAO_amount, objkt_id)
         await Tezos.wallet
           .at('KT1TybhR7XraG75JFYKSrh7KnxukMBT5dor6')
           .then((c) => {
@@ -299,7 +314,7 @@ class HicetnuncContextProviderClass extends Component {
 
       burn: async (objkt_id, amount) => {
         var tz = await wallet.client.getActiveAccount()
-        console.log('trying to burn', parseInt(amount))
+        // console.log('trying to burn', parseInt(amount))
 
         await Tezos.wallet
           .at('KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton')
@@ -325,16 +340,18 @@ class HicetnuncContextProviderClass extends Component {
         return await Tezos.wallet
           .at(this.state.objkt)
           .then((c) =>
-            c.methods.cancel_swap(parseFloat(swap_id)).send({ amount: 0 })
+            c.methods
+              .cancel_swap(parseFloat(swap_id))
+              .send({ amount: 0, storageLimit: 310 })
           )
           .catch((e) => e)
       },
 
       signStr: async (payload) => {
         const signedPayload = await wallet.client.requestSignPayload(payload)
-        console.log(signedPayload, payload)
+        // console.log(signedPayload, payload)
         const signature = signedPayload
-        console.log(signature.signature, payload.payload, await wallet.getPKH())
+        // console.log(signature.signature, payload.payload, await wallet.getPKH())
         /*         const r = await KeyStoreUtils.checkSignature(
           signature.signature,
           payload.payload,
@@ -348,7 +365,7 @@ class HicetnuncContextProviderClass extends Component {
             `https://tezos-prod.cryptonomic-infra.tech/chains/main/blocks/head/context/contracts/${await wallet.getPKH()}/manager_key`
           )
         )
-        console.log(r)
+        // console.log(r)
       },
 
       registry: async (alias, metadata) => {
@@ -362,7 +379,7 @@ class HicetnuncContextProviderClass extends Component {
                     (hex += c.charCodeAt(0).toString(16).padStart(2, '0')),
                   ''
                 ),
-                alias
+              alias
                 .split('')
                 .reduce(
                   (hex, c) =>
@@ -390,9 +407,9 @@ class HicetnuncContextProviderClass extends Component {
         )
       },
 
-      unregister : async () => {
+      unregister: async () => {
         return await Tezos.wallet.at(this.state.unregistry).then((c) => {
-          c.methods.sign(undefined).send({amount : 0})
+          c.methods.sign(undefined).send({ amount: 0 })
         })
       },
 
@@ -425,7 +442,7 @@ class HicetnuncContextProviderClass extends Component {
         // This piece of code should be called on startup to "load" the current address from the user
         // If the activeAccount is present, no "permission request" is required again, unless the user "disconnects" first.
         const activeAccount = await wallet.client.getActiveAccount()
-        console.log(activeAccount)
+        // console.log(activeAccount)
         if (activeAccount === undefined) {
           console.log('permissions')
           await wallet.requestPermissions({ network })
@@ -438,11 +455,11 @@ class HicetnuncContextProviderClass extends Component {
           wallet,
         })
         this.state.setAuth(await wallet.getPKH())
-        console.log(this.state)
+        // console.log(this.state)
       },
 
       disconnect: async () => {
-        console.log('disconnect wallet')
+        // console.log('disconnect wallet')
         // This will clear the active account and the next "syncTaquito" will trigger a new sync
         await wallet.client.clearActiveAccount()
         this.setState({
@@ -460,7 +477,7 @@ class HicetnuncContextProviderClass extends Component {
         op.destination = op.to
         op.kind = 'transaction'
         delete op.to
-        console.log(obj.result)
+        // console.log(obj.result)
 
         this.state.client.requestOperation({
           operationDetails: [obj.result],
@@ -497,7 +514,7 @@ class HicetnuncContextProviderClass extends Component {
               parseFloat(res.data[res.data.length - 1].balance / 1000000)
             )
           })
-          .catch((e) => console.log('balance error', e))
+          .catch((e) => console.error('balance error', e))
       },
 
       collapsed: true,

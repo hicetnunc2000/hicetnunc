@@ -1,0 +1,55 @@
+@import '../../styles/layout.scss';
+@import '../../styles/variables.scss';
+
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  min-height: 100vh;
+
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  overflow-y: auto;
+  z-index: 2;
+
+  @supports (padding: unquote('max(0px)')) {
+    padding-top: unquote('max(0px, env(safe-area-inset-top))');
+    padding-bottom: unquote('max(0px, env(safe-area-inset-top))');
+  }
+
+  @include respond-to('tablet') {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+  }
+}
+
+.image {
+  position: relative;
+  width: 50vh;
+  max-width: 100%;
+  margin: 100px 0;
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  @include respond-to('desktop') {
+    width: 70vh;
+  }
+
+  > div {
+    width: 100%;
+  }
+}
+
+.info {
+  width: 100%;
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
