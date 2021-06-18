@@ -57,7 +57,8 @@ async function fetchFrenCreations(frensAddress) {
 
 const query_frens = `
   query collectorGallery($address: String!) {
-    hic_et_nunc_token_holder(where: {holder_id: {_eq: $address}}, order_by: {token_id: desc}) {
+    hic_et_nunc_token_holder(where: {holder_id: {_eq: $address}, _not: {token: {creator: {address: {_eq: $address}}}}}, order_by: {token_id: desc})
+    {
       token {
         id
         artifact_uri
@@ -222,15 +223,35 @@ export default class Friends extends Component {
             </Padding>
           </Container>
         )}
-        <div>
-          <Container>
-            <Padding>
-              {this.state.creations.map((item, index) => (
-                <FeedItem key={`${item.id}-${index}`} {...item} creator_id={item.creator.address} />
-              ))}
-            </Padding>
-          </Container>
-        </div>
+        {!this.state.loading && (
+          <>
+            {this.state.creations == 0 && (
+              <Container>
+                <Padding>
+                  <p style={{                    
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                    }}>
+                      No OBJKTs have been collected by this wallet address
+                    </p>
+                  {this.state.creations}
+                </Padding>
+              </Container>
+            )}
+          </>
+        )}
+        {!this.state.loading && (
+          <div>
+            <Container>
+              <Padding>
+                {this.state.creations.map((item, index) => (
+                  <FeedItem key={`${item.id}-${index}`} {...item} creator_id={item.creator.address} />
+                ))}
+              </Padding>
+            </Container>
+          </div>
+        )}
       </Page>
     )
   }
