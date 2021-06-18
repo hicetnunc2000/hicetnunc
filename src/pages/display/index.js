@@ -171,6 +171,18 @@ async function fetchCreations(addr) {
   return result
 }
 
+async function fetchTz(addr) {
+  const { errors, data } = await fetchGraphQL(query_tz, 'addressQuery', {
+    address: addr,
+  })
+  if (errors) {
+    console.error(errors)
+  }
+  const result = data.hic_et_nunc_holder
+  // console.log({ result })
+  return result
+}
+
 export default class Display extends Component {
   static contextType = HicetnuncContext
 
@@ -230,6 +242,9 @@ export default class Display extends Component {
         if (data.data.tzprofile) this.setState({ tzprofile })
       })
 
+      let resTz = await fetchTz(wallet)
+      this.setState({ hdao: Math.floor(resTz[0].hdao_balance/1000000) })
+
       this.onReady()
     } else {
       let res = await fetchSubjkts(window.location.pathname.split('/')[1])
@@ -239,6 +254,9 @@ export default class Display extends Component {
         wallet: res[0].address,
         walletPreview: walletPreview(res[0].address),
       })
+
+      let resTz = await fetchTz(this.state.wallet)
+      this.setState({ hdao: Math.floor(resTz[0].hdao_balance/1000000) })
 
       await GetUserMetadata(this.state.wallet).then((data) => {
         const {
