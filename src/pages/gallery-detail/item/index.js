@@ -112,7 +112,7 @@ export const Item = ({ objkt, onClick, minimal }) => {
           </div>
         ) : (
           <div>
-            <Loading />
+            {/* <Loading /> */}
           </div>
         )}
       </>

@@ -10,6 +10,40 @@ import { Artist } from './artist'
 import { ResponsiveMasonry } from '../../components/responsive-masonry'
 import styles from './styles.module.scss'
 
+async function fetchGraphQL(operationsDoc, operationName, variables) {
+  const result = await fetch(
+    "https://api.hicdex.com/v1/graphql",
+    {
+      method: "POST",
+      body: JSON.stringify({
+        query: operationsDoc,
+        variables: variables,
+        operationName: operationName
+      })
+    }
+  );
+
+  return await result.json()
+}
+
+async function fetchObjkts(ids) {
+  const { errors, data } = await fetchGraphQL(`
+    query Objkts($_in: [bigint!] = "") {
+      hic_et_nunc_token(where: { id: {_in: $_in}}) {
+        artifact_uri
+        display_uri
+        creator_id
+        id
+        mime
+        thumbnail_uri
+        timestamp
+        title
+        hdao_balance
+      }
+    }`, "Objkts", { "_in" : ids })
+  return data.hic_et_nunc_token
+}
+
 export const GalleryDetail = () => {
   const { id } = useParams()
   const [loaded, setLoaded] = useState(false)
@@ -53,9 +87,9 @@ export const GalleryDetail = () => {
     <Page title={collection?.title}>
       {!loaded ? (
         <Container>
-          <Padding>
+{/*           <Padding>
             <Loading />
-          </Padding>
+          </Padding> */}
         </Container>
       ) : (
         <div className={styles.container}>
@@ -90,6 +124,7 @@ export const GalleryDetail = () => {
                       <Artist artist={artist} />
                       <ResponsiveMasonry>
                         {artist.objkt.map((objkt) => {
+                          
                           return (
                             <Item
                               key={objkt}
