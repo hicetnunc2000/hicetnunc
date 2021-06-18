@@ -122,6 +122,29 @@ query addressQuery($address: String!) {
 }
 `
 
+const query_v1_swaps = `
+query querySwaps($address: String!) {
+  hic_et_nunc_swap(where: {creator_id: {_eq: $address}, status: {_eq: "0"}, token: {supply: {_gt: "1"}}}, order_by: {price: desc, amount_left: desc}) {
+    amount_left
+    price
+    token_id
+    id
+  }
+}
+`
+async function fetchSwaps(address) {
+
+  const { errors, data } = await fetchGraphQL(query_v1_swaps, 'querySwaps', {
+    address : address
+  })
+  if (errors) {
+    console.error(errors)
+  }
+  const result = data.hic_et_nunc_swap
+  return result
+
+}
+
 async function fetchSubjkts(subjkt) {
   const { errors, data } = await fetchGraphQL(query_subjkts, 'subjktsQuery', {
     subjkt: subjkt,
@@ -172,6 +195,7 @@ export default class Display extends Component {
   }
 
   componentWillMount = async () => {
+
     const id = window.location.pathname.split('/')[1]
     console.log(window.location.pathname.split('/'))
     if (id === 'tz') {
@@ -239,97 +263,19 @@ export default class Display extends Component {
         if (data.data.logo) this.setState({ logo })
         this.onReady()
       })
+      this.onReady()
+
     }
   }
 
-  // called if there's no redirect
-  onReady = async () => {
-    this.context.setPath(window.location.pathname)
-
-    // based on route, define initial state
-    if (this.state.subjkt !== '') {
-      // if alias route
-      if (window.location.pathname.split('/')[2] === 'creations') {
-        this.setState({
-          creationsState: true,
-          collectionState: false,
-          marketState: false,
-        })
-      } else if (window.location.pathname.split('/')[2] === 'collection') {
-        this.setState({
-          creationsState: false,
-          collectionState: true,
-          marketState: false,
-        })
-      } else if (window.location.pathname.split('/')[2] === 'market') {
-        this.setState({
-          creationsState: false,
-          collectionState: false,
-          marketState: true,
-        })
-      }
-    } else {
-      // if tz/wallethash route
-      if (window.location.pathname.split('/')[3] === 'creations') {
-        this.setState({
-          creationsState: true,
-          collectionState: false,
-          marketState: false,
-        })
-      } else if (window.location.pathname.split('/')[3] === 'collection') {
-        this.setState({
-          creationsState: false,
-          collectionState: true,
-          marketState: false,
-        })
-      } else if (window.location.pathname.split('/')[3] === 'market') {
-        this.setState({
-          creationsState: false,
-          collectionState: false,
-          marketState: true,
-        })
-      }
-    }
-
-    let addr = ''
-
-    if (window.location.pathname.split('/')[1] === 'tz') {
-      addr = window.location.pathname.split('/')[2]
-    } else {
-      let res = await fetchSubjkts(window.location.pathname.split('/')[1])
-      console.log(res)
-      addr = res[0].address
-
-      this.setState({ subjkt: res[0].name, walletPrev: walletPreview(addr) })
-      if (!this.state.alias) {
-        this.setState({
-          addr: res[0].address,
-          description: res[0].metadata.description,
-        })
-      }
-    }
+  creations = async () => {
     let list = await getRestrictedAddresses()
-
-    let creations = []
-    let collection = []
-    if (!list.includes(addr)) {
-      creations = await fetchCreations(addr)
-      collection = await fetchCollection(addr)
+    console.log(this.state.wallet)
+    console.log(!list.includes(this.state.wallet))
+    if (!list.includes(this.state.wallet)) {
+      this.setState({ creations : await fetchCreations(this.state.wallet), loading : false })
     }
 
-    console.log(creations)
-    console.log('collection', collection)
-    // market
-
-    this.setState({
-      creations: creations,
-      loading: false,
-      collection: collection,
-      /* market, */
-    })
-  }
-
-  creations = () => {
     this.setState({
       creationsState: true,
       collectionState: false,
@@ -345,11 +291,17 @@ export default class Display extends Component {
     }
   }
 
-  collection = () => {
+  collection = async () => {
+
+    let list = await getRestrictedAddresses()
+    if (!list.includes(this.state.wallet)) {
+      this.setState({ collection : await fetchCollection(this.state.wallet), loading : false })
+    }
+
     this.setState({
       creationsState: false,
       collectionState: true,
-      marketState: false,
+      marketState: false
     })
 
     if (this.state.subjkt !== '') {
@@ -362,12 +314,15 @@ export default class Display extends Component {
   }
 
   market = () => {
+
+    this.setState({ market : fetchSwaps(this.state.wallet), loading : false })
+
     this.setState({
       creationsState: false,
       collectionState: false,
       marketState: true,
     })
-
+    console.log(this.state)
     if (this.state.subjkt !== '') {
       // if alias route
       this.props.history.push(`/${this.state.subjkt}/market`)
@@ -375,7 +330,40 @@ export default class Display extends Component {
       // if tz/wallethash route
       this.props.history.push(`/tz/${this.state.wallet}/market`)
     }
+
   }
+  // called if there's no redirect
+  onReady = async () => {
+
+    // based on route, define initial state
+    if (this.state.subjkt !== '') {
+      // if alias route
+      console.log('oi')
+      if (window.location.pathname.split('/')[2] === 'creations') {
+        this.creations()
+      } else if (window.location.pathname.split('/')[2] === 'collection') {
+        this.collection()
+      } else if (window.location.pathname.split('/')[2] === 'market') {
+        this.market()
+      } else {
+
+        this.creations()
+      }
+    } else {
+      // if tz wallet route
+      if (window.location.pathname.split('/')[3] === 'creations') {
+        this.creations()
+      } else if (window.location.pathname.split('/')[3] === 'collection') {
+        this.collection()
+      } else if (window.location.pathname.split('/')[3] === 'market') {
+        this.market()
+      } else {
+        this.creations()
+      }
+    }
+  }
+
+
 
   render() {
     return (
@@ -567,9 +555,9 @@ export default class Display extends Component {
                 </Primary>
               </Button>
 
-              <Button onClick={this.market}>
+{/*               <Button onClick={this.market}>
                 <Primary selected={this.state.v1}>v1 swaps</Primary>
-              </Button>
+              </Button> */}
             </div>
           </Padding>
         </Container>
