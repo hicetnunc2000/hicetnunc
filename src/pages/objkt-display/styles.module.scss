@@ -39,10 +39,6 @@
   justify-content: center;
   align-items: center;
 
-  // @include respond-to('desktop') {
-    // width: 60vh;
-  // }
-
   > div {
     width: 100%;
   }
@@ -50,14 +46,11 @@
 
 .info {
   width: 100%;
-  padding: 20px;
   background-color: var(--background-color);
   color: var(--text-color);
   border-top: 1px solid #222;
 
   > div {
-    // margin: 0 auto;
-
     @include respond-to('desktop') {
       width: 1024px;
       max-width: 100%;
