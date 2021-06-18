@@ -48,7 +48,7 @@
   width: 100%;
   background-color: var(--background-color);
   color: var(--text-color);
-  border-top: 1px solid #222;
+  border-top: 1px solid var(--border-color);
 
   > div {
     @include respond-to('desktop') {
