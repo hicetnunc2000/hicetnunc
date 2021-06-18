@@ -86,7 +86,6 @@ export const renderMediaType = ({
   let parsedDisplayUri
 
   switch (mimeType) {
-
     /* IMAGES */
     case MIMETYPE.BMP:
     case MIMETYPE.GIF:

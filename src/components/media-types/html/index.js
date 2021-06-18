@@ -18,7 +18,7 @@ export const HTMLComponent = (props) => {
     displayUri,
     previewUri,
     creator,
-    id,
+    objkt,
     onDetailView,
     preview,
   } = props
@@ -36,8 +36,8 @@ export const HTMLComponent = (props) => {
     _viewer_ = context.address.address
   }
 
-  if (id) {
-    _objectId_ = String(id)
+  if (objkt) {
+    _objectId_ = String(objkt)
   }
 
   // preview
@@ -162,7 +162,6 @@ export const HTMLComponent = (props) => {
     )
   }
 
-  console.log('HTML')
   return (
     <div className={classes}>
       <iframe
