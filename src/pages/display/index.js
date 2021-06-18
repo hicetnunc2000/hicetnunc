@@ -90,11 +90,7 @@ query creatorGallery($address: String!) {
     mime
     title
     description
-    supply,
-    hdao_balance,
-    creator {
-      hdao_balance
-    }
+    supply
     token_tags {
       tag {
         tag
@@ -114,14 +110,6 @@ query subjktsQuery($subjkt: String!) {
 }
 `
 
-// const query_creatorHdao = `
-// query creatorGallery($address: String!) {
-//   hic_et_nunc_holder(where: {creator: {_eq: $address}}) {
-//     hdao_balance,
-//     address
-//   }
-// }
-// `
 async function fetchSubjkts(subjkt) {
   const { errors, data } = await fetchGraphQL(query_subjkts, 'subjktsQuery', {
     subjkt: subjkt,
@@ -144,23 +132,9 @@ async function fetchCreations(addr) {
     console.error(errors)
   }
   const result = data.hic_et_nunc_token
-  console.log({ result })
+  /* console.log({ result }) */
   return result
 }
-
-// async function fetchCreatorHdao(addr) {
-//   const { errors, data } = await fetchGraphQL(
-//     query_creatorHdao,
-//     'creatorGallery',
-//     { address: addr }
-//   )
-//   if (errors) {
-//     console.error(errors)
-//   }
-//   const result = data.hic_et_nunc_token
-//   console.log({ result })
-//   return result
-// }
 
 export default class Display extends Component {
   static contextType = HicetnuncContext
@@ -221,10 +195,6 @@ export default class Display extends Component {
       })
 
       this.onReady()
-      
-      // let res = await fetchCreatorHdao(wallet)
-      // console.log("ashfoasjdf " + res)
-
     } else {
       let res = await fetchSubjkts(window.location.pathname.split('/')[1])
       console.log(res)
@@ -330,18 +300,13 @@ export default class Display extends Component {
 
     let creations = []
     let collection = []
-
     if (!list.includes(addr)) {
       creations = await fetchCreations(addr)
       collection = await fetchCollection(addr)
-      console.log('creations', creations)
-      console.log('collection', collection)
-
-      this.setState({
-        hdao: Math.floor(creations[0].creator.hdao_balance / 1000000)
-      })
     }
 
+    console.log(creations)
+    console.log('collection', collection)
     // market
 
     this.setState({
