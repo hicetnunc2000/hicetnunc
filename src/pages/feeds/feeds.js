@@ -35,7 +35,7 @@ export const Feeds = ({ type }) => {
       await getHdaoFeed()
     }
     if (type === 2) await getRandomFeed()
-    if (type === 3) getLatest(Math.min.apply(Math, items.map(e => e.id)))
+    if (type === 3) await getLatest(Math.min.apply(Math, items.map(e => e.id)))
   }
 
   useEffect(async () => {
@@ -63,13 +63,7 @@ export const Feeds = ({ type }) => {
     } else if (type === 2) {
       await getRandomFeed()
     } else if (type === 3) {
-      let result = await axios
-        .post(process.env.REACT_APP_GRAPHQL_FEED, { lastId: lastId })
-        .then((res) => res.data)
-      console.log(result)
-      setId(Math.min.apply(Math, result.map((e) => e.id)))
-      const next = result.concat(result)
-      setItems(next)
+      await getLatest(lastId)
 
       /*       GetFeaturedFeed({ counter: count, max_time: startTime })
         .then((result) => {
@@ -95,9 +89,7 @@ export const Feeds = ({ type }) => {
       .then((res) => res.data)
     const next = items.concat(result)
     setItems(next)
-    if (result.length < 10) {
-      setHasMore(false)
-    }
+ 
   }
 
   const getHdaoFeed = async () => {
