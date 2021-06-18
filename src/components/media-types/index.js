@@ -16,7 +16,7 @@ const HashToURL = (hash, type) => {
   // when on preview the hash might be undefined.
   // its safe to return empty string as whatever called HashToURL is not going to be used
   // artifactUri or displayUri
-  if (hash === undefined) {
+  if (hash == undefined) {
     return ''
   }
 
