@@ -22,8 +22,8 @@ export const VectorComponent = ({
   let _viewer_ = false
   let _objkt_ = false
 
-  if (creator) {
-    _creator_ = creator
+  if (creator && creator.address) {
+    _creator_ = creator.address
   }
 
   if (context.address && context.address.address) {
