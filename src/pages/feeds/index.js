@@ -5,7 +5,7 @@ export const Latest = () => {
 }
 
 export const Hdao = () => {
-  return <Feeds type={3} />
+  return <Feeds type={1} />
 }
 
 export const Random = () => {
@@ -13,5 +13,5 @@ export const Random = () => {
 }
 
 export const Featured = () => {
-  return <Feeds type={1} />
+  return <Feeds type={3} />
 }
