@@ -116,7 +116,7 @@ export class Config extends Component {
   render() {
     return (
       <Page>
-{/*         <Container>
+        <Container>
           <Padding>
             <Input
               name="subjkt"
@@ -136,7 +136,8 @@ export class Config extends Component {
               <Curate>Save Profile</Curate>
             </Button>
           </Padding>
-        </Container> */}
+          <p style={{fontSize : "12px"}}> one can link their twitter account through <a href="https://tzprofiles.com">tz profiles</a></p>
+        </Container>
 
         <Container>
           <Padding>
@@ -153,6 +154,14 @@ export class Config extends Component {
             </Button>
 
             <p>hic et nunc DAO ○ curation parameter</p>
+          </Padding>
+        </Container>
+
+        <Container>
+          <Padding>
+            <Button onClick={this.unregister}>
+              <Curate>Unregister</Curate>
+            </Button>
           </Padding>
         </Container>
       </Page>
