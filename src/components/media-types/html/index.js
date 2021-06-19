@@ -166,7 +166,7 @@ export const HTMLComponent = (props) => {
     <div className={classes}>
       <iframe
         title="html-embed"
-        src={`${artifactUri}?creator=${_creator_}&viewer=${_viewer_}&objkt=${_objectId_}`}
+        src={`${artifactUri}/?creator=${_creator_}&viewer=${_viewer_}&objkt=${_objectId_}`}
         sandbox="allow-scripts allow-same-origin"
         allow="accelerometer; camera; gyroscope; microphone; xr-spatial-tracking;"
       />
