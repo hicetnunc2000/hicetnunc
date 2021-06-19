@@ -13,5 +13,5 @@ export const Random = () => {
 }
 
 export const Featured = () => {
-  return <Feeds type={3} />
+  return <Feeds type={1} />
 }
