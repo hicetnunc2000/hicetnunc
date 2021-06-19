@@ -15,6 +15,7 @@
 
     @include respond-to('tablet') {
       max-height: 70vh;
+      max-height: calc(100vh - 280px);
       width: auto;
       height: initial;
       max-width: 100%;

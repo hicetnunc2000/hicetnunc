@@ -31,17 +31,13 @@
 
 .image {
   position: relative;
-  width: 50vh;
-  max-width: 100%;
-  margin: 100px 0;
+  width: 100%;
+  max-width: 1024px;
+  margin: 105px 0 50px;
   flex: 1;
   display: flex;
   justify-content: center;
   align-items: center;
-
-  @include respond-to('desktop') {
-    width: 70vh;
-  }
 
   > div {
     width: 100%;
@@ -52,4 +48,12 @@
   width: 100%;
   background-color: var(--background-color);
   color: var(--text-color);
+  border-top: 1px solid var(--border-color);
+
+  > div {
+    @include respond-to('desktop') {
+      width: 1024px;
+      max-width: 100%;
+    }
+  }
 }
