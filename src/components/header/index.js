@@ -115,8 +115,8 @@ export const Header = () => {
                 <nav className={styles.content}>
                   <ul>
                     <li>
-                      <Button onClick={() => handleRoute('/hdao')}>
-                        <Primary>○</Primary>
+                      <Button onClick={() => handleRoute('/latest')}>
+                        <Primary>latest</Primary>
                       </Button>
                     </li>
                     <li>

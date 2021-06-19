@@ -19,7 +19,7 @@ export const routes = [
   },
   {
     exact: false,
-    path: '/hdao',
+    path: '/latest',
     component: Hdao,
   },
   {
