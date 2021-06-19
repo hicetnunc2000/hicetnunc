@@ -11,7 +11,8 @@
     z-index: 10;
     .popup__inner {
         border-radius: 3px;
-        box-shadow: 10px 10px 25px var(--shadow-color);
+        border: 2px solid var(--text-color);
+        box-shadow: 0 0 0 99999px #1119;
         position: relative;
         
         width: 90%;
@@ -36,10 +37,11 @@
             display: inline-block;
             height: fit-content;
             width: 1.5em;
-            top: 0.5rem;
-            right: 0.5rem;
+            top: 0.3rem;
+            right: 0.3rem;
             background-color: transparent;
             color: var(--text-color);
+            font-size: x-large;
         }
 
         .popup__fixed {
