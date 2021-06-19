@@ -116,7 +116,7 @@ export class Config extends Component {
   render() {
     return (
       <Page>
-        <Container>
+{/*         <Container>
           <Padding>
             <Input
               name="subjkt"
@@ -136,7 +136,7 @@ export class Config extends Component {
               <Curate>Save Profile</Curate>
             </Button>
           </Padding>
-        </Container>
+        </Container> */}
 
         <Container>
           <Padding>
