@@ -145,6 +145,7 @@ export const renderMediaType = ({
             objkt={objkt}
             preview={preview}
             onDetailView={interactive}
+            displayView={displayView}
           />
         </Container>
       )

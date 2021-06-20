@@ -21,6 +21,7 @@ export const HTMLComponent = (props) => {
     objkt,
     onDetailView,
     preview,
+    displayView
   } = props
   const context = useContext(HicetnuncContext)
 
@@ -162,14 +163,27 @@ export const HTMLComponent = (props) => {
     )
   }
 
-  return (
-    <div className={classes}>
-      <iframe
-        title="html-embed"
-        src={`${artifactUri}/?creator=${_creator_}&viewer=${_viewer_}&objkt=${_objectId_}`}
-        sandbox="allow-scripts allow-same-origin"
-        allow="accelerometer; camera; gyroscope; microphone; xr-spatial-tracking;"
-      />
-    </div>
-  )
+  if (!displayView) {
+    return (
+      <div>
+        <iframe style={{height : '65vh', width: '100vw'}}
+          title="html-embed"
+          src={`${artifactUri}/?creator=${_creator_}&viewer=${_viewer_}&objkt=${_objectId_}`}
+          sandbox="allow-scripts allow-same-origin"
+          allow="accelerometer; camera; gyroscope; microphone; xr-spatial-tracking;"
+        />
+      </div>
+    )
+  } else {
+    return (
+      <div className={classes}>
+        <iframe
+          title="html-embed"
+          src={`${artifactUri}/?creator=${_creator_}&viewer=${_viewer_}&objkt=${_objectId_}`}
+          sandbox="allow-scripts allow-same-origin"
+          allow="accelerometer; camera; gyroscope; microphone; xr-spatial-tracking;"
+        />
+      </div>
+    )
+  }
 }

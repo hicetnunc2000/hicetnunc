@@ -117,6 +117,7 @@ export const ObjktDisplay = () => {
                 creator: nft.creator,
                 objkt: nft.id,
                 interactive: true,
+                displayView: false
               })}
             </div>
             <div className={styles.info}>
