@@ -30,6 +30,7 @@ export class Config extends Component {
     description: '',
     social_media: '',
     subjktUri: '', // uploads image
+    subjkt_url: ''
   }
 
   componentWillMount = () => {
@@ -37,6 +38,10 @@ export class Config extends Component {
   }
 
   handleChange = (e) => {
+    if (e.target.name == 'subjkt_url' && !e.target.checkValidity()){
+      console.log(e.target.pattern)
+      e.target.value = e.target.value.replace(/[^a-z0-9-._]/g, "")
+    }
     this.setState({ [e.target.name]: e.target.value })
   }
 
@@ -132,50 +137,71 @@ export class Config extends Component {
               <div style={{ backgroundColor: 'black', height: '0.5px' }}></div>
             </div>
             <div style={{ paddingTop: '15%' }}>
+              <div><strong>SUBJKT</strong></div>
+              <label>hicetnunc.xyz/</label>
               <input
+                style={{ marginBottom: '4px' }}
+                type="text"
+                name="subjkt_url"
+                onChange={this.handleChange}
+                placeholder="subjkt-url"
+                pattern="^[a-z0-9-._]*$"
+                value={this.subjkt_url}
+              ></input> (a-z 0-9 - _ .)
+              <br />
+              <label>Display Name: </label>
+              <input
+                style={{ marginBottom: '4px' }}
                 type="text"
                 name="subjkt"
                 onChange={this.handleChange}
-                placeholder="SUBJKT"
+                placeholder="Subjkt Name"
+                pattern="^[a-z0-9-._]*$"
+                value={this.subjkt}
               ></input>
               <br />
-              <input
-                type="text"
+              <label>Description: &nbsp;</label>
+              <textarea
+                style={{ marginBottom: '4px', width: '100%' }}
                 name="description"
                 onChange={this.handleChange}
                 placeholder="description"
-              ></input>
+                value={this.description}
+              ></textarea>
               <br />
               <button
                 style={{
                   border: 'none',
-                  borderBottom: '3px solid black',
-                  borderRight: '3px solid black',
+                  padding: '4px 8px',
+                  margin: '8px 4px'
                 }}
                 onClick={this.subjkt_config}
               >
-                config SUBJKT
+                set SUBJKT
               </button>
             </div>
             <div style={{ paddingTop: '5%' }}>
+              <div><strong>CURATE</strong></div>
+              <label>hDAO amount: &nbsp;</label>
               <input
+                style={{ marginBottom: '4px' }}
                 type="text"
                 name="vote"
                 onChange={this.handleChange}
                 placeholder="μ○"
-              ></input>
+              ></input> (default: 1000)
               <p style={{ fontSize: '12px' }}>
-                hic et nunc DAO ○ curation parameter
+                hic et nunc DAO ○ sent per curate, in millionths <a style={{ color: 'var(--text-color)', fontWeight: 'bold' }} href="https://github.com/hicetnunc2000/hicetnunc/wiki/hDAO#what-are-those-little-circles-on-each-post-hdao-what-is-that" target="_blank">Learn More</a>
               </p>
               <button
                 style={{
                   border: 'none',
-                  borderBottom: '3px solid black',
-                  borderRight: '3px solid black',
+                  padding: '4px 8px',
+                  margin: '8px 4px'
                 }}
                 onClick={this.hDAO_config}
               >
-                config ○
+                set curate
               </button>
             </div>
             {/*             <div>
