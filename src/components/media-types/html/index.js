@@ -166,7 +166,7 @@ export const HTMLComponent = (props) => {
   if (!displayView) {
     return (
       <div>
-        <iframe style={{height : '65vh', width: '100vw'}}
+        <iframe style={{height : '65vh', width: '100vw', border : 'none'}}
           title="html-embed"
           src={`${artifactUri}/?creator=${_creator_}&viewer=${_viewer_}&objkt=${_objectId_}`}
           sandbox="allow-scripts allow-same-origin"
