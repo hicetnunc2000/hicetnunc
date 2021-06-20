@@ -135,7 +135,7 @@ query querySwaps($address: String!) {
 async function fetchSwaps(address) {
 
   const { errors, data } = await fetchGraphQL(query_v1_swaps, 'querySwaps', {
-    address : address
+    address: address
   })
   if (errors) {
     console.error(errors)
@@ -243,7 +243,7 @@ export default class Display extends Component {
       })
 
       let resTz = await fetchTz(wallet)
-      this.setState({ hdao: Math.floor(resTz[0].hdao_balance/1000000) })
+      this.setState({ hdao: Math.floor(resTz[0].hdao_balance / 1000000) })
 
       this.onReady()
     } else {
@@ -256,7 +256,7 @@ export default class Display extends Component {
       })
 
       let resTz = await fetchTz(this.state.wallet)
-      this.setState({ hdao: Math.floor(resTz[0].hdao_balance/1000000) })
+      this.setState({ hdao: Math.floor(resTz[0].hdao_balance / 1000000) })
 
       await GetUserMetadata(this.state.wallet).then((data) => {
         const {
@@ -291,7 +291,7 @@ export default class Display extends Component {
     console.log(this.state.wallet)
     console.log(!list.includes(this.state.wallet))
     if (!list.includes(this.state.wallet)) {
-      this.setState({ creations : await fetchCreations(this.state.wallet), loading : false })
+      this.setState({ creations: await fetchCreations(this.state.wallet), loading: false })
     }
 
     this.setState({
@@ -313,7 +313,7 @@ export default class Display extends Component {
 
     let list = await getRestrictedAddresses()
     if (!list.includes(this.state.wallet)) {
-      this.setState({ collection : await fetchCollection(this.state.wallet), loading : false })
+      this.setState({ collection: await fetchCollection(this.state.wallet), loading: false })
     }
 
     this.setState({
@@ -333,7 +333,7 @@ export default class Display extends Component {
 
   market = () => {
 
-    this.setState({ market : fetchSwaps(this.state.wallet), loading : false })
+    this.setState({ market: fetchSwaps(this.state.wallet), loading: false })
 
     this.setState({
       creationsState: false,
@@ -573,7 +573,7 @@ export default class Display extends Component {
                 </Primary>
               </Button>
 
-{/*               <Button onClick={this.market}>
+              {/*               <Button onClick={this.market}>
                 <Primary selected={this.state.v1}>v1 swaps</Primary>
               </Button> */}
             </div>
@@ -599,6 +599,7 @@ export default class Display extends Component {
                         mimeType: nft.mime,
                         artifactUri: nft.artifact_uri,
                         displayUri: nft.display_uri,
+                        profile: true
                       })}
                     </div>
                   </Button>

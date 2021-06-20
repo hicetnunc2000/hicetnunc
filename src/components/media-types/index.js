@@ -81,6 +81,8 @@ export const renderMediaType = ({
 
   // when previewing during mint process
   preview = false,
+
+  profile
 }) => {
   let parsedArtifactUri
   let parsedDisplayUri
@@ -93,8 +95,8 @@ export const renderMediaType = ({
     case MIMETYPE.PNG:
     case MIMETYPE.TIFF:
     case MIMETYPE.WEBP:
-      parsedArtifactUri = HashToURL(artifactUri, 'IPFS')
-      parsedDisplayUri = HashToURL(displayUri, 'IPFS')
+      parsedArtifactUri = HashToURL(artifactUri, 'CLOUDFLARE')
+      parsedDisplayUri = HashToURL(displayUri, 'CLOUDFLARE')
       // when its a GIF we always load the artifactUri by triggering `onDetailView` to be `true`.
       return (
         <Container interactive={interactive}>
@@ -132,7 +134,7 @@ export const renderMediaType = ({
     case MIMETYPE.ZIP1:
     case MIMETYPE.ZIP2:
       parsedArtifactUri = HashToURL(artifactUri, 'IPFS')
-      parsedDisplayUri = HashToURL(displayUri, 'IPFS')
+      parsedDisplayUri = HashToURL(displayUri, 'CLOUDFLARE')
       return (
         <Container interactive={interactive}>
           <HTMLComponent
@@ -195,6 +197,7 @@ export const renderMediaType = ({
             previewUri={previewUri}
             preview={preview}
             onDetailView={interactive}
+            profile={profile}
           />
         </Container>
       )
