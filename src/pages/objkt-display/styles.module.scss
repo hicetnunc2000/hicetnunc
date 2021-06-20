@@ -31,8 +31,9 @@
 
 .image {
   position: relative;
-  width: 50vh;
-  max-width: 100%;
+  margin-top: 25%;
+
+  height: 50vh;
   margin: 100px 0;
   flex: 1;
   display: flex;
@@ -40,8 +41,8 @@
   align-items: center;
 
   @include respond-to('desktop') {
-    width: 70vh;
-    min-height: 65vh;
+    margin-top: 10px;
+    height: 50vh;
   }
 
   > div {
@@ -50,6 +51,7 @@
 }
 
 .info {
+  position: relative;
   width: 100%;
   background-color: var(--background-color);
   color: var(--text-color);
