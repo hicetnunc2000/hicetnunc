@@ -147,7 +147,7 @@ export class Config extends Component {
                 placeholder="subjkt-url"
                 pattern="^[a-z0-9-._]*$"
                 value={this.subjkt_url}
-              ></input> (a-z 0-9 - _ .)
+              ></input> <span style={{display: 'inline-block', marginBottom: '4px', opacity: '0.8'}}>(a-z 0-9 - _ .)</span>
               <br />
               <label>Display Name: </label>
               <input
@@ -173,7 +173,8 @@ export class Config extends Component {
                 style={{
                   border: 'none',
                   padding: '4px 8px',
-                  margin: '8px 4px'
+                  margin: '8px 0',
+                  fontWeight: 'bold'
                 }}
                 onClick={this.subjkt_config}
               >
@@ -189,7 +190,7 @@ export class Config extends Component {
                 name="vote"
                 onChange={this.handleChange}
                 placeholder="μ○"
-              ></input> (default: 1000)
+              ></input> <span style={{display: 'inline-block', marginBottom: '4px', opacity: '0.8'}}>(default: 1000)</span>
               <p style={{ fontSize: '12px' }}>
                 hic et nunc DAO ○ sent per curate, in millionths <a style={{ color: 'var(--text-color)', fontWeight: 'bold' }} href="https://github.com/hicetnunc2000/hicetnunc/wiki/hDAO#what-are-those-little-circles-on-each-post-hdao-what-is-that" target="_blank">Learn More</a>
               </p>
@@ -197,7 +198,8 @@ export class Config extends Component {
                 style={{
                   border: 'none',
                   padding: '4px 8px',
-                  margin: '8px 4px'
+                  margin: '8px 0',
+                  fontWeight: 'bold'
                 }}
                 onClick={this.hDAO_config}
               >
