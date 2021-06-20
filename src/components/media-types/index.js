@@ -95,7 +95,7 @@ export const renderMediaType = ({
     case MIMETYPE.PNG:
     case MIMETYPE.TIFF:
     case MIMETYPE.WEBP:
-      parsedArtifactUri = HashToURL(artifactUri, 'CLOUDFLARE')
+      parsedArtifactUri = HashToURL(artifactUri, 'IPFS')
       parsedDisplayUri = HashToURL(displayUri, 'CLOUDFLARE')
       // when its a GIF we always load the artifactUri by triggering `onDetailView` to be `true`.
       return (

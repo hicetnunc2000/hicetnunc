@@ -168,9 +168,7 @@ export const ObjktDisplay = () => {
           </div>
         </>
       )}
-      <div style={{height:'20px'}}>
-
-      </div>
+      <div style={{height:'20px'}}></div>
     </Page>
   )
 }
