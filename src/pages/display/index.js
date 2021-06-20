@@ -599,7 +599,7 @@ export default class Display extends Component {
                         mimeType: nft.mime,
                         artifactUri: nft.artifact_uri,
                         displayUri: nft.display_uri,
-                        profile: true
+                        displayView: true
                       })}
                     </div>
                   </Button>
@@ -623,6 +623,7 @@ export default class Display extends Component {
                         mimeType: nft.token.mime,
                         artifactUri: nft.token.artifact_uri,
                         displayUri: nft.token.display_uri,
+                        displayView: true
                       })}
                     </div>
                   </Button>

@@ -82,11 +82,11 @@ export const renderMediaType = ({
   // when previewing during mint process
   preview = false,
 
-  profile
+  displayView
 }) => {
   let parsedArtifactUri
   let parsedDisplayUri
-
+  console.log('display', displayView)
   switch (mimeType) {
     /* IMAGES */
     case MIMETYPE.BMP:
@@ -179,6 +179,7 @@ export const renderMediaType = ({
             previewUri={previewUri}
             preview={preview}
             onDetailView={interactive}
+            displayView={displayView}
           />
         </Container>
       )
@@ -197,7 +198,6 @@ export const renderMediaType = ({
             previewUri={previewUri}
             preview={preview}
             onDetailView={interactive}
-            profile={profile}
           />
         </Container>
       )
