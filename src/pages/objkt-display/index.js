@@ -109,7 +109,7 @@ export const ObjktDisplay = () => {
       {!loading && (
         <>
           <div>
-            <div >
+            <div>
               {renderMediaType({
                 mimeType: nft.mime,
                 artifactUri: nft.artifact_uri,
