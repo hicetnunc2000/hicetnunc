@@ -7,7 +7,7 @@ export const GLBComponent = ({
   previewUri,
   preview,
   onDetailView,
-  profile
+  displayView
 }) => {
   const ref = useRef()
   const [width, setWidth] = useState('100px')
@@ -44,8 +44,8 @@ export const GLBComponent = ({
       global.removeEventListener('resize', handleResize)
     }
   }, [width, height])
-  if (profile) {
-    console.log('profile', profile)
+  if (displayView) {
+    console.log('profile', displayView)
     return (
     <div className={styles.container} ref={ref}>
     <model-viewer {...props} style={{ width, height }}>
