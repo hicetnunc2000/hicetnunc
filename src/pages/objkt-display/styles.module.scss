@@ -31,9 +31,8 @@
 
 .image {
   position: relative;
-  margin-top: 25%;
-
-  height: 50vh;
+  width: 50vh;
+  max-width: 100%;
   margin: 100px 0;
   flex: 1;
   display: flex;
@@ -41,8 +40,7 @@
   align-items: center;
 
   @include respond-to('desktop') {
-    margin-top: 10px;
-    height: 50vh;
+    min-height: 65vh;
   }
 
   > div {
@@ -51,7 +49,6 @@
 }
 
 .info {
-  position: relative;
   width: 100%;
   background-color: var(--background-color);
   color: var(--text-color);
