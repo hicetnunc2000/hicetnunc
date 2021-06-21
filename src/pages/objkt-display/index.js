@@ -108,8 +108,8 @@ export const ObjktDisplay = () => {
 
       {!loading && (
         <>
-          <div className={styles.container}>
-            <div className={styles.image}>
+          <div>
+            <div>
               {renderMediaType({
                 mimeType: nft.mime,
                 artifactUri: nft.artifact_uri,
@@ -117,6 +117,7 @@ export const ObjktDisplay = () => {
                 creator: nft.creator,
                 objkt: nft.id,
                 interactive: true,
+                displayView: false
               })}
             </div>
             <div className={styles.info}>
@@ -167,6 +168,7 @@ export const ObjktDisplay = () => {
           </div>
         </>
       )}
+      <div style={{height:'20px'}}></div>
     </Page>
   )
 }
