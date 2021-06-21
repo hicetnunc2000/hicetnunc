@@ -59,7 +59,7 @@ export const GLBComponent = ({
 
   return (
     <div>
-      <model-viewer {...props} style={{ height : '65vh', width: '100vw' }}>
+      <model-viewer {...props} style={{ height : '60vh', width: '100vw' }}>
         <button slot="ar-button" className={styles.arButton}>
           AR
         </button>
