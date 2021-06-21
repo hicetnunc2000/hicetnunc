@@ -40,7 +40,7 @@
   align-items: center;
 
   @include respond-to('desktop') {
-    width: 70vh;
+    min-height: 50vh;
   }
 
   > div {
