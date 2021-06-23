@@ -21,6 +21,8 @@ const HashToURL = (hash, type) => {
   }
 
   switch (type) {
+    case 'HIC':
+      return hash.replace('ipfs://', 'https://pinata.hicetnunc.xyz/ipfs/')
     case 'CLOUDFLARE':
       return hash.replace('ipfs://', 'https://cloudflare-ipfs.com/ipfs/')
     case 'PINATA':
@@ -95,8 +97,8 @@ export const renderMediaType = ({
     case MIMETYPE.PNG:
     case MIMETYPE.TIFF:
     case MIMETYPE.WEBP:
-      parsedArtifactUri = HashToURL(artifactUri, 'CLOUDFLARE')
-      parsedDisplayUri = HashToURL(displayUri, 'CLOUDFLARE')
+      parsedArtifactUri = HashToURL(artifactUri, 'HIC')
+      parsedDisplayUri = HashToURL(displayUri, 'HIC')
       // when its a GIF we always load the artifactUri by triggering `onDetailView` to be `true`.
       return (
         <Container interactive={interactive}>
@@ -112,8 +114,8 @@ export const renderMediaType = ({
 
     /* VECTOR */
     case MIMETYPE.SVG:
-      parsedArtifactUri = HashToURL(artifactUri, 'IPFS')
-      parsedDisplayUri = HashToURL(displayUri, 'IPFS')
+      parsedArtifactUri = HashToURL(artifactUri, 'HIC')
+      parsedDisplayUri = HashToURL(displayUri, 'HIC')
       return (
         <Container interactive={interactive}>
           <VectorComponent
@@ -133,8 +135,8 @@ export const renderMediaType = ({
     case MIMETYPE.ZIP:
     case MIMETYPE.ZIP1:
     case MIMETYPE.ZIP2:
-      parsedArtifactUri = HashToURL(artifactUri, 'IPFS')
-      parsedDisplayUri = HashToURL(displayUri, 'IPFS')
+      parsedArtifactUri = HashToURL(artifactUri, 'HIC')
+      parsedDisplayUri = HashToURL(displayUri, 'HIC')
       return (
         <Container interactive={interactive}>
           <HTMLComponent
@@ -154,8 +156,8 @@ export const renderMediaType = ({
     case MIMETYPE.OGV:
     case MIMETYPE.QUICKTIME:
     case MIMETYPE.WEBM:
-      parsedArtifactUri = HashToURL(artifactUri, 'IPFS')
-      parsedDisplayUri = HashToURL(displayUri, 'IPFS')
+      parsedArtifactUri = HashToURL(artifactUri, 'HIC')
+      parsedDisplayUri = HashToURL(displayUri, 'HIC')
       return (
         <Container interactive={interactive} nofullscreen>
           <VideoComponent
@@ -170,8 +172,8 @@ export const renderMediaType = ({
     /* 3D */
     case MIMETYPE.GLB:
     case MIMETYPE.GLTF:
-      parsedArtifactUri = HashToURL(artifactUri, 'IPFS')
-      parsedDisplayUri = HashToURL(displayUri, 'IPFS')
+      parsedArtifactUri = HashToURL(artifactUri, 'HIC')
+      parsedDisplayUri = HashToURL(displayUri, 'HIC')
       return (
         <Container interactive={interactive}>
           <GLBComponent
@@ -189,8 +191,8 @@ export const renderMediaType = ({
     case MIMETYPE.OGA:
     case MIMETYPE.FLAC:
     case MIMETYPE.WAV:
-      parsedArtifactUri = HashToURL(artifactUri, 'IPFS')
-      parsedDisplayUri = HashToURL(displayUri, 'IPFS')
+      parsedArtifactUri = HashToURL(artifactUri, 'HIC')
+      parsedDisplayUri = HashToURL(displayUri, 'HIC')
       return (
         <Container interactive={interactive}>
           <AudioComponent
@@ -204,8 +206,8 @@ export const renderMediaType = ({
       )
     /* PDF */
     case MIMETYPE.PDF:
-      parsedArtifactUri = HashToURL(artifactUri, 'IPFS')
-      parsedDisplayUri = HashToURL(displayUri, 'IPFS')
+      parsedArtifactUri = HashToURL(artifactUri, 'HIC')
+      parsedDisplayUri = HashToURL(displayUri, 'HIC')
       return (
         <Container interactive={interactive}>
           <PdfComponent
