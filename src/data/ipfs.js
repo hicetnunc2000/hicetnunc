@@ -9,7 +9,7 @@ const axios = require('axios')
 const readJsonLines = require('read-json-lines-sync').default
 const { getCoverImagePathFromBuffer } = require('../utils/html')
 
-const infuraUrl = 'https://ipfs.infura.io:5001'
+const infuraUrl = 'https://pinata.hicetnunc.xyz'
 
 export const prepareFile = async ({
   name,
