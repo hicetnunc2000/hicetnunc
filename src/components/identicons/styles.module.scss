@@ -6,7 +6,7 @@
     padding: 1px;
     width: 120px;
     height: 120px;
-    border: 2px solid var(--text-color);
+    border: 1px solid var(--text-color);
     transition: border-color #{$theme-duration} ease-out;
 
     path {
