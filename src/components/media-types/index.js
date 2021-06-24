@@ -172,8 +172,8 @@ export const renderMediaType = ({
     /* 3D */
     case MIMETYPE.GLB:
     case MIMETYPE.GLTF:
-      parsedArtifactUri = HashToURL(artifactUri, 'CLOUDFLARE')
-      parsedDisplayUri = HashToURL(displayUri, 'CLOUDFLARE')
+      parsedArtifactUri = HashToURL(artifactUri, 'IPFS')
+      parsedDisplayUri = HashToURL(displayUri, 'IPFS')
       return (
         <Container interactive={interactive}>
           <GLBComponent
