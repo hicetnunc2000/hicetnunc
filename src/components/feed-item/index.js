@@ -23,7 +23,9 @@ export const FeedItem = (props) => {
           })}
         </div>
       </Button>
+      <div style={{paddingLeft : '20px'}}>
       <ItemInfo {...props} />
+      </div>
     </Padding>
   )
 }
