@@ -10,6 +10,7 @@ import { UnknownComponent } from './unknown'
 import { PdfComponent } from './pdf'
 import { MIMETYPE, IPFS_DIRECTORY_MIMETYPE } from '../../constants'
 import { Container } from './container'
+import { MD } from './md'
 
 // converts an ipfs hash to ipfs url
 const HashToURL = (hash, type) => {
@@ -221,6 +222,16 @@ export const renderMediaType = ({
           />
         </Container>
       )
+
+    case MIMETYPE.MD:
+      parsedArtifactUri = HashToURL(artifactUri, 'IPFS')
+      return (
+        <MD
+          artifactUri={HashToURL(artifactUri, 'IPFS')}
+        >
+        </MD>
+      )
+
     default:
       return <UnknownComponent mimeType={mimeType} />
   }

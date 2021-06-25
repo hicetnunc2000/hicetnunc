@@ -1,5 +1,16 @@
 @import '../../../styles/layout.scss';
 
+.audio {
+  
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  @include respond-to('desktop') {
+    width: 50%;
+  }
+}
 .container {
   position: relative;
   display: flex;
