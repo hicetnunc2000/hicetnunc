@@ -47,15 +47,9 @@ export const AudioComponent = ({
 
   if (!displayView) {
     return (
-      <div style={{
-        width: '50%',
-        margin: 'auto auto',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between'
-      }}>
+      <div className={styles.audio}>
         <span>
-          <img style={{ maxWidth: '100%' }} src={displayUri} /><br />
+          <img style={{ width: '100%' }} src={displayUri} /><br />
           <audio style={{ width: '100%' }} src={preview ? previewUri : artifactUri} controls />
         </span>
         {/*         {true && <audio src={preview ? previewUri : artifactUri} controls />}
