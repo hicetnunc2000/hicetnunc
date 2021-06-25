@@ -10,11 +10,12 @@ export const AudioComponent = ({
   displayUri,
   previewUri,
   preview,
+  displayView
 }) => {
   const visualiser = useRef()
   const [userTouched, setUserTouched] = useState(false)
   const [play, setPlay] = useState(false)
-
+  console.log('sound', displayView)
   const togglePlay = () => {
     setUserTouched(true)
     setPlay(!play)
@@ -41,12 +42,24 @@ export const AudioComponent = ({
     [styles.container]: true,
     [styles.userTouch]: userTouched,
   })
+  /*   console.log(displayUri)
+   */
 
-  return (
-    <>
-      <div className={classes}>
-        {true && <audio src={preview ? previewUri : artifactUri} controls />}
-        {false && <img src={displayUri} alt="album cover" />}
+  if (!displayView) {
+    return (
+      <div style={{
+        width: '50%',
+        margin: 'auto auto',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between'
+      }}>
+        <span>
+          <img style={{ maxWidth: '100%' }} src={displayUri} /><br />
+          <audio style={{ width: '100%' }} src={preview ? previewUri : artifactUri} controls />
+        </span>
+        {/*         {true && <audio src={preview ? previewUri : artifactUri} controls />}
+    <img src={displayUri} alt="album cover" /> */}
         {false && <Visualiser ref={visualiser} src={artifactUri} />}
         {false && (
           <div className={styles.icons} onClick={togglePlay}>
@@ -54,6 +67,25 @@ export const AudioComponent = ({
           </div>
         )}
       </div>
-    </>
-  )
+    )
+  } else {
+    return (
+      <>
+        <div>
+          <span>
+            <img style={{ maxWidth: '100%' }} src={displayUri} /><br />
+            <audio style={{ width: '100%' }} src={preview ? previewUri : artifactUri} controls />
+          </span>
+          {/*         {true && <audio src={preview ? previewUri : artifactUri} controls />}
+        <img src={displayUri} alt="album cover" /> */}
+          {false && <Visualiser ref={visualiser} src={artifactUri} />}
+          {false && (
+            <div className={styles.icons} onClick={togglePlay}>
+              {play ? <PauseIcon /> : <PlayIcon />}
+            </div>
+          )}
+        </div>
+      </>
+    )
+  }
 }
