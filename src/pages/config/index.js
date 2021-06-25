@@ -157,13 +157,13 @@ export class Config extends Component {
           </Padding>
         </Container>
 
-        <Container>
+{/*         <Container>
           <Padding>
             <Button onClick={this.unregister}>
               <Curate>Unregister</Curate>
             </Button>
           </Padding>
-        </Container>
+        </Container> */}
       </Page>
     )
   }
