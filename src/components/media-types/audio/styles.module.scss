@@ -6,7 +6,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-
+  object-fit: cover;
   @include respond-to('desktop') {
     width: 50%;
   }
