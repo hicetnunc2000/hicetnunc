@@ -33,8 +33,6 @@ export const Feeds = ({ type }) => {
 
   const loadMore = async () => {
 
-    setCreators(items.map(e => e.creator_id))
-
     if (type === 1) {
       await getHdaoFeed()
     }
@@ -87,17 +85,18 @@ export const Feeds = ({ type }) => {
   }, [count, type])
 
   const getLatest = async (id) => {
-    console.log(id)
     let result = await axios
       .post(process.env.REACT_APP_GRAPHQL_FEED, { lastId: id })
       .then((res) => res.data)
 
+    setCreators([...creators, result.map(e => e.creator_id)])
+
     result = _.uniqBy(result, 'creator_id')
+    setCreators(creators.concat(result.map(e => e.creator_id)))
     result = result.filter(e => !creators.includes(e.creator_id))
-    
     const next = items.concat(result)
     setItems(next)
- 
+
   }
 
   const getHdaoFeed = async () => {
