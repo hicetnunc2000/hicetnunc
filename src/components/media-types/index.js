@@ -191,6 +191,7 @@ export const renderMediaType = ({
     case MIMETYPE.OGA:
     case MIMETYPE.FLAC:
     case MIMETYPE.WAV:
+    case MIMETYPE.XWAV:
       parsedArtifactUri = HashToURL(artifactUri, 'IPFS')
       parsedDisplayUri = HashToURL(displayUri, 'IPFS')
       return (
@@ -201,6 +202,7 @@ export const renderMediaType = ({
             previewUri={previewUri}
             preview={preview}
             onDetailView={interactive}
+            displayView={displayView}
           />
         </Container>
       )

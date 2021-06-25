@@ -47,6 +47,7 @@ export const MIMETYPE = {
   MP3: 'audio/mpeg',
   OGA: 'audio/ogg',
   WAV: 'audio/wav',
+  XWAV: 'audio/x-wav',
   FLAC: 'audio/flac',
   PDF: 'application/pdf',
   ZIP: 'application/zip',

@@ -109,17 +109,17 @@ export const ObjktDisplay = () => {
       {!loading && (
         <>
           <div>
-            <div>
-              {renderMediaType({
-                mimeType: nft.mime,
-                artifactUri: nft.artifact_uri,
-                displayUri: nft.display_uri,
-                creator: nft.creator,
-                objkt: nft.id,
-                interactive: true,
-                displayView: false
-              })}
-            </div>
+              <div>
+                {renderMediaType({
+                  mimeType: nft.mime,
+                  artifactUri: nft.artifact_uri,
+                  displayUri: nft.display_uri,
+                  creator: nft.creator,
+                  objkt: nft.id,
+                  interactive: true,
+                  displayView: false
+                })}
+              </div>
             <div className={styles.info}>
               <Container>
                 <Padding>
@@ -168,7 +168,7 @@ export const ObjktDisplay = () => {
           </div>
         </>
       )}
-      <div style={{height:'20px'}}></div>
+      <div style={{ height: '20px' }}></div>
     </Page>
   )
 }

@@ -47,24 +47,24 @@ export const GLBComponent = ({
   if (displayView) {
     console.log('profile', displayView)
     return (
-    <div className={styles.container} ref={ref}>
-    <model-viewer {...props} style={{ width, height }}>
-      <button slot="ar-button" className={styles.arButton}>
-        AR
-      </button>
-    </model-viewer>
-  </div>
+      <div className={styles.container} ref={ref}>
+        <model-viewer {...props} style={{ width, height }}>
+          <button slot="ar-button" className={styles.arButton}>
+            AR
+          </button>
+        </model-viewer>
+      </div>
     )
   } else {
 
-  return (
-    <div>
-      <model-viewer {...props} style={{ height : '60vh', width: '100vw' }}>
-        <button slot="ar-button" className={styles.arButton}>
-          AR
-        </button>
-      </model-viewer>
-    </div>
-  )
+    return (
+      <div>
+        <model-viewer {...props} style={{ height: '60vh', width: '100vw' }} >
+          <button slot="ar-button" className={styles.arButton}>
+            AR
+          </button>
+        </model-viewer>
+      </div>
+    )
   }
 }
