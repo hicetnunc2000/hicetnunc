@@ -502,7 +502,7 @@ class HicetnuncContextProviderClass extends Component {
       },
       hDAO_vote: ls.get('hDAO_vote'),
 
-      proxyFactoryAddress: 'KT1UmgaFQgHrqEb4kPK4GoeHyu7YBfGu3rd4',
+      proxyFactoryAddress: 'KT1DfdhNm8NEy158dqnfg5cfCjsrMeB6jdHW',
 
       mockProxy: async () => {
 
@@ -564,7 +564,6 @@ class HicetnuncContextProviderClass extends Component {
           .then(c =>
             c.methods
               .default(
-                administratorAddress,
                 MichelsonMap.fromLiteral(participantData),
               )
               .send({ amount: 0 })
