@@ -21,23 +21,6 @@ export class About extends Component {
     })
   }
 
-  constructor() {
-    super();
-    this.state = {
-      show: true
-    };
-    this.showPopup = this.showPopup.bind(this);
-    this.hidePopup = this.hidePopup.bind(this);
-  }
-
-  showPopup = () => {
-    this.setState({ show: true });
-  };
-
-  hidePopup = () => {
-    this.setState({ show: false });
-  };
-
   render() {
     return (
       <Page title="about" large>
