@@ -16,12 +16,3 @@ export const extractAddress = (input) => {
 }
 
 export const groupShareTotal = collaborators => collaborators.reduce((sharesAllocated, c) => (c.shares || 0) + sharesAllocated, 0)
-
-// export const appendAddresses = (addresses, input) => {
-//     const updatedAddresses = [...addresses]
-//     const lines = input.replace(/\r/g, '').split(/\n/)
-//     const newAddresses = lines.map(l => extractAddress(l)).filter(a => a)
-
-//     // Add them
-//     return updatedAddresses.concat(newAddresses)
-// }

@@ -1,52 +1,6 @@
 @import '../../styles/layout.scss';
 @import '../../styles/variables.scss';
 
-// .input {
-//   background: none;
-//   color: var(--text-color);
-// }
-
-// .input:focus {
-//   outline: none;
-// }
-
-// .textarea {
-//   width: 100%;
-//   padding: 0.5em;
-//   background: none;
-//   color: var(--text-color);
-//   margin-bottom: 1em;
-// }
-
-// .textarea:focus {
-//   outline: none;
-// }
-
-// .table {
-//   width: 100%;
-//   margin-top: 20px;
-// }
-
-// .addressCell {
-//   width: 60%;
-//   vertical-align:top;
-//   padding-bottom: 6px;
-// }
-
-// .percentageCell {
-//   width: 30%;
-//   vertical-align:top;
-//   padding-bottom: 6px;
-//   padding-right: 20px;
-// }
-
-// .actionCell {
-//   width: 10%;
-//   padding-top: 6px;
-//   vertical-align:top;
-//   text-align:right;
-// }
-
 @for $i from 1 through 3 {
   .mb#{$i} {
     margin-bottom: #{$i}em;

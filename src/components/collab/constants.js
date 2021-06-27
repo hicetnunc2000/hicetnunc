@@ -30,6 +30,6 @@ export const mockData = [{
   address: 'tz1YJvMiZyXnzvV9pxtAiuCFvaG7XoBZhbUQ',
   shares: 50,
 }, {
-  address: 'tz1PSDB8iTqHKyB3gFftKZG6YLPRkvPv5VDi',
+  address: 'tz2Hz4TVJZjoQVks4SfWgt38RfZTmrHmVH62',
   shares: 50,
 }];

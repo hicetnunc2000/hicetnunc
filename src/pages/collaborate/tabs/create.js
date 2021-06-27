@@ -6,12 +6,13 @@ import { AddCollaboratorsButton } from '../../../components/collab/create/AddCol
 import { ReviewStage } from '../../../components/collab/create/ReviewStage'
 import styles from '../styles.module.scss'
 import classNames from 'classnames'
+import { mockData } from '../../../components/collab/constants'
 
 export const CreateCollaboration = () => {
 
     // Core collaborators and benefactors
     const [editCollaborators, setEditCollaborators] = useState(true)
-    const [collaborators, setCollaborators] = useState([])
+    const [collaborators, setCollaborators] = useState(mockData)
     const [benefactors, setBenefactors] = useState([])
 
     // For adding people not directly involved with the creation
@@ -36,12 +37,18 @@ export const CreateCollaboration = () => {
         if (!editCollaborators && !showBenefactorsUI) {
             setShowBenefactorsUI(true)
         }
+
+        if (validCollaborators.length === 0) {
+            setCollaborators([])
+        }
     }, [editCollaborators, showBenefactorsUI])
 
     // When the user clicks a percentage button in the benefactors UI
     const _calculateShares = (index, percentage) => {
         const benefactor = benefactors[index]
         const updatedBenefactors = [...benefactors]
+
+        console.log("_calculateShares", index, percentage);
 
         updatedBenefactors[index] = {
             ...benefactor,
@@ -54,8 +61,8 @@ export const CreateCollaboration = () => {
         // Redistribute to collaborators
         const updatedCollaborators = collaborators.map(collaborator => {
             const proportion = collaborator.shares / groupShareTotal(collaborators)
-            const newAllocation = Math.floor( proportion * remaining * 100 ) / 100
-            
+            const newAllocation = Math.floor(proportion * remaining * 100) / 100
+
             return {
                 ...collaborator,
                 shares: newAllocation,
@@ -66,14 +73,17 @@ export const CreateCollaboration = () => {
         setCollaborators(updatedCollaborators)
     }
 
+    const totalParticipants = validCollaborators.length + benefactors.length
+
     const notesClass = classNames(styles.mb2, styles.muted)
     const minimalView = !editCollaborators && (showBenefactorsUI || showReview)
+    const showCollaboratorsTable = editCollaborators || validCollaborators.length > 0
 
     return showReview ? (
         <ReviewStage
             collaborators={collaborators}
             benefactors={benefactors}
-            onEdit={ () => setShowReview(false)}
+            onEdit={() => setShowReview(false)}
         />
     ) :
         (
@@ -83,23 +93,29 @@ export const CreateCollaboration = () => {
                         <strong>core collaborators</strong>
                     </h1>
 
-                    {validCollaborators.length === 0 && (
+                    {validCollaborators.length === 0 && showCollaboratorsTable && (
                         <Fragment>
                             <p className={notesClass}>Note: shares don’t have to add up to 100% - splits are calculated as proportions of the total shares.</p>
                             <p className={notesClass}>You can paste multiple addresses to get an auto split</p>
                         </Fragment>
                     )}
 
-                    <CollaboratorTable
-                        collaborators={collaborators}
-                        setCollaborators={setCollaborators}
-                        minimalView={minimalView}
-                        onEdit={() => setEditCollaborators(true)}
-                    />
+                    {showCollaboratorsTable && (
+                        <CollaboratorTable
+                            collaborators={collaborators}
+                            setCollaborators={setCollaborators}
+                            minimalView={minimalView}
+                            onEdit={() => setEditCollaborators(true)}
+                        />
+                    )}
+
+                    {!showCollaboratorsTable && (
+                        <p className={styles.muted}>No core collaborators</p>
+                    )}
 
                     {!minimalView && (
                         <AddCollaboratorsButton
-                            type="creator"
+                            threshold={0}
                             collaborators={collaborators}
                             onClick={() => setEditCollaborators(false)}
                         />
@@ -107,6 +123,7 @@ export const CreateCollaboration = () => {
 
                     {showBenefactorsUI && (
                         <BenefactorsUI
+                            totalParticipants={totalParticipants}
                             totalShares={totalShares}
                             benefactors={benefactors}
                             setBenefactors={setBenefactors}

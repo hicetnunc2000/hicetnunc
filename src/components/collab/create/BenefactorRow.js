@@ -7,7 +7,9 @@ import classNames from "classnames"
 import { CloseIcon } from ".."
 import { GetUserMetadata } from "../../../data/api"
 
-export const BenefactorRow = ({ benefactor, onUpdate, onAdd, onRemove, onPasteMulti, onSelectPercentage, minimalView }) => {
+export const BenefactorRow = ({
+    benefactor, onUpdate, onAdd, onRemove, onPasteMulti, onSelectPercentage, minimalView
+}) => {
 
     const [meta, setMeta] = useState()
     const [address, setAddress] = useState(benefactor.address)
@@ -71,7 +73,7 @@ export const BenefactorRow = ({ benefactor, onUpdate, onAdd, onRemove, onPasteMu
     return minimalView ? (
         <tr className={styles.row}>
             <td className={styles.addressCell}>{address}</td>
-            <td className={styles.percentageCell}>{benefactor.share}%</td>
+            <td className={styles.sharesCell}>{benefactor.share}%</td>
         </tr>
     ) : (
         <tr className={styles.row}>
@@ -80,38 +82,34 @@ export const BenefactorRow = ({ benefactor, onUpdate, onAdd, onRemove, onPasteMu
                     <label>
                         <textarea
                             rows={1}
-                            className={styles.textInput}
-                            onChange={event => _update('address', event.target.value)}
-                            placeholder="address (tz... or KT...)"
                             value={address || ''}
+                            className={styles.textInput}
+                            placeholder="address (tz... or KT...)"
                             autoFocus={!address || address === ''}
+                            onChange={event => _update('address', event.target.value)}
                         />
                         <p>{placeholderText}</p>
                     </label>
                 </div>
             </td>
 
-            <td className={styles.percentageCell}>
+            <td className={styles.sharesCell}>
                 <div className={cellClass}>
                     <label>
                         <input
                             type="number"
-                            min={1}
-                            max={100}
+                            label="shares"
+                            placeholder="shares"
+                            value={shares || ''}
+                            onKeyDown={_onKeyDown}
                             autoFocus={Boolean(address)}
                             onChange={event => _update('shares', event.target.value)}
-                            onKeyDown={_onKeyDown}
-                            placeholder="shares"
-                            label="shares"
-                            value={shares || ''}
                         />
                         <p>shares</p>
                     </label>
-                    {!shares && <TipSelector onSelect={onSelectPercentage} />}
+                    {!shares && onSelectPercentage && <TipSelector onSelect={onSelectPercentage} />}
                 </div>
             </td>
-
-            {/* If there is an onRemove or onAdd function passed in, show a button to call the function */}
 
             <td className={styles.actionCell}>
                 <Button onClick={onRemove}>

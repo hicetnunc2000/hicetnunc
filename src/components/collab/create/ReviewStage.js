@@ -64,31 +64,37 @@ export const ReviewStage = ({ collaborators, benefactors, onEdit }) => {
                 <p className={styles.descriptive}>You have a total of {totalShares} shares divided between {cNum + bNum} addresses. Percentages may not total 100% due to rounding.</p>
 
                 <h2 className={styles.mt3}>collaborators</h2>
-                <table className={styles.reviewTable}>
-                    <thead>
-                        <tr>
-                            <th>address</th>
-                            <th>shares</th>
-                            <th style={{ textAlign: 'right' }}>%</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {collaborators.map(collaborator => {
-                            const { address, shares, name } = collaborator
-                            const percentage = ((shares / totalShares) * 100).toFixed(2)
-                            return (
-                                <tr key={address}>
-                                    <td className={styles.cellWithPadding}>
-                                        {name && <p className={styles.muted}>{name}</p>}
-                                        {address}
-                                    </td>
-                                    <td className={styles.cellWithPadding}>{shares}</td>
-                                    <td className={styles.cellWithPadding} style={{ textAlign: 'right' }}>{percentage}</td>
-                                </tr>
-                            )
-                        })}
-                    </tbody>
-                </table>
+                {collaborators.length > 0 && (
+                    <table className={styles.reviewTable}>
+                        <thead>
+                            <tr>
+                                <th>address</th>
+                                <th>shares</th>
+                                <th style={{ textAlign: 'right' }}>%</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {collaborators.map(collaborator => {
+                                const { address, shares, name } = collaborator
+                                const percentage = ((shares / totalShares) * 100).toFixed(2)
+                                return (
+                                    <tr key={address}>
+                                        <td className={styles.cellWithPadding}>
+                                            {name && <p className={styles.muted}>{name}</p>}
+                                            {address}
+                                        </td>
+                                        <td className={styles.cellWithPadding}>{shares}</td>
+                                        <td className={styles.cellWithPadding} style={{ textAlign: 'right' }}>{percentage}</td>
+                                    </tr>
+                                )
+                            })}
+                        </tbody>
+                    </table>
+                )}
+
+                { collaborators.length === 0 && (
+                    <p className={styles.muted}>No core collaborators</p>
+                )}
 
 
                 {benefactors.length > 0 && (

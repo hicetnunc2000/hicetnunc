@@ -86,7 +86,7 @@ export const CollaboratorRow = ({ collaborator, onUpdate, onAdd, onRemove, onPas
                 </div>
             </td>
 
-            <td className={styles.percentageCell}>
+            <td className={styles.sharesCell}>
                 <div className={cellClass}>
                     <label>
                         <input

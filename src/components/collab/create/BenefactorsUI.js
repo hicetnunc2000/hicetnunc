@@ -7,7 +7,7 @@ import classNames from "classnames"
 import { ProjectList } from "./ProjectList"
 import { AddCollaboratorsButton } from "./AddCollaboratorsButton"
 
-export const BenefactorsUI = ({ benefactors, setBenefactors, onSelectPercentage, onComplete }) => {
+export const BenefactorsUI = ({ benefactors, setBenefactors, onSelectPercentage, totalParticipants, onComplete }) => {
 
     // For when users paste multiline content
     const [multilineContent, setMultilineContent] = useState('')
@@ -76,10 +76,16 @@ export const BenefactorsUI = ({ benefactors, setBenefactors, onSelectPercentage,
     const validBenefactors = benefactors.filter(b => b.address && b.shares)
     const lastBenefactor = benefactors[benefactors.length - 1]
     const disableAddButton = lastBenefactor ? (!lastBenefactor.address) : true
+    const noCollaborators = totalParticipants === benefactors.length
+
+    console.log("Total", totalParticipants, "ben", benefactors.length)
+
+    const _selectPercentage = noCollaborators ? null : (index, percentage) => onSelectPercentage(index, percentage)
 
     return (
         <Fragment>
             <h2 className={headingClass}><strong>benefactors</strong></h2>
+
             {benefactors.length === 0 && (
                 <p className={notesClass}>Do you want to include anyone that wasn’t a collaborator, eg. a donation to the H=N Tezos Fountain?</p>
             )}
@@ -104,12 +110,12 @@ export const BenefactorsUI = ({ benefactors, setBenefactors, onSelectPercentage,
                                     onRemove={() => removeBenefactor(index)}
                                     onAdd={addBenefactor}
                                     onPasteMulti={setMultilineContent}
-                                    onSelectPercentage={percentage => onSelectPercentage(index, percentage)}
+                                    onSelectPercentage={percentage => _selectPercentage(index, percentage)}
                                 />
                             )
                         })}
                     </tbody>
-                    
+
                     {benefactors.filter(b => b.address).length > 0 && (
                         <tfoot>
                             <tr>
@@ -124,22 +130,26 @@ export const BenefactorsUI = ({ benefactors, setBenefactors, onSelectPercentage,
 
             <ProjectList benefactors={benefactors} onSelect={addBenefactor} />
 
-            {validBenefactors.length > 0 && (
+            {validBenefactors.length > 0 && totalParticipants >= 2 && (
                 <AddCollaboratorsButton
-                    type="benefactor"
-                    threshold={1}
+                    threshold={totalParticipants - validBenefactors.length}
                     collaborators={benefactors}
                     onClick={onComplete}
                 />
             )}
 
-            {validBenefactors.length === 0 && (
+            {(validBenefactors.length === 0 || totalParticipants < 2) && (
                 <div className={styles.mt2}>
-                    <Button onClick={onComplete}>
-                        <Purchase>
-                            Skip
-                        </Purchase>
-                    </Button>
+                    {totalParticipants > 2 && (
+                        <Button onClick={onComplete}>
+                            <Purchase>
+                                Skip
+                            </Purchase>
+                        </Button>
+                    )}
+                    {totalParticipants < 2 && (
+                        <p className={styles.muted}>You need to have at least two participants to create a collaborative contract</p>
+                    )}
                 </div>
             )}
 
