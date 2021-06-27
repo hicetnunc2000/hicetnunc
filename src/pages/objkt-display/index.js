@@ -10,7 +10,8 @@ import { renderMediaType } from '../../components/media-types'
 import { ItemInfo } from '../../components/item-info'
 import { Menu } from '../../components/menu'
 import { Info, Collectors, Swap, Burn } from './tabs'
-import styles from './styles.module.scss'
+//import'./styles.module.scss'
+import './style.css'
 
 const axios = require('axios')
 
@@ -109,7 +110,7 @@ export const ObjktDisplay = () => {
       {!loading && (
         <>
           <div>
-              <div>
+              <div className='objkt-view'>
                 {renderMediaType({
                   mimeType: nft.mime,
                   artifactUri: nft.artifact_uri,
@@ -120,7 +121,7 @@ export const ObjktDisplay = () => {
                   displayView: false
                 })}
               </div>
-            <div className={styles.info}>
+            <div>
               <Container>
                 <Padding>
                   <ItemInfo {...nft} isDetailView />

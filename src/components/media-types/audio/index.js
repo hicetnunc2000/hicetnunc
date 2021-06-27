@@ -47,11 +47,11 @@ export const AudioComponent = ({
 
   if (!displayView) {
     return (
-      <div className={styles.audio}>
-        <span>
-          <img style={{ width: '100%' }} src={displayUri} /><br />
-          <audio style={{ width: '100%' }} src={preview ? previewUri : artifactUri} controls />
-        </span>
+      <div>
+        <div>
+          <img style={{ height: '60vh', maxWidth: '100vh', display : 'block', margin: '0 auto' }} src={displayUri} /><br />
+          <audio style={{ display: 'block', margin: '0 auto' }} src={preview ? previewUri : artifactUri} controls />
+        </div>
         {/*         {true && <audio src={preview ? previewUri : artifactUri} controls />}
     <img src={displayUri} alt="album cover" /> */}
         {false && <Visualiser ref={visualiser} src={artifactUri} />}
@@ -65,9 +65,9 @@ export const AudioComponent = ({
   } else {
     return (
       <>
-        <div>
+        <div >
           <span>
-            <img style={{ maxWidth: '100%' }} src={displayUri} /><br />
+            <img style={{ width: '100%' }} src={displayUri} /><br />
             <audio style={{ width: '100%' }} src={preview ? previewUri : artifactUri} controls />
           </span>
           {/*         {true && <audio src={preview ? previewUri : artifactUri} controls />}

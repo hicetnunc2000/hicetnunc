@@ -1,6 +1,13 @@
 @import '../../styles/layout.scss';
 @import '../../styles/variables.scss';
 
+.test {
+  width: 100%;
+  @include respond-to('desktop') {
+    background-color: black;
+    width : 50%;
+  }
+}
 .container {
   display: flex;
   flex-direction: column;
