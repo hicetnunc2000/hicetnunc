@@ -46,7 +46,7 @@ export const VectorComponent = ({
 
   if (displayView) {
     return (
-      <div className={styles.vector}>
+      <div className={classes}>
         <iframe
           title="hic et nunc SVG renderer"
           src={path}

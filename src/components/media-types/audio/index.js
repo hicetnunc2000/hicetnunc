@@ -49,7 +49,7 @@ export const AudioComponent = ({
     return (
       <div>
         <div>
-          <img style={{ height: '60vh', maxWidth: '100vh', display : 'block', margin: '0 auto' }} src={displayUri} /><br />
+          <img style={{ height: '55vh', display : 'block', margin: '0 auto' }} src={displayUri} /><br />
           <audio style={{ display: 'block', margin: '0 auto' }} src={preview ? previewUri : artifactUri} controls />
         </div>
         {/*         {true && <audio src={preview ? previewUri : artifactUri} controls />}
