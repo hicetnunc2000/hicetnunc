@@ -251,7 +251,8 @@ export default class Display extends Component {
 
       this.onReady()
     } else {
-      let res = await fetchSubjkts(window.location.pathname.split('/')[1])
+      let res = await fetchSubjkts(decodeURI(window.location.pathname.split('/')[1]))
+      // console.log(decodeURI(window.location.pathname.split('/')[1]))
       console.log(res)
 
       this.setState({
