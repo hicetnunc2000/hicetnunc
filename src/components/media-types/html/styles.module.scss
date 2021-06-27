@@ -1,6 +1,18 @@
 @import '../../../styles/layout.scss';
 @import '../../../styles/layout.scss';
 
+.html {
+  width : 100%;
+  height : 60vh; 
+  display: block;
+  margin: 0 auto; 
+  border : none;
+
+  @include respond-to('desktop') {
+    width: 50% !important;
+  }
+
+}
 .container {
   position: relative;
   display: block;

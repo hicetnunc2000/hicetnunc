@@ -109,6 +109,7 @@ export const renderMediaType = ({
             previewUri={previewUri}
             onDetailView={interactive || mimeType === MIMETYPE.GIF}
             preview={preview}
+            displayView={displayView}
           />
         </Container>
       )
@@ -127,6 +128,7 @@ export const renderMediaType = ({
             creator={creator}
             objkt={objkt}
             onDetailView={interactive}
+            displayView={displayView}
           />
         </Container>
       )
@@ -136,7 +138,7 @@ export const renderMediaType = ({
     case MIMETYPE.ZIP:
     case MIMETYPE.ZIP1:
     case MIMETYPE.ZIP2:
-      parsedArtifactUri = HashToURL(artifactUri, 'CLOUDFLARE')
+      parsedArtifactUri = HashToURL(artifactUri, 'IPFS')
       parsedDisplayUri = HashToURL(displayUri, 'IPFS')
       return (
         <Container interactive={interactive}>
@@ -167,6 +169,7 @@ export const renderMediaType = ({
             previewUri={previewUri}
             preview={preview}
             onDetailView={interactive}
+            displayView={displayView}
           />
         </Container>
       )
@@ -183,6 +186,7 @@ export const renderMediaType = ({
             previewUri={previewUri}
             preview={preview}
             onDetailView={interactive}
+            displayView={displayView}
             displayView={displayView}
           />
         </Container>
@@ -219,6 +223,7 @@ export const renderMediaType = ({
             previewUri={previewUri}
             preview={preview}
             onDetailView={interactive}
+            displayView={displayView}
           />
         </Container>
       )
@@ -228,6 +233,7 @@ export const renderMediaType = ({
       return (
         <MD
           artifactUri={HashToURL(artifactUri, 'IPFS')}
+          displayView={displayView}
         >
         </MD>
       )

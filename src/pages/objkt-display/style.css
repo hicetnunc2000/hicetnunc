@@ -1,0 +1,16 @@
+
+
+.objkt-view {
+
+    overflow : hidden;
+    @media screen (min-width : 801px) {
+        width : 50%;
+        margin: '0 auto';
+        height: 60vh;
+    }
+
+    @media screen (max-width : 800px) {
+        width : 100%;
+        height: 60vh;
+    }
+}
