@@ -9,7 +9,6 @@
   border : none;
 
   @include respond-to('desktop') {
-      max-width : 50% !important; 
   }
 }
 

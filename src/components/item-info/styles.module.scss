@@ -6,7 +6,7 @@
   align-items: center;
   justify-content: space-between;
   padding-top: 20px;
-  padding-bottom: 40px;
+  padding-bottom: 20px;
   word-break: normal;
   width: 100%;
 }
@@ -41,7 +41,6 @@
 }
 
 .hdaoButton {
-  margin-bottom: 2px;
   padding-left: 20px;
 }
 
@@ -111,7 +110,6 @@ span[data-tooltip] {
 span[data-tooltip][data-position='top']:before {
   bottom: 100%;
   left: 50%;
-  margin-bottom: 9px;
 }
 
 span[data-tooltip][data-position='top']:after {
