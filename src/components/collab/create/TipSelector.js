@@ -14,23 +14,3 @@ export const TipSelector = ({ onSelect }) => {
         </div>
     )
 }
-
-
-// export const TipSelector = ({ tip, onUpdate }) => {
-//     return (
-//         <div className={styles.tipSelect}>
-//             {tipOptions.map(percentage => {
-//                 const selected = tip ? tip.percentage === percentage : false
-//                 const className = classNames(styles.btn, {
-//                     [styles.selected]: selected,
-//                 })
-
-//                 return (
-//                     <button className={className} key={`btn-${percentage}`} onClick={() => onUpdate(percentage)}>
-//                         {percentage}%
-//                     </button>
-//                 )
-//             })}
-//         </div>
-//     )
-// }
