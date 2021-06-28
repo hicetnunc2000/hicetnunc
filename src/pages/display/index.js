@@ -11,6 +11,7 @@ import { PATH } from '../../constants'
 import { VisuallyHidden } from '../../components/visually-hidden'
 import { GetUserMetadata } from '../../data/api'
 import { ResponsiveMasonry } from '../../components/responsive-masonry'
+import InfiniteScroll from 'react-infinite-scroll-component'
 import styles from './styles.module.scss'
 
 const axios = require('axios')
@@ -195,11 +196,14 @@ export default class Display extends Component {
     subjkt: '',
     render: false,
     loading: true,
+    hasMore : true,
     results: [],
     objkts: [],
     creations: [],
     collection: [],
     market: [],
+    items: [],
+    offset: 0,
     creationsState: true,
     collectionState: false,
     marketState: false,
@@ -291,8 +295,10 @@ export default class Display extends Component {
     console.log(this.state.wallet)
     console.log(!list.includes(this.state.wallet))
     if (!list.includes(this.state.wallet)) {
-      this.setState({ creations: await fetchCreations(this.state.wallet), loading: false })
+      this.setState({ objkts: await fetchCreations(this.state.wallet), loading: false, items : [] })
     }
+
+    this.setState({items : this.state.objkts.slice(0, 20), offset: 20})
 
     this.setState({
       creationsState: true,
@@ -313,8 +319,10 @@ export default class Display extends Component {
 
     let list = await getRestrictedAddresses()
     if (!list.includes(this.state.wallet)) {
-      this.setState({ collection: await fetchCollection(this.state.wallet), loading: false })
+      this.setState({ objkts: await fetchCollection(this.state.wallet), loading: false, items : [] })
     }
+
+    this.setState({items : this.state.objkts.slice(0, 20), offset: 20})
 
     this.setState({
       creationsState: false,
@@ -356,7 +364,6 @@ export default class Display extends Component {
     // based on route, define initial state
     if (this.state.subjkt !== '') {
       // if alias route
-      console.log('oi')
       if (window.location.pathname.split('/')[2] === 'creations') {
         this.creations()
       } else if (window.location.pathname.split('/')[2] === 'collection') {
@@ -381,7 +388,13 @@ export default class Display extends Component {
     }
   }
 
+  loadMore = () => {
+    this.setState({ items : this.state.items.concat(this.state.objkts.slice(this.state.offset, this.state.offset + 20)), offset : this.state.offset + 20 })
 
+/*     if ((this.state.objkts.slice(this.state.offset, this.state.offset + 20).length < 20) && (this.state.offset !== 20)) {
+      this.setState({ hasMore : false })
+    } */
+  }
 
   render() {
     return (
@@ -590,46 +603,72 @@ export default class Display extends Component {
 
         {!this.state.loading && this.state.creationsState && (
           <Container xlarge>
-            <ResponsiveMasonry>
-              {this.state.creations.map((nft) => {
-                return (
-                  <Button key={nft.id} to={`${PATH.OBJKT}/${nft.id}`}>
-                    <div className={styles.container}>
-                      {renderMediaType({
-                        mimeType: nft.mime,
-                        artifactUri: nft.artifact_uri,
-                        displayUri: nft.display_uri,
-                        displayView: true
-                      })}
-                    </div>
-                  </Button>
-                )
-              })}
-            </ResponsiveMasonry>
+            <InfiniteScroll
+              dataLength={this.state.items.length}
+              next={this.loadMore}
+              hasMore={this.state.hasMore}
+              loader={
+                <Container>
+                  <Padding>
+                    <Loading />
+                  </Padding>
+                </Container>
+              }
+              endMessage={<p></p>}
+            >
+              <ResponsiveMasonry>
+                {this.state.items.map((nft) => {
+                  return (
+                    <Button key={nft.id} to={`${PATH.OBJKT}/${nft.id}`}>
+                      <div className={styles.container}>
+                        {renderMediaType({
+                          mimeType: nft.mime,
+                          artifactUri: nft.artifact_uri,
+                          displayUri: nft.display_uri,
+                          displayView: true
+                        })}
+                      </div>
+                    </Button>
+                  )
+                })}
+              </ResponsiveMasonry>
+            </InfiniteScroll>
           </Container>
         )}
 
         {!this.state.loading && this.state.collectionState && (
           <Container xlarge>
-            <ResponsiveMasonry>
-              {this.state.collection.map((nft) => {
-                return (
-                  <Button
-                    key={nft.token.id}
-                    to={`${PATH.OBJKT}/${nft.token.id}`}
-                  >
-                    <div className={styles.container}>
-                      {renderMediaType({
-                        mimeType: nft.token.mime,
-                        artifactUri: nft.token.artifact_uri,
-                        displayUri: nft.token.display_uri,
-                        displayView: true
-                      })}
-                    </div>
-                  </Button>
-                )
-              })}
-            </ResponsiveMasonry>
+            <InfiniteScroll
+              dataLength={this.state.items.length}
+              next={this.loadMore}
+              hasMore={this.state.hasMore}
+              loader={
+                <Container>
+                  <Padding>
+                    <Loading />
+                  </Padding>
+                </Container>
+              }
+              endMessage={<p></p>}
+            >
+              <ResponsiveMasonry>
+                {this.state.items.map((nft) => {
+                  console.log(nft)
+                  return (
+                    <Button key={nft.token.id} to={`${PATH.OBJKT}/${nft.token.id}`}>
+                      <div className={styles.container}>
+                        {renderMediaType({
+                          mimeType: nft.token.mime,
+                          artifactUri: nft.token.artifact_uri,
+                          displayUri: nft.token.display_uri,
+                          displayView: true
+                        })}
+                      </div>
+                    </Button>
+                  )
+                })}
+              </ResponsiveMasonry>
+            </InfiniteScroll>
           </Container>
         )}
 

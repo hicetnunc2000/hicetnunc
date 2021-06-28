@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import styles from './styles.module.scss'
+import "./style.css"
 
 export const GLBComponent = ({
   artifactUri,
@@ -14,7 +15,6 @@ export const GLBComponent = ({
   const [height, setHeight] = useState('100px')
 
   const props = {
-    className: styles.glb,
     src: preview ? previewUri : artifactUri,
     autoplay: true,
     'auto-rotate': true,
@@ -47,24 +47,23 @@ export const GLBComponent = ({
   if (displayView) {
     console.log('profile', displayView)
     return (
-    <div className={styles.container} ref={ref}>
-    <model-viewer {...props} style={{ width, height }}>
-      <button slot="ar-button" className={styles.arButton}>
-        AR
-      </button>
-    </model-viewer>
-  </div>
+      <div className={styles.container} ref={ref}>
+        <model-viewer {...props} style={{ width, height }}>
+          <button slot="ar-button" className={styles.arButton}>
+            AR
+          </button>
+        </model-viewer>
+      </div>
     )
   } else {
-
-  return (
-    <div>
-      <model-viewer {...props} style={{ height : '60vh', width: '100vw' }}>
-        <button slot="ar-button" className={styles.arButton}>
-          AR
-        </button>
-      </model-viewer>
-    </div>
-  )
+    return (
+      <div>
+        <model-viewer {...props} style={{height:'60vh', width : '100%', magin : '0 auto'}}>
+          <button slot="ar-button" className={styles.arButton}>
+            AR
+          </button>
+        </model-viewer>
+      </div>
+    )
   }
 }

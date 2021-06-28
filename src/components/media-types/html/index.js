@@ -9,7 +9,7 @@ import {
 } from '../../../utils/html'
 import { VisuallyHidden } from '../../visually-hidden'
 import styles from './styles.module.scss'
-
+import './styles.css'
 const uid = Math.round(Math.random() * 100000000).toString()
 
 export const HTMLComponent = (props) => {
@@ -47,6 +47,7 @@ export const HTMLComponent = (props) => {
   const unpacking = useRef(false)
   const [validHTML, setValidHTML] = useState(null)
   const [validationError, setValidationError] = useState(null)
+  const [contentRef, setContentRef] = useState(null)
 
   const unpackZipFiles = async () => {
     unpacking.current = true
@@ -124,6 +125,8 @@ export const HTMLComponent = (props) => {
     }
   }
 
+
+  console.log(onDetailView)
   if (!onDetailView) {
     return (
       <div className={classes}>
@@ -166,18 +169,22 @@ export const HTMLComponent = (props) => {
   if (!displayView) {
     return (
       <div>
-        <iframe style={{height : '65vh', width: '100vw', border : 'none'}}
+        <iframe
+          className={styles.html}
           title="html-embed"
           src={`${artifactUri}/?creator=${_creator_}&viewer=${_viewer_}&objkt=${_objectId_}`}
           sandbox="allow-scripts allow-same-origin"
           allow="accelerometer; camera; gyroscope; microphone; xr-spatial-tracking;"
+
         />
       </div>
     )
   } else {
+
     return (
-      <div className={classes}>
+      <div>
         <iframe
+          className={styles.html}
           title="html-embed"
           src={`${artifactUri}/?creator=${_creator_}&viewer=${_viewer_}&objkt=${_objectId_}`}
           sandbox="allow-scripts allow-same-origin"

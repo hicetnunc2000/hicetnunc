@@ -10,6 +10,7 @@ import { UnknownComponent } from './unknown'
 import { PdfComponent } from './pdf'
 import { MIMETYPE, IPFS_DIRECTORY_MIMETYPE } from '../../constants'
 import { Container } from './container'
+import { MD } from './md'
 
 // converts an ipfs hash to ipfs url
 const HashToURL = (hash, type) => {
@@ -21,6 +22,8 @@ const HashToURL = (hash, type) => {
   }
 
   switch (type) {
+    case 'HIC':
+      return hash.replace('ipfs://', 'https://pinata.hicetnunc.xyz/ipfs/')
     case 'CLOUDFLARE':
       return hash.replace('ipfs://', 'https://cloudflare-ipfs.com/ipfs/')
     case 'PINATA':
@@ -95,7 +98,7 @@ export const renderMediaType = ({
     case MIMETYPE.PNG:
     case MIMETYPE.TIFF:
     case MIMETYPE.WEBP:
-      parsedArtifactUri = HashToURL(artifactUri, 'CLOUDFLARE')
+      parsedArtifactUri = HashToURL(artifactUri, 'IPFS')
       parsedDisplayUri = HashToURL(displayUri, 'CLOUDFLARE')
       // when its a GIF we always load the artifactUri by triggering `onDetailView` to be `true`.
       return (
@@ -106,6 +109,7 @@ export const renderMediaType = ({
             previewUri={previewUri}
             onDetailView={interactive || mimeType === MIMETYPE.GIF}
             preview={preview}
+            displayView={displayView}
           />
         </Container>
       )
@@ -124,6 +128,7 @@ export const renderMediaType = ({
             creator={creator}
             objkt={objkt}
             onDetailView={interactive}
+            displayView={displayView}
           />
         </Container>
       )
@@ -164,6 +169,7 @@ export const renderMediaType = ({
             previewUri={previewUri}
             preview={preview}
             onDetailView={interactive}
+            displayView={displayView}
           />
         </Container>
       )
@@ -181,6 +187,7 @@ export const renderMediaType = ({
             preview={preview}
             onDetailView={interactive}
             displayView={displayView}
+            displayView={displayView}
           />
         </Container>
       )
@@ -189,6 +196,7 @@ export const renderMediaType = ({
     case MIMETYPE.OGA:
     case MIMETYPE.FLAC:
     case MIMETYPE.WAV:
+    case MIMETYPE.XWAV:
       parsedArtifactUri = HashToURL(artifactUri, 'IPFS')
       parsedDisplayUri = HashToURL(displayUri, 'IPFS')
       return (
@@ -199,6 +207,7 @@ export const renderMediaType = ({
             previewUri={previewUri}
             preview={preview}
             onDetailView={interactive}
+            displayView={displayView}
           />
         </Container>
       )
@@ -214,9 +223,21 @@ export const renderMediaType = ({
             previewUri={previewUri}
             preview={preview}
             onDetailView={interactive}
+            displayView={displayView}
           />
         </Container>
       )
+
+    case MIMETYPE.MD:
+      parsedArtifactUri = HashToURL(artifactUri, 'IPFS')
+      return (
+        <MD
+          artifactUri={HashToURL(artifactUri, 'IPFS')}
+          displayView={displayView}
+        >
+        </MD>
+      )
+
     default:
       return <UnknownComponent mimeType={mimeType} />
   }
