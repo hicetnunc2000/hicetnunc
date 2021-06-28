@@ -9,6 +9,7 @@ export const VideoComponent = ({
   preview,
   interactive,
   inView,
+  displayView
 }) => {
   const domElement = useRef()
 
@@ -47,19 +48,37 @@ export const VideoComponent = ({
     }
   }, [inView])
 
-  return (
-    <div className={styles.container}>
-      <video
-        ref={domElement}
-        className={styles.video}
-        autoPlay={inView}
-        playsInline
-        muted
-        loop
-        controls={interactive}
-        src={preview ? previewUri : artifactUri}
-        poster={displayUri}
-      />
-    </div>
-  )
+  if (displayView) {
+    return (
+      <div className={styles.container}>
+        <video
+          ref={domElement}
+          className={styles.video}
+          autoPlay={inView}
+          playsInline
+          muted
+          loop
+          controls={interactive}
+          src={preview ? previewUri : artifactUri}
+          poster={displayUri}
+        />
+      </div>
+    )
+  } else {
+    return (
+      <div>
+        <video
+          ref={domElement}
+          style={{ height: '60vh', display: 'block', margin: '0 auto' }}
+          autoPlay={inView}
+          playsInline
+          muted
+          loop
+          controls={interactive}
+          src={preview ? previewUri : artifactUri}
+          poster={displayUri}
+        />
+      </div>
+    )
+  }
 }

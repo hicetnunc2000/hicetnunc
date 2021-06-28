@@ -1,11 +1,18 @@
 @import '../../../styles/layout.scss';
 
+
+.style {
+  max-height : 60vh;
+  max-width: 100%;
+  display: block; 
+  margin: 0 auto; 
+  border : none;
+
+  @include respond-to('desktop') {
+  }
+}
+
 .container {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 
   .image {
     display: block;
@@ -17,6 +24,10 @@
     @include respond-to('tablet') {
       max-height: 70vh;
       height: initial;
+    }
+
+    @include respond-to('desktop') {
+      max-height: 60vh;
     }
   }
 }

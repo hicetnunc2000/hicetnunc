@@ -11,12 +11,14 @@ export const VectorComponent = ({
   objkt,
   onDetailView,
   preview,
+  displayView
 }) => {
   const context = useContext(HicetnuncContext)
   const classes = classnames({
     [styles.container]: true,
     [styles.interactive]: onDetailView,
   })
+
 
   let _creator_ = false
   let _viewer_ = false
@@ -42,16 +44,31 @@ export const VectorComponent = ({
     path = `${artifactUri}?creator=${_creator_}&viewer=${_viewer_}&objkt=${_objkt_}`
   }
 
-  return (
-    <div className={classes}>
-      <iframe
-        title="hic et nunc SVG renderer"
-        src={path}
-        sandbox="allow-scripts"
-        scrolling="no"
-      />
-    </div>
-  )
+  if (displayView) {
+    return (
+      <div className={classes}>
+        <iframe
+          title="hic et nunc SVG renderer"
+          src={path}
+          sandbox="allow-scripts"
+          scrolling="no"
+        />
+      </div>
+    )
+  } else {
+    return (
+      <div>
+        <iframe
+          className={styles.vector}
+          title="hic et nunc SVG renderer"
+          src={path}
+          sandbox="allow-scripts"
+          scrolling="no"
+          onLoad={'javascript:(function(o){o.style.height=o.contentWindow.document.body.scrollHeight+"px";}(this));'}
+        />
+      </div>
+    )
+  }
 }
 // svg version:     src={`${src}?author=${_creator_}&viewer=${_viewer_}`}
 // iframe version:  src={`https://hicetnunc2000.github.io/hicetnunc/gh-pages/sandbox-svg.html?src=${src}&creator=${_creator_}&viewer=${_viewer_}`}

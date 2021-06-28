@@ -47,11 +47,13 @@ export const MIMETYPE = {
   MP3: 'audio/mpeg',
   OGA: 'audio/ogg',
   WAV: 'audio/wav',
+  XWAV: 'audio/x-wav',
   FLAC: 'audio/flac',
   PDF: 'application/pdf',
   ZIP: 'application/zip',
   ZIP1: 'application/x-zip-compressed',
   ZIP2: 'multipart/x-zip',
+  MD : 'text/markdown'
 }
 
 export const IPFS_DIRECTORY_MIMETYPE = 'application/x-directory'

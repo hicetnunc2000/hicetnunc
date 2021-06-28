@@ -89,7 +89,8 @@ export const ItemInfo = ({
     }
 
     return (
-      <>
+      <> 
+      <div style={{height:'30px'}}></div>
         <div className={styles.container}>
           <div className={styles.edition}>
             <div className={styles.inline}>
@@ -129,7 +130,7 @@ export const ItemInfo = ({
 
         {isDetailView && (
           <div className={styles.spread}>
-            <p>OBJKT#{id}</p>
+            <p style={{paddingBottom:'7.5px'}}>OBJKT#{id}</p>
             <Button onClick={() => handleCollect()}>
               <Purchase>{message}</Purchase>
             </Button>
