@@ -3,6 +3,7 @@
 import React, { Component } from 'react'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
 import { Container, Padding, Page } from '../../components/layout'
+import { BottomBanner } from '../../components/bottom-banner'
 import { Input, Textarea } from '../../components/input'
 import { Button, Curate } from '../../components/button'
 import { Upload } from '../../components/upload'
@@ -136,7 +137,7 @@ export class Config extends Component {
               <Curate>Save Profile</Curate>
             </Button>
           </Padding>
-          <p style={{fontSize : "12px"}}> one can link their twitter account through <a href="https://tzprofiles.com">tz profiles</a></p>
+          <p style={{ fontSize: "12px" }}> one can link their twitter account through <a href="https://tzprofiles.com">tz profiles</a></p>
         </Container>
 
         <Container>
@@ -157,13 +158,16 @@ export class Config extends Component {
           </Padding>
         </Container>
 
-{/*         <Container>
+        {/*         <Container>
           <Padding>
             <Button onClick={this.unregister}>
               <Curate>Unregister</Curate>
             </Button>
           </Padding>
         </Container> */}
+        <BottomBanner>
+          Collecting has been temporarily disabled. Follow <a href="https://twitter.com/hicetnunc2000" target="_blank">@hicetnunc2000</a> or <a href="https://discord.gg/jKNy6PynPK" target="_blank">join the discord</a> for updates.
+        </BottomBanner>
       </Page>
     )
   }

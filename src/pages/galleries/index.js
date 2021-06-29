@@ -5,6 +5,7 @@ import { GetOBJKT } from '../../data/api'
 import { renderMediaType } from '../../components/media-types'
 import { PATH } from '../../constants'
 import { ResponsiveMasonry } from '../../components/responsive-masonry'
+import { BottomBanner } from '../../components/bottom-banner'
 import styles from './styles.module.scss'
 
 const sortByThumbnailTokenId = (a, b) => {
@@ -51,10 +52,7 @@ export const Galleries = () => {
               return (
                 <Button key={e.uid} to={`${PATH.GALLERY}/${e.uid}`}>
                   <div className={styles.item}>
-                    <div
-                      style={{ pointerEvents: 'none' }}
-                      className={styles.image}
-                    >
+
                       {renderMediaType({
                         mimeType: token_info.formats[0].mimeType,
                         artifactUri: token_info.artifactUri,
@@ -62,9 +60,9 @@ export const Galleries = () => {
                         creator: token_info.creators[0],
                         objkt: e.token_id,
                         interactive: false,
+                        displayView: true
                       })}
                       <div className={styles.number}>{e.name}</div>
-                    </div>
                   </div>
                 </Button>
               )
@@ -72,6 +70,9 @@ export const Galleries = () => {
           </ResponsiveMasonry>
         </Padding>
       </Container>
+      <BottomBanner>
+        Collecting has been temporarily disabled. Follow <a href="https://twitter.com/hicetnunc2000" target="_blank">@hicetnunc2000</a> or <a href="https://discord.gg/jKNy6PynPK" target="_blank">join the discord</a> for updates.
+      </BottomBanner>
     </Page>
   )
 }

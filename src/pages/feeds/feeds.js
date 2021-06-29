@@ -2,6 +2,7 @@
 /* eslint-disable */
 import React, { useEffect, useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
+import { BottomBanner } from '../../components/bottom-banner'
 import {
   GetLatestFeed,
   // GethDAOFeed,
@@ -147,6 +148,9 @@ export const Feeds = ({ type }) => {
           </Padding>
         </Container>
       </InfiniteScroll>
+      <BottomBanner>
+        Collecting has been temporarily disabled. Follow <a href="https://twitter.com/hicetnunc2000" target="_blank">@hicetnunc2000</a> or <a href="https://discord.gg/jKNy6PynPK" target="_blank">join the discord</a> for updates.
+      </BottomBanner>
     </Page>
   )
 }
