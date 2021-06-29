@@ -2,17 +2,13 @@
 @import '../../../styles/layout.scss';
 
 .html {
-  width:100%;
+  width: 60vh;
   height : 60vh; 
   display: block;
   margin: 0 auto; 
   border : none;
-
-  @include respond-to('desktop') {
-    width:50%;
-  }
-
 }
+
 .container {
   position: relative;
   display: block;
