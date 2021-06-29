@@ -8,14 +8,14 @@
   align-items: center;
   justify-content: center;
 
-  @include respond-to('desktop') {
-    width : 50%;
-    margin: 0 auto;
+  @include respond-to('tablet') {
+    width : 100%;
     height: 60vh;
   }
 
-  @include respond-to('tablet') {
-    width : 100%;
+  @include respond-to('desktop') {
+    width : 60vh;
+    margin: 0 auto;
     height: 60vh;
   }
 }
