@@ -9,6 +9,7 @@ import { Page, Container, Padding } from '../../components/layout'
 import { renderMediaType } from '../../components/media-types'
 import { ItemInfo } from '../../components/item-info'
 import { Menu } from '../../components/menu'
+import { BottomBanner } from '../../components/bottom-banner'
 import { Info, Collectors, Swap, Burn } from './tabs'
 //import'./styles.module.scss'
 import './style.css'
@@ -169,6 +170,9 @@ export const ObjktDisplay = () => {
           </div>
         </>
       )}
+      <BottomBanner>
+        Collecting has been temporarily disabled. Follow <a href="https://twitter.com/hicetnunc2000" target="_blank">@hicetnunc2000</a> or <a href="https://discord.gg/jKNy6PynPK" target="_blank">join the discord</a> for updates.
+      </BottomBanner>
       <div style={{ height: '20px' }}></div>
     </Page>
   )
