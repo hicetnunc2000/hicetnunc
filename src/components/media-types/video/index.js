@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react'
 import { iOS } from '../../../utils/os'
 import styles from './styles.module.scss'
+import './style.css'
 
 export const VideoComponent = ({
   artifactUri,
@@ -50,7 +51,7 @@ export const VideoComponent = ({
 
   if (displayView) {
     return (
-      <div className={styles.container}>
+      <div className={styles.video}>
         <video
           ref={domElement}
           className={styles.displayviewVideo}
@@ -69,7 +70,7 @@ export const VideoComponent = ({
       <>
         <video
           ref={domElement}
-          className={styles.objktviewVideo}
+          className={styles.video}
           autoPlay={inView}
           playsInline
           muted
