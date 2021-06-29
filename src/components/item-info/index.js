@@ -131,9 +131,9 @@ export const ItemInfo = ({
         {isDetailView && (
           <div className={styles.spread}>
             <p style={{paddingBottom:'7.5px'}}>OBJKT#{id}</p>
-            <Button onClick={() => handleCollect()}>
+{/*             <Button onClick={() => handleCollect()}>
               <Purchase>{message}</Purchase>
-            </Button>
+            </Button> */}
           </div>
         )}
         <div className={styles.spread}>
