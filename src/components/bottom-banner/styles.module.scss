@@ -1,0 +1,29 @@
+@import '../../styles/variables.scss';
+@import '../../styles/layout.scss';
+
+.container {
+  background: var(--background-color);
+  padding: 10px;
+  font-size: 15px;
+  text-align: center;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 999;
+  a {
+    color: var(--text-color);
+    font-weight: bold;
+  }
+}
+        
+html {
+  margin-bottom: 10px!important;  
+  @include respond-to('phone') {
+    margin-bottom: 20px!important;
+    .container {
+      padding: 5px;
+      font-size: 13px;
+    }
+  }
+}
