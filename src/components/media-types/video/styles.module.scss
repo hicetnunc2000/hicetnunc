@@ -2,22 +2,18 @@
 
 .container {
   width: 100%;
-  height: 100%;
+  height: 60vh;
   display: flex;
   align-items: center;
   justify-content: center;
+}
 
-  .video {
-    display: block;
+.video {
+  position: relative;
+  width: auto;
+  height: 60vh;
+
+  @include respond-to('tablet') {
     width: 100%;
-    height: auto;
-    margin: 0 auto;
-
-    @include respond-to('tablet') {
-      max-height: 70vh;
-      width: auto;
-      height: initial;
-      max-width: 100%;
-    }
   }
 }
