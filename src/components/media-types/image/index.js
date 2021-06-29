@@ -1,7 +1,6 @@
 import React from 'react'
 import { LazyLoadImage } from 'react-lazy-load-image-component'
 import styles from './styles.module.scss'
-import './style.css'
 
 export const ImageComponent = ({
   artifactUri,
