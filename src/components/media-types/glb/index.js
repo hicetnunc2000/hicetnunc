@@ -1,10 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react'
 import styles from './styles.module.scss'
-import "./style.css"
 
 export const GLBComponent = ({
   artifactUri,
-  displayUri,
   previewUri,
   preview,
   onDetailView,
@@ -57,13 +55,13 @@ export const GLBComponent = ({
     )
   } else {
     return (
-      <>
-        <model-viewer {...props} style={{height:'60vh', width : '100%', magin : '0 auto'}}>
+      <div>
+        <model-viewer {...props}>
           <button slot="ar-button" className={styles.arButton}>
             AR
           </button>
         </model-viewer>
-      </>
+      </div>
     )
   }
 }

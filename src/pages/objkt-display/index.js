@@ -114,7 +114,7 @@ export const ObjktDisplay = () => {
             display: 'block',
             width: '100%'
           }}>
-              <div className='objkt-view'>
+              <div className={(nft.mime == 'application/pdf' ? 'pdf' : 'objkt-view')} >
                 {renderMediaType({
                   mimeType: nft.mime,
                   artifactUri: nft.artifact_uri,

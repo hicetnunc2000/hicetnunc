@@ -5,8 +5,7 @@
   align-items: center;
   justify-content: center;
   position: relative;
-  width: 100%;
-  height: 100%;
+  overflow: hidden;
 
   &:after {
     content: '';
@@ -22,11 +21,13 @@
     transform: translateX(-50%) translateY(-50%);
     border: none;
   }
+
   canvas{
     max-width: 100%;
     margin: 0 auto;
     height: auto!important;
   }
+  
   .pdfNav {
     margin: 6px;
     text-align: center;
