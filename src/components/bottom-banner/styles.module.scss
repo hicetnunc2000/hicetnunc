@@ -1,0 +1,25 @@
+@import '../../styles/variables.scss';
+@import '../../styles/layout.scss';
+
+.container {
+  background: var(--background-color);
+  padding: 10px;
+  font-size: 14px;
+  text-align: center;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 999;
+  a {
+    color: var(--text-color);
+    font-weight: bold;
+  }
+}
+        
+div#root {
+  margin-bottom: 20px;  
+  @include respond-to('phone') {
+    margin-bottom: 50px;
+  }
+}
