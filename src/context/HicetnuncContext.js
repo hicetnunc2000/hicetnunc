@@ -19,8 +19,8 @@ const eztz = require('eztz-lib')
 export const HicetnuncContext = createContext()
 
 // This should be moved to a service so it is only done once on page load
-//const Tezos = new TezosToolkit('https://mainnet-tezos.giganode.io')
-const Tezos = new TezosToolkit('https://mainnet.smartpy.io')
+const Tezos = new TezosToolkit('https://mainnet-tezos.giganode.io')
+//const Tezos = new TezosToolkit('https://mainnet.smartpy.io')
 
 // storage fee adjustment
 
@@ -187,6 +187,9 @@ class HicetnuncContextProviderClass extends Component {
 
       mint: async (tz, amount, cid, royalties) => {
         // show feedback component with followind message and progress indicator
+
+        console.log(cid)
+        
         this.state.setFeedback({
           visible: true,
           message: 'preparing OBJKT',

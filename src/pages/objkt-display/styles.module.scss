@@ -1,6 +1,13 @@
 @import '../../styles/layout.scss';
 @import '../../styles/variables.scss';
 
+.test {
+  width: 100%;
+  @include respond-to('desktop') {
+    background-color: black;
+    width : 50%;
+  }
+}
 .container {
   display: flex;
   flex-direction: column;
@@ -40,7 +47,7 @@
   align-items: center;
 
   @include respond-to('desktop') {
-    width: 60vh;
+    min-height: 50vh;
   }
 
   > div {
@@ -50,17 +57,6 @@
 
 .info {
   width: 100%;
-  padding: 20px;
   background-color: var(--background-color);
   color: var(--text-color);
-  box-shadow: 2px 2px 30px 2px rgba(127, 127, 127, 0.3);
-
-  > div {
-    // margin: 0 auto;
-
-    @include respond-to('desktop') {
-      width: 1024px;
-      max-width: 100%;
-    }
-  }
 }

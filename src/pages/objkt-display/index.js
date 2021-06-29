@@ -11,7 +11,8 @@ import { ItemInfo } from '../../components/item-info'
 import { Menu } from '../../components/menu'
 import { BottomBanner } from '../../components/bottom-banner'
 import { Info, Collectors, Swap, Burn } from './tabs'
-import styles from './styles.module.scss'
+//import'./styles.module.scss'
+import './style.css'
 
 const axios = require('axios')
 
@@ -82,7 +83,6 @@ export const ObjktDisplay = () => {
   }, [])
 
   const Tab = TABS[tabIndex].component
-
   return (
     <Page title={nft?.name}>
       {loading && (
@@ -110,17 +110,19 @@ export const ObjktDisplay = () => {
 
       {!loading && (
         <>
-          <div className={styles.container}>
-            <div className={styles.image}>
-              {renderMediaType({
-                mimeType: nft.mime,
-                artifactUri: nft.artifact_uri,
-                displayUri: nft.display_uri,
-                creator: nft.creator,
-                interactive: true,
-              })}
-            </div>
-            <div className={styles.info}>
+          <div>
+              <div className='objkt-view'>
+                {renderMediaType({
+                  mimeType: nft.mime,
+                  artifactUri: nft.artifact_uri,
+                  displayUri: nft.display_uri,
+                  creator: nft.creator,
+                  objkt: nft.id,
+                  interactive: true,
+                  displayView: false
+                })}
+              </div>
+            <div>
               <Container>
                 <Padding>
                   <ItemInfo {...nft} isDetailView />
@@ -171,6 +173,7 @@ export const ObjktDisplay = () => {
       <BottomBanner>
         Collecting has been temporarily disabled. Follow <a href="https://twitter.com/hicetnunc2000" target="_blank">@hicetnunc2000</a> or <a href="https://discord.gg/jKNy6PynPK" target="_blank">join the discord</a> for updates.
       </BottomBanner>
+      <div style={{ height: '20px' }}></div>
     </Page>
   )
 }
