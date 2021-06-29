@@ -292,6 +292,13 @@ export default class Display extends Component {
   }
 
   creations = async () => {
+
+    this.setState({
+      creationsState: true,
+      collectionState: false,
+      marketState: false,
+    })
+    
     let list = await getRestrictedAddresses()
     console.log(this.state.wallet)
     console.log(!list.includes(this.state.wallet))
@@ -300,12 +307,6 @@ export default class Display extends Component {
     }
 
     this.setState({ items: this.state.objkts.slice(0, 20), offset: 20 })
-
-    this.setState({
-      creationsState: true,
-      collectionState: false,
-      marketState: false,
-    })
 
     if (this.state.subjkt !== '') {
       // if alias route
