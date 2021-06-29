@@ -20,6 +20,13 @@ const customFloor = function (value, roundTo) {
   return Math.floor(value / roundTo) * roundTo
 }
 
+const getRestrictedAddresses = async () =>
+  await axios
+    .get(
+      'https://raw.githubusercontent.com/hicetnunc2000/hicetnunc/main/filters/w.json'
+    )
+    .then((res) => res.data)
+
 const ONE_MINUTE_MILLIS = 60 * 1000
 
 export const Feeds = ({ type }) => {
@@ -95,6 +102,9 @@ export const Feeds = ({ type }) => {
     result = _.uniqBy(result, 'creator_id')
     setCreators(creators.concat(result.map(e => e.creator_id)))
     result = result.filter(e => !creators.includes(e.creator_id))
+    
+    let restricted = await getRestrictedAddresses()
+    result = result.filter(e => !restricted.includes(e.creator_id))
     const next = items.concat(result)
     setItems(next)
 
