@@ -1,23 +1,26 @@
 @import '../../../styles/layout.scss';
 
 .container {
-  width: 100%;
-  height: 100%;
   display: flex;
+  width: 100%;
   align-items: center;
   justify-content: center;
 
-  .video {
-    display: block;
+  .displayviewVideo {
     width: 100%;
     height: auto;
-    margin: 0 auto;
+  }
+}
+  
+.objktviewVideo {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: auto;
+  margin: auto;
 
-    @include respond-to('tablet') {
-      max-height: 70vh;
-      width: auto;
-      height: initial;
-      max-width: 100%;
-    }
+  @include respond-to('desktop') {
+    width: auto;
+    height: 60vh;
   }
 }

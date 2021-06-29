@@ -11,8 +11,7 @@ import { ItemInfo } from '../../components/item-info'
 import { Menu } from '../../components/menu'
 import { BottomBanner } from '../../components/bottom-banner'
 import { Info, Collectors, Swap, Burn } from './tabs'
-//import'./styles.module.scss'
-import './style.css'
+import styles from './styles.module.scss'
 
 const axios = require('axios')
 
@@ -110,8 +109,12 @@ export const ObjktDisplay = () => {
 
       {!loading && (
         <>
-          <div>
-              <div className='objkt-view'>
+          <div style={{
+            position: 'relative',
+            display: 'block',
+            width: '100%'
+          }}>
+              <div className={nft.mime == 'video/mp4' || nft.mime == 'application/pdf' ? 'no-fullscreen' : styles.objktview}>
                 {renderMediaType({
                   mimeType: nft.mime,
                   artifactUri: nft.artifact_uri,
