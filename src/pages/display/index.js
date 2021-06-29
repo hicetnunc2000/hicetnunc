@@ -3,7 +3,7 @@ import { Button, Primary } from '../../components/button'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
 import { Page, Container, Padding } from '../../components/layout'
 import { Loading } from '../../components/loading'
-import { renderThumbnail } from '../../components/media-types'
+import { renderMediaType } from '../../components/media-types'
 import { Identicon } from '../../components/identicons'
 import { walletPreview } from '../../utils/string'
 import { SanitiseOBJKT, SanitizeDipDup } from '../../utils/sanitise'
@@ -49,7 +49,6 @@ query collectorGallery($address: String!) {
       creator {
         address
       }
-      extra
     }
   }
 }
@@ -98,7 +97,6 @@ query creatorGallery($address: String!) {
         tag
       }
     }
-    extra
   }
 }
 `
@@ -620,16 +618,14 @@ export default class Display extends Component {
             >
               <ResponsiveMasonry>
                 {this.state.items.map((nft) => {
-                  console.log('NFT Creation', nft)
                   return (
                     <Button key={nft.id} to={`${PATH.OBJKT}/${nft.id}`}>
                       <div className={styles.container}>
-                        {renderThumbnail({
+                        {renderMediaType({
                           mimeType: nft.mime,
                           artifactUri: nft.artifact_uri,
                           displayUri: nft.display_uri,
-                          displayView: true,
-                          extra: nft.extra
+                          displayView: true
                         })}
                       </div>
                     </Button>
@@ -657,16 +653,15 @@ export default class Display extends Component {
             >
               <ResponsiveMasonry>
                 {this.state.items.map((nft) => {
-                  console.log('NFT Collection', nft)
+                  console.log(nft)
                   return (
                     <Button key={nft.token.id} to={`${PATH.OBJKT}/${nft.token.id}`}>
                       <div className={styles.container}>
-                        {renderThumbnail({
+                        {renderMediaType({
                           mimeType: nft.token.mime,
                           artifactUri: nft.token.artifact_uri,
                           displayUri: nft.token.display_uri,
-                          displayView: true,
-                          extra: nft.token.extra
+                          displayView: true
                         })}
                       </div>
                     </Button>
