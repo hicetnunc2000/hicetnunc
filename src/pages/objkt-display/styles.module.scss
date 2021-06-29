@@ -3,7 +3,7 @@
 
 .objktview {
   position: relative;
-  overflow : hidden;
+  overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -17,5 +17,11 @@
     width : 60vh;
     margin: 0 auto;
     height: 60vh;
+  }
+}
+
+.nofullscreen {
+  svg {
+    display: none;
   }
 }
