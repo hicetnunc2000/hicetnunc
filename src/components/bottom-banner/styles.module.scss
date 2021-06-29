@@ -4,7 +4,7 @@
 .container {
   background: var(--background-color);
   padding: 10px;
-  font-size: 14px;
+  font-size: 15px;
   text-align: center;
   position: fixed;
   bottom: 0;
@@ -17,9 +17,13 @@
   }
 }
         
-div#root {
-  margin-bottom: 20px;  
+html {
+  margin-bottom: 10px!important;  
   @include respond-to('phone') {
-    margin-bottom: 50px;
+    margin-bottom: 20px!important;
+    .container {
+      padding: 5px;
+      font-size: 13px;
+    }
   }
 }
