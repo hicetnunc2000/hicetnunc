@@ -1,6 +1,9 @@
 .objkt-view {
     position: relative;
     overflow : hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 @media screen and (min-width : 801px) {

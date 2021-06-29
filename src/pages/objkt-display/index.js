@@ -109,7 +109,11 @@ export const ObjktDisplay = () => {
 
       {!loading && (
         <>
-          <div>
+          <div style={{
+            position: 'relative',
+            display: 'block',
+            width: '100%'
+          }}>
               <div className='objkt-view'>
                 {renderMediaType({
                   mimeType: nft.mime,

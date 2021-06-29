@@ -1,62 +1,21 @@
-// @import '../../styles/layout.scss';
-// @import '../../styles/variables.scss';
+@import '../../styles/layout.scss';
+@import '../../styles/variables.scss';
 
-// .test {
-//   width: 100%;
-//   @include respond-to('desktop') {
-//     background-color: black;
-//     width : 50%;
-//   }
-// }
-// .container {
-//   display: flex;
-//   flex-direction: column;
-//   justify-content: flex-start;
-//   align-items: center;
-//   min-height: 100vh;
+.objktview {
+  position: relative;
+  overflow : hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-//   position: absolute;
-//   top: 0;
-//   right: 0;
-//   bottom: 0;
-//   left: 0;
-//   overflow-y: auto;
-//   z-index: 2;
+  @include respond-to('desktop') {
+    width : 50%;
+    margin: 0 auto;
+    height: 60vh;
+  }
 
-//   @supports (padding: unquote('max(0px)')) {
-//     padding-top: unquote('max(0px, env(safe-area-inset-top))');
-//     padding-bottom: unquote('max(0px, env(safe-area-inset-top))');
-//   }
-
-//   @include respond-to('tablet') {
-//     display: flex;
-//     flex-direction: column;
-//     justify-content: flex-start;
-//     align-items: center;
-//   }
-// }
-
-// .image {
-//   position: relative;
-//   width: 50vh;
-//   max-width: 100%;
-//   margin: 100px 0;
-//   flex: 1;
-//   display: flex;
-//   justify-content: center;
-//   align-items: center;
-
-//   @include respond-to('desktop') {
-//     min-height: 50vh;
-//   }
-
-//   > div {
-//     width: 100%;
-//   }
-// }
-
-// .info {
-//   width: 100%;
-//   background-color: var(--background-color);
-//   color: var(--text-color);
-// }
+  @include respond-to('tablet') {
+    width : 100%;
+    height: 60vh;
+  }
+}

@@ -1,19 +1,14 @@
 @import '../../../styles/layout.scss';
 
-
 .style {
   max-height : 60vh;
   max-width: 100%;
   display: block; 
   margin: 0 auto; 
   border : none;
-
-  @include respond-to('desktop') {
-  }
 }
 
 .container {
-
   .image {
     display: block;
     width: auto;

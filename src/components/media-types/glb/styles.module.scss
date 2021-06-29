@@ -46,4 +46,9 @@
     padding: 4px 8px;
     cursor: pointer;
   }
+
+  > div {
+    position: relative;
+    display: block;
+  }
 }

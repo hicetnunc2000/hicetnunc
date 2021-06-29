@@ -66,10 +66,10 @@ export const VideoComponent = ({
     )
   } else {
     return (
-      <div>
+      <>
         <video
           ref={domElement}
-          style={{ height: '60vh', display: 'block', margin: '0 auto' }}
+          className={styles.video}
           autoPlay={inView}
           playsInline
           muted
@@ -78,7 +78,7 @@ export const VideoComponent = ({
           src={preview ? previewUri : artifactUri}
           poster={displayUri}
         />
-      </div>
+      </>
     )
   }
 }
