@@ -11,6 +11,7 @@ import { PdfComponent } from './pdf'
 import { MIMETYPE, IPFS_DIRECTORY_MIMETYPE } from '../../constants'
 import { Container } from './container'
 import { MD } from './md'
+import { render } from 'react-dom'
 
 // converts an ipfs hash to ipfs url
 const HashToURL = (hash, type) => {
@@ -240,5 +241,123 @@ export const renderMediaType = ({
 
     default:
       return <UnknownComponent mimeType={mimeType} />
+  }
+}
+
+export const renderThumbnail = ({
+  // the objkt mimeType (used to choose what renderer to use)
+  mimeType,
+
+  // artifactUri holds the file the user uploaded
+  artifactUri,
+
+  // displayUri might be sometimes undefined or '', but when present its a lower resolution of the artifactUri for faster loading
+  displayUri,
+
+  // previewUri is used when previewing on mint page
+  previewUri,
+
+  // the wallet id of the creator
+  creator,
+
+  // the objkt id so interactive NFT's can call API's
+  objkt,
+
+  // if the NFT is on the objkt detail page this value is true. otherwise is false
+  interactive = false,
+
+  // when previewing during mint process
+  preview = false,
+
+  displayView,
+
+  /* may contain `display_uris[{
+    mimeType: string,
+    path: string,
+    dimensions: {
+      unit: 'px',
+      value: '128x128',
+      duration: '00:00:05.33'
+    }
+  }]`*/
+  extra
+}) => {
+  let parsedArtifactUri
+  let parsedDisplayUri
+
+  const getBestDisplayUri = (lookup, maxWidth) => {
+    if (!lookup || !lookup.length) {
+      return null;
+    }
+  
+    let videos = lookup.filter((o) => {
+      return o.mimeType && o.mimeType.indexOf("video/") === 0;
+    });
+    let gifs = lookup.filter((o) => {
+      return o.mimeType && o.mimeType.indexOf("image/gif") === 0;
+    });
+    let stills = lookup.filter((o) => {
+      return o.mimeType && o.mimeType.indexOf("image/jpeg") === 0;
+    });
+  
+    const addWidth = (o) => {
+      if (o.dimensions && o.dimensions.value) {
+        const dims = o.dimensions.value.split("x");
+        if (dims[0]) {
+          return (o.width = parseInt(dims[0], 10));
+        }
+      }
+      return (o.width = -1);
+    };
+  
+    videos.forEach(addWidth);
+    gifs.forEach(addWidth);
+    stills.forEach(addWidth);
+  
+    videos.sort((a, b) => a.width - b.width);
+    gifs.sort((a, b) => a.width - b.width);
+    stills.sort((a, b) => a.width - b.width);
+  
+    let largestVideo = videos[0] || null;
+    let largestGif = gifs[0] || null;
+    let largestStill = stills[0] || null;
+  
+    videos.forEach((o) => {
+      if (o.width <= maxWidth) largestVideo = o;
+    });
+    gifs.forEach((o) => {
+      if (o.width <= maxWidth) largestGif = o;
+    });
+    stills.forEach((o) => {
+      if (o.width <= maxWidth) largestStill = o;
+    });
+  
+    const largestObj = largestVideo || largestGif || largestStill;
+    // const largestObj = largestGif || largestStill;
+    return largestObj
+      ? {
+          mimeType: largestObj.mimeType,
+          displayUri: `ipfs://${largestObj.path}`
+        }
+      : null;
+  };
+  
+  console.log(extra)
+  const best = getBestDisplayUri(extra && extra.display_uris, 512);
+  console.log(best)
+  if (best) {
+    return renderMediaType({
+      mimeType: best.mimeType,
+      artifactUri: artifactUri,
+      displayUri: best.displayUri,
+      displayView: true,
+    })
+  } else {
+    return renderMediaType({
+      mimeType: mimeType,
+      artifactUri: artifactUri,
+      displayUri: displayUri,
+      displayView: true,
+    })
   }
 }
