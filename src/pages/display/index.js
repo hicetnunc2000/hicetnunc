@@ -11,6 +11,7 @@ import { PATH } from '../../constants'
 import { VisuallyHidden } from '../../components/visually-hidden'
 import { GetUserMetadata } from '../../data/api'
 import { ResponsiveMasonry } from '../../components/responsive-masonry'
+import InfiniteScroll from 'react-infinite-scroll-component'
 import styles from './styles.module.scss'
 
 const axios = require('axios')
@@ -122,6 +123,29 @@ query addressQuery($address: String!) {
 }
 `
 
+const query_v1_swaps = `
+query querySwaps($address: String!) {
+  hic_et_nunc_swap(where: {creator_id: {_eq: $address}, status: {_eq: "0"}, token: {supply: {_gt: "1"}}}, order_by: {price: desc, amount_left: desc}) {
+    amount_left
+    price
+    token_id
+    id
+  }
+}
+`
+async function fetchSwaps(address) {
+
+  const { errors, data } = await fetchGraphQL(query_v1_swaps, 'querySwaps', {
+    address: address
+  })
+  if (errors) {
+    console.error(errors)
+  }
+  const result = data.hic_et_nunc_swap
+  return result
+
+}
+
 async function fetchSubjkts(subjkt) {
   const { errors, data } = await fetchGraphQL(query_subjkts, 'subjktsQuery', {
     subjkt: subjkt,
@@ -148,6 +172,18 @@ async function fetchCreations(addr) {
   return result
 }
 
+async function fetchTz(addr) {
+  const { errors, data } = await fetchGraphQL(query_tz, 'addressQuery', {
+    address: addr,
+  })
+  if (errors) {
+    console.error(errors)
+  }
+  const result = data.hic_et_nunc_holder
+  // console.log({ result })
+  return result
+}
+
 export default class Display extends Component {
   static contextType = HicetnuncContext
 
@@ -160,11 +196,14 @@ export default class Display extends Component {
     subjkt: '',
     render: false,
     loading: true,
+    hasMore : true,
     results: [],
     objkts: [],
     creations: [],
     collection: [],
     market: [],
+    items: [],
+    offset: 0,
     creationsState: true,
     collectionState: false,
     marketState: false,
@@ -172,6 +211,7 @@ export default class Display extends Component {
   }
 
   componentWillMount = async () => {
+
     const id = window.location.pathname.split('/')[1]
     console.log(window.location.pathname.split('/'))
     if (id === 'tz') {
@@ -206,6 +246,9 @@ export default class Display extends Component {
         if (data.data.tzprofile) this.setState({ tzprofile })
       })
 
+      let resTz = await fetchTz(wallet)
+      this.setState({ hdao: Math.floor(resTz[0].hdao_balance / 1000000) })
+
       this.onReady()
     } else {
       let res = await fetchSubjkts(window.location.pathname.split('/')[1])
@@ -215,6 +258,9 @@ export default class Display extends Component {
         wallet: res[0].address,
         walletPreview: walletPreview(res[0].address),
       })
+
+      let resTz = await fetchTz(this.state.wallet)
+      this.setState({ hdao: Math.floor(resTz[0].hdao_balance / 1000000) })
 
       await GetUserMetadata(this.state.wallet).then((data) => {
         const {
@@ -239,97 +285,21 @@ export default class Display extends Component {
         if (data.data.logo) this.setState({ logo })
         this.onReady()
       })
+      this.onReady()
+
     }
   }
 
-  // called if there's no redirect
-  onReady = async () => {
-    this.context.setPath(window.location.pathname)
-
-    // based on route, define initial state
-    if (this.state.subjkt !== '') {
-      // if alias route
-      if (window.location.pathname.split('/')[2] === 'creations') {
-        this.setState({
-          creationsState: true,
-          collectionState: false,
-          marketState: false,
-        })
-      } else if (window.location.pathname.split('/')[2] === 'collection') {
-        this.setState({
-          creationsState: false,
-          collectionState: true,
-          marketState: false,
-        })
-      } else if (window.location.pathname.split('/')[2] === 'market') {
-        this.setState({
-          creationsState: false,
-          collectionState: false,
-          marketState: true,
-        })
-      }
-    } else {
-      // if tz/wallethash route
-      if (window.location.pathname.split('/')[3] === 'creations') {
-        this.setState({
-          creationsState: true,
-          collectionState: false,
-          marketState: false,
-        })
-      } else if (window.location.pathname.split('/')[3] === 'collection') {
-        this.setState({
-          creationsState: false,
-          collectionState: true,
-          marketState: false,
-        })
-      } else if (window.location.pathname.split('/')[3] === 'market') {
-        this.setState({
-          creationsState: false,
-          collectionState: false,
-          marketState: true,
-        })
-      }
-    }
-
-    let addr = ''
-
-    if (window.location.pathname.split('/')[1] === 'tz') {
-      addr = window.location.pathname.split('/')[2]
-    } else {
-      let res = await fetchSubjkts(window.location.pathname.split('/')[1])
-      console.log(res)
-      addr = res[0].address
-
-      this.setState({ subjkt: res[0].name, walletPrev: walletPreview(addr) })
-      if (!this.state.alias) {
-        this.setState({
-          addr: res[0].address,
-          description: res[0].metadata.description,
-        })
-      }
-    }
+  creations = async () => {
     let list = await getRestrictedAddresses()
-
-    let creations = []
-    let collection = []
-    if (!list.includes(addr)) {
-      creations = await fetchCreations(addr)
-      collection = await fetchCollection(addr)
+    console.log(this.state.wallet)
+    console.log(!list.includes(this.state.wallet))
+    if (!list.includes(this.state.wallet)) {
+      this.setState({ objkts: await fetchCreations(this.state.wallet), loading: false, items : [] })
     }
 
-    console.log(creations)
-    console.log('collection', collection)
-    // market
+    this.setState({items : this.state.objkts.slice(0, 20), offset: 20})
 
-    this.setState({
-      creations: creations,
-      loading: false,
-      collection: collection,
-      /* market, */
-    })
-  }
-
-  creations = () => {
     this.setState({
       creationsState: true,
       collectionState: false,
@@ -345,11 +315,19 @@ export default class Display extends Component {
     }
   }
 
-  collection = () => {
+  collection = async () => {
+
+    let list = await getRestrictedAddresses()
+    if (!list.includes(this.state.wallet)) {
+      this.setState({ objkts: await fetchCollection(this.state.wallet), loading: false, items : [] })
+    }
+
+    this.setState({items : this.state.objkts.slice(0, 20), offset: 20})
+
     this.setState({
       creationsState: false,
       collectionState: true,
-      marketState: false,
+      marketState: false
     })
 
     if (this.state.subjkt !== '') {
@@ -362,12 +340,15 @@ export default class Display extends Component {
   }
 
   market = () => {
+
+    this.setState({ market: fetchSwaps(this.state.wallet), loading: false })
+
     this.setState({
       creationsState: false,
       collectionState: false,
       marketState: true,
     })
-
+    console.log(this.state)
     if (this.state.subjkt !== '') {
       // if alias route
       this.props.history.push(`/${this.state.subjkt}/market`)
@@ -375,6 +356,44 @@ export default class Display extends Component {
       // if tz/wallethash route
       this.props.history.push(`/tz/${this.state.wallet}/market`)
     }
+
+  }
+  // called if there's no redirect
+  onReady = async () => {
+
+    // based on route, define initial state
+    if (this.state.subjkt !== '') {
+      // if alias route
+      if (window.location.pathname.split('/')[2] === 'creations') {
+        this.creations()
+      } else if (window.location.pathname.split('/')[2] === 'collection') {
+        this.collection()
+      } else if (window.location.pathname.split('/')[2] === 'market') {
+        this.market()
+      } else {
+
+        this.creations()
+      }
+    } else {
+      // if tz wallet route
+      if (window.location.pathname.split('/')[3] === 'creations') {
+        this.creations()
+      } else if (window.location.pathname.split('/')[3] === 'collection') {
+        this.collection()
+      } else if (window.location.pathname.split('/')[3] === 'market') {
+        this.market()
+      } else {
+        this.creations()
+      }
+    }
+  }
+
+  loadMore = () => {
+    this.setState({ items : this.state.items.concat(this.state.objkts.slice(this.state.offset, this.state.offset + 20)), offset : this.state.offset + 20 })
+
+/*     if ((this.state.objkts.slice(this.state.offset, this.state.offset + 20).length < 20) && (this.state.offset !== 20)) {
+      this.setState({ hasMore : false })
+    } */
   }
 
   render() {
@@ -567,9 +586,9 @@ export default class Display extends Component {
                 </Primary>
               </Button>
 
-              <Button onClick={this.market}>
+              {/*               <Button onClick={this.market}>
                 <Primary selected={this.state.v1}>v1 swaps</Primary>
-              </Button>
+              </Button> */}
             </div>
           </Padding>
         </Container>
@@ -584,44 +603,72 @@ export default class Display extends Component {
 
         {!this.state.loading && this.state.creationsState && (
           <Container xlarge>
-            <ResponsiveMasonry>
-              {this.state.creations.map((nft) => {
-                return (
-                  <Button key={nft.id} to={`${PATH.OBJKT}/${nft.id}`}>
-                    <div className={styles.container}>
-                      {renderMediaType({
-                        mimeType: nft.mime,
-                        artifactUri: nft.artifact_uri,
-                        displayUri: nft.display_uri,
-                      })}
-                    </div>
-                  </Button>
-                )
-              })}
-            </ResponsiveMasonry>
+            <InfiniteScroll
+              dataLength={this.state.items.length}
+              next={this.loadMore}
+              hasMore={this.state.hasMore}
+              loader={
+                <Container>
+                  <Padding>
+                    <Loading />
+                  </Padding>
+                </Container>
+              }
+              endMessage={<p></p>}
+            >
+              <ResponsiveMasonry>
+                {this.state.items.map((nft) => {
+                  return (
+                    <Button key={nft.id} to={`${PATH.OBJKT}/${nft.id}`}>
+                      <div className={styles.container}>
+                        {renderMediaType({
+                          mimeType: nft.mime,
+                          artifactUri: nft.artifact_uri,
+                          displayUri: nft.display_uri,
+                          displayView: true
+                        })}
+                      </div>
+                    </Button>
+                  )
+                })}
+              </ResponsiveMasonry>
+            </InfiniteScroll>
           </Container>
         )}
 
         {!this.state.loading && this.state.collectionState && (
           <Container xlarge>
-            <ResponsiveMasonry>
-              {this.state.collection.map((nft) => {
-                return (
-                  <Button
-                    key={nft.token.id}
-                    to={`${PATH.OBJKT}/${nft.token.id}`}
-                  >
-                    <div className={styles.container}>
-                      {renderMediaType({
-                        mimeType: nft.token.mime,
-                        artifactUri: nft.token.artifact_uri,
-                        displayUri: nft.token.display_uri,
-                      })}
-                    </div>
-                  </Button>
-                )
-              })}
-            </ResponsiveMasonry>
+            <InfiniteScroll
+              dataLength={this.state.items.length}
+              next={this.loadMore}
+              hasMore={this.state.hasMore}
+              loader={
+                <Container>
+                  <Padding>
+                    <Loading />
+                  </Padding>
+                </Container>
+              }
+              endMessage={<p></p>}
+            >
+              <ResponsiveMasonry>
+                {this.state.items.map((nft) => {
+                  console.log(nft)
+                  return (
+                    <Button key={nft.token.id} to={`${PATH.OBJKT}/${nft.token.id}`}>
+                      <div className={styles.container}>
+                        {renderMediaType({
+                          mimeType: nft.token.mime,
+                          artifactUri: nft.token.artifact_uri,
+                          displayUri: nft.token.display_uri,
+                          displayView: true
+                        })}
+                      </div>
+                    </Button>
+                  )
+                })}
+              </ResponsiveMasonry>
+            </InfiniteScroll>
           </Container>
         )}
 

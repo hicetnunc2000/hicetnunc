@@ -4,7 +4,7 @@
 .container {
   position: fixed;
   width: 100%;
-  height: 55px;
+  height: 60px;
   padding: 0 #{$mobile-padding};
   background-color: var(--background-color);
   color: var(--text-color);
@@ -30,12 +30,17 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      height: 30px;
+      height: 35px;
 
       svg {
-        height: 20px;
+        height: 35px;
         // fill: var(--text-color);
         transition: fill #{$theme-duration} ease-out;
+      }
+
+      img {
+        width: auto;
+        height: 37px;
       }
     }
 

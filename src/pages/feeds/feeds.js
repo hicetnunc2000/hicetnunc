@@ -13,6 +13,7 @@ import { FeedItem } from '../../components/feed-item'
 import { Loading } from '../../components/loading'
 
 const axios = require('axios')
+const _ = require('lodash')
 
 const customFloor = function (value, roundTo) {
   return Math.floor(value / roundTo) * roundTo
@@ -27,15 +28,16 @@ export const Feeds = ({ type }) => {
   const [lastId, setId] = useState(999999)
   const [offset, setOffset] = useState(0)
   const [hasMore, setHasMore] = useState(true)
+  const [creators, setCreators] = useState([])
   const startTime = customFloor(Date.now(), ONE_MINUTE_MILLIS)
 
   const loadMore = async () => {
-    console.log(type)
+
     if (type === 1) {
       await getHdaoFeed()
     }
     if (type === 2) await getRandomFeed()
-    if (type === 3) getLatest(Math.min.apply(Math, items.map(e => e.id)))
+    if (type === 3) await getLatest(Math.min.apply(Math, items.map(e => e.id)))
   }
 
   useEffect(async () => {
@@ -63,13 +65,7 @@ export const Feeds = ({ type }) => {
     } else if (type === 2) {
       await getRandomFeed()
     } else if (type === 3) {
-      let result = await axios
-        .post(process.env.REACT_APP_GRAPHQL_FEED, { lastId: lastId })
-        .then((res) => res.data)
-      console.log(result)
-      setId(Math.min.apply(Math, result.map((e) => e.id)))
-      const next = result.concat(result)
-      setItems(next)
+      await getLatest(lastId)
 
       /*       GetFeaturedFeed({ counter: count, max_time: startTime })
         .then((result) => {
@@ -89,15 +85,18 @@ export const Feeds = ({ type }) => {
   }, [count, type])
 
   const getLatest = async (id) => {
-    console.log(id)
     let result = await axios
       .post(process.env.REACT_APP_GRAPHQL_FEED, { lastId: id })
       .then((res) => res.data)
+
+    setCreators([...creators, result.map(e => e.creator_id)])
+
+    result = _.uniqBy(result, 'creator_id')
+    setCreators(creators.concat(result.map(e => e.creator_id)))
+    result = result.filter(e => !creators.includes(e.creator_id))
     const next = items.concat(result)
     setItems(next)
-    if (result.length < 10) {
-      setHasMore(false)
-    }
+
   }
 
   const getHdaoFeed = async () => {
