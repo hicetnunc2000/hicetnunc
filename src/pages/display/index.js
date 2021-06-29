@@ -197,7 +197,7 @@ export default class Display extends Component {
     subjkt: '',
     render: false,
     loading: true,
-    hasMore : true,
+    hasMore: true,
     results: [],
     objkts: [],
     creations: [],
@@ -296,10 +296,10 @@ export default class Display extends Component {
     console.log(this.state.wallet)
     console.log(!list.includes(this.state.wallet))
     if (!list.includes(this.state.wallet)) {
-      this.setState({ objkts: await fetchCreations(this.state.wallet), loading: false, items : [] })
+      this.setState({ objkts: await fetchCreations(this.state.wallet), loading: false, items: [] })
     }
 
-    this.setState({items : this.state.objkts.slice(0, 20), offset: 20})
+    this.setState({ items: this.state.objkts.slice(0, 20), offset: 20 })
 
     this.setState({
       creationsState: true,
@@ -320,10 +320,10 @@ export default class Display extends Component {
 
     let list = await getRestrictedAddresses()
     if (!list.includes(this.state.wallet)) {
-      this.setState({ objkts: await fetchCollection(this.state.wallet), loading: false, items : [] })
+      this.setState({ objkts: await fetchCollection(this.state.wallet), loading: false, items: [] })
     }
 
-    this.setState({items : this.state.objkts.slice(0, 20), offset: 20})
+    this.setState({ items: this.state.objkts.slice(0, 20), offset: 20 })
 
     this.setState({
       creationsState: false,
@@ -390,11 +390,11 @@ export default class Display extends Component {
   }
 
   loadMore = () => {
-    this.setState({ items : this.state.items.concat(this.state.objkts.slice(this.state.offset, this.state.offset + 20)), offset : this.state.offset + 20 })
+    this.setState({ items: this.state.items.concat(this.state.objkts.slice(this.state.offset, this.state.offset + 20)), offset: this.state.offset + 20 })
 
-/*     if ((this.state.objkts.slice(this.state.offset, this.state.offset + 20).length < 20) && (this.state.offset !== 20)) {
-      this.setState({ hasMore : false })
-    } */
+    /*     if ((this.state.objkts.slice(this.state.offset, this.state.offset + 20).length < 20) && (this.state.offset !== 20)) {
+          this.setState({ hasMore : false })
+        } */
   }
 
   render() {
@@ -697,6 +697,9 @@ export default class Display extends Component {
             })}
           </>
         )}
+        <BottomBanner>
+          The dApp has been temporarily disabled for a contract migration. Follow <a href="https://twitter.com/hicetnunc2000" target="_blank">@hicetnunc2000</a> or <a href="https://discord.gg/jKNy6PynPK" target="_blank">join the discord</a> for updates.
+        </BottomBanner>
       </Page>
     )
   }

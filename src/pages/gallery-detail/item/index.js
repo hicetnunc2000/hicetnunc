@@ -99,13 +99,13 @@ export const Item = ({ objkt, onClick, minimal }) => {
                 {minimal !== true && (
                   <div className={styles.info}>
                     {data.edition !== false && <p>{data.edition}</p>}
-                    <p
+{/*                     <p
                       style={{
                         opacity: data.price === nfs ? 0.5 : 1,
                       }}
                     >
                       {data.price}
-                    </p>
+                    </p> */}
                   </div>
                 )}
               </>
