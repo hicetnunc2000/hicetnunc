@@ -53,7 +53,7 @@ export const VideoComponent = ({
       <div className={styles.container}>
         <video
           ref={domElement}
-          className={styles.video}
+          className={styles.displayviewVideo}
           autoPlay={inView}
           playsInline
           muted
@@ -69,7 +69,7 @@ export const VideoComponent = ({
       <>
         <video
           ref={domElement}
-          className={styles.video}
+          className={styles.objktviewVideo}
           autoPlay={inView}
           playsInline
           muted
