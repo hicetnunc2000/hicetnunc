@@ -11,7 +11,6 @@ import { ItemInfo } from '../../components/item-info'
 import { Menu } from '../../components/menu'
 import { Info, Collectors, Swap, Burn } from './tabs'
 import styles from './styles.module.scss'
-// import './style.css'
 
 const axios = require('axios')
 
@@ -114,7 +113,7 @@ export const ObjktDisplay = () => {
             display: 'block',
             width: '100%'
           }}>
-              <div className={nft.mime == 'video/mp4' || nft.mime == 'application/pdf' ? 'nostyles' : styles.objktview}>
+              <div className={nft.mime == 'video/mp4' || nft.mime == 'application/pdf' ? 'nofullscreen' : styles.objktview}>
                 {renderMediaType({
                   mimeType: nft.mime,
                   artifactUri: nft.artifact_uri,

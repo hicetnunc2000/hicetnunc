@@ -11,7 +11,6 @@ export const PdfComponent = ({
   previewUri,
   preview,
   onDetailView,
-  displayView
 }) => {
   const [numPages, setNumPages] = useState(null)
   const [pageNumber, setPageNumber] = useState(1)
