@@ -9,7 +9,8 @@ import {
 } from '../../../utils/html'
 import { VisuallyHidden } from '../../visually-hidden'
 import styles from './styles.module.scss'
-import './styles.css'
+// import './styles.css'
+
 const uid = Math.round(Math.random() * 100000000).toString()
 
 export const HTMLComponent = (props) => {
