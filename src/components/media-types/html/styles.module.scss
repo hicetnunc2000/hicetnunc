@@ -7,21 +7,6 @@
   display: block;
   margin: 0 auto; 
   border : none;
-
-  @include respond-to('desktop') {
-    width: 60vh;
-  }
-}
-
-.fullscreen {
-  .html {
-    width: 100vw;
-    height: 100vh;
-  }
-}
-
-iframe {
-  width: 100%;
 }
 
 .container {
