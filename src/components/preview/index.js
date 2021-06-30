@@ -13,7 +13,7 @@ function isHTML(mimeType) {
   )
 }
 
-export const Preview = ({ title, description, mimeType, previewUri, tags }) => {
+export const Preview = ({ title, description, mimeType, displayUri, previewUri, tags }) => {
   const token_tags = tags !== '' ? tags.replace(/\s/g, '').split(',') : []
   return (
     <div className={styles.container}>
@@ -24,6 +24,8 @@ export const Preview = ({ title, description, mimeType, previewUri, tags }) => {
           previewUri,
           interactive: true,
           preview: true,
+          displayView : true,
+          displayUri
         })}
       </div>
       <div className={styles.info}>
