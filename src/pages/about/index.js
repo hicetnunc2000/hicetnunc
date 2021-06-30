@@ -94,10 +94,9 @@ export class About extends Component {
         </Container>
         <Container>
           <Padding>
-            <p>Community tools:</p>&nbsp;
-            <Button href="https://projects.stroep.nl/hicetnunc">
+            <Button href="https://github.com/hicetnunc2000/hicetnunc/wiki/Tools-made-by-the-community">
               <Primary>
-                <strong>hicetnunc discovery</strong>
+                <strong>Community tools</strong>
               </Primary>
             </Button>
             {false && (

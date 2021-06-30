@@ -6,14 +6,15 @@ import { Loading } from '../../../components/loading'
 import { Input } from '../../../components/input'
 import { Button, Curate } from '../../../components/button'
 
-export const Swap = ({ total_amount, owners, token_info, address }) => {
+export const Swap = ({ total_amount, owners, creator, royalties, token_info, address }) => {
   const { id } = useParams()
-  const { swap } = useContext(HicetnuncContext)
+  const { swap, swapv2, acc } = useContext(HicetnuncContext)
   const [amount, setAmount] = useState()
   const [price, setPrice] = useState()
   const [progress, setProgress] = useState(false)
   const [message, setMessage] = useState('')
 
+  console.log('token', creator.address)
   const checkPrice = (value) => {
     if (value <= 0.1) {
       setPrice(value)
@@ -39,8 +40,10 @@ export const Swap = ({ total_amount, owners, token_info, address }) => {
       setProgress(true)
       setMessage('preparing swap')
       // swap is valid call API
-      swap(parseFloat(amount), id, parseFloat(price) * 1000000)
-        .then((e) => {
+      console.log(acc.address, royalties,parseFloat(price) * 1000000, id, creator.address, parseFloat(amount))
+      //swapv2(acc.address, royalties, parseFloat(price) * 1000000, id, creator.address, parseFloat(amount))
+      swap(parseFloat(amount), id, parseFloat(price) * 1000000)  
+      .then((e) => {
           // when taquito returns a success/fail message
           setProgress(false)
           setMessage(e.description)
