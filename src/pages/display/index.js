@@ -253,16 +253,21 @@ export default class Display extends Component {
 
       this.onReady()
     } else {
-      let res = await fetchSubjkts(window.location.pathname.split('/')[1])
+      let res = await fetchSubjkts(decodeURI(window.location.pathname.split('/')[1]))
+      // console.log(decodeURI(window.location.pathname.split('/')[1]))
       console.log(res)
 
-      this.setState({
-        wallet: res[0].address,
-        walletPreview: walletPreview(res[0].address),
-      })
-
-      let resTz = await fetchTz(this.state.wallet)
-      this.setState({ hdao: Math.floor(resTz[0].hdao_balance / 1000000) })
+      if (res.length >= 1) {
+        this.setState({
+          wallet: res[0].address,
+          walletPreview: walletPreview(res[0].address),
+        })
+  
+        let resTz = await fetchTz(this.state.wallet)
+        this.setState({ hdao: Math.floor(resTz[0].hdao_balance / 1000000) })
+      } else {
+        this.props.history.push('/')
+      }
 
       await GetUserMetadata(this.state.wallet).then((data) => {
         const {
