@@ -46,7 +46,7 @@ export const AudioComponent = ({
     <>
       <div className={classes}>
         {true && <audio src={preview ? previewUri : artifactUri} controls />}
-        {true && <img src={displayUri} alt="album cover" />}
+        {false && <img src={displayUri} alt="album cover" />}
         {false && <Visualiser ref={visualiser} src={artifactUri} />}
         {false && (
           <div className={styles.icons} onClick={togglePlay}>
