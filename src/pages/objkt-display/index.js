@@ -117,16 +117,7 @@ export const ObjktDisplay = () => {
             width: '100%'
           }}
           className="objkt-display">
-            <div className={
-              nft.mime == 'application/x-directory' ? 'objktview-html objktview ' + styles.objktview:
-              [(
-                nft.mime == 'video/mp4' ||
-                nft.mime == 'video/ogv' ||
-                nft.mime == 'video/quicktime' ||
-                nft.mime == 'video/webm' ||
-                nft.mime == 'application/pdf' ? 'no-fullscreen' : 'objktview ' + styles.objktview
-              )]
-            }>
+            <div className={nft.mime == 'video/mp4' || nft.mime == 'application/pdf' ? 'no-fullscreen' : styles.objktview}>
               {renderMediaType({
                 mimeType: nft.mime,
                 artifactUri: nft.artifact_uri,
