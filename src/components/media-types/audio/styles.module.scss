@@ -1,11 +1,22 @@
 @import '../../../styles/layout.scss';
 
+.audio {
+  
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  object-fit: cover;
+  @include respond-to('desktop') {
+    width: 50%;
+  }
+}
 .container {
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 320px;
+  width: 230px;
   height: 320px;
   margin: 0 auto;
 
@@ -22,9 +33,16 @@
     }
   }
 
+  audio {
+    position: absolute;
+    top: 260px;
+    width: 230px;
+
+  }
+
   img {
-    display: none;
-    width: 100%;
+    max-width: 230px;
+    max-height: 100%;
     height: auto;
   }
 
