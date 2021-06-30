@@ -2,8 +2,9 @@
 @import '../../../styles/layout.scss';
 
 .html {
-  width: 60vh;
-  height : 60vh; 
+  width: calc(100vh - 285px);
+  height: calc(100vh - 285px);
+  position: relative;
   display: block;
   margin: 0 auto; 
   border : none;
