@@ -359,10 +359,10 @@ export default class Display extends Component {
     console.log(this.state)
     if (this.state.subjkt !== '') {
       // if alias route
-      this.props.history.push(`/${this.state.subjkt}/market`)
+      this.props.history.push(`/${this.state.subjkt}/v1`)
     } else {
       // if tz/wallethash route
-      this.props.history.push(`/tz/${this.state.wallet}/market`)
+      this.props.history.push(`/tz/${this.state.wallet}/v1`)
     }
 
   }
@@ -376,7 +376,7 @@ export default class Display extends Component {
         this.creations()
       } else if (window.location.pathname.split('/')[2] === 'collection') {
         this.collection()
-      } else if (window.location.pathname.split('/')[2] === 'market') {
+      } else if (window.location.pathname.split('/')[2] === 'v1') {
         this.market()
       } else {
 
@@ -388,7 +388,7 @@ export default class Display extends Component {
         this.creations()
       } else if (window.location.pathname.split('/')[3] === 'collection') {
         this.collection()
-      } else if (window.location.pathname.split('/')[3] === 'market') {
+      } else if (window.location.pathname.split('/')[3] === 'v1') {
         this.market()
       } else {
         this.creations()

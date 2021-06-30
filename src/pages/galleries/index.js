@@ -52,17 +52,16 @@ export const Galleries = () => {
               return (
                 <Button key={e.uid} to={`${PATH.GALLERY}/${e.uid}`}>
                   <div className={styles.item}>
-
-                      {renderMediaType({
-                        mimeType: token_info.formats[0].mimeType,
-                        artifactUri: token_info.artifactUri,
-                        displayUri: token_info.displayUri,
-                        creator: token_info.creators[0],
-                        objkt: e.token_id,
-                        interactive: false,
-                        displayView: true
-                      })}
-                      <div className={styles.number}>{e.name}</div>
+                    {renderMediaType({
+                      mimeType: token_info.formats[0].mimeType,
+                      artifactUri: token_info.artifactUri,
+                      displayUri: token_info.displayUri,
+                      creator: token_info.creators[0],
+                      objkt: e.token_id,
+                      interactive: false,
+                      displayView: true
+                    })}
+                    <div className={styles.number}>{e.name}</div>
                   </div>
                 </Button>
               )
@@ -71,7 +70,7 @@ export const Galleries = () => {
         </Padding>
       </Container>
       <BottomBanner>
-      Collecting has been temporarily disabled. Follow <a href="https://twitter.com/hicetnunc2000" target="_blank">@hicetnunc2000</a> or <a href="https://discord.gg/jKNy6PynPK" target="_blank">join the discord</a> for updates.
+        Collecting has been temporarily disabled. Follow <a href="https://twitter.com/hicetnunc2000" target="_blank">@hicetnunc2000</a> or <a href="https://discord.gg/jKNy6PynPK" target="_blank">join the discord</a> for updates.
       </BottomBanner>
     </Page>
   )
