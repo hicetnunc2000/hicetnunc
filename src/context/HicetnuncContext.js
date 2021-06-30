@@ -75,7 +75,7 @@ class HicetnuncContextProviderClass extends Component {
       subjkt: 'KT1My1wDZHDGweCrJnQJi3wcFaS67iksirvj',
       v1: 'KT1Hkg5qeNhfwpKW4fXvq7HGZB9z2EnmCCA9',
       unregistry: 'KT18xby6bb1ur1dKe7i6YVrBaksP4AgtuLES',
-      v2: 'KT1BEvvviQRFxVqJ8uGXJ6x7KSvo7F9ygsw6',
+      v2: 'KT1AzUXMGCZ1PYddxDkMna89SkkEZYUbu5vf',
       objkts: 'KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton',
       hDAO_curation: 'KT1TybhR7XraG75JFYKSrh7KnxukMBT5dor6',
       // market 
