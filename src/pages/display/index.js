@@ -143,6 +143,7 @@ async function fetchSwaps(address) {
     console.error(errors)
   }
   const result = data.hic_et_nunc_swap
+  console.log(result)
   return result
 
 }
@@ -298,7 +299,7 @@ export default class Display extends Component {
       collectionState: false,
       marketState: false,
     })
-    
+
     let list = await getRestrictedAddresses()
     console.log(this.state.wallet)
     console.log(!list.includes(this.state.wallet))
@@ -341,9 +342,9 @@ export default class Display extends Component {
     }
   }
 
-  market = () => {
+  market = async () => {
 
-    this.setState({ market: fetchSwaps(this.state.wallet), loading: false })
+    this.setState({ market: await fetchSwaps(this.state.wallet), loading: false })
 
     this.setState({
       creationsState: false,
@@ -398,6 +399,9 @@ export default class Display extends Component {
         } */
   }
 
+  cancel_batch = async () => {
+    this.context.batch_cancel(this.state.market.slice(0, 10))
+  }
   render() {
     return (
       <Page title={this.state.alias}>
@@ -587,10 +591,11 @@ export default class Display extends Component {
                   collection
                 </Primary>
               </Button>
-
-              {/*               <Button onClick={this.market}>
-                <Primary selected={this.state.v1}>v1 swaps</Primary>
-              </Button> */}
+              {this.context.acc != null && this.context.acc.address == this.state.wallet ?
+                <Button onClick={this.market}>
+                  <Primary selected={this.state.marketState}>v1 swaps</Primary>
+                </Button>
+                : null}
             </div>
           </Padding>
         </Container>
@@ -676,6 +681,11 @@ export default class Display extends Component {
 
         {!this.state.loading && this.state.marketState && (
           <>
+            <Container>
+              <Padding>
+                <p>We're currently migrating the marketplace smart contract. We ask for users to cancel their's listings as the v1 marketplace will no longer be maintained. Auditing tools for the v1 protocol can be found at <a href='https://hictory.xyz'>hictory.xyz</a></p>
+              </Padding>
+            </Container>
             {Object.keys(this.state.market).length === 0 && (
               <Container>
                 <Padding>
@@ -683,14 +693,38 @@ export default class Display extends Component {
                 </Padding>
               </Container>
             )}
-            {Object.keys(this.state.market).map((key) => {
+
+            {
+              this.state.market.length !== 0 ?
+                <Container>
+                  <Padding>
+                    <p>
+                      One can delist multiple swaps at once batching transactions or delist each single one of them.
+                    </p>
+                    <br />
+                    <Button onClick={this.cancel_batch}>
+                      <Primary>
+                        Batch Cancel
+                      </Primary>
+                    </Button>
+                  </Padding>
+                </Container>
+                :
+                null
+            }
+
+            {this.state.market.map((e, key) => {
               return (
                 <Container key={key}>
                   <Padding>
-                    <Button to={`${PATH.OBJKT}/${key}`}>
+                    <Button to={`${PATH.OBJKT}/${e.token_id}`}>
+                      {console.log(e)}
                       <Primary>
-                        <strong>OBJKT#{key}</strong>
+                        <strong>{e.amount_left}x OBJKT#{e.token_id} {e.price}µtez</strong>
                       </Primary>
+                    </Button>
+                    <Button onClick={() => this.context.cancel(e.id)}>
+                      Cancel Swap
                     </Button>
                   </Padding>
                 </Container>
