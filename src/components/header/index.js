@@ -141,7 +141,7 @@ export const Header = () => {
                         <Primary>manage assets</Primary>
                       </Button>
                     </li>
-                                        {context.acc?.address ?
+                    { context.acc?.address ?
                       <li>
                         <Button onClick={() => handleRoute('/config')}>
                           <Primary>settings</Primary>

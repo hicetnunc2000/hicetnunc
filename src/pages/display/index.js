@@ -246,6 +246,8 @@ export default class Display extends Component {
         if (data.data.instagram) this.setState({ instagram })
         if (data.data.logo) this.setState({ logo })
         if (data.data.tzprofile) this.setState({ tzprofile })
+
+        console.log(this.state.logo)
       })
 
       let resTz = await fetchTz(wallet)
@@ -407,6 +409,7 @@ export default class Display extends Component {
   cancel_batch = async () => {
     this.context.batch_cancel(this.state.market.slice(0, 10))
   }
+
   render() {
     return (
       <Page title={this.state.alias}>

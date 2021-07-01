@@ -65,7 +65,7 @@ export const GalleryDetail = () => {
       .then((e) => e.json())
       .then((galleries) => {
         const found = galleries.find((e) => e.uid === id)
-
+        
         if (found) {
           fetch(found.endpoint)
             .then((e) => e.json())
