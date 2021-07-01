@@ -1,6 +1,7 @@
 @import '../../../styles/layout.scss';
 
 .vector {
+  position: relative;
   width: calc(100vh - 285px);
   height: calc(100vh - 285px);
   display: block;
