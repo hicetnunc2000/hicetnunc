@@ -1,4 +1,7 @@
-.objktview-html.objktview {
+.objktview-zipembed.objktview {
+  position: relative;
+  display: block;
+  margin: auto;
   width: calc(100vh - 285px);
   height: calc(100vh - 285px);
 }

@@ -118,7 +118,7 @@ export const ObjktDisplay = () => {
           }}
           className="objkt-display">
             <div className={
-              nft.mime == 'application/x-directory' ? 'objktview-html objktview ' + styles.objktview:
+              nft.mime == 'application/x-directory' || nft.mime == 'image/svg+xml' ? 'objktview-zipembed objktview ' + styles.objktview:
               [(
                 nft.mime == 'video/mp4' ||
                 nft.mime == 'video/ogv' ||
