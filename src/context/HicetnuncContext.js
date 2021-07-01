@@ -75,7 +75,7 @@ class HicetnuncContextProviderClass extends Component {
       subjkt: 'KT1My1wDZHDGweCrJnQJi3wcFaS67iksirvj',
       v1: 'KT1Hkg5qeNhfwpKW4fXvq7HGZB9z2EnmCCA9',
       unregistry: 'KT18xby6bb1ur1dKe7i6YVrBaksP4AgtuLES',
-      v2: 'KT1AzUXMGCZ1PYddxDkMna89SkkEZYUbu5vf',
+      v2: 'KT1SNoS7iBVVeGjhAjASXPH8cdbTdgysKPm4',
       objkts: 'KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton',
       hDAO_curation: 'KT1TybhR7XraG75JFYKSrh7KnxukMBT5dor6',
       // market 
@@ -95,14 +95,14 @@ class HicetnuncContextProviderClass extends Component {
       },
 
       swapv2: async (from, royalties, xtz_per_objkt, objkt_id, creator, objkt_amount) => {
-        let objkt = await Tezos.wallet.at(this.state.fa2_objkts)
+        let objkts = await Tezos.wallet.at(this.state.objkts)
         await Tezos.wallet.at(this.state.v2).then(c => console.log(c.parameterSchema.ExtractSignatures()))
         let marketplace = await Tezos.wallet.at(this.state.v2)
         //parameterSchema.ExtractSignatures()
         //onsole.log('marketplace', marketplace)
         //console.log(from, royalties, xtz_per_objkt, objkt_id, creator, objkt_amount)
-        let batch = await Tezos.wallet.batch().withContractCall(objkt.methods.update_operators([{ add_operator: { operator: this.state.market, token_id: parseFloat(objkt_id), owner: from } }]))
-          .withContractCall(marketplace.methods.swap(creator, parseFloat(objkt_amount), parseFloat(objkt_id), parseFloat(royalties), parseFloat(xtz_per_objkt)))
+        let batch = await Tezos.wallet.batch().withContractCall(objkts.methods.update_operators([{ add_operator: { operator: this.state.v2, token_id: parseFloat(objkt_id), owner: from } }]))
+        .withContractCall(marketplace.methods.swap(creator, parseFloat(objkt_amount), parseFloat(objkt_id), parseFloat(royalties), parseFloat(xtz_per_objkt)))
 
         return await batch.send()
       },

@@ -7,7 +7,7 @@ import { BottomBanner } from '../../components/bottom-banner'
 import { Input, Textarea } from '../../components/input'
 import { Button, Curate } from '../../components/button'
 import { Upload } from '../../components/upload'
-
+import { Identicon } from '../../components/identicons'
 import { SigningType } from '@airgap/beacon-sdk'
 import { char2Bytes } from '@taquito/utils'
 import styles from './styles.module.scss'
@@ -21,14 +21,17 @@ export class Config extends Component {
 
   state = {
     vote: 0,
+    address : '',
     subjkt: '',
     description: '',
     social_media: '',
     subjktUri: '', // uploads image
   }
 
-  componentWillMount = () => {
-    this.context.syncTaquito()
+  componentWillMount = async () => {
+    await this.context.syncTaquito()
+    this.setState({address : this.context.acc.address})
+    console.log(this.context)
   }
 
   handleChange = (e) => {
@@ -114,10 +117,12 @@ export class Config extends Component {
 
   // delete account
 
-  render() {
+  render () {
     return (
       <Page>
         <Container>
+         <Identicon address={this.state.address} />
+          <div style={{height:'15px'}}></div>
           <Padding>
             <Input
               name="subjkt"
@@ -137,7 +142,7 @@ export class Config extends Component {
               <Curate>Save Profile</Curate>
             </Button>
           </Padding>
-          <p style={{ fontSize: "12px" }}> one can link their twitter account through <a href="https://tzprofiles.com">tz profiles</a></p>
+          <p>link your twitter account with <a href="https://tzprofiles.com">tz profiles</a></p>
         </Container>
 
         <Container>
