@@ -91,6 +91,7 @@ export const Container = ({
       style={{
         width: '100%',
       }}
+      className="objktview-container"
     >
       <div ref={domElement} className={classes}>
         {interactive && !iOS && !nofullscreen && (

@@ -59,7 +59,7 @@ export const VectorComponent = ({
     return (
       <div>
         <iframe
-          className={styles.vector}
+          className={styles.vector + ' zip-embed'}
           title="hic et nunc SVG renderer"
           src={path}
           sandbox="allow-scripts"

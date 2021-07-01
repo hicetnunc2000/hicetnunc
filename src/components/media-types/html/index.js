@@ -171,7 +171,7 @@ export const HTMLComponent = (props) => {
     return (
       <div>
         <iframe
-          className={styles.html + ' html'}
+          className={styles.html + ' zip-embed'}
           title="html-embed"
           src={`${artifactUri}/?creator=${_creator_}&viewer=${_viewer_}&objkt=${_objectId_}`}
           sandbox="allow-scripts allow-same-origin"
