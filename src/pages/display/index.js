@@ -126,11 +126,14 @@ query addressQuery($address: String!) {
 
 const query_v1_swaps = `
 query querySwaps($address: String!) {
-  hic_et_nunc_swap(where: {creator_id: {_eq: $address}, status: {_eq: "0"}, token: {supply: {_gt: "1"}}}, order_by: {price: desc, amount_left: desc}) {
+  hic_et_nunc_swap(where: {creator_id: {_eq: $address}, status: {_eq: "0"}}) {
+    token {
+      id
+      title
+    }
+    amount
     amount_left
     price
-    token_id
-    id
   }
 }
 `
