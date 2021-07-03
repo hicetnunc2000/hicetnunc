@@ -134,6 +134,7 @@ query querySwaps($address: String!) {
     amount
     amount_left
     price
+    id
   }
 }
 `
