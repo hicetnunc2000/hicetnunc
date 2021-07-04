@@ -2,6 +2,8 @@
 
 hicetnunc UI is intended to experiment with different smart contracts designs.
 
+github deploy: https://main.d3cm9lcfrb8gaf.amplifyapp.com
+
 ```
 node v12.18.3
 npm 6.14.6
