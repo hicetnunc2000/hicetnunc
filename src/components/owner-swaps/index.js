@@ -8,6 +8,7 @@ const sortByPrice = (a, b) => {
 }
 
 export const OwnerSwaps = ({ swaps, handleCollect, acc, cancel }) => {
+  swaps = swaps.filter(e => parseInt(e.contract_version) === 2)
   return (
     <div className={styles.container}>
       {swaps.sort(sortByPrice).map((swap, index) => {
