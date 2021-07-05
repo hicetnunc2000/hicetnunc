@@ -10,7 +10,7 @@ import { renderMediaType } from '../../components/media-types'
 import { ItemInfo } from '../../components/item-info'
 import { Menu } from '../../components/menu'
 import { BottomBanner } from '../../components/bottom-banner'
-import { Info, Collectors, Swap, Burn } from './tabs'
+import { Info, Collectors, Swap, Burn, History } from './tabs'
 import styles from './styles.module.scss'
 import './style.css'
 
@@ -19,6 +19,7 @@ const axios = require('axios')
 const TABS = [
   { title: 'info', component: Info }, // public tab
   { title: 'collectors', component: Collectors }, // public tab
+  //{ title: 'history', component: History },
   //{ title: 'swap', component: Swap, private: true }, // private tab (users only see if they are the creators or own a copy)
   { title: 'burn', component: Burn, private: true }, // private tab (users only see if they are the creators or own a copy)
 ]
@@ -110,22 +111,22 @@ export const ObjktDisplay = () => {
 
       {!loading && (
         <>
-          <div 
-          style={{
-            position: 'relative',
-            display: 'block',
-            width: '100%'
-          }}
-          className="objkt-display">
+          <div
+            style={{
+              position: 'relative',
+              display: 'block',
+              width: '100%'
+            }}
+            className="objkt-display">
             <div className={
-              nft.mime == 'application/x-directory' || nft.mime == 'image/svg+xml' ? 'objktview-zipembed objktview ' + styles.objktview:
-              [(
-                nft.mime == 'video/mp4' ||
-                nft.mime == 'video/ogv' ||
-                nft.mime == 'video/quicktime' ||
-                nft.mime == 'video/webm' ||
-                nft.mime == 'application/pdf' ? 'no-fullscreen' : 'objktview ' + styles.objktview
-              )]
+              nft.mime == 'application/x-directory' || nft.mime == 'image/svg+xml' ? 'objktview-zipembed objktview ' + styles.objktview :
+                [(
+                  nft.mime == 'video/mp4' ||
+                    nft.mime == 'video/ogv' ||
+                    nft.mime == 'video/quicktime' ||
+                    nft.mime == 'video/webm' ||
+                    nft.mime == 'application/pdf' ? 'no-fullscreen' : 'objktview ' + styles.objktview
+                )]
             }>
               {renderMediaType({
                 mimeType: nft.mime,
@@ -186,7 +187,7 @@ export const ObjktDisplay = () => {
         </>
       )}
       <BottomBanner>
-      Collecting has been temporarily disabled. Follow <a href="https://twitter.com/hicetnunc2000" target="_blank">@hicetnunc2000</a> or <a href="https://discord.gg/jKNy6PynPK" target="_blank">join the discord</a> for updates.
+        Collecting has been temporarily disabled. Follow <a href="https://twitter.com/hicetnunc2000" target="_blank">@hicetnunc2000</a> or <a href="https://discord.gg/jKNy6PynPK" target="_blank">join the discord</a> for updates.
       </BottomBanner>
       <div style={{ height: '20px' }}></div>
     </Page>
