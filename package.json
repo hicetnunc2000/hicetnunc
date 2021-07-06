@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@airgap/beacon-sdk": "^2.2.9",
+    "@airgap/beacon-sdk": "^2.2.10",
     "@babel/core": "^7.14.5",
     "@taquito/beacon-wallet": "^9.1.1",
     "@taquito/michelson-encoder": "^9.1.1",
