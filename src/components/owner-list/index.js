@@ -7,7 +7,7 @@ export const OwnerList = ({ owners, creator, acc }) => {
 
   console.log('owners list', owners)
 
-  owners = owners.filter(e => e.holder_id !== 'KT1Hkg5qeNhfwpKW4fXvq7HGZB9z2EnmCCA9' && e.holder_id !== 'tz1burnburnburnburnburnburnburjAYjjX')
+  owners = owners.filter(e => e.holder_id !== 'tz1burnburnburnburnburnburnburjAYjjX')
 
   return (
 

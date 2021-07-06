@@ -25,6 +25,7 @@ export class Config extends Component {
     subjkt: '',
     description: '',
     social_media: '',
+    avatar: '',
     subjktUri: '', // uploads image
   }
 
@@ -43,18 +44,18 @@ export class Config extends Component {
 
   subjkt_config = async () => {
     const ipfs = create(infuraUrl)
-    /*     const [file] = this.state.selectedFile
+        const [file] = this.state.selectedFile
     
         const buffer = Buffer.from(await file.arrayBuffer())
     
-        this.setState({ avatar: 'ipfs://' + (await ipfs.add(buffer)).path }) */
-
-    this.context.registry(
+        this.setState({ avatar: 'ipfs://' + (await ipfs.add(buffer)).path })
+        console.log(this.state)
+/*     this.context.registry(
       this.state.subjkt,
       await ipfs.add(
         Buffer.from(JSON.stringify({ description: this.state.description }))
       )
-    )
+    ) */
   }
 
   // upload file
@@ -98,7 +99,7 @@ export class Config extends Component {
        console.log(payload)
        this.context.sign(payload) 
        
-       */
+  */
 
   sign = () => {
     console.log(this.context.addr)
@@ -122,6 +123,7 @@ export class Config extends Component {
       <Page>
         <Container>
          <Identicon address={this.state.address} />
+         <input type="file" onChange={this.onFileChange} />
           <div style={{height:'15px'}}></div>
           <Padding>
             <Input
