@@ -268,6 +268,7 @@ export default class Display extends Component {
         this.setState({
           wallet: res[0].address,
           walletPreview: walletPreview(res[0].address),
+          subjkt: window.location.pathname.split('/')[1]
         })
   
         let resTz = await fetchTz(this.state.wallet)

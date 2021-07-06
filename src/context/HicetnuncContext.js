@@ -309,7 +309,7 @@ class HicetnuncContextProviderClass extends Component {
       swap: async (objkt_amount, objkt_id, xtz_per_objkt) => {
         // console.log(objkt_amount)
         return await Tezos.wallet
-          .at(this.state.v1)
+          .at(this.state.v2)
           .then((c) =>
             c.methods
               .swap(
@@ -382,7 +382,7 @@ class HicetnuncContextProviderClass extends Component {
       cancel: async (swap_id) => {
         console.log(swap_id)
         return await Tezos.wallet
-          .at(this.state.v1)
+          .at(this.state.v2)
           .then((c) =>
             c.methods
               .cancel_swap(parseFloat(swap_id))

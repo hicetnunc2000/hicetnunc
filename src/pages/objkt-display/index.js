@@ -50,6 +50,9 @@ swaps {
     name
   }
   contract_version
+  status
+  royalties
+  creator_id
 }
 token_holders(where: {quantity: {_gt: "0"}}) {
   holder_id
