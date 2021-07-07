@@ -16,6 +16,41 @@ const infuraUrl = 'https://ipfs.infura.io:5001'
 
 const ls = require('local-storage')
 
+const query_tz = `
+query addressQuery($address: String!) {
+  hic_et_nunc_holder(where: { address: {_eq: $address}}) {
+    address
+    name
+    hdao_balance
+    metadata
+  }
+}
+`
+
+async function fetchTz(addr) {
+  const { errors, data } = await fetchGraphQL(query_tz, 'addressQuery', {
+    address: addr,
+  })
+  if (errors) {
+    console.error(errors)
+  }
+  const result = data.hic_et_nunc_holder
+  // console.log({ result })
+  return result
+}
+
+async function fetchGraphQL(operationsDoc, operationName, variables) {
+  let result = await fetch('https://api.hicdex.com/v1/graphql', {
+    method: 'POST',
+    body: JSON.stringify({
+      query: operationsDoc,
+      variables: variables,
+      operationName: operationName,
+    }),
+  })
+  return await result.json()
+}
+
 export class Config extends Component {
   static contextType = HicetnuncContext
 
@@ -31,8 +66,12 @@ export class Config extends Component {
 
   componentWillMount = async () => {
     await this.context.syncTaquito()
-    this.setState({address : this.context.acc.address})
-    console.log(this.context)
+/*     this.setState({address : this.context.acc.address})
+    let res = await fetchTz(this.context.acc.address)
+    this.context.setSubjktInfo(res[0])
+    this.context.subjktInfo = res[0]
+    console.log(this.context.subjktInfo) */
+    //console.log(this.context.subjktInfo)
   }
 
   handleChange = (e) => {
@@ -123,24 +162,23 @@ export class Config extends Component {
       <Page>
         <Container>
          <Identicon address={this.state.address} />
-         <div style={{height:'15px'}}></div>
-
+         <div style={{height:'20px'}}></div>
          <input type="file" onChange={this.onFileChange} />
-          <div style={{height:'15px'}}></div>
+          <div style={{height:'20px'}}></div>
           <Padding>
             <Input
               name="subjkt"
               onChange={this.handleChange}
               placeholder="Username"
               label="Username"
-              value={this.state.subjkt}
+              value={undefined}
             />
             <Input
               name="description"
               onChange={this.handleChange}
               placeholder="Description"
               label="Description"
-              value={this.state.description}
+              value={undefined}
             />
             <Button onClick={this.subjkt_config}>
               <Curate>Save Profile</Curate>
