@@ -295,12 +295,12 @@ class HicetnuncContextProviderClass extends Component {
           })
       },
 
-      collect: async (objkt_amount, swap_id, amount) => {
+      collect: async (swap_id, amount) => {
         return await Tezos.wallet
-          .at(this.state.v1)
+          .at(this.state.v2)
           .then((c) =>
             c.methods
-              .collect(parseFloat(objkt_amount), parseFloat(swap_id))
+              .collect(parseFloat(swap_id))
               .send({
                 amount: parseFloat(amount),
                 mutez: true,
