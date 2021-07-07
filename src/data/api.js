@@ -184,5 +184,6 @@ export const GetUserMetadata = async (walletAddr) => {
   } else if (tzpData) {
     tzktData.data = tzpData
   }
+  console.log(tzktData)
   return tzktData
 }

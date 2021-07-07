@@ -78,6 +78,10 @@ class HicetnuncContextProviderClass extends Component {
       v2: 'KT1HbQepzV1nVGg8QVznG7z4RcHseD5kwqBn',
       objkts: 'KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton',
       hDAO_curation: 'KT1TybhR7XraG75JFYKSrh7KnxukMBT5dor6',
+
+      subjktInfo : {},
+      setSubjktInfo : (subjkt) => this.setState({ subjktInfo : subjkt }),
+
       // market 
 
       collectv2: async (swap_id, xtz_amount) => {
