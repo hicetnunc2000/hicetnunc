@@ -59,7 +59,7 @@ export const ItemInfo = ({
       if (acc == null) {
         syncTaquito()
       } else {
-        collect(1, s.id, s.price * 1)
+        collect(s.id, s.price * 1)
       }
     }
 
