@@ -104,7 +104,7 @@ class HicetnuncContextProviderClass extends Component {
         let batch = await Tezos.wallet.batch().withContractCall(objkts.methods.update_operators([{ add_operator: { operator: this.state.v2, token_id: parseFloat(objkt_id), owner: from } }]))
         .withContractCall(marketplace.methods.swap(creator, parseFloat(objkt_amount), parseFloat(objkt_id), parseFloat(royalties), parseFloat(xtz_per_objkt)))
 
-        return await batch.send()
+        return await batch.send({ storageLimit: 209 })
       },
 
       batch_cancel: async (arr) => {
