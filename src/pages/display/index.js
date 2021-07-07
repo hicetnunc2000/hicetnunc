@@ -136,6 +136,7 @@ query querySwaps($address: String!) {
     price
     id
     token_id
+    contract_version
   }
 }
 `
@@ -356,8 +357,9 @@ export default class Display extends Component {
   }
 
   market = async () => {
-
-    this.setState({ market: await fetchSwaps(this.state.wallet), loading: false })
+    let swaps = await fetchSwaps(this.state.wallet)
+    swaps = swaps.filter(e => parseInt(e.contract_version) !== 2)
+    this.setState({ market: swaps, loading: false })
 
     this.setState({
       creationsState: false,
@@ -728,6 +730,8 @@ export default class Display extends Component {
             }
 
             {this.state.market.map((e, key) => {
+
+              console.log(e)
               return (
                 <Container key={key}>
                   <Padding>
