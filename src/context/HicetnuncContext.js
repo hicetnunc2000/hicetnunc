@@ -103,11 +103,20 @@ class HicetnuncContextProviderClass extends Component {
         await Tezos.wallet.at(this.state.v2).then(c => console.log(c.parameterSchema.ExtractSignatures()))
         let marketplace = await Tezos.wallet.at(this.state.v2)
         //parameterSchema.ExtractSignatures()
-        //onsole.log('marketplace', marketplace)
+        //console.log('marketplace', marketplace)
         //console.log(from, royalties, xtz_per_objkt, objkt_id, creator, objkt_amount)
-        let batch = await Tezos.wallet.batch().withContractCall(objkts.methods.update_operators([{ add_operator: { operator: this.state.v2, token_id: parseFloat(objkt_id), owner: from } }]))
-        .withContractCall(marketplace.methods.swap(creator, parseFloat(objkt_amount), parseFloat(objkt_id), parseFloat(royalties), parseFloat(xtz_per_objkt)))
-
+        let list = [
+          {
+            kind: OpKind.TRANSACTION,
+            ...objkts.methods.update_operators([{ add_operator: { operator: this.state.v2, token_id: parseFloat(objkt_id), owner: from } }])
+              .toTransferParams({ amount: 0, mutez: true, storageLimit: 100 })
+          },
+          {
+            kind: OpKind.TRANSACTION,
+            ...marketplace.methods.swap(creator, parseFloat(objkt_amount), parseFloat(objkt_id), parseFloat(royalties), parseFloat(xtz_per_objkt)).toTransferParams({ amount: 0, mutez: true, storageLimit: 250 })
+          }
+        ]
+        let batch = await Tezos.wallet.batch(list);
         return await batch.send()
       },
 
