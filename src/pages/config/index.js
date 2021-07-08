@@ -66,8 +66,8 @@ export class Config extends Component {
 
   componentWillMount = async () => {
     await this.context.syncTaquito()
-/*     this.setState({address : this.context.acc.address})
-    let res = await fetchTz(this.context.acc.address)
+     this.setState({address : this.context.acc.address})
+    /*let res = await fetchTz(this.context.acc.address)
     this.context.setSubjktInfo(res[0])
     this.context.subjktInfo = res[0]
     console.log(this.context.subjktInfo) */
@@ -163,8 +163,8 @@ export class Config extends Component {
         <Container>
          <Identicon address={this.state.address} />
          <div style={{height:'20px'}}></div>
-         <input type="file" onChange={this.onFileChange} />
-          <div style={{height:'20px'}}></div>
+{/*          <input type="file" onChange={this.onFileChange} />
+ */}          <div style={{height:'20px'}}></div>
           <Padding>
             <Input
               name="subjkt"
