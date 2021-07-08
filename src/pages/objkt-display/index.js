@@ -6,7 +6,7 @@ import { getWalletBlockList } from '../../constants'
 import { Loading } from '../../components/loading'
 import { Button, Primary } from '../../components/button'
 import { Page, Container, Padding } from '../../components/layout'
-import { renderMediaType } from '../../components/media-types'
+import { renderMediaType, HashToURL } from '../../components/media-types'
 import { ItemInfo } from '../../components/item-info'
 import { Menu } from '../../components/menu'
 import { Info, Collectors, Swap, Burn } from './tabs'
@@ -83,7 +83,7 @@ export const ObjktDisplay = () => {
   const Tab = TABS[tabIndex].component
 
   return (
-    <Page title={nft?.name} thumbnail={nft?.thumbnailUri}>
+    <Page title={nft?.title} shareImage={nft && (HashToURL(nft.display_uri, 'CLOUDFLARE'))}>
       {loading && (
         <Container>
           <Padding>

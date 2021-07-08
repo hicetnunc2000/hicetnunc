@@ -12,7 +12,7 @@ import { MIMETYPE, IPFS_DIRECTORY_MIMETYPE } from '../../constants'
 import { Container } from './container'
 
 // converts an ipfs hash to ipfs url
-const HashToURL = (hash, type) => {
+export const HashToURL = (hash, type) => {
   // when on preview the hash might be undefined.
   // its safe to return empty string as whatever called HashToURL is not going to be used
   // artifactUri or displayUri
