@@ -39,7 +39,7 @@ export const Textarea = ({
   name = 'input-name-not-set',
   min,
   max,
-  maxlength = 500,
+  maxlength = 5000,
   label,
   onChange = () => null,
   onBlur = () => null,
