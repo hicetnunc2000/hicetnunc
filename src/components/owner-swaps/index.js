@@ -8,7 +8,7 @@ const sortByPrice = (a, b) => {
 }
 
 export const OwnerSwaps = ({ swaps, handleCollect, acc, cancel }) => {
-  swaps = swaps.filter(e => parseInt(e.contract_version) === 2 && parseInt(e.status) === 0 && e.token.royalties === e.royalties )
+  swaps = swaps.filter(e => parseInt(e.contract_version) === 2 && parseInt(e.status) === 0 && e.is_valid )
   console.log('v2',swaps)
   return (
     <div className={styles.container}>
