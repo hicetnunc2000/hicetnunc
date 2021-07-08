@@ -53,10 +53,7 @@ swaps {
   status
   royalties
   creator_id
-  token {
-    creator_id
-    royalties
-  }
+  is_valid
 }
 token_holders(where: {quantity: {_gt: "0"}}) {
   holder_id
