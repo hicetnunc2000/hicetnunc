@@ -3,7 +3,7 @@ import Compressor from 'compressorjs'
 import { BottomBanner } from '../../components/bottom-banner'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
 import { Page, Container, Padding } from '../../components/layout'
-import { Input } from '../../components/input'
+import { Input, Textarea } from '../../components/input'
 import { Button, Curate, Primary } from '../../components/button'
 import { Upload } from '../../components/upload'
 import { Preview } from '../../components/preview'
@@ -263,13 +263,12 @@ export const Mint = () => {
                 value={title}
               />
 
-              <Input
+              <Textarea
                 type="text"
                 style={{ whiteSpace: 'pre' }}
                 onChange={(e) => setDescription(e.target.value)}
-                placeholder="description"
+                placeholder="description (max 5000 characters)"
                 label="description"
-                maxlength="5000"
                 value={description}
               />
 
