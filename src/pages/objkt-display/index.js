@@ -83,7 +83,7 @@ export const ObjktDisplay = () => {
   const Tab = TABS[tabIndex].component
 
   return (
-    <Page title={nft?.name}>
+    <Page title={nft?.name} thumbnail={nft?.thumbnailUri}>
       {loading && (
         <Container>
           <Padding>

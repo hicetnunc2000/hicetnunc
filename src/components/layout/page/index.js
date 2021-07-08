@@ -4,7 +4,7 @@ import classnames from 'classnames'
 import { VisuallyHidden } from '../../visually-hidden'
 import styles from './styles.module.scss'
 
-export const Page = ({ title = 'hic et nunc', children = null, large }) => {
+export const Page = ({ title = 'hic et nunc', children = null, thumbnail = null, large }) => {
   const classes = classnames({
     [styles.container]: true,
     [styles.large]: large,
@@ -17,6 +17,14 @@ export const Page = ({ title = 'hic et nunc', children = null, large }) => {
         ) : (
           <title>hic et nunc</title>
         )}
+
+        {thumbnail ? (
+          <>
+            <meta name="twitter:image" content={thumbnail} />
+            <meta name="og:image" content={thumbnail} />
+          </>
+        ) : ''}
+
       </Helmet>
       <VisuallyHidden as="h1">{title}</VisuallyHidden>
       {children}
