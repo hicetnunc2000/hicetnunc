@@ -56,7 +56,7 @@ export class Config extends Component {
 
   state = {
     vote: 0,
-    address : '',
+    address: '',
     subjkt: '',
     description: '',
     social_media: '',
@@ -66,7 +66,7 @@ export class Config extends Component {
 
   componentWillMount = async () => {
     await this.context.syncTaquito()
-     this.setState({address : this.context.acc.address})
+    this.setState({ address: this.context.acc.address })
     /*let res = await fetchTz(this.context.acc.address)
     this.context.setSubjktInfo(res[0])
     this.context.subjktInfo = res[0]
@@ -83,12 +83,15 @@ export class Config extends Component {
 
   subjkt_config = async () => {
     const ipfs = create(infuraUrl)
-        const [file] = this.state.selectedFile
-    
-        const buffer = Buffer.from(await file.arrayBuffer())
-    
-        this.setState({ identicon: 'ipfs://' + (await ipfs.add(buffer)).path })
-        //console.log(this.state)
+
+    if (this.state.selectedFile) {
+      const [file] = this.state.selectedFile
+
+      const buffer = Buffer.from(await file.arrayBuffer())
+
+      this.setState({ identicon: 'ipfs://' + (await ipfs.add(buffer)).path })
+    }
+    //console.log(this.state)
     this.context.registry(
       this.state.subjkt,
       await ipfs.add(
@@ -157,14 +160,14 @@ export class Config extends Component {
 
   // delete account
 
-  render () {
+  render() {
     return (
       <Page>
         <Container>
-         <Identicon address={this.state.address} />
-         <div style={{height:'20px'}}></div>
-{/*          <input type="file" onChange={this.onFileChange} />
- */}          <div style={{height:'20px'}}></div>
+          <Identicon address={this.state.address} />
+          <div style={{ height: '20px' }}></div>
+          <input type="file" onChange={this.onFileChange} />
+          <div style={{ height: '20px' }}></div>
           <Padding>
             <Input
               name="subjkt"
@@ -212,7 +215,7 @@ export class Config extends Component {
             </Button>
           </Padding>
         </Container> */}
-{/*         <BottomBanner>
+        {/*         <BottomBanner>
           The dApp has been temporarily disabled for a contract migration. Follow <a href="https://twitter.com/hicetnunc2000" target="_blank">@hicetnunc2000</a> or <a href="https://discord.gg/jKNy6PynPK" target="_blank">join the discord</a> for updates.
         </BottomBanner> */}
       </Page>

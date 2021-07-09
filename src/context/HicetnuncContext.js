@@ -100,11 +100,8 @@ class HicetnuncContextProviderClass extends Component {
 
       swapv2: async (from, royalties, xtz_per_objkt, objkt_id, creator, objkt_amount) => {
         let objkts = await Tezos.wallet.at(this.state.objkts)
-        await Tezos.wallet.at(this.state.v2).then(c => console.log(c.parameterSchema.ExtractSignatures()))
         let marketplace = await Tezos.wallet.at(this.state.v2)
-        //parameterSchema.ExtractSignatures()
-        //console.log('marketplace', marketplace)
-        //console.log(from, royalties, xtz_per_objkt, objkt_id, creator, objkt_amount)
+
         let list = [
           {
             kind: OpKind.TRANSACTION,
@@ -116,6 +113,7 @@ class HicetnuncContextProviderClass extends Component {
             ...marketplace.methods.swap(creator, parseFloat(objkt_amount), parseFloat(objkt_id), parseFloat(royalties), parseFloat(xtz_per_objkt)).toTransferParams({ amount: 0, mutez: true, storageLimit: 250 })
           }
         ]
+
         let batch = await Tezos.wallet.batch(list);
         return await batch.send()
       },
@@ -123,18 +121,17 @@ class HicetnuncContextProviderClass extends Component {
       batch_cancel: async (arr) => {
         console.log(arr)
         let v1 = await Tezos.wallet.at(this.state.v1)
+
+        let list = [
+
+        ]
         const batch = await arr
           .map((e) => parseInt(e.id))
           .reduce((batch, id) => {
-            return batch.withContractCall(v1.methods.cancel_swap(id))
-          }, Tezos.wallet.batch())
-        console.log(arr)
+            return { kind : OpKind.TRANSACTION, ...batch.withContractCall(v1.methods.cancel_swap(id)).toTransferParams({ amount: 0, mutez: true, storageLimit: 150 }) }
+          })
         return await batch.send()
       },
-
-      cancelv2: async () => { },
-
-      collectv2: async () => { },
 
       // fullscreen. DO NOT CHANGE!
       fullscreen: false,
@@ -313,7 +310,7 @@ class HicetnuncContextProviderClass extends Component {
               .send({
                 amount: parseFloat(amount),
                 mutez: true,
-                storageLimit: 310,
+                storageLimit: 350,
               })
           )
           .catch((e) => e)
@@ -426,6 +423,7 @@ class HicetnuncContextProviderClass extends Component {
       },
 
       registry: async (alias, metadata) => {
+        console.log(metadata)
         return await Tezos.wallet.at(this.state.subjkt).then((c) =>
           c.methods
             .registry(
