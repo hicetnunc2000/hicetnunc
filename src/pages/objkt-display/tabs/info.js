@@ -27,7 +27,9 @@ export const Info = ( token_info ) => {
       </Container>
 
       <Container>
-        <Padding>{description}</Padding>
+        <Padding>
+          <div style={{ whiteSpace: 'pre-wrap' }}>{description}</div>
+        </Padding>
       </Container>
 
       <Container>
