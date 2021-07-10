@@ -29,20 +29,6 @@ export const Header = () => {
     context.setTheme(getItem('theme') || setItem('theme', 'dark'))
   }, [])
 
-  // we assume user isn't connected
-  let button = 'sync'
-
-  // but if they are
-  if (context.acc?.address) {
-    // is menu closed?
-    if (context.collapsed) {
-      button = walletPreview(context.acc.address)
-    } else {
-      // menu is open
-      button = 'unsync'
-    }
-  }
-
   //const activeAccount = await wallet.client.getActiveAccount()
   //console.log(activeAccount)
   const handleRoute = (path, data) => {
@@ -50,15 +36,28 @@ export const Header = () => {
     history.push(path, data)
   }
 
-  const handleSyncUnsync = () => {
-    if (context.acc?.address && !context.collapsed) {
-      // disconnect wallet
-      context.disconnect()
-    } else {
-      // connect wallet
-      context.syncTaquito()
-    }
+  // we assume user isn't connected
+  let profileButton = (
+    <Button onClick={()=>context.syncTaquito()} secondary>
+      <Primary>sync</Primary>
+    </Button>
+  )
+
+  // but if they are, we add shortcut to their profile
+  if (context.acc?.address) {
+    profileButton = (
+      <Button onClick={() => handleRoute('/sync', 'tz')} secondary>
+        <Primary>{walletPreview(context.acc.address)}</Primary>
+      </Button>
+    )
   }
+
+  // ... and show additional unsync button when menu opens
+  const unSyncButton = context.acc?.address && !context.collapsed ? (
+    <Button onClick={()=>context.disconnect()} secondary>
+      <Primary>unsync</Primary>
+    </Button>
+  ) : ''
 
   return (
     <>
@@ -138,9 +137,8 @@ export const Header = () => {
           </Button>
 
           <div className={styles.right}>
-            <Button onClick={handleSyncUnsync} secondary>
-              <Primary>{button}</Primary>
-            </Button>
+            {unSyncButton}
+            {profileButton}
 
             <Button onClick={context.toogleNavbar} secondary>
               <VisuallyHidden>
