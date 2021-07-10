@@ -79,8 +79,8 @@ class HicetnuncContextProviderClass extends Component {
       objkts: 'KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton',
       hDAO_curation: 'KT1TybhR7XraG75JFYKSrh7KnxukMBT5dor6',
 
-      subjktInfo : {},
-      setSubjktInfo : (subjkt) => this.setState({ subjktInfo : subjkt }),
+      subjktInfo: {},
+      setSubjktInfo: (subjkt) => this.setState({ subjktInfo: subjkt }),
 
       // market 
 
@@ -122,14 +122,17 @@ class HicetnuncContextProviderClass extends Component {
         console.log(arr)
         let v1 = await Tezos.wallet.at(this.state.v1)
 
-        let list = [
-
-        ]
+        /*         const batch = await arr
+                  .map((e) => parseInt(e.id))
+                  .reduce((batch, id) => {
+                    return { kind : OpKind.TRANSACTION, ...batch.withContractCall(v1.methods.cancel_swap(id)).toTransferParams({ amount: 0, mutez: true, storageLimit: 150 }) }
+                  }, Tezos.wallet.batch()) */
         const batch = await arr
           .map((e) => parseInt(e.id))
           .reduce((batch, id) => {
-            return { kind : OpKind.TRANSACTION, ...batch.withContractCall(v1.methods.cancel_swap(id)).toTransferParams({ amount: 0, mutez: true, storageLimit: 150 }) }
-          })
+            return batch.withContractCall(v1.methods.cancel_swap(id))
+          }, Tezos.wallet.batch())
+        console.log(arr)
         return await batch.send()
       },
 
@@ -317,9 +320,9 @@ class HicetnuncContextProviderClass extends Component {
       },
 
       swap: async (objkt_amount, objkt_id, xtz_per_objkt) => {
-        // console.log(objkt_amount)
+        console.log(objkt_amount)
         return await Tezos.wallet
-          .at(this.state.v2)
+          .at(this.state.v1)
           .then((c) =>
             c.methods
               .swap(
@@ -387,6 +390,17 @@ class HicetnuncContextProviderClass extends Component {
               ])
               .send()
           )
+      },
+
+      cancelv1: async (swap_id) => {
+        return await Tezos.wallet
+        .at(this.state.v1)
+        .then((c) =>
+          c.methods
+            .cancel_swap(parseFloat(swap_id))
+            .send({ amount: 0, storageLimit: 310 })
+        )
+        .catch((e) => e) 
       },
 
       cancel: async (swap_id) => {

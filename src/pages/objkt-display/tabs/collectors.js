@@ -30,7 +30,7 @@ export const Collectors = ({ owners, swaps, token_holders }) => {
       syncTaquito()
       getAccount()
     } else {
-      collect(1, swap_id, price)
+      collect(swap_id, price)
     }
   }
   return (
