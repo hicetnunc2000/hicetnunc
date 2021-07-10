@@ -47,12 +47,9 @@
         display: flex;
         align-items: center;
         font-size: 16px;
-      }
-
-      .hamburger {
-        width: 30px;
-        height: auto;
-        margin-left: 10px;
+        + * {
+          margin-left: 10px;
+        }
       }
     }
   }
