@@ -389,6 +389,18 @@ class HicetnuncContextProviderClass extends Component {
           )
       },
 
+      cancelv1: async (swap_id) => {
+        console.log(swap_id)
+        return await Tezos.wallet
+          .at(this.state.v1)
+          .then((c) =>
+            c.methods
+              .cancel_swap(parseFloat(swap_id))
+              .send({ amount: 0, storageLimit: 310 })
+          )
+          .catch((e) => e)
+      },
+
       cancel: async (swap_id) => {
         console.log(swap_id)
         return await Tezos.wallet

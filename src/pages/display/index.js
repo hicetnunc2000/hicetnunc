@@ -741,7 +741,7 @@ export default class Display extends Component {
                         <strong>{e.amount_left}x OBJKT#{e.token_id} {e.price}µtez</strong>
                       </Primary>
                     </Button>
-                    <Button onClick={() => this.context.cancel(e.id)}>
+                    <Button onClick={() => this.context.cancelv1(e.id)}>
                       Cancel Swap
                     </Button>
                   </Padding>
