@@ -140,9 +140,49 @@ query querySwaps($address: String!) {
   }
 }
 `
+
+const query_v2_swaps = `
+query querySwaps($address: String!) {
+  hic_et_nunc_swap(where: {creator_id: {_eq: $address}, status: {_eq: "0"}, contract_version: {_neq: "1"}}, distinct_on: token_id) {
+    token {
+      id
+      title
+      artifact_uri
+      display_uri
+      thumbnail_uri
+      timestamp
+      mime
+      description
+      supply
+      token_tags {
+        tag {
+          tag
+        }
+      }
+    }
+    amount
+    amount_left
+    price
+    id
+  }
+}
+`
 async function fetchSwaps(address) {
 
   const { errors, data } = await fetchGraphQL(query_v1_swaps, 'querySwaps', {
+    address: address
+  })
+  if (errors) {
+    console.error(errors)
+  }
+  const result = data.hic_et_nunc_swap
+  console.log(result)
+  return result
+
+}
+async function fetchv2Swaps(address) {
+
+  const { errors, data } = await fetchGraphQL(query_v2_swaps, 'querySwaps', {
     address: address
   })
   if (errors) {
@@ -312,6 +352,7 @@ export default class Display extends Component {
       creationsState: true,
       collectionState: false,
       marketState: false,
+      swapsState: false,
     })
 
     let list = await getRestrictedAddresses()
@@ -344,7 +385,8 @@ export default class Display extends Component {
     this.setState({
       creationsState: false,
       collectionState: true,
-      marketState: false
+      marketState: false,
+      swapsState: false,
     })
 
     if (this.state.subjkt !== '') {
@@ -365,6 +407,7 @@ export default class Display extends Component {
       creationsState: false,
       collectionState: false,
       marketState: true,
+      swapsState: false,
     })
     console.log(this.state)
     if (this.state.subjkt !== '') {
@@ -373,6 +416,31 @@ export default class Display extends Component {
     } else {
       // if tz/wallethash route
       this.props.history.push(`/tz/${this.state.wallet}/v1`)
+    }
+
+  }
+
+  swaps = async () => {
+    
+    this.setState({ objkts: await fetchv2Swaps(this.state.wallet), loading: false, items: [] })
+
+    this.setState({ items: this.state.objkts.slice(0, 20), offset: 20 })
+
+    console.log(['objkts',this.state.objkts])
+
+    this.setState({
+      creationsState: false,
+      collectionState: false,
+      marketState: false,
+      swapsState: true,
+    })
+    
+    if (this.state.subjkt !== '') {
+      // if alias route
+      this.props.history.push(`/${this.state.subjkt}/swaps`)
+    } else {
+      // if tz/wallethash route
+      this.props.history.push(`/tz/${this.state.wallet}/swaps`)
     }
 
   }
@@ -400,6 +468,8 @@ export default class Display extends Component {
         this.collection()
       } else if (window.location.pathname.split('/')[3] === 'v1') {
         this.market()
+      } else if (window.location.pathname.split('/')[3] === 'swaps') {
+        this.swaps()
       } else {
         this.creations()
       }
@@ -607,6 +677,12 @@ export default class Display extends Component {
                   collection
                 </Primary>
               </Button>
+                
+              <Button onClick={this.swaps}>
+                <Primary selected={this.state.swapsState}>
+                  swaps
+                </Primary>
+              </Button>
               {this.context.acc != null && this.context.acc.address == this.state.wallet ?
                 <Button onClick={this.market}>
                   <Primary selected={this.state.marketState}>v1 swaps</Primary>
@@ -660,6 +736,42 @@ export default class Display extends Component {
         )}
 
         {!this.state.loading && this.state.collectionState && (
+          <Container xlarge>
+            <InfiniteScroll
+              dataLength={this.state.items.length}
+              next={this.loadMore}
+              hasMore={this.state.hasMore}
+              loader={
+                <Container>
+                  <Padding>
+                    <Loading />
+                  </Padding>
+                </Container>
+              }
+              endMessage={<p></p>}
+            >
+              <ResponsiveMasonry>
+                {this.state.items.map((nft) => {
+                  console.log(nft)
+                  return (
+                    <Button key={nft.token.id} to={`${PATH.OBJKT}/${nft.token.id}`}>
+                      <div className={styles.container}>
+                        {renderMediaType({
+                          mimeType: nft.token.mime,
+                          artifactUri: nft.token.artifact_uri,
+                          displayUri: nft.token.display_uri,
+                          displayView: true
+                        })}
+                      </div>
+                    </Button>
+                  )
+                })}
+              </ResponsiveMasonry>
+            </InfiniteScroll>
+          </Container>
+        )}
+
+        {!this.state.loading && this.state.swapsState && (
           <Container xlarge>
             <InfiniteScroll
               dataLength={this.state.items.length}
