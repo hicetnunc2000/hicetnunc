@@ -478,10 +478,10 @@ export default class Display extends Component {
 
   loadMore = () => {
     this.setState({ items: this.state.items.concat(this.state.objkts.slice(this.state.offset, this.state.offset + 20)), offset: this.state.offset + 20 })
-
-    /*     if ((this.state.objkts.slice(this.state.offset, this.state.offset + 20).length < 20) && (this.state.offset !== 20)) {
-          this.setState({ hasMore : false })
-        } */
+    console.log(['loadmore',this.state.objkts])
+    if ((this.state.objkts.slice(this.state.offset, this.state.offset + 20).length < 20) && (this.state.offset !== 20)) {
+      this.setState({ hasMore : false })
+    }
   }
 
   cancel_batch = async () => {
