@@ -37,27 +37,21 @@ export const Header = () => {
   }
 
   // we assume user isn't connected
-  let profileButton = (
-    <Button onClick={()=>context.syncTaquito()} secondary>
-      <Primary>sync</Primary>
-    </Button>
-  )
+  let headerButtonHandler = () => context.syncTaquito()
+  let headerButtonText = 'sync'
 
-  // but if they are, we add shortcut to their profile
+  // but if they are
   if (context.acc?.address) {
-    profileButton = (
-      <Button onClick={() => handleRoute('/sync', 'tz')} secondary>
-        <Primary>{walletPreview(context.acc.address)}</Primary>
-      </Button>
-    )
+    // is menu closed?
+    if (context.collapsed) {
+      headerButtonHandler = () => handleRoute('/sync', 'tz')
+      headerButtonText = walletPreview(context.acc.address)
+    } else {
+      // menu is open
+      headerButtonHandler = () => context.disconnect()
+      headerButtonText = 'unsync'
+    }
   }
-
-  // ... and show additional unsync button when menu opens
-  const unSyncButton = context.acc?.address && !context.collapsed ? (
-    <Button onClick={()=>context.disconnect()} secondary>
-      <Primary>unsync</Primary>
-    </Button>
-  ) : ''
 
   return (
     <>
@@ -137,8 +131,9 @@ export const Header = () => {
           </Button>
 
           <div className={styles.right}>
-            {unSyncButton}
-            {profileButton}
+            <Button onClick={headerButtonHandler} secondary>
+              <Primary>{headerButtonText}</Primary>
+            </Button>
 
             <Button onClick={context.toogleNavbar} secondary>
               <VisuallyHidden>
