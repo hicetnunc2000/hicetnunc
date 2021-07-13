@@ -76,7 +76,6 @@ async function fetchFeed(lastId) {
   return result
 }
 
-
 async function fetchGraphQL(operationsDoc, operationName, variables) {
   let result = await fetch('https://api.hicdex.com/v1/graphql', {
     method: 'POST',
@@ -87,6 +86,66 @@ async function fetchGraphQL(operationsDoc, operationName, variables) {
     }),
   })
   return await result.json()
+}
+
+async function fetchObjkts(ids) {
+  const { errors, data } = await fetchGraphQL(`
+    query Objkts($ids: [bigint!] = "") {
+      hic_et_nunc_token(where: {id: {_in: $ids}}) {
+        artifact_uri
+        display_uri
+        creator_id
+        id
+        mime
+        thumbnail_uri
+        timestamp
+        title
+        creator {
+          name
+          address
+        }
+      }
+    }`, "Objkts", { "ids": ids });
+    if (errors) {
+      console.log(errors)
+    }
+    return data
+}
+
+async function getLastId() {
+  const { errors, data } = await fetchGraphQL(`
+    query LastId {
+      hic_et_nunc_token(limit: 1, order_by: {id: desc}) {
+        id
+      }
+    }`, "LastId");
+  return data.hic_et_nunc_token[0].id
+}
+
+function rnd(min, max) {
+  return Math.floor(Math.random() * (max - min + 1) + min)
+}
+
+async function fetchRandomObjkts() {
+  const firstId = 196
+  const lastId = await getLastId()
+
+  const uniqueIds = new Set()
+  while (uniqueIds.size < 50) {
+    uniqueIds.add(rnd(firstId, lastId))
+  }
+
+  const { errors, data } = await fetchObjkts(Array.from(uniqueIds));
+
+  let objkts = await fetchObjkts(Array.from(uniqueIds));
+  console.log(objkts.hic_et_nunc_token)
+
+  if (errors) {
+    console.error(errors);
+  }
+
+  const result = data
+  return objkts.hic_et_nunc_token
 }
 
 const getRestrictedAddresses = async () =>
@@ -109,7 +168,6 @@ export const Feeds = ({ type }) => {
   const startTime = customFloor(Date.now(), ONE_MINUTE_MILLIS)
 
   const loadMore = async () => {
-
     if (type === 1) {
       await getHdaoFeed()
     }
@@ -175,7 +233,6 @@ export const Feeds = ({ type }) => {
     result = result.filter(e => !restricted.includes(e.creator_id))
     const next = items.concat(result)
     setItems(next)
-
   }
 
   const getHdaoFeed = async () => {
@@ -186,10 +243,15 @@ export const Feeds = ({ type }) => {
   }
 
   const getRandomFeed = async () => {
-    let result = await axios
-      .post(process.env.REACT_APP_GRAPHQL_RANDOM)
-      .then((res) => res.data)
-    setOffset(offset + 50)
+    let result = await fetchRandomObjkts()
+    setCreators([...creators, result.map(e => e.creator_id)])
+
+    result = _.uniqBy(result, 'creator_id')
+    setCreators(creators.concat(result.map(e => e.creator_id)))
+    result = result.filter(e => !creators.includes(e.creator_id))
+    
+    let restricted = await getRestrictedAddresses()
+    result = result.filter(e => !restricted.includes(e.creator_id))
     const next = items.concat(result)
     setItems(next)
   }
