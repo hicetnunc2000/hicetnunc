@@ -56,24 +56,6 @@ const query_hdao = `query hDAOFeed($offset: Int = 0) {
   }
 }`
 
-const random_feed = `
-query RandomFeed($offset: Int = 0) {
-  hic_et_nunc_token(limit: 50, offset: $offset) {
-    artifact_uri
-    display_uri
-    creator_id
-    id
-    mime
-    thumbnail_uri
-    timestamp
-    title
-    creator {
-      name
-      address
-    }
-  }
-}`
-
 async function fetchHdao(offset) {
   const { errors, data } = await fetchGraphQL(query_hdao, "hDAOFeed", { "offset": offset });
   if (errors) {
@@ -92,6 +74,18 @@ async function fetchFeed(lastId) {
   const result = data.hic_et_nunc_token
   /* console.log({ result }) */
   return result
+}
+
+async function fetchGraphQL(operationsDoc, operationName, variables) {
+  let result = await fetch('https://api.hicdex.com/v1/graphql', {
+    method: 'POST',
+    body: JSON.stringify({
+      query: operationsDoc,
+      variables: variables,
+      operationName: operationName,
+    }),
+  })
+  return await result.json()
 }
 
 async function fetchObjkts(ids) {
@@ -152,18 +146,6 @@ async function fetchRandomObjkts() {
 
   const result = data
   return objkts.hic_et_nunc_token
-}
-
-async function fetchGraphQL(operationsDoc, operationName, variables) {
-  let result = await fetch('https://api.hicdex.com/v1/graphql', {
-    method: 'POST',
-    body: JSON.stringify({
-      query: operationsDoc,
-      variables: variables,
-      operationName: operationName,
-    }),
-  })
-  return await result.json()
 }
 
 const getRestrictedAddresses = async () =>
