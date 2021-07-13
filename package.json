@@ -5,7 +5,7 @@
   "dependencies": {
     "@airgap/beacon-sdk": "^2.2.9",
     "@babel/core": "^7.14.5",
-    "@taquito/beacon-wallet": "^9.1.1",
+    "@taquito/beacon-wallet": "^9.2.0",
     "@taquito/michelson-encoder": "^9.1.1",
     "@taquito/taquito": "^9.2.0",
     "@testing-library/jest-dom": "^5.14.1",
