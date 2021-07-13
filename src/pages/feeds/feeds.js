@@ -168,7 +168,6 @@ export const Feeds = ({ type }) => {
   const startTime = customFloor(Date.now(), ONE_MINUTE_MILLIS)
 
   const loadMore = async () => {
-    console.log('load')
     if (type === 1) {
       await getHdaoFeed()
     }
