@@ -78,11 +78,36 @@ class HicetnuncContextProviderClass extends Component {
       v2: 'KT1HbQepzV1nVGg8QVznG7z4RcHseD5kwqBn',
       objkts: 'KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton',
       hDAO_curation: 'KT1TybhR7XraG75JFYKSrh7KnxukMBT5dor6',
+      hDAO_marketplace: 'KT1Qxq1NHq4j5GC91YNpyHcwiUaMWeYtQtCQ',
 
       subjktInfo: {},
       setSubjktInfo: (subjkt) => this.setState({ subjktInfo: subjkt }),
 
-      // market 
+
+      // hdao marketplace
+
+      collect_hdao: async(swap_id) => {
+
+      },
+
+      swap_hdao: async (from, royalties, hdao_per_objkt, objkt_id, creator, objkt_amount) => {
+        
+        let objkts = await Tezos.wallet.at(this.state.objkts)
+        let marketplace = await Tezos.wallet.at(this.state.hDAO_marketplace)
+
+        let list = [
+          {
+            kind: OpKind.TRANSACTION,
+            ...objkts.methods.update_operators([{ add_operator: { operator: this.state.hDAO_marketplace, token_id: parseFloat(objkt_id), owner: from } }])
+              .toTransferParams({ amount: 0, mutez: true, storageLimit: 100 })
+          },
+          {
+            kind: OpKind.TRANSACTION,
+            ...marketplace.methods.swap(creator, parseFloat(hdao_per_objkt), parseFloat(objkt_amount), parseFloat(objkt_id), parseFloat(royalties)).toTransferParams({ amount: 0, mutez: true, storageLimit: 250 })
+          }
+        ]
+      },
+      // marketplace v2
 
       collectv2: async (swap_id, xtz_amount) => {
         return await Tezos.wallet
