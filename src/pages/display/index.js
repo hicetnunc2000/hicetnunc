@@ -438,7 +438,7 @@ export default class Display extends Component {
                 )}
                 {this.state.description && <p>{this.state.description}</p>}
                 <Button href={`https://tzkt.io/${this.state.wallet}`}>
-                  <Primary>{this.state.walletPrev}</Primary>
+                  <Primary>{walletPreview(this.state.wallet)}</Primary>
                 </Button>
 
                 <p>{this.state.hdao} ○</p>
