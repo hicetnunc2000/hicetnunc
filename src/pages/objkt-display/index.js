@@ -271,9 +271,9 @@ export const ObjktDisplay = () => {
           </div>
         </>
       )}
-      <BottomBanner>
+{/*       <BottomBanner>
               v2 migration: All OBJKTs listed on market before June 28th must be relisted. menu > managed assets > v1 swaps > batch cancel > relist. Profiles informations must be reconfigured at menu > settings as well being possible to verify your twitter profile.
-      </BottomBanner>
+      </BottomBanner> */}
       <div style={{ height: '40px' }}></div>
 
     </Page>
