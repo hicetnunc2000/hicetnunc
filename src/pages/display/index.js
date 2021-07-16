@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Button, Primary } from '../../components/button'
+import { Button, Primary, Secondary } from '../../components/button'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
 import { Page, Container, Padding } from '../../components/layout'
 import { BottomBanner } from '../../components/bottom-banner'
@@ -852,7 +852,9 @@ export default class Display extends Component {
                         </Primary>
                       </Button>
                       <Button onClick={() => this.context.cancel(e.id)}>
-                        Cancel Swap
+                        <Secondary>
+                          Cancel Swap
+                        </Secondary>
                       </Button>
                     </Padding>
                   </Container>
