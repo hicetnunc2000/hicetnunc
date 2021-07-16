@@ -76,9 +76,9 @@ export const Tags = () => {
           </Container>
         </div>
       </InfiniteScroll>
-      {/* <BottomBanner>
-      Collecting has been temporarily disabled. Follow <a href="https://twitter.com/hicetnunc2000" target="_blank">@hicetnunc2000</a> or <a href="https://discord.gg/jKNy6PynPK" target="_blank">join the discord</a> for updates.
-      </BottomBanner> */}
+      <BottomBanner>
+              We're currently on a migration phase. All OBJKTs listed on market before June 28th must be relisted. managed assets > v1 swaps > batch cancel > relist.
+      </BottomBanner>
     </Page>
   )
 }
