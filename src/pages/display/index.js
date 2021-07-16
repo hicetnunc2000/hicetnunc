@@ -351,8 +351,7 @@ export default class Display extends Component {
     this.setState({
       creationsState: true,
       collectionState: false,
-      marketState: false,
-      swapsState: false,
+      marketState: false
     })
 
     let list = await getRestrictedAddresses()
@@ -402,6 +401,10 @@ export default class Display extends Component {
     let swaps = await fetchSwaps(this.state.wallet)
     swaps = swaps.filter(e => parseInt(e.contract_version) !== 2)
     this.setState({ market: swaps, loading: false })
+    
+    this.setState({ objkts: await fetchv2Swaps(this.state.wallet), loading: false, items: [] })
+
+    this.setState({ items: this.state.objkts.slice(0, 20), offset: 20 })
 
     this.setState({
       creationsState: false,
@@ -678,16 +681,14 @@ export default class Display extends Component {
                 </Primary>
               </Button>
                 
-              <Button onClick={this.swaps}>
+              {/* <Button onClick={this.swaps}>
                 <Primary selected={this.state.swapsState}>
                   swaps
                 </Primary>
+              </Button> */}
+              <Button onClick={this.market}>
+                <Primary selected={this.state.marketState}>swaps</Primary>
               </Button>
-              {this.context.acc != null && this.context.acc.address == this.state.wallet ?
-                <Button onClick={this.market}>
-                  <Primary selected={this.state.marketState}>v1 swaps</Primary>
-                </Button>
-                : null}
             </div>
           </Padding>
         </Container>
@@ -809,57 +810,89 @@ export default class Display extends Component {
 
         {!this.state.loading && this.state.marketState && (
           <>
-            <Container>
-              <Padding>
-                <p>We're currently migrating the marketplace smart contract. We ask for users to cancel their's listings as the v1 marketplace will no longer be maintained. Auditing tools for the v1 protocol can be found at <a href='https://hictory.xyz'>hictory.xyz</a></p>
-              </Padding>
-            </Container>
-            {Object.keys(this.state.market).length === 0 && (
+          { this.context.acc != null && this.context.acc.address == this.state.wallet ?
+            <>
+            {Object.keys(this.state.market).length !== 0 && (
               <Container>
                 <Padding>
-                  <p>You currently don't have any OBJKT on the market.</p>
+                  <p>We're currently migrating the marketplace smart contract. We ask for users to cancel their's listings as the v1 marketplace will no longer be maintained. Auditing tools for the v1 protocol can be found at <a href='https://hictory.xyz'>hictory.xyz</a></p>
                 </Padding>
               </Container>
-            )}
+              )}
 
-            {
-              this.state.market.length !== 0 ?
-                <Container>
-                  <Padding>
-                    <p>
-                      One can delist multiple swaps at once batching transactions or delist each single one of them.
-                    </p>
-                    <br />
-                    <Button onClick={this.cancel_batch}>
-                      <Primary>
-                        Batch Cancel
-                      </Primary>
-                    </Button>
-                  </Padding>
-                </Container>
-                :
-                null
-            }
+              {
+                this.state.market.length !== 0 ?
+                  <Container>
+                    <Padding>
+                      <p>
+                        One can delist multiple swaps at once batching transactions or delist each single one of them.
+                      </p>
+                      <br />
+                      <Button onClick={this.cancel_batch}>
+                        <Primary>
+                          Batch Cancel
+                        </Primary>
+                      </Button>
+                    </Padding>
+                  </Container>
+                  :
+                  null
+              }
 
-            {this.state.market.map((e, key) => {
+              {this.state.market.map((e, key) => {
 
-              console.log(e)
-              return (
-                <Container key={key}>
-                  <Padding>
-                    <Button to={`${PATH.OBJKT}/${e.token_id}`}>
-                      {console.log(e)}
-                      <Primary>
-                        <strong>{e.amount_left}x OBJKT#{e.token_id} {e.price}µtez</strong>
-                      </Primary>
-                    </Button>
-                    <Button onClick={() => this.context.cancel(e.id)}>
-                      Cancel Swap
-                    </Button>
-                  </Padding>
-                </Container>
-              )
-            })}
+                console.log(e)
+                return (
+                  <Container key={key}>
+                    <Padding>
+                      <Button to={`${PATH.OBJKT}/${e.token_id}`}>
+                        {console.log(e)}
+                        <Primary>
+                          <strong>{e.amount_left}x OBJKT#{e.token_id} {e.price}µtez</strong>
+                        </Primary>
+                      </Button>
+                      <Button onClick={() => this.context.cancel(e.id)}>
+                        Cancel Swap
+                      </Button>
+                    </Padding>
+                  </Container>
+                )
+              })}
+            </> : null }  
+            
+            <Container xlarge>
+              <InfiniteScroll
+                dataLength={this.state.items.length}
+                next={this.loadMore}
+                hasMore={this.state.hasMore}
+                loader={
+                  <Container>
+                    <Padding>
+                      <Loading />
+                    </Padding>
+                  </Container>
+                }
+                endMessage={<p></p>}
+              >
+                <ResponsiveMasonry>
+                  {this.state.items.map((nft) => {
+                    console.log(nft)
+                    return (
+                      <Button key={nft.token.id} to={`${PATH.OBJKT}/${nft.token.id}`}>
+                        <div className={styles.container}>
+                          {renderMediaType({
+                            mimeType: nft.token.mime,
+                            artifactUri: nft.token.artifact_uri,
+                            displayUri: nft.token.display_uri,
+                            displayView: true
+                          })}
+                        </div>
+                      </Button>
+                    )
+                  })}
+                </ResponsiveMasonry>
+              </InfiniteScroll>
+            </Container>
           </>
         )}
 {/*         <BottomBanner>
