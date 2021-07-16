@@ -74,9 +74,11 @@ trades(order_by: {timestamp: asc}) {
   }
   seller {
     address
+    name
   }
   buyer {
     address
+    name
   }
   timestamp
 }

@@ -21,7 +21,7 @@ export const OwnerList = ({ owners, creator, acc }) => {
           {
             holder.name ?
               <Button href={`https://hicetnunc.xyz/${holder.name}`}>
-                <Primary>{holder.name}</Primary>
+                <Primary>{encodeURI(holder.name)}</Primary>
               </Button>
               :
               <Button href={`https://hicetnunc.xyz/tz/${holder_id}`}>

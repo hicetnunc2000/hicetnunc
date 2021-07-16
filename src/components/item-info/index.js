@@ -96,11 +96,11 @@ export const ItemInfo = ({
             <div className={styles.inline}>
               <Button
                 to={
-                  creator.name ? `/${creator.name}` : `/tz/${creator.address}`
+                  creator.name ? `/${encodeURI(creator.name)}` : `/tz/${creator.address}`
                 }
               >
                 {creator.name ? (
-                  <Primary>{creator.name}</Primary>
+                  <Primary>{encodeURI(creator.name)}</Primary>
                 ) : (
                   <Primary>{walletPreview(creator.address)}</Primary>
                 )}
@@ -158,11 +158,11 @@ export const ItemInfo = ({
           <div className={styles.inline}>
             <Button
               to={
-                creator.name ? `/${creator.name}` : `/tz/${creator.address}`
+                creator.name ? `/${encodeURI(creator.name)}` : `/tz/${creator.address}`
               }
             >
               {creator.name ? (
-                <Primary>{creator.name}</Primary>
+                <Primary>{encodeURI(creator.name)}</Primary>
               ) : (
                 <Primary>{walletPreview(creator.address)}</Primary>
               )}
