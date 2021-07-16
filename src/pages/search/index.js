@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import SearchBox from 'react-search'
 import { Page, Container, Padding } from '../../components/layout'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
 import { ResponsiveMasonry } from '../../components/responsive-masonry'
