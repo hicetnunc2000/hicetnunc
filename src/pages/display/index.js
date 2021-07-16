@@ -143,7 +143,7 @@ query querySwaps($address: String!) {
 
 const query_v2_swaps = `
 query querySwaps($address: String!) {
-  hic_et_nunc_swap(where: {creator_id: {_eq: $address}, status: {_eq: "0"}, contract_version: {_neq: "1"}}, distinct_on: token_id) {
+  hic_et_nunc_swap(where: {creator_id: {_eq: $address}, status: {_eq: "0"}, contract_version: {_eq: "2"}}, distinct_on: token_id) {
     token {
       id
       title
@@ -415,31 +415,6 @@ export default class Display extends Component {
     console.log(this.state)
     if (this.state.subjkt !== '') {
       // if alias route
-      this.props.history.push(`/${this.state.subjkt}/v1`)
-    } else {
-      // if tz/wallethash route
-      this.props.history.push(`/tz/${this.state.wallet}/v1`)
-    }
-
-  }
-
-  swaps = async () => {
-    
-    this.setState({ objkts: await fetchv2Swaps(this.state.wallet), loading: false, items: [] })
-
-    this.setState({ items: this.state.objkts.slice(0, 20), offset: 20 })
-
-    console.log(['objkts',this.state.objkts])
-
-    this.setState({
-      creationsState: false,
-      collectionState: false,
-      marketState: false,
-      swapsState: true,
-    })
-    
-    if (this.state.subjkt !== '') {
-      // if alias route
       this.props.history.push(`/${this.state.subjkt}/swaps`)
     } else {
       // if tz/wallethash route
@@ -447,6 +422,7 @@ export default class Display extends Component {
     }
 
   }
+
   // called if there's no redirect
   onReady = async () => {
 
@@ -457,7 +433,7 @@ export default class Display extends Component {
         this.creations()
       } else if (window.location.pathname.split('/')[2] === 'collection') {
         this.collection()
-      } else if (window.location.pathname.split('/')[2] === 'v1') {
+      } else if (window.location.pathname.split('/')[2] === 'swaps') {
         this.market()
       } else {
 
@@ -469,10 +445,8 @@ export default class Display extends Component {
         this.creations()
       } else if (window.location.pathname.split('/')[3] === 'collection') {
         this.collection()
-      } else if (window.location.pathname.split('/')[3] === 'v1') {
-        this.market()
       } else if (window.location.pathname.split('/')[3] === 'swaps') {
-        this.swaps()
+        this.market()
       } else {
         this.creations()
       }
@@ -681,13 +655,10 @@ export default class Display extends Component {
                 </Primary>
               </Button>
                 
-              {/* <Button onClick={this.swaps}>
-                <Primary selected={this.state.swapsState}>
+              <Button onClick={this.market}>
+                <Primary selected={this.state.marketState}>
                   swaps
                 </Primary>
-              </Button> */}
-              <Button onClick={this.market}>
-                <Primary selected={this.state.marketState}>swaps</Primary>
               </Button>
             </div>
           </Padding>
@@ -737,42 +708,6 @@ export default class Display extends Component {
         )}
 
         {!this.state.loading && this.state.collectionState && (
-          <Container xlarge>
-            <InfiniteScroll
-              dataLength={this.state.items.length}
-              next={this.loadMore}
-              hasMore={this.state.hasMore}
-              loader={
-                <Container>
-                  <Padding>
-                    <Loading />
-                  </Padding>
-                </Container>
-              }
-              endMessage={<p></p>}
-            >
-              <ResponsiveMasonry>
-                {this.state.items.map((nft) => {
-                  console.log(nft)
-                  return (
-                    <Button key={nft.token.id} to={`${PATH.OBJKT}/${nft.token.id}`}>
-                      <div className={styles.container}>
-                        {renderMediaType({
-                          mimeType: nft.token.mime,
-                          artifactUri: nft.token.artifact_uri,
-                          displayUri: nft.token.display_uri,
-                          displayView: true
-                        })}
-                      </div>
-                    </Button>
-                  )
-                })}
-              </ResponsiveMasonry>
-            </InfiniteScroll>
-          </Container>
-        )}
-
-        {!this.state.loading && this.state.swapsState && (
           <Container xlarge>
             <InfiniteScroll
               dataLength={this.state.items.length}
