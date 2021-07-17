@@ -55,6 +55,7 @@ export class Config extends Component {
   static contextType = HicetnuncContext
 
   state = {
+    loading: true,
     vote: 0,
     address: '',
     subjkt: '',
@@ -67,10 +68,10 @@ export class Config extends Component {
   componentWillMount = async () => {
     await this.context.syncTaquito()
     this.setState({ address: this.context.acc.address })
-    /*let res = await fetchTz(this.context.acc.address)
+    let res = await fetchTz(this.context.acc.address)
     this.context.setSubjktInfo(res[0])
     this.context.subjktInfo = res[0]
-    console.log(this.context.subjktInfo) */
+    console.log(this.context.subjktInfo)
     //console.log(this.context.subjktInfo)
   }
 
