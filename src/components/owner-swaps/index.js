@@ -18,7 +18,7 @@ export const OwnerSwaps = ({ swaps, handleCollect, acc, cancel }) => {
             <div className={styles.issuer}>
               {swap.amount_left} x&nbsp;
               {swap.creator.name ? (
-                <Button to={`/${swap.creator.name}`}>
+                <Button to={`/${encodeURI(swap.creator.name)}`}>
                   <Primary>{encodeURI(swap.creator.name)}</Primary>
                 </Button>
               ) : (
