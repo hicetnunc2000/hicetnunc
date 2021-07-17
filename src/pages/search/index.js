@@ -177,9 +177,6 @@ export class Search extends Component {
                   {
                     this.state.subjkt.map(e => <div><a href={`/${e.name}`}>{e.name}</a>{e.metadata.description}</div>)
                   }
-
-                  {/* creations */}
-
                 </div>
                 :
                 undefined

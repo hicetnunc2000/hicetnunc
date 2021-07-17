@@ -593,7 +593,6 @@ export default class Display extends Component {
         <Container>
           <Padding>
             <p>
-              <strong>OBJKTs</strong>
             </p>
             <div className={styles.menu}>
               <Button onClick={this.creations}>
