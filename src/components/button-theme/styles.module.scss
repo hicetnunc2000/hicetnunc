@@ -10,6 +10,10 @@
   }
 }
 
+.container:hover {
+  text-decoration: underline;
+}
+
 .button__light {
   display: flex;
   justify-content: space-between;

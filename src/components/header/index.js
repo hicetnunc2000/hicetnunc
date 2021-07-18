@@ -166,7 +166,7 @@ export const Header = () => {
           </Button>
 
           <div className={styles.right}>
-            <Button onClick={headerButtonHandler}>
+            <Button onClick={() => handleRoute('/sync')}>
               <Primary>{aliasText}</Primary>
             </Button>
             <Button onClick={context.toogleNavbar} secondary>

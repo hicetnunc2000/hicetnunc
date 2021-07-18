@@ -215,6 +215,7 @@ export const Feeds = ({ type }) => {
             </span>
           </p>
         }
+        style={{ overflow: 'hidden' }}
       >
         <Container>
           <Padding>
