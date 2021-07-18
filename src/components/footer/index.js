@@ -11,10 +11,6 @@ export const Footer = () => {
     <footer className={styles.container}>
       <div>
         <div className={styles.copy}>{language.footer.mint}</div>
-        <div className={styles.buttons}>
-          {false && <ButtonLanguage />}
-          <ButtonTheme />
-        </div>
       </div>
 
       {false && (

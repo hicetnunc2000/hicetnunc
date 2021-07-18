@@ -1,13 +1,35 @@
 @import '../../styles/variables.scss';
+@import '../../styles/layout.scss';
 
 .container {
-  display: flex;
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  background-color: var(--background-color);
-  transition: background-color #{$theme-duration} ease-out,
-    color #{$theme-duration} ease-out;
-  z-index: 1000;
   cursor: pointer;
+  font-size: 20px;
+
+  @include respond-to('desktop') {
+    font-size: 16px;
+  }
+}
+
+.button__light {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 88px;
+  height: 20px;
+
+  @include respond-to('desktop') {
+    width: 71px;
+  }
+}
+
+.button__dark {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 72px;
+  height: 20px;
+
+  @include respond-to('desktop') {
+    width: 60px;
+  }
 }

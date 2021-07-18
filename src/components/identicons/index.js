@@ -24,7 +24,7 @@ function newPath(path) {
 }
 
 function avatar(address) {
-  console.log('trim', address)
+  // console.log('trim', address)
   const decoded = base58.decode(address.trim().substr(3))
   const hex = decoded.toString('hex')
   const check = hex.split('').reduce((sum, x) => sum + parseInt(x, 16), 0)
@@ -288,10 +288,10 @@ const identicons = [
   ),
 ]
 
-export const Identicon = ({ address = '', logo }) => {
+export const Identicon = ({ address = '', logo, small }) => {
   if (logo) {
     return (
-      <div className={styles.identicon}>
+      <div className={small ? styles.identicon__small : styles.identicon}>
         <img
           src={`https://services.tzkt.io/v1/avatars2/${address}`}
           alt="identicon"
@@ -303,5 +303,5 @@ export const Identicon = ({ address = '', logo }) => {
   const [path, xsa] = avatar(address)
   const identicon = identicons[xsa % identicons.length](path, address)
 
-  return <div className={styles.identicon}>{identicon}</div>
+  return <div className={small ? styles.identicon__small : styles.identicon}>{identicon}</div>
 }

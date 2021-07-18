@@ -1,17 +1,41 @@
 @import '../../styles/variables.scss';
 
 .menu {
-  margin-left: 6px;
-  // border: 1px dashed black;
+  margin-left: 13px;
+  border-radius: 50%;
 
+  height: 30px;
+  width: 30px;
+  // border: 1px dashed black;
+}
+
+.menu__svg {
+  position: absolute;
+  z-index: 0;
+  border-radius: 50%;
   svg {
+    
     display: block;
     width: 30px;
     height: 30px;
 
-    line {
-      stroke: var(--text-color);
-      transition: stroke #{$theme-duration} ease-out;
-    }
+    stroke: var(--text-color);
   }
+  transition: 0.2s ease;
 }
+
+.menu__svg.hidden {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.menu__svg.visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+.menu:hover {
+  box-shadow: 0 0 0 2px var(--background-color), 0 0 0 3px var(--text-color);
+  transition: 0.1s ease;
+}
+

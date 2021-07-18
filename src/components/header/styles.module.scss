@@ -6,14 +6,14 @@
   width: 100%;
   height: 60px;
   padding: 0 #{$mobile-padding};
-  background-color: var(--background-color);
   color: var(--text-color);
-  transition: background-color #{$theme-duration} ease-out,
-    color #{$theme-duration} ease-out;
+  transition: color #{$theme-duration} ease-out;
   z-index: 1000;
   display: flex;
   align-items: center;
   justify-content: center;
+
+  background-color: var(--background-color);
 
   .content {
     width: 100%;
@@ -23,17 +23,17 @@
 
     @include respond-to('desktop') {
       width: 50%;
-      margin: 0 auto;
+      margin: 0 auto;  
     }
 
     .logo {
       display: flex;
       align-items: center;
       justify-content: center;
-      height: 23px;
+      width: 80px;
 
       svg {
-        height: 23px;
+        width: 80px;
         // fill: var(--text-color);
         transition: fill #{$theme-duration} ease-out;
       }
@@ -65,27 +65,88 @@
 
 .menu {
   position: fixed;
-  top: 55px;
+  top: 60px;
   left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: var(--background-color);
+  z-index: 999;
+  width: 100%;
+  height: 100vh;
+
   color: var(--text-color);
-  transition: background-color #{$theme-duration} ease-out,
-    color #{$theme-duration} ease-out;
-  z-index: 1000;
+  transition: color #{$theme-duration} ease-out;
+
+  overflow: scroll;
+
+  @include respond-to('desktop') {
+    left: calc(75% - 230px);
+  
+    width: fit-content;
+    height: fit-content;
+
+    overflow: initial;
+  }
 
   .content {
-    display: flex;
-    justify-content: flex-end;
+    width: 100%;
+    min-height: 99vh;
+    height: max-content;
+    padding: 25px 15px;
+    background-color: var(--background-color);
+    
+    @include respond-to('desktop') {
+      width: 220px;
+      min-height: 0;
+      height: auto;
+      border: 1px solid var(--text-color);
+    }
+
+    hr {
+      margin-top: 24px;
+      margin-bottom: 24px;
+
+      @include respond-to('desktop') {
+        margin-top: 20px;
+        margin-bottom: 20px;  
+      }
+    }
 
     ul {
-      margin-top: 100px;
       list-style: none;
 
       li {
-        font-size: 30px;
-        text-align: right;
+        font-size: 20px;
+        margin: 13px 20px;
+        text-align: left;
+
+        &:first-child {
+          margin-top: 0;
+        }
+
+        &:last-child {
+          padding-bottom: 120px;
+
+          @include respond-to('desktop') {
+            padding-bottom: 0;
+          }
+        }
+
+        @include respond-to('desktop') {
+          font-size: 16px;
+          margin: 4px 10px;
+        }
+
+        // @include respond-to('phone') {
+        //   font-size: 20px;
+        //   margin-top: 6.5px;
+        //   margin-bottom: 6.5px;
+        
+        //   &:first-child {
+        //     margin-top: 0;
+        //   }
+
+        //   &:last-child {
+        //     margin-bottom: 0;
+        //   }
+        // }
 
         /*         &:first-of-type {
           text-decoration: line-through;
@@ -97,4 +158,59 @@
       }
     }
   }
+}
+
+.buttons {
+  display: flex;
+  align-items: center;
+  width: 25%;
+
+  & > * {
+    margin-left: 0.5rem;
+  }
+}
+
+.icon__button {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  stroke: var(--text-color);
+}
+
+.sync {
+  width: 76px;
+
+  @include respond-to('desktop') {
+    width: 63px;
+  }
+}
+
+.unsync {
+  justify-content: left;
+
+  @include respond-to('desktop') {
+    width: 82.5;
+    margin-bottom: 5px;
+  }
+}
+
+.list__unsync {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  
+  flex-wrap: wrap;
+}
+
+.hdao {
+  width: 134px;
+
+  @include respond-to('desktop') {
+    width: 110px;
+  }
+}
+ 
+.wallet {
+  color: #707070;
 }
