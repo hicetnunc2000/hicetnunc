@@ -254,7 +254,7 @@ export const Header = () => {
                     </li>
                     <hr />
                     <li>
-                      <div className={styles.buttons} style={{ marginLeft: -10 }}>
+                      <div className={styles.buttons} style={{marginLeft: -6}}>
                         {false && <ButtonLanguage />}
                         <ButtonTheme />
                       </div>
