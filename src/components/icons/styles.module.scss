@@ -34,7 +34,7 @@
 }
 
 .menu:hover {
-  box-shadow: 0 0 0 2px var(--background-color), 0 0 0 3px #D1D1D1;
+  box-shadow: 0 0 0 2px var(--background-color), 0 0 0 3px var(--divider-color);
   transition: 0.1s ease;
 }
 

@@ -154,6 +154,7 @@ class HicetnuncContextProviderClass extends Component {
           light ? '#ffffff' : '#111111'
         )
         root.style.setProperty('--text-color', light ? '#000000' : '#dedede')
+        root.style.setProperty('--divider-color', light ? '#D1D1D1' : '#4F4F4F')
         root.style.setProperty(
           '--border-color',
           light ? 'rgba(0,0,0,0.1)' : 'rgba(255,255,255,0.3)'
