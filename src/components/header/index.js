@@ -1,7 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useContext, useEffect, useState, useRef } from 'react'
 import { useHistory } from 'react-router'
-import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick'
 import { motion, AnimatePresence } from 'framer-motion'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
 import { ButtonLanguage } from '../button-language'
