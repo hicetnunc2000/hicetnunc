@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState, useRef } from 'react'
 import { useHistory } from 'react-router'
+import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick'
 import { motion, AnimatePresence } from 'framer-motion'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
 import { ButtonLanguage } from '../button-language'
@@ -64,12 +65,34 @@ export const Header = () => {
 
   const [alias, setAlias] = useState();
   const [loading, setLoading] = useState(true);
+  const [isOpen, setIsOpen] = useState(false)
+  const ref = useRef()
 
   useEffect(() => {
     context.setAccount()
     context.setTheme(getItem('theme') || setItem('theme', 'dark'))
 
   }, [])
+
+  useEffect(() => {
+    const checkIfClickedOutside = e => {
+      if (!context.collapsed && ref.current && !ref.current.contains(e.target)) {
+        context.setMenu(true)
+      }
+    }
+
+    document.addEventListener("mousedown", checkIfClickedOutside)
+
+    return () => {
+      document.removeEventListener("mousedown", checkIfClickedOutside)
+    }
+  }, [isOpen])
+
+  const toggleOpen = () => {
+    context.toogleNavbar()
+    setIsOpen(!isOpen)
+  }
+
 
   // we assume user isn't connected
   let userWallet;
@@ -169,7 +192,7 @@ export const Header = () => {
             <Button onClick={() => handleRoute('/sync')}>
               <Primary>{aliasText}</Primary>
             </Button>
-            <Button onClick={context.toogleNavbar} secondary>
+            <Button onClick={toggleOpen} secondary>
               <VisuallyHidden>
                 {`${context.collapsed ? 'show' : 'hide'} menu`}
               </VisuallyHidden>
@@ -183,7 +206,7 @@ export const Header = () => {
         {!context.collapsed && (
           <motion.div className={styles.menu} {...fadeIn()}>
               <Padding>
-                <nav className={styles.content}>
+                <nav className={styles.content} ref={ref}>
                     <ul>
                       {headerButtonText === 'sync' ? <>
                       <li>
