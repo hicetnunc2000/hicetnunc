@@ -125,7 +125,7 @@
         }
 
         &:last-child {
-          padding-bottom: 120px;
+          padding-bottom: 240px;
 
           @include respond-to('desktop') {
             padding-bottom: 0;
