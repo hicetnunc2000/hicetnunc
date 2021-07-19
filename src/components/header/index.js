@@ -129,7 +129,6 @@ export const Header = () => {
 
     // is menu closed?
     if (context.collapsed) {
-      document.querySelector("body").style.overflow = 'overlay'
       headerButtonHandler = () => handleRoute('/sync', 'tz')
       // document.querySelector("body").style.overflow = 'overlay'
       if (alias) {
@@ -139,12 +138,15 @@ export const Header = () => {
       }
     } else {
       // menu is open
-      if (document.body.clientWidth < 1024) {
-        document.querySelector("body").style.overflow = 'hidden'
-      }
       headerButtonHandler = () => context.disconnect()
       headerButtonText = 'unsync'
     }
+  }
+
+  if (context.collapsed) {
+    document.querySelector("body").style.overflow = 'overlay'
+  } else if (document.body.clientWidth < 1024) {
+    document.querySelector("body").style.overflow = 'hidden'
   }
 
   //const activeAccount = await wallet.client.getActiveAccount()
