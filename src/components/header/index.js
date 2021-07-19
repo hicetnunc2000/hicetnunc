@@ -66,6 +66,7 @@ export const Header = () => {
   const [loading, setLoading] = useState(true);
   const [isOpen, setIsOpen] = useState(false)
   const ref = useRef()
+  const trigger = useRef()
 
   useEffect(() => {
     context.setAccount()
@@ -74,7 +75,11 @@ export const Header = () => {
   }, [])
 
   useEffect(() => {
+
     const checkIfClickedOutside = e => {
+      if (!context.collapsed && trigger.current?.contains(e.target)) {
+        return
+      }
       if (!context.collapsed && ref.current && !ref.current.contains(e.target)) {
         context.setMenu(true)
       }
@@ -187,7 +192,7 @@ export const Header = () => {
             </div>
           </Button>
 
-          <div className={styles.right}>
+          <div className={styles.right} ref={trigger}>
             <Button onClick={() => handleRoute('/sync')}>
               <Primary>{aliasText}</Primary>
             </Button>
