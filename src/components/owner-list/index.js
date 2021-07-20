@@ -20,7 +20,7 @@ export const OwnerList = ({ owners, creator, acc }) => {
           {quantity}&nbsp;x&nbsp;
           {
             holder.name ?
-              <Button to={`/${encodeURI(holder.name)}`}>
+              <Button to={`/tz/${holder_id}`}>
                 <Primary>{encodeURI(holder.name)}</Primary>
               </Button>
               :
