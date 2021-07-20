@@ -77,7 +77,7 @@ export const Tags = () => {
         </div>
       </InfiniteScroll>
       <BottomBanner>
-              We're currently on a migration phase. All OBJKTs listed on market before June 28th must be relisted. managed assets > v1 swaps > batch cancel > relist.
+              v2 migration: All OBJKTs listed on market before June 28th must be relisted on market due smart contract migration. managed assets > v1 swaps > batch cancel > relist.
       </BottomBanner>
     </Page>
   )

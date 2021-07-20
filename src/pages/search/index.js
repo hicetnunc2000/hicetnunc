@@ -24,6 +24,56 @@ const query_tag = `query ObjktsByTag($tag: String = "3d", $lastId: bigint = 9999
   }
 }`
 
+async function fetchTitle(title) {
+  const { errors, data } = await fetchGraphQL(`
+  query queryTitles($title: String!) {
+    hic_et_nunc_token(where: {title: {_like: "%${title}%"}}) {
+      id
+      artifact_uri
+      display_uri
+      mime
+      creator {
+        address
+        name
+      }
+    }
+  }
+  `, 'queryTitles', {
+    title : title
+  })
+
+  try {
+    return data.hic_et_nunc_token
+  } catch (e) {
+    return undefined
+  }
+}
+
+async function fetchDescription(description) {
+  const { errors, data } = await fetchGraphQL(`
+  query queryDescriptions($title: String!) {
+    hic_et_nunc_token(where: {description: {_like: "%${description}%"}}) {
+      id
+      artifact_uri
+      display_uri
+      mime
+      creator {
+        address
+        name
+      }
+    }
+  }
+  `, 'queryDescriptions', {
+    description : description
+  })
+
+  try {
+    return data.hic_et_nunc_token
+  } catch (e) {
+    return undefined
+  }
+}
+
 async function fetchSubjkts(subjkt) {
   console.log(subjkt)
   const { errors, data } = await fetchGraphQL(`
@@ -93,7 +143,7 @@ export class Search extends Component {
     select: [],
     mouse: false,
     hasMore: true,
-    offset: 0
+    offset: 20
   }
 
   /*   componentWillMount = async () => {
@@ -105,6 +155,7 @@ export class Search extends Component {
 
   search = async () => {
 
+    this.setState({ tag : [] })
     // search for alias
 
     this.setState({ subjkt: await fetchSubjkts(this.state.search) })
@@ -117,6 +168,12 @@ export class Search extends Component {
 
     // search for objkt titles/descriptions
 
+    let title = await fetchTitle(this.state.search)
+    if (await title) this.setState({ tag : [...this.state.tag, ...(await title)]})
+    let description = await fetchDescription(this.state.search)
+    if (await description) this.setState({ tag : [...this.state.tag, ...(await description)]})
+    
+    this.setState({ feed : this.state.tag.slice(0, 20)})
     // search for objkt id
 
     console.log(this.state)
@@ -155,10 +212,7 @@ export class Search extends Component {
                 return <span>{e._id.tag} </span>
               })
             } */}
-
-
             {
-
               this.state.mouse ?
                 <div
                   style={{ display: 'block' }}
@@ -170,7 +224,6 @@ export class Search extends Component {
                 :
                 null
             }
-
             {
               this.state.subjkt.length > 0 ?
                 <div>
@@ -187,14 +240,8 @@ export class Search extends Component {
                   dataLength={this.state.feed.length}
                   next={this.loadMore}
                   hasMore={this.state.hasMore}
-                  loader={
-                    <Container>
-                      <Padding>
-                        <Loading />
-                      </Padding>
-                    </Container>
-                  }
-                  endMessage={<p></p>}
+                  loader={undefined}
+                  endMessage={undefined}
                 >
                   <ResponsiveMasonry>
                     {this.state.feed.map((nft) => {
