@@ -33,7 +33,7 @@
   visibility: visible;
 }
 
-.menu:hover {
+.menu:hover, .menu:focus {
   box-shadow: 0 0 0 2px var(--background-color), 0 0 0 3px var(--divider-color);
   transition: #{$theme-duration} ease-out;
 }

@@ -10,7 +10,7 @@
   }
 }
 
-.container:hover {
+.container:hover, .container:focus {
   text-decoration: underline;
 }
 
