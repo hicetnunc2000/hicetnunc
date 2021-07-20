@@ -629,14 +629,8 @@ export default class Display extends Component {
               dataLength={this.state.items.length}
               next={this.loadMore}
               hasMore={this.state.hasMore}
-              loader={
-                <Container>
-                  <Padding>
-                    <Loading />
-                  </Padding>
-                </Container>
-              }
-              endMessage={<p></p>}
+              loader={undefined}
+              endMessage={undefined}
             >
               <ResponsiveMasonry>
                 {this.state.items.map((nft) => {
@@ -665,13 +659,9 @@ export default class Display extends Component {
               next={this.loadMore}
               hasMore={this.state.hasMore}
               loader={
-                <Container>
-                  <Padding>
-                    <Loading />
-                  </Padding>
-                </Container>
+                undefined
               }
-              endMessage={<p></p>}
+              endMessage={undefined}
             >
               <ResponsiveMasonry>
                 {this.state.items.map((nft) => {

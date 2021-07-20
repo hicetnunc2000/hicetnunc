@@ -94,7 +94,7 @@ export const Item = ({ objkt, onClick, minimal }) => {
                     objkt: data.token_id,
                     displayView: true
                   })}
-                  <div className={styles.number}>OBJKT#{objkt}</div>
+                  {/* <div className={styles.number}>OBJKT#{objkt}</div> */}
                 </div>
                 {minimal !== true && (
                   <div className={styles.info}>
