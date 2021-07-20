@@ -96,7 +96,7 @@ export const ItemInfo = ({
             <div className={styles.inline}>
               <Button
                 to={
-                  creator.name ? `/${encodeURI(creator.name)}` : `/tz/${creator.address}`
+                  `/tz/${creator.address}`
                 }
               >
                 {creator.name ? (
@@ -158,7 +158,7 @@ export const ItemInfo = ({
           <div className={styles.inline}>
             <Button
               to={
-                creator.name ? `/${encodeURI(creator.name)}` : `/tz/${creator.address}`
+                `/tz/${creator.address}`
               }
             >
               {creator.name ? (
