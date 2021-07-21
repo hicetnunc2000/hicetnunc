@@ -97,7 +97,7 @@ export const Mint = () => {
 
         setFeedback({
           visible: true,
-          message: `Maz file size (${filesize}). Limit is currently ${MINT_FILESIZE}MB`,
+          message: `Max file size (${filesize}). Limit is currently ${MINT_FILESIZE}MB`,
           progress: false,
           confirm: true,
           confirmCallback: () => {
