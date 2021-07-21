@@ -83,10 +83,11 @@ class HicetnuncContextProviderClass extends Component {
       subjktInfo: {},
       setSubjktInfo: (subjkt) => this.setState({ subjktInfo: subjkt }),
 
-
       // hdao marketplace
 
-      collect_hdao: async(from, swap_id, token_address, token_id) => {
+      cancel_hdao: undefined,
+
+      collect_hdao: async (from, swap_id, token_address, token_id) => {
 
         let hDAO = await Tezos.wallet.at(this.state.hDAO)
         let marketplace = await Tezos.wallet.at(this.state.hDAO_marketplace)
@@ -94,7 +95,7 @@ class HicetnuncContextProviderClass extends Component {
         let list = [
           {
             kind: OpKind.TRANSACTION,
-            ...hDAO.methods.update_operators([{ add_operator : { operator : this.state.hDAO_marketplace, token_id: parseFloat(0), owner : from }}]).toTransferParams({ amount: 0, mutez: true, storageLimit: 150 })
+            ...hDAO.methods.update_operators([{ add_operator: { operator: this.state.hDAO_marketplace, token_id: parseFloat(0), owner: from } }]).toTransferParams({ amount: 0, mutez: true, storageLimit: 150 })
           },
           {
             kind: OpKind.TRANSACTION,
@@ -107,20 +108,19 @@ class HicetnuncContextProviderClass extends Component {
 
       },
 
-      swap_hdao: async (from, royalties, token_per_objkt, objkt_id, creator, objkt_amount) => {
-        
+      swap_hDAO: async (from, royalties, token_per_objkt, objkt_id, creator, objkt_amount) => {
+
         let objkts = await Tezos.wallet.at(this.state.objkts)
         let marketplace = await Tezos.wallet.at(this.state.hDAO_marketplace)
-
+        console.log(from, objkt_id)
         let list = [
           {
             kind: OpKind.TRANSACTION,
             ...objkts.methods.update_operators([{ add_operator: { operator: this.state.hDAO_marketplace, token_id: parseFloat(objkt_id), owner: from } }]).toTransferParams({ amount: 0, mutez: true, storageLimit: 150 })
-              .toTransferParams({ amount: 0, mutez: true, storageLimit: 100 })
           },
           {
             kind: OpKind.TRANSACTION,
-            ...marketplace.methods.swap(this.state.hDAO_marketplace, creator, parseFloat(objkt_amount), parseFloat(objkt_id), parseFloat(royalties), parseFloat(token_id), parseFloat(token_per_objkt)).toTransferParams({ amount: 0, mutez: true, storageLimit: 250 })
+            ...marketplace.methods.swap(this.state.hDAO_marketplace, creator, parseFloat(objkt_amount), parseFloat(objkt_id), parseFloat(royalties), parseFloat(0), parseFloat(token_per_objkt)).toTransferParams({ amount: 0, mutez: true, storageLimit: 250 })
           }
         ]
 
@@ -156,7 +156,7 @@ class HicetnuncContextProviderClass extends Component {
           },
           {
             kind: OpKind.TRANSACTION,
-            ...marketplace.methods.swap(creator, parseFloat(objkt_amount), parseFloat(objkt_id), parseFloat(royalties), parseFloat(xtz_per_objkt)).toTransferParams({ amount: 0, mutez: true, storageLimit: 250 })
+            ...marketplace.methods.swap(creator, parseFloat(objkt_amount), parseFloat(objkt_id), parseFloat(royalties), parseFloat(xtz_per_objkt)).toTransferParams({ amount: 0, mutez: true, storageLimit: 270 })
           }
         ]
 
@@ -440,13 +440,13 @@ class HicetnuncContextProviderClass extends Component {
 
       cancelv1: async (swap_id) => {
         return await Tezos.wallet
-        .at(this.state.v1)
-        .then((c) =>
-          c.methods
-            .cancel_swap(parseFloat(swap_id))
-            .send({ amount: 0, storageLimit: 310 })
-        )
-        .catch((e) => e) 
+          .at(this.state.v1)
+          .then((c) =>
+            c.methods
+              .cancel_swap(parseFloat(swap_id))
+              .send({ amount: 0, storageLimit: 310 })
+          )
+          .catch((e) => e)
       },
 
       cancel: async (swap_id) => {

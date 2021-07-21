@@ -8,13 +8,15 @@ import { Button, Curate } from '../../../components/button'
 
 export const Swap = ({ total_amount, owners, creator, royalties, token_info, address }) => {
   const { id } = useParams()
-  const { swap, swapv2, acc } = useContext(HicetnuncContext)
+  const { swap, swapv2, acc, swap_hDAO } = useContext(HicetnuncContext)
   const [amount, setAmount] = useState()
   const [price, setPrice] = useState()
   const [progress, setProgress] = useState(false)
   const [message, setMessage] = useState('')
+  const [currency, setCurrency] = useState('')
 
-  console.log('token', creator.address)
+  const onChange = e => setCurrency(e.target.value)
+
   const checkPrice = (value) => {
     if (value <= 0.1) {
       setPrice(value)
@@ -33,6 +35,8 @@ export const Swap = ({ total_amount, owners, creator, royalties, token_info, add
   }
 
   const handleSubmit = () => {
+    console.log(currency)
+
     if (!amount || amount === '' || !price || price === '') {
       // simple validation for now
       alert('invalid input')
@@ -41,20 +45,37 @@ export const Swap = ({ total_amount, owners, creator, royalties, token_info, add
       setMessage('preparing swap')
       // swap is valid call API
       console.log(acc.address, royalties, parseFloat(price) * 1000000, id, creator.address, parseFloat(amount))
+      
+      if (currency === 'tezos') {
       swapv2(acc.address, royalties, parseFloat(price) * 1000000, id, creator.address, parseFloat(amount))
         //swap(parseFloat(amount), id, parseFloat(price) * 1000000)  
         .then((e) => {
           // when taquito returns a success/fail message
           setProgress(false)
           setMessage(e.description)
-
-          //history.push(`${PATH.ISSUER}/${address}`)
         })
         .catch((e) => {
           setProgress(false)
           setMessage('error')
         })
+      }
+
+      if (currency === 'hDAO') {
+        swap_hDAO(acc.address, royalties, parseFloat(price) * 1000000, id, creator.address, parseFloat(amount)).then((e) => {
+          // when taquito returns a success/fail message
+          setProgress(false)
+          setMessage(e.description)
+        })
+        .catch((e) => {
+          setProgress(false)
+          setMessage('error')
+        })
+      }
     }
+  }
+
+  const style = {
+    width: '75% !important'
   }
 
   return (
@@ -70,22 +91,24 @@ export const Swap = ({ total_amount, owners, creator, royalties, token_info, add
             onChange={(e) => setAmount(e.target.value)}
             disabled={progress}
           />
-          <div style={{ display: 'inline', width : '100%' }}>
-            <span>
-              <Input
-                type="number"
-                placeholder="price per OBJKT (in tez)"
-                style={{ width: '70%', left: 0 }}
-                min={0}
-                max={10000}
-                onChange={(e) => checkPrice(e.target.value)}
-                disabled={progress}
-              /></span>
-            <span>
-              <select>
-                <option value="tezos">tezos</option>
-                <option value="hDAO">○ hDAO</option>
-              </select></span>
+          <div style={{width : '100%', display:'flex'}}>
+              <div style={{ width: '90%'}}>
+                <Input
+                  style={style}
+                  type="number"
+                  placeholder="price per OBJKT"
+                  min={0}
+                  max={10000}
+                  onChange={(e) => checkPrice(e.target.value)}
+                  disabled={progress}
+                />
+              </div>
+              <div>
+              <select onChange={onChange} style={{float : 'right', display:'inline'}}>
+                <option value="tezos">tez</option>
+                {/* <option value="hDAO">○ hDAO</option> */}
+              </select>
+              </div>
           </div>
           <Button onClick={handleSubmit} fit disabled={progress}>
             <Curate>swap</Curate>
