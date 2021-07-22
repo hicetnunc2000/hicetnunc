@@ -17,7 +17,7 @@ export const History = (token_info) => {
         return e
     })
 
-    let history = [...trades, ...swaps].sort((a, b) => Date.parse(a.timestamp) - Date.parse(b.timestamp))
+    let history = [...trades, ...swaps].sort((a, b) => Date.parse(a.timestamp) - Date.parse(b.timestamp)).reverse()
 
     console.log(history)
     return (
