@@ -5,8 +5,7 @@ import { walletPreview } from '../../../utils/string'
 
 
 export const History = (token_info) => {
-    console.log(token_info)
-
+    
     let trades = token_info.trades.map(e => {
         e.trade = true
         return e
