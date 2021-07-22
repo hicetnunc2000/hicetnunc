@@ -7,23 +7,23 @@ import { OwnerSwaps } from '../../../components/owner-swaps'
 const _ = require('lodash')
 
 export const Collectors = ({ owners, swaps, token_holders }) => {
-  const { syncTaquito, collect, acc, getAccount, cancel } =
+  const { syncTaquito, collect, acc, getAccount, cancel, reswapv2 } =
     useContext(HicetnuncContext)
-    console.log(swaps)
-    console.log('holders', token_holders)
+  console.log(swaps)
+  console.log('holders', token_holders)
 
   // sort swaps in ascending price order
 
   swaps = _.orderBy(swaps, 'price', 'asc')
 
-/*   const filtered =
-    (owners &&
-      Object.keys(owners)
-        .filter((s) => s.startsWith('tz'))
-        .filter((s) => parseFloat(owners[s]) > 0) // removes negative owners
-        .filter((e) => e !== 'tz1burnburnburnburnburnburnburjAYjjX') // remove burn wallet
-        .map((s) => ({ amount: owners[s], wallet: s }))) ||
-    [] */
+  /*   const filtered =
+      (owners &&
+        Object.keys(owners)
+          .filter((s) => s.startsWith('tz'))
+          .filter((s) => parseFloat(owners[s]) > 0) // removes negative owners
+          .filter((e) => e !== 'tz1burnburnburnburnburnburnburjAYjjX') // remove burn wallet
+          .map((s) => ({ amount: owners[s], wallet: s }))) ||
+      [] */
 
   const handleCollect = (swap_id, price) => {
     if (acc == null) {
@@ -43,17 +43,18 @@ export const Collectors = ({ owners, swaps, token_holders }) => {
               handleCollect={handleCollect}
               acc={acc}
               cancel={cancel}
+              reswapv2={reswapv2}
             />
           </Padding>
         </Container>
       )}
 
       {/* {filtered.length === 0 ? undefined : ( */}
-        <Container>
-          <Padding>
-            <OwnerList owners={token_holders} />
-          </Padding>
-        </Container>
+      <Container>
+        <Padding>
+          <OwnerList owners={token_holders} />
+        </Padding>
+      </Container>
       {/* )} */}
     </>
   )
