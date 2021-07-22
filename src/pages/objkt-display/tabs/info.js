@@ -4,7 +4,7 @@ import { Button, Primary } from '../../../components/button'
 import { Tags } from '../../../components/tags'
 
 export const Info = ( token_info ) => {
-  const { title, description, token_tags, mime, artifact_uri } = token_info
+  const { title, description, token_tags, mime, artifact_uri, royalties, timestamp } = token_info
   console.log(token_info)
   // cloudflare isn't useful in this case. they don't allow video streaming...
   // const CLOUDFLARE = 'https://cloudflare-ipfs.com/ipfs/'
@@ -39,6 +39,8 @@ export const Info = ( token_info ) => {
       </Container>
 
       <Container>
+        <Padding>{royalties / 10}% royalties</Padding>
+        <Padding>timestamp: {timestamp}</Padding>
         <Padding>mimetype: {mime}</Padding>
         <Padding>
           <Button href={artifact_uri.replace('ipfs://', IPFS)}>
