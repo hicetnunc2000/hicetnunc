@@ -5,7 +5,7 @@ import { walletPreview } from '../../../utils/string'
 
 
 export const History = (token_info) => {
-    
+
     let trades = token_info.trades.map(e => {
         e.trade = true
         return e
@@ -39,7 +39,7 @@ export const History = (token_info) => {
                             }
                         })
                     }
-                    minted {token_info.timestamp} {parseInt(token_info.supply) === 1 ? <span>{token_info.supply} edition</span> : <span>{token_info.supply} editions</span>} {token_info.royalties / 10}% royalties
+                    minted {token_info.timestamp} {token_info.supply} ed {token_info.royalties / 10}% royalties
                 </Padding>
             </Container>
         </div>
