@@ -1,11 +1,12 @@
 // breakpoints
+$PHONE: 0px;
 $TABLET: 600px;
 $DESKTOP: 1024px;
 
 $breakpoints: (
   'desktop': $DESKTOP,
   'tablet': $TABLET,
-  'phone': 0px,
+  'phone': $PHONE,
 ) !default;
 
 @mixin respond-to($breakpoint) {

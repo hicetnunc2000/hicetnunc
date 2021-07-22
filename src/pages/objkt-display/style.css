@@ -1,7 +1,14 @@
 .objktview-zipembed.objktview {
   position: relative;
   display: block;
-  margin: auto;
-  width: calc(100vh - 285px);
-  height: calc(100vh - 285px);
+  margin: 0 auto;
+  width: 100vw;
+  height: 100vw;
+}
+
+@media (min-width: 600px) {
+  .objktview-zipembed.objktview {
+    width: calc(100vh - 250px);
+    height: calc(100vh - 250px);
+  }
 }

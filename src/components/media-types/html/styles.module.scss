@@ -2,12 +2,17 @@
 @import '../../../styles/layout.scss';
 
 .html {
-  width: calc(100vh - 285px);
-  height: calc(100vh - 285px);
   position: relative;
   display: block;
   margin: 0 auto; 
   border : none;
+  width: 100vw;
+  height: 100vw;
+
+  @include respond-to('tablet') {
+    width: calc(100vh - 250px);
+    height: calc(100vh - 250px);
+  }
 }
 
 .container {

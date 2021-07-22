@@ -2,16 +2,16 @@
 
 .vector {
   position: relative;
-  width: calc(100vh - 285px);
-  height: calc(100vh - 285px);
+  width: 100vw;
+  height: 100vw;
   display: block;
   margin: 0 auto; 
   border : none;
 
-  @include respond-to('desktop') {
-    // width: 50% !important;
+  @include respond-to('tablet') {
+    width: calc(100vh - 250px);
+    height: calc(100vh - 250px);
   }
-
 }
 
 .display {
@@ -30,6 +30,11 @@
   align-items: center;
   justify-content: center;
   pointer-events: none;
+
+  @include respond-to('tablet') {
+    width: 100vw;
+    height: 100vw;
+  }
 
   &:after {
     content: '';
