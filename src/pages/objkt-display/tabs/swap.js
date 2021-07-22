@@ -13,7 +13,7 @@ export const Swap = ({ total_amount, owners, creator, royalties, token_info, add
   const [price, setPrice] = useState()
   const [progress, setProgress] = useState(false)
   const [message, setMessage] = useState('')
-  const [currency, setCurrency] = useState('')
+  const [currency, setCurrency] = useState('tez')
 
   const onChange = e => setCurrency(e.target.value)
 
@@ -46,7 +46,7 @@ export const Swap = ({ total_amount, owners, creator, royalties, token_info, add
       // swap is valid call API
       console.log(acc.address, royalties, parseFloat(price) * 1000000, id, creator.address, parseFloat(amount))
       
-      if (currency === 'tezos') {
+      if (currency === 'tez') {
       swapv2(acc.address, royalties, parseFloat(price) * 1000000, id, creator.address, parseFloat(amount))
         //swap(parseFloat(amount), id, parseFloat(price) * 1000000)  
         .then((e) => {
