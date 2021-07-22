@@ -19,7 +19,6 @@ export const History = (token_info) => {
 
     let history = [...trades, ...swaps].sort((a, b) => Date.parse(a.timestamp) - Date.parse(b.timestamp)).reverse()
 
-    console.log(history)
     return (
         <div>
             <Container>
