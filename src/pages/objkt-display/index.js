@@ -19,7 +19,7 @@ const axios = require('axios')
 const TABS = [
   { title: 'info', component: Info }, // public tab
   { title: 'collectors', component: Collectors }, // public tab
-  //{ title: 'history', component: History },
+  { title: 'history', component: History },
   { title: 'swap', component: Swap, private: true }, // private tab (users only see if they are the creators or own a copy)
   { title: 'burn', component: Burn, private: true }, // private tab (users only see if they are the creators or own a copy)
 ]
@@ -42,9 +42,11 @@ title
 supply
 royalties
 swaps {
+  amount
   amount_left
   id
   price
+  timestamp
   creator {
     address
     name
