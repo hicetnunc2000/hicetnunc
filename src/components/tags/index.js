@@ -9,7 +9,7 @@ export const Tags = ({ token_tags, preview }) => {
     return (
       <div className={styles.container}>
         {token_tags
-          .filter((e) => e.tag.tag !== '')
+          .filter((e) => e !== '')
           .map((tag, index) => {
             return (
               <Button
