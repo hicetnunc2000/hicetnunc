@@ -39,8 +39,8 @@ export const Info = ( token_info ) => {
       </Container>
 
       <Container>
-        <Padding>{royalties / 10}% royalties</Padding>
-        <Padding>timestamp: {timestamp}</Padding>
+{/*         <Padding>{royalties / 10}% royalties</Padding>
+        <Padding>timestamp: {timestamp}</Padding> */}
         <Padding>mimetype: {mime}</Padding>
         <Padding>
           <Button href={artifact_uri.replace('ipfs://', IPFS)}>
