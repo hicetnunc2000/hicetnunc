@@ -1,9 +1,15 @@
+/* eslint-disable */
 import React, { createContext, Component } from 'react'
 import { withRouter } from 'react-router'
-import { BeaconWallet } from '@taquito/beacon-wallet'
-import { TezosToolkit, MichelsonMap } from '@taquito/taquito'
+import {
+  BeaconWallet,
+  BeaconWalletNotInitialized,
+} from '@taquito/beacon-wallet'
+import { TezosToolkit, OpKind, MichelsonMap } from '@taquito/taquito'
 import { setItem } from '../utils/storage'
 import { KeyStoreUtils } from 'conseiljs-softsigner'
+import { PermissionScope } from '@airgap/beacon-sdk'
+import { UnitValue } from '@taquito/michelson-encoder'
 
 const { NetworkType } = require('@airgap/beacon-sdk')
 var ls = require('local-storage')
@@ -13,13 +19,49 @@ const eztz = require('eztz-lib')
 export const HicetnuncContext = createContext()
 
 // This should be moved to a service so it is only done once on page load
-//const Tezos = new TezosToolkit('https://mainnet-tezos.giganode.io')
-const Tezos = new TezosToolkit('https://mainnet.smartpy.io')
+const Tezos = new TezosToolkit('https://mainnet-tezos.giganode.io')
+//const Tezos = new TezosToolkit('https://mainnet.smartpy.io')
+
+// storage fee adjustment
+
+/* export class PatchedBeaconWallet extends BeaconWallet {
+  async sendOperations(params) {
+    const account = await this.client.getActiveAccount();
+    if (!account) {
+      throw new BeaconWalletNotInitialized();
+    }
+    const permissions = account.scopes;
+    this.validateRequiredScopesOrFail(permissions, [PermissionScope.OPERATION_REQUEST]);
+
+    const { transactionHash } = await this.client.requestOperation({
+      operationDetails: params.map(op => ({
+        ...modifyFeeAndLimit(op),
+      })),
+    });
+    return transactionHash;
+  }
+}
+
+function modifyFeeAndLimit(op) {
+  const { fee, gas_limit, storage_limit, ...rest } = op;
+  
+  if (op.parameters && (op.parameters.entrypoint === "swap") || (op.parameters.entrypoint === "mint_OBJKT") || (op.parameters.entrypoint === "collect")) {
+    rest.storage_limit = 310
+  }
+  return rest;
+}
+
+
+const wallet = new PatchedBeaconWallet({
+  name: 'hicetnunc.xyz',
+  preferredNetwork: 'mainnet',
+}) */
 
 const wallet = new BeaconWallet({
   name: 'hicetnunc.xyz',
   preferredNetwork: 'mainnet',
 })
+
 Tezos.setWalletProvider(wallet)
 
 class HicetnuncContextProviderClass extends Component {
@@ -31,7 +73,114 @@ class HicetnuncContextProviderClass extends Component {
 
       hDAO: 'KT1AFA2mwNUMNd4SsujE1YYp29vd8BZejyKW',
       subjkt: 'KT1My1wDZHDGweCrJnQJi3wcFaS67iksirvj',
-      objkt: 'KT1Hkg5qeNhfwpKW4fXvq7HGZB9z2EnmCCA9',
+      v1: 'KT1Hkg5qeNhfwpKW4fXvq7HGZB9z2EnmCCA9',
+      unregistry: 'KT18xby6bb1ur1dKe7i6YVrBaksP4AgtuLES',
+      v2: 'KT1HbQepzV1nVGg8QVznG7z4RcHseD5kwqBn',
+      objkts: 'KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton',
+      hDAO_curation: 'KT1TybhR7XraG75JFYKSrh7KnxukMBT5dor6',
+      hDAO_marketplace: 'KT1QPvv7sWVaT9PcPiC4fN9BgfX8NB2d5WzL',
+
+      subjktInfo: {},
+      setSubjktInfo: (subjkt) => this.setState({ subjktInfo: subjkt }),
+
+      // hdao marketplace
+
+      cancel_hdao: undefined,
+
+      collect_hdao: async (from, swap_id, token_address, token_id) => {
+
+        let hDAO = await Tezos.wallet.at(this.state.hDAO)
+        let marketplace = await Tezos.wallet.at(this.state.hDAO_marketplace)
+
+        let list = [
+          {
+            kind: OpKind.TRANSACTION,
+            ...hDAO.methods.update_operators([{ add_operator: { operator: this.state.hDAO_marketplace, token_id: parseFloat(0), owner: from } }]).toTransferParams({ amount: 0, mutez: true, storageLimit: 150 })
+          },
+          {
+            kind: OpKind.TRANSACTION,
+            ...marketplace.methods.collect(swap_id).toTransferParams({ amount: 0, mutez: true, storageLimit: 250 })
+          }
+        ]
+
+        let batch = await Tezos.wallet.batch(list);
+        return await batch.send()
+
+      },
+
+      swap_hDAO: async (from, royalties, token_per_objkt, objkt_id, creator, objkt_amount) => {
+
+        let objkts = await Tezos.wallet.at(this.state.objkts)
+        let marketplace = await Tezos.wallet.at(this.state.hDAO_marketplace)
+        console.log(from, objkt_id)
+        let list = [
+          {
+            kind: OpKind.TRANSACTION,
+            ...objkts.methods.update_operators([{ add_operator: { operator: this.state.hDAO_marketplace, token_id: parseFloat(objkt_id), owner: from } }]).toTransferParams({ amount: 0, mutez: true, storageLimit: 150 })
+          },
+          {
+            kind: OpKind.TRANSACTION,
+            ...marketplace.methods.swap(this.state.hDAO_marketplace, creator, parseFloat(objkt_amount), parseFloat(objkt_id), parseFloat(royalties), parseFloat(0), parseFloat(token_per_objkt)).toTransferParams({ amount: 0, mutez: true, storageLimit: 250 })
+          }
+        ]
+
+        let batch = await Tezos.wallet.batch(list);
+        return await batch.send()
+
+      },
+      // marketplace v2
+
+      collectv2: async (swap_id, xtz_amount) => {
+        return await Tezos.wallet
+          .at(this.state.v2)
+          .then((c) =>
+            c.methods
+              .collect(parseFloat(swap_id))
+              .send({
+                amount: parseFloat(xtz_amount),
+                mutez: true,
+                storageLimit: 310,
+              })
+          )
+      },
+
+      swapv2: async (from, royalties, xtz_per_objkt, objkt_id, creator, objkt_amount) => {
+        let objkts = await Tezos.wallet.at(this.state.objkts)
+        let marketplace = await Tezos.wallet.at(this.state.v2)
+
+        let list = [
+          {
+            kind: OpKind.TRANSACTION,
+            ...objkts.methods.update_operators([{ add_operator: { operator: this.state.v2, token_id: parseFloat(objkt_id), owner: from } }])
+              .toTransferParams({ amount: 0, mutez: true, storageLimit: 100 })
+          },
+          {
+            kind: OpKind.TRANSACTION,
+            ...marketplace.methods.swap(creator, parseFloat(objkt_amount), parseFloat(objkt_id), parseFloat(royalties), parseFloat(xtz_per_objkt)).toTransferParams({ amount: 0, mutez: true, storageLimit: 270 })
+          }
+        ]
+
+        let batch = await Tezos.wallet.batch(list);
+        return await batch.send()
+      },
+
+      batch_cancel: async (arr) => {
+        console.log(arr)
+        let v1 = await Tezos.wallet.at(this.state.v1)
+
+        /*         const batch = await arr
+                  .map((e) => parseInt(e.id))
+                  .reduce((batch, id) => {
+                    return { kind : OpKind.TRANSACTION, ...batch.withContractCall(v1.methods.cancel_swap(id)).toTransferParams({ amount: 0, mutez: true, storageLimit: 150 }) }
+                  }, Tezos.wallet.batch()) */
+        const batch = await arr
+          .map((e) => parseInt(e.id))
+          .reduce((batch, id) => {
+            return batch.withContractCall(v1.methods.cancel_swap(id))
+          }, Tezos.wallet.batch())
+        console.log(arr)
+        return await batch.send()
+      },
 
       // fullscreen. DO NOT CHANGE!
       fullscreen: false,
@@ -156,6 +305,9 @@ class HicetnuncContextProviderClass extends Component {
 
       mint: async (tz, amount, cid, royalties) => {
         // show feedback component with followind message and progress indicator
+
+        console.log(cid)
+
         this.state.setFeedback({
           visible: true,
           message: 'preparing OBJKT',
@@ -165,7 +317,7 @@ class HicetnuncContextProviderClass extends Component {
 
         // call mint method
         await Tezos.wallet
-          .at(this.state.objkt)
+          .at(this.state.v1)
           .then((c) =>
             c.methods
               .mint_OBJKT(
@@ -180,7 +332,7 @@ class HicetnuncContextProviderClass extends Component {
                   ),
                 parseFloat(royalties) * 10
               )
-              .send({ amount: 0 })
+              .send({ amount: 0, storageLimit: 310 })
           )
           .then((op) =>
             op.confirmation(1).then(() => {
@@ -217,13 +369,17 @@ class HicetnuncContextProviderClass extends Component {
           })
       },
 
-      collect: async (objkt_amount, swap_id, amount) => {
+      collect: async (swap_id, amount) => {
         return await Tezos.wallet
-          .at(this.state.objkt)
+          .at(this.state.v2)
           .then((c) =>
             c.methods
-              .collect(parseFloat(objkt_amount), parseFloat(swap_id))
-              .send({ amount: parseFloat(amount), mutez: true })
+              .collect(parseFloat(swap_id))
+              .send({
+                amount: parseFloat(amount),
+                mutez: true,
+                storageLimit: 350,
+              })
           )
           .catch((e) => e)
       },
@@ -231,7 +387,7 @@ class HicetnuncContextProviderClass extends Component {
       swap: async (objkt_amount, objkt_id, xtz_per_objkt) => {
         console.log(objkt_amount)
         return await Tezos.wallet
-          .at(this.state.objkt)
+          .at(this.state.v1)
           .then((c) =>
             c.methods
               .swap(
@@ -239,7 +395,7 @@ class HicetnuncContextProviderClass extends Component {
                 parseFloat(objkt_id),
                 parseFloat(xtz_per_objkt)
               )
-              .send({ amount: 0 })
+              .send({ amount: 0, storageLimit: 310 })
           )
           .catch((e) => e)
       },
@@ -252,7 +408,7 @@ class HicetnuncContextProviderClass extends Component {
           })
           .then((amt) => {
             Tezos.wallet
-              .at(this.state.objkt)
+              .at(this.state.v1)
               .then((c) =>
                 c.methods
                   .curate(
@@ -267,9 +423,9 @@ class HicetnuncContextProviderClass extends Component {
       },
 
       claim_hDAO: async (hDAO_amount, objkt_id) => {
-        console.log('claiming', hDAO_amount, objkt_id)
+        // console.log('claiming', hDAO_amount, objkt_id)
         await Tezos.wallet
-          .at('KT1TybhR7XraG75JFYKSrh7KnxukMBT5dor6')
+          .at(this.state.hDAO_curation)
           .then((c) => {
             c.methods
               .claim_hDAO(parseInt(hDAO_amount), parseInt(objkt_id))
@@ -279,10 +435,10 @@ class HicetnuncContextProviderClass extends Component {
 
       burn: async (objkt_id, amount) => {
         var tz = await wallet.client.getActiveAccount()
-        console.log('trying to burn', parseInt(amount))
+        // console.log('trying to burn', parseInt(amount))
 
         await Tezos.wallet
-          .at('KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton')
+          .at(this.state.objkts)
           .then(async (c) =>
             c.methods
               .transfer([
@@ -301,20 +457,34 @@ class HicetnuncContextProviderClass extends Component {
           )
       },
 
-      cancel: async (swap_id) => {
+      cancelv1: async (swap_id) => {
         return await Tezos.wallet
-          .at(this.state.objkt)
+          .at(this.state.v1)
           .then((c) =>
-            c.methods.cancel_swap(parseFloat(swap_id)).send({ amount: 0 })
+            c.methods
+              .cancel_swap(parseFloat(swap_id))
+              .send({ amount: 0, storageLimit: 310 })
+          )
+          .catch((e) => e)
+      },
+
+      cancel: async (swap_id) => {
+        console.log(swap_id)
+        return await Tezos.wallet
+          .at(this.state.v2)
+          .then((c) =>
+            c.methods
+              .cancel_swap(parseFloat(swap_id))
+              .send({ amount: 0, storageLimit: 310 })
           )
           .catch((e) => e)
       },
 
       signStr: async (payload) => {
         const signedPayload = await wallet.client.requestSignPayload(payload)
-        console.log(signedPayload, payload)
+        // console.log(signedPayload, payload)
         const signature = signedPayload
-        console.log(signature.signature, payload.payload, await wallet.getPKH())
+        // console.log(signature.signature, payload.payload, await wallet.getPKH())
         /*         const r = await KeyStoreUtils.checkSignature(
           signature.signature,
           payload.payload,
@@ -328,10 +498,11 @@ class HicetnuncContextProviderClass extends Component {
             `https://tezos-prod.cryptonomic-infra.tech/chains/main/blocks/head/context/contracts/${await wallet.getPKH()}/manager_key`
           )
         )
-        console.log(r)
+        // console.log(r)
       },
 
       registry: async (alias, metadata) => {
+        console.log(metadata)
         return await Tezos.wallet.at(this.state.subjkt).then((c) =>
           c.methods
             .registry(
@@ -370,6 +541,12 @@ class HicetnuncContextProviderClass extends Component {
         )
       },
 
+      unregister: async () => {
+        return await Tezos.wallet.at(this.state.unregistry).then((c) => {
+          c.methods.sign(undefined).send({ amount: 0 })
+        })
+      },
+
       load: false,
       loading: () => this.setState({ load: !this.state.load }),
       /* taquito */
@@ -399,7 +576,7 @@ class HicetnuncContextProviderClass extends Component {
         // This piece of code should be called on startup to "load" the current address from the user
         // If the activeAccount is present, no "permission request" is required again, unless the user "disconnects" first.
         const activeAccount = await wallet.client.getActiveAccount()
-        console.log(activeAccount)
+        // console.log(activeAccount)
         if (activeAccount === undefined) {
           console.log('permissions')
           await wallet.requestPermissions({ network })
@@ -412,11 +589,11 @@ class HicetnuncContextProviderClass extends Component {
           wallet,
         })
         this.state.setAuth(await wallet.getPKH())
-        console.log(this.state)
+        // console.log(this.state)
       },
 
       disconnect: async () => {
-        console.log('disconnect wallet')
+        // console.log('disconnect wallet')
         // This will clear the active account and the next "syncTaquito" will trigger a new sync
         await wallet.client.clearActiveAccount()
         this.setState({
@@ -434,7 +611,7 @@ class HicetnuncContextProviderClass extends Component {
         op.destination = op.to
         op.kind = 'transaction'
         delete op.to
-        console.log(obj.result)
+        // console.log(obj.result)
 
         this.state.client.requestOperation({
           operationDetails: [obj.result],
@@ -471,7 +648,7 @@ class HicetnuncContextProviderClass extends Component {
               parseFloat(res.data[res.data.length - 1].balance / 1000000)
             )
           })
-          .catch((e) => console.log('balance error', e))
+          .catch((e) => console.error('balance error', e))
       },
 
       collapsed: true,

@@ -37,7 +37,11 @@ export const ItemModal = ({ info }) => {
     <div className={styles.container}>
       <div className={styles.image}>
         {renderMediaType({
-          ...info,
+          mimeType: info.mimeType,
+          artifactUri: info.token_info.artifactUri,
+          displayUri: info.token_info.displayUri,
+          creator: info.token_info.creators[0],
+          objkt: info.token_id,
           interactive: true,
         })}
       </div>

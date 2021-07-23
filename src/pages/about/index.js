@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Page, Container, Padding } from '../../components/layout'
 import { Button, Primary } from '../../components/button'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
+import { BottomBanner } from '../../components/bottom-banner'
 import { getLanguage } from '../../constants'
 import styles from './styles.module.scss'
 
@@ -93,10 +94,9 @@ export class About extends Component {
         </Container>
         <Container>
           <Padding>
-            <p>Community tools:</p>&nbsp;
-            <Button href="https://projects.stroep.nl/hicetnunc">
+            <Button href="https://github.com/hicetnunc2000/hicetnunc/wiki/Tools-made-by-the-community">
               <Primary>
-                <strong>hicetnunc discovery</strong>
+                <strong>Community tools</strong>
               </Primary>
             </Button>
             {false && (
@@ -121,6 +121,9 @@ export class About extends Component {
             </div>
           </Padding>
         </Container>
+{/*         <BottomBanner>
+        Collecting has been temporarily disabled. Follow <a href="https://twitter.com/hicetnunc2000" target="_blank">@hicetnunc2000</a> or <a href="https://discord.gg/jKNy6PynPK" target="_blank">join the discord</a> for updates.
+        </BottomBanner> */}
       </Page>
     )
   }

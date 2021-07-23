@@ -11,8 +11,13 @@
 
   .info {
     display: flex;
+    flex-direction: column;
     align-items: flex-start;
     margin-top: 20px;
+  }
+
+  .description {
+    white-space: pre-wrap;
   }
 
   @include respond-to('tablet') {
@@ -23,6 +28,13 @@
       width: 100%;
     }
 
+    .media {
+      min-height: 70vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
     .info {
       display: flex;
       flex-direction: column;
@@ -31,6 +43,12 @@
       .title,
       .description {
         margin-bottom: 20px;
+      }
+
+      .title {
+        font-family: 'basier_circle_monoregular';
+        font-weight: bold;
+        font-size: 20px;
       }
     }
   }
