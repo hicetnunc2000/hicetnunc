@@ -152,6 +152,7 @@ export function injectCSPMetaTagIntoHTML(html) {
       'unsafe-inline'
       data:
       blob:
+      https://services.tzkt.io
       https://ipfs.infura.io
       https://cloudflare-ipfs.com/
       https://ipfs.io/
@@ -179,6 +180,7 @@ export function injectCSPMetaTagIntoHTML(html) {
       https://api.etherscan.io
       https://api.thegraph.com
       https://*.tzkt.io
+      https://api.hicdex.com
       https://api.tzstats.com
       https://*.wikidata.org
       https://*.coinmarketcap.com

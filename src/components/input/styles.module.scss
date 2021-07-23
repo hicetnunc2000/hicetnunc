@@ -1,33 +1,38 @@
 @import '../../styles/variables.scss';
 
 .container {
+  position: relative;
   width: 100%;
-  margin-bottom: 15px;
-  // border: 1px dashed red;
+  margin-bottom: 12px;
 
   label {
+    display: block;
     position: relative;
     width: 100%;
 
     p {
       position: absolute;
-      top: 0;
+      top: 6px;
       left: 0;
       color: var(--text-color);
       opacity: 0.7;
       transition: all 0.2s;
       pointer-events: none;
+      border: 1px;
     }
 
+    textarea,
     input {
       background-color: transparent;
       width: 100%;
-      padding: 6px 0;
+      padding: 5px 0;
       border: none;
       color: var(--text-color);
       transition: color #{$theme-duration} ease-out;
       letter-spacing: 0.015em;
       // border-bottom: 1px solid var(--text-color);
+      // border: 1px dashed red;
+      margin-bottom: 10px;
 
       &::placeholder {
         color: var(--text-color);
@@ -41,7 +46,7 @@
       &:focus + p,
       &:not(:placeholder-shown) + p {
         opacity: 0.4;
-        transform: translateY(-20px);
+        transform: translateY(-25px);
       }
 
       &:focus::placeholder {

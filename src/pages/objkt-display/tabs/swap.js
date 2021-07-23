@@ -5,16 +5,17 @@ import { Container, Padding } from '../../../components/layout'
 import { Loading } from '../../../components/loading'
 import { Input } from '../../../components/input'
 import { Button, Curate } from '../../../components/button'
-import { getTotalSales } from '../../../utils/sanitise'
 
-export const Swap = ({ total_amount, owners, token_info, address }) => {
+export const Swap = ({ total_amount, owners, creator, royalties, token_info, address }) => {
   const { id } = useParams()
-  const { swap } = useContext(HicetnuncContext)
+  const { swap, swapv2, acc, swap_hDAO } = useContext(HicetnuncContext)
   const [amount, setAmount] = useState()
   const [price, setPrice] = useState()
-  const sales = getTotalSales({ owners, creators: token_info.creators })
   const [progress, setProgress] = useState(false)
   const [message, setMessage] = useState('')
+  const [currency, setCurrency] = useState('tez')
+
+  const onChange = e => setCurrency(e.target.value)
 
   const checkPrice = (value) => {
     if (value <= 0.1) {
@@ -34,6 +35,8 @@ export const Swap = ({ total_amount, owners, token_info, address }) => {
   }
 
   const handleSubmit = () => {
+    console.log(currency)
+
     if (!amount || amount === '' || !price || price === '') {
       // simple validation for now
       alert('invalid input')
@@ -41,19 +44,38 @@ export const Swap = ({ total_amount, owners, token_info, address }) => {
       setProgress(true)
       setMessage('preparing swap')
       // swap is valid call API
-      swap(parseFloat(amount), id, parseFloat(price) * 1000000)
+      console.log(acc.address, royalties, parseFloat(price) * 1000000, id, creator.address, parseFloat(amount))
+      
+      if (currency === 'tez') {
+      swapv2(acc.address, royalties, parseFloat(price) * 1000000, id, creator.address, parseFloat(amount))
+        //swap(parseFloat(amount), id, parseFloat(price) * 1000000)  
         .then((e) => {
           // when taquito returns a success/fail message
           setProgress(false)
           setMessage(e.description)
-
-          //history.push(`${PATH.ISSUER}/${address}`)
         })
         .catch((e) => {
           setProgress(false)
           setMessage('error')
         })
+      }
+
+      if (currency === 'hDAO') {
+        swap_hDAO(acc.address, royalties, parseFloat(price) * 1000000, id, creator.address, parseFloat(amount)).then((e) => {
+          // when taquito returns a success/fail message
+          setProgress(false)
+          setMessage(e.description)
+        })
+        .catch((e) => {
+          setProgress(false)
+          setMessage('error')
+        })
+      }
     }
+  }
+
+  const style = {
+    width: '75% !important'
   }
 
   return (
@@ -65,18 +87,29 @@ export const Swap = ({ total_amount, owners, token_info, address }) => {
             placeholder="OBJKT amount"
             min={1}
             defaultValue={amount}
-            max={total_amount - sales}
+            /* max={total_amount - sales} */
             onChange={(e) => setAmount(e.target.value)}
             disabled={progress}
           />
-          <Input
-            type="number"
-            placeholder="price per OBJKT (in tez)"
-            min={0}
-            max={10000}
-            onChange={(e) => checkPrice(e.target.value)}
-            disabled={progress}
-          />
+          <div style={{width : '100%', display:'flex'}}>
+              <div style={{ width: '90%'}}>
+                <Input
+                  style={style}
+                  type="number"
+                  placeholder="price per OBJKT"
+                  min={0}
+                  max={10000}
+                  onChange={(e) => checkPrice(e.target.value)}
+                  disabled={progress}
+                />
+              </div>
+              <div>
+              <select onChange={onChange} style={{float : 'right', display:'inline'}}>
+                <option value="tezos">tez</option>
+                {/* <option value="hDAO">○ hDAO</option> */}
+              </select>
+              </div>
+          </div>
           <Button onClick={handleSubmit} fit disabled={progress}>
             <Curate>swap</Curate>
           </Button>

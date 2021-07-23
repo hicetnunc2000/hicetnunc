@@ -48,11 +48,13 @@ export const MIMETYPE = {
   MP3: 'audio/mpeg',
   OGA: 'audio/ogg',
   WAV: 'audio/wav',
+  XWAV: 'audio/x-wav',
   FLAC: 'audio/flac',
   PDF: 'application/pdf',
   ZIP: 'application/zip',
   ZIP1: 'application/x-zip-compressed',
   ZIP2: 'multipart/x-zip',
+  MD : 'text/markdown'
 }
 
 export const IPFS_DIRECTORY_MIMETYPE = 'application/x-directory'
@@ -82,5 +84,5 @@ export const MIN_ROYALTIES = 10 // Limited by contract
 
 export const MAX_ROYALTIES = 25 // Limited by contract
 
-export const IPFS_DISPLAY_URI_BLACKCIRCLE =
+export const IPFS_DEFAULT_THUMBNAIL_URI =
   'ipfs://QmNrhZHUaEqxhyLfqoq1mtHSipkWHeT31LNHb1QEbDHgnc'

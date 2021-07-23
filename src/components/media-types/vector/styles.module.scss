@@ -1,5 +1,26 @@
 @import '../../../styles/layout.scss';
 
+.vector {
+  position: relative;
+  width: calc(100vh - 285px);
+  height: calc(100vh - 285px);
+  display: block;
+  margin: 0 auto; 
+  border : none;
+
+  @include respond-to('desktop') {
+    // width: 50% !important;
+  }
+
+}
+
+.display {
+  width : 100%;
+  display: block;
+  margin: 0 auto; 
+  border : none;
+}
+
 .container {
   position: relative;
   display: block;

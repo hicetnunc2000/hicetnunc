@@ -24,6 +24,7 @@ function newPath(path) {
 }
 
 function avatar(address) {
+  console.log('trim', address)
   const decoded = base58.decode(address.trim().substr(3))
   const hex = decoded.toString('hex')
   const check = hex.split('').reduce((sum, x) => sum + parseInt(x, 16), 0)

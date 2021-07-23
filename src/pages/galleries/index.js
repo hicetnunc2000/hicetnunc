@@ -5,6 +5,7 @@ import { GetOBJKT } from '../../data/api'
 import { renderMediaType } from '../../components/media-types'
 import { PATH } from '../../constants'
 import { ResponsiveMasonry } from '../../components/responsive-masonry'
+import { BottomBanner } from '../../components/bottom-banner'
 import styles from './styles.module.scss'
 
 const sortByThumbnailTokenId = (a, b) => {
@@ -40,6 +41,7 @@ export const Galleries = () => {
       document.body.style = {}
     }
   }, [])
+
   return (
     <Page title="Galleries">
       <Container xlarge>
@@ -47,23 +49,19 @@ export const Galleries = () => {
           <ResponsiveMasonry>
             {data.map((e) => {
               const { token_info } = e
-              const { mimeType, uri } = token_info.formats[0]
-
               return (
                 <Button key={e.uid} to={`${PATH.GALLERY}/${e.uid}`}>
                   <div className={styles.item}>
-                    <div
-                      style={{ pointerEvents: 'none' }}
-                      className={styles.image}
-                    >
-                      {renderMediaType({
-                        uri: uri.split('//')[1],
-                        mimeType,
-                        metadata: e,
-                        interactive: false,
-                      })}
-                      <div className={styles.number}>{e.name}</div>
-                    </div>
+                    {renderMediaType({
+                      mimeType: token_info.formats[0].mimeType,
+                      artifactUri: token_info.artifactUri,
+                      displayUri: token_info.displayUri,
+                      creator: token_info.creators[0],
+                      objkt: e.token_id,
+                      interactive: false,
+                      displayView: true
+                    })}
+                    <div className={styles.number}>{e.name}</div>
                   </div>
                 </Button>
               )
@@ -71,6 +69,9 @@ export const Galleries = () => {
           </ResponsiveMasonry>
         </Padding>
       </Container>
+{/*       <BottomBanner>
+        Collecting has been temporarily disabled. Follow <a href="https://twitter.com/hicetnunc2000" target="_blank">@hicetnunc2000</a> or <a href="https://discord.gg/jKNy6PynPK" target="_blank">join the discord</a> for updates.
+      </BottomBanner> */}
     </Page>
   )
 }

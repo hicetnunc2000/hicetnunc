@@ -2,28 +2,40 @@ import React, { Component } from 'react'
 import { Button, Primary } from '../../components/button'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
 import { Page, Container, Padding } from '../../components/layout'
+import { BottomBanner } from '../../components/bottom-banner'
 import { Loading } from '../../components/loading'
 import { renderMediaType } from '../../components/media-types'
 import { Identicon } from '../../components/identicons'
 import { walletPreview } from '../../utils/string'
-import { SanitiseOBJKT } from '../../utils/sanitise'
+import { SanitiseOBJKT, SanitizeDipDup } from '../../utils/sanitise'
 import { PATH } from '../../constants'
 import { VisuallyHidden } from '../../components/visually-hidden'
 import { GetUserMetadata } from '../../data/api'
 import { ResponsiveMasonry } from '../../components/responsive-masonry'
+import InfiniteScroll from 'react-infinite-scroll-component'
 import styles from './styles.module.scss'
 
 const axios = require('axios')
 const fetch = require('node-fetch')
 
 const sortByTokenId = (a, b) => {
-  return b.token_id - a.token_id
+  return b.id - a.id
 }
-const query = `
-  query creatorGallery($address: String!) {
-    hic_et_nunc_token(where: {creator: {address: {_eq: $address}}}) {
+
+const getRestrictedAddresses = async () =>
+  await axios
+    .get(
+      'https://raw.githubusercontent.com/hicetnunc2000/hicetnunc/main/filters/w.json'
+    )
+    .then((res) => res.data)
+
+const query_collection = `
+query collectorGallery($address: String!) {
+  hic_et_nunc_token_holder(where: {holder_id: {_eq: $address}, token: {creator: {address: {_neq: $address}}}, quantity: {_gt: "0"}}, order_by: {token_id: desc}) {
+    token {
       id
       artifact_uri
+      display_uri
       thumbnail_uri
       timestamp
       mime
@@ -35,34 +47,151 @@ const query = `
           tag
         }
       }
+      creator {
+        address
+      }
     }
   }
-`;
+}
+`
 
 async function fetchGraphQL(operationsDoc, operationName, variables) {
-  const result = await fetch(
-    "https://api.hicdex.com/v1/graphql",
-    {
-      method: "POST",
-      body: JSON.stringify({
-        query: operationsDoc,
-        variables: variables,
-        operationName: operationName
-      })
-    }
-  );
+  let result = await fetch('https://api.hicdex.com/v1/graphql', {
+    method: 'POST',
+    body: JSON.stringify({
+      query: operationsDoc,
+      variables: variables,
+      operationName: operationName,
+    }),
+  })
   return await result.json()
 }
 
-async function doFetch(addr) {
-  const { errors, data } = await fetchGraphQL(query, "creatorGallery", { "address": addr });
+async function fetchCollection(addr) {
+  const { errors, data } = await fetchGraphQL(
+    query_collection,
+    'collectorGallery',
+    { address: addr }
+  )
   if (errors) {
-    console.error(errors);
+    console.error(errors)
   }
-  const result = data.hic_et_nunc_swap
+  const result = data.hic_et_nunc_token_holder
   console.log({ result })
   return result
 }
+
+const query_creations = `
+query creatorGallery($address: String!) {
+  hic_et_nunc_token(where: {creator: {address: {_eq: $address}}, supply: {_gt: 0}}, order_by: {id: desc}) {
+    id
+    artifact_uri
+    display_uri
+    thumbnail_uri
+    timestamp
+    mime
+    title
+    description
+    supply
+    token_tags {
+      tag {
+        tag
+      }
+    }
+  }
+}
+`
+
+const query_subjkts = `
+query subjktsQuery($subjkt: String!) {
+  hic_et_nunc_holder(where: { name: {_eq: $subjkt}}) {
+    address
+    name
+    hdao_balance
+    metadata
+  }
+}
+`
+
+const query_tz = `
+query addressQuery($address: String!) {
+  hic_et_nunc_holder(where: { address: {_eq: $address}}) {
+    address
+    name
+    hdao_balance
+    metadata
+  }
+}
+`
+
+const query_v1_swaps = `
+query querySwaps($address: String!) {
+  hic_et_nunc_swap(where: {creator_id: {_eq: $address}, status: {_eq: "0"}}) {
+    token {
+      id
+      title
+    }
+    amount
+    amount_left
+    price
+    id
+    token_id
+    contract_version
+  }
+}
+`
+async function fetchSwaps(address) {
+
+  const { errors, data } = await fetchGraphQL(query_v1_swaps, 'querySwaps', {
+    address: address
+  })
+  if (errors) {
+    console.error(errors)
+  }
+  const result = data.hic_et_nunc_swap
+  console.log(result)
+  return result
+
+}
+
+async function fetchSubjkts(subjkt) {
+  const { errors, data } = await fetchGraphQL(query_subjkts, 'subjktsQuery', {
+    subjkt: subjkt,
+  })
+  if (errors) {
+    console.error(errors)
+  }
+  const result = data.hic_et_nunc_holder
+  /* console.log({ result }) */
+  return result
+}
+
+async function fetchCreations(addr) {
+  const { errors, data } = await fetchGraphQL(
+    query_creations,
+    'creatorGallery',
+    { address: addr }
+  )
+  if (errors) {
+    console.error(errors)
+  }
+  const result = data.hic_et_nunc_token
+  /* console.log({ result }) */
+  return result
+}
+
+async function fetchTz(addr) {
+  const { errors, data } = await fetchGraphQL(query_tz, 'addressQuery', {
+    address: addr,
+  })
+  if (errors) {
+    console.error(errors)
+  }
+  const result = data.hic_et_nunc_holder
+  // console.log({ result })
+  return result
+}
+
 export default class Display extends Component {
   static contextType = HicetnuncContext
 
@@ -75,11 +204,14 @@ export default class Display extends Component {
     subjkt: '',
     render: false,
     loading: true,
+    hasMore: true,
     results: [],
     objkts: [],
     creations: [],
     collection: [],
     market: [],
+    items: [],
+    offset: 0,
     creationsState: true,
     collectionState: false,
     marketState: false,
@@ -87,7 +219,9 @@ export default class Display extends Component {
   }
 
   componentWillMount = async () => {
+
     const id = window.location.pathname.split('/')[1]
+    console.log(window.location.pathname.split('/'))
     if (id === 'tz') {
       const wallet = window.location.pathname.split('/')[2]
       this.setState({
@@ -96,6 +230,55 @@ export default class Display extends Component {
       })
 
       await GetUserMetadata(wallet).then((data) => {
+        const {
+          alias,
+          description,
+          site,
+          telegram,
+          twitter,
+          github,
+          reddit,
+          instagram,
+          logo,
+          tzprofile,
+        } = data.data
+        if (data.data.alias) this.setState({ alias })
+        if (data.data.description) this.setState({ description })
+        if (data.data.site) this.setState({ site })
+        if (data.data.telegram) this.setState({ telegram })
+        if (data.data.twitter) this.setState({ twitter })
+        if (data.data.github) this.setState({ github })
+        if (data.data.reddit) this.setState({ reddit })
+        if (data.data.instagram) this.setState({ instagram })
+        if (data.data.logo) this.setState({ logo })
+        if (data.data.tzprofile) this.setState({ tzprofile })
+
+        console.log(this.state.logo)
+      })
+
+      let resTz = await fetchTz(wallet)
+      this.setState({ hdao: Math.floor(resTz[0].hdao_balance / 1000000) })
+
+      this.onReady()
+    } else {
+      let res = await fetchSubjkts(decodeURI(window.location.pathname.split('/')[1]))
+      // console.log(decodeURI(window.location.pathname.split('/')[1]))
+      console.log(res)
+
+      if (res.length >= 1) {
+        this.setState({
+          wallet: res[0].address,
+          walletPreview: walletPreview(res[0].address),
+          subjkt: window.location.pathname.split('/')[1]
+        })
+  
+        let resTz = await fetchTz(this.state.wallet)
+        this.setState({ hdao: Math.floor(resTz[0].hdao_balance / 1000000) })
+      } else {
+        this.props.history.push('/')
+      }
+
+      await GetUserMetadata(this.state.wallet).then((data) => {
         const {
           alias,
           description,
@@ -116,110 +299,29 @@ export default class Display extends Component {
         if (data.data.reddit) this.setState({ reddit })
         if (data.data.instagram) this.setState({ instagram })
         if (data.data.logo) this.setState({ logo })
+        this.onReady()
       })
-
       this.onReady()
-    } else {
-      await axios
-        .post(process.env.REACT_APP_SUBJKT, {
-          subjkt: id,
-        })
-        .then((res) => {
-          if (res.data.result.length === 0) {
-            // if alias is not found, redirect to homepage
-            this.props.history.push('/')
-          } else {
-            this.setState({
-              wallet: res.data.result[0].tz,
-              walletPrev: id,
-              subjkt: id,
-            })
-
-            this.onReady()
-          }
-        })
-
 
     }
-    /* doFetch(window.location.pathname.split('/')[2]) */
   }
 
-  // called if there's no redirect
-  onReady = async () => {
-    const { pathname } = window.location
+  creations = async () => {
 
-    this.context.setPath(pathname)
-    const uriComponentIndex = this.state.subjkt !== '' ? 2 : 3
-    const slug = pathname.split('/')[uriComponentIndex]
-
-    this.setState({
-      creationsState: slug === 'creations',
-      collectionState: slug === 'collection',
-      marketState: slug === 'market',
-    })
-
-    /*
-    await axios.get('http://localhost:3002/tz_owner', { params : { tz : this.state.wallet }}).then(res => console.log(res.data))
-    await axios.get('http://localhost:3002/tz_creator', { params : this.state.wallet }).then(res => console.log(res.data))
-    */
-
-    await axios
-      .get(process.env.REACT_APP_TZ, {
-        params: { tz: this.state.wallet },
-      })
-      .then(async (res) => {
-        this.setState({
-          hdao: res.data.hdao / 1_000_000,
-        })
-
-        const sanitised = SanitiseOBJKT(res.data.result)
-
-        const creations = sanitised.filter((e) => {
-          return (
-            this.state.wallet === e.token_info.creators[0]
-          ) /*  && (e.action !== 'Received') */
-        })
-        const collection = sanitised.filter(
-          (e) => this.state.wallet !== e.token_info.creators[0]
-        )
-
-        const market = {}
-
-        // filter market that were created by the user
-        Object.keys(res.data.swaps).forEach((e) => {
-          // all swaps include swaps on OBJKT you purchased and OBJKT you minted.
-          // setting it to false will only display OBJKT that you purchased and put up for sale
-          // but will NOT include your own art.
-          const allSwaps = true
-
-          if (allSwaps) {
-            market[e] = res.data.swaps[e]
-          } else {
-            const id = Number(e)
-            const found = sanitised.find((e) => {
-              return e.token_id === id
-            })
-            if (!found) {
-              market[e] = res.data.swaps[e]
-            }
-          }
-        })
-
-        this.setState({
-          creations: creations.sort(sortByTokenId),
-          loading: false,
-          collection: collection.sort(sortByTokenId),
-          market,
-        })
-      })
-  }
-
-  creations = () => {
     this.setState({
       creationsState: true,
       collectionState: false,
       marketState: false,
     })
+
+    let list = await getRestrictedAddresses()
+    console.log(this.state.wallet)
+    console.log(!list.includes(this.state.wallet))
+    if (!list.includes(this.state.wallet)) {
+      this.setState({ objkts: await fetchCreations(this.state.wallet), loading: false, items: [] })
+    }
+
+    this.setState({ items: this.state.objkts.slice(0, 20), offset: 20 })
 
     if (this.state.subjkt !== '') {
       // if alias route
@@ -230,11 +332,19 @@ export default class Display extends Component {
     }
   }
 
-  collection = () => {
+  collection = async () => {
+
+    let list = await getRestrictedAddresses()
+    if (!list.includes(this.state.wallet)) {
+      this.setState({ objkts: await fetchCollection(this.state.wallet), loading: false, items: [] })
+    }
+
+    this.setState({ items: this.state.objkts.slice(0, 20), offset: 20 })
+
     this.setState({
       creationsState: false,
       collectionState: true,
-      marketState: false,
+      marketState: false
     })
 
     if (this.state.subjkt !== '') {
@@ -246,20 +356,66 @@ export default class Display extends Component {
     }
   }
 
-  market = () => {
+  market = async () => {
+    let swaps = await fetchSwaps(this.state.wallet)
+    swaps = swaps.filter(e => parseInt(e.contract_version) !== 2)
+    this.setState({ market: swaps, loading: false })
+
     this.setState({
       creationsState: false,
       collectionState: false,
       marketState: true,
     })
-
+    console.log(this.state)
     if (this.state.subjkt !== '') {
       // if alias route
-      this.props.history.push(`/${this.state.subjkt}/market`)
+      this.props.history.push(`/${this.state.subjkt}/v1`)
     } else {
       // if tz/wallethash route
-      this.props.history.push(`/tz/${this.state.wallet}/market`)
+      this.props.history.push(`/tz/${this.state.wallet}/v1`)
     }
+
+  }
+  // called if there's no redirect
+  onReady = async () => {
+
+    // based on route, define initial state
+    if (this.state.subjkt !== '') {
+      // if alias route
+      if (window.location.pathname.split('/')[2] === 'creations') {
+        this.creations()
+      } else if (window.location.pathname.split('/')[2] === 'collection') {
+        this.collection()
+      } else if (window.location.pathname.split('/')[2] === 'v1') {
+        this.market()
+      } else {
+
+        this.creations()
+      }
+    } else {
+      // if tz wallet route
+      if (window.location.pathname.split('/')[3] === 'creations') {
+        this.creations()
+      } else if (window.location.pathname.split('/')[3] === 'collection') {
+        this.collection()
+      } else if (window.location.pathname.split('/')[3] === 'v1') {
+        this.market()
+      } else {
+        this.creations()
+      }
+    }
+  }
+
+  loadMore = () => {
+    this.setState({ items: this.state.items.concat(this.state.objkts.slice(this.state.offset, this.state.offset + 20)), offset: this.state.offset + 20 })
+
+    /*     if ((this.state.objkts.slice(this.state.offset, this.state.offset + 20).length < 20) && (this.state.offset !== 20)) {
+          this.setState({ hasMore : false })
+        } */
+  }
+
+  cancel_batch = async () => {
+    this.context.batch_cancel(this.state.market.slice(0, 10))
   }
 
   render() {
@@ -271,14 +427,18 @@ export default class Display extends Component {
               <Identicon address={this.state.wallet} logo={this.state.logo} />
 
               <div className={styles.info}>
-                {this.state.alias && (
+                {this.state.alias && !this.state.subjkt ? (
                   <p>
                     <strong>{this.state.alias}</strong>
+                  </p>
+                ) : (
+                  <p>
+                    <strong>{this.state.subjkt}</strong>
                   </p>
                 )}
                 {this.state.description && <p>{this.state.description}</p>}
                 <Button href={`https://tzkt.io/${this.state.wallet}`}>
-                  <Primary>{this.state.walletPrev}</Primary>
+                  <Primary>{walletPreview(this.state.wallet)}</Primary>
                 </Button>
 
                 <p>{this.state.hdao} ○</p>
@@ -402,6 +562,28 @@ export default class Display extends Component {
                       </svg>
                     </Button>
                   )}
+                  {this.state.tzprofile && (
+                    <Button href={`https://tzprofiles.com/view/${this.state.tzprofile}`}>
+                      <VisuallyHidden>{`https://tzprofiles.com/view/${this.state.tzprofile}`}</VisuallyHidden>
+                      <svg
+                        height="16"
+                        viewBox="0 0 16 16"
+                        width="16"
+                        xmlns="http://www.w3.org/2000/svg"
+                        style={{
+                          fill: 'var(--text-color)',
+                          stroke: 'transparent',
+                          marginRight: '10px',
+                        }}
+                      >
+
+                        <g>
+                          <rect x="1" y="1" width="9" height="14" />
+                          <rect x="1" y="1" width="14" height="9" />
+                        </g>
+                      </svg>
+                    </Button>
+                  )}
                 </div>
               </div>
             </div>
@@ -411,7 +593,6 @@ export default class Display extends Component {
         <Container>
           <Padding>
             <p>
-              <strong>OBJKTs</strong>
             </p>
             <div className={styles.menu}>
               <Button onClick={this.creations}>
@@ -425,10 +606,11 @@ export default class Display extends Component {
                   collection
                 </Primary>
               </Button>
-
-              {/*               <Button onClick={this.market}>
-                <Primary selected={this.state.marketState}>market</Primary>
-              </Button> */}
+              {this.context.acc != null && this.context.acc.address == this.state.wallet ?
+                <Button onClick={this.market}>
+                  <Primary selected={this.state.marketState}>v1 swaps</Primary>
+                </Button>
+                : null}
             </div>
           </Padding>
         </Container>
@@ -443,72 +625,113 @@ export default class Display extends Component {
 
         {!this.state.loading && this.state.creationsState && (
           <Container xlarge>
-            <ResponsiveMasonry>
-              {this.state.creations.map((nft, i) => {
-                const { mimeType, uri } = nft.token_info.formats[0]
-
-                return (
-                  <Button
-                    key={nft.token_id}
-                    to={`${PATH.OBJKT}/${nft.token_id}`}
-                  >
-                    <div className={styles.container}>
-                      {renderMediaType({
-                        mimeType,
-                        uri: uri.split('//')[1],
-                        metadata: nft,
-                      })}
-                    </div>
-                  </Button>
-                )
-              })}
-            </ResponsiveMasonry>
+            <InfiniteScroll
+              dataLength={this.state.items.length}
+              next={this.loadMore}
+              hasMore={this.state.hasMore}
+              loader={undefined}
+              endMessage={undefined}
+            >
+              <ResponsiveMasonry>
+                {this.state.items.map((nft) => {
+                  return (
+                    <Button key={nft.id} to={`${PATH.OBJKT}/${nft.id}`}>
+                      <div className={styles.container}>
+                        {renderMediaType({
+                          mimeType: nft.mime,
+                          artifactUri: nft.artifact_uri,
+                          displayUri: nft.display_uri,
+                          displayView: true
+                        })}
+                      </div>
+                    </Button>
+                  )
+                })}
+              </ResponsiveMasonry>
+            </InfiniteScroll>
           </Container>
         )}
 
         {!this.state.loading && this.state.collectionState && (
           <Container xlarge>
-            <ResponsiveMasonry>
-              {this.state.collection.map((nft, i) => {
-                const { mimeType, uri } = nft.token_info.formats[0]
-                return (
-                  <Button
-                    key={nft.token_id}
-                    to={`${PATH.OBJKT}/${nft.token_id}`}
-                  >
-                    <div className={styles.container}>
-                      {renderMediaType({
-                        mimeType,
-                        uri: uri.split('//')[1],
-                        metadata: nft,
-                      })}
-                    </div>
-                  </Button>
-                )
-              })}
-            </ResponsiveMasonry>
+            <InfiniteScroll
+              dataLength={this.state.items.length}
+              next={this.loadMore}
+              hasMore={this.state.hasMore}
+              loader={
+                undefined
+              }
+              endMessage={undefined}
+            >
+              <ResponsiveMasonry>
+                {this.state.items.map((nft) => {
+                  console.log(nft)
+                  return (
+                    <Button key={nft.token.id} to={`${PATH.OBJKT}/${nft.token.id}`}>
+                      <div className={styles.container}>
+                        {renderMediaType({
+                          mimeType: nft.token.mime,
+                          artifactUri: nft.token.artifact_uri,
+                          displayUri: nft.token.display_uri,
+                          displayView: true
+                        })}
+                      </div>
+                    </Button>
+                  )
+                })}
+              </ResponsiveMasonry>
+            </InfiniteScroll>
           </Container>
         )}
 
         {!this.state.loading && this.state.marketState && (
           <>
+            <Container>
+              <Padding>
+                <p>We're currently migrating the marketplace smart contract. We ask for users to cancel their's listings as the v1 marketplace will no longer be maintained. Auditing tools for the v1 protocol can be found at <a href='https://hictory.xyz'>hictory.xyz</a></p>
+              </Padding>
+            </Container>
             {Object.keys(this.state.market).length === 0 && (
               <Container>
                 <Padding>
-                  <p>
-                    You currently don't have any OBJKT on the market.
-                  </p>
+                  <p>You currently don't have any OBJKT on the market.</p>
                 </Padding>
               </Container>
             )}
-            {Object.keys(this.state.market).map((key) => {
+
+            {
+              this.state.market.length !== 0 ?
+                <Container>
+                  <Padding>
+                    <p>
+                      One can delist multiple swaps at once batching transactions or delist each single one of them.
+                    </p>
+                    <br />
+                    <Button onClick={this.cancel_batch}>
+                      <Primary>
+                        Batch Cancel
+                      </Primary>
+                    </Button>
+                  </Padding>
+                </Container>
+                :
+                null
+            }
+
+            {this.state.market.map((e, key) => {
+
+              console.log(e)
               return (
                 <Container key={key}>
                   <Padding>
-                    <Button to={`${PATH.OBJKT}/${key}`}>
+                    <Button to={`${PATH.OBJKT}/${e.token_id}`}>
+                      {console.log(e)}
                       <Primary>
-                        <strong>OBJKT#{key}</strong>
+                        <strong>{e.amount_left}x OBJKT#{e.token_id} {e.price}µtez</strong>
                       </Primary>
+                    </Button>
+                    <Button onClick={() => this.context.cancelv1(e.id)}>
+                      Cancel Swap
                     </Button>
                   </Padding>
                 </Container>
@@ -516,6 +739,9 @@ export default class Display extends Component {
             })}
           </>
         )}
+{/*         <BottomBanner>
+          Collecting has been temporarily disabled. Follow <a href="https://twitter.com/hicetnunc2000" target="_blank">@hicetnunc2000</a> or <a href="https://discord.gg/jKNy6PynPK" target="_blank">join the discord</a> for updates.
+        </BottomBanner> */}
       </Page>
     )
   }

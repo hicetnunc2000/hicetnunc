@@ -26,14 +26,15 @@
     width: 50vh;
     max-width: 100%;
     margin: 0 auto;
-    padding: 50px 20px;
+    padding: 50px 0px;
     flex: 1;
     display: flex;
     justify-content: center;
     align-items: center;
 
     @include respond-to('desktop') {
-      width: 60vh;
+      width: 70vh;
+      padding: 50px 20px;
     }
 
     > div {
@@ -46,7 +47,6 @@
     padding: 20px;
     background-color: var(--background-color);
     color: var(--text-color);
-    box-shadow: 2px 2px 30px 2px rgba(127, 127, 127, 0.3);
 
     > div {
       margin: 0 auto;
