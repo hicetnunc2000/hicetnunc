@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Button, Primary } from '../../components/button'
+import { Button, Primary, Secondary } from '../../components/button'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
 import { Page, Container, Padding } from '../../components/layout'
 import { BottomBanner } from '../../components/bottom-banner'
@@ -130,6 +130,7 @@ query querySwaps($address: String!) {
     token {
       id
       title
+      royalties
     }
     amount
     amount_left
@@ -140,9 +141,53 @@ query querySwaps($address: String!) {
   }
 }
 `
+
+const query_v2_swaps = `
+query querySwaps($address: String!) {
+  hic_et_nunc_swap(where: {creator_id: {_eq: $address}, status: {_eq: "0"}, contract_version: {_eq: "2"}}, distinct_on: token_id) {
+    token {
+      id
+      title
+      artifact_uri
+      display_uri
+      thumbnail_uri
+      timestamp
+      mime
+      description
+      supply
+      royalties
+      token_tags {
+        tag {
+          tag
+        }
+      }
+      creator {
+        name
+      }
+    }
+    amount
+    amount_left
+    price
+    id
+  }
+}
+`
 async function fetchSwaps(address) {
 
   const { errors, data } = await fetchGraphQL(query_v1_swaps, 'querySwaps', {
+    address: address
+  })
+  if (errors) {
+    console.error(errors)
+  }
+  const result = data.hic_et_nunc_swap
+  console.log(result)
+  return result
+
+}
+async function fetchv2Swaps(address) {
+
+  const { errors, data } = await fetchGraphQL(query_v2_swaps, 'querySwaps', {
     address: address
   })
   if (errors) {
@@ -311,7 +356,7 @@ export default class Display extends Component {
     this.setState({
       creationsState: true,
       collectionState: false,
-      marketState: false,
+      marketState: false
     })
 
     let list = await getRestrictedAddresses()
@@ -344,7 +389,8 @@ export default class Display extends Component {
     this.setState({
       creationsState: false,
       collectionState: true,
-      marketState: false
+      marketState: false,
+      swapsState: false,
     })
 
     if (this.state.subjkt !== '') {
@@ -360,22 +406,28 @@ export default class Display extends Component {
     let swaps = await fetchSwaps(this.state.wallet)
     swaps = swaps.filter(e => parseInt(e.contract_version) !== 2)
     this.setState({ market: swaps, loading: false })
+    
+    this.setState({ objkts: await fetchv2Swaps(this.state.wallet), loading: false, items: [] })
+
+    this.setState({ items: this.state.objkts.slice(0, 20), offset: 20 })
 
     this.setState({
       creationsState: false,
       collectionState: false,
       marketState: true,
+      swapsState: false,
     })
     console.log(this.state)
     if (this.state.subjkt !== '') {
       // if alias route
-      this.props.history.push(`/${this.state.subjkt}/v1`)
+      this.props.history.push(`/${this.state.subjkt}/swaps`)
     } else {
       // if tz/wallethash route
-      this.props.history.push(`/tz/${this.state.wallet}/v1`)
+      this.props.history.push(`/tz/${this.state.wallet}/swaps`)
     }
 
   }
+
   // called if there's no redirect
   onReady = async () => {
 
@@ -386,7 +438,7 @@ export default class Display extends Component {
         this.creations()
       } else if (window.location.pathname.split('/')[2] === 'collection') {
         this.collection()
-      } else if (window.location.pathname.split('/')[2] === 'v1') {
+      } else if (window.location.pathname.split('/')[2] === 'swaps') {
         this.market()
       } else {
 
@@ -398,7 +450,7 @@ export default class Display extends Component {
         this.creations()
       } else if (window.location.pathname.split('/')[3] === 'collection') {
         this.collection()
-      } else if (window.location.pathname.split('/')[3] === 'v1') {
+      } else if (window.location.pathname.split('/')[3] === 'swaps') {
         this.market()
       } else {
         this.creations()
@@ -408,10 +460,10 @@ export default class Display extends Component {
 
   loadMore = () => {
     this.setState({ items: this.state.items.concat(this.state.objkts.slice(this.state.offset, this.state.offset + 20)), offset: this.state.offset + 20 })
-
-    /*     if ((this.state.objkts.slice(this.state.offset, this.state.offset + 20).length < 20) && (this.state.offset !== 20)) {
-          this.setState({ hasMore : false })
-        } */
+    console.log(['loadmore',this.state.objkts])
+    if ((this.state.objkts.slice(this.state.offset, this.state.offset + 20).length < 20) && (this.state.offset !== 20)) {
+      this.setState({ hasMore : false })
+    }
   }
 
   cancel_batch = async () => {
@@ -438,7 +490,7 @@ export default class Display extends Component {
                 )}
                 {this.state.description && <p>{this.state.description}</p>}
                 <Button href={`https://tzkt.io/${this.state.wallet}`}>
-                  <Primary>{walletPreview(this.state.wallet)}</Primary>
+                  <Primary>{this.state.walletPrev}</Primary>
                 </Button>
 
                 <p>{this.state.hdao} ○</p>
@@ -593,6 +645,7 @@ export default class Display extends Component {
         <Container>
           <Padding>
             <p>
+              <strong>OBJKTs</strong>
             </p>
             <div className={styles.menu}>
               <Button onClick={this.creations}>
@@ -606,11 +659,12 @@ export default class Display extends Component {
                   collection
                 </Primary>
               </Button>
-              {this.context.acc != null && this.context.acc.address == this.state.wallet ?
-                <Button onClick={this.market}>
-                  <Primary selected={this.state.marketState}>v1 swaps</Primary>
-                </Button>
-                : null}
+                
+              <Button onClick={this.market}>
+                <Primary selected={this.state.marketState}>
+                  swaps
+                </Primary>
+              </Button>
             </div>
           </Padding>
         </Container>
@@ -629,8 +683,14 @@ export default class Display extends Component {
               dataLength={this.state.items.length}
               next={this.loadMore}
               hasMore={this.state.hasMore}
-              loader={undefined}
-              endMessage={undefined}
+              loader={
+                <Container>
+                  <Padding>
+                    <Loading />
+                  </Padding>
+                </Container>
+              }
+              endMessage={<p></p>}
             >
               <ResponsiveMasonry>
                 {this.state.items.map((nft) => {
@@ -659,9 +719,13 @@ export default class Display extends Component {
               next={this.loadMore}
               hasMore={this.state.hasMore}
               loader={
-                undefined
+                <Container>
+                  <Padding>
+                    <Loading />
+                  </Padding>
+                </Container>
               }
-              endMessage={undefined}
+              endMessage={<p></p>}
             >
               <ResponsiveMasonry>
                 {this.state.items.map((nft) => {
@@ -686,57 +750,101 @@ export default class Display extends Component {
 
         {!this.state.loading && this.state.marketState && (
           <>
-            <Container>
-              <Padding>
-                <p>We're currently migrating the marketplace smart contract. We ask for users to cancel their's listings as the v1 marketplace will no longer be maintained. Auditing tools for the v1 protocol can be found at <a href='https://hictory.xyz'>hictory.xyz</a></p>
-              </Padding>
-            </Container>
-            {Object.keys(this.state.market).length === 0 && (
+          { this.context.acc != null && this.context.acc.address == this.state.wallet ?
+            <>
+            {Object.keys(this.state.market).length !== 0 && (
               <Container>
                 <Padding>
-                  <p>You currently don't have any OBJKT on the market.</p>
+                  <p>We're currently migrating the marketplace smart contract. We ask for users to cancel their's listings as the v1 marketplace will no longer be maintained. Auditing tools for the v1 protocol can be found at <a href='https://hictory.xyz'>hictory.xyz</a></p>
                 </Padding>
               </Container>
-            )}
+              )}
 
-            {
-              this.state.market.length !== 0 ?
-                <Container>
-                  <Padding>
-                    <p>
-                      One can delist multiple swaps at once batching transactions or delist each single one of them.
-                    </p>
-                    <br />
-                    <Button onClick={this.cancel_batch}>
-                      <Primary>
-                        Batch Cancel
-                      </Primary>
-                    </Button>
-                  </Padding>
-                </Container>
-                :
-                null
-            }
+              {
+                this.state.market.length !== 0 ?
+                  <Container>
+                    <Padding>
+                      <p>
+                        One can delist multiple swaps at once batching transactions or delist each single one of them.
+                      </p>
+                      <br />
+                      <Button onClick={this.cancel_batch}>
+                        <Primary>
+                          Batch Cancel
+                        </Primary>
+                      </Button>
+                    </Padding>
+                  </Container>
+                  :
+                  null
+              }
 
-            {this.state.market.map((e, key) => {
+              {this.state.market.map((e, key) => {
 
-              console.log(e)
-              return (
-                <Container key={key}>
-                  <Padding>
-                    <Button to={`${PATH.OBJKT}/${e.token_id}`}>
-                      {console.log(e)}
-                      <Primary>
-                        <strong>{e.amount_left}x OBJKT#{e.token_id} {e.price}µtez</strong>
-                      </Primary>
-                    </Button>
-                    <Button onClick={() => this.context.cancelv1(e.id)}>
-                      Cancel Swap
-                    </Button>
-                  </Padding>
-                </Container>
-              )
-            })}
+                console.log(e)
+                return (
+                  <Container key={key}>
+                    <Padding>
+                      <Button to={`${PATH.OBJKT}/${e.token_id}`}>
+                        {console.log(e)}
+                        <Primary>
+                          <strong>{e.amount_left}x OBJKT#{e.token_id} {e.price}µtez</strong>
+                        </Primary>
+                      </Button>
+                      <Button onClick={() => this.context.cancel(e.id)}>
+                        <Secondary>
+                          Cancel Swap
+                        </Secondary>
+                      </Button>
+                    </Padding>
+                  </Container>
+                )
+              })}
+            </> : null }  
+            
+            <>
+              <InfiniteScroll
+                dataLength={this.state.items.length}
+                next={this.loadMore}
+                hasMore={this.state.hasMore}
+                loader={
+                  <Container>
+                    <Padding>
+                      <Loading />
+                    </Padding>
+                  </Container>
+                }
+                endMessage={<p></p>}
+              >
+                <div>
+                  {this.state.items.map((nft) => {
+                    console.log(nft)
+                    return (
+                      <Container>
+                        {/* {renderMediaType({
+                            mimeType: nft.token.mime,
+                            artifactUri: nft.token.artifact_uri,
+                            displayUri: nft.token.display_uri,
+                            displayView: true
+                        })} */}
+                        <Button key={nft.token.id} to={`${PATH.OBJKT}/${nft.token.id}`}>
+                          <Primary>
+                            <strong>OBJKT#{nft.token.id}</strong>
+                          </Primary>
+                        </Button>
+                          <Secondary>{nft.token.title}</Secondary>
+                        <Padding>
+                          {nft.token.creator.name}
+                        </Padding>
+                        <Padding>
+                          {nft.amount} ed {nft.price/ 1000000} tez {nft.token.royalties*0.1 + '%'} royalties
+                        </Padding>
+                      </Container>
+                    )
+                  })}
+                </div>
+              </InfiniteScroll>
+            </>
           </>
         )}
 {/*         <BottomBanner>
