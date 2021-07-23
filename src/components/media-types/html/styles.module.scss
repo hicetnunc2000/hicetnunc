@@ -1,18 +1,8 @@
 @import '../../../styles/layout.scss';
-@import '../../../styles/layout.scss';
+@import '../../../styles/mixins.scss';
 
 .html {
-  position: relative;
-  display: block;
-  margin: 0 auto; 
-  border : none;
-  width: 100vw;
-  height: 100vw;
-
-  @include respond-to('tablet') {
-    width: calc(100vh - 250px);
-    height: calc(100vh - 250px);
-  }
+  @include embedObjktViewSizes;
 }
 
 .container {

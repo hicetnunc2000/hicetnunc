@@ -1,14 +1,26 @@
+/* copy embedObjktViewSizes in mixins.scss */
+
 .objktview-zipembed.objktview {
   position: relative;
   display: block;
-  margin: 0 auto;
+  margin: 0 auto; 
+  border : none;
   width: 100vw;
   height: 100vw;
 }
 
 @media (min-width: 600px) {
   .objktview-zipembed.objktview {
-    width: calc(100vh - 250px);
-    height: calc(100vh - 250px);
+    width: 550px;
+    height: 550px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .objktview-zipembed.objktview {
+    min-height: 550px;
+    min-width: 550px;
+    width: calc(100vh - 280px);
+    height: calc(100vh - 280px);
   }
 }
