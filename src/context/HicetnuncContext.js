@@ -6,6 +6,8 @@ import {
   BeaconWalletNotInitialized,
 } from '@taquito/beacon-wallet'
 import { TezosToolkit, OpKind, MichelsonMap } from '@taquito/taquito'
+import { Parser, Expr } from "@taquito/michel-codec";
+import { Schema } from "@taquito/michelson-encoder";
 import { setItem } from '../utils/storage'
 import { KeyStoreUtils } from 'conseiljs-softsigner'
 import { PermissionScope } from '@airgap/beacon-sdk'
@@ -17,6 +19,11 @@ const axios = require('axios')
 const eztz = require('eztz-lib')
 
 export const HicetnuncContext = createContext()
+
+// TODO: move this schema into separate place?
+const createProxySchema = `
+(map address (pair (bool %isCore) (nat %share))))
+`
 
 // This should be moved to a service so it is only done once on page load
 const Tezos = new TezosToolkit('https://mainnet-tezos.giganode.io')
@@ -679,7 +686,7 @@ class HicetnuncContextProviderClass extends Component {
       },
       hDAO_vote: ls.get('hDAO_vote'),
 
-      proxyFactoryAddress: 'KT1DfdhNm8NEy158dqnfg5cfCjsrMeB6jdHW',
+      proxyFactoryAddress: 'KT1DoyD6kr8yLK8mRBFusyKYJUk2ZxNHKP1N',
 
       mockProxy: async () => {
 
@@ -735,14 +742,27 @@ class HicetnuncContextProviderClass extends Component {
           confirm: false,
         })
 
+        // packing participants data:
+        // (TODO: move to separate func)
+        const participantMap = MichelsonMap.fromLiteral(participantData);
+
+        const parser = new Parser();
+        const michelsonType = parser.parseData(createProxySchema);
+        const schema = new Schema(michelsonType);
+        const data = schema.Encode(participantMap);
+
+        // Is it okay to make it blocking?:
+        const { packed } = await Tezos.rpc.packData({
+          data,
+          type: michelsonType,
+        });
+
         // Blockchain ops
         await Tezos.wallet
           .at(this.state.proxyFactoryAddress)
           .then(c =>
             c.methods
-              .default(
-                MichelsonMap.fromLiteral(participantData),
-              )
+              .create_proxy(packed, 'hic_proxy')
               .send({ amount: 0 })
           )
           .then(result => {
