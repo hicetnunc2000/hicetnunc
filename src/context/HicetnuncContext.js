@@ -152,13 +152,18 @@ class HicetnuncContextProviderClass extends Component {
       },
 
       swapv2: async (from, royalties, xtz_per_objkt, objkt_id, creator, objkt_amount) => {
-        let objkts = await Tezos.wallet.at(this.state.objkts)
-        let marketplace = await Tezos.wallet.at(this.state.v2)
+        // If using proxy: both calls are made through this.state.proxyAddress:
+        const objktsAddress = this.state.proxyAddress || this.state.objkts;
+        const marketplaceAddress = this.state.proxyAddress || this.state.v2;
+        const ownerAddress = this.state.proxyAddress || from;
+
+        let objkts = await Tezos.wallet.at(objktsAddress)
+        let marketplace = await Tezos.wallet.at(marketplaceAddress)
 
         let list = [
           {
             kind: OpKind.TRANSACTION,
-            ...objkts.methods.update_operators([{ add_operator: { operator: this.state.v2, token_id: parseFloat(objkt_id), owner: from } }])
+            ...objkts.methods.update_operators([{ add_operator: { operator: this.state.v2, token_id: parseFloat(objkt_id), owner: ownerAddress } }])
               .toTransferParams({ amount: 0, mutez: true, storageLimit: 100 })
           },
           {
@@ -301,7 +306,7 @@ class HicetnuncContextProviderClass extends Component {
         // setting proxy updates objkt contract as well:
         this.setState({
           proxyAddress: proxyAddress,
-          objkt: proxyAddress || 'KT1Hkg5qeNhfwpKW4fXvq7HGZB9z2EnmCCA9'
+          // objkt: proxyAddress || 'KT1Hkg5qeNhfwpKW4fXvq7HGZB9z2EnmCCA9'
         });
       },
 
@@ -324,7 +329,7 @@ class HicetnuncContextProviderClass extends Component {
 
         // call mint method
         await Tezos.wallet
-          .at(this.state.v1)
+          .at(this.state.proxyAddress || this.state.v1)
           .then((c) =>
             c.methods
               .mint_OBJKT(
@@ -378,7 +383,7 @@ class HicetnuncContextProviderClass extends Component {
 
       collect: async (swap_id, amount) => {
         return await Tezos.wallet
-          .at(this.state.v2)
+          .at(this.state.proxyAddress || this.state.v2)
           .then((c) =>
             c.methods
               .collect(parseFloat(swap_id))
@@ -415,7 +420,7 @@ class HicetnuncContextProviderClass extends Component {
           })
           .then((amt) => {
             Tezos.wallet
-              .at(this.state.v1)
+              .at(this.state.proxyAddress || this.state.v1)
               .then((c) =>
                 c.methods
                   .curate(
@@ -478,7 +483,7 @@ class HicetnuncContextProviderClass extends Component {
       cancel: async (swap_id) => {
         console.log(swap_id)
         return await Tezos.wallet
-          .at(this.state.v2)
+          .at(this.state.proxyAddress || this.state.v2)
           .then((c) =>
             c.methods
               .cancel_swap(parseFloat(swap_id))
