@@ -41,44 +41,46 @@ export const Tags = () => {
 
   return (
     <Page title={`Tag ${id}`}>
-      <InfiniteScroll
-        dataLength={items.length}
-        next={loadMore}
-        hasMore={hasMore}
-        loader={
-          <Container xlarge>
-            <Padding>
-              <Loading />
-            </Padding>
-          </Container>
-        }
-      >
-        <div className={styles.container}>
-          <Container xlarge>
-            <ResponsiveMasonry>
-              {items.map((nft, index) => {
-                return (
-                  <Button
-                    key={`${nft.id}-${index}`}
-                    to={`${PATH.OBJKT}/${nft.id}`}
-                  >
-                    <div className={styles.container}>
-                      {renderMediaType({
-                        mimeType: nft.mime,
-                        artifactUri: nft.artifact_uri,
-                        displayUri: nft.display_uri,
-                      })}
-                    </div>
-                  </Button>
-                )
-              })}
-            </ResponsiveMasonry>
-          </Container>
-        </div>
-      </InfiniteScroll>
-      <BottomBanner>
-              v2 migration: All OBJKTs listed on market before June 28th must be relisted on market due smart contract migration. managed assets > v1 swaps > batch cancel > relist.
-      </BottomBanner>
+      <div className="tag-view">
+        <InfiniteScroll
+          dataLength={items.length}
+          next={loadMore}
+          hasMore={hasMore}
+          loader={
+            <Container xlarge>
+              <Padding>
+                <Loading />
+              </Padding>
+            </Container>
+          }
+        >
+          <div className={styles.container}>
+            <Container xlarge>
+              <ResponsiveMasonry>
+                {items.map((nft, index) => {
+                  return (
+                    <Button
+                      key={`${nft.id}-${index}`}
+                      to={`${PATH.OBJKT}/${nft.id}`}
+                    >
+                      <div className={styles.container}>
+                        {renderMediaType({
+                          mimeType: nft.mime,
+                          artifactUri: nft.artifact_uri,
+                          displayUri: nft.display_uri,
+                        })}
+                      </div>
+                    </Button>
+                  )
+                })}
+              </ResponsiveMasonry>
+            </Container>
+          </div>
+        </InfiniteScroll>
+        <BottomBanner>
+                v2 migration: All OBJKTs listed on market before June 28th must be relisted on market due smart contract migration. managed assets > v1 swaps > batch cancel > relist.
+        </BottomBanner>
+      </div>
     </Page>
   )
 }
