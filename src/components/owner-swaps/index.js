@@ -16,7 +16,7 @@ export const OwnerSwaps = ({ swaps, handleCollect, acc, cancel }) => {
         return (
           <div key={`${swap.id}-${index}`} className={styles.swap}>
             <div className={styles.issuer}>
-              {swap.amount_left} ed&nbsp;
+              {swap.amount_left} x&nbsp;
               {swap.creator.name ? (
                 <Button to={`/tz/${swap.creator.address}`}>
                   <Primary>{encodeURI(swap.creator.name)}</Primary>
