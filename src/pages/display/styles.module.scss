@@ -1,6 +1,11 @@
 @import '../../styles/layout.scss';
 @import '../../styles/variables.scss';
 
+.card {
+  color: white;
+  background: black;
+}
+
 .profile {
   display: flex;
 
@@ -36,25 +41,5 @@
     color: var(--background-color);
     transition: background-color #{$theme-duration} ease-out,
       color #{$theme-duration} ease-out;
-  }
-}
-
-.marketView {
-  .marketCard {
-    display: flex;
-
-    .marketThumbnailContainer {
-      width: 30%;
-      min-width: 200px;
-      max-width: 400px;
-    }
-
-    .marketThumbnail {
-      width: 100%;
-    }
-  }
-
-  .marketCardDetails {
-    padding-left: 20px;
   }
 }
