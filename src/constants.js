@@ -64,7 +64,7 @@ export const ALLOWED_MIMETYPES = Object.keys(MIMETYPE)
 
 export const ALLOWED_FILETYPES_LABEL = Object.entries(MIMETYPE)
   .filter((e) => ALLOWED_MIMETYPES.includes(e[1]))
-  .filter((e) => !['ZIP1', 'ZIP2'].includes(e[0]))
+  .filter((e) => !['ZIP1', 'ZIP2', 'OGA', 'OGV', 'BMP', 'TIFF', 'XWAV', 'QUICKTIME', 'WEBP'].includes(e[0]))
   .map((e) => (e[0] === 'ZIP' ? 'HTML (ZIP ARCHIVE)' : e[0]))
   .join(', ')
 
