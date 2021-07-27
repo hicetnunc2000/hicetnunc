@@ -749,59 +749,67 @@ export default class Display extends Component {
         )}
 
         {!this.state.loading && this.state.marketState && (
-          <>
+          <div className={styles.marketView}>
           { this.context.acc != null && this.context.acc.address == this.state.wallet ?
             <>
             {Object.keys(this.state.market).length !== 0 && (
-              <Container>
-                <Padding>
-                  <p>We're currently migrating the marketplace smart contract. We ask for users to cancel their's listings as the v1 marketplace will no longer be maintained. Auditing tools for the v1 protocol can be found at <a href='https://hictory.xyz'>hictory.xyz</a></p>
-                </Padding>
-              </Container>
-              )}
+              <>
+                <Container>
+                  <div className={styles.menu}>
+                    <h1><strong>V1</strong></h1>
+                  </div>
+                </Container>
+                <Container>
+                  <Padding>
+                    <p>We're currently migrating the marketplace smart contract. We ask for users to cancel their listings as the v1 marketplace will no longer be maintained. Auditing tools for the v1 protocol can be found at <a href='https://hictory.xyz'>hictory.xyz</a></p>
+                  </Padding>
+                </Container>
+              </>
+            )}
 
-              {
-                this.state.market.length !== 0 ?
-                  <Container>
-                    <Padding>
-                      <p>
-                        One can delist multiple swaps at once batching transactions or delist each single one of them.
-                      </p>
-                      <br />
-                      <Button onClick={this.cancel_batch}>
-                        <Primary>
-                          Batch Cancel
-                        </Primary>
-                      </Button>
-                    </Padding>
-                  </Container>
-                  :
-                  null
-              }
+            {
+              this.state.market.length !== 0 ?
+                <Container>
+                  <Padding>
+                    <p>
+                      One can delist multiple swaps in once batch transaction or delist each single one at a time.
+                    </p>
+                    <br />
+                    <Button onClick={this.cancel_batch}>
+                      <Primary>
+                        Batch Cancel
+                      </Primary>
+                    </Button>
+                  </Padding>
+                </Container>
+                
+                :
+                null
+            }
 
               {this.state.market.map((e, key) => {
-
                 console.log(e)
                 return (
-                  <Container key={key}>
-                    <Padding>
-                      <Button to={`${PATH.OBJKT}/${e.token_id}`}>
-                        {console.log(e)}
-                        <Primary>
-                          <strong>{e.amount_left}x OBJKT#{e.token_id} {e.price}µtez</strong>
-                        </Primary>
-                      </Button>
-                      <Button onClick={() => this.context.cancel(e.id)}>
-                        <Secondary>
-                          Cancel Swap
-                        </Secondary>
-                      </Button>
-                    </Padding>
-                  </Container>
+                  <>
+                    <Container key={key}>
+                      <Padding>
+                        <Button to={`${PATH.OBJKT}/${e.token_id}`}>
+                          {console.log(e)}
+                          <Primary>
+                            <strong>{e.amount_left}x OBJKT#{e.token_id} {e.price}µtez</strong>
+                          </Primary>
+                        </Button>
+                        <Button onClick={() => this.context.cancel(e.id)}>
+                          <Secondary>
+                            Cancel Swap
+                          </Secondary>
+                        </Button>
+                      </Padding>
+                    </Container>
+                  </>
                 )
               })}
             </> : null }  
-            
             <>
               <InfiniteScroll
                 dataLength={this.state.items.length}
@@ -816,36 +824,53 @@ export default class Display extends Component {
                 }
                 endMessage={<p></p>}
               >
-                <div>
+                <div> 
+                  <Container>
+                    <div className={styles.menu}>
+                      <strong>V2</strong>
+                    </div>
+                  </Container>
                   {this.state.items.map((nft) => {
                     console.log(nft)
                     return (
                       <Container>
-                        {/* {renderMediaType({
-                            mimeType: nft.token.mime,
-                            artifactUri: nft.token.artifact_uri,
-                            displayUri: nft.token.display_uri,
-                            displayView: true
-                        })} */}
-                        <Button key={nft.token.id} to={`${PATH.OBJKT}/${nft.token.id}`}>
-                          <Primary>
-                            <strong>OBJKT#{nft.token.id}</strong>
-                          </Primary>
-                        </Button>
-                          <Secondary>{nft.token.title}</Secondary>
-                        <Padding>
-                          {nft.token.creator.name}
-                        </Padding>
-                        <Padding>
-                          {nft.amount} ed {nft.price/ 1000000} tez {nft.token.royalties*0.1 + '%'} royalties
-                        </Padding>
+                        <div className={styles.marketCard}>
+                          <div className={styles.marketThumbnailContainer}>
+                            <Button
+                              key={nft.token.id} 
+                              to={`${PATH.OBJKT}/${nft.token.id}`}>
+                              <div className={styles.marketThumbnail}>
+                                {renderMediaType({
+                                    mimeType: nft.token.mime,
+                                    artifactUri: nft.token.artifact_uri,
+                                    displayUri: nft.token.display_uri,
+                                    displayView: true
+                                })}
+                              </div>
+                            </Button>
+                          </div>
+                          <div className={styles.marketCardDetails}>
+                            <Button key={nft.token.id} to={`${PATH.OBJKT}/${nft.token.id}`}>
+                              <Primary>
+                                <strong>OBJKT#{nft.token.id}</strong>
+                              </Primary>
+                            </Button>
+                              <Secondary>{nft.token.title}</Secondary>
+                            <Padding>
+                              {nft.token.creator.name}
+                            </Padding>
+                            <Padding>
+                              {nft.amount} ed {nft.price/ 1000000} tez {nft.token.royalties*0.1 + '%'} royalties
+                            </Padding>
+                          </div>
+                        </div>
                       </Container>
                     )
                   })}
                 </div>
               </InfiniteScroll>
             </>
-          </>
+          </div>
         )}
 {/*         <BottomBanner>
           Collecting has been temporarily disabled. Follow <a href="https://twitter.com/hicetnunc2000" target="_blank">@hicetnunc2000</a> or <a href="https://discord.gg/jKNy6PynPK" target="_blank">join the discord</a> for updates.
