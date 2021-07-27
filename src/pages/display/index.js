@@ -822,7 +822,7 @@ export default class Display extends Component {
                   {this.state.items.map((nft) => {
                     console.log(nft)
                     return (
-                      <>
+                      <div>
                         <Button
                           key={nft.token.id} 
                           to={`${PATH.OBJKT}/${nft.token.id}`}>
@@ -833,7 +833,7 @@ export default class Display extends Component {
                                 displayView: true
                             })}
                         </Button>
-                        <div className="card">
+                        <div>
                           <Button key={nft.token.id} to={`${PATH.OBJKT}/${nft.token.id}`}>
                             <Primary>
                               <strong>OBJKT#{nft.token.id}</strong>
@@ -847,7 +847,7 @@ export default class Display extends Component {
                             {nft.amount} ed {nft.price/ 1000000} tez {nft.token.royalties*0.1 + '%'} royalties
                           </Padding>
                         </div>
-                      </>
+                      </div>
                     )
                   })}
                 </ResponsiveMasonry>
