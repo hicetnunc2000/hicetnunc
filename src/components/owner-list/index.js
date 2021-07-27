@@ -17,7 +17,7 @@ export const OwnerList = ({ owners, creator, acc }) => {
 
         
         <div key={`${holder_id}-${index}`} className={styles.owner}>
-          {quantity}&nbsp;ed.&nbsp;
+          {quantity}&nbsp;ed&nbsp;
           {
             holder.name ?
               <Button to={`/tz/${holder_id}`}>
