@@ -755,11 +755,6 @@ export default class Display extends Component {
             {Object.keys(this.state.market).length !== 0 && (
               <>
                 <Container>
-                  <div className={styles.menu}>
-                    <h1><strong>V1</strong></h1>
-                  </div>
-                </Container>
-                <Container>
                   <Padding>
                     <p>We're currently migrating the marketplace smart contract. We ask for users to cancel their listings as the v1 marketplace will no longer be maintained. Auditing tools for the v1 protocol can be found at <a href='https://hictory.xyz'>hictory.xyz</a></p>
                   </Padding>
@@ -782,10 +777,9 @@ export default class Display extends Component {
                     </Button>
                   </Padding>
                 </Container>
-                
                 :
                 null
-            }
+              }
 
               {this.state.market.map((e, key) => {
                 console.log(e)
@@ -810,7 +804,7 @@ export default class Display extends Component {
                 )
               })}
             </> : null }  
-            <>
+            <Container xlarge>
               <InfiniteScroll
                 dataLength={this.state.items.length}
                 next={this.loadMore}
@@ -823,53 +817,42 @@ export default class Display extends Component {
                   </Container>
                 }
                 endMessage={<p></p>}
-              >
-                <div> 
-                  <Container>
-                    <div className={styles.menu}>
-                      <strong>V2</strong>
-                    </div>
-                  </Container>
+              >                  
+                <ResponsiveMasonry>
                   {this.state.items.map((nft) => {
                     console.log(nft)
                     return (
-                      <Container>
-                        <div className={styles.marketCard}>
-                          <div className={styles.marketThumbnailContainer}>
-                            <Button
-                              key={nft.token.id} 
-                              to={`${PATH.OBJKT}/${nft.token.id}`}>
-                              <div className={styles.marketThumbnail}>
-                                {renderMediaType({
-                                    mimeType: nft.token.mime,
-                                    artifactUri: nft.token.artifact_uri,
-                                    displayUri: nft.token.display_uri,
-                                    displayView: true
-                                })}
-                              </div>
-                            </Button>
-                          </div>
-                          <div className={styles.marketCardDetails}>
-                            <Button key={nft.token.id} to={`${PATH.OBJKT}/${nft.token.id}`}>
-                              <Primary>
-                                <strong>OBJKT#{nft.token.id}</strong>
-                              </Primary>
-                            </Button>
-                              <Secondary>{nft.token.title}</Secondary>
-                            <Padding>
-                              {nft.token.creator.name}
-                            </Padding>
-                            <Padding>
-                              {nft.amount} ed {nft.price/ 1000000} tez {nft.token.royalties*0.1 + '%'} royalties
-                            </Padding>
-                          </div>
+                      <>
+                        <Button
+                          key={nft.token.id} 
+                          to={`${PATH.OBJKT}/${nft.token.id}`}>
+                            {renderMediaType({
+                                mimeType: nft.token.mime,
+                                artifactUri: nft.token.artifact_uri,
+                                displayUri: nft.token.display_uri,
+                                displayView: true
+                            })}
+                        </Button>
+                        <div className="card">
+                          <Button key={nft.token.id} to={`${PATH.OBJKT}/${nft.token.id}`}>
+                            <Primary>
+                              <strong>OBJKT#{nft.token.id}</strong>
+                            </Primary>
+                          </Button>
+                          <Secondary>{nft.token.title}</Secondary>
+                          <Padding>
+                            {nft.token.creator.name}
+                          </Padding>
+                          <Padding>
+                            {nft.amount} ed {nft.price/ 1000000} tez {nft.token.royalties*0.1 + '%'} royalties
+                          </Padding>
                         </div>
-                      </Container>
+                      </>
                     )
                   })}
-                </div>
+                </ResponsiveMasonry>
               </InfiniteScroll>
-            </>
+            </Container>
           </div>
         )}
 {/*         <BottomBanner>
