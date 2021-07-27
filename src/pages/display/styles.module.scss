@@ -38,3 +38,23 @@
       color #{$theme-duration} ease-out;
   }
 }
+
+.marketView {
+  .marketCard {
+    display: flex;
+
+    .marketThumbnailContainer {
+      width: 30%;
+      min-width: 200px;
+      max-width: 400px;
+    }
+
+    .marketThumbnail {
+      width: 100%;
+    }
+  }
+
+  .marketCardDetails {
+    padding-left: 20px;
+  }
+}
