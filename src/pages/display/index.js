@@ -271,7 +271,7 @@ export default class Display extends Component {
           walletPreview: walletPreview(res[0].address),
           subjkt: window.location.pathname.split('/')[1]
         })
-  
+
         let resTz = await fetchTz(this.state.wallet)
         this.setState({ hdao: Math.floor(resTz[0].hdao_balance / 1000000) })
       } else {
@@ -608,7 +608,7 @@ export default class Display extends Component {
               </Button>
               {this.context.acc != null && this.context.acc.address == this.state.wallet ?
                 <Button onClick={this.market}>
-                  <Primary selected={this.state.marketState}>v1 swaps</Primary>
+                  <Primary selected={this.state.marketState}>swaps</Primary>
                 </Button>
                 : null}
             </div>
@@ -739,7 +739,7 @@ export default class Display extends Component {
             })}
           </>
         )}
-{/*         <BottomBanner>
+        {/*         <BottomBanner>
           Collecting has been temporarily disabled. Follow <a href="https://twitter.com/hicetnunc2000" target="_blank">@hicetnunc2000</a> or <a href="https://discord.gg/jKNy6PynPK" target="_blank">join the discord</a> for updates.
         </BottomBanner> */}
       </Page>
