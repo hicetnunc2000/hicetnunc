@@ -33,7 +33,7 @@ export const History = (token_info) => {
                             } else {
                                 return (
                                     <div>
-                                        swap {e.timestamp} {e.creator.name ? <span><a href={`/tz/${e.creator.address}`}>{encodeURI(e.creator.name)}</a></span> : <span><a href={`/tz/${e.creator.address}`}>{walletPreview(e.creator.address)}</a></span>} {e.amount} ed. {parseFloat(e.price / 1000000)} tez
+                                        swap {e.timestamp} {e.creator.name ? <span><a href={`/tz/${e.creator.address}`}>{encodeURI(e.creator.name)}</a></span> : <span><a href={`/tz/${e.creator.address}`}>{walletPreview(e.creator.address)}</a></span>} {e.amount} ed {parseFloat(e.price / 1000000)} tez
                                     </div>
                                 )
                             }
