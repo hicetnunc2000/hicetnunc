@@ -27,7 +27,7 @@ export const History = (token_info) => {
                             if (e.trade) {
                                 return (
                                     <div>
-                                        trade {e.timestamp} {encodeURI(e.seller.name) ? <span><a href={`/tz/${encodeURI(e.seller.address)}`}>{encodeURI(e.seller.name)}</a></span> : <span><a href={`/tz/${e.seller.address}`}>{walletPreview(e.seller.address)}</a></span>} {e.amount} ed. {parseFloat(e.swap.price / 1000000)} tez {e.buyer.name ? <span><a href={`/${encodeURI(e.buyer.name)}`}>{encodeURI(e.buyer.name)}</a></span> : <span><a href={`/tz/${e.buyer.address}`}>{walletPreview(e.buyer.address)}</a></span>}
+                                        trade {e.timestamp} {encodeURI(e.seller.name) ? <span><a href={`/tz/${encodeURI(e.seller.address)}`}>{encodeURI(e.seller.name)}</a></span> : <span><a href={`/tz/${e.seller.address}`}>{walletPreview(e.seller.address)}</a></span>} {e.amount} ed {parseFloat(e.swap.price / 1000000)} tez {e.buyer.name ? <span><a href={`/${encodeURI(e.buyer.name)}`}>{encodeURI(e.buyer.name)}</a></span> : <span><a href={`/tz/${e.buyer.address}`}>{walletPreview(e.buyer.address)}</a></span>}
                                     </div>
                                 )
                             } else {
@@ -39,7 +39,7 @@ export const History = (token_info) => {
                             }
                         })
                     }
-                    minted {token_info.timestamp} {token_info.supply} ed. {token_info.royalties / 10}% royalties
+                    minted {token_info.timestamp} {token_info.supply} ed {token_info.royalties / 10}% royalties
                 </Padding>
             </Container>
         </div>
