@@ -25,3 +25,32 @@
     transition: border-color #{$theme-duration} ease-out;
   }
 }
+
+.identicon__small {
+  width: 30px;
+  height: 30px;
+  svg {
+    border-radius: 100%;
+    padding: 1px;
+    width: 30px;
+    height: 30px;
+    border: 1px solid var(--text-color);
+    transition: border-color #{$theme-duration} ease-out;
+
+    path {
+      stroke: var(--text-color);
+      fill: var(--text-color);
+      transition: all #{$theme-duration} ease-out;
+    }
+  }
+
+  img {
+    border-radius: 100%;
+    padding: 1px;
+    width: 30px;
+    height: 30px;
+    border: 2px solid var(--text-color);
+    transition: border-color #{$theme-duration} ease-out;
+  }
+}
+
