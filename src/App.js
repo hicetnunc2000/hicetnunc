@@ -10,7 +10,7 @@ import { routes } from './routes'
 const App = () => {
   const [loading, setLoading] = useState(true)
 
-  // 1st time loading the site
+  // 1st time loading the site ???
   useEffect(() => {
     getInitialData().then(() => {
       setLoading(false)
