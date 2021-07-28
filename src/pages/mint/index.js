@@ -37,7 +37,7 @@ const thumbnailOptions = {
 const GENERATE_DISPLAY_AND_THUMBNAIL = true
 
 export const Mint = () => {
-  const { mint, getAuth, acc, setAccount, setFeedback, syncTaquito } =
+  const { mint, getAuth, acc, setAccount, getProxy, setFeedback, syncTaquito } =
     useContext(HicetnuncContext)
   // const history = useHistory()
   const [step, setStep] = useState(0)
@@ -119,6 +119,11 @@ export const Mint = () => {
         confirm: false,
       })
 
+      // if proxyContract is selected, using it as a the miterAddress:
+      const minterAddress = getProxy() || acc.address
+      // ztepler: I have not understand the difference between acc.address and getAuth here
+      //    so I am using acc.address (minterAddress) in both nftCid.address and in mint call
+
       // upload file(s)
       let nftCid
       if (
@@ -130,7 +135,7 @@ export const Mint = () => {
           name: title,
           description,
           tags,
-          address: acc.address,
+          address: minterAddress,
           files,
           cover,
           thumbnail,
@@ -142,7 +147,7 @@ export const Mint = () => {
           name: title,
           description,
           tags,
-          address: acc.address,
+          address: minterAddress,
           buffer: file.buffer,
           mimeType: file.mimeType,
           cover,
@@ -151,7 +156,7 @@ export const Mint = () => {
         })
       }
 
-      mint(getAuth(), amount, nftCid.path, royalties)
+      mint(minterAddress, amount, nftCid.path, royalties)
     }
   }
 
