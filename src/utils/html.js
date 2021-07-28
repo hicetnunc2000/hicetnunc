@@ -179,6 +179,7 @@ export function injectCSPMetaTagIntoHTML(html) {
       wss:
       bootstrap.libp2p.io
       preload.ipfs.io
+      https://mainnet.smartpy.io
       https://api.etherscan.io
       https://api.thegraph.com
       https://*.tzkt.io
