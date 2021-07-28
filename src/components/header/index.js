@@ -36,7 +36,8 @@ export const Header = () => {
   if (context.acc?.address) {
     // is menu closed?
     if (context.collapsed) {
-      button = walletPreview(context.acc.address)
+      const proxyAddress = context.proxyAddress ? ' (' + context.proxyAddress + ')' : ''
+      button = walletPreview(context.acc.address) + proxyAddress
     } else {
       // menu is open
       button = 'unsync'
@@ -134,6 +135,11 @@ export const Header = () => {
                         <Primary>
                           OBJKT<span style={{ fontSize: '16px' }}> (mint)</span>
                         </Primary>
+                      </Button>
+                    </li>
+                    <li>
+                      <Button onClick={() => handleRoute('/collaborate')}>
+                        <Primary>collaborate</Primary>
                       </Button>
                     </li>
                     <li>

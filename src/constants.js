@@ -17,6 +17,7 @@ export const getBanBlockList = () => banBlockList
 export const PATH = {
   FEED: '/',
   ISSUER: '/tz',
+  COLLAB: '/kt',
   ABOUT: '/about',
   FAQ: '/faq',
   SYNC: '/sync',

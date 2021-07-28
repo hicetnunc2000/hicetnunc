@@ -124,6 +124,7 @@ export const ObjktDisplay = () => {
   const [error, setError] = useState(false)
 
   const address = context.acc?.address
+  const proxy = context.getProxy()
 
   useEffect(async () => {
     let objkt = await fetchObjkt(id)
@@ -245,7 +246,8 @@ export const ObjktDisplay = () => {
 
                         if (
                           holders_arr.includes(address) === false &&
-                          nft.creator.address !== address
+                          nft.creator.address !== address &&
+                          nft.creator.address !== proxy
                         ) {
                           // user is not the creator now owns a copy of the object. hide
 
