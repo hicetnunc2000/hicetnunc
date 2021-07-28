@@ -159,6 +159,7 @@ export function injectCSPMetaTagIntoHTML(html) {
       https://gateway.pinata.cloud/;
     font-src
       'self'
+      data:
       https://ipfs.infura.io
       https://cloudflare-ipfs.com/
       https://fonts.googleapis.com/
