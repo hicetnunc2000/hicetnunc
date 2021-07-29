@@ -156,6 +156,7 @@ export function injectCSPMetaTagIntoHTML(html) {
       https://ipfs.infura.io
       https://cloudflare-ipfs.com/
       https://ipfs.io/
+      https://templewallet.com/logo.png
       https://gateway.pinata.cloud/;
     font-src
       'self'
