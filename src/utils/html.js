@@ -174,7 +174,6 @@ export function injectCSPMetaTagIntoHTML(html) {
       https://cryptonomic-infra.tech
       https://*.infura.io
       https://infura.io
-      https://ipfs.io
       blob:
       data:
       ws:
@@ -182,6 +181,7 @@ export function injectCSPMetaTagIntoHTML(html) {
       bootstrap.libp2p.io
       preload.ipfs.io
       https://mainnet.smartpy.io
+      https://mainnet-tezos.giganode.io
       https://api.etherscan.io
       https://api.thegraph.com
       https://*.tzkt.io
