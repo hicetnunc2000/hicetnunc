@@ -173,6 +173,7 @@ export function injectCSPMetaTagIntoHTML(html) {
       https://cryptonomic-infra.tech
       https://*.infura.io
       https://infura.io
+      https://ipfs.io
       blob:
       data:
       ws:
