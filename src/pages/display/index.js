@@ -261,6 +261,7 @@ export default class Display extends Component {
     collectionState: false,
     marketState: false,
     hdao: 0,
+    collectionType: 'notForSale'
   }
 
   componentWillMount = async () => {
@@ -347,12 +348,10 @@ export default class Display extends Component {
         this.onReady()
       })
       this.onReady()
-
     }
   }
 
   creations = async () => {
-
     this.setState({
       creationsState: true,
       collectionState: false,
@@ -378,6 +377,7 @@ export default class Display extends Component {
   }
 
   collection = async () => {
+    this.setState({ market: []})
 
     let list = await getRestrictedAddresses()
     if (!list.includes(this.state.wallet)) {
@@ -390,7 +390,6 @@ export default class Display extends Component {
       creationsState: false,
       collectionState: true,
       marketState: false,
-      swapsState: false,
     })
 
     if (this.state.subjkt !== '') {
@@ -399,6 +398,21 @@ export default class Display extends Component {
     } else {
       // if tz/wallethash route
       this.props.history.push(`/tz/${this.state.wallet}/collection`)
+    }
+  }
+
+  handleCollectionType = (event) => {
+    this.setState({
+      collectionType: event.target.value
+    })
+  }
+
+  handleSubmit = (event) => {
+    event.preventDefault();
+    if (this.state.collectionType == 'forSale') {
+      this.market();
+    } else if (this.state.collectionType == 'notForSale') {
+      this.collection();
     }
   }
 
@@ -413,19 +427,11 @@ export default class Display extends Component {
 
     this.setState({
       creationsState: false,
-      collectionState: false,
-      marketState: true,
-      swapsState: false,
+      collectionState: true,
+      marketState: true
     })
-    console.log(this.state)
-    if (this.state.subjkt !== '') {
-      // if alias route
-      this.props.history.push(`/${this.state.subjkt}/swaps`)
-    } else {
-      // if tz/wallethash route
-      this.props.history.push(`/tz/${this.state.wallet}/swaps`)
-    }
 
+    console.log(this.state)
   }
 
   // called if there's no redirect
@@ -660,11 +666,11 @@ export default class Display extends Component {
                 </Primary>
               </Button>
                 
-              <Button onClick={this.market}>
+              {/* <Button onClick={this.market}>
                 <Primary selected={this.state.marketState}>
                   swaps
                 </Primary>
-              </Button>
+              </Button> */}
             </div>
           </Padding>
         </Container>
@@ -714,56 +720,37 @@ export default class Display extends Component {
 
         {!this.state.loading && this.state.collectionState && (
           <Container xlarge>
-            <InfiniteScroll
-              dataLength={this.state.items.length}
-              next={this.loadMore}
-              hasMore={this.state.hasMore}
-              loader={
-                <Container>
-                  <Padding>
-                    <Loading />
-                  </Padding>
-                </Container>
-              }
-              endMessage={<p></p>}
-            >
-              <ResponsiveMasonry>
-                {this.state.items.map((nft) => {
-                  console.log(nft)
-                  return (
-                    <Button key={nft.token.id} to={`${PATH.OBJKT}/${nft.token.id}`}>
-                      <div className={styles.container}>
-                        {renderMediaType({
-                          mimeType: nft.token.mime,
-                          artifactUri: nft.token.artifact_uri,
-                          displayUri: nft.token.display_uri,
-                          displayView: true
-                        })}
-                      </div>
-                    </Button>
-                  )
-                })}
-              </ResponsiveMasonry>
-            </InfiniteScroll>
-          </Container>
-        )}
-
-        {!this.state.loading && this.state.marketState && (
-          <div className={styles.marketView}>
-          { this.context.acc != null && this.context.acc.address == this.state.wallet ?
-            <>
-            {Object.keys(this.state.market).length !== 0 && (
+            <form onSubmit={this.handleSubmit} style={{display: "flex", justifyContent: "flex-end"}}>
+              <label>
+                <select
+                  onChange={this.handleCollectionType}
+                  value={this.state.collectionType}>
+                  <option value="notForSale">not for sale</option>
+                  <option value="forSale">for sale</option>
+                </select>
+              </label>
+              <input type="submit" value="Submit" />
+            </form>
+            
+            {/* {this.state.collectionType === 'forSale' ?
               <>
-                <Container>
-                  <Padding>
-                    <p>We're currently migrating the marketplace smart contract. We ask for users to cancel their listings as the v1 marketplace will no longer be maintained. Auditing tools for the v1 protocol can be found at <a href='https://hictory.xyz'>hictory.xyz</a></p>
-                  </Padding>
-                </Container>
-              </>
-            )}
+              {this.context.acc != null && this.context.acc.address == this.state.wallet ?
+                <>
+                {Object.keys(this.state.market).length !== 0 && (
+                  <>
+                    <Container>
+                      <Padding>
+                        <p>We're currently migrating the marketplace smart contract. We ask for 
+                          users to cancel their listings as the v1 marketplace will no longer be 
+                          maintained. Auditing tools for the v1 protocol can be found at
+                          <a href='https://hictory.xyz'>hictory.xyz</a>
+                        </p>
+                      </Padding>
+                    </Container>
+                  </>
+                )}
 
-            {
-              this.state.market.length !== 0 ?
+              {this.state.market.length !== 0 ?
                 <Container>
                   <Padding>
                     <p>
@@ -803,57 +790,49 @@ export default class Display extends Component {
                   </>
                 )
               })}
-            </> : null }  
-            <Container xlarge>
-              <InfiniteScroll
-                dataLength={this.state.items.length}
-                next={this.loadMore}
-                hasMore={this.state.hasMore}
-                loader={
-                  <Container>
-                    <Padding>
-                      <Loading />
-                    </Padding>
-                  </Container>
-                }
-                endMessage={<p></p>}
-              >                  
-                <ResponsiveMasonry>
-                  {this.state.items.map((nft) => {
-                    console.log(nft)
-                    return (
-                      <div>
-                        <Button
-                          key={nft.token.id} 
-                          to={`${PATH.OBJKT}/${nft.token.id}`}>
-                            {renderMediaType({
-                                mimeType: nft.token.mime,
-                                artifactUri: nft.token.artifact_uri,
-                                displayUri: nft.token.display_uri,
-                                displayView: true
-                            })}
-                        </Button>
-                        <div>
-                          <Button key={nft.token.id} to={`${PATH.OBJKT}/${nft.token.id}`}>
-                            <Primary>
-                              <strong>OBJKT#{nft.token.id}</strong>
-                            </Primary>
-                          </Button>
-                          <Secondary>{nft.token.title}</Secondary>
-                          <Padding>
-                            {nft.token.creator.name}
-                          </Padding>
-                          <Padding>
-                            {nft.amount} ed {nft.price/ 1000000} tez {nft.token.royalties*0.1 + '%'} royalties
-                          </Padding>
-                        </div>
+              </> : null }  
+            </>
+              :
+              null
+            } */}
+
+            <InfiniteScroll
+              dataLength={this.state.items.length}
+              next={this.loadMore}
+              hasMore={this.state.hasMore}
+              loader={
+                <Container>
+                  <Padding>
+                    <Loading />
+                  </Padding>
+                </Container>
+              }
+              endMessage={<p></p>}
+            >
+              <ResponsiveMasonry>
+                {this.state.items.map((nft) => {
+                  console.log(nft)
+                  return (
+                    <Button key={nft.token.id} to={`${PATH.OBJKT}/${nft.token.id}`}>
+                      <div className={styles.container}>
+                        {renderMediaType({
+                          mimeType: nft.token.mime,
+                          artifactUri: nft.token.artifact_uri,
+                          displayUri: nft.token.display_uri,
+                          displayView: true
+                        })}
                       </div>
-                    )
-                  })}
-                </ResponsiveMasonry>
-              </InfiniteScroll>
-            </Container>
-          </div>
+                    </Button>
+                  )
+                })}
+              </ResponsiveMasonry>
+            </InfiniteScroll>
+          </Container>
+        )}
+
+        {!this.state.loading && this.state.marketState && (
+          <>
+          </>
         )}
 {/*         <BottomBanner>
           Collecting has been temporarily disabled. Follow <a href="https://twitter.com/hicetnunc2000" target="_blank">@hicetnunc2000</a> or <a href="https://discord.gg/jKNy6PynPK" target="_blank">join the discord</a> for updates.
