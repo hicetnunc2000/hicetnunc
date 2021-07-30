@@ -3,21 +3,41 @@
 
 .card {
   position: relative;
+
   .cardDetails {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    -webkit-transform: translate(-50%, -50%);
+    width: 70%;
+    color: var(--background-color);
+    z-index: 101;
+    opacity: 0;
+    transition: opacity 0.1s ease-out;
+  }
+
+  .cardDetailsContainer {
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    opacity: 0;
     z-index: 100;
-    transition: cubic-bezier(0.075, 0.82, 0.165, 1) opacity 0.5s;
+    opacity: 0;
+    color: transparent;
+    transition: opacity 0.1s ease-out;
   }
   
-  &:hover {
-    .cardDetails {
-      background: black;
+  &:hover, &:active {
+    .cardDetailsContainer {
       opacity: 1;
+      background-color: var(--text-color);
+      transition: opacity 0.1s ease-out;
+    }
+    .cardDetails {
+      opacity: 1;
+      transition: opacity 0.1s ease-out;
     }
   }
 }
