@@ -401,25 +401,10 @@ export default class Display extends Component {
     }
   }
 
-  handleCollectionType = (event) => {
-    this.setState({
-      collectionType: event.target.value
-    })
-  }
-
-  handleSubmit = (event) => {
-    event.preventDefault();
-    if (this.state.collectionType == 'forSale') {
-      this.market();
-    } else if (this.state.collectionType == 'notForSale') {
-      this.collection();
-    }
-  }
-
   market = async () => {
     let swaps = await fetchSwaps(this.state.wallet)
     swaps = swaps.filter(e => parseInt(e.contract_version) !== 2)
-    this.setState({ market: swaps, loading: false })
+    // this.setState({ market: swaps, loading: false })
     
     this.setState({ objkts: await fetchv2Swaps(this.state.wallet), loading: false, items: [] })
 
@@ -432,6 +417,10 @@ export default class Display extends Component {
     })
 
     console.log(this.state)
+  }
+
+  fullCollection = async () => {
+
   }
 
   // called if there's no redirect
@@ -720,7 +709,7 @@ export default class Display extends Component {
 
         {!this.state.loading && this.state.collectionState && (
           <Container xlarge>
-            <form onSubmit={this.handleSubmit} style={{display: "flex", justifyContent: "flex-end"}}>
+            {/* <form onSubmit={this.handleSubmit} style={{display: "flex", justifyContent: "flex-end"}}>
               <label>
                 <select
                   onChange={this.handleCollectionType}
@@ -730,7 +719,19 @@ export default class Display extends Component {
                 </select>
               </label>
               <input type="submit" value="Submit" />
-            </form>
+            </form> */}
+
+            <div style={{display: "flex", justifyContent: "flex-end"}}>
+              <Button onClick={this.collectionFull}>
+                <div className={styles.tag}>all</div>
+              </Button>
+              <Button onClick={this.collection}>
+                <div className={styles.tag}>not for sale</div>
+              </Button>
+              <Button onClick={this.market}>
+                <div className={styles.tag}>for sale</div>
+              </Button>
+            </div>
             
             {/* {this.state.collectionType === 'forSale' ?
               <>
