@@ -101,7 +101,7 @@ export const ItemInfo = ({
         <div className={styles.container}>
           <div className={styles.edition}>
             <div className={styles.inline}>
-              <p className={styles.issuer}>{isCollab ? 'Collaboration:' : 'Issuer:'}&nbsp;</p>
+              {/* <p className={styles.issuer}>{isCollab ? 'Collaboration:' : 'Issuer:'}&nbsp;</p> */}
               {isCollab && (
                 <CollabIssuerInfo address={ creatorAddress } />
               )}
