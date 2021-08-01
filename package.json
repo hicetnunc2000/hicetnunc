@@ -10,7 +10,7 @@
     "@taquito/taquito": "^10.0.0",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^11.2.7",
-    "@testing-library/user-event": "^13.1.9",
+    "@testing-library/user-event": "^13.2.1",
     "axios": "^0.21.1",
     "base-x": "^3.0.8",
     "buffer": "^6.0.3",
