@@ -77,7 +77,7 @@ async function fetchCollection(addr) {
     console.error(errors)
   }
   const result = data.hic_et_nunc_token_holder
-  //console.log({ result })
+  console.log('collection result' + { result })
   return result
 }
 
@@ -130,7 +130,6 @@ query querySwaps($address: String!) {
     token {
       id
       title
-      royalties
     }
     amount
     amount_left
@@ -172,7 +171,8 @@ query querySwaps($address: String!) {
   }
 }
 `
-async function fetchSwaps(address) {
+
+async function fetchV1Swaps(address) {
 
   const { errors, data } = await fetchGraphQL(query_v1_swaps, 'querySwaps', {
     address: address
@@ -181,11 +181,12 @@ async function fetchSwaps(address) {
     console.error(errors)
   }
   const result = data.hic_et_nunc_swap
-  //console.log(result)
+  console.log('swapresultv1 ' + result)
   return result
 
 }
-async function fetchv2Swaps(address) {
+
+async function fetchV2Swaps(address) {
 
   const { errors, data } = await fetchGraphQL(query_v2_swaps, 'querySwaps', {
     address: address
@@ -194,7 +195,9 @@ async function fetchv2Swaps(address) {
     console.error(errors)
   }
   const result = data.hic_et_nunc_swap
-  //console.log(result)
+  console.log(result)
+  console.log('swapresultv2 ' + result)
+
   return result
 
 }
@@ -252,10 +255,10 @@ export default class Display extends Component {
     hasMore: true,
     results: [],
     objkts: [],
-    pendingObjkts: [],
     creations: [],
     collection: [],
-    market: [],
+    marketV1: [],
+    marketV2: [],
     items: [],
     offset: 0,
     creationsState: true,
@@ -268,7 +271,7 @@ export default class Display extends Component {
   componentWillMount = async () => {
 
     const id = window.location.pathname.split('/')[1]
-    //console.log(window.location.pathname.split('/'))
+    console.log(window.location.pathname.split('/'))
     if (id === 'tz') {
       const wallet = window.location.pathname.split('/')[2]
       this.setState({
@@ -300,7 +303,7 @@ export default class Display extends Component {
         if (data.data.logo) this.setState({ logo })
         if (data.data.tzprofile) this.setState({ tzprofile })
 
-        //console.log(this.state.logo)
+        console.log(this.state.logo)
       })
 
       let resTz = await fetchTz(wallet)
@@ -310,7 +313,7 @@ export default class Display extends Component {
     } else {
       let res = await fetchSubjkts(decodeURI(window.location.pathname.split('/')[1]))
       // console.log(decodeURI(window.location.pathname.split('/')[1]))
-      // console.log(res)
+      console.log(res)
 
       if (res.length >= 1) {
         this.setState({
@@ -318,7 +321,7 @@ export default class Display extends Component {
           walletPreview: walletPreview(res[0].address),
           subjkt: window.location.pathname.split('/')[1]
         })
-  
+
         let resTz = await fetchTz(this.state.wallet)
         this.setState({ hdao: Math.floor(resTz[0].hdao_balance / 1000000) })
       } else {
@@ -349,6 +352,7 @@ export default class Display extends Component {
         this.onReady()
       })
       this.onReady()
+
     }
   }
 
@@ -364,17 +368,15 @@ export default class Display extends Component {
   }
 
   creations = async () => {
-    this.reset()
-    
     this.setState({
       creationsState: true,
       collectionState: false,
-      marketState: false
+      marketState: false,
     })
 
     let list = await getRestrictedAddresses()
-    //console.log(this.state.wallet)
-    //console.log(!list.includes(this.state.wallet))
+    console.log(this.state.wallet)
+    console.log(!list.includes(this.state.wallet))
     if (!list.includes(this.state.wallet)) {
       this.setState({ objkts: await fetchCreations(this.state.wallet), loading: false, items: [] })
     }
@@ -391,10 +393,7 @@ export default class Display extends Component {
   }
 
   collection = async () => {
-    console.log("collection")
-    
-    this.reset()
-
+    this.reset();
     this.setState({collectionType: 'notForSale'})
 
     let list = await getRestrictedAddresses()
@@ -407,7 +406,7 @@ export default class Display extends Component {
     this.setState({
       creationsState: false,
       collectionState: true,
-      marketState: false,
+      marketState: false
     })
 
     if (this.state.subjkt !== '') {
@@ -419,62 +418,63 @@ export default class Display extends Component {
     }
   }
 
-  market = async () => {
-    console.log("market")
+  collectionFull = async () => {
+    this.reset();
+    this.setState({collectionType: 'notForSale'})
 
-    this.reset()
+    let list = await getRestrictedAddresses()
 
-    this.setState({collectionType: 'forSale'})
+    let collection = await fetchCollection(this.state.wallet);
+    // console.log('collectionljhlj' + JSON.stringify(collection));
 
-    let swaps = await fetchSwaps(this.state.wallet)
-    swaps = swaps.filter(e => parseInt(e.contract_version) !== 2)
-    // this.setState({ market: swaps, loading: false })
+    if (!list.includes(this.state.wallet)) {
+      this.setState({ objkts: collection, items: [], loading: false })
+    }
+
+    let swaps = await fetchV2Swaps(this.state.wallet)
     
-    this.setState({ objkts: await fetchv2Swaps(this.state.wallet), loading: false, items: [] })
+    // console.log("swapsswapsswaps " + JSON.stringify(swaps))
+
+    // this.setState(previousState => ({
+    //   objkts: [...previousState.objkts, swaps.token_id]
+    // }));
 
     this.setState({ items: this.state.objkts.slice(0, 20), offset: 20 })
 
     this.setState({
       creationsState: false,
       collectionState: true,
-      marketState: true
+      marketState: false
+    })
+  }
+
+  market = async () => {
+    console.log("market")
+    this.reset()
+    this.setState({collectionType: 'forSale'})
+
+    let swapsV1 = await fetchV1Swaps(this.state.wallet)
+    swapsV1 = swapsV1.filter(e => parseInt(e.contract_version) !== 2)
+    this.setState({ marketV1: swapsV1, loading: false })
+
+    this.setState({
+      creationsState: false,
+      collectionState: true
     })
 
     console.log(this.state)
-  }
 
-  fullCollection = async () => {
-    console.log('full collection')
-
-    this.reset()
-
-    this.setState({collectionType: 'notForSale'})
+    let swapsV2 = await fetchV2Swaps(this.state.wallet)
+    this.setState({ objkts: swapsV2})
     
-    //get collection
-    let list = await getRestrictedAddresses()
-    if (!list.includes(this.state.wallet)) {
-      this.setState({ objkts: await fetchCollection(this.state.wallet), loading: false, items: [] })
-    }
-
-    //get market
-    let swaps = await fetchSwaps(this.state.wallet)
-    swaps = swaps.filter(e => parseInt(e.contract_version) !== 2)
-    
-    const pendingObjkts = await fetchv2Swaps(this.state.wallet)
-
-    this.setState(previousState => ({
-      objkts: [...previousState.objkts, pendingObjkts]
-    }));
-
-    console.log(this.state.objkts)
-
     this.setState({ items: this.state.objkts.slice(0, 20), offset: 20 })
 
     this.setState({
       creationsState: false,
-      collectionState: true,
-      marketState: false,
+      collectionState: true
     })
+
+    console.log(this.state)
   }
 
   // called if there's no redirect
@@ -486,10 +486,11 @@ export default class Display extends Component {
       if (window.location.pathname.split('/')[2] === 'creations') {
         this.creations()
       } else if (window.location.pathname.split('/')[2] === 'collection') {
-        this.fullCollection()
-      } else if (window.location.pathname.split('/')[2] === 'swaps') {
+        this.collectionFull()
+      } else if (window.location.pathname.split('/')[2] === 'v1') {
         this.market()
       } else {
+
         this.creations()
       }
     } else {
@@ -497,7 +498,9 @@ export default class Display extends Component {
       if (window.location.pathname.split('/')[3] === 'creations') {
         this.creations()
       } else if (window.location.pathname.split('/')[3] === 'collection') {
-        this.fullCollection()
+        this.collectionFull()
+      } else if (window.location.pathname.split('/')[3] === 'v1') {
+        this.market()
       } else {
         this.creations()
       }
@@ -506,14 +509,14 @@ export default class Display extends Component {
 
   loadMore = () => {
     this.setState({ items: this.state.items.concat(this.state.objkts.slice(this.state.offset, this.state.offset + 20)), offset: this.state.offset + 20 })
-    console.log(['loadmore',this.state.objkts])
-    if ((this.state.objkts.slice(this.state.offset, this.state.offset + 20).length < 20) && (this.state.offset !== 20)) {
-      this.setState({ hasMore : false })
-    }
+
+    /*     if ((this.state.objkts.slice(this.state.offset, this.state.offset + 20).length < 20) && (this.state.offset !== 20)) {
+          this.setState({ hasMore : false })
+        } */
   }
 
   cancel_batch = async () => {
-    this.context.batch_cancel(this.state.market.slice(0, 10))
+    this.context.batch_cancel(this.state.marketV1.slice(0, 10))
   }
 
   render() {
@@ -536,7 +539,7 @@ export default class Display extends Component {
                 )}
                 {this.state.description && <p>{this.state.description}</p>}
                 <Button href={`https://tzkt.io/${this.state.wallet}`}>
-                  <Primary>{this.state.walletPrev}</Primary>
+                  <Primary>{walletPreview(this.state.wallet)}</Primary>
                 </Button>
 
                 <p>{this.state.hdao} ○</p>
@@ -691,7 +694,6 @@ export default class Display extends Component {
         <Container>
           <Padding>
             <p>
-              <strong>OBJKTs</strong>
             </p>
             <div className={styles.menu}>
               <Button onClick={this.creations}>
@@ -700,17 +702,11 @@ export default class Display extends Component {
                 </Primary>
               </Button>
 
-              <Button onClick={this.collection}>
+              <Button onClick={this.collectionFull}>
                 <Primary selected={this.state.collectionState}>
                   collection
                 </Primary>
               </Button>
-                
-              {/* <Button onClick={this.market}>
-                <Primary selected={this.state.marketState}>
-                  swaps
-                </Primary>
-              </Button> */}
             </div>
           </Padding>
         </Container>
@@ -729,14 +725,8 @@ export default class Display extends Component {
               dataLength={this.state.items.length}
               next={this.loadMore}
               hasMore={this.state.hasMore}
-              loader={
-                <Container>
-                  <Padding>
-                    <Loading />
-                  </Padding>
-                </Container>
-              }
-              endMessage={<p></p>}
+              loader={undefined}
+              endMessage={undefined}
             >
               <ResponsiveMasonry>
                 {this.state.items.map((nft) => {
@@ -776,7 +766,7 @@ export default class Display extends Component {
               <>
               {this.context.acc != null && this.context.acc.address == this.state.wallet ?
                 <>
-                {Object.keys(this.state.market).length !== 0 && (
+                {Object.keys(this.state.marketV1).length !== 0 && (
                   <>
                     <Container>
                       <Padding>
@@ -790,7 +780,7 @@ export default class Display extends Component {
                   </>
                 )}
 
-              {this.state.market.length !== 0 ?
+              {this.state.marketV1.length !== 0 ?
                 <Container>
                   <Padding>
                     <p>
@@ -808,7 +798,7 @@ export default class Display extends Component {
                 null
               }
 
-              {this.state.market.map((e, key) => {
+              {this.state.marketV1.map((e, key) => {
                 // console.log(e)
                 return (
                   <>
@@ -870,11 +860,7 @@ export default class Display extends Component {
           </Container>
         )}
 
-        {!this.state.loading && this.state.marketState && (
-          <>
-          </>
-        )}
-{/*         <BottomBanner>
+        {/*         <BottomBanner>
           Collecting has been temporarily disabled. Follow <a href="https://twitter.com/hicetnunc2000" target="_blank">@hicetnunc2000</a> or <a href="https://discord.gg/jKNy6PynPK" target="_blank">join the discord</a> for updates.
         </BottomBanner> */}
       </Page>
