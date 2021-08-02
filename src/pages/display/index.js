@@ -258,12 +258,10 @@ export default class Display extends Component {
     creations: [],
     collection: [],
     marketV1: [],
-    marketV2: [],
     items: [],
     offset: 0,
     creationsState: true,
     collectionState: false,
-    marketState: false,
     hdao: 0,
     collectionType: 'notForSale'
   }
@@ -360,7 +358,7 @@ export default class Display extends Component {
     this.setState({
       items: [],
       objkts: [],
-      market: [],
+      marketV1: [],
       render: false,
       loading: true,
       hasMore: true,
@@ -371,7 +369,6 @@ export default class Display extends Component {
     this.setState({
       creationsState: true,
       collectionState: false,
-      marketState: false,
     })
 
     let list = await getRestrictedAddresses()
@@ -405,8 +402,24 @@ export default class Display extends Component {
 
     this.setState({
       creationsState: false,
-      collectionState: true,
-      marketState: false
+      collectionState: true
+    })
+  }
+
+  collectionFull = async () => {
+    this.reset();
+    this.setState({collectionType: 'notForSale'})
+
+    let list = await getRestrictedAddresses()
+    if (!list.includes(this.state.wallet)) {
+      this.setState({ objkts: await fetchCollection(this.state.wallet), loading: false, items: [] })
+    }
+
+    this.setState({ items: this.state.objkts.slice(0, 20), offset: 20 })
+
+    this.setState({
+      creationsState: false,
+      collectionState: true
     })
 
     if (this.state.subjkt !== '') {
@@ -416,36 +429,6 @@ export default class Display extends Component {
       // if tz/wallethash route
       this.props.history.push(`/tz/${this.state.wallet}/collection`)
     }
-  }
-
-  collectionFull = async () => {
-    this.reset();
-    this.setState({collectionType: 'notForSale'})
-
-    let list = await getRestrictedAddresses()
-
-    let collection = await fetchCollection(this.state.wallet);
-    // console.log('collectionljhlj' + JSON.stringify(collection));
-
-    if (!list.includes(this.state.wallet)) {
-      this.setState({ objkts: collection, items: [], loading: false })
-    }
-
-    let swaps = await fetchV2Swaps(this.state.wallet)
-    
-    // console.log("swapsswapsswaps " + JSON.stringify(swaps))
-
-    // this.setState(previousState => ({
-    //   objkts: [...previousState.objkts, swaps.token_id]
-    // }));
-
-    this.setState({ items: this.state.objkts.slice(0, 20), offset: 20 })
-
-    this.setState({
-      creationsState: false,
-      collectionState: true,
-      marketState: false
-    })
   }
 
   market = async () => {
@@ -751,7 +734,7 @@ export default class Display extends Component {
         {!this.state.loading && this.state.collectionState && (
           <Container xlarge>
             <div style={{display: "flex", justifyContent: "flex-end"}}>
-              <Button onClick={this.fullCollection}>
+              <Button onClick={this.collectionFull}>
                 <div className={styles.tag}>all</div>
               </Button>
               <Button onClick={this.collection}>
