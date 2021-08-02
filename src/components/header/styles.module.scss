@@ -30,10 +30,10 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      height: 23px;
+      height: 22.5px;
 
       svg {
-        height: 23px;
+        height: 22.5px;
         // fill: var(--text-color);
         transition: fill #{$theme-duration} ease-out;
       }
