@@ -154,6 +154,7 @@ export function injectCSPMetaTagIntoHTML(html) {
       blob:
       https://services.tzkt.io
       https://ipfs.infura.io
+      https://*.infura-ipfs.io
       https://cloudflare-ipfs.com/
       https://ipfs.io/
       https://templewallet.com/logo.png
@@ -162,6 +163,7 @@ export function injectCSPMetaTagIntoHTML(html) {
       'self'
       data:
       https://ipfs.infura.io
+      https://*.infura-ipfs.io
       https://cloudflare-ipfs.com/
       https://fonts.googleapis.com/
       https://ipfs.io/
@@ -205,12 +207,14 @@ export function injectCSPMetaTagIntoHTML(html) {
       data:
       blob:
       https://ipfs.infura.io
+      https://*.infura-ipfs.io
       https://cloudflare-ipfs.com/
       https://ipfs.io/
       https://gateway.pinata.cloud/;
     prefetch-src
       'self'
       https://ipfs.infura.io
+      https://*.infura-ipfs.io
       https://cloudflare-ipfs.com/
       https://fonts.googleapis.com/
       https://ipfs.io/
