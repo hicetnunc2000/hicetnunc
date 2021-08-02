@@ -143,7 +143,8 @@ query querySwaps($address: String!) {
 
 const query_v2_swaps = `
 query querySwaps($address: String!) {
-  hic_et_nunc_swap(where: {creator_id: {_eq: $address}, status: {_eq: "0"}, contract_version: {_eq: "2"}}, distinct_on: token_id) {
+  hic_et_nunc_swap(distinct_on: token_id, where: {status: {_eq: "0"}, creator_id: {_eq: $address}, contract_version: {_eq: "2"}}) {
+    creator_id
     token {
       id
       title
@@ -162,6 +163,7 @@ query querySwaps($address: String!) {
       }
       creator {
         name
+        address
       }
     }
     amount
@@ -196,7 +198,7 @@ async function fetchV2Swaps(address) {
   }
   const result = data.hic_et_nunc_swap
   console.log(result)
-  console.log('swapresultv2 ' + result)
+  console.log('swapresultv2 ' + JSON.stringify(result))
 
   return result
 
@@ -411,19 +413,33 @@ export default class Display extends Component {
 
     collection.forEach(function(item) {
       combinedCollection.push(item)
-      // console.log('swaps 92384294' + item)
+      console.log("collectionadfadfs " + collection.length)
     })
     
     swaps.forEach(function(item) {
       combinedCollection.push(item)
-      console.log('combinedCollection ' + combinedCollection)
+      console.log("swapsdadfadfs " + swaps.length)
     })
+
+    console.log("comvinedadfadfs " + combinedCollection.length)
 
     return combinedCollection;
   }
 
+  sortCollection = async (unsorted) => {
+    unsorted.sort(function (a, b) {
+      return b.token.id - a.token.id
+    })
+  }
+
   collectionFull = async () => {
+    this.setState({
+      creationsState: false,
+      collectionState: true
+    })
+
     this.reset();
+
     this.setState({collectionType: 'notForSale'})
 
     let list = await getRestrictedAddresses()
@@ -432,16 +448,13 @@ export default class Display extends Component {
       this.setState({loading: false, items: []})
       let collection = await fetchCollection(this.state.wallet)
       let swaps = await fetchV2Swaps(this.state.wallet)
-
-      this.setState({ objkts: await this.combineCollection(collection, swaps), loading: false, items: [] })
+      let combinedCollection = await this.combineCollection(collection, swaps)
+      let sortedCollection = await this.sortCollection(combinedCollection)
+      this.sortCollection(combinedCollection)
+      this.setState({ objkts: combinedCollection })
     }
 
     this.setState({ items: this.state.objkts.slice(0, 20), offset: 20 })
-
-    this.setState({
-      creationsState: false,
-      collectionState: true
-    })
 
     if (this.state.subjkt !== '') {
       // if alias route
