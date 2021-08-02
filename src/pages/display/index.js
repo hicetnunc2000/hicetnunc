@@ -406,13 +406,34 @@ export default class Display extends Component {
     })
   }
 
+  combineCollection = async (collection, swaps) => {
+    let combinedCollection = [];
+
+    collection.forEach(function(item) {
+      combinedCollection.push(item)
+      // console.log('swaps 92384294' + item)
+    })
+    
+    swaps.forEach(function(item) {
+      combinedCollection.push(item)
+      console.log('combinedCollection ' + combinedCollection)
+    })
+
+    return combinedCollection;
+  }
+
   collectionFull = async () => {
     this.reset();
     this.setState({collectionType: 'notForSale'})
 
     let list = await getRestrictedAddresses()
+
     if (!list.includes(this.state.wallet)) {
-      this.setState({ objkts: await fetchCollection(this.state.wallet), loading: false, items: [] })
+      this.setState({loading: false, items: []})
+      let collection = await fetchCollection(this.state.wallet)
+      let swaps = await fetchV2Swaps(this.state.wallet)
+
+      this.setState({ objkts: await this.combineCollection(collection, swaps), loading: false, items: [] })
     }
 
     this.setState({ items: this.state.objkts.slice(0, 20), offset: 20 })
@@ -431,7 +452,7 @@ export default class Display extends Component {
     }
   }
 
-  market = async () => {
+  marketV2 = async () => {
     console.log("market")
     this.reset()
     this.setState({collectionType: 'forSale'})
@@ -451,11 +472,6 @@ export default class Display extends Component {
     this.setState({ objkts: swapsV2})
     
     this.setState({ items: this.state.objkts.slice(0, 20), offset: 20 })
-
-    this.setState({
-      creationsState: false,
-      collectionState: true
-    })
 
     console.log(this.state)
   }
@@ -740,7 +756,7 @@ export default class Display extends Component {
               <Button onClick={this.collection}>
                 <div className={styles.tag}>not for sale</div>
               </Button>
-              <Button onClick={this.market}>
+              <Button onClick={this.marketV2}>
                 <div className={styles.tag}>for sale</div>
               </Button>
             </div>
