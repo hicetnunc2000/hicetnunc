@@ -391,15 +391,27 @@ export default class Display extends Component {
     }
   }
 
+  filterNotForSale = async (collection) => {
+    // collection.forEach(function(item) {
+    //   if (item.creator_id == 'tz1YMqQQme7jcERyk2586QDT9fqWGCz9L2fQ') {
+    //     console.log(item)
+    //   }
+    // })
+
+    let objktsNotForSale = this.state.objkts.filter(objkt => objkt.creator_id == this.state.wallet)
+    // console.log('objktsNotForSale ' + JSON.stringify(objktsNotForSale))
+    // console.log(this.state.wallet)
+    // console.log(this.state.objkts.length)
+    return objktsNotForSale
+  }
+
   collection = async () => {
     this.reset();
     this.setState({collectionType: 'notForSale'})
-
-    let list = await getRestrictedAddresses()
-    if (!list.includes(this.state.wallet)) {
-      this.setState({ objkts: await fetchCollection(this.state.wallet), loading: false, items: [] })
-    }
-
+    // console.log(this.state.objkts)
+    // console.log(this.state.objkts.length)
+    // this.filterNotForSale(this.state.objkts)
+    this.setState({ objkts: await this.filterNotForSale(this.state.objkts), loading: false, items: [] })
     this.setState({ items: this.state.objkts.slice(0, 20), offset: 20 })
 
     this.setState({
@@ -413,16 +425,15 @@ export default class Display extends Component {
 
     collection.forEach(function(item) {
       combinedCollection.push(item)
-      console.log("collectionadfadfs " + collection.length)
+      // console.log("collectionadfadfs " + collection.length)
     })
     
     swaps.forEach(function(item) {
       combinedCollection.push(item)
-      console.log("swapsdadfadfs " + swaps.length)
+      // console.log("swapsdadfadfs " + swaps.length)
     })
 
-    console.log("comvinedadfadfs " + combinedCollection.length)
-
+    // console.log("comvinedadfadfs " + combinedCollection.length)
     return combinedCollection;
   }
 
@@ -449,7 +460,6 @@ export default class Display extends Component {
       let collection = await fetchCollection(this.state.wallet)
       let swaps = await fetchV2Swaps(this.state.wallet)
       let combinedCollection = await this.combineCollection(collection, swaps)
-      let sortedCollection = await this.sortCollection(combinedCollection)
       this.sortCollection(combinedCollection)
       this.setState({ objkts: combinedCollection })
     }
