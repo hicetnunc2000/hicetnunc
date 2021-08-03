@@ -259,6 +259,8 @@ export default class Display extends Component {
     objkts: [],
     creations: [],
     collection: [],
+    forSale: [],
+    notForSale: [],
     marketV1: [],
     items: [],
     offset: 0,
@@ -391,35 +393,6 @@ export default class Display extends Component {
     }
   }
 
-  filterNotForSale = async (collection) => {
-    // collection.forEach(function(item) {
-    //   if (item.creator_id == 'tz1YMqQQme7jcERyk2586QDT9fqWGCz9L2fQ') {
-    //     console.log(item)
-    //   }
-    // })
-
-    let objktsNotForSale = this.state.objkts.filter(objkt => objkt.creator_id == this.state.wallet)
-    // console.log('objktsNotForSale ' + JSON.stringify(objktsNotForSale))
-    // console.log(this.state.wallet)
-    // console.log(this.state.objkts.length)
-    return objktsNotForSale
-  }
-
-  collection = async () => {
-    this.reset();
-    this.setState({collectionType: 'notForSale'})
-    // console.log(this.state.objkts)
-    // console.log(this.state.objkts.length)
-    // this.filterNotForSale(this.state.objkts)
-    this.setState({ objkts: await this.filterNotForSale(this.state.objkts), loading: false, items: [] })
-    this.setState({ items: this.state.objkts.slice(0, 20), offset: 20 })
-
-    this.setState({
-      creationsState: false,
-      collectionState: true
-    })
-  }
-
   combineCollection = async (collection, swaps) => {
     let combinedCollection = [];
 
@@ -449,8 +422,6 @@ export default class Display extends Component {
       collectionState: true
     })
 
-    this.reset();
-
     this.setState({collectionType: 'notForSale'})
 
     let list = await getRestrictedAddresses()
@@ -461,9 +432,10 @@ export default class Display extends Component {
       let swaps = await fetchV2Swaps(this.state.wallet)
       let combinedCollection = await this.combineCollection(collection, swaps)
       this.sortCollection(combinedCollection)
-      this.setState({ objkts: combinedCollection })
+      this.setState({ collection: combinedCollection })
     }
 
+    this.setState({ objkts: this.state.collection, loading: false, items: [] })
     this.setState({ items: this.state.objkts.slice(0, 20), offset: 20 })
 
     if (this.state.subjkt !== '') {
@@ -476,27 +448,32 @@ export default class Display extends Component {
   }
 
   marketV2 = async () => {
-    console.log("market")
-    this.reset()
     this.setState({collectionType: 'forSale'})
 
     let swapsV1 = await fetchV1Swaps(this.state.wallet)
     swapsV1 = swapsV1.filter(e => parseInt(e.contract_version) !== 2)
     this.setState({ marketV1: swapsV1, loading: false })
 
-    this.setState({
-      creationsState: false,
-      collectionState: true
-    })
-
-    console.log(this.state)
-
-    let swapsV2 = await fetchV2Swaps(this.state.wallet)
-    this.setState({ objkts: swapsV2})
-    
+    this.setState({ objkts: await this.filterForSale(this.state.objkts), loading: false, items: [] })
     this.setState({ items: this.state.objkts.slice(0, 20), offset: 20 })
+  }
 
-    console.log(this.state)
+  filterNotForSale = async () => {
+    let objktsNotForSale = this.state.collection.filter(item => item.token.creator.address !== this.state.wallet && item.creator_id !== this.state.wallet)
+    return objktsNotForSale
+  }
+
+  filterForSale = async () => {
+    let objktsForSale = this.state.collection.filter(item => item.creator_id == this.state.wallet)
+    return objktsForSale
+  }
+
+  collection = async () => {
+    this.reset();
+    this.setState({collectionType: 'notForSale'})
+
+    this.setState({ objkts: await this.filterNotForSale(this.state.objkts), loading: false, items: [] })
+    this.setState({ items: this.state.objkts.slice(0, 20), offset: 20 })
   }
 
   // called if there's no redirect
@@ -794,8 +771,7 @@ export default class Display extends Component {
                       <Padding>
                         <p>We're currently migrating the marketplace smart contract. We ask for 
                           users to cancel their listings as the v1 marketplace will no longer be 
-                          maintained. Auditing tools for the v1 protocol can be found at
-                          <a href='https://hictory.xyz'>hictory.xyz</a>
+                          maintained. Auditing tools for the v1 protocol can be found at <a href='https://hictory.xyz'>hictory.xyz</a>
                         </p>
                       </Padding>
                     </Container>
