@@ -143,7 +143,7 @@ query querySwaps($address: String!) {
 
 const query_v2_swaps = `
 query querySwaps($address: String!) {
-  hic_et_nunc_swap(distinct_on: token_id, where: {status: {_eq: "0"}, creator_id: {_eq: $address}, contract_version: {_eq: "2"}}) {
+  hic_et_nunc_swap(where: {token: {creator: {address: {_neq: $address}}}, creator_id: {_eq: $address}, status: {_eq: "0"}, contract_version: {_eq: "2"}}, distinct_on: token_id) {
     creator_id
     token {
       id
@@ -448,7 +448,7 @@ export default class Display extends Component {
     }
   }
 
-  marketV2 = async () => {
+  collectionForSale = async () => {
     this.setState({collectionType: 'forSale'})
 
     let swapsV1 = await fetchV1Swaps(this.state.wallet)
@@ -469,7 +469,7 @@ export default class Display extends Component {
     return objktsForSale
   }
 
-  collection = async () => {
+  collectionNotForSale = async () => {
     this.reset();
     this.setState({collectionType: 'notForSale'})
 
@@ -487,10 +487,7 @@ export default class Display extends Component {
         this.creations()
       } else if (window.location.pathname.split('/')[2] === 'collection') {
         this.collectionFull()
-      } else if (window.location.pathname.split('/')[2] === 'v1') {
-        this.market()
       } else {
-
         this.creations()
       }
     } else {
@@ -499,8 +496,6 @@ export default class Display extends Component {
         this.creations()
       } else if (window.location.pathname.split('/')[3] === 'collection') {
         this.collectionFull()
-      } else if (window.location.pathname.split('/')[3] === 'v1') {
-        this.market()
       } else {
         this.creations()
       }
@@ -754,10 +749,10 @@ export default class Display extends Component {
               <Button onClick={this.collectionFull}>
                 <div className={styles.tag}>all</div>
               </Button>
-              <Button onClick={this.collection}>
+              <Button onClick={this.collectionNotForSale}>
                 <div className={styles.tag}>not for sale</div>
               </Button>
-              <Button onClick={this.marketV2}>
+              <Button onClick={this.collectionForSale}>
                 <div className={styles.tag}>for sale</div>
               </Button>
             </div>
