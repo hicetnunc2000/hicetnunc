@@ -417,6 +417,7 @@ export default class Display extends Component {
   }
 
   collectionFull = async () => {
+    this.reset()
     this.setState({
       creationsState: false,
       collectionState: true
