@@ -516,7 +516,7 @@ class HicetnuncContextProviderClass extends Component {
       registry: async (alias, metadata) => {
         console.log(metadata)
         const subjktAddressOrProxy = this.state.proxyAddress || this.state.subjkt
-        return await Tezos.wallet.at(subjktAddressOrProxy).then((c) =>
+        return await Tezos.wallet.at(this.state.subjkt).then((c) =>
           c.methods
             .registry(
               ('ipfs://' + metadata.path)
