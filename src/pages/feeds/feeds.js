@@ -20,6 +20,15 @@ const customFloor = function (value, roundTo) {
   return Math.floor(value / roundTo) * roundTo
 }
 
+const tz_profiles = `
+query profiles {
+  tzprofiles(where: {account: {_in: $arr }}) {
+    account
+    contract
+  }
+}
+`
+
 const latest_feed = `
 query LatestFeed($lastId: bigint = 99999999) {
   hic_et_nunc_token(order_by: {id: desc}, limit: 50, where: {id: {_lt: $lastId}, artifact_uri: {_neq: ""}}) {
@@ -56,8 +65,13 @@ const query_hdao = `query hDAOFeed($offset: Int = 0) {
   }
 }`
 
+async function fetchProfiles(arr) {
+  const { errors, data } = await fetchGraphQLProfiles(tz_profiles, "profiles", { "arr" : arr })
+  return data.tzprofiles  
+}
+
 async function fetchHdao(offset) {
-  const { errors, data } = await fetchGraphQL(query_hdao, "hDAOFeed", { "offset": offset });
+  const { errors, data } = await fetchGraphQL(query_hdao, "hDAOFeed", { "offset": offset })
   if (errors) {
     console.error(errors);
   }
@@ -74,6 +88,18 @@ async function fetchFeed(lastId) {
   const result = data.hic_et_nunc_token
   /* console.log({ result }) */
   return result
+}
+
+async function fetchGraphQLProfiles(operationsDoc, operationName, variables) {
+  let result = await fetch('https://indexer.tzprofiles.com/v1/graphql', {
+    method : 'POST',
+    body : JSON.stringify({
+      query : operationsDoc,
+      variables : variables,
+      operationName : operationName
+    })
+  })
+  return await result.json()
 }
 
 async function fetchGraphQL(operationsDoc, operationName, variables) {
@@ -222,7 +248,7 @@ export const Feeds = ({ type }) => {
   const getLatest = async (id) => {
     console.log(id)
     let result = await fetchFeed(id)
-
+    //console.log('feed', await fetchProfiles(result.map(e => e.creator_id)))
     setCreators([...creators, result.map(e => e.creator_id)])
 
     result = _.uniqBy(result, 'creator_id')
