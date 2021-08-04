@@ -53,6 +53,11 @@ export class About extends Component {
             <div className={styles.buttons}>
               <p>For consulting, networking or questions get in touch by</p>
               &nbsp;
+              <Button href="https://hicetnunc2000.medium.com">
+                <Primary>
+                  <strong>medium</strong>
+                </Primary>
+              </Button>
               <Button href="mailto:hicetnunc2000@protonmail.com">
                 <Primary>
                   <strong>email</strong>

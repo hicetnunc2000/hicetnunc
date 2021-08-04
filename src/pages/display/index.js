@@ -109,6 +109,7 @@ query subjktsQuery($subjkt: String!) {
     name
     hdao_balance
     metadata
+    metadata_file
   }
 }
 `
@@ -120,6 +121,7 @@ query addressQuery($address: String!) {
     name
     hdao_balance
     metadata
+    metadata_file
   }
 }
 `
@@ -222,48 +224,69 @@ export default class Display extends Component {
 
     const id = window.location.pathname.split('/')[1]
     console.log(window.location.pathname.split('/'))
+
     if (id === 'tz') {
+
       const wallet = window.location.pathname.split('/')[2]
       this.setState({
         wallet,
         walletPreview: walletPreview(wallet),
       })
+      //let res = await fetchSubjkts(decodeURI(window.location.pathname.split('/')[1]))
+      // console.log(decodeURI(window.location.pathname.split('/')[1]))
+      //console.log(res)
+
 
       await GetUserMetadata(wallet).then((data) => {
         const {
-          alias,
+/*           alias,
           description,
           site,
-          telegram,
+          telegram, */
           twitter,
-          github,
+/*           github,
           reddit,
           instagram,
-          logo,
+          logo, */
           tzprofile,
         } = data.data
-        if (data.data.alias) this.setState({ alias })
+/*         if (data.data.alias) this.setState({ alias })
         if (data.data.description) this.setState({ description })
         if (data.data.site) this.setState({ site })
-        if (data.data.telegram) this.setState({ telegram })
+        if (data.data.telegram) this.setState({ telegram }) */
         if (data.data.twitter) this.setState({ twitter })
-        if (data.data.github) this.setState({ github })
+/*         if (data.data.github) this.setState({ github })
         if (data.data.reddit) this.setState({ reddit })
         if (data.data.instagram) this.setState({ instagram })
-        if (data.data.logo) this.setState({ logo })
+        if (data.data.logo) this.setState({ logo }) */
         if (data.data.tzprofile) this.setState({ tzprofile })
 
         console.log(this.state.logo)
       })
 
-      let resTz = await fetchTz(wallet)
-      this.setState({ hdao: Math.floor(resTz[0].hdao_balance / 1000000) })
+      let res = await fetchTz(wallet)
+      if (res[0].metadata_file) { 
+        let meta = await axios.get('https://ipfs.io/ipfs/' + res[0].metadata_file.split('//')[1]).then(res => res.data)
+        console.log(meta)
+        if (meta.description) this.setState({ description : meta.description })
+        if (meta.identicon) this.setState({ identicon : meta.identicon })
+      }
+
+      if (res[0].name) this.setState({ subjkt : res[0].name })
+      this.setState({ hdao: Math.floor(res[0].hdao_balance / 1000000) })
 
       this.onReady()
     } else {
       let res = await fetchSubjkts(decodeURI(window.location.pathname.split('/')[1]))
       // console.log(decodeURI(window.location.pathname.split('/')[1]))
       console.log(res)
+
+      if (res[0].metadata_file) { 
+        let meta = await axios.get('https://ipfs.io/ipfs/' + res[0].metadata_file.split('//')[1]).then(res => res.data)
+        console.log(meta)
+        if (meta.description) this.setState({ description : meta.description })
+        if (meta.identicon) this.setState({ identicon : meta.identicon })
+      }
 
       if (res.length >= 1) {
         this.setState({
@@ -280,26 +303,30 @@ export default class Display extends Component {
 
       await GetUserMetadata(this.state.wallet).then((data) => {
         const {
-          alias,
+/*           alias,
           description,
           site,
-          telegram,
+          telegram, */
           twitter,
-          github,
+/*           github,
           reddit,
           instagram,
-          logo,
+          logo, */
+          tzprofile
         } = data.data
-        if (data.data.alias) this.setState({ alias })
+/*         if (data.data.alias) this.setState({ alias })
         if (data.data.description) this.setState({ description })
         if (data.data.site) this.setState({ site })
-        if (data.data.telegram) this.setState({ telegram })
+        if (data.data.telegram) this.setState({ telegram }) */
         if (data.data.twitter) this.setState({ twitter })
-        if (data.data.github) this.setState({ github })
+        if (data.data.tzprofile) this.setState({ tzprofile })
+
+/*         if (data.data.github) this.setState({ github })
         if (data.data.reddit) this.setState({ reddit })
         if (data.data.instagram) this.setState({ instagram })
-        if (data.data.logo) this.setState({ logo })
+        if (data.data.logo) this.setState({ logo }) */
         this.onReady()
+
       })
       this.onReady()
 
@@ -366,7 +393,9 @@ export default class Display extends Component {
       collectionState: false,
       marketState: true,
     })
+
     console.log(this.state)
+
     if (this.state.subjkt !== '') {
       // if alias route
       this.props.history.push(`/${this.state.subjkt}/v1`)
@@ -424,7 +453,7 @@ export default class Display extends Component {
         <Container>
           <Padding>
             <div className={styles.profile}>
-              <Identicon address={this.state.wallet} logo={this.state.logo} />
+              <Identicon address={this.state.wallet} logo={this.state.identicon} />
 
               <div className={styles.info}>
                 {this.state.alias && !this.state.subjkt ? (
@@ -444,7 +473,7 @@ export default class Display extends Component {
                 <p>{this.state.hdao} ○</p>
 
                 <div>
-                  {this.state.site && (
+{/*                   {this.state.site && (
                     <Button href={this.state.site}>
                       <VisuallyHidden>{this.state.site}</VisuallyHidden>
                       <svg
@@ -481,7 +510,7 @@ export default class Display extends Component {
                         <path d="M9.78,18.65L10.06,14.42L17.74,7.5C18.08,7.19 17.67,7.04 17.22,7.31L7.74,13.3L3.64,12C2.76,11.75 2.75,11.14 3.84,10.7L19.81,4.54C20.54,4.21 21.24,4.72 20.96,5.84L18.24,18.65C18.05,19.56 17.5,19.78 16.74,19.36L12.6,16.3L10.61,18.23C10.38,18.46 10.19,18.65 9.78,18.65Z"></path>
                       </svg>
                     </Button>
-                  )}
+                  )} */}
                   {this.state.twitter && (
                     <Button href={`https://twitter.com/${this.state.twitter}`}>
                       <VisuallyHidden>{`https://twitter.com/${this.state.twitter}`}</VisuallyHidden>
@@ -501,7 +530,7 @@ export default class Display extends Component {
                       </svg>
                     </Button>
                   )}
-                  {this.state.instagram && (
+{/*                   {this.state.instagram && (
                     <Button
                       href={`https://instagram.com/${this.state.instagram}`}
                     >
@@ -561,7 +590,7 @@ export default class Display extends Component {
                         <path d="m314.675781 256c-14.695312 0-26.675781 11.980469-26.675781 26.675781 0 14.691407 11.980469 26.675781 26.675781 26.675781 14.691407 0 26.675781-11.984374 26.675781-26.675781 0-14.695312-11.980468-26.675781-26.675781-26.675781zm0 0" />
                       </svg>
                     </Button>
-                  )}
+                  )} */}
                   {this.state.tzprofile && (
                     <Button href={`https://tzprofiles.com/view/${this.state.tzprofile}`}>
                       <VisuallyHidden>{`https://tzprofiles.com/view/${this.state.tzprofile}`}</VisuallyHidden>
