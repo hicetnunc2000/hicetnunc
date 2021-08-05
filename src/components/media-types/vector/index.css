@@ -9,3 +9,7 @@
   min-height: 0;
   min-width: 0;
 }
+
+.objktview .vector-container {
+  pointer-events: all;
+}

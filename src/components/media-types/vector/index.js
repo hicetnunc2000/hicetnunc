@@ -58,7 +58,7 @@ export const VectorComponent = ({
     )
   } else {
     return (
-      <div className={styles.container}>
+      <div className={styles.container + ' vector-container'}>
         <iframe
           className={styles.vector + ' vector'}
           title="hic et nunc SVG renderer"
