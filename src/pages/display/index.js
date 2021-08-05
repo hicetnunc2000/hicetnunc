@@ -265,15 +265,15 @@ export default class Display extends Component {
       })
 
       let res = await fetchTz(wallet)
-      if (res[0].metadata_file) { 
+      if (res[0]) { 
         let meta = await axios.get('https://ipfs.io/ipfs/' + res[0].metadata_file.split('//')[1]).then(res => res.data)
         console.log(meta)
         if (meta.description) this.setState({ description : meta.description })
         if (meta.identicon) this.setState({ identicon : meta.identicon })
       }
 
-      if (res[0].name) this.setState({ subjkt : res[0].name })
-      this.setState({ hdao: Math.floor(res[0].hdao_balance / 1000000) })
+      if (res[0]) this.setState({ subjkt : res[0].name })
+      if (res[0]) this.setState({ hdao: Math.floor(res[0].hdao_balance / 1000000) })
 
       this.onReady()
     } else {
