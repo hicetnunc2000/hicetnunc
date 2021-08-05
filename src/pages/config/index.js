@@ -14,6 +14,7 @@ import styles from './styles.module.scss'
 import axios from 'axios'
 const { create } = require('ipfs-http-client')
 const infuraUrl = 'https://ipfs.infura.io:5001'
+const ipfs = create(infuraUrl)
 
 const ls = require('local-storage')
 
@@ -75,14 +76,17 @@ export class Config extends Component {
 
     this.context.subjktInfo = res[0]
     console.log(this.context.subjktInfo)
+
+    if (this.context.subjktInfo) {
     let cid = await axios.get('https://ipfs.io/ipfs/'+ (this.context.subjktInfo.metadata_file).split('//')[1]).then(res => res.data) 
 
     this.context.subjktInfo.gravatar = cid
     
     if (cid.description) this.setState({ description : cid.description })
     if (cid.identicon) this.setState({ identicon : cid.identicon })
-    
-    console.log(this.context.subjktInfo.gravatar.identicon)
+    if (this.context.subjktInfo.name) this.setState({ subjkt : this.context.subjktInfo.name })
+
+    }
     //console.log(this.context.subjktInfo)
     this.setState({ loading : false })
   }
@@ -95,7 +99,6 @@ export class Config extends Component {
   // config subjkt
 
   subjkt_config = async () => {
-    const ipfs = create(infuraUrl)
 
     if (this.state.selectedFile) {
       const [file] = this.state.selectedFile
@@ -116,11 +119,17 @@ export class Config extends Component {
 
   // upload file
 
-  onFileChange = (event) => {
+  onFileChange = async (event) => {
     this.setState({
       selectedFile: event.target.files,
       fileTitle: event.target.files[0].name,
     })
+
+    const [file] = event.target.files
+
+    const buffer = Buffer.from(await file.arrayBuffer())
+    this.setState({ identicon: 'ipfs://' + (await ipfs.add(buffer)).path })
+     
   }
 
   hDAO_operators = () => {
@@ -191,7 +200,7 @@ export class Config extends Component {
               onChange={this.handleChange}
               placeholder="Username"
               label="Username"
-              value={this.context.subjktInfo.name}
+              value={this.context.subjktInfo ? this.context.subjktInfo.name : undefined}
             />
             <Input
               name="description"
