@@ -155,9 +155,7 @@ const GetUserClaims = async (walletAddr) => {
  * Get User Metadata
  */
 export const GetUserMetadata = async (walletAddr) => {
-  let tzktData = await axios.get(
-    `https://api.tzkt.io/v1/accounts/${walletAddr}/metadata`
-  )
+  let tzktData = {}
 
   let tzpData = {}
   try {
@@ -179,11 +177,9 @@ export const GetUserMetadata = async (walletAddr) => {
     console.error(e, e.stack);
   }
 
-  if (tzktData.data !== '') {
-    tzktData.data = { ...tzpData, ...tzktData.data }
-  } else if (tzpData) {
+  if (tzpData) {
     tzktData.data = tzpData
   }
-  console.log(tzktData)
+  
   return tzktData
 }
