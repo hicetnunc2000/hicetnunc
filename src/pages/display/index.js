@@ -235,45 +235,29 @@ export default class Display extends Component {
       //let res = await fetchSubjkts(decodeURI(window.location.pathname.split('/')[1]))
       // console.log(decodeURI(window.location.pathname.split('/')[1]))
       //console.log(res)
-
-
       await GetUserMetadata(wallet).then((data) => {
         const {
-/*           alias,
-          description,
-          site,
-          telegram, */
           twitter,
-/*           github,
-          reddit,
-          instagram,
-          logo, */
           tzprofile,
         } = data.data
-/*         if (data.data.alias) this.setState({ alias })
-        if (data.data.description) this.setState({ description })
-        if (data.data.site) this.setState({ site })
-        if (data.data.telegram) this.setState({ telegram }) */
         if (data.data.twitter) this.setState({ twitter })
-/*         if (data.data.github) this.setState({ github })
-        if (data.data.reddit) this.setState({ reddit })
-        if (data.data.instagram) this.setState({ instagram })
-        if (data.data.logo) this.setState({ logo }) */
         if (data.data.tzprofile) this.setState({ tzprofile })
 
-        console.log(this.state.logo)
       })
 
       let res = await fetchTz(wallet)
-      if (res[0]) { 
-        let meta = await axios.get('https://ipfs.io/ipfs/' + res[0].metadata_file.split('//')[1]).then(res => res.data)
-        console.log(meta)
-        if (meta.description) this.setState({ description : meta.description })
-        if (meta.identicon) this.setState({ identicon : meta.identicon })
-      }
+      try {
+        if (res[0]) {
+          let meta = await axios.get('https://ipfs.io/ipfs/' + res[0].metadata_file.split('//')[1]).then(res => res.data)
+          console.log(meta)
+          if (meta.description) this.setState({ description: meta.description })
+          if (meta.identicon) this.setState({ identicon: meta.identicon })
+          if (res[0]) this.setState({ subjkt: res[0].name })
+          if (res[0]) this.setState({ hdao: Math.floor(res[0].hdao_balance / 1000000) })
 
-      if (res[0]) this.setState({ subjkt : res[0].name })
-      if (res[0]) this.setState({ hdao: Math.floor(res[0].hdao_balance / 1000000) })
+        }
+      } catch (e) { }
+
 
       this.onReady()
     } else {
@@ -281,11 +265,11 @@ export default class Display extends Component {
       // console.log(decodeURI(window.location.pathname.split('/')[1]))
       console.log(res)
 
-      if (res[0].metadata_file) { 
+      if (res[0].metadata_file) {
         let meta = await axios.get('https://ipfs.io/ipfs/' + res[0].metadata_file.split('//')[1]).then(res => res.data)
         console.log(meta)
-        if (meta.description) this.setState({ description : meta.description })
-        if (meta.identicon) this.setState({ identicon : meta.identicon })
+        if (meta.description) this.setState({ description: meta.description })
+        if (meta.identicon) this.setState({ identicon: meta.identicon })
       }
 
       if (res.length >= 1) {
@@ -303,33 +287,14 @@ export default class Display extends Component {
 
       await GetUserMetadata(this.state.wallet).then((data) => {
         const {
-/*           alias,
-          description,
-          site,
-          telegram, */
           twitter,
-/*           github,
-          reddit,
-          instagram,
-          logo, */
           tzprofile
         } = data.data
-/*         if (data.data.alias) this.setState({ alias })
-        if (data.data.description) this.setState({ description })
-        if (data.data.site) this.setState({ site })
-        if (data.data.telegram) this.setState({ telegram }) */
         if (data.data.twitter) this.setState({ twitter })
         if (data.data.tzprofile) this.setState({ tzprofile })
-
-/*         if (data.data.github) this.setState({ github })
-        if (data.data.reddit) this.setState({ reddit })
-        if (data.data.instagram) this.setState({ instagram })
-        if (data.data.logo) this.setState({ logo }) */
         this.onReady()
-
       })
       this.onReady()
-
     }
   }
 
@@ -405,6 +370,7 @@ export default class Display extends Component {
     }
 
   }
+
   // called if there's no redirect
   onReady = async () => {
 
@@ -418,7 +384,6 @@ export default class Display extends Component {
       } else if (window.location.pathname.split('/')[2] === 'v1') {
         this.market()
       } else {
-
         this.creations()
       }
     } else {
@@ -473,7 +438,7 @@ export default class Display extends Component {
                 <p>{this.state.hdao} ○</p>
 
                 <div>
-{/*                   {this.state.site && (
+                  {/*                   {this.state.site && (
                     <Button href={this.state.site}>
                       <VisuallyHidden>{this.state.site}</VisuallyHidden>
                       <svg
@@ -530,7 +495,7 @@ export default class Display extends Component {
                       </svg>
                     </Button>
                   )}
-{/*                   {this.state.instagram && (
+                  {/*                   {this.state.instagram && (
                     <Button
                       href={`https://instagram.com/${this.state.instagram}`}
                     >
