@@ -51,7 +51,7 @@ export class About extends Component {
         <Container>
           <Padding>
             <div className={styles.buttons}>
-              <p>For consulting, networking or questions get in touch by</p>
+              <p>Join or contact hic et nunc by</p>
               &nbsp;
               <Button href="https://hicetnunc2000.medium.com">
                 <Primary>

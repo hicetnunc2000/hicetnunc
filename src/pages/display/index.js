@@ -402,10 +402,6 @@ export default class Display extends Component {
 
   loadMore = () => {
     this.setState({ items: this.state.items.concat(this.state.objkts.slice(this.state.offset, this.state.offset + 20)), offset: this.state.offset + 20 })
-
-    /*     if ((this.state.objkts.slice(this.state.offset, this.state.offset + 20).length < 20) && (this.state.offset !== 20)) {
-          this.setState({ hasMore : false })
-        } */
   }
 
   cancel_batch = async () => {
@@ -682,7 +678,7 @@ export default class Display extends Component {
           <>
             <Container>
               <Padding>
-                <p>We're currently migrating the marketplace smart contract. We ask for users to cancel their's listings as the v1 marketplace will no longer be maintained. Auditing tools for the v1 protocol can be found at <a href='https://hictory.xyz'>hictory.xyz</a></p>
+                <p>OBJKTs listed on market before june 28th must migrate to the marketplace v2 contract. We ask for users to cancel their's listings as the v1 marketplace is no longer maintained.</p>
               </Padding>
             </Container>
             {Object.keys(this.state.market).length === 0 && (
