@@ -248,7 +248,7 @@ export default class Display extends Component {
       let res = await fetchTz(wallet)
       try {
         if (res[0]) {
-          let meta = await axios.get('https://ipfs.io/ipfs/' + res[0].metadata_file.split('//')[1]).then(res => res.data)
+          let meta = await axios.get('https://cloudflare-ipfs.com/ipfs/' + res[0].metadata_file.split('//')[1]).then(res => res.data)
           console.log(meta)
           if (meta.description) this.setState({ description: meta.description })
           if (meta.identicon) this.setState({ identicon: meta.identicon })
@@ -266,7 +266,7 @@ export default class Display extends Component {
       console.log(res)
 
       if (res[0].metadata_file) {
-        let meta = await axios.get('https://ipfs.io/ipfs/' + res[0].metadata_file.split('//')[1]).then(res => res.data)
+        let meta = await axios.get('https://cloudflare-ipfs.com/ipfs/' + res[0].metadata_file.split('//')[1]).then(res => res.data)
         console.log(meta)
         if (meta.description) this.setState({ description: meta.description })
         if (meta.identicon) this.setState({ identicon: meta.identicon })
@@ -307,8 +307,7 @@ export default class Display extends Component {
     })
 
     let list = await getRestrictedAddresses()
-    console.log(this.state.wallet)
-    console.log(!list.includes(this.state.wallet))
+
     if (!list.includes(this.state.wallet)) {
       this.setState({ objkts: await fetchCreations(this.state.wallet), loading: false, items: [] })
     }
