@@ -47,6 +47,54 @@ const query_tag = `query ObjktsByTag($tag: String = "3d", $lastId: bigint = 9999
   }
 }`
 
+async function fetchGLB() {
+  const { errors, data } = await fetchGraphQL(`
+  query GLBObjkts {
+    hic_et_nunc_token(where : { mime : {_in : ["model/gltf-binary"]}}) {
+      id
+      artifact_uri
+      display_uri
+      mime
+      creator {
+        address
+        name
+      }
+    }
+  }
+  `, 'GLBObjkts', {}
+  )
+
+  try {
+    return data.hic_et_nunc_token
+  } catch (e) {
+    return undefined
+  }
+}
+
+async function fetchMusic() {
+  const { errors, data } = await fetchGraphQL(`
+  query AudioObjkts {
+    hic_et_nunc_token(where: { mime: {_in: ["audio/ogg", "audio/wav", "audio/mpeg"]}}) {
+      id
+      artifact_uri
+      display_uri
+      mime
+      creator {
+        address
+        name
+      }
+    }
+  }  
+  `, 'AudioObjkts', {}
+  )
+
+  try {
+    return data.hic_et_nunc_token
+  } catch (e) {
+    return undefined
+  }
+}
+
 async function fetchTitle(title) {
   const { errors, data } = await fetchGraphQL(`
   query queryTitles($title: String!) {
@@ -196,7 +244,8 @@ export class Search extends Component {
   }
 
   search = async () => {
-
+    console.log(await fetchGLB())
+    console.log(await fetchMusic())
     this.setState({ tag: [], feed : [] })
     // search for alias
 

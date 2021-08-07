@@ -23,7 +23,6 @@
     "fflate": "^0.7.0",
     "filereader": "^0.10.3",
     "framer-motion": "^4.1.16",
-    "graphql": "^15.5.1",
     "ipfs-api": "^26.1.2",
     "ipfs-http-client": "^50.0.0",
     "local-storage": "^2.0.0",
@@ -47,7 +46,6 @@
     "react-scroll": "^1.8.1",
     "read-json-lines-sync": "^2.1.7",
     "screenfull": "^5.1.0",
-    "urql": "^2.0.4",
     "web-encoding": "1.1.5"
   },
   "scripts": {
