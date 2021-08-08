@@ -29,7 +29,7 @@ export const History = (token_info) => {
                             if (e.trade) {
                                 return (
                                     <div className={styles.history}>
-                                        trade {e.timestamp} {encodeURI(e.seller.name) ? <span><a href={`/tz/${encodeURI(e.seller.address)}`}><Primary>&nbsp;{encodeURI(e.seller.name)}</Primary></a></span> : <span><a href={`/tz/${e.seller.address}`}><Primary>&nbsp;{walletPreview(e.seller.address)}</Primary></a></span>} {e.amount} ed. {parseFloat(e.swap.price / 1000000)} tez {e.buyer.name ? <span><a href={`/${encodeURI(e.buyer.name)}`}><Primary>&nbsp;{encodeURI(e.buyer.name)}</Primary></a></span> : <span><a href={`/tz/${e.buyer.address}`}>{walletPreview(e.buyer.address)}</a></span>}
+                                        trade {e.timestamp} {encodeURI(e.seller.name) ? <span><a href={`/tz/${encodeURI(e.seller.address)}`}> <Primary>&nbsp;{encodeURI(e.seller.name)}</Primary></a></span> : <span><a href={`/tz/${e.seller.address}`}>&nbsp;<Primary>{walletPreview(e.seller.address)}</Primary></a></span>}&nbsp;{e.amount} ed. {parseFloat(e.swap.price / 1000000)} tez{e.buyer.name ? <span><a href={`/${encodeURI(e.buyer.name)}`}><Primary>&nbsp;{encodeURI(e.buyer.name)}</Primary></a></span> : <span>&nbsp;<a href={`/tz/${e.buyer.address}`}>{walletPreview(e.buyer.address)}</a></span>}
                                     </div>
                                 )
                             } else {

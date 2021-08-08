@@ -47,6 +47,31 @@ const query_tag = `query ObjktsByTag($tag: String = "3d", $lastId: bigint = 9999
   }
 }`
 
+async function fetchID(id) {
+  const { errors, data } = await fetchGraphQL(`
+  query objktId {
+    hic_et_nunc_token(where : { id : { _eq : $id }}) {
+      id
+      artifact_uri
+      display_uri
+      mime
+      creator {
+        address
+        name
+      }
+    }
+  }
+  `, 'objktId', {
+    id : id
+  })
+
+  try {
+    return data.hic_et_nunc_token
+  } catch (e) {
+    return undefined
+  }
+}
+
 async function fetchGLB() {
   const { errors, data } = await fetchGraphQL(`
   query GLBObjkts {
@@ -63,6 +88,29 @@ async function fetchGLB() {
   }
   `, 'GLBObjkts', {}
   )
+
+  try {
+    return data.hic_et_nunc_token
+  } catch (e) {
+    return undefined
+  }
+}
+
+async function fetchInteractive() {
+  const { errors, data } = await fetchGraphQL(`
+    query InteractiveObjkts {
+      hic_et_nunc_token(where: { mime: {_in : [ "application/x-directory" ]}}) {
+        id
+        artifact_uri
+        display_uri
+        mime
+        creator {
+          name
+          address
+        }
+      }
+    }
+  `, 'InteractiveObjkts', {})
 
   try {
     return data.hic_et_nunc_token
@@ -181,8 +229,8 @@ async function fetchSubjkts(subjkt) {
 
   try {
     result = data.hic_et_nunc_holder
-  } catch (e) { }
-  console.log({ result })
+  } catch (e) {}
+
   return result
 }
 
@@ -192,7 +240,6 @@ async function fetchTag(tag) {
     console.error(errors);
   }
   const result = data.hic_et_nunc_token
-  /* console.log({ result }) */
   return result
 }
 
@@ -216,13 +263,13 @@ export class Search extends Component {
 
   state = {
     subjkt: [],
-    tag: [],
+    items: [],
     feed: [],
     search: '',
-    items: [
+    tags: [
       { id: 1, value: 'random' },
       { id: 2, value: 'glb' },
-      { id: 3, value: 'mp3' },
+      { id: 3, value: 'music' },
       { id: 3, value: 'interactive' },
       { id: 4, value: 'vqgan' }
     ],
@@ -243,10 +290,25 @@ export class Search extends Component {
     if (this.state.search.length >= 1) this.search()
   }
 
+  update = async (e) => {
+
+    if (e === 'music') {
+      console.log(await fetchMusic())
+    }
+
+    if (e === 'glb') {
+      console.log(await fetchGLB())
+    }
+
+    if (e === 'interactive') {
+      console.log(await fetchInteractive())
+    }
+  }
+
   search = async () => {
     console.log(await fetchGLB())
     console.log(await fetchMusic())
-    this.setState({ tag: [], feed : [] })
+    this.setState({ items: [], feed : [] })
     // search for alias
 
     this.setState({ subjkt: await fetchSubjkts(this.state.search) })
@@ -255,24 +317,24 @@ export class Search extends Component {
     //if (this.state.subjkt.length > 0) {
       //console.log('address', this.state.subjkt[0].address)
       //console.log('creations', await fetchCreations(this.state.subjkt[0].address))
-      //this.setState({ tag : await fetchCreations(this.state.subjkt[0].address) })
-      //this.setState({ feed: [...this.state.feed, this.state.tag.slice(0, 20)] })
+      //this.setState({ items : await fetchCreations(this.state.subjkt[0].address) })
+      //this.setState({ feed: [...this.state.feed, this.state.items.slice(0, 20)] })
     //}
 
     // search alias creations?
 
-    // search for tags
+    // search for itemss
 
-    this.setState({ tag: await fetchTag(this.state.search) })
+    this.setState({ items: await fetchTag(this.state.search) })
 
     // search for objkt titles/descriptions
 
     let title = await fetchTitle(this.state.search)
-    if (await title) this.setState({ tag: [...this.state.tag, ...(await title)] })
+    if (await title) this.setState({ items: [...this.state.items, ...(await title)] })
     let description = await fetchDescription(this.state.search)
-    if (await description) this.setState({ tag: [...this.state.tag, ...(await description)] })
+    if (await description) this.setState({ items: [...this.state.items, ...(await description)] })
 
-    this.setState({ feed: [...this.state.feed, this.state.tag.slice(0, 20)] })
+    this.setState({ feed: [...this.state.feed, this.state.items.slice(0, 20)] })
     // search for objkt id
 
     console.log(this.state)
@@ -303,8 +365,8 @@ export class Search extends Component {
               onMouseEnter={() => this.hoverState(true)}
               onMouseLeave={() => this.hoverState(false)}
               onChange={this.handleChange}
-              label="artists, titles, tags"
-              placeholder="artists, titles, tags"
+              label="objkt id, artists, titles, tags"
+              placeholder="objkt id, artists, titles, tags"
             />
 {/*             <button onClick={this.search}>search</button>
  */}            {/*             {
@@ -314,7 +376,7 @@ export class Search extends Component {
             } */}
             {
               <div style={{ marginTop : '15px' }}>
-                {this.state.items.map(e => <a className='tag' href='#'>{e.value} </a>)}
+                {this.state.tags.map(e => <a className='tag' href='#' onClick={() => this.update(e.value)}>{e.value} </a>)}
               </div>
             }
             {
@@ -331,7 +393,7 @@ export class Search extends Component {
         </Container>
         <Container xlarge>
           {
-            this.state.tag.length > 0 ?
+            this.state.items.length > 0 ?
               <InfiniteScroll
                 dataLength={this.state.feed.length}
                 next={this.loadMore}
