@@ -76,10 +76,16 @@ export class About extends Component {
                   <strong>reddit</strong>
                 </Primary>
               </Button>
-              &nbsp;<p>or</p>&nbsp;
+              <p>,</p>&nbsp;
               <Button href="https://t.me/hicetnunc2000">
                 <Primary>
                   <strong>telegram</strong>
+                </Primary>
+              </Button>
+              or through our
+              &nbsp;<Button href="https://community.hicetnunc.xyz">
+                <Primary>
+                  <strong>community forum</strong>
                 </Primary>
               </Button>.
             </div>
