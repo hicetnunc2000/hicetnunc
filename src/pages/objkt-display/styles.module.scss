@@ -15,7 +15,10 @@
   }
 }
 
-.history {
-  display: flex;
-  flex-wrap: wrap;
+.history a {
+  color: var(--text-color);
+}
+
+.history a:hover {
+  text-decoration: underline;
 }
