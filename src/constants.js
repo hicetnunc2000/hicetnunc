@@ -29,7 +29,7 @@ export const PATH = {
 
 export const MINT_MIN_LIMIT = 1
 export const MINT_MAX_LIMIT = 10000
-export const MINT_FILESIZE = 40
+export const MINT_FILESIZE = 100
 
 export const MIMETYPE = {
   BMP: 'image/bmp',
