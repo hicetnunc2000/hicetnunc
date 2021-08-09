@@ -2,13 +2,10 @@
 
 .loader {
   position: absolute;
-  margin-top: 50vh;
-  margin-left: 50vw;
-  z-index: 1000;
-  transform: translateX(-50%) translateY(-50%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  left: 50%;
+  top: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
 }
 
 .container {
@@ -17,6 +14,11 @@
   justify-content: center;
 
   .circle {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
     display: inline-block;
     background-color: var(--text-color);
     width: 20px;
