@@ -7,7 +7,7 @@ import { Input, Textarea } from '../../components/input'
 import { Button, Curate, Primary } from '../../components/button'
 import { Upload } from '../../components/upload'
 import { Preview } from '../../components/preview'
-import { prepareFile, prepareDirectory } from '../../data/ipfs'
+import { prepareFile, prepareFile100MB, prepareDirectory } from '../../data/ipfs'
 import { prepareFilesFromZIP } from '../../utils/html'
 import {
   ALLOWED_MIMETYPES,
@@ -140,6 +140,7 @@ export const Mint = () => {
           cover,
           thumbnail,
           generateDisplayUri: GENERATE_DISPLAY_AND_THUMBNAIL,
+          file
         })
       } else {
         // process all other files
