@@ -93,9 +93,24 @@ query creatorGallery($address: String!) {
     title
     description
     supply
+    swaps {
+      status
+      amount
+      amount_left
+      creator_id
+      token_id
+      creator {
+        address
+      }
+    }
     token_tags {
       tag {
         tag
+      }
+    }
+    swaps_aggregate(where: {status: {_eq: "0"}, contract_version: {_eq: "2"}}) {
+      aggregate {
+        count
       }
     }
   }
@@ -185,7 +200,6 @@ async function fetchV1Swaps(address) {
   const result = data.hic_et_nunc_swap
   console.log('swapresultv1 ' + result)
   return result
-
 }
 
 async function fetchV2Swaps(address) {
@@ -201,7 +215,6 @@ async function fetchV2Swaps(address) {
   console.log('swapresultv2 ' + JSON.stringify(result))
 
   return result
-
 }
 
 async function fetchSubjkts(subjkt) {
@@ -379,7 +392,8 @@ export default class Display extends Component {
     console.log(this.state.wallet)
     console.log(!list.includes(this.state.wallet))
     if (!list.includes(this.state.wallet)) {
-      this.setState({ objkts: await fetchCreations(this.state.wallet), loading: false, items: [] })
+      this.setState({ creations: await fetchCreations(this.state.wallet)})
+      this.setState({ objkts: this.state.creations, loading: false, items: [] })
     }
 
     this.setState({ items: this.state.objkts.slice(0, 20), offset: 20 })
@@ -391,6 +405,46 @@ export default class Display extends Component {
       // if tz/wallethash route
       this.props.history.push(`/tz/${this.state.wallet}/creations`)
     }
+  }
+
+  creationsNotForSale = async () => {
+    this.setState({ 
+      objkts: await this.filterCreationsNotForSale(this.state.objkts), 
+      loading: false, 
+      items: [] 
+    })
+    this.setState({ items: this.state.objkts.slice(0, 20), offset: 20 })
+    this.filterCreationsForSale()
+  }
+
+  filterCreationsNotForSale = async () => {
+    console.log(JSON.stringify(this.state.creations[0]))
+    let objkts = this.state.creations.filter(item => {
+      console.log("llll " + JSON.stringify(item.swaps_aggregate.aggregate.count))
+      return item.swaps_aggregate.aggregate.count == 0
+    });
+
+    return objkts
+  }
+
+  creationsForSale = async () => {
+    this.setState({ 
+      objkts: await this.filterCreationsForSale(this.state.objkts), 
+      loading: false, 
+      items: [] 
+    })
+    this.setState({ items: this.state.objkts.slice(0, 20), offset: 20 })
+  }
+
+  filterCreationsForSale = async () => {
+    let objkts = this.state.creations.filter(item => {
+      const swaps = item.swaps.filter(swaps => {
+        return swaps.status == 0
+      })
+      return swaps && swaps.length > 0
+    });
+
+    return objkts
   }
 
   combineCollection = async (collection, swaps) => {
@@ -431,6 +485,7 @@ export default class Display extends Component {
       this.setState({loading: false, items: []})
       let collection = await fetchCollection(this.state.wallet)
       let swaps = await fetchV2Swaps(this.state.wallet)
+      console.log(swaps)
       let combinedCollection = await this.combineCollection(collection, swaps)
       this.sortCollection(combinedCollection)
       this.setState({ collection: combinedCollection })
@@ -449,13 +504,14 @@ export default class Display extends Component {
   }
 
   collectionForSale = async () => {
-    this.setState({collectionType: 'forSale'})
-
-    let swapsV1 = await fetchV1Swaps(this.state.wallet)
-    swapsV1 = swapsV1.filter(e => parseInt(e.contract_version) !== 2)
-    this.setState({ marketV1: swapsV1, loading: false })
-
     this.setState({ objkts: await this.filterForSale(this.state.objkts), loading: false, items: [] })
+    this.setState({ items: this.state.objkts.slice(0, 20), offset: 20 })
+  }
+
+  collectionNotForSale = async () => {
+    this.reset();
+
+    this.setState({ objkts: await this.filterNotForSale(this.state.objkts), loading: false, items: [] })
     this.setState({ items: this.state.objkts.slice(0, 20), offset: 20 })
   }
 
@@ -467,14 +523,6 @@ export default class Display extends Component {
   filterForSale = async () => {
     let objktsForSale = this.state.collection.filter(item => item.creator_id == this.state.wallet)
     return objktsForSale
-  }
-
-  collectionNotForSale = async () => {
-    this.reset();
-    this.setState({collectionType: 'notForSale'})
-
-    this.setState({ objkts: await this.filterNotForSale(this.state.objkts), loading: false, items: [] })
-    this.setState({ items: this.state.objkts.slice(0, 20), offset: 20 })
   }
 
   // called if there's no redirect
@@ -716,6 +764,17 @@ export default class Display extends Component {
 
         {!this.state.loading && this.state.creationsState && (
           <Container xlarge>
+            <div style={{display: "flex", justifyContent: "flex-end"}}>
+              <Button onClick={this.creations}>
+                <div className={styles.tag}>all</div>
+              </Button>
+              <Button onClick={this.creationsNotForSale}>
+                <div className={styles.tag}>not for sale</div>
+              </Button>
+              <Button onClick={this.creationsForSale}>
+                <div className={styles.tag}>for sale</div>
+              </Button>
+            </div>
             <InfiniteScroll
               dataLength={this.state.items.length}
               next={this.loadMore}
