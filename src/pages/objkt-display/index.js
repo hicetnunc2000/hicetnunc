@@ -198,6 +198,7 @@ export const ObjktDisplay = () => {
       )}
 
       {!loading && (
+        !context.progress ?
         <>
           <div
             style={{
@@ -274,7 +275,20 @@ export const ObjktDisplay = () => {
             </div>
           </div>
         </>
-      )}
+        :
+        <Container>
+        <Padding>
+          <div>
+            <p style={{
+                position: 'absolute',
+                left: '46%',
+                top: '45%',
+            }}>{context.message}</p>
+            {context.progress && <Loading />}
+          </div>
+        </Padding>
+      </Container>
+)}
 {/*       <BottomBanner>
               v2 migration: All OBJKTs listed on market before June 28th must be relisted. menu > managed assets > v1 swaps > batch cancel > relist. Profiles informations must be reconfigured at menu > settings as well being possible to verify your twitter profile.
       </BottomBanner> */}
