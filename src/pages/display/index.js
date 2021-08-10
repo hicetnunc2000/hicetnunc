@@ -77,7 +77,7 @@ async function fetchCollection(addr) {
     console.error(errors)
   }
   const result = data.hic_et_nunc_token_holder
-  console.log('collection result' + { result })
+  // console.log('collection result' + { result })
   return result
 }
 
@@ -141,11 +141,19 @@ query addressQuery($address: String!) {
 
 const query_v1_swaps = `
 query querySwaps($address: String!) {
-  hic_et_nunc_swap(where: {creator_id: {_eq: $address}, status: {_eq: "0"}}) {
+  hic_et_nunc_swap(where: {contract_version: {_eq: "1"}, creator_id: {_eq: $address}, status: {_eq: "0"}}) {
     token {
       id
       title
+      creator {
+        address
+      }
+      creator_id
     }
+    creator {
+      address
+    }
+    creator_id
     amount
     amount_left
     price
@@ -197,7 +205,7 @@ async function fetchV1Swaps(address) {
     console.error(errors)
   }
   const result = data.hic_et_nunc_swap
-  console.log('swapresultv1 ' + JSON.stringify(result))
+  // console.log('swapresultv1 ' + JSON.stringify(result))
   return result
 }
 
@@ -366,7 +374,6 @@ export default class Display extends Component {
         this.onReady()
       })
       this.onReady()
-
     }
   }
 
@@ -378,6 +385,7 @@ export default class Display extends Component {
       render: false,
       loading: true,
       hasMore: true,
+      collectionType: 'notForSale'
     })
   }
 
@@ -385,11 +393,12 @@ export default class Display extends Component {
     this.setState({
       creationsState: true,
       collectionState: false,
+      collectionType: 'notForSale'
     })
 
     let list = await getRestrictedAddresses()
-    console.log(this.state.wallet)
-    console.log(!list.includes(this.state.wallet))
+    // console.log(this.state.wallet)
+    // console.log(!list.includes(this.state.wallet))
     if (!list.includes(this.state.wallet)) {
       this.setState({ creations: await fetchCreations(this.state.wallet)})
       this.setState({ objkts: this.state.creations, loading: false, items: [] })
@@ -410,9 +419,7 @@ export default class Display extends Component {
     this.setState({collectionType: 'notForSale'})
 
     this.setState({ 
-      objkts: await this.filterCreationsNotForSale(this.state.objkts), 
-      loading: false, 
-      items: [] 
+      objkts: await this.filterCreationsNotForSale(this.state.objkts), loading: false, items: [] 
     })
 
     this.setState({ items: this.state.objkts.slice(0, 20), offset: 20 })
@@ -422,7 +429,6 @@ export default class Display extends Component {
   filterCreationsNotForSale = async () => {
     console.log(JSON.stringify(this.state.creations[0]))
     let objkts = this.state.creations.filter(item => {
-      console.log("llll " + JSON.stringify(item.swaps_aggregate.aggregate.count))
       return item.swaps_aggregate.aggregate.count == 0
     });
 
@@ -433,15 +439,15 @@ export default class Display extends Component {
     this.setState({collectionType: 'forSale'})
 
     let v1Swaps = await fetchV1Swaps(this.state.wallet)
-    v1Swaps = v1Swaps.filter(e => parseInt(e.contract_version) !== 2)
+    v1Swaps = v1Swaps.filter(item => item.token.creator.address == this.state.wallet)
     this.setState({ marketV1: v1Swaps, loading: false })
-    console.log("this.state.marketV1 "  + JSON.stringify(this.state.marketV1))
 
     this.setState({ 
-      objkts: await this.filterCreationsForSale(this.state.objkts), 
-      loading: false, 
-      items: [] 
+      objkts: await this.filterCreationsForSale(this.state.objkts),
+      loading: false,
+      items: []
     })
+
     this.setState({ items: this.state.objkts.slice(0, 20), offset: 20 })
   }
 
@@ -517,9 +523,8 @@ export default class Display extends Component {
     this.setState({collectionType: 'forSale'})
 
     let v1Swaps = await fetchV1Swaps(this.state.wallet)
-    v1Swaps = v1Swaps.filter(e => parseInt(e.contract_version) !== 2)
+    v1Swaps = v1Swaps.filter(item => item.token.creator.address !== this.state.wallet)
     this.setState({ marketV1: v1Swaps, loading: false })
-    console.log("this.state.marketV1 "  + JSON.stringify(this.state.marketV1))
 
     this.setState({ objkts: await this.filterCollectionForSale(this.state.objkts), loading: false, items: [] })
     this.setState({ items: this.state.objkts.slice(0, 20), offset: 20 })
