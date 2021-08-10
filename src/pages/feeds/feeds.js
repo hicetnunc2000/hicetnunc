@@ -66,8 +66,8 @@ const query_hdao = `query hDAOFeed($offset: Int = 0) {
 }`
 
 async function fetchProfiles(arr) {
-  const { errors, data } = await fetchGraphQLProfiles(tz_profiles, "profiles", { "arr" : arr })
-  return data.tzprofiles  
+  const { errors, data } = await fetchGraphQLProfiles(tz_profiles, "profiles", { "arr": arr })
+  return data.tzprofiles
 }
 
 async function fetchHdao(offset) {
@@ -92,11 +92,11 @@ async function fetchFeed(lastId) {
 
 async function fetchGraphQLProfiles(operationsDoc, operationName, variables) {
   let result = await fetch('https://indexer.tzprofiles.com/v1/graphql', {
-    method : 'POST',
-    body : JSON.stringify({
-      query : operationsDoc,
-      variables : variables,
-      operationName : operationName
+    method: 'POST',
+    body: JSON.stringify({
+      query: operationsDoc,
+      variables: variables,
+      operationName: operationName
     })
   })
   return await result.json()
@@ -132,10 +132,10 @@ async function fetchObjkts(ids) {
         }
       }
     }`, "Objkts", { "ids": ids });
-    if (errors) {
-      console.log(errors)
-    }
-    return data
+  if (errors) {
+    console.log(errors)
+  }
+  return data
 }
 
 async function getLastId() {
@@ -254,7 +254,7 @@ export const Feeds = ({ type }) => {
     result = _.uniqBy(result, 'creator_id')
     setCreators(creators.concat(result.map(e => e.creator_id)))
     result = result.filter(e => !creators.includes(e.creator_id))
-    
+
     let restricted = await getRestrictedAddresses()
     result = result.filter(e => !restricted.includes(e.creator_id))
     const next = items.concat(result)
@@ -275,7 +275,7 @@ export const Feeds = ({ type }) => {
     result = _.uniqBy(result, 'creator_id')
     setCreators(creators.concat(result.map(e => e.creator_id)))
     result = result.filter(e => !creators.includes(e.creator_id))
-    
+
     let restricted = await getRestrictedAddresses()
     result = result.filter(e => !restricted.includes(e.creator_id))
     const next = items.concat(result)
@@ -284,35 +284,37 @@ export const Feeds = ({ type }) => {
 
   return (
     <Page title="">
-      <InfiniteScroll
-        dataLength={items.length}
-        next={loadMore}
-        hasMore={hasMore}
-        loader={
+      {items.length > 0 ?
+        <InfiniteScroll
+          dataLength={items.length}
+          next={loadMore}
+          hasMore={hasMore}
+          loader={undefined}
+          endMessage={
+            <p>
+              mint mint mint{' '}
+              <span role="img" aria-labelledby={'Sparkles emoji'}>
+                ✨
+              </span>
+            </p>
+          }
+        >
           <Container>
             <Padding>
-              <Loading />
+              {items.map((item, index) => (
+                <FeedItem key={`${item.id}-${index}`} {...item} />
+              ))}
             </Padding>
           </Container>
-        }
-        endMessage={
-          <p>
-            mint mint mint{' '}
-            <span role="img" aria-labelledby={'Sparkles emoji'}>
-              ✨
-            </span>
-          </p>
-        }
-      >
+        </InfiniteScroll>
+        :
         <Container>
           <Padding>
-            {items.map((item, index) => (
-              <FeedItem key={`${item.id}-${index}`} {...item} />
-            ))}
+            <Loading />
           </Padding>
         </Container>
-      </InfiniteScroll>
-{/*       <BottomBanner>
+      }
+      {/*       <BottomBanner>
         Collecting has been temporarily disabled. Follow <a href="https://twitter.com/hicetnunc2000" target="_blank">@hicetnunc2000</a> or <a href="https://discord.gg/jKNy6PynPK" target="_blank">join the discord</a> for updates.
       </BottomBanner> */}
     </Page>
