@@ -93,3 +93,7 @@
   transition: background-color #{$theme-duration} ease-out,
     color #{$theme-duration} ease-out;
 }
+
+.active.tag {
+  background-color: black;
+}

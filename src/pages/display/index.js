@@ -287,7 +287,8 @@ export default class Display extends Component {
     creationsState: true,
     collectionState: false,
     hdao: 0,
-    collectionType: 'notForSale'
+    collectionType: 'notForSale',
+    activeTab: 0
   }
 
   componentWillMount = async () => {
@@ -385,7 +386,7 @@ export default class Display extends Component {
       render: false,
       loading: true,
       hasMore: true,
-      collectionType: 'notForSale'
+      collectionType: 'notForSale'    
     })
   }
 
@@ -393,7 +394,8 @@ export default class Display extends Component {
     this.setState({
       creationsState: true,
       collectionState: false,
-      collectionType: 'notForSale'
+      collectionType: 'notForSale',
+      activeTab: 0
     })
 
     let list = await getRestrictedAddresses()
@@ -490,7 +492,8 @@ export default class Display extends Component {
     
     this.setState({
       creationsState: false,
-      collectionState: true
+      collectionState: true,
+      activeTab: 0
     })
 
     this.setState({collectionType: 'notForSale'})
@@ -546,6 +549,11 @@ export default class Display extends Component {
   filterCollectionForSale = async () => {
     let objktsForSale = this.state.collection.filter(item => item.creator_id == this.state.wallet)
     return objktsForSale
+  }
+
+  setActive(index) {
+    this.setState({activeTag: index})
+    console.log(this.state.activeTag)
   }
 
   // called if there's no redirect
@@ -788,18 +796,36 @@ export default class Display extends Component {
         {!this.state.loading && this.state.creationsState && (
           <Container xlarge>
             <div style={{display: "flex", justifyContent: "flex-end"}}>
-              <Button onClick={this.creations}>
-                <div className={styles.tag}>all</div>
+            <Button 
+                onClick={() => {
+                this.creations(); 
+                this.setActive(0)
+              }}>                
+              <div className={`${this.state.activeTag == 0 ? styles.active : ""}` + " " + styles.tag}>
+                  all
+                </div>
               </Button>
-              <Button onClick={this.creationsNotForSale}>
-                <div className={styles.tag}>not for sale</div>
+              <Button 
+                onClick={() => {
+                this.creationsNotForSale(); 
+                this.setActive(1)
+              }}>                         
+                <div className={`${this.state.activeTag == 1 ? styles.active : ""}` + " " + styles.tag}>
+                  not for sale
+                </div>
               </Button>
-              <Button onClick={this.creationsForSale}>
-                <div className={styles.tag}>for sale</div>
+              <Button 
+                onClick={() => {
+                this.creationsForSale(); 
+                this.setActive(2)
+              }}>                    
+                <div className={`${this.state.activeTag == 2 ? styles.active : ""}` + " " + styles.tag}>
+                  for sale
+                </div>
               </Button>
             </div>
 
-            {this.state.collectionType === 'forSale' ?
+            {this.state.collectionType == 'forSale' ?
               <>
               {this.context.acc != null && this.context.acc.address == this.state.wallet ?
                 <>
@@ -893,18 +919,36 @@ export default class Display extends Component {
         {!this.state.loading && this.state.collectionState && (
           <Container xlarge>
             <div style={{display: "flex", justifyContent: "flex-end"}}>
-              <Button onClick={this.collectionFull}>
-                <div className={styles.tag}>all</div>
+              <Button 
+                onClick={() => {
+                this.collectionFull(); 
+                this.setActive(0)
+              }}>
+                <div className={`${this.state.activeTag == 0 ? styles.active : ""}` + " " + styles.tag}>
+                  all
+                </div>
               </Button>
-              <Button onClick={this.collectionNotForSale}>
-                <div className={styles.tag}>not for sale</div>
+              <Button
+                onClick={() => {
+                this.collectionNotForSale(); 
+                this.setActive(1)
+              }}>
+                <div className={`${this.state.activeTag == 1 ? styles.active : ""}` + " " + styles.tag}>
+                  not for sale
+                </div>
               </Button>
-              <Button onClick={this.collectionForSale}>
-                <div className={styles.tag}>for sale</div>
+              <Button
+                onClick={() => {
+                this.collectionForSale(); 
+                this.setActive(2)
+              }}>
+              <div className={`${this.state.activeTag == 2 ? styles.active : ""}` + " " + styles.tag}>
+                for sale
+              </div>
               </Button>
             </div>
             
-            {this.state.collectionType === 'forSale' ?
+            {this.state.collectionType == 'forSale' ?
               <>
               {this.context.acc != null && this.context.acc.address == this.state.wallet ?
                 <>
