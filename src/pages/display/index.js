@@ -190,7 +190,6 @@ query querySwaps($address: String!) {
 `
 
 async function fetchV1Swaps(address) {
-
   const { errors, data } = await fetchGraphQL(query_v1_swaps, 'querySwaps', {
     address: address
   })
@@ -198,7 +197,7 @@ async function fetchV1Swaps(address) {
     console.error(errors)
   }
   const result = data.hic_et_nunc_swap
-  console.log('swapresultv1 ' + result)
+  console.log('swapresultv1 ' + JSON.stringify(result))
   return result
 }
 
@@ -408,11 +407,14 @@ export default class Display extends Component {
   }
 
   creationsNotForSale = async () => {
+    this.setState({collectionType: 'notForSale'})
+
     this.setState({ 
       objkts: await this.filterCreationsNotForSale(this.state.objkts), 
       loading: false, 
       items: [] 
     })
+
     this.setState({ items: this.state.objkts.slice(0, 20), offset: 20 })
     this.filterCreationsForSale()
   }
@@ -428,6 +430,13 @@ export default class Display extends Component {
   }
 
   creationsForSale = async () => {
+    this.setState({collectionType: 'forSale'})
+
+    let v1Swaps = await fetchV1Swaps(this.state.wallet)
+    v1Swaps = v1Swaps.filter(e => parseInt(e.contract_version) !== 2)
+    this.setState({ marketV1: v1Swaps, loading: false })
+    console.log("this.state.marketV1 "  + JSON.stringify(this.state.marketV1))
+
     this.setState({ 
       objkts: await this.filterCreationsForSale(this.state.objkts), 
       loading: false, 
@@ -472,6 +481,7 @@ export default class Display extends Component {
 
   collectionFull = async () => {
     this.reset()
+    
     this.setState({
       creationsState: false,
       collectionState: true
@@ -504,23 +514,31 @@ export default class Display extends Component {
   }
 
   collectionForSale = async () => {
-    this.setState({ objkts: await this.filterForSale(this.state.objkts), loading: false, items: [] })
+    this.setState({collectionType: 'forSale'})
+
+    let v1Swaps = await fetchV1Swaps(this.state.wallet)
+    v1Swaps = v1Swaps.filter(e => parseInt(e.contract_version) !== 2)
+    this.setState({ marketV1: v1Swaps, loading: false })
+    console.log("this.state.marketV1 "  + JSON.stringify(this.state.marketV1))
+
+    this.setState({ objkts: await this.filterCollectionForSale(this.state.objkts), loading: false, items: [] })
     this.setState({ items: this.state.objkts.slice(0, 20), offset: 20 })
   }
 
   collectionNotForSale = async () => {
     this.reset();
+    this.setState({collectionType: 'notForSale'})
 
-    this.setState({ objkts: await this.filterNotForSale(this.state.objkts), loading: false, items: [] })
+    this.setState({ objkts: await this.filterCollectionNotForSale(this.state.objkts), loading: false, items: [] })
     this.setState({ items: this.state.objkts.slice(0, 20), offset: 20 })
   }
 
-  filterNotForSale = async () => {
+  filterCollectionNotForSale = async () => {
     let objktsNotForSale = this.state.collection.filter(item => item.token.creator.address !== this.state.wallet && item.creator_id !== this.state.wallet)
     return objktsNotForSale
   }
 
-  filterForSale = async () => {
+  filterCollectionForSale = async () => {
     let objktsForSale = this.state.collection.filter(item => item.creator_id == this.state.wallet)
     return objktsForSale
   }
