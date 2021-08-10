@@ -239,6 +239,10 @@ class HicetnuncContextProviderClass extends Component {
       setFeedback: (props) =>
         this.setState({ feedback: { ...this.state.feedback, ...props } }),
 
+      progress : undefined,
+      setProgress : (bool) => this.setState({ progress : bool }),
+      message: undefined,
+      setMessage : (str) => this.setState({ message : str }),
       // --------------------
       // feedback component end
       // --------------------
@@ -468,6 +472,8 @@ class HicetnuncContextProviderClass extends Component {
               ])
               .send()
           )
+
+          this.state.setProgress(false)
       },
 
       cancelv1: async (swap_id) => {
