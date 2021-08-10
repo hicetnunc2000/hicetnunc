@@ -383,7 +383,16 @@ export default class Display extends Component {
     }
   }
 
-
+  getDiscordTooltip() {
+    const handleSize = this.state.discord.length;
+    const missingSize = handleSize - 6;
+    const spaces = ' '.repeat(Math.ceil(Math.abs(missingSize / 2)));
+    if (missingSize < 0) {
+      return `${this.state.copied ? 'Copied' : `${spaces}${this.state.discord}${spaces}`}`;
+    } else {
+      return `${this.state.copied ? `${spaces}Copied${spaces}` : `${this.state.discord}`}`;
+    }
+  }
 
   render() {
     return (
@@ -561,7 +570,7 @@ export default class Display extends Component {
                         <span
                           className={styles.top}
                           data-position={'top'}
-                          data-tooltip={this.state.copied ? 'Copied' : this.state.discord}
+                          data-tooltip={this.getDiscordTooltip()}
                         >
                           <VisuallyHidden>{`${this.state.discord}`}</VisuallyHidden>
                           <svg
