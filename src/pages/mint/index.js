@@ -4,7 +4,7 @@ import { BottomBanner } from '../../components/bottom-banner'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
 import { Page, Container, Padding } from '../../components/layout'
 import { Input, Textarea } from '../../components/input'
-import { Button, Curate, Primary } from '../../components/button'
+import { Button, Curate, Primary, Purchase } from '../../components/button'
 import { Upload } from '../../components/upload'
 import { Preview } from '../../components/preview'
 import { prepareFile, prepareFile100MB, prepareDirectory } from '../../data/ipfs'
@@ -68,7 +68,8 @@ export const Mint = () => {
       })
     } else {
       await setAccount()
-
+      console.log(file.mimeType)
+      console.log(ALLOWED_MIMETYPES)
       // check mime type
       if (ALLOWED_MIMETYPES.indexOf(file.mimeType) === -1) {
         // alert(
@@ -378,7 +379,7 @@ export const Mint = () => {
           <Container>
             <Padding>
               <Button onClick={handleMint} fit>
-                <Curate>mint OBJKT</Curate>
+                <Purchase>mint OBJKT</Purchase>
               </Button>
             </Padding>
           </Container>

@@ -267,11 +267,13 @@ export class Search extends Component {
     feed: [],
     search: '',
     tags: [
+      { id: 0, value: '○'},
       { id: 1, value: 'random' },
       { id: 2, value: 'glb' },
       { id: 3, value: 'music' },
       { id: 3, value: 'interactive' },
-      { id: 4, value: 'vqgan' }
+      { id: 4, value: 'illustration' },
+      { id: 5, value: 'gif' }
     ],
     select: [],
     mouse: false,
@@ -344,6 +346,7 @@ export class Search extends Component {
   hoverState = (bool) => this.setState({ mouse: bool })
 
   select = (id) => this.setState({ select: [...this.state.select, id] })
+  
   loadMore = () => {
     this.setState({ feed: this.state.tag.concat(this.state.tag.slice(this.state.offset, this.state.offset + 20)), offset: this.state.offset + 20 })
 
@@ -364,7 +367,7 @@ export class Search extends Component {
               name="search"
               onMouseEnter={() => this.hoverState(true)}
               onMouseLeave={() => this.hoverState(false)}
-              onChange={this.handleChange}
+              onChange={e => console.log(e.target.name, e.target.value)}
               label="objkt id, artists, titles, tags"
               placeholder="objkt id, artists, titles, tags"
             />
