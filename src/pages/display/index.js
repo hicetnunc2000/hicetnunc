@@ -403,6 +403,7 @@ export default class Display extends Component {
     if (!list.includes(this.state.wallet)) {
       this.setState({ creations: await fetchCreations(this.state.wallet)})
       this.setState({ objkts: this.state.creations, loading: false, items: [] })
+      this.setState({ marketV1: await fetchV1Swaps(this.state.wallet) })
     }
 
     this.setState({ items: this.state.objkts.slice(0, 20), offset: 20 })
@@ -439,8 +440,11 @@ export default class Display extends Component {
   creationsForSale = async () => {
     this.setState({collectionType: 'forSale'})
 
-    let v1Swaps = await fetchV1Swaps(this.state.wallet)
-    v1Swaps = v1Swaps.filter(item => item.token.creator.address == this.state.wallet)
+    let v1Swaps = this.state.marketV1.filter(item => {
+      const objkts = item.token.creator.address == this.state.wallet
+      return objkts
+    })
+
     this.setState({ marketV1: v1Swaps, loading: false })
 
     this.setState({ 
@@ -467,15 +471,12 @@ export default class Display extends Component {
 
     collection.forEach(function(item) {
       combinedCollection.push(item)
-      // console.log("collectionadfadfs " + collection.length)
     })
     
     swaps.forEach(function(item) {
       combinedCollection.push(item)
-      // console.log("swapsdadfadfs " + swaps.length)
     })
 
-    // console.log("comvinedadfadfs " + combinedCollection.length)
     return combinedCollection;
   }
 
@@ -506,6 +507,7 @@ export default class Display extends Component {
       let combinedCollection = await this.combineCollection(collection, swaps)
       this.sortCollection(combinedCollection)
       this.setState({ collection: combinedCollection })
+      this.setState({ marketV1: await fetchV1Swaps(this.state.wallet) })
     }
 
     this.setState({ objkts: this.state.collection, loading: false, items: [] })
@@ -523,8 +525,11 @@ export default class Display extends Component {
   collectionForSale = async () => {
     this.setState({collectionType: 'forSale'})
 
-    let v1Swaps = await fetchV1Swaps(this.state.wallet)
-    v1Swaps = v1Swaps.filter(item => item.token.creator.address !== this.state.wallet)
+    let v1Swaps = this.state.marketV1.filter(item => {
+      const objkts = item.token.creator.address !== this.state.wallet
+      return objkts
+    })
+
     this.setState({ marketV1: v1Swaps, loading: false })
 
     this.setState({ objkts: await this.filterCollectionForSale(this.state.objkts), loading: false, items: [] })
