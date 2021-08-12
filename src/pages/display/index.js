@@ -7,7 +7,6 @@ import { Loading } from '../../components/loading'
 import { renderMediaType } from '../../components/media-types'
 import { Identicon } from '../../components/identicons'
 import { walletPreview } from '../../utils/string'
-import { SanitiseOBJKT, SanitizeDipDup } from '../../utils/sanitise'
 import { PATH } from '../../constants'
 import { VisuallyHidden } from '../../components/visually-hidden'
 import { GetUserMetadata } from '../../data/api'
@@ -384,8 +383,8 @@ export default class Display extends Component {
       objkts: [],
       marketV1: [],
       render: false,
-      loading: true,
       hasMore: true,
+      loading: false,
       collectionType: 'notForSale'    
     })
   }
@@ -446,7 +445,6 @@ export default class Display extends Component {
 
     this.setState({ 
       objkts: await this.filterCreationsForSale(this.state.objkts),
-      loading: false,
       items: []
     })
 
@@ -785,14 +783,6 @@ export default class Display extends Component {
           </Padding>
         </Container>
 
-        {this.state.loading && (
-          <Container>
-            <Padding>
-              <Loading />
-            </Padding>
-          </Container>
-        )}
-
         {!this.state.loading && this.state.creationsState && (
           <Container xlarge>
             <div style={{display: "flex", justifyContent: "flex-end"}}>
@@ -801,7 +791,7 @@ export default class Display extends Component {
                 this.creations(); 
                 this.setActive(0)
               }}>                
-              <div className={`${this.state.activeTag == 0 ? styles.active : ""}` + " " + styles.tag}>
+              <div className={styles.tag}>
                   all
                 </div>
               </Button>
@@ -810,7 +800,7 @@ export default class Display extends Component {
                 this.creationsNotForSale(); 
                 this.setActive(1)
               }}>                         
-                <div className={`${this.state.activeTag == 1 ? styles.active : ""}` + " " + styles.tag}>
+                <div className={styles.tag}>
                   not for sale
                 </div>
               </Button>
@@ -819,7 +809,7 @@ export default class Display extends Component {
                 this.creationsForSale(); 
                 this.setActive(2)
               }}>                    
-                <div className={`${this.state.activeTag == 2 ? styles.active : ""}` + " " + styles.tag}>
+                <div className={styles.tag}>
                   for sale
                 </div>
               </Button>
@@ -924,7 +914,7 @@ export default class Display extends Component {
                 this.collectionFull(); 
                 this.setActive(0)
               }}>
-                <div className={`${this.state.activeTag == 0 ? styles.active : ""}` + " " + styles.tag}>
+                <div className={styles.tag}>
                   all
                 </div>
               </Button>
@@ -933,7 +923,7 @@ export default class Display extends Component {
                 this.collectionNotForSale(); 
                 this.setActive(1)
               }}>
-                <div className={`${this.state.activeTag == 1 ? styles.active : ""}` + " " + styles.tag}>
+                <div className={styles.tag}>
                   not for sale
                 </div>
               </Button>
@@ -942,7 +932,7 @@ export default class Display extends Component {
                 this.collectionForSale(); 
                 this.setActive(2)
               }}>
-              <div className={`${this.state.activeTag == 2 ? styles.active : ""}` + " " + styles.tag}>
+              <div className={styles.tag}>
                 for sale
               </div>
               </Button>
@@ -1016,13 +1006,7 @@ export default class Display extends Component {
               dataLength={this.state.items.length}
               next={this.loadMore}
               hasMore={this.state.hasMore}
-              loader={
-                <Container>
-                  <Padding>
-                    <Loading />
-                  </Padding>
-                </Container>
-              }
+              loader={undefined}
               endMessage={<p></p>}
             >
               <ResponsiveMasonry>
