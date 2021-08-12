@@ -4,7 +4,7 @@ import { HicetnuncContext } from '../../../context/HicetnuncContext'
 import { Container, Padding } from '../../../components/layout'
 import { Loading } from '../../../components/loading'
 import { Input } from '../../../components/input'
-import { Button, Curate } from '../../../components/button'
+import { Button, Curate, Purchase } from '../../../components/button'
 import { stubFalse } from 'lodash'
 export const Swap = ({ total_amount, owners, creator, royalties, token_info, address }) => {
   const { id } = useParams()
@@ -117,7 +117,7 @@ export const Swap = ({ total_amount, owners, creator, royalties, token_info, add
                   </div>
                 </div>
                 <Button onClick={handleSubmit} fit disabled={progress}>
-                  <Curate>swap</Curate>
+                  <Purchase>swap</Purchase>
                 </Button>
               </Padding>
             </Container>
