@@ -65,7 +65,7 @@ export class About extends Component {
                 </Primary>
               </Button>
               <p>,</p>&nbsp;
-              <Button href="https://discord.gg/jKNy6PynPK">
+              <Button href="https://discord.gg/XWCPjXUYeN">
                 <Primary>
                   <strong>discord</strong>
                 </Primary>
@@ -76,10 +76,16 @@ export class About extends Component {
                   <strong>reddit</strong>
                 </Primary>
               </Button>
-              &nbsp;<p>or</p>&nbsp;
+              <p>,</p>&nbsp;
               <Button href="https://t.me/hicetnunc2000">
                 <Primary>
                   <strong>telegram</strong>
+                </Primary>
+              </Button>
+              or through our
+              &nbsp;<Button href="https://community.hicetnunc.xyz">
+                <Primary>
+                  <strong>community forum</strong>
                 </Primary>
               </Button>.
             </div>

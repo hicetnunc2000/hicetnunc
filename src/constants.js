@@ -29,7 +29,7 @@ export const PATH = {
 
 export const MINT_MIN_LIMIT = 1
 export const MINT_MAX_LIMIT = 10000
-export const MINT_FILESIZE = 40
+export const MINT_FILESIZE = 100
 
 export const MIMETYPE = {
   BMP: 'image/bmp',
@@ -54,7 +54,7 @@ export const MIMETYPE = {
   ZIP: 'application/zip',
   ZIP1: 'application/x-zip-compressed',
   ZIP2: 'multipart/x-zip',
-  MD : 'text/markdown'
+  MD : 'text/plain'
 }
 
 export const IPFS_DIRECTORY_MIMETYPE = 'application/x-directory'
