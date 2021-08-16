@@ -2,6 +2,7 @@ import React, { useContext } from 'react'
 import classnames from 'classnames'
 import { HicetnuncContext } from '../../../context/HicetnuncContext'
 import styles from './styles.module.scss'
+import './index.css'
 
 export const VectorComponent = ({
   artifactUri,
@@ -57,9 +58,9 @@ export const VectorComponent = ({
     )
   } else {
     return (
-      <div>
+      <div className={styles.container + ' vector-container'}>
         <iframe
-          className={styles.vector + ' zip-embed'}
+          className={styles.vector + ' vector'}
           title="hic et nunc SVG renderer"
           src={path}
           sandbox="allow-scripts"

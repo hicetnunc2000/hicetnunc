@@ -5,11 +5,14 @@ import {
   BeaconWallet,
   BeaconWalletNotInitialized,
 } from '@taquito/beacon-wallet'
-import { TezosToolkit, OpKind } from '@taquito/taquito'
+import { TezosToolkit, OpKind, MichelsonMap } from '@taquito/taquito'
+import { Parser, Expr } from "@taquito/michel-codec";
+import { Schema } from "@taquito/michelson-encoder";
 import { setItem } from '../utils/storage'
 import { KeyStoreUtils } from 'conseiljs-softsigner'
 import { PermissionScope } from '@airgap/beacon-sdk'
 import { UnitValue } from '@taquito/michelson-encoder'
+import { contentType } from 'mime-types';
 
 const { NetworkType } = require('@airgap/beacon-sdk')
 var ls = require('local-storage')
@@ -18,10 +21,19 @@ const eztz = require('eztz-lib')
 
 export const HicetnuncContext = createContext()
 
-// This should be moved to a service so it is only done once on page load
-const Tezos = new TezosToolkit('https://mainnet-tezos.giganode.io')
-//const Tezos = new TezosToolkit('https://mainnet.smartpy.io')
+// TODO: move this schema into separate place?
+const createProxySchema = `
+(map address (pair (bool %isCore) (nat %share))))
+`
 
+const bandwidth = navigator.connection.downlink
+const connectionType = navigator.connection
+console.log('band', bandwidth, 'type', connectionType)
+// This should be moved to a service so it is only done once on page load
+//const Tezos = new TezosToolkit('https://api.tez.ie/rpc/mainnet')
+//const Tezos = new TezosToolkit('https://mainnet-tezos.giganode.io')
+//const Tezos = new TezosToolkit('https://mainnet.smartpy.io')
+const Tezos = new TezosToolkit('https://api.tez.ie/rpc/mainnet')
 // storage fee adjustment
 
 /* export class PatchedBeaconWallet extends BeaconWallet {
@@ -145,13 +157,18 @@ class HicetnuncContextProviderClass extends Component {
       },
 
       swapv2: async (from, royalties, xtz_per_objkt, objkt_id, creator, objkt_amount) => {
-        let objkts = await Tezos.wallet.at(this.state.objkts)
-        let marketplace = await Tezos.wallet.at(this.state.v2)
+        // If using proxy: both calls are made through this.state.proxyAddress:
+        const objktsAddress = this.state.proxyAddress || this.state.objkts;
+        const marketplaceAddress = this.state.proxyAddress || this.state.v2;
+        const ownerAddress = this.state.proxyAddress || from;
+
+        let objkts = await Tezos.wallet.at(objktsAddress)
+        let marketplace = await Tezos.wallet.at(marketplaceAddress)
 
         let list = [
           {
             kind: OpKind.TRANSACTION,
-            ...objkts.methods.update_operators([{ add_operator: { operator: this.state.v2, token_id: parseFloat(objkt_id), owner: from } }])
+            ...objkts.methods.update_operators([{ add_operator: { operator: this.state.v2, token_id: parseFloat(objkt_id), owner: ownerAddress } }])
               .toTransferParams({ amount: 0, mutez: true, storageLimit: 100 })
           },
           {
@@ -226,6 +243,10 @@ class HicetnuncContextProviderClass extends Component {
       setFeedback: (props) =>
         this.setState({ feedback: { ...this.state.feedback, ...props } }),
 
+      progress : undefined,
+      setProgress : (bool) => this.setState({ progress : bool }),
+      message: undefined,
+      setMessage : (str) => this.setState({ message : str }),
       // --------------------
       // feedback component end
       // --------------------
@@ -284,6 +305,25 @@ class HicetnuncContextProviderClass extends Component {
           .catch((error) => console.log(error))
       },
 
+      proxyAddress: null,
+
+      // This will be set after creating a new collab
+      // but we don't want to auto-sign in
+      originatedContract: null,
+
+      setProxyAddress: (proxyAddress) => {
+        // setting proxy updates objkt contract as well:
+        this.setState({
+          proxyAddress: proxyAddress,
+          // objkt: proxyAddress || 'KT1Hkg5qeNhfwpKW4fXvq7HGZB9z2EnmCCA9'
+        });
+      },
+
+      // Do we need this? proxyAddress will push to UI via context
+      getProxy: () => this.state.proxyAddress,
+
+      objkt: 'KT1Hkg5qeNhfwpKW4fXvq7HGZB9z2EnmCCA9',
+
       mint: async (tz, amount, cid, royalties) => {
         // show feedback component with followind message and progress indicator
 
@@ -298,7 +338,7 @@ class HicetnuncContextProviderClass extends Component {
 
         // call mint method
         await Tezos.wallet
-          .at(this.state.v1)
+          .at(this.state.proxyAddress || this.state.v1)
           .then((c) =>
             c.methods
               .mint_OBJKT(
@@ -352,7 +392,7 @@ class HicetnuncContextProviderClass extends Component {
 
       collect: async (swap_id, amount) => {
         return await Tezos.wallet
-          .at(this.state.v2)
+          .at(this.state.proxyAddress || this.state.v2)
           .then((c) =>
             c.methods
               .collect(parseFloat(swap_id))
@@ -389,7 +429,7 @@ class HicetnuncContextProviderClass extends Component {
           })
           .then((amt) => {
             Tezos.wallet
-              .at(this.state.v1)
+              .at(this.state.proxyAddress || this.state.v1)
               .then((c) =>
                 c.methods
                   .curate(
@@ -436,6 +476,8 @@ class HicetnuncContextProviderClass extends Component {
               ])
               .send()
           )
+
+          this.state.setProgress(false)
       },
 
       cancelv1: async (swap_id) => {
@@ -452,7 +494,7 @@ class HicetnuncContextProviderClass extends Component {
       cancel: async (swap_id) => {
         console.log(swap_id)
         return await Tezos.wallet
-          .at(this.state.v2)
+          .at(this.state.proxyAddress || this.state.v2)
           .then((c) =>
             c.methods
               .cancel_swap(parseFloat(swap_id))
@@ -484,6 +526,7 @@ class HicetnuncContextProviderClass extends Component {
 
       registry: async (alias, metadata) => {
         console.log(metadata)
+        const subjktAddressOrProxy = this.state.proxyAddress || this.state.subjkt
         return await Tezos.wallet.at(this.state.subjkt).then((c) =>
           c.methods
             .registry(
@@ -659,6 +702,130 @@ class HicetnuncContextProviderClass extends Component {
         })
       },
       hDAO_vote: ls.get('hDAO_vote'),
+
+      proxyFactoryAddress: 'KT1DoyD6kr8yLK8mRBFusyKYJUk2ZxNHKP1N',
+
+      mockProxy: async () => {
+
+        this.state.setFeedback({
+          visible: true,
+          message: 'creating collaborative contract',
+          progress: true,
+          confirm: false,
+        })
+
+        setTimeout(() => {
+          const result = {
+            opHash: 'opQ2gLDiqHCqhQTKK5h9vCnL3c3izFeB11SQRuFzUricptKH6pJ',
+          }
+
+          axios
+            .get(`https://api.tzkt.io/v1/operations/originations/${result.opHash}`)
+            .then(({ data }) => {
+              const { originatedContract } = data[0]
+
+              // We can either sign in now, or force a button to do so
+              // this.state.setProxyAddress(originatedContract.address)
+
+              this.setState({
+                originatedContract,
+              })
+
+              // We have got our contract address
+              this.state.setFeedback({
+                message: 'Collaborative contract created successfully',
+                progress: true,
+                confirm: false,
+              })
+
+              // Hide after a second
+              setTimeout(() => {
+                this.state.setFeedback({
+                  visible: false,
+                })
+              }, 2000)
+            })
+        }, 2000)
+
+      },
+
+      originateProxy: async (administratorAddress, participantData) => {
+      
+        // Show progress during creation
+        this.state.setFeedback({
+          visible: true,
+          message: 'creating collaborative contract',
+          progress: true,
+          confirm: false,
+        })
+
+        // packing participants data:
+        // (TODO: move to separate func)
+        const participantMap = MichelsonMap.fromLiteral(participantData);
+
+        const parser = new Parser();
+        const michelsonType = parser.parseData(createProxySchema);
+        const schema = new Schema(michelsonType);
+        const data = schema.Encode(participantMap);
+
+        // Is it okay to make it blocking?:
+        const { packed } = await Tezos.rpc.packData({
+          data,
+          type: michelsonType,
+        });
+
+        // Blockchain ops
+        await Tezos.wallet
+          .at(this.state.proxyFactoryAddress)
+          .then(c =>
+            c.methods
+              .create_proxy(packed, 'hic_proxy')
+              .send({ amount: 0 })
+          )
+          .then(result => {
+
+            // TODO: this is a bit too nested for my liking
+            
+            // Keep the operation hash for further queries if required (do we need this?)
+            this.setState({ op: result.opHash })
+
+            // Query tzkt.io to get the originated contract address
+            axios
+              .get(`https://api.tzkt.io/v1/operations/originations/${result.opHash}`)
+              .then(response => {
+
+                // Send the originated contract to the UI via context
+                const { originatedContract } = response
+                this.setState({ originatedContract }) // save hash
+
+                // We have got our contract address
+                this.state.setFeedback({
+                  message: 'Collaborative contract created successfully',
+                  progress: true,
+                  confirm: false,
+                })
+
+                // Hide after a second
+                setTimeout(() => {
+                  this.state.setFeedback({
+                    visible: false,
+                  })
+                }, 1000)
+              })
+          })
+          .catch(e => {
+            this.state.setFeedback({
+              message: e.message || 'an error occurred',
+              progress: false,
+              confirm: true,
+              confirmCallback: () => {
+                this.state.setFeedback({
+                  visible: false,
+                })
+              }
+            })
+          })
+      },
     }
   }
 

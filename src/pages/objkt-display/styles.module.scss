@@ -9,13 +9,13 @@
   justify-content: center;
 
   @include respond-to('tablet') {
-    width : 100%;
-    height: 60vh;
-  }
-
-  @include respond-to('desktop') {
     width : 60vh;
-    margin: 0 auto;
     height: 60vh;
+    margin: 0 auto;
   }
+}
+
+.history {
+  display: flex;
+  flex-wrap: wrap;
 }

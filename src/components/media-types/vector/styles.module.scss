@@ -1,17 +1,8 @@
 @import '../../../styles/layout.scss';
+@import '../../../styles/mixins.scss';
 
 .vector {
-  position: relative;
-  width: calc(100vh - 285px);
-  height: calc(100vh - 285px);
-  display: block;
-  margin: 0 auto; 
-  border : none;
-
-  @include respond-to('desktop') {
-    // width: 50% !important;
-  }
-
+  @include embedObjktViewSizes;
 }
 
 .display {
@@ -49,5 +40,6 @@
     height: 100%;
     transform: translateX(-50%) translateY(-50%);
     border: none;
+    background: black;
   }
 }

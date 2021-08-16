@@ -11,6 +11,59 @@ const { getCoverImagePathFromBuffer } = require('../utils/html')
 
 const infuraUrl = 'https://ipfs.infura.io:5001'
 
+export const prepareFile100MB = async ({
+  name,
+  description,
+  tags,
+  address,
+  buffer,
+  mimeType,
+  cover,
+  thumbnail,
+  generateDisplayUri,
+  file
+}) => {
+
+  const ipfs = create(infuraUrl)
+
+  let formData = new FormData()
+  formData.append('file', file)
+
+  let info = await axios.post('https://hesychasm.herokuapp.com/post_file', formData, {
+    headers: { 'Content-Type': 'multipart/form-data' }
+  }).then(res => res.data)
+  const hash = info.path
+  const cid = `ipfs://${hash}`
+
+  // upload cover image
+  let displayUri = ''
+  if (generateDisplayUri) {
+    const coverInfo = await ipfs.add(cover.buffer)
+    const coverHash = coverInfo.path
+    displayUri = `ipfs://${coverHash}`
+  }
+
+  // upload thumbnail image
+  let thumbnailUri = IPFS_DEFAULT_THUMBNAIL_URI
+  // @crzypatch works wants the thumbnailUri to be the black circle
+  // if (generateDisplayUri) {
+  //   const thumbnailInfo = await ipfs.add(thumbnail.buffer)
+  //   const thumbnailHash = thumbnailInfo.path
+  //   thumbnailUri = `ipfs://${thumbnailHash}`
+  // }
+
+  return await uploadMetadataFile({
+    name,
+    description,
+    tags,
+    cid,
+    address,
+    mimeType,
+    displayUri,
+    thumbnailUri,
+  })
+}
+
 export const prepareFile = async ({
   name,
   description,

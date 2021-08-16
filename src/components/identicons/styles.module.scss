@@ -4,9 +4,9 @@
   svg {
     border-radius: 100%;
     padding: 1px;
-    width: 120px;
-    height: 120px;
-    border: 1px solid var(--text-color);
+    width: 127.5px;
+    height: 127.5px;
+    //border: 1px solid var(--text-color);
     transition: border-color #{$theme-duration} ease-out;
 
     path {
@@ -19,9 +19,9 @@
   img {
     border-radius: 100%;
     padding: 1px;
-    width: 120px;
-    height: 120px;
-    border: 2px solid var(--text-color);
+    width: 127.5px;
+    height: 127.5px;
+    //border: 2px solid var(--text-color);
     transition: border-color #{$theme-duration} ease-out;
   }
 }
