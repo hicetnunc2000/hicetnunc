@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Button, Primary } from '../../components/button'
+import { Button, Primary, Secondary } from '../../components/button'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
 import { Page, Container, Padding } from '../../components/layout'
 import { BottomBanner } from '../../components/bottom-banner'
@@ -7,7 +7,6 @@ import { Loading } from '../../components/loading'
 import { renderMediaType } from '../../components/media-types'
 import { Identicon } from '../../components/identicons'
 import { walletPreview } from '../../utils/string'
-import { SanitiseOBJKT, SanitizeDipDup } from '../../utils/sanitise'
 import { PATH } from '../../constants'
 import { VisuallyHidden } from '../../components/visually-hidden'
 import { GetUserMetadata } from '../../data/api'
@@ -77,7 +76,7 @@ async function fetchCollection(addr) {
     console.error(errors)
   }
   const result = data.hic_et_nunc_token_holder
-  console.log({ result })
+  // console.log('collection result' + { result })
   return result
 }
 
@@ -93,9 +92,24 @@ query creatorGallery($address: String!) {
     title
     description
     supply
+    swaps {
+      status
+      amount
+      amount_left
+      creator_id
+      token_id
+      creator {
+        address
+      }
+    }
     token_tags {
       tag {
         tag
+      }
+    }
+    swaps_aggregate(where: {status: {_eq: "0"}, contract_version: {_eq: "2"}}) {
+      aggregate {
+        count
       }
     }
   }
@@ -128,11 +142,19 @@ query addressQuery($address: String!) {
 
 const query_v1_swaps = `
 query querySwaps($address: String!) {
-  hic_et_nunc_swap(where: {creator_id: {_eq: $address}, status: {_eq: "0"}}) {
+  hic_et_nunc_swap(where: {contract_version: {_eq: "1"}, creator_id: {_eq: $address}, status: {_eq: "0"}}) {
     token {
       id
       title
+      creator {
+        address
+      }
+      creator_id
     }
+    creator {
+      address
+    }
+    creator_id
     amount
     amount_left
     price
@@ -142,8 +164,41 @@ query querySwaps($address: String!) {
   }
 }
 `
-async function fetchSwaps(address) {
 
+const query_v2_swaps = `
+query querySwaps($address: String!) {
+  hic_et_nunc_swap(where: {token: {creator: {address: {_neq: $address}}}, creator_id: {_eq: $address}, status: {_eq: "0"}, contract_version: {_eq: "2"}}, distinct_on: token_id) {
+    creator_id
+    token {
+      id
+      title
+      artifact_uri
+      display_uri
+      thumbnail_uri
+      timestamp
+      mime
+      description
+      supply
+      royalties
+      token_tags {
+        tag {
+          tag
+        }
+      }
+      creator {
+        name
+        address
+      }
+    }
+    amount
+    amount_left
+    price
+    id
+  }
+}
+`
+
+async function fetchV1Swaps(address) {
   const { errors, data } = await fetchGraphQL(query_v1_swaps, 'querySwaps', {
     address: address
   })
@@ -151,9 +206,22 @@ async function fetchSwaps(address) {
     console.error(errors)
   }
   const result = data.hic_et_nunc_swap
-  console.log(result)
+  // console.log('swapresultv1 ' + JSON.stringify(result))
   return result
+}
 
+async function fetchV2Swaps(address) {
+
+  const { errors, data } = await fetchGraphQL(query_v2_swaps, 'querySwaps', {
+    address: address
+  })
+  if (errors) {
+    console.error(errors)
+  }
+  const result = data.hic_et_nunc_swap
+  // console.log('swapresultv2 ' + JSON.stringify(result))
+
+  return result
 }
 
 async function fetchSubjkts(subjkt) {
@@ -207,23 +275,25 @@ export default class Display extends Component {
     render: false,
     loading: true,
     hasMore: true,
+    offset: 0,
     results: [],
     objkts: [],
     creations: [],
     collection: [],
-    market: [],
+    forSale: [],
+    notForSale: [],
+    marketV1: [],
     items: [],
-    offset: 0,
     creationsState: true,
     collectionState: false,
-    marketState: false,
+    collectionType: 'notForSale',
     hdao: 0,
   }
 
   componentWillMount = async () => {
 
     const id = window.location.pathname.split('/')[1]
-    console.log(window.location.pathname.split('/'))
+    // console.log(window.location.pathname.split('/'))
 
     if (id === 'tz') {
 
@@ -234,7 +304,6 @@ export default class Display extends Component {
       })
       //let res = await fetchSubjkts(decodeURI(window.location.pathname.split('/')[1]))
       // console.log(decodeURI(window.location.pathname.split('/')[1]))
-      //console.log(res)
       await GetUserMetadata(wallet).then((data) => {
         const {
           twitter,
@@ -242,21 +311,21 @@ export default class Display extends Component {
         } = data.data
         if (data.data.twitter) this.setState({ twitter })
         if (data.data.tzprofile) this.setState({ tzprofile })
-
       })
 
       let res = await fetchTz(wallet)
       try {
         if (res[0]) {
           let meta = await axios.get('https://cloudflare-ipfs.com/ipfs/' + res[0].metadata_file.split('//')[1]).then(res => res.data)
-          console.log(meta)
+
           if (meta.description) this.setState({ description: meta.description })
           if (meta.identicon) this.setState({ identicon: meta.identicon })
           if (res[0]) this.setState({ subjkt: res[0].name })
           if (res[0]) this.setState({ hdao: Math.floor(res[0].hdao_balance / 1000000) })
-
         }
-      } catch (e) { }
+      } catch (e) { 
+        console.log("error " + e)
+      }
 
 
       this.onReady()
@@ -264,7 +333,6 @@ export default class Display extends Component {
       let res = await fetchSubjkts(decodeURI(window.location.pathname.split('/')[1]))
       // console.log(decodeURI(window.location.pathname.split('/')[1]))
       console.log(res)
-
       if (res[0].metadata_file) {
         let meta = await axios.get('https://cloudflare-ipfs.com/ipfs/' + res[0].metadata_file.split('//')[1]).then(res => res.data)
         console.log(meta)
@@ -273,6 +341,8 @@ export default class Display extends Component {
       }
 
       if (res.length >= 1) {
+        console.log(res)
+
         this.setState({
           wallet: res[0].address,
           walletPreview: walletPreview(res[0].address),
@@ -298,18 +368,30 @@ export default class Display extends Component {
     }
   }
 
-  creations = async () => {
+  reset() {
+    this.setState({
+      items: [],
+      objkts: [],
+      render: false,
+      loading: true,
+      hasMore: true,
+    })
+  }
 
+  creations = async () => {
     this.setState({
       creationsState: true,
       collectionState: false,
-      marketState: false,
+      collectionType: 'notForSale'
     })
 
     let list = await getRestrictedAddresses()
-
+    // console.log(this.state.wallet)
+    // console.log(!list.includes(this.state.wallet))
     if (!list.includes(this.state.wallet)) {
-      this.setState({ objkts: await fetchCreations(this.state.wallet), loading: false, items: [] })
+      this.setState({ creations: await fetchCreations(this.state.wallet)})
+      this.setState({ objkts: this.state.creations, loading: false, items: [] })
+      this.setState({ marketV1: await fetchV1Swaps(this.state.wallet) })
     }
 
     this.setState({ items: this.state.objkts.slice(0, 20), offset: 20 })
@@ -323,20 +405,100 @@ export default class Display extends Component {
     }
   }
 
-  collection = async () => {
+  creationsNotForSale = async () => {
+    this.setState({collectionType: 'notForSale'})
 
-    let list = await getRestrictedAddresses()
-    if (!list.includes(this.state.wallet)) {
-      this.setState({ objkts: await fetchCollection(this.state.wallet), loading: false, items: [] })
-    }
+    this.setState({ 
+      objkts: await this.filterCreationsNotForSale(this.state.objkts), loading: false, items: [] 
+    })
 
     this.setState({ items: this.state.objkts.slice(0, 20), offset: 20 })
+    this.filterCreationsForSale()
+  }
 
+  filterCreationsNotForSale = async () => {
+    // console.log(JSON.stringify(this.state.creations[0]))
+    let objkts = this.state.creations.filter(item => {
+      return item.swaps_aggregate.aggregate.count == 0
+    });
+
+    return objkts
+  }
+
+  creationsForSale = async () => {
+    this.setState({collectionType: 'forSale'})
+
+    let v1Swaps = this.state.marketV1.filter(item => {
+      const objkts = item.token.creator.address == this.state.wallet
+      return objkts
+    })
+
+    this.setState({ marketV1: v1Swaps, loading: false })
+
+    this.setState({ 
+      objkts: await this.filterCreationsForSale(this.state.objkts),
+      items: []
+    })
+
+    this.setState({ items: this.state.objkts.slice(0, 20), offset: 20 })
+  }
+
+  filterCreationsForSale = async () => {
+    let objkts = this.state.creations.filter(item => {
+      const swaps = item.swaps.filter(swaps => {
+        return swaps.status == 0
+      })
+      return swaps && swaps.length > 0
+    });
+
+    return objkts
+  }
+
+  combineCollection = async (collection, swaps) => {
+    let combinedCollection = [];
+
+    collection.forEach(function(item) {
+      combinedCollection.push(item)
+    })
+    
+    swaps.forEach(function(item) {
+      combinedCollection.push(item)
+    })
+
+    return combinedCollection;
+  }
+
+  sortCollection = async (unsorted) => {
+    unsorted.sort(function (a, b) {
+      return b.token.id - a.token.id
+    })
+  }
+
+  collectionFull = async () => {
+    this.reset()
+    
     this.setState({
       creationsState: false,
-      collectionState: true,
-      marketState: false
+      collectionState: true
     })
+
+    this.setState({collectionType: 'notForSale'})
+
+    let list = await getRestrictedAddresses()
+
+    if (!list.includes(this.state.wallet)) {
+      this.setState({loading: false, items: []})
+      let collection = await fetchCollection(this.state.wallet)
+      let swaps = await fetchV2Swaps(this.state.wallet)
+      // console.log(swaps)
+      let combinedCollection = await this.combineCollection(collection, swaps)
+      this.sortCollection(combinedCollection)
+      this.setState({ collection: combinedCollection })
+      this.setState({ marketV1: await fetchV1Swaps(this.state.wallet) })
+    }
+
+    this.setState({ objkts: this.state.collection, loading: false, items: [] })
+    this.setState({ items: this.state.objkts.slice(0, 20), offset: 20 })
 
     if (this.state.subjkt !== '') {
       // if alias route
@@ -347,27 +509,36 @@ export default class Display extends Component {
     }
   }
 
-  market = async () => {
-    let swaps = await fetchSwaps(this.state.wallet)
-    swaps = swaps.filter(e => parseInt(e.contract_version) !== 2)
-    this.setState({ market: swaps, loading: false })
+  collectionForSale = async () => {
+    this.setState({collectionType: 'forSale'})
 
-    this.setState({
-      creationsState: false,
-      collectionState: false,
-      marketState: true,
+    let v1Swaps = this.state.marketV1.filter(item => {
+      const objkts = item.token.creator.address !== this.state.wallet
+      return objkts
     })
 
-    console.log(this.state)
+    this.setState({ marketV1: v1Swaps, loading: false })
 
-    if (this.state.subjkt !== '') {
-      // if alias route
-      this.props.history.push(`/${this.state.subjkt}/v1`)
-    } else {
-      // if tz/wallethash route
-      this.props.history.push(`/tz/${this.state.wallet}/v1`)
-    }
+    this.setState({ objkts: await this.filterCollectionForSale(this.state.objkts), loading: false, items: [] })
+    this.setState({ items: this.state.objkts.slice(0, 20), offset: 20 })
+  }
 
+  collectionNotForSale = async () => {
+    this.reset();
+    this.setState({collectionType: 'notForSale'})
+
+    this.setState({ objkts: await this.filterCollectionNotForSale(this.state.objkts), loading: false, items: [] })
+    this.setState({ items: this.state.objkts.slice(0, 20), offset: 20 })
+  }
+
+  filterCollectionNotForSale = async () => {
+    let objktsNotForSale = this.state.collection.filter(item => item.token.creator.address !== this.state.wallet && item.creator_id !== this.state.wallet)
+    return objktsNotForSale
+  }
+
+  filterCollectionForSale = async () => {
+    let objktsForSale = this.state.collection.filter(item => item.creator_id == this.state.wallet)
+    return objktsForSale
   }
 
   // called if there's no redirect
@@ -379,9 +550,7 @@ export default class Display extends Component {
       if (window.location.pathname.split('/')[2] === 'creations') {
         this.creations()
       } else if (window.location.pathname.split('/')[2] === 'collection') {
-        this.collection()
-      } else if (window.location.pathname.split('/')[2] === 'v1') {
-        this.market()
+        this.collectionFull()
       } else {
         this.creations()
       }
@@ -390,9 +559,7 @@ export default class Display extends Component {
       if (window.location.pathname.split('/')[3] === 'creations') {
         this.creations()
       } else if (window.location.pathname.split('/')[3] === 'collection') {
-        this.collection()
-      } else if (window.location.pathname.split('/')[3] === 'v1') {
-        this.market()
+        this.collectionFull()
       } else {
         this.creations()
       }
@@ -404,7 +571,7 @@ export default class Display extends Component {
   }
 
   cancel_batch = async () => {
-    this.context.batch_cancel(this.state.market.slice(0, 10))
+    this.context.batch_cancel(this.state.marketV1.slice(0, 10))
   }
 
   render() {
@@ -433,7 +600,7 @@ export default class Display extends Component {
                 <p>{this.state.hdao} ○</p>
 
                 <div>
-                  {/*                   {this.state.site && (
+                  {/* {this.state.site && (
                     <Button href={this.state.site}>
                       <VisuallyHidden>{this.state.site}</VisuallyHidden>
                       <svg
@@ -490,7 +657,7 @@ export default class Display extends Component {
                       </svg>
                     </Button>
                   )}
-                  {/*                   {this.state.instagram && (
+                  {/* {this.state.instagram && (
                     <Button
                       href={`https://instagram.com/${this.state.instagram}`}
                     >
@@ -590,16 +757,11 @@ export default class Display extends Component {
                 </Primary>
               </Button>
 
-              <Button onClick={this.collection}>
+              <Button onClick={this.collectionFull}>
                 <Primary selected={this.state.collectionState}>
                   collection
                 </Primary>
               </Button>
-              {this.context.acc != null && this.context.acc.address == this.state.wallet ?
-                <Button onClick={this.market}>
-                  <Primary selected={this.state.marketState}>swaps</Primary>
-                </Button>
-                : null}
             </div>
           </Padding>
         </Container>
@@ -614,6 +776,92 @@ export default class Display extends Component {
 
         {!this.state.loading && this.state.creationsState && (
           <Container xlarge>
+            <div style={{display: "flex", justifyContent: "flex-end"}}>
+            <Button 
+                onClick={() => {this.creations()}}>                
+              <div className={styles.tag}>
+                  all
+                </div>
+              </Button>
+              <Button 
+                onClick={() => {this.creationsForSale(); 
+              }}>                    
+                <div className={styles.tag}>
+                  for sale
+                </div>
+              </Button>
+              <Button 
+                onClick={() => {this.creationsNotForSale()}}>                         
+                <div className={styles.tag}>
+                  not for sale
+                </div>
+              </Button>
+            </div>
+
+            {this.state.collectionType == 'forSale' ?
+              <>
+              {this.context.acc != null && this.context.acc.address == this.state.wallet ?
+                <>
+                  {Object.keys(this.state.marketV1).length !== 0 && (
+                    <>
+                      <Container>
+                        <Padding>
+                          <p>We're currently migrating the marketplace smart contract. We ask for 
+                            users to cancel their listings as the v1 marketplace will no longer be 
+                            maintained. Auditing tools for the v1 protocol can be found at <a href='https://hictory.xyz'>hictory.xyz</a>
+                          </p>
+                        </Padding>
+                      </Container>
+                    </>
+                  )}
+
+                  {this.state.marketV1.length !== 0 ?
+                    <Container>
+                      <Padding>
+                        <p>
+                          One can delist multiple swaps in once batch transaction or delist each single one at a time.
+                        </p>
+                        <br />
+                        <Button onClick={this.cancel_batch}>
+                          <Primary>
+                            Batch Cancel
+                          </Primary>
+                        </Button>
+                      </Padding>
+                    </Container>
+                    :
+                    null
+                  }
+
+                  {this.state.marketV1.map((e, key) => {
+                    // console.log(e)
+                    return (
+                      <>
+                        <Container key={key}>
+                          <Padding>
+                            <Button to={`${PATH.OBJKT}/${e.token_id}`}>
+                              {/* {console.log(e)} */}
+                              <Primary>
+                                <strong>{e.amount_left}x OBJKT#{e.token_id} {e.price}µtez</strong>
+                              </Primary>
+                            </Button>
+                            <Button onClick={() => this.context.cancel(e.id)}>
+                              <Secondary>
+                                Cancel Swap
+                              </Secondary>
+                            </Button>
+                          </Padding>
+                        </Container>
+                      </>
+                    )
+                  })
+                }
+              </> : null }  
+            </>
+              :
+              null
+            }
+            
             <InfiniteScroll
               dataLength={this.state.items.length}
               next={this.loadMore}
@@ -643,18 +891,99 @@ export default class Display extends Component {
 
         {!this.state.loading && this.state.collectionState && (
           <Container xlarge>
+            <div style={{display: "flex", justifyContent: "flex-end"}}>
+              <Button 
+onClick={() => {this.collectionFull()}}>
+                <div className={styles.tag}>
+                  all
+                </div>
+              </Button>
+              <Button onClick={() => {this.collectionForSale()}}>
+              <div className={styles.tag}>
+                for sale
+              </div>
+              </Button>
+              <Button onClick={() => {this.collectionNotForSale()}}>
+                <div className={styles.tag}>
+                  not for sale
+                </div>
+              </Button>
+            </div>
+            
+            {this.state.collectionType == 'forSale' ?
+              <>
+              {this.context.acc != null && this.context.acc.address == this.state.wallet ?
+                <>
+                  {Object.keys(this.state.marketV1).length !== 0 && (
+                    <>
+                      <Container>
+                        <Padding>
+                          <p>We're currently migrating the marketplace smart contract. We ask for 
+                            users to cancel their listings as the v1 marketplace will no longer be 
+                            maintained. Auditing tools for the v1 protocol can be found at <a href='https://hictory.xyz'>hictory.xyz</a>
+                          </p>
+                        </Padding>
+                      </Container>
+                    </>
+                  )}
+
+                  {this.state.marketV1.length !== 0 ?
+                    <Container>
+                      <Padding>
+                        <p>
+                          One can delist multiple swaps in once batch transaction or delist each single one at a time.
+                        </p>
+                        <br />
+                        <Button onClick={this.cancel_batch}>
+                          <Primary>
+                            Batch Cancel
+                          </Primary>
+                        </Button>
+                      </Padding>
+                    </Container>
+                    :
+                    null
+                  }
+
+                  {this.state.marketV1.map((e, key) => {
+                    // console.log(e)
+                    return (
+                      <>
+                        <Container key={key}>
+                          <Padding>
+                            <Button to={`${PATH.OBJKT}/${e.token_id}`}>
+                              {/* {console.log(e)} */}
+                              <Primary>
+                                <strong>{e.amount_left}x OBJKT#{e.token_id} {e.price}µtez</strong>
+                              </Primary>
+                            </Button>
+                            <Button onClick={() => this.context.cancel(e.id)}>
+                              <Secondary>
+                                Cancel Swap
+                              </Secondary>
+                            </Button>
+                          </Padding>
+                        </Container>
+                      </>
+                    )
+                  })
+                }
+              </> : null }  
+            </>
+              :
+              null
+            }
+
             <InfiniteScroll
               dataLength={this.state.items.length}
               next={this.loadMore}
               hasMore={this.state.hasMore}
-              loader={
-                undefined
-              }
-              endMessage={undefined}
+              loader={undefined}
+              endMessage={<p></p>}
             >
               <ResponsiveMasonry>
                 {this.state.items.map((nft) => {
-                  console.log(nft)
+                  // console.log('nft : ' + nft)
                   return (
                     <Button key={nft.token.id} to={`${PATH.OBJKT}/${nft.token.id}`}>
                       <div className={styles.container}>
@@ -673,64 +1002,9 @@ export default class Display extends Component {
           </Container>
         )}
 
-        {!this.state.loading && this.state.marketState && (
-          <>
-            <Container>
-              <Padding>
-                <p>OBJKTs listed on market before june 28th must migrate to the marketplace v2 contract. We ask for users to cancel their's listings as the v1 marketplace is no longer maintained.</p>
-              </Padding>
-            </Container>
-            {Object.keys(this.state.market).length === 0 && (
-              <Container>
-                <Padding>
-                  <p>You currently don't have any OBJKT on the market.</p>
-                </Padding>
-              </Container>
-            )}
-
-            {
-              this.state.market.length !== 0 ?
-                <Container>
-                  <Padding>
-                    <p>
-                      One can delist multiple swaps at once batching transactions or delist each single one of them.
-                    </p>
-                    <br />
-                    <Button onClick={this.cancel_batch}>
-                      <Primary>
-                        Batch Cancel
-                      </Primary>
-                    </Button>
-                  </Padding>
-                </Container>
-                :
-                null
-            }
-
-            {this.state.market.map((e, key) => {
-
-              console.log(e)
-              return (
-                <Container key={key}>
-                  <Padding>
-                    <Button to={`${PATH.OBJKT}/${e.token_id}`}>
-                      {console.log(e)}
-                      <Primary>
-                        <strong>{e.amount_left}x OBJKT#{e.token_id} {e.price}µtez</strong>
-                      </Primary>
-                    </Button>
-                    <Button onClick={() => this.context.cancelv1(e.id)}>
-                      Cancel Swap
-                    </Button>
-                  </Padding>
-                </Container>
-              )
-            })}
-          </>
-        )}
-        {/*         <BottomBanner>
-          Collecting has been temporarily disabled. Follow <a href="https://twitter.com/hicetnunc2000" target="_blank">@hicetnunc2000</a> or <a href="https://discord.gg/jKNy6PynPK" target="_blank">join the discord</a> for updates.
-        </BottomBanner> */}
+        <BottomBanner>
+          All V1 swaps can now be found under the "For Sale" tabs. Please cancel them and then reswap as you normally would. Follow <a href="https://twitter.com/hicetnunc2000" target="_blank">@hicetnunc2000</a> or <a href="https://discord.gg/B7pw68mrXW" target="_blank">join the discord</a> for updates.
+        </BottomBanner>
       </Page>
     )
   }
