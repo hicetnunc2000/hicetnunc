@@ -778,27 +778,22 @@ export default class Display extends Component {
           <Container xlarge>
             <div style={{display: "flex", justifyContent: "flex-end"}}>
             <Button 
-                onClick={() => {
-                this.creations(); 
-              }}>                
+                onClick={() => {this.creations()}}>                
               <div className={styles.tag}>
                   all
                 </div>
               </Button>
               <Button 
-                onClick={() => {
-                this.creationsNotForSale(); 
-              }}>                         
-                <div className={styles.tag}>
-                  not for sale
-                </div>
-              </Button>
-              <Button 
-                onClick={() => {
-                this.creationsForSale(); 
+                onClick={() => {this.creationsForSale(); 
               }}>                    
                 <div className={styles.tag}>
                   for sale
+                </div>
+              </Button>
+              <Button 
+                onClick={() => {this.creationsNotForSale()}}>                         
+                <div className={styles.tag}>
+                  not for sale
                 </div>
               </Button>
             </div>
@@ -903,15 +898,15 @@ onClick={() => {this.collectionFull()}}>
                   all
                 </div>
               </Button>
-              <Button onClick={() => {this.collectionNotForSale()}}>
-                <div className={styles.tag}>
-                  not for sale
-                </div>
-              </Button>
               <Button onClick={() => {this.collectionForSale()}}>
               <div className={styles.tag}>
                 for sale
               </div>
+              </Button>
+              <Button onClick={() => {this.collectionNotForSale()}}>
+                <div className={styles.tag}>
+                  not for sale
+                </div>
               </Button>
             </div>
             
