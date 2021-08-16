@@ -7,9 +7,9 @@ const sortByPrice = (a, b) => {
   return Number(a.xtz_per_objkt) - Number(b.xtz_per_objkt)
 }
 
-export const OwnerSwaps = ({ swaps, handleCollect, acc, cancel }) => {
-  swaps = swaps.filter(e => parseInt(e.contract_version) === 2 && parseInt(e.status) === 0 && e.is_valid )
-  console.log('v2',swaps)
+export const OwnerSwaps = ({ swaps, handleCollect, acc, cancel, reswapv2 }) => {
+  swaps = swaps.filter(e => parseInt(e.contract_version) === 2 && parseInt(e.status) === 0 && e.is_valid)
+  console.log('v2', swaps)
   return (
     <div className={styles.container}>
       {swaps.sort(sortByPrice).map((swap, index) => {
@@ -36,10 +36,17 @@ export const OwnerSwaps = ({ swaps, handleCollect, acc, cancel }) => {
               </Button>
               {swap.creator.address ===
                 (acc !== undefined ? acc.address : '') && (
-                <Button onClick={() => cancel(swap.id)}>
-                  <Purchase>cancel</Purchase>
-                </Button>
-              )}
+                  <>
+                    <Button onClick={() => cancel(swap.id)}>
+                      <Purchase>cancel</Purchase>
+                    </Button>
+                    <div className={styles.break}></div>
+                    <input id="new_price" type="text" size="12" placeholder="New price"></input>
+                    <Button onClick={() => reswapv2(swap)}>
+                      <Purchase>reswap</Purchase>
+                    </Button>
+                  </>
+                )}
             </div>
           </div>
         )

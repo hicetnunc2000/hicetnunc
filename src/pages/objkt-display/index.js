@@ -56,6 +56,10 @@ swaps {
   royalties
   creator_id
   is_valid
+  token {
+    id
+    creator_id
+  }
 }
 token_holders(where: {quantity: {_gt: "0"}}) {
   holder_id
@@ -147,7 +151,7 @@ export const ObjktDisplay = () => {
         } else {
           await context.setAccount()
           setNFT(objkt)
-  
+
           setLoading(false)
         }
       })
