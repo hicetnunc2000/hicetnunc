@@ -123,6 +123,7 @@ query subjktsQuery($subjkt: String!) {
     name
     hdao_balance
     metadata
+    metadata_file
   }
 }
 `
@@ -134,6 +135,7 @@ query addressQuery($address: String!) {
     name
     hdao_balance
     metadata
+    metadata_file
   }
 }
 `
@@ -217,8 +219,7 @@ async function fetchV2Swaps(address) {
     console.error(errors)
   }
   const result = data.hic_et_nunc_swap
-  console.log(result)
-  console.log('swapresultv2 ' + JSON.stringify(result))
+  // console.log('swapresultv2 ' + JSON.stringify(result))
 
   return result
 }
@@ -274,6 +275,7 @@ export default class Display extends Component {
     render: false,
     loading: true,
     hasMore: true,
+    offset: 0,
     results: [],
     objkts: [],
     creations: [],
@@ -282,62 +284,65 @@ export default class Display extends Component {
     notForSale: [],
     marketV1: [],
     items: [],
-    offset: 0,
     creationsState: true,
     collectionState: false,
-    hdao: 0,
     collectionType: 'notForSale',
-    activeTab: 0
+    hdao: 0,
   }
 
   componentWillMount = async () => {
 
     const id = window.location.pathname.split('/')[1]
-    console.log(window.location.pathname.split('/'))
+    // console.log(window.location.pathname.split('/'))
+
     if (id === 'tz') {
+
       const wallet = window.location.pathname.split('/')[2]
       this.setState({
         wallet,
         walletPreview: walletPreview(wallet),
       })
-
+      //let res = await fetchSubjkts(decodeURI(window.location.pathname.split('/')[1]))
+      // console.log(decodeURI(window.location.pathname.split('/')[1]))
       await GetUserMetadata(wallet).then((data) => {
         const {
-          alias,
-          description,
-          site,
-          telegram,
           twitter,
-          github,
-          reddit,
-          instagram,
-          logo,
           tzprofile,
         } = data.data
-        if (data.data.alias) this.setState({ alias })
-        if (data.data.description) this.setState({ description })
-        if (data.data.site) this.setState({ site })
-        if (data.data.telegram) this.setState({ telegram })
         if (data.data.twitter) this.setState({ twitter })
-        if (data.data.github) this.setState({ github })
-        if (data.data.reddit) this.setState({ reddit })
-        if (data.data.instagram) this.setState({ instagram })
-        if (data.data.logo) this.setState({ logo })
         if (data.data.tzprofile) this.setState({ tzprofile })
-
-        console.log(this.state.logo)
       })
 
-      let resTz = await fetchTz(wallet)
-      this.setState({ hdao: Math.floor(resTz[0].hdao_balance / 1000000) })
+      let res = await fetchTz(wallet)
+      try {
+        if (res[0]) {
+          let meta = await axios.get('https://cloudflare-ipfs.com/ipfs/' + res[0].metadata_file.split('//')[1]).then(res => res.data)
+
+          if (meta.description) this.setState({ description: meta.description })
+          if (meta.identicon) this.setState({ identicon: meta.identicon })
+          if (res[0]) this.setState({ subjkt: res[0].name })
+          if (res[0]) this.setState({ hdao: Math.floor(res[0].hdao_balance / 1000000) })
+        }
+      } catch (e) { 
+        console.log("error " + e)
+      }
+
 
       this.onReady()
     } else {
       let res = await fetchSubjkts(decodeURI(window.location.pathname.split('/')[1]))
       // console.log(decodeURI(window.location.pathname.split('/')[1]))
       console.log(res)
+      if (res[0].metadata_file) {
+        let meta = await axios.get('https://cloudflare-ipfs.com/ipfs/' + res[0].metadata_file.split('//')[1]).then(res => res.data)
+        console.log(meta)
+        if (meta.description) this.setState({ description: meta.description })
+        if (meta.identicon) this.setState({ identicon: meta.identicon })
+      }
 
       if (res.length >= 1) {
+        console.log(res)
+
         this.setState({
           wallet: res[0].address,
           walletPreview: walletPreview(res[0].address),
@@ -352,25 +357,11 @@ export default class Display extends Component {
 
       await GetUserMetadata(this.state.wallet).then((data) => {
         const {
-          alias,
-          description,
-          site,
-          telegram,
           twitter,
-          github,
-          reddit,
-          instagram,
-          logo,
+          tzprofile
         } = data.data
-        if (data.data.alias) this.setState({ alias })
-        if (data.data.description) this.setState({ description })
-        if (data.data.site) this.setState({ site })
-        if (data.data.telegram) this.setState({ telegram })
         if (data.data.twitter) this.setState({ twitter })
-        if (data.data.github) this.setState({ github })
-        if (data.data.reddit) this.setState({ reddit })
-        if (data.data.instagram) this.setState({ instagram })
-        if (data.data.logo) this.setState({ logo })
+        if (data.data.tzprofile) this.setState({ tzprofile })
         this.onReady()
       })
       this.onReady()
@@ -381,11 +372,9 @@ export default class Display extends Component {
     this.setState({
       items: [],
       objkts: [],
-      marketV1: [],
       render: false,
+      loading: true,
       hasMore: true,
-      loading: false,
-      collectionType: 'notForSale'    
     })
   }
 
@@ -393,8 +382,7 @@ export default class Display extends Component {
     this.setState({
       creationsState: true,
       collectionState: false,
-      collectionType: 'notForSale',
-      activeTab: 0
+      collectionType: 'notForSale'
     })
 
     let list = await getRestrictedAddresses()
@@ -429,7 +417,7 @@ export default class Display extends Component {
   }
 
   filterCreationsNotForSale = async () => {
-    console.log(JSON.stringify(this.state.creations[0]))
+    // console.log(JSON.stringify(this.state.creations[0]))
     let objkts = this.state.creations.filter(item => {
       return item.swaps_aggregate.aggregate.count == 0
     });
@@ -491,8 +479,7 @@ export default class Display extends Component {
     
     this.setState({
       creationsState: false,
-      collectionState: true,
-      activeTab: 0
+      collectionState: true
     })
 
     this.setState({collectionType: 'notForSale'})
@@ -503,7 +490,7 @@ export default class Display extends Component {
       this.setState({loading: false, items: []})
       let collection = await fetchCollection(this.state.wallet)
       let swaps = await fetchV2Swaps(this.state.wallet)
-      console.log(swaps)
+      // console.log(swaps)
       let combinedCollection = await this.combineCollection(collection, swaps)
       this.sortCollection(combinedCollection)
       this.setState({ collection: combinedCollection })
@@ -554,11 +541,6 @@ export default class Display extends Component {
     return objktsForSale
   }
 
-  setActive(index) {
-    this.setState({activeTag: index})
-    console.log(this.state.activeTag)
-  }
-
   // called if there's no redirect
   onReady = async () => {
 
@@ -586,10 +568,6 @@ export default class Display extends Component {
 
   loadMore = () => {
     this.setState({ items: this.state.items.concat(this.state.objkts.slice(this.state.offset, this.state.offset + 20)), offset: this.state.offset + 20 })
-
-    /*     if ((this.state.objkts.slice(this.state.offset, this.state.offset + 20).length < 20) && (this.state.offset !== 20)) {
-          this.setState({ hasMore : false })
-        } */
   }
 
   cancel_batch = async () => {
@@ -602,7 +580,7 @@ export default class Display extends Component {
         <Container>
           <Padding>
             <div className={styles.profile}>
-              <Identicon address={this.state.wallet} logo={this.state.logo} />
+              <Identicon address={this.state.wallet} logo={this.state.identicon} />
 
               <div className={styles.info}>
                 {this.state.alias && !this.state.subjkt ? (
@@ -622,7 +600,7 @@ export default class Display extends Component {
                 <p>{this.state.hdao} ○</p>
 
                 <div>
-                  {this.state.site && (
+                  {/* {this.state.site && (
                     <Button href={this.state.site}>
                       <VisuallyHidden>{this.state.site}</VisuallyHidden>
                       <svg
@@ -659,7 +637,7 @@ export default class Display extends Component {
                         <path d="M9.78,18.65L10.06,14.42L17.74,7.5C18.08,7.19 17.67,7.04 17.22,7.31L7.74,13.3L3.64,12C2.76,11.75 2.75,11.14 3.84,10.7L19.81,4.54C20.54,4.21 21.24,4.72 20.96,5.84L18.24,18.65C18.05,19.56 17.5,19.78 16.74,19.36L12.6,16.3L10.61,18.23C10.38,18.46 10.19,18.65 9.78,18.65Z"></path>
                       </svg>
                     </Button>
-                  )}
+                  )} */}
                   {this.state.twitter && (
                     <Button href={`https://twitter.com/${this.state.twitter}`}>
                       <VisuallyHidden>{`https://twitter.com/${this.state.twitter}`}</VisuallyHidden>
@@ -679,7 +657,7 @@ export default class Display extends Component {
                       </svg>
                     </Button>
                   )}
-                  {this.state.instagram && (
+                  {/* {this.state.instagram && (
                     <Button
                       href={`https://instagram.com/${this.state.instagram}`}
                     >
@@ -739,7 +717,7 @@ export default class Display extends Component {
                         <path d="m314.675781 256c-14.695312 0-26.675781 11.980469-26.675781 26.675781 0 14.691407 11.980469 26.675781 26.675781 26.675781 14.691407 0 26.675781-11.984374 26.675781-26.675781 0-14.695312-11.980468-26.675781-26.675781-26.675781zm0 0" />
                       </svg>
                     </Button>
-                  )}
+                  )} */}
                   {this.state.tzprofile && (
                     <Button href={`https://tzprofiles.com/view/${this.state.tzprofile}`}>
                       <VisuallyHidden>{`https://tzprofiles.com/view/${this.state.tzprofile}`}</VisuallyHidden>
@@ -788,13 +766,20 @@ export default class Display extends Component {
           </Padding>
         </Container>
 
+        {this.state.loading && (
+          <Container>
+            <Padding>
+              <Loading />
+            </Padding>
+          </Container>
+        )}
+
         {!this.state.loading && this.state.creationsState && (
           <Container xlarge>
             <div style={{display: "flex", justifyContent: "flex-end"}}>
             <Button 
                 onClick={() => {
                 this.creations(); 
-                this.setActive(0)
               }}>                
               <div className={styles.tag}>
                   all
@@ -803,7 +788,6 @@ export default class Display extends Component {
               <Button 
                 onClick={() => {
                 this.creationsNotForSale(); 
-                this.setActive(1)
               }}>                         
                 <div className={styles.tag}>
                   not for sale
@@ -812,7 +796,6 @@ export default class Display extends Component {
               <Button 
                 onClick={() => {
                 this.creationsForSale(); 
-                this.setActive(2)
               }}>                    
                 <div className={styles.tag}>
                   for sale
@@ -915,28 +898,17 @@ export default class Display extends Component {
           <Container xlarge>
             <div style={{display: "flex", justifyContent: "flex-end"}}>
               <Button 
-                onClick={() => {
-                this.collectionFull(); 
-                this.setActive(0)
-              }}>
+onClick={() => {this.collectionFull()}}>
                 <div className={styles.tag}>
                   all
                 </div>
               </Button>
-              <Button
-                onClick={() => {
-                this.collectionNotForSale(); 
-                this.setActive(1)
-              }}>
+              <Button onClick={() => {this.collectionNotForSale()}}>
                 <div className={styles.tag}>
                   not for sale
                 </div>
               </Button>
-              <Button
-                onClick={() => {
-                this.collectionForSale(); 
-                this.setActive(2)
-              }}>
+              <Button onClick={() => {this.collectionForSale()}}>
               <div className={styles.tag}>
                 for sale
               </div>
@@ -1035,9 +1007,9 @@ export default class Display extends Component {
           </Container>
         )}
 
-        {/*         <BottomBanner>
-          Collecting has been temporarily disabled. Follow <a href="https://twitter.com/hicetnunc2000" target="_blank">@hicetnunc2000</a> or <a href="https://discord.gg/jKNy6PynPK" target="_blank">join the discord</a> for updates.
-        </BottomBanner> */}
+        <BottomBanner>
+          All V1 swaps can now be found under the "For Sale" tabs. Please cancel them and then reswap as you normally would. Follow <a href="https://twitter.com/hicetnunc2000" target="_blank">@hicetnunc2000</a> or <a href="https://discord.gg/B7pw68mrXW" target="_blank">join the discord</a> for updates.
+        </BottomBanner>
       </Page>
     )
   }
