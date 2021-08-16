@@ -154,12 +154,16 @@ export function injectCSPMetaTagIntoHTML(html) {
       blob:
       https://services.tzkt.io
       https://ipfs.infura.io
+      https://*.infura-ipfs.io
       https://cloudflare-ipfs.com/
       https://ipfs.io/
+      https://templewallet.com/logo.png
       https://gateway.pinata.cloud/;
     font-src
       'self'
+      data:
       https://ipfs.infura.io
+      https://*.infura-ipfs.io
       https://cloudflare-ipfs.com/
       https://fonts.googleapis.com/
       https://ipfs.io/
@@ -171,12 +175,16 @@ export function injectCSPMetaTagIntoHTML(html) {
       https://*.cryptonomic-infra.tech
       https://cryptonomic-infra.tech
       https://*.infura.io
+      https://*.infura-ipfs.io
       https://infura.io
       blob:
+      data:
       ws:
       wss:
       bootstrap.libp2p.io
       preload.ipfs.io
+      https://mainnet.smartpy.io
+      https://mainnet-tezos.giganode.io
       https://api.etherscan.io
       https://api.thegraph.com
       https://*.tzkt.io
@@ -199,12 +207,14 @@ export function injectCSPMetaTagIntoHTML(html) {
       data:
       blob:
       https://ipfs.infura.io
+      https://*.infura-ipfs.io
       https://cloudflare-ipfs.com/
       https://ipfs.io/
       https://gateway.pinata.cloud/;
     prefetch-src
       'self'
       https://ipfs.infura.io
+      https://*.infura-ipfs.io
       https://cloudflare-ipfs.com/
       https://fonts.googleapis.com/
       https://ipfs.io/

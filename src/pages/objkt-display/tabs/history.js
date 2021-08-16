@@ -1,7 +1,9 @@
 import React, { useContext, useState } from 'react'
 import { Container, Padding } from '../../../components/layout'
+import { Primary } from '../../../components/button'
 import { HicetnuncContext } from '../../../context/HicetnuncContext'
 import { walletPreview } from '../../../utils/string'
+import styles from '../styles.module.scss'
 
 
 export const History = (token_info) => {
@@ -26,20 +28,20 @@ export const History = (token_info) => {
                         history.map(e => {
                             if (e.trade) {
                                 return (
-                                    <div>
-                                        trade {e.timestamp} {encodeURI(e.seller.name) ? <span><a href={`/tz/${encodeURI(e.seller.address)}`}>{encodeURI(e.seller.name)}</a></span> : <span><a href={`/tz/${e.seller.address}`}>{walletPreview(e.seller.address)}</a></span>} {e.amount} ed {parseFloat(e.swap.price / 1000000)} tez {e.buyer.name ? <span><a href={`/${encodeURI(e.buyer.name)}`}>{encodeURI(e.buyer.name)}</a></span> : <span><a href={`/tz/${e.buyer.address}`}>{walletPreview(e.buyer.address)}</a></span>}
+                                    <div className={styles.history}>
+                                        trade {e.timestamp} { encodeURI(e.seller.name) ? <span><a href={`/tz/${encodeURI(e.seller.address)}`}> <Primary>&nbsp;{encodeURI(e.seller.name)}</Primary></a></span> : <span><a href={`/tz/${e.seller.address}`}><Primary>&nbsp;{walletPreview(e.seller.address)}</Primary></a></span>}&nbsp;{e.amount} ed. {parseFloat(e.swap.price / 1000000)} tez{e.buyer.name ? <span><a href={`/${encodeURI(e.buyer.name)}`}><Primary>&nbsp;{encodeURI(e.buyer.name)}</Primary></a></span> : <span><a href={`/tz/${e.buyer.address}`}><Primary>&nbsp;{walletPreview(e.buyer.address)}</Primary></a></span>}
                                     </div>
                                 )
                             } else {
                                 return (
-                                    <div>
-                                        swap {e.timestamp} {e.creator.name ? <span><a href={`/tz/${e.creator.address}`}>{encodeURI(e.creator.name)}</a></span> : <span><a href={`/tz/${e.creator.address}`}>{walletPreview(e.creator.address)}</a></span>} {e.amount} ed {parseFloat(e.price / 1000000)} tez
+                                    <div className={styles.history}>
+                                        swap {e.timestamp} {e.creator.name ? <span><a href={`/tz/${e.creator.address}`}><Primary>&nbsp;{encodeURI(e.creator.name)}&nbsp;</Primary></a></span> : <span><a href={`/tz/${e.creator.address}`}><Primary>&nbsp;{walletPreview(e.creator.address)}</Primary></a></span>} {e.amount} ed. {parseFloat(e.price / 1000000)} tez
                                     </div>
                                 )
                             }
                         })
                     }
-                    minted {token_info.timestamp} {token_info.supply} ed {token_info.royalties / 10}% royalties
+                    minted {token_info.timestamp} {token_info.supply} ed. {token_info.royalties / 10}% royalties
                 </Padding>
             </Container>
         </div>

@@ -4,12 +4,12 @@ import { Button, Primary, Purchase } from '../button'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
 import { walletPreview } from '../../utils/string'
 import styles from './styles.module.scss'
+import { CollabIssuerInfo } from '../collab/show/CollabIssuerInfo'
 
 const _ = require('lodash')
 
 export const ItemInfo = ({
   id,
-  token_info,
   creator_id,
   owners,
   swaps,
@@ -66,7 +66,7 @@ export const ItemInfo = ({
 
     const curateOrClaim = (id, balance = 0) => {
       // if user is creator and there's hDAO balance
-      if (acc && acc.address === token_info.creators[0] && balance > 0) {
+      if (acc && acc.address === creator.address && balance > 0) {
         claim_hDAO(balance, id)
       } else {
         curate(id)
@@ -88,23 +88,36 @@ export const ItemInfo = ({
         </Button>
       )
     }
+
+    // the issuer path depends on whether it's a collab address (KT) or individual (tz)
+    const { ISSUER, COLLAB } = PATH
+    const creatorAddress = creator.address
+    const isCollab = creatorAddress.substring(0, 2) === 'KT'
+    const issuerPath = isCollab ? COLLAB : ISSUER
+
     return (
       <>
         <div style={{ height: '30px' }}></div>
         <div className={styles.container}>
           <div className={styles.edition}>
             <div className={styles.inline}>
-              <Button
-                to={
-                  `/tz/${creator.address}`
-                }
-              >
-                {creator.name ? (
-                  <Primary>{encodeURI(creator.name)}</Primary>
-                ) : (
-                  <Primary>{walletPreview(creator.address)}</Primary>
-                )}
-              </Button>
+              {/* <p className={styles.issuer}>{isCollab ? 'Collaboration:' : 'Issuer:'}&nbsp;</p> */}
+              {isCollab && (
+                <CollabIssuerInfo address={ creatorAddress } />
+              )}
+              {!isCollab && (
+                <Button
+                  to={
+                    `/tz/${creator.address}`
+                  }
+                >
+                  {creator.name ? (
+                    <Primary>{encodeURI(creator.name)}</Primary>
+                  ) : (
+                    <Primary>{walletPreview(creator.address)}</Primary>
+                  )}
+                </Button>
+              )}
             </div>
             {!feed && (
               <div>

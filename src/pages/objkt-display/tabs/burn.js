@@ -6,10 +6,8 @@ import { Input } from '../../../components/input'
 import { Loading } from '../../../components/loading'
 
 export const Burn = (props) => {
-  const { burn, address } = useContext(HicetnuncContext)
-  const [message, setMessage] = useState() // eslint-disable-line
+  const { burn, address, message, setMessage, setProgress, progress } = useContext(HicetnuncContext)
   const [amount, setAmount] = useState('')
-  const [progress, setProgress] = useState() // eslint-disable-line
 
   let totalOwned = 0
 
@@ -45,54 +43,63 @@ export const Burn = (props) => {
 
   return (
     <>
-      <Container>
-        <Padding>
-          <p>
-            You own {totalOwned} editions of OBJKT#{props.id}. How many would
-            you like to burn?
-          </p>
-        </Padding>
-      </Container>
-      <Container>
-        <Padding>
-          <Input
-            type="number"
-            placeholder="OBJKTs to burn"
-            min={1}
-            max={totalOwned}
-            onChange={(e) => setAmount(e.target.value)}
-            disabled={progress}
-          />
-        </Padding>
-      </Container>
+      {!progress ?
+        <div>
+          <Container>
+            <Padding>
+              <p>
+                You own {totalOwned} editions of OBJKT#{props.id}. How many would
+                you like to burn?
+              </p>
+            </Padding>
+          </Container>
+          <Container>
+            <Padding>
+              <Input
+                type="number"
+                placeholder="OBJKTs to burn"
+                min={1}
+                max={totalOwned}
+                onChange={(e) => setAmount(e.target.value)}
+                disabled={progress}
+              />
+            </Padding>
+          </Container>
 
-      <Container>
-        <Padding>
-          <p style={{ fontSize: '14px' }}>
-            Burning will transfer the OBJKTs from your possession to a burn
-            address. Once in the burn address, the OBJKT can't be recovered or
-            sold. You can only burn tokens that you own. If you have them
-            swapped, you first need to cancel that swap before you try to burn
-            them.
-          </p>
-          <br />
-          <p>
-            <strong>NB: This action is not reversable.</strong>
-          </p>
-        </Padding>
-      </Container>
+          <Container>
+            <Padding>
+              <p style={{ fontSize: '14px' }}>
+                Burning will transfer the OBJKTs from your possession to a burn
+                address. Once in the burn address, the OBJKT can't be recovered or
+                sold. You can only burn tokens that you own. If you have them
+                swapped, you first need to cancel that swap before you try to burn
+                them.
+              </p>
+              <br />
+              <p>
+                <strong>NB: This action is not reversable.</strong>
+              </p>
+            </Padding>
+          </Container>
 
-      <Container>
-        <Padding>
-          <Button onClick={handleSubmit} fit>
-            <Curate>burn</Curate>
-          </Button>
-          <div>
-            <p>{message}</p>
-            {progress && <Loading />}
-          </div>
-        </Padding>
-      </Container>
+          <Container>
+            <Padding>
+              <Button onClick={handleSubmit} fit>
+                <Curate>burn</Curate>
+              </Button>
+            </Padding>
+          </Container>
+        </div>
+        :
+        <div>
+          <p tyle={{
+          position: 'absolute',
+          left: '46%',
+          top: '35%',
+      }}> {message}</p>
+          {progress && <Loading />}
+        </div>
+      }
     </>
   )
 }

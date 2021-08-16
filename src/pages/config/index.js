@@ -11,8 +11,10 @@ import { Identicon } from '../../components/identicons'
 import { SigningType } from '@airgap/beacon-sdk'
 import { char2Bytes } from '@taquito/utils'
 import styles from './styles.module.scss'
+import axios from 'axios'
 const { create } = require('ipfs-http-client')
 const infuraUrl = 'https://ipfs.infura.io:5001'
+const ipfs = create(infuraUrl)
 
 const ls = require('local-storage')
 
@@ -23,6 +25,7 @@ query addressQuery($address: String!) {
     name
     hdao_balance
     metadata
+    metadata_file
   }
 }
 `
@@ -63,16 +66,29 @@ export class Config extends Component {
     social_media: '',
     identicon: '',
     subjktUri: '', // uploads image
+    cid : undefined
   }
 
   componentWillMount = async () => {
     await this.context.syncTaquito()
     this.setState({ address: this.context.acc.address })
     let res = await fetchTz(this.context.acc.address)
-    this.context.setSubjktInfo(res[0])
+
     this.context.subjktInfo = res[0]
     console.log(this.context.subjktInfo)
+
+    if (this.context.subjktInfo) {
+    let cid = await axios.get('https://ipfs.io/ipfs/'+ (this.context.subjktInfo.metadata_file).split('//')[1]).then(res => res.data) 
+
+    this.context.subjktInfo.gravatar = cid
+    
+    if (cid.description) this.setState({ description : cid.description })
+    if (cid.identicon) this.setState({ identicon : cid.identicon })
+    if (this.context.subjktInfo.name) this.setState({ subjkt : this.context.subjktInfo.name })
+
+    }
     //console.log(this.context.subjktInfo)
+    this.setState({ loading : false })
   }
 
   handleChange = (e) => {
@@ -83,16 +99,16 @@ export class Config extends Component {
   // config subjkt
 
   subjkt_config = async () => {
-    const ipfs = create(infuraUrl)
 
     if (this.state.selectedFile) {
       const [file] = this.state.selectedFile
 
       const buffer = Buffer.from(await file.arrayBuffer())
-
+      console.log(buffer)
       this.setState({ identicon: 'ipfs://' + (await ipfs.add(buffer)).path })
     }
-    //console.log(this.state)
+
+    console.log(this.state)
     this.context.registry(
       this.state.subjkt,
       await ipfs.add(
@@ -103,11 +119,17 @@ export class Config extends Component {
 
   // upload file
 
-  onFileChange = (event) => {
+  onFileChange = async (event) => {
     this.setState({
       selectedFile: event.target.files,
       fileTitle: event.target.files[0].name,
     })
+
+    const [file] = event.target.files
+
+    const buffer = Buffer.from(await file.arrayBuffer())
+    this.setState({ identicon: 'ipfs://' + (await ipfs.add(buffer)).path })
+     
   }
 
   hDAO_operators = () => {
@@ -164,8 +186,11 @@ export class Config extends Component {
   render() {
     return (
       <Page>
+        
         <Container>
-          <Identicon address={this.state.address} />
+
+          <Identicon address={this.state.address} logo={this.state.identicon} />
+        
           <div style={{ height: '20px' }}></div>
           <input type="file" onChange={this.onFileChange} />
           <div style={{ height: '20px' }}></div>
@@ -175,14 +200,14 @@ export class Config extends Component {
               onChange={this.handleChange}
               placeholder="Username"
               label="Username"
-              value={undefined}
+              value={this.context.subjktInfo ? this.context.subjktInfo.name : undefined}
             />
             <Input
               name="description"
               onChange={this.handleChange}
               placeholder="Description"
               label="Description"
-              value={undefined}
+              value={this.state.description}
             />
             <Button onClick={this.subjkt_config}>
               <Curate>Save Profile</Curate>

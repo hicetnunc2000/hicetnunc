@@ -4,10 +4,10 @@ import { BottomBanner } from '../../components/bottom-banner'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
 import { Page, Container, Padding } from '../../components/layout'
 import { Input, Textarea } from '../../components/input'
-import { Button, Curate, Primary } from '../../components/button'
+import { Button, Curate, Primary, Purchase } from '../../components/button'
 import { Upload } from '../../components/upload'
 import { Preview } from '../../components/preview'
-import { prepareFile, prepareDirectory } from '../../data/ipfs'
+import { prepareFile, prepareFile100MB, prepareDirectory } from '../../data/ipfs'
 import { prepareFilesFromZIP } from '../../utils/html'
 import {
   ALLOWED_MIMETYPES,
@@ -37,7 +37,7 @@ const thumbnailOptions = {
 const GENERATE_DISPLAY_AND_THUMBNAIL = true
 
 export const Mint = () => {
-  const { mint, getAuth, acc, setAccount, setFeedback, syncTaquito } =
+  const { mint, getAuth, acc, setAccount, getProxy, setFeedback, syncTaquito } =
     useContext(HicetnuncContext)
   // const history = useHistory()
   const [step, setStep] = useState(0)
@@ -68,7 +68,8 @@ export const Mint = () => {
       })
     } else {
       await setAccount()
-
+      console.log(file.mimeType)
+      console.log(ALLOWED_MIMETYPES)
       // check mime type
       if (ALLOWED_MIMETYPES.indexOf(file.mimeType) === -1) {
         // alert(
@@ -119,6 +120,11 @@ export const Mint = () => {
         confirm: false,
       })
 
+      // if proxyContract is selected, using it as a the miterAddress:
+      const minterAddress = getProxy() || acc.address
+      // ztepler: I have not understand the difference between acc.address and getAuth here
+      //    so I am using acc.address (minterAddress) in both nftCid.address and in mint call
+
       // upload file(s)
       let nftCid
       if (
@@ -130,11 +136,12 @@ export const Mint = () => {
           name: title,
           description,
           tags,
-          address: acc.address,
+          address: minterAddress,
           files,
           cover,
           thumbnail,
           generateDisplayUri: GENERATE_DISPLAY_AND_THUMBNAIL,
+          file
         })
       } else {
         // process all other files
@@ -142,7 +149,7 @@ export const Mint = () => {
           name: title,
           description,
           tags,
-          address: acc.address,
+          address: minterAddress,
           buffer: file.buffer,
           mimeType: file.mimeType,
           cover,
@@ -151,7 +158,7 @@ export const Mint = () => {
         })
       }
 
-      mint(getAuth(), amount, nftCid.path, royalties)
+      mint(minterAddress, amount, nftCid.path, royalties)
     }
   }
 
@@ -372,7 +379,7 @@ export const Mint = () => {
           <Container>
             <Padding>
               <Button onClick={handleMint} fit>
-                <Curate>mint OBJKT</Curate>
+                <Purchase>mint OBJKT</Purchase>
               </Button>
             </Padding>
           </Container>

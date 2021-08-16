@@ -124,6 +124,7 @@ export const ObjktDisplay = () => {
   const [error, setError] = useState(false)
 
   const address = context.acc?.address
+  const proxy = context.getProxy()
 
   useEffect(async () => {
     let objkt = await fetchObjkt(id)
@@ -197,6 +198,7 @@ export const ObjktDisplay = () => {
       )}
 
       {!loading && (
+        !context.progress ?
         <>
           <div
             style={{
@@ -245,7 +247,8 @@ export const ObjktDisplay = () => {
 
                         if (
                           holders_arr.includes(address) === false &&
-                          nft.creator.address !== address
+                          nft.creator.address !== address &&
+                          nft.creator.address !== proxy
                         ) {
                           // user is not the creator now owns a copy of the object. hide
 
@@ -272,7 +275,20 @@ export const ObjktDisplay = () => {
             </div>
           </div>
         </>
-      )}
+        :
+        <Container>
+        <Padding>
+          <div>
+            <p style={{
+                position: 'absolute',
+                left: '46%',
+                top: '45%',
+            }}>{context.message}</p>
+            {context.progress && <Loading />}
+          </div>
+        </Padding>
+      </Container>
+)}
 {/*       <BottomBanner>
               v2 migration: All OBJKTs listed on market before June 28th must be relisted. menu > managed assets > v1 swaps > batch cancel > relist. Profiles informations must be reconfigured at menu > settings as well being possible to verify your twitter profile.
       </BottomBanner> */}
