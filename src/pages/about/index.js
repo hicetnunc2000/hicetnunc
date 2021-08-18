@@ -65,7 +65,7 @@ export class About extends Component {
                 </Primary>
               </Button>
               <p>,</p>&nbsp;
-              <Button href="https://discord.gg/XWCPjXUYeN">
+              <Button href="https://discord.gg/W8vQ7REym7">
                 <Primary>
                   <strong>discord</strong>
                 </Primary>

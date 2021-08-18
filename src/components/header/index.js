@@ -116,13 +116,8 @@ export const Header = () => {
                 <nav className={styles.content}>
                   <ul>
                     <li>
-                      <Button onClick={() => handleRoute('/hdao')}>
-                        <Primary>○</Primary>
-                      </Button>
-                    </li>
-                    <li>
-                      <Button onClick={() => handleRoute('/random')}>
-                        <Primary>random</Primary>
+                      <Button onClick={() => handleRoute('/search')}>
+                        <Primary>explore</Primary>
                       </Button>
                     </li>
                     <li>
@@ -150,7 +145,7 @@ export const Header = () => {
                     { context.acc?.address ?
                       <li>
                         <Button onClick={() => handleRoute('/config')}>
-                          <Primary>settings</Primary>
+                          <Primary>update profile</Primary>
                         </Button>
                       </li>
                       :
