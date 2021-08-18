@@ -31,7 +31,7 @@ query profiles {
 
 const latest_feed = `
 query LatestFeed($lastId: bigint = 99999999) {
-  hic_et_nunc_token(order_by: {id: desc}, limit: 50, where: {id: {_lt: $lastId}, artifact_uri: {_neq: ""}}) {
+  hic_et_nunc_token(order_by: {id: desc}, limit: 10, where: {id: {_lt: $lastId}, artifact_uri: {_neq: ""}}) {
     artifact_uri
     display_uri
     creator_id
@@ -192,7 +192,7 @@ export const Feeds = ({ type }) => {
   const [hasMore, setHasMore] = useState(true)
   const [creators, setCreators] = useState([])
   const startTime = customFloor(Date.now(), ONE_MINUTE_MILLIS)
-
+  
   const loadMore = async () => {
     if (type === 1) {
       await getHdaoFeed()
@@ -263,7 +263,7 @@ export const Feeds = ({ type }) => {
 
   const getHdaoFeed = async () => {
     let result = await fetchHdao(offset)
-    setOffset(offset + 50)
+    setOffset(offset + 15)
     const next = items.concat(result)
     setItems(next)
   }

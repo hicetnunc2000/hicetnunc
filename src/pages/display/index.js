@@ -394,7 +394,7 @@ export default class Display extends Component {
       this.setState({ marketV1: await fetchV1Swaps(this.state.wallet) })
     }
 
-    this.setState({ items: this.state.objkts.slice(0, 20), offset: 20 })
+    this.setState({ items: this.state.objkts.slice(0, 15), offset: 15 })
 
     if (this.state.subjkt !== '') {
       // if alias route
@@ -412,7 +412,7 @@ export default class Display extends Component {
       objkts: await this.filterCreationsNotForSale(this.state.objkts), loading: false, items: [] 
     })
 
-    this.setState({ items: this.state.objkts.slice(0, 20), offset: 20 })
+    this.setState({ items: this.state.objkts.slice(0, 15), offset: 15 })
     this.filterCreationsForSale()
   }
 
@@ -440,7 +440,7 @@ export default class Display extends Component {
       items: []
     })
 
-    this.setState({ items: this.state.objkts.slice(0, 20), offset: 20 })
+    this.setState({ items: this.state.objkts.slice(0, 15), offset: 15 })
   }
 
   filterCreationsForSale = async () => {
@@ -498,7 +498,7 @@ export default class Display extends Component {
     }
 
     this.setState({ objkts: this.state.collection, loading: false, items: [] })
-    this.setState({ items: this.state.objkts.slice(0, 20), offset: 20 })
+    this.setState({ items: this.state.objkts.slice(0, 15), offset: 15 })
 
     if (this.state.subjkt !== '') {
       // if alias route
@@ -520,7 +520,7 @@ export default class Display extends Component {
     this.setState({ marketV1: v1Swaps, loading: false })
 
     this.setState({ objkts: await this.filterCollectionForSale(this.state.objkts), loading: false, items: [] })
-    this.setState({ items: this.state.objkts.slice(0, 20), offset: 20 })
+    this.setState({ items: this.state.objkts.slice(0, 15), offset: 15 })
   }
 
   collectionNotForSale = async () => {
@@ -528,7 +528,7 @@ export default class Display extends Component {
     this.setState({collectionType: 'notForSale'})
 
     this.setState({ objkts: await this.filterCollectionNotForSale(this.state.objkts), loading: false, items: [] })
-    this.setState({ items: this.state.objkts.slice(0, 20), offset: 20 })
+    this.setState({ items: this.state.objkts.slice(0, 15), offset: 15 })
   }
 
   filterCollectionNotForSale = async () => {
@@ -762,6 +762,12 @@ export default class Display extends Component {
                   collection
                 </Primary>
               </Button>
+
+              <Button onClick={() => this.setState({ filter : !this.state.filter })}>
+                <Primary>
+                    filter
+                </Primary>
+              </Button>
             </div>
           </Padding>
         </Container>
@@ -776,6 +782,7 @@ export default class Display extends Component {
 
         {!this.state.loading && this.state.creationsState && (
           <Container xlarge>
+            {this.state.filter && (
             <div style={{display: "flex", justifyContent: "flex-end"}}>
             <Button 
                 onClick={() => {this.creations()}}>                
@@ -797,6 +804,7 @@ export default class Display extends Component {
                 </div>
               </Button>
             </div>
+            )}
 
             {this.state.collectionType == 'forSale' ?
               <>
@@ -1002,9 +1010,9 @@ onClick={() => {this.collectionFull()}}>
           </Container>
         )}
 
-        <BottomBanner>
+{/*         <BottomBanner>
           All V1 swaps can now be found under the "For Sale" tabs. Please cancel them and then reswap as you normally would. Follow <a href="https://twitter.com/hicetnunc2000" target="_blank">@hicetnunc2000</a> or <a href="https://discord.gg/B7pw68mrXW" target="_blank">join the discord</a> for updates.
-        </BottomBanner>
+        </BottomBanner> */}
       </Page>
     )
   }

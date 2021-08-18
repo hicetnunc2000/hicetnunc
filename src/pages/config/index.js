@@ -5,7 +5,7 @@ import { HicetnuncContext } from '../../context/HicetnuncContext'
 import { Container, Padding, Page } from '../../components/layout'
 import { BottomBanner } from '../../components/bottom-banner'
 import { Input, Textarea } from '../../components/input'
-import { Button, Curate } from '../../components/button'
+import { Button, Curate, Primary } from '../../components/button'
 import { Upload } from '../../components/upload'
 import { Identicon } from '../../components/identicons'
 import { SigningType } from '@airgap/beacon-sdk'
@@ -66,7 +66,8 @@ export class Config extends Component {
     social_media: '',
     identicon: '',
     subjktUri: '', // uploads image
-    cid : undefined
+    cid: undefined,
+    toogled: false
   }
 
   componentWillMount = async () => {
@@ -78,17 +79,17 @@ export class Config extends Component {
     console.log(this.context.subjktInfo)
 
     if (this.context.subjktInfo) {
-    let cid = await axios.get('https://ipfs.io/ipfs/'+ (this.context.subjktInfo.metadata_file).split('//')[1]).then(res => res.data) 
+      let cid = await axios.get('https://ipfs.io/ipfs/' + (this.context.subjktInfo.metadata_file).split('//')[1]).then(res => res.data)
 
-    this.context.subjktInfo.gravatar = cid
-    
-    if (cid.description) this.setState({ description : cid.description })
-    if (cid.identicon) this.setState({ identicon : cid.identicon })
-    if (this.context.subjktInfo.name) this.setState({ subjkt : this.context.subjktInfo.name })
+      this.context.subjktInfo.gravatar = cid
+
+      if (cid.description) this.setState({ description: cid.description })
+      if (cid.identicon) this.setState({ identicon: cid.identicon })
+      if (this.context.subjktInfo.name) this.setState({ subjkt: this.context.subjktInfo.name })
 
     }
     //console.log(this.context.subjktInfo)
-    this.setState({ loading : false })
+    this.setState({ loading: false })
   }
 
   handleChange = (e) => {
@@ -129,7 +130,7 @@ export class Config extends Component {
 
     const buffer = Buffer.from(await file.arrayBuffer())
     this.setState({ identicon: 'ipfs://' + (await ipfs.add(buffer)).path })
-     
+
   }
 
   hDAO_operators = () => {
@@ -143,6 +144,7 @@ export class Config extends Component {
     ls.set('hDAO_config', this.state.vote)
   }
 
+  toogle = () => this.setState({ toogled: !this.state.toogled })
   /*     
 
    signature studies
@@ -186,11 +188,11 @@ export class Config extends Component {
   render() {
     return (
       <Page>
-        
+
         <Container>
 
           <Identicon address={this.state.address} logo={this.state.identicon} />
-        
+
           <div style={{ height: '20px' }}></div>
           <input type="file" onChange={this.onFileChange} />
           <div style={{ height: '20px' }}></div>
@@ -213,26 +215,44 @@ export class Config extends Component {
               <Curate>Save Profile</Curate>
             </Button>
           </Padding>
-          <p>link your twitter account with <a href="https://tzprofiles.com">tz profiles</a></p>
+          <div style={{ display: 'inline' }}>
+            <span>link your twitter account with </span>
+            <span><a style={{color : 'black', fontWeight : 'bold'}}href="https://tzprofiles.com">tz profiles</a></span>
+          </div>
         </Container>
 
         <Container>
           <Padding>
-            <Input
-              name="vote"
-              onChange={this.handleChange}
-              placeholder="hDAO Curation"
-              label="hDAO Curation"
-              value={undefined}
-            />
-
-            <Button onClick={this.hDAO_config}>
-              <Curate>Save ○</Curate>
-            </Button>
-
-            <p>hic et nunc DAO ○ curation parameter</p>
+            <div onClick={this.toogle}>
+              <Primary>
+                + advanced
+              </Primary>
+            </div>
           </Padding>
         </Container>
+        {
+          this.state.toogled ?
+            <Container>
+              <Padding>
+                <Input
+                  name="vote"
+                  onChange={this.handleChange}
+                  placeholder="hDAO Curation"
+                  label="hDAO Curation"
+                  value={undefined}
+                />
+
+                <Button onClick={this.hDAO_config}>
+                  <Curate>Save ○</Curate>
+                </Button>
+
+                <p>hic et nunc DAO ○ curation parameter</p>
+              </Padding>
+            </Container>
+            :
+            undefined
+        }
+
 
         {/*         <Container>
           <Padding>
