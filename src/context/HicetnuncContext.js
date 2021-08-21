@@ -26,9 +26,9 @@ const createProxySchema = `
 (map address (pair (bool %isCore) (nat %share))))
 `
 
-const bandwidth = navigator.connection.downlink
-const connectionType = navigator.connection
-console.log('band', bandwidth, 'type', connectionType)
+//const bandwidth = navigator.connection.downlink
+//const connectionType = navigator.connection
+//console.log('band', bandwidth, 'type', connectionType)
 // This should be moved to a service so it is only done once on page load
 //const Tezos = new TezosToolkit('https://api.tez.ie/rpc/mainnet')
 //const Tezos = new TezosToolkit('https://mainnet-tezos.giganode.io')
