@@ -132,7 +132,7 @@ export const HTMLComponent = (props) => {
     return (
       <div className={classes}>
         <div className={styles.preview}>
-          <img src={displayUri} alt="thumbnail" />
+          <img src={displayUri} alt="display" />
           <div className={styles.button}>
             <Button>
               <VisuallyHidden>View</VisuallyHidden>
@@ -168,6 +168,7 @@ export const HTMLComponent = (props) => {
   }
 
   if (!displayView) {
+    try {
     return (
       <div>
         <iframe
@@ -180,6 +181,9 @@ export const HTMLComponent = (props) => {
         />
       </div>
     )
+    } catch (err) {
+      return undefined
+    }
   } else {
 
     return (

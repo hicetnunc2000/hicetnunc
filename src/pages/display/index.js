@@ -323,7 +323,7 @@ export default class Display extends Component {
           if (res[0]) this.setState({ subjkt: res[0].name })
           if (res[0]) this.setState({ hdao: Math.floor(res[0].hdao_balance / 1000000) })
         }
-      } catch (e) { 
+      } catch (e) {
         console.log("error " + e)
       }
 
@@ -389,7 +389,7 @@ export default class Display extends Component {
     // console.log(this.state.wallet)
     // console.log(!list.includes(this.state.wallet))
     if (!list.includes(this.state.wallet)) {
-      this.setState({ creations: await fetchCreations(this.state.wallet)})
+      this.setState({ creations: await fetchCreations(this.state.wallet) })
       this.setState({ objkts: this.state.creations, loading: false, items: [] })
       this.setState({ marketV1: await fetchV1Swaps(this.state.wallet) })
     }
@@ -406,10 +406,10 @@ export default class Display extends Component {
   }
 
   creationsNotForSale = async () => {
-    this.setState({collectionType: 'notForSale'})
+    this.setState({ collectionType: 'notForSale' })
 
-    this.setState({ 
-      objkts: await this.filterCreationsNotForSale(this.state.objkts), loading: false, items: [] 
+    this.setState({
+      objkts: await this.filterCreationsNotForSale(this.state.objkts), loading: false, items: []
     })
 
     this.setState({ items: this.state.objkts.slice(0, 15), offset: 15 })
@@ -426,7 +426,7 @@ export default class Display extends Component {
   }
 
   creationsForSale = async () => {
-    this.setState({collectionType: 'forSale'})
+    this.setState({ collectionType: 'forSale' })
 
     let v1Swaps = this.state.marketV1.filter(item => {
       const objkts = item.token.creator.address == this.state.wallet
@@ -435,7 +435,7 @@ export default class Display extends Component {
 
     this.setState({ marketV1: v1Swaps, loading: false })
 
-    this.setState({ 
+    this.setState({
       objkts: await this.filterCreationsForSale(this.state.objkts),
       items: []
     })
@@ -457,11 +457,11 @@ export default class Display extends Component {
   combineCollection = async (collection, swaps) => {
     let combinedCollection = [];
 
-    collection.forEach(function(item) {
+    collection.forEach(function (item) {
       combinedCollection.push(item)
     })
-    
-    swaps.forEach(function(item) {
+
+    swaps.forEach(function (item) {
       combinedCollection.push(item)
     })
 
@@ -476,18 +476,18 @@ export default class Display extends Component {
 
   collectionFull = async () => {
     this.reset()
-    
+
     this.setState({
       creationsState: false,
       collectionState: true
     })
 
-    this.setState({collectionType: 'notForSale'})
+    this.setState({ collectionType: 'notForSale' })
 
     let list = await getRestrictedAddresses()
 
     if (!list.includes(this.state.wallet)) {
-      this.setState({loading: false, items: []})
+      this.setState({ loading: false, items: [] })
       let collection = await fetchCollection(this.state.wallet)
       let swaps = await fetchV2Swaps(this.state.wallet)
       // console.log(swaps)
@@ -510,7 +510,7 @@ export default class Display extends Component {
   }
 
   collectionForSale = async () => {
-    this.setState({collectionType: 'forSale'})
+    this.setState({ collectionType: 'forSale' })
 
     let v1Swaps = this.state.marketV1.filter(item => {
       const objkts = item.token.creator.address !== this.state.wallet
@@ -525,7 +525,7 @@ export default class Display extends Component {
 
   collectionNotForSale = async () => {
     this.reset();
-    this.setState({collectionType: 'notForSale'})
+    this.setState({ collectionType: 'notForSale' })
 
     this.setState({ objkts: await this.filterCollectionNotForSale(this.state.objkts), loading: false, items: [] })
     this.setState({ items: this.state.objkts.slice(0, 15), offset: 15 })
@@ -762,10 +762,9 @@ export default class Display extends Component {
                   collection
                 </Primary>
               </Button>
-
-              <Button onClick={() => this.setState({ filter : !this.state.filter })}>
+              <Button onClick={() => this.setState({ filter: !this.state.filter })}>
                 <Primary>
-                    filter
+                  filter
                 </Primary>
               </Button>
             </div>
@@ -783,93 +782,94 @@ export default class Display extends Component {
         {!this.state.loading && this.state.creationsState && (
           <Container xlarge>
             {this.state.filter && (
-            <div style={{display: "flex", justifyContent: "flex-end"}}>
-            <Button 
-                onClick={() => {this.creations()}}>                
-              <div className={styles.tag}>
-                  all
-                </div>
-              </Button>
-              <Button 
-                onClick={() => {this.creationsForSale(); 
-              }}>                    
-                <div className={styles.tag}>
-                  for sale
-                </div>
-              </Button>
-              <Button 
-                onClick={() => {this.creationsNotForSale()}}>                         
-                <div className={styles.tag}>
-                  not for sale
-                </div>
-              </Button>
-            </div>
+              <div style={{ display: "flex", justifyContent: "flex-end" }}>
+                <Button
+                  onClick={() => { this.creations() }}>
+                  <div className={styles.tag}>
+                    all
+                  </div>
+                </Button>
+                <Button
+                  onClick={() => {
+                    this.creationsForSale();
+                  }}>
+                  <div className={styles.tag}>
+                    for sale
+                  </div>
+                </Button>
+                <Button
+                  onClick={() => { this.creationsNotForSale() }}>
+                  <div className={styles.tag}>
+                    not for sale
+                  </div>
+                </Button>
+              </div>
             )}
 
             {this.state.collectionType == 'forSale' ?
               <>
-              {this.context.acc != null && this.context.acc.address == this.state.wallet ?
-                <>
-                  {Object.keys(this.state.marketV1).length !== 0 && (
-                    <>
-                      <Container>
-                        <Padding>
-                          <p>We're currently migrating the marketplace smart contract. We ask for 
-                            users to cancel their listings as the v1 marketplace will no longer be 
-                            maintained. Auditing tools for the v1 protocol can be found at <a href='https://hictory.xyz'>hictory.xyz</a>
-                          </p>
-                        </Padding>
-                      </Container>
-                    </>
-                  )}
-
-                  {this.state.marketV1.length !== 0 ?
-                    <Container>
-                      <Padding>
-                        <p>
-                          One can delist multiple swaps in once batch transaction or delist each single one at a time.
-                        </p>
-                        <br />
-                        <Button onClick={this.cancel_batch}>
-                          <Primary>
-                            Batch Cancel
-                          </Primary>
-                        </Button>
-                      </Padding>
-                    </Container>
-                    :
-                    null
-                  }
-
-                  {this.state.marketV1.map((e, key) => {
-                    // console.log(e)
-                    return (
+                {this.context.acc != null && this.context.acc.address == this.state.wallet ?
+                  <>
+                    {Object.keys(this.state.marketV1).length !== 0 && (
                       <>
-                        <Container key={key}>
+                        <Container>
                           <Padding>
-                            <Button to={`${PATH.OBJKT}/${e.token_id}`}>
-                              {/* {console.log(e)} */}
-                              <Primary>
-                                <strong>{e.amount_left}x OBJKT#{e.token_id} {e.price}µtez</strong>
-                              </Primary>
-                            </Button>
-                            <Button onClick={() => this.context.cancel(e.id)}>
-                              <Secondary>
-                                Cancel Swap
-                              </Secondary>
-                            </Button>
+                            <p>We're currently migrating the marketplace smart contract. We ask for
+                              users to cancel their listings as the v1 marketplace will no longer be
+                              maintained. Auditing tools for the v1 protocol can be found at <a href='https://hictory.xyz'>hictory.xyz</a>
+                            </p>
                           </Padding>
                         </Container>
                       </>
-                    )
-                  })
-                }
-              </> : null }  
-            </>
+                    )}
+
+                    {this.state.marketV1.length !== 0 ?
+                      <Container>
+                        <Padding>
+                          <p>
+                            One can delist multiple swaps in once batch transaction or delist each single one at a time.
+                          </p>
+                          <br />
+                          <Button onClick={this.cancel_batch}>
+                            <Primary>
+                              Batch Cancel
+                            </Primary>
+                          </Button>
+                        </Padding>
+                      </Container>
+                      :
+                      null
+                    }
+
+                    {this.state.marketV1.map((e, key) => {
+                      // console.log(e)
+                      return (
+                        <>
+                          <Container key={key}>
+                            <Padding>
+                              <Button to={`${PATH.OBJKT}/${e.token_id}`}>
+                                {/* {console.log(e)} */}
+                                <Primary>
+                                  <strong>{e.amount_left}x OBJKT#{e.token_id} {e.price}µtez</strong>
+                                </Primary>
+                              </Button>
+                              <Button onClick={() => this.context.cancel(e.id)}>
+                                <Secondary>
+                                  Cancel Swap
+                                </Secondary>
+                              </Button>
+                            </Padding>
+                          </Container>
+                        </>
+                      )
+                    })
+                    }
+                  </> : null}
+              </>
               :
               null
             }
-            
+
             <InfiniteScroll
               dataLength={this.state.items.length}
               next={this.loadMore}
@@ -899,85 +899,89 @@ export default class Display extends Component {
 
         {!this.state.loading && this.state.collectionState && (
           <Container xlarge>
-            <div style={{display: "flex", justifyContent: "flex-end"}}>
-              <Button 
-onClick={() => {this.collectionFull()}}>
-                <div className={styles.tag}>
-                  all
+            {this.state.filter && (
+              <div>
+                <div style={{ display: "flex", justifyContent: "flex-end" }}>
+                  <Button
+                    onClick={() => { this.collectionFull() }}>
+                    <div className={styles.tag}>
+                      all
+                    </div>
+                  </Button>
+                  <Button onClick={() => { this.collectionForSale() }}>
+                    <div className={styles.tag}>
+                      for sale
+                    </div>
+                  </Button>
+                  <Button onClick={() => { this.collectionNotForSale() }}>
+                    <div className={styles.tag}>
+                      not for sale
+                    </div>
+                  </Button>
                 </div>
-              </Button>
-              <Button onClick={() => {this.collectionForSale()}}>
-              <div className={styles.tag}>
-                for sale
               </div>
-              </Button>
-              <Button onClick={() => {this.collectionNotForSale()}}>
-                <div className={styles.tag}>
-                  not for sale
-                </div>
-              </Button>
-            </div>
-            
+            )}
+
             {this.state.collectionType == 'forSale' ?
               <>
-              {this.context.acc != null && this.context.acc.address == this.state.wallet ?
-                <>
-                  {Object.keys(this.state.marketV1).length !== 0 && (
-                    <>
-                      <Container>
-                        <Padding>
-                          <p>We're currently migrating the marketplace smart contract. We ask for 
-                            users to cancel their listings as the v1 marketplace will no longer be 
-                            maintained. Auditing tools for the v1 protocol can be found at <a href='https://hictory.xyz'>hictory.xyz</a>
-                          </p>
-                        </Padding>
-                      </Container>
-                    </>
-                  )}
-
-                  {this.state.marketV1.length !== 0 ?
-                    <Container>
-                      <Padding>
-                        <p>
-                          One can delist multiple swaps in once batch transaction or delist each single one at a time.
-                        </p>
-                        <br />
-                        <Button onClick={this.cancel_batch}>
-                          <Primary>
-                            Batch Cancel
-                          </Primary>
-                        </Button>
-                      </Padding>
-                    </Container>
-                    :
-                    null
-                  }
-
-                  {this.state.marketV1.map((e, key) => {
-                    // console.log(e)
-                    return (
+                {this.context.acc != null && this.context.acc.address == this.state.wallet ?
+                  <>
+                    {Object.keys(this.state.marketV1).length !== 0 && (
                       <>
-                        <Container key={key}>
+                        <Container>
                           <Padding>
-                            <Button to={`${PATH.OBJKT}/${e.token_id}`}>
-                              {/* {console.log(e)} */}
-                              <Primary>
-                                <strong>{e.amount_left}x OBJKT#{e.token_id} {e.price}µtez</strong>
-                              </Primary>
-                            </Button>
-                            <Button onClick={() => this.context.cancel(e.id)}>
-                              <Secondary>
-                                Cancel Swap
-                              </Secondary>
-                            </Button>
+                            <p>We're currently migrating the marketplace smart contract. We ask for
+                              users to cancel their listings as the v1 marketplace will no longer be
+                              maintained. Auditing tools for the v1 protocol can be found at <a href='https://hictory.xyz'>hictory.xyz</a>
+                            </p>
                           </Padding>
                         </Container>
                       </>
-                    )
-                  })
-                }
-              </> : null }  
-            </>
+                    )}
+
+                    {this.state.marketV1.length !== 0 ?
+                      <Container>
+                        <Padding>
+                          <p>
+                            One can delist multiple swaps in once batch transaction or delist each single one at a time.
+                          </p>
+                          <br />
+                          <Button onClick={this.cancel_batch}>
+                            <Primary>
+                              Batch Cancel
+                            </Primary>
+                          </Button>
+                        </Padding>
+                      </Container>
+                      :
+                      null
+                    }
+
+                    {this.state.marketV1.map((e, key) => {
+                      // console.log(e)
+                      return (
+                        <>
+                          <Container key={key}>
+                            <Padding>
+                              <Button to={`${PATH.OBJKT}/${e.token_id}`}>
+                                {/* {console.log(e)} */}
+                                <Primary>
+                                  <strong>{e.amount_left}x OBJKT#{e.token_id} {e.price}µtez</strong>
+                                </Primary>
+                              </Button>
+                              <Button onClick={() => this.context.cancel(e.id)}>
+                                <Secondary>
+                                  Cancel Swap
+                                </Secondary>
+                              </Button>
+                            </Padding>
+                          </Container>
+                        </>
+                      )
+                    })
+                    }
+                  </> : null}
+              </>
               :
               null
             }
@@ -1007,10 +1011,11 @@ onClick={() => {this.collectionFull()}}>
                 })}
               </ResponsiveMasonry>
             </InfiniteScroll>
+
           </Container>
         )}
 
-{/*         <BottomBanner>
+        {/*         <BottomBanner>
           All V1 swaps can now be found under the "For Sale" tabs. Please cancel them and then reswap as you normally would. Follow <a href="https://twitter.com/hicetnunc2000" target="_blank">@hicetnunc2000</a> or <a href="https://discord.gg/B7pw68mrXW" target="_blank">join the discord</a> for updates.
         </BottomBanner> */}
       </Page>

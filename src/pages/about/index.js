@@ -83,9 +83,9 @@ export class About extends Component {
                 </Primary>
               </Button>
               or through our
-              &nbsp;<Button href="https://community.hicetnunc.xyz">
+              <Button href="https://community.hicetnunc.xyz">
                 <Primary>
-                  <strong>community forum</strong>
+                  <strong>&nbsp;community forum</strong>
                 </Primary>
               </Button>.
             </div>

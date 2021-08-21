@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react'
 import { HicetnuncContext } from '../../../context/HicetnuncContext'
 import { Container, Padding } from '../../../components/layout'
-import { Button, Curate } from '../../../components/button'
+import { Button, Curate, Purchase } from '../../../components/button'
 import { Input } from '../../../components/input'
 import { Loading } from '../../../components/loading'
 
@@ -85,7 +85,7 @@ export const Burn = (props) => {
           <Container>
             <Padding>
               <Button onClick={handleSubmit} fit>
-                <Curate>burn</Curate>
+                <Purchase>burn</Purchase>
               </Button>
             </Padding>
           </Container>
