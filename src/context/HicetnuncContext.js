@@ -677,6 +677,12 @@ class HicetnuncContextProviderClass extends Component {
 
       collapsed: true,
 
+      feed : [],
+
+      offset : 0,
+
+      setFeed : (arr) => this.setState({ feed : arr }),
+
       toogleNavbar: () => {
         this.setState({ collapsed: !this.state.collapsed })
       },
@@ -701,6 +707,7 @@ class HicetnuncContextProviderClass extends Component {
           title: title,
         })
       },
+      
       hDAO_vote: ls.get('hDAO_vote'),
 
       proxyFactoryAddress: 'KT1DoyD6kr8yLK8mRBFusyKYJUk2ZxNHKP1N',

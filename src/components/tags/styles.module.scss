@@ -7,14 +7,12 @@
 
   .tag {
     display: inline-flex;
-    background-color: var(--border-color);
+    font-weight: bold;
     color: var(--text-color);
-    border-radius: 4px;
-    padding: 4px 8px;
-    margin-right: 6px;
+    margin-right: 12.5px;
     margin-bottom: 6px;
-    text-transform: uppercase;
-    font-size: 14px;
+    text-transform: lowercase;
+    font-size: 16px;
     transition: background-color #{$theme-duration} ease-out,
       color #{$theme-duration} ease-out;
   }

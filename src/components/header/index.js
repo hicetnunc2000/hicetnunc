@@ -116,7 +116,7 @@ export const Header = () => {
                 <nav className={styles.content}>
                   <ul>
                     <li>
-                      <Button onClick={() => handleRoute('/search')}>
+                      <Button onClick={() => handleRoute('/explore')}>
                         <Primary>explore</Primary>
                       </Button>
                     </li>
@@ -145,7 +145,7 @@ export const Header = () => {
                     { context.acc?.address ?
                       <li>
                         <Button onClick={() => handleRoute('/config')}>
-                          <Primary>update profile</Primary>
+                          <Primary>edit profile</Primary>
                         </Button>
                       </li>
                       :

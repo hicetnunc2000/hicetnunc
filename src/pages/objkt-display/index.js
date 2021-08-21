@@ -18,7 +18,7 @@ const axios = require('axios')
 
 const TABS = [
   { title: 'info', component: Info }, // public tab
-  { title: 'collectors', component: Collectors }, // public tab
+  { title: 'market', component: Collectors }, // public tab
   { title: 'history', component: History },
   { title: 'swap', component: Swap, private: true }, // private tab (users only see if they are the creators or own a copy)
   { title: 'burn', component: Burn, private: true }, // private tab (users only see if they are the creators or own a copy)
@@ -33,6 +33,7 @@ timestamp
 display_uri
 description
 artifact_uri
+metadata
 creator {
   address
   name
@@ -199,101 +200,97 @@ export const ObjktDisplay = () => {
 
       {!loading && (
         !context.progress ?
-        <>
-          <div
-            style={{
-              position: 'relative',
-              display: 'block',
-              width: '100%'
-            }}
-            className="objkt-display">
-            <div className={
-              nft.mime == 'application/x-directory' || nft.mime == 'image/svg+xml' ? 'objktview-zipembed objktview ' + styles.objktview :
-                [(
-                  nft.mime == 'video/mp4' ||
-                    nft.mime == 'video/ogv' ||
-                    nft.mime == 'video/quicktime' ||
-                    nft.mime == 'video/webm' ||
-                    nft.mime == 'application/pdf' ? 'no-fullscreen' : 'objktview ' + styles.objktview
-                )]
-            }>
-              {renderMediaType({
-                mimeType: nft.mime,
-                artifactUri: nft.artifact_uri,
-                displayUri: nft.display_uri,
-                creator: nft.creator,
-                objkt: nft.id,
-                interactive: true,
-                displayView: false
-              })}
-            </div>
-            <div>
-              <Container>
-                <Padding>
-                  <ItemInfo {...nft} isDetailView />
-                </Padding>
-              </Container>
+          <>
+            <div
+              style={{
+                position: 'relative',
+                display: 'block',
+                width: '100%'
+              }}
+              className="objkt-display">
+              <div className={
+                nft.mime == 'application/x-directory' || nft.mime == 'image/svg+xml' ? 'objktview-zipembed objktview ' + styles.objktview :
+                  [(
+                    nft.mime == 'video/mp4' ||
+                      nft.mime == 'video/ogv' ||
+                      nft.mime == 'video/quicktime' ||
+                      nft.mime == 'video/webm' ||
+                      nft.mime == 'application/pdf' ? 'no-fullscreen' : 'objktview ' + styles.objktview
+                  )]
+              }>
+                {renderMediaType({
+                  mimeType: nft.mime,
+                  artifactUri: nft.artifact_uri,
+                  displayUri: nft.display_uri,
+                  creator: nft.creator,
+                  objkt: nft.id,
+                  interactive: true,
+                  displayView: false
+                })}
+              </div>
+              <div>
+                <Container>
+                  <Padding>
+                    <ItemInfo {...nft} isDetailView />
+                  </Padding>
+                </Container>
 
-              <Container>
-                <Padding>
-                  <Menu>
-                    {TABS.map((tab, index) => {
-                      // if nft.owners exist and this is a private route, try to hide the tab.
-                      // if nft.owners fails, always show route!
-                      if (nft?.token_holders && tab.private) {
-                        let holders_arr = nft.token_holders.map(
-                          (e) => e.holder_id
-                        )
+                <Container>
+                  <Padding>
+                    <Menu>
+                      {TABS.map((tab, index) => {
+                        // if nft.owners exist and this is a private route, try to hide the tab.
+                        // if nft.owners fails, always show route!
+                        if (nft?.token_holders && tab.private) {
+                          let holders_arr = nft.token_holders.map(
+                            (e) => e.holder_id
+                          )
 
-                        if (
-                          holders_arr.includes(address) === false &&
-                          nft.creator.address !== address &&
-                          nft.creator.address !== proxy
-                        ) {
-                          // user is not the creator now owns a copy of the object. hide
+                          if (
+                            holders_arr.includes(address) === false &&
+                            nft.creator.address !== address &&
+                            nft.creator.address !== proxy
+                          ) {
+                            // user is not the creator now owns a copy of the object. hide
 
-                          return null
+                            return null
+                          }
                         }
-                      }
 
-                      return (
-                        <Button
-                          key={tab.title}
-                          onClick={() => setTabIndex(index)}
-                        >
-                          <Primary selected={tabIndex === index}>
-                            {tab.title}
-                          </Primary>
-                        </Button>
-                      )
-                    })}
-                  </Menu>
-                </Padding>
-              </Container>
+                        return (
+                          <Button
+                            key={tab.title}
+                            onClick={() => setTabIndex(index)}
+                          >
+                            <Primary selected={tabIndex === index}>
+                              {tab.title}
+                            </Primary>
+                          </Button>
+                        )
+                      })}
+                    </Menu>
+                  </Padding>
+                </Container>
 
-              <Tab {...nft} address={address} />
+                <Tab {...nft} address={address} />
+              </div>
             </div>
-          </div>
-        </>
-        :
-        <Container>
-        <Padding>
-          <div>
-            <p style={{
-                position: 'absolute',
-                left: '46%',
-                top: '45%',
-            }}>{context.message}</p>
-            {context.progress && <Loading />}
-          </div>
-        </Padding>
-      </Container>
-)}
-{/*       <BottomBanner>
-              v2 migration: All OBJKTs listed on market before June 28th must be relisted. menu > managed assets > v1 swaps > batch cancel > relist. Profiles informations must be reconfigured at menu > settings as well being possible to verify your twitter profile.
-      </BottomBanner> */}
+          </>
+          :
+          <Container>
+            <Padding>
+              <div>
+                <p style={{
+                  position: 'absolute',
+                  left: '46%',
+                  top: '45%',
+                }}>{context.message}</p>
+                {context.progress && <Loading />}
+              </div>
+            </Padding>
+          </Container>
+      )}
       <div style={{ height: '40px' }}></div>
-
     </Page>
   )
 }

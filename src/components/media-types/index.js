@@ -31,9 +31,13 @@ const HashToURL = (hash, type) => {
     case 'IPFS':
       return hash.replace('ipfs://', 'https://ipfs.io/ipfs/')
     case 'INFURA':
+      try {
       var cidv1 = new ipfsClient.CID(hash.replace('ipfs://', '')).toV1()
       var subdomain = cidv1.toBaseEncodedString('base32')
       return `https://${subdomain}.ipfs.infura-ipfs.io/`
+    } catch (err) {
+      return undefined
+    }
     case 'DWEB':
       return hash.replace('ipfs://', 'http://dweb.link/ipfs/')
     default:
@@ -100,8 +104,8 @@ export const renderMediaType = ({
     case MIMETYPE.PNG:
     case MIMETYPE.TIFF:
     case MIMETYPE.WEBP:
-      parsedArtifactUri = HashToURL(artifactUri, 'IPFS')
-      parsedDisplayUri = HashToURL(displayUri, 'IPFS')
+      parsedArtifactUri = HashToURL(artifactUri, 'INFURA')
+      parsedDisplayUri = HashToURL(displayUri, 'INFURA')
       // when its a GIF we always load the artifactUri by triggering `onDetailView` to be `true`.
       return (
         <Container interactive={interactive}>
@@ -118,8 +122,8 @@ export const renderMediaType = ({
 
     /* VECTOR */
     case MIMETYPE.SVG:
-      parsedArtifactUri = HashToURL(artifactUri, 'IPFS')
-      parsedDisplayUri = HashToURL(displayUri, 'IPFS')
+      parsedArtifactUri = HashToURL(artifactUri, 'INFURA')
+      parsedDisplayUri = HashToURL(displayUri, 'INFURA')
       return (
         <Container interactive={interactive}>
           <VectorComponent
@@ -161,8 +165,8 @@ export const renderMediaType = ({
     case MIMETYPE.OGV:
     case MIMETYPE.QUICKTIME:
     case MIMETYPE.WEBM:
-      parsedArtifactUri = HashToURL(artifactUri, 'IPFS')
-      parsedDisplayUri = HashToURL(displayUri, 'IPFS')
+      parsedArtifactUri = HashToURL(artifactUri, 'INFURA')
+      parsedDisplayUri = HashToURL(displayUri, 'INFURA')
       return (
         <Container interactive={interactive} nofullscreen>
           <VideoComponent
@@ -199,8 +203,8 @@ export const renderMediaType = ({
     case MIMETYPE.FLAC:
     case MIMETYPE.WAV:
     case MIMETYPE.XWAV:
-      parsedArtifactUri = HashToURL(artifactUri, 'IPFS')
-      parsedDisplayUri = HashToURL(displayUri, 'IPFS')
+      parsedArtifactUri = HashToURL(artifactUri, 'INFURA')
+      parsedDisplayUri = HashToURL(displayUri, 'INFURA')
       return (
         <Container interactive={interactive}>
           <AudioComponent
@@ -215,8 +219,8 @@ export const renderMediaType = ({
       )
     /* PDF */
     case MIMETYPE.PDF:
-      parsedArtifactUri = HashToURL(artifactUri, 'IPFS')
-      parsedDisplayUri = HashToURL(displayUri, 'IPFS')
+      parsedArtifactUri = HashToURL(artifactUri, 'INFURA')
+      parsedDisplayUri = HashToURL(displayUri, 'INFURA')
       return (
         <Container interactive={interactive}>
           <PdfComponent

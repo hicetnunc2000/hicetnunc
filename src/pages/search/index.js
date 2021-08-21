@@ -12,10 +12,41 @@ import './style.css'
 
 const axios = require('axios')
 const ls = require('local-storage')
+const _ = require('lodash')
+
+const isFloat = (n) => Number(n) === n && n % 1 !== 0
+
+const latest_feed = `
+query LatestFeed($lastId: bigint = 99999999) {
+  hic_et_nunc_token(order_by: {id: desc}, limit: 15, where: {id: {_lt: $lastId}, artifact_uri: {_neq: ""}}) {
+    artifact_uri
+    display_uri
+    creator_id
+    id
+    mime
+    thumbnail_uri
+    timestamp
+    title
+    creator {
+      name
+      address
+    }
+  }
+}`
+
+async function fetchFeed(lastId) {
+  const { errors, data } = await fetchGraphQL(latest_feed, "LatestFeed", { "lastId": lastId });
+  if (errors) {
+    console.error(errors);
+  }
+  const result = data.hic_et_nunc_token
+  /* console.log({ result }) */
+  return result
+}
 
 const query_creations = `
 query creatorGallery($address: String!) {
-  hic_et_nunc_token(where: {creator: {address: {_eq: $address}}, supply: {_gt: 0}}, order_by: {id: desc}) {
+  hic_et_nunc_token(where: {creator: {address: {_eq: $address}}, supply: {_gt: 0}}, order_by: {id: desc}, limit : 15, offset : $offset ) {
     id
     artifact_uri
     display_uri
@@ -35,8 +66,8 @@ query creatorGallery($address: String!) {
 `
 
 const query_tag = `
-query ObjktsByTag($tag: String = "3d", $lastId: bigint = 99999999) {
-  hic_et_nunc_token(where: {token_tags: {tag: {tag: {_eq: $tag}}}, id: {_lt: $lastId}, supply: {_gt: "0"}}, order_by: {id: desc}) {
+query ObjktsByTag {
+  hic_et_nunc_token(where: {supply : { _neq : 0 }, token_tags: {tag: {tag: {_eq: $tag}}}, id: {_lt: $lastId}}, limit : 15, order_by: {id: desc}) {
     id
     artifact_uri
     display_uri
@@ -81,7 +112,7 @@ async function fetchID(id) {
 async function fetchObjkts(ids) {
   const { errors, data } = await fetchGraphQL(`
     query Objkts($ids: [bigint!] = "") {
-      hic_et_nunc_token(where: {id: {_in: $ids}}) {
+      hic_et_nunc_token(where: {id: {_in: $ids}, supply : { _neq : 0 }}) {
         artifact_uri
         display_uri
         creator_id
@@ -119,7 +150,7 @@ function rnd(min, max) {
 async function fetchGLB(offset) {
   const { errors, data } = await fetchGraphQL(`
   query GLBObjkts {
-    hic_et_nunc_token(where : { mime : {_in : ["model/gltf-binary"] }}, order_by: {id: desc}) {
+    hic_et_nunc_token(where : { mime : {_in : ["model/gltf-binary"] }, supply : { _neq : 0 }}, limit : 15, offset : ${offset}, order_by: {id: desc}) {
       id
       artifact_uri
       display_uri
@@ -132,8 +163,8 @@ async function fetchGLB(offset) {
   }
   `, 'GLBObjkts', {}
   )
-
-  try {
+  console.log('glb', data.hic_et_nunc_token)
+  try { 
     return data.hic_et_nunc_token
   } catch (e) {
     return undefined
@@ -143,7 +174,7 @@ async function fetchGLB(offset) {
 async function fetchInteractive(offset) {
   const { errors, data } = await fetchGraphQL(`
     query InteractiveObjkts {
-      hic_et_nunc_token(where: { mime: {_in : [ "application/x-directory" ]}}, order_by: {id: desc}) {
+      hic_et_nunc_token(where: { mime: {_in : [ "application/x-directory" ]}, supply : { _neq : 0 } }, limit : 15, offset : ${offset}, order_by: {id: desc}) {
         id
         artifact_uri
         display_uri
@@ -166,7 +197,7 @@ async function fetchInteractive(offset) {
 async function fetchGifs(offset) {
   const { errors, data } = await fetchGraphQL(`
     query Gifs ($offset: Int = 0) {
-      hic_et_nunc_token(where: { mime: {_in : [ "image/gif" ]}}, order_by: {id: desc}, offset: ${offset}) {
+      hic_et_nunc_token(where: { mime: {_in : [ "image/gif" ]}, supply : { _neq : 0 }}, order_by: {id: desc}, limit: 15, offset: ${offset}) {
         id
         artifact_uri
         display_uri
@@ -189,7 +220,7 @@ async function fetchGifs(offset) {
 async function fetchMusic(offset) {
   const { errors, data } = await fetchGraphQL(`
   query AudioObjkts {
-    hic_et_nunc_token(where: {mime: {_in: ["audio/ogg", "audio/wav", "audio/mpeg"]}}, order_by: {id: desc}) {
+    hic_et_nunc_token(where: {mime: {_in: ["audio/ogg", "audio/wav", "audio/mpeg"]}, supply : { _neq : 0 }}, limit : 15, offset : ${offset}, order_by: {id: desc}) {
       id
       artifact_uri
       display_uri
@@ -234,13 +265,28 @@ async function fetchTitle(title, offset) {
 }
 
 async function fetchCreations(addr, offset) {
-  const { errors, data } = await fetchGraphQL(
-    query_creations,
-    'creatorGallery',
-    { 
-      address: addr,
-      offset: offset
+  const { errors, data } = await fetchGraphQL(`
+query creatorGallery {
+  hic_et_nunc_token(where: {creator: {address: {_eq: ${addr}}}, supply: {_gt: 0}}, order_by: {id: desc}, limit : 15, offset : ${offset} ) {
+    id
+    artifact_uri
+    display_uri
+    thumbnail_uri
+    timestamp
+    mime
+    title
+    description
+    supply
+    token_tags {
+      tag {
+        tag
+      }
     }
+  }
+}
+`,
+    'creatorGallery',
+    { }
   )
   if (errors) {
     console.error(errors)
@@ -278,7 +324,7 @@ async function fetchRandomObjkts() {
   const lastId = await getLastId()
 
   const uniqueIds = new Set()
-  while (uniqueIds.size < 50) {
+  while (uniqueIds.size < 15) {
     uniqueIds.add(rnd(firstId, lastId))
   }
 
@@ -292,6 +338,12 @@ async function fetchRandomObjkts() {
 
   const result = data
   return objkts.hic_et_nunc_token
+}
+
+async function fetchDay() {
+  const { erros, data } = await fetchGraphQL(`
+  
+  `)
 }
 
 async function fetchSubjkts(subjkt) {
@@ -319,8 +371,26 @@ async function fetchSubjkts(subjkt) {
   return result
 }
 
-async function fetchTag(tag) {
-  const { errors, data } = await fetchGraphQL(query_tag, "ObjktsByTag", { "tag" : tag });
+async function fetchTag(tag, offset) {
+  const { errors, data } = await fetchGraphQL(
+    `query ObjktsByTag {
+  hic_et_nunc_token(where: {supply : { _neq : 0 }, token_tags: {tag: {tag: {_eq: ${tag}}}}, id: {_lt: ${offset}}}, limit : 15, order_by: {id: desc}) {
+    id
+    artifact_uri
+    display_uri
+    mime
+    token_tags {
+      tag {
+        tag
+      }
+    }
+    creator {
+      address
+      name
+    }
+  }
+}`
+, "ObjktsByTag", {});
   if (errors) {
     console.error(errors);
   }
@@ -344,7 +414,7 @@ async function fetchGraphQL(operationsDoc, operationName, variables) {
 }
 
 const query_hdao = `query hDAOFeed($offset: Int = 0) {
-  hic_et_nunc_token(order_by: {hdao_balance: desc}, limit: 50, where: {hdao_balance: {_gt: 100}}, offset: $offset) {
+  hic_et_nunc_token(order_by: {hdao_balance: desc}, limit: 15, where: {hdao_balance: {_gt: 100}}, offset: $offset) {
     artifact_uri
     display_uri
     creator_id
@@ -378,12 +448,19 @@ export class Search extends Component {
     items: [],
     feed: [],
     search: '',
+    select: '',
+    prev: '',
+    reset: false,
+    flag : false,
     tags: [
       { id: 0, value: '○' },
       { id: 1, value: 'random' },
       { id: 2, value: 'glb' },
       { id: 3, value: 'music' },
-      { id: 3, value: 'interactive' },
+      { id: 4, value: 'interactive' },
+      { id: 5, value: 'gif'},
+/*       { id: 6, value: '1D'},
+      { id: 7, value: '1W'}, */
 /*       { id: 4, value: 'illustration' }, */
 /*       { id: 5, value: 'gif' } */
 
@@ -411,41 +488,62 @@ export class Search extends Component {
     if (this.state.search.length >= 1) this.search()
   }
 
-  update = async (e) => {
+  update = async (e, reset) => {
 
-    this.setState({ feed: [], items: [] })
+    this.setState({ select : e })
+    if (reset) {
+      this.state.feed = []
+      this.state.offset = 0
+    }
+
+    if (e === 'num') {
+      this.setState({
+        feed : [...this.state.feed, ...(await fetchFeed(Number(this.state.search) + 1 - this.state.offset))]
+      })
+    }
 
     if (e === '○') {
-      this.setState({ items: await fetchHdao(this.state.offset), hdao: true })
+      this.setState({ feed: [...this.state.feed, ...(await fetchHdao(this.state.offset))], hdao: true })
     }
 
     if (e === 'music') {
-      console.log(await fetchMusic(this.state.offset + 10))
-      this.setState({ items: await fetchMusic() })
+      this.setState({ feed : [...this.context.feed, ...(await fetchMusic(this.state.offset))] })
+    }
+
+    if (e === 'video') {
+
     }
 
     if (e === 'glb') {
-      this.setState({ items: await fetchGLB() })
+      this.setState({ feed : [...this.state.feed, ...(await fetchGLB(this.state.offset))] })
     }
 
     if (e === 'interactive') {
-      this.setState({ items: await fetchInteractive() })
+      this.setState({ feed: [...this.state.feed, ...(await fetchInteractive(this.state.offset))] })
     }
 
     if (e == 'random') {
-      console.log(await fetchRandomObjkts())
-      this.setState({ items: await fetchRandomObjkts() })
+      this.setState({ feed : [...this.state.feed, ...(await fetchRandomObjkts())]})
     }
 
     if (e == 'gif') {
-      console.log(await fetchGifs())
+      this.setState({ feed : [...this.state.feed, ...(await fetchGifs(this.state.offset))] })
+      //this.setState({ feed: [...this.state.feed, ...(await fetchGifs(this.state.offset))] })
     }
 
     if (e == 'illustration') {
       console.log(await fetchTag('illustration'))
     }
 
-    this.setState({ feed : this.state.items.slice(0, 10) })
+    if (e == 'tag') {
+      console.log(this.state.feed.length)
+      this.setState({ feed : [...this.state.feed, ...(await fetchTag(this.state.search, this.state.feed[this.state.feed.length - 1].id))]})
+    }
+
+    this.setState({ reset : false })
+
+    //this.setState({ feed : this.state.feed })
+
   }
 
   search = async (e) => {
@@ -457,35 +555,30 @@ export class Search extends Component {
     console.log(await fetchSubjkts(e))
     this.setState({ subjkt: await fetchSubjkts(this.state.search) })
 
-    if (this.state.subjkt[0]?.hdao_balance > 30000000) {
-      this.setState({ items: await fetchCreations(this.state.subjkt[0].address) })
+    if ((this.state.subjkt[0]?.hdao_balance > 30000000) || (isFloat(Number(this.state.search)))) {
+      this.setState({ feed: await fetchCreations(this.state.subjkt[0].address, this.state.offset), select : 'creations' })
+    } else if (!isNaN(this.state.search)) {
+      //await fetchLatest(this.state.search)
+      this.setState({ feed : await fetchFeed(Number(this.state.search) + 1), select : 'num' })
     } else {
-      this.setState({ items: await fetchTag(this.state.search.toLocaleLowerCase()) })
-      console.log('tags', await fetchTag(this.state.search))
+      this.setState({ feed: await fetchTag(this.state.search.toLowerCase(), 9999999), select : 'tag' })
+      //console.log('tags', await fetchTag(this.state.search.toLowerCase()))
       // search for objkt titles/descriptions
 
-/*       let title = await fetchTitle(this.state.search)
+/*       
+      let title = await fetchTitle(this.state.search)
       console.log('title', title)
       if (await title) this.setState({ items: [...this.state.items, ...(await title)] })
       let description = await fetchDescription(this.state.search)
       console.log('description', description)
-      if (await description) this.setState({ items: [...this.state.items, ...(await description)] }) */
-
+      if (await description) this.setState({ items: [...this.state.items, ...(await description)] })       
+*/
       
     }
 
 
-    var resArr = [];
-    this.state.items.forEach(function (item) {
-      var i = resArr.findIndex(x => x.id == item.id);
-      if (i <= -1) {
-        resArr.push(item);
-      }
-    });
-    this.setState({ items : resArr })
 
     // verify if tz profiles/hdao
-    this.setState({ feed: [...this.state.feed, ...(this.state.items.slice(0, 10))] })
     console.log('test', this.state.feed)
 
     // results from creator
@@ -511,14 +604,12 @@ export class Search extends Component {
   select = (id) => this.setState({ select: [...this.state.select, id] })
 
   loadMore = () => {
+    this.setState({ offset : this.state.offset + 15 })
+    console.log(this.context.offset)
+      //this.setState({ feed: [...this.state.feed, ...this.state.items.slice(this.state.offset + 20, this.state.offset + 40)], offset: this.state.offset + 20 })
+    this.update(this.state.select, false)
 
-    if (this.state.feed.length <= this.state.items.length) {
-      this.setState({ feed: [...this.state.feed, ...this.state.items.slice(this.state.offset + 10, this.state.offset + 20)], offset: this.state.offset + 10 })
-    } else {
-      this.setState({ hasMore : false })
-    }
-
-    console.log(this.state.feed.length)
+   // console.log(this.state.feed.length)
 
     /*     if ((this.state.objkts.slice(this.state.offset, this.state.offset + 20).length < 20) && (this.state.offset !== 20)) {
           this.setState({ hasMore : false })
@@ -549,11 +640,13 @@ export class Search extends Component {
             } */}
             {
               <div style={{ marginTop: '15px' }}>
-                {this.state.tags.map(e => <a className='tag' href='#' onClick={() => this.update(e.value)}>{e.value} </a>)}
+                {this.state.tags.map(e => <a className='tag' href='#' onClick={() => {
+                  this.update(e.value, true)
+                  }}>{e.value} </a>)}
               </div>
             }
             {
-              this.state.subjkt.length > 0 ?
+              (this.state.subjkt.length > 0) && (this.state.search !== "") ?
                 <div style={{ maxHeight: '200px', overflow: 'scroll' }}>
                   {
                     this.state.subjkt.map(e => <div style={{ marginTop: '10px' }}><a href={`/${e.name}`}>{e.name}</a> {e.metadata.description}</div>)
