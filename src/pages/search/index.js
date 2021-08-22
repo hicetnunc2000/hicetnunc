@@ -350,7 +350,7 @@ async function fetchSubjkts(subjkt) {
   //console.log(subjkt)
   const { errors, data } = await fetchGraphQL(`
   query subjktsQuery {
-    hic_et_nunc_holder(where: { name: {_like: "%${subjkt}%"}}) {
+    hic_et_nunc_holder(where: { name: {_like: "%${subjkt}%"}}, order_by: {hdao_balance: desc}) {
       address
       name
       hdao_balance
@@ -554,7 +554,7 @@ export class Search extends Component {
     // search for alias
     console.log(await fetchSubjkts(e))
     this.setState({ subjkt: await fetchSubjkts(this.state.search) })
-
+    
     if ((this.state.subjkt[0]?.hdao_balance > 30000000) || (isFloat(Number(this.state.search)))) {
       this.setState({ feed: await fetchCreations(this.state.subjkt[0].address, this.state.offset), select : 'creations' })
     } else if (!isNaN(this.state.search)) {
