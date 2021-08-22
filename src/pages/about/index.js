@@ -82,7 +82,7 @@ export class About extends Component {
                   <strong>telegram</strong>
                 </Primary>
               </Button>
-              or through our
+              &nbsp;or through our
               <Button href="https://community.hicetnunc.xyz">
                 <Primary>
                   <strong>&nbsp;community forum</strong>
