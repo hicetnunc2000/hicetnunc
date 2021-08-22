@@ -507,7 +507,7 @@ export class Search extends Component {
     }
 
     if (e === 'music') {
-      this.setState({ feed : [...this.context.feed, ...(await fetchMusic(this.state.offset))] })
+      this.setState({ feed : [...this.state.feed, ...(await fetchMusic(this.state.offset))] })
     }
 
     if (e === 'video') {
