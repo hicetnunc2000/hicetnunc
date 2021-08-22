@@ -23,7 +23,7 @@ export const HicetnuncContext = createContext()
 
 // TODO: move this schema into separate place?
 const createProxySchema = `
-(map address (pair (bool %isCore) (nat %share))))
+  (map address (pair (bool %isCore) (nat %share))))
 `
 
 //const bandwidth = navigator.connection.downlink
@@ -77,6 +77,7 @@ const wallet = new BeaconWallet({
 Tezos.setWalletProvider(wallet)
 
 class HicetnuncContextProviderClass extends Component {
+
   constructor(props) {
     super(props)
 
@@ -124,7 +125,7 @@ class HicetnuncContextProviderClass extends Component {
 
         let objkts = await Tezos.wallet.at(this.state.objkts)
         let marketplace = await Tezos.wallet.at(this.state.hDAO_marketplace)
-        console.log(from, objkt_id)
+
         let list = [
           {
             kind: OpKind.TRANSACTION,
@@ -140,6 +141,7 @@ class HicetnuncContextProviderClass extends Component {
         return await batch.send()
 
       },
+
       // marketplace v2
 
       collectv2: async (swap_id, xtz_amount) => {
@@ -182,7 +184,6 @@ class HicetnuncContextProviderClass extends Component {
       },
 
       batch_cancel: async (arr) => {
-        console.log(arr)
         let v1 = await Tezos.wallet.at(this.state.v1)
 
         /*         const batch = await arr
@@ -195,7 +196,6 @@ class HicetnuncContextProviderClass extends Component {
           .reduce((batch, id) => {
             return batch.withContractCall(v1.methods.cancel_swap(id))
           }, Tezos.wallet.batch())
-        console.log(arr)
         return await batch.send()
       },
 
@@ -406,7 +406,6 @@ class HicetnuncContextProviderClass extends Component {
       },
 
       swap: async (objkt_amount, objkt_id, xtz_per_objkt) => {
-        console.log(objkt_amount)
         return await Tezos.wallet
           .at(this.state.v1)
           .then((c) =>
@@ -444,7 +443,6 @@ class HicetnuncContextProviderClass extends Component {
       },
 
       claim_hDAO: async (hDAO_amount, objkt_id) => {
-        // console.log('claiming', hDAO_amount, objkt_id)
         await Tezos.wallet
           .at(this.state.hDAO_curation)
           .then((c) => {
@@ -456,7 +454,6 @@ class HicetnuncContextProviderClass extends Component {
 
       burn: async (objkt_id, amount) => {
         var tz = await wallet.client.getActiveAccount()
-        // console.log('trying to burn', parseInt(amount))
 
         await Tezos.wallet
           .at(this.state.objkts)
@@ -492,7 +489,6 @@ class HicetnuncContextProviderClass extends Component {
       },
 
       cancel: async (swap_id) => {
-        console.log(swap_id)
         return await Tezos.wallet
           .at(this.state.proxyAddress || this.state.v2)
           .then((c) =>
@@ -627,8 +623,8 @@ class HicetnuncContextProviderClass extends Component {
       },
 
       /* 
-                airgap/thanos interop methods
-            */
+            airgap/thanos interop methods
+      */
       operationRequest: async (obj) => {
         var op = obj.result
         delete op.mutez
