@@ -93,6 +93,10 @@ export class Config extends Component {
   }
 
   handleChange = (e) => {
+    if (e.target.name == 'subjkt' && !e.target.checkValidity()){
+      console.log(e.target.pattern)
+      e.target.value = e.target.value.replace(/[^a-z0-9-._]/g, "")
+    }
     console.log('set', e.target.name, 'to', e.target.value)
     this.setState({ [e.target.name]: e.target.value })
   }
@@ -203,6 +207,7 @@ export class Config extends Component {
               placeholder="Username"
               label="Username"
               value={this.context.subjktInfo ? this.context.subjktInfo.name : undefined}
+              pattern="^[a-z0-9-._]*$"
             />
             <Input
               name="description"
