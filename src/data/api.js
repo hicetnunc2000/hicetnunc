@@ -171,6 +171,10 @@ export const GetUserMetadata = async (walletAddr) => {
           if (claimJSON.credentialSubject.alias !== "" && !(tzktData.data && tzktData.data.alias))
             tzpData['alias'] = claimJSON.credentialSubject.alias
           tzpData['tzprofile'] = walletAddr
+        } else if (claimJSON.type.includes('DiscordVerification')) {
+          if (!tzktData.data) {
+            tzpData['discord'] = claimJSON.evidence.handle
+          }
         }
       }
   } catch (e) {
