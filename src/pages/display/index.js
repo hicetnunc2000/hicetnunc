@@ -1014,11 +1014,9 @@ export default class Display extends Component {
 
           </Container>
         )}
-        <BottomBanner>
-          API server is feeling some growing pains from hens recent explosive growth — yesterday we had our 
-          most active daily users ever, and a second day in a row of record breaking secondary sales. We're working to fix the issue — 
-          please be patient with us. <a href="https://discord.gg/mNNSpxpDce" target="_blank">Join the discord</a> for updates.
-        </BottomBanner>
+      <BottomBanner>
+        API is down due to heavy server load — We're working to fix the issue — please be patient with us. <a href="https://discord.gg/mNNSpxpDce" target="_blank">Join the discord</a> for updates.
+      </BottomBanner>
       </Page>
     )
   }
