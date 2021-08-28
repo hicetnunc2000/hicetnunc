@@ -192,7 +192,7 @@ export const Feeds = ({ type }) => {
   const [hasMore, setHasMore] = useState(true)
   const [creators, setCreators] = useState([])
   const startTime = customFloor(Date.now(), ONE_MINUTE_MILLIS)
-  
+
   const loadMore = async () => {
     if (type === 1) {
       await getHdaoFeed()
@@ -314,9 +314,9 @@ export const Feeds = ({ type }) => {
           </Padding>
         </Container>
       }
-            <BottomBanner>
-            API is down due to heavy server load — We're working to fix the issue — please be patient with us. <a href="https://discord.gg/mNNSpxpDce" target="_blank">Join the discord</a> for updates.
-      </BottomBanner>
+{/*       <BottomBanner>
+        API is down due to heavy server load — We're working to fix the issue — please be patient with us. <a href="https://discord.gg/mNNSpxpDce" target="_blank">Join the discord</a> for updates.
+      </BottomBanner> */}
     </Page>
   )
 }
