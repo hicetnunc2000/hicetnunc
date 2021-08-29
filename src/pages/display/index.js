@@ -41,11 +41,7 @@ query collectorGallery($address: String!) {
       title
       description
       supply
-      token_tags {
-        tag {
-          tag
-        }
-      }
+      royalties
       creator {
         address
       }
@@ -86,31 +82,18 @@ query creatorGallery($address: String!) {
     id
     artifact_uri
     display_uri
-    thumbnail_uri
-    timestamp
     mime
     title
     description
     supply
-    swaps {
+    swaps(order_by: {price: asc}, limit: 1, where: {amount_left: {_gte: "1"}, status: {_eq: "0"}}) {
       status
-      amount
       amount_left
       creator_id
-      token_id
       creator {
         address
       }
-    }
-    token_tags {
-      tag {
-        tag
-      }
-    }
-    swaps_aggregate(where: {status: {_eq: "0"}, contract_version: {_eq: "2"}}) {
-      aggregate {
-        count
-      }
+      price
     }
   }
 }
@@ -155,7 +138,6 @@ query querySwaps($address: String!) {
       address
     }
     creator_id
-    amount
     amount_left
     price
     id
@@ -174,23 +156,15 @@ query querySwaps($address: String!) {
       title
       artifact_uri
       display_uri
-      thumbnail_uri
-      timestamp
       mime
       description
       supply
       royalties
-      token_tags {
-        tag {
-          tag
-        }
-      }
       creator {
         name
         address
       }
     }
-    amount
     amount_left
     price
     id
@@ -419,7 +393,7 @@ export default class Display extends Component {
   filterCreationsNotForSale = async () => {
     // console.log(JSON.stringify(this.state.creations[0]))
     let objkts = this.state.creations.filter(item => {
-      return item.swaps_aggregate.aggregate.count == 0
+      return item.swaps.length === 0
     });
 
     return objkts
