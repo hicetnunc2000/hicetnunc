@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>ZIM NFT - Code Creativity!</title>
+
+<meta property="og:image" content="thumbnail.gif" />
+
+<!-- ZIM - https://zimjs.com - JavaScript Canvas Framework -->
+<script src="zim.js"></script>
+
+<script>
+
+// See Docs under Frame for FIT, FILL, FULL, and TAG scaling modes
+// and loading assets (images, sounds, fonts) make these local for NFTs
+// See https://zimjs.com/nft for more details
+const frame = new Frame(FIT, 1024, 768, darker, dark);
+frame.on("ready", () => {
+    const stage = frame.stage;
+    let stageW = frame.width;
+    let stageH = frame.height;
+    
+    // PUT YOUR CODE HERE
+
+    new Circle(100, blue).center().drag();
+    
+    
+    stage.update(); // to see changes	
+
+}); // end of ready
+
+</script>
+<meta name="viewport" content="width=device-width, user-scalable=no" />
+</head>
+<body></body>
+</html>
+
+
