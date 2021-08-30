@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+      }
+    </style>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Document</title>
+  </head>
+  <body>
+    <script src="p5.js"></script>
+    <!-- //library to turn p5 into svg Zeno Zeng on github! -->
+    <script src="p5.svg.js"></script>
+    <script>
+      const c = new URLSearchParams(location.search).get('creator')
+      const v = new URLSearchParams(location.search).get('viewer')
+      console.log(`${c} sends good vibes to ${v}`)
+    </script>
+    <script>
+      //tweaked a couple templates to work with p5 as SVG.. check out the p5.svg library...
+      // no blend modes yet in the libarary... just getting started so will look into it!
+      function setup() {
+        createCanvas(window.innerWidth, window.innerHeight, SVG)
+        background(255)
+        fill(150)
+        stroke(150)
+      }
+
+      //one love let it take shape and like water
+
+      function windowResized() {
+        resizeCanvas(windowWidth, windowHeight)
+      }
+      function draw() {
+        var r = (frameCount % 200) * Math.sqrt(2)
+        background(255)
+        ellipse(window.innerWidth / 2, window.innerHeight / 2, r, r)
+      }
+    </script>
+  </body>
+</html>
