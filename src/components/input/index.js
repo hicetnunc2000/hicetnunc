@@ -13,6 +13,7 @@ export const Input = ({
   onBlur = () => null,
   disabled,
   value,
+  pattern
 }) => (
   <div className={styles.container}>
     <label>
@@ -27,6 +28,7 @@ export const Input = ({
         onChange={onChange}
         onBlur={onBlur}
         disabled={disabled}
+        pattern={pattern}
       />
       <p>{label}</p>
     </label>

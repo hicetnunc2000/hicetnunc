@@ -164,7 +164,7 @@ async function fetchGLB(offset) {
   `, 'GLBObjkts', {}
   )
   console.log('glb', data.hic_et_nunc_token)
-  try { 
+  try {
     return data.hic_et_nunc_token
   } catch (e) {
     return undefined
@@ -286,7 +286,7 @@ query creatorGallery {
 }
 `,
     'creatorGallery',
-    { }
+    {}
   )
   if (errors) {
     console.error(errors)
@@ -340,17 +340,41 @@ async function fetchRandomObjkts() {
   return objkts.hic_et_nunc_token
 }
 
-async function fetchDay() {
-  const { erros, data } = await fetchGraphQL(`
-  
-  `)
+async function fetchDay(day, offset) {
+  const { errors, data } = await fetchGraphQL(`query dayTrades {
+    hic_et_nunc_trade(where: {timestamp: {_gte: "${day}"}}, order_by: {swap: {price: desc}}, limit : 15, offset : ${offset}) {
+      timestamp
+      swap {
+        price
+      }
+      token {
+        artifact_uri
+        display_uri
+        id
+        mime
+      }
+    }
+  }`, 'dayTrades', {})
+
+  if (errors) {
+    console.log(errors)
+  }
+
+  let result = []
+
+  try {
+    result = data.hic_et_nunc_trade
+  } catch (e) { }
+
+  return result
+
 }
 
 async function fetchSubjkts(subjkt) {
   //console.log(subjkt)
   const { errors, data } = await fetchGraphQL(`
   query subjktsQuery {
-    hic_et_nunc_holder(where: { name: {_like: "%${subjkt}%"}}) {
+    hic_et_nunc_holder(where: { name: {_like: "%${subjkt}%"}}, order_by: {hdao_balance: desc}) {
       address
       name
       hdao_balance
@@ -390,7 +414,7 @@ async function fetchTag(tag, offset) {
     }
   }
 }`
-, "ObjktsByTag", {});
+    , "ObjktsByTag", {});
   if (errors) {
     console.error(errors);
   }
@@ -451,24 +475,24 @@ export class Search extends Component {
     select: '',
     prev: '',
     reset: false,
-    flag : false,
+    flag: false,
     tags: [
       { id: 0, value: '○' },
       { id: 1, value: 'random' },
       { id: 2, value: 'glb' },
       { id: 3, value: 'music' },
       { id: 4, value: 'interactive' },
-      { id: 5, value: 'gif'},
-/*       { id: 6, value: '1D'},
-      { id: 7, value: '1W'}, */
-/*       { id: 4, value: 'illustration' }, */
-/*       { id: 5, value: 'gif' } */
+      { id: 5, value: 'gif' },
+      { id: 6, value: '1D'},
+      { id: 7, value: '1W'},
+      /*       { id: 4, value: 'illustration' }, */
+      /*       { id: 5, value: 'gif' } */
 
-// video/mp4
+      // video/mp4
 
-// filter
-// day
-// week
+      // filter
+      // day
+      // week
 
     ],
     select: [],
@@ -490,15 +514,39 @@ export class Search extends Component {
 
   update = async (e, reset) => {
 
-    this.setState({ select : e })
+    this.setState({ select: e })
     if (reset) {
       this.state.feed = []
       this.state.offset = 0
     }
 
+    if (e === '1D') {
+      console.log(new Date((new Date()).getTime() - 60*60*24*1000))
+
+      let list = await fetchDay(new Date((new Date()).getTime() - 60*60*24*1000).toISOString(), this.state.offset)
+      list = list.map(e => e.token)
+      list = [...this.state.feed, ...(list)]
+      list = _.uniqBy(list, 'id')
+
+      this.setState({
+        feed : list
+      })
+    }
+
+    if (e === '1W') {
+      let list = await fetchDay(new Date((new Date()).getTime() - 60*60*24*30*1000).toISOString(), this.state.offset)
+      list = list.map(e => e.token)
+      list = [...this.state.feed, ...(list)]
+      list = _.uniqBy(list, 'id')
+
+      this.setState({
+        feed : list
+      })
+    }
+
     if (e === 'num') {
       this.setState({
-        feed : [...this.state.feed, ...(await fetchFeed(Number(this.state.search) + 1 - this.state.offset))]
+        feed: [...this.state.feed, ...(await fetchFeed(Number(this.state.search) + 1 - this.state.offset))]
       })
     }
 
@@ -507,7 +555,7 @@ export class Search extends Component {
     }
 
     if (e === 'music') {
-      this.setState({ feed : [...this.context.feed, ...(await fetchMusic(this.state.offset))] })
+      this.setState({ feed: [...this.state.feed, ...(await fetchMusic(this.state.offset))] })
     }
 
     if (e === 'video') {
@@ -515,7 +563,7 @@ export class Search extends Component {
     }
 
     if (e === 'glb') {
-      this.setState({ feed : [...this.state.feed, ...(await fetchGLB(this.state.offset))] })
+      this.setState({ feed: [...this.state.feed, ...(await fetchGLB(this.state.offset))] })
     }
 
     if (e === 'interactive') {
@@ -523,11 +571,11 @@ export class Search extends Component {
     }
 
     if (e == 'random') {
-      this.setState({ feed : [...this.state.feed, ...(await fetchRandomObjkts())]})
+      this.setState({ feed: [...this.state.feed, ...(await fetchRandomObjkts())] })
     }
 
     if (e == 'gif') {
-      this.setState({ feed : [...this.state.feed, ...(await fetchGifs(this.state.offset))] })
+      this.setState({ feed: [...this.state.feed, ...(await fetchGifs(this.state.offset))] })
       //this.setState({ feed: [...this.state.feed, ...(await fetchGifs(this.state.offset))] })
     }
 
@@ -537,10 +585,10 @@ export class Search extends Component {
 
     if (e == 'tag') {
       console.log(this.state.feed.length)
-      this.setState({ feed : [...this.state.feed, ...(await fetchTag(this.state.search, this.state.feed[this.state.feed.length - 1].id))]})
+      this.setState({ feed: [...this.state.feed, ...(await fetchTag(this.state.search, this.state.feed[this.state.feed.length - 1].id))] })
     }
 
-    this.setState({ reset : false })
+    this.setState({ reset: false })
 
     //this.setState({ feed : this.state.feed })
 
@@ -556,24 +604,24 @@ export class Search extends Component {
     this.setState({ subjkt: await fetchSubjkts(this.state.search) })
 
     if ((this.state.subjkt[0]?.hdao_balance > 30000000) || (isFloat(Number(this.state.search)))) {
-      this.setState({ feed: await fetchCreations(this.state.subjkt[0].address, this.state.offset), select : 'creations' })
+      this.setState({ feed: await fetchCreations(this.state.subjkt[0].address, this.state.offset), select: 'creations' })
     } else if (!isNaN(this.state.search)) {
       //await fetchLatest(this.state.search)
-      this.setState({ feed : await fetchFeed(Number(this.state.search) + 1), select : 'num' })
+      this.setState({ feed: await fetchFeed(Number(this.state.search) + 1), select: 'num' })
     } else {
-      this.setState({ feed: await fetchTag(this.state.search.toLowerCase(), 9999999), select : 'tag' })
+      this.setState({ feed: await fetchTag(this.state.search.toLowerCase(), 9999999), select: 'tag' })
       //console.log('tags', await fetchTag(this.state.search.toLowerCase()))
       // search for objkt titles/descriptions
 
-/*       
-      let title = await fetchTitle(this.state.search)
-      console.log('title', title)
-      if (await title) this.setState({ items: [...this.state.items, ...(await title)] })
-      let description = await fetchDescription(this.state.search)
-      console.log('description', description)
-      if (await description) this.setState({ items: [...this.state.items, ...(await description)] })       
-*/
-      
+      /*       
+            let title = await fetchTitle(this.state.search)
+            console.log('title', title)
+            if (await title) this.setState({ items: [...this.state.items, ...(await title)] })
+            let description = await fetchDescription(this.state.search)
+            console.log('description', description)
+            if (await description) this.setState({ items: [...this.state.items, ...(await description)] })       
+      */
+
     }
 
 
@@ -604,12 +652,12 @@ export class Search extends Component {
   select = (id) => this.setState({ select: [...this.state.select, id] })
 
   loadMore = () => {
-    this.setState({ offset : this.state.offset + 15 })
+    this.setState({ offset: this.state.offset + 15 })
     console.log(this.context.offset)
-      //this.setState({ feed: [...this.state.feed, ...this.state.items.slice(this.state.offset + 20, this.state.offset + 40)], offset: this.state.offset + 20 })
+    //this.setState({ feed: [...this.state.feed, ...this.state.items.slice(this.state.offset + 20, this.state.offset + 40)], offset: this.state.offset + 20 })
     this.update(this.state.select, false)
 
-   // console.log(this.state.feed.length)
+    // console.log(this.state.feed.length)
 
     /*     if ((this.state.objkts.slice(this.state.offset, this.state.offset + 20).length < 20) && (this.state.offset !== 20)) {
           this.setState({ hasMore : false })
@@ -642,7 +690,7 @@ export class Search extends Component {
               <div style={{ marginTop: '15px' }}>
                 {this.state.tags.map(e => <a className='tag' href='#' onClick={() => {
                   this.update(e.value, true)
-                  }}>{e.value} </a>)}
+                }}>{e.value} </a>)}
               </div>
             }
             {

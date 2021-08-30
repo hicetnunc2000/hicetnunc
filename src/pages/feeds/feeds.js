@@ -192,7 +192,7 @@ export const Feeds = ({ type }) => {
   const [hasMore, setHasMore] = useState(true)
   const [creators, setCreators] = useState([])
   const startTime = customFloor(Date.now(), ONE_MINUTE_MILLIS)
-  
+
   const loadMore = async () => {
     if (type === 1) {
       await getHdaoFeed()
@@ -314,8 +314,8 @@ export const Feeds = ({ type }) => {
           </Padding>
         </Container>
       }
-      {/*       <BottomBanner>
-        Collecting has been temporarily disabled. Follow <a href="https://twitter.com/hicetnunc2000" target="_blank">@hicetnunc2000</a> or <a href="https://discord.gg/jKNy6PynPK" target="_blank">join the discord</a> for updates.
+{/*       <BottomBanner>
+        API is down due to heavy server load — We're working to fix the issue — please be patient with us. <a href="https://discord.gg/mNNSpxpDce" target="_blank">Join the discord</a> for updates.
       </BottomBanner> */}
     </Page>
   )

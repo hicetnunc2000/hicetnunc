@@ -18,7 +18,7 @@ const axios = require('axios')
 
 const TABS = [
   { title: 'info', component: Info }, // public tab
-  { title: 'market', component: Collectors }, // public tab
+  { title: 'listings', component: Collectors }, // public tab
   { title: 'history', component: History },
   { title: 'swap', component: Swap, private: true }, // private tab (users only see if they are the creators or own a copy)
   { title: 'burn', component: Burn, private: true }, // private tab (users only see if they are the creators or own a copy)
