@@ -11,6 +11,8 @@ export const ImageComponent = ({
   displayView
 }) => {
   let src = onDetailView ? artifactUri : displayUri || artifactUri
+  console.log('src', src)
+  console.log('artifact', artifactUri, 'display', displayUri)
   if (preview) {
     src = previewUri
   }
