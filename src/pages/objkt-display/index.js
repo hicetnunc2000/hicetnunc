@@ -104,7 +104,7 @@ async function fetchObjkt(id) {
 }
 
 async function fetchGraphQL(operationsDoc, operationName, variables) {
-  let result = await fetch('https://api.hicdex.com/v1/graphql', {
+  let result = await fetch(process.env.REACT_APP_GRAPHQL_API, {
     method: 'POST',
     body: JSON.stringify({
       query: operationsDoc,
