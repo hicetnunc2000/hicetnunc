@@ -95,6 +95,7 @@ export const Swap = ({ total_amount, owners, creator, royalties, token_info, add
                   defaultValue={amount}
                   /* max={total_amount - sales} */
                   onChange={(e) => setAmount(e.target.value)}
+                  onWheel={(e) => e.target.blur()} 
                   disabled={progress}
                 />
                 <div style={{ width: '100%', display: 'flex' }}>
@@ -106,6 +107,7 @@ export const Swap = ({ total_amount, owners, creator, royalties, token_info, add
                       min={0}
                       max={10000}
                       onChange={(e) => checkPrice(e.target.value)}
+                      onWheel={(e) => e.target.blur()} 
                       disabled={progress}
                     />
                   </div>
