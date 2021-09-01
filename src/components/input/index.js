@@ -11,6 +11,7 @@ export const Input = ({
   label,
   onChange = () => null,
   onBlur = () => null,
+  onWheel = () => null,
   disabled,
   value,
   pattern
@@ -29,6 +30,7 @@ export const Input = ({
         onBlur={onBlur}
         disabled={disabled}
         pattern={pattern}
+        onWheel={onWheel}
       />
       <p>{label}</p>
     </label>
