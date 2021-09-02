@@ -2,6 +2,7 @@ import {
   IPFS_DIRECTORY_MIMETYPE,
   IPFS_DEFAULT_THUMBNAIL_URI,
 } from '../constants'
+import { NFTStorage, File } from 'nft.storage'
 
 const { create } = require('ipfs-http-client')
 const Buffer = require('buffer').Buffer
@@ -10,6 +11,8 @@ const readJsonLines = require('read-json-lines-sync').default
 const { getCoverImagePathFromBuffer } = require('../utils/html')
 
 const infuraUrl = 'https://ipfs.infura.io:5001'
+const apiKey = process.env.REACT_APP_IPFS_KEY
+const storage = new NFTStorage({ token: apiKey })
 
 export const prepareFile100MB = async ({
   name,
@@ -78,15 +81,14 @@ export const prepareFile = async ({
   const ipfs = create(infuraUrl)
 
   // upload main file
-  const info = await ipfs.add(buffer)
-  const hash = info.path
+  const hash = await storage.storeBlob(new Blob([buffer]))
+
   const cid = `ipfs://${hash}`
 
   // upload cover image
   let displayUri = ''
   if (generateDisplayUri) {
-    const coverInfo = await ipfs.add(cover.buffer)
-    const coverHash = coverInfo.path
+    const coverHash = await storage.storeBlob(new Blob([cover.buffer]))
     displayUri = `ipfs://${coverHash}`
   }
 
