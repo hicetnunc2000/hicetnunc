@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Page, Container, Padding } from '../../components/layout'
 import { Button, Primary } from '../../components/button'
+import { Popup } from '../../components/popup'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
 import { getLanguage } from '../../constants'
 import styles from './styles.module.scss'
