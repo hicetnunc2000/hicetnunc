@@ -222,7 +222,7 @@ export class Config extends Component {
           </Padding>
           <div style={{ display: 'inline' }}>
             <span>link your twitter account with </span>
-            <span><a style={{color : 'black', fontWeight : 'bold'}}href="https://tzprofiles.com">tz profiles</a></span>
+            <a href="https://tzprofiles.com"><button>tz profiles</button></a>
           </div>
         </Container>
 
