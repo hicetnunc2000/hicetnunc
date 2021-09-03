@@ -95,7 +95,6 @@ export const renderMediaType = ({
 }) => {
   let parsedArtifactUri
   let parsedDisplayUri
-  console.log('display', displayView)
   switch (mimeType) {
     /* IMAGES */
     case MIMETYPE.BMP:
@@ -219,8 +218,8 @@ export const renderMediaType = ({
       )
     /* PDF */
     case MIMETYPE.PDF:
-      parsedArtifactUri = HashToURL(artifactUri, 'INFURA')
-      parsedDisplayUri = HashToURL(displayUri, 'INFURA')
+      parsedArtifactUri = HashToURL(artifactUri, 'IPFS')
+      parsedDisplayUri = HashToURL(displayUri, 'IPFS')
       return (
         <Container interactive={interactive}>
           <PdfComponent
