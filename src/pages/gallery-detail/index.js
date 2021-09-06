@@ -8,6 +8,7 @@ import { Item } from './item'
 import { ItemModal } from './item-modal'
 import { Artist } from './artist'
 import { ResponsiveMasonry } from '../../components/responsive-masonry'
+import { shuffle } from "../../utils/array"
 import styles from './styles.module.scss'
 
 async function fetchGraphQL(operationsDoc, operationName, variables) {
@@ -59,7 +60,33 @@ export const GalleryDetail = () => {
     }
   }
 
+
   useEffect(() => {
+    const defaultSampleSize = 40
+
+    const loadDefault = (collectionData) => {
+      setCollection(collectionData)
+      setLoaded(true)
+    }
+
+    const loadRandomSelection = (collectionData) => {
+      const {data} = collectionData
+      const maxSize = collectionData.maxSize ? collectionData.maxSize : defaultSampleSize
+      shuffle(data[0].objkt)
+      data[0].objkt = data[0].objkt.slice(0, maxSize)
+      setCollection(collectionData)
+      setLoaded(true)
+    }
+
+    const galleryJSONLoaded = (collectionData) => {
+      if (collectionData.useRandomSample){
+        loadRandomSelection(collectionData)
+      }
+      else {
+        loadDefault(collectionData)
+      }
+    }
+
     // loads gallery to check endpoint file
     fetch('/galleries/galleries.json')
       .then((e) => e.json())
@@ -69,10 +96,7 @@ export const GalleryDetail = () => {
         if (found) {
           fetch(found.endpoint)
             .then((e) => e.json())
-            .then((data) => {
-              setCollection(data)
-              setLoaded(true)
-            })
+            .then(galleryJSONLoaded)
         } else {
           alert(`gallery ${id} not found`)
         }
