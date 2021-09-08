@@ -20,7 +20,7 @@ const TABS = [
   { title: 'info', component: Info }, // public tab
   { title: 'listings', component: Collectors }, // public tab
   { title: 'history', component: History },
-  { title: 'swap', component: Swap, private: true }, // private tab (users only see if they are the creators or own a copy)
+  { title: 'swap', component: Swap, private: true, restricted: true }, // private tab (users only see if they are the creators or own a copy)
   { title: 'burn', component: Burn, private: true }, // private tab (users only see if they are the creators or own a copy)
 ]
 
@@ -123,6 +123,7 @@ export const ObjktDisplay = () => {
   const [tabIndex, setTabIndex] = useState(0)
   const [nft, setNFT] = useState()
   const [error, setError] = useState(false)
+  const [restricted, setRestricted] = useState(false)
 
   const address = context.acc?.address
   const proxy = context.getProxy()
@@ -133,8 +134,11 @@ export const ObjktDisplay = () => {
     await context.setAccount()
 
     if (getWalletBlockList().includes(objkt.creator.address)) {
-      setError('Object is restricted and/or from a copyminter')
+      setRestricted(true)
+      objkt.restricted = true
+      setNFT(objkt)
     } else {
+      objkt.restricted = false
       setNFT(objkt)
     }
     setLoading(false)
@@ -201,6 +205,15 @@ export const ObjktDisplay = () => {
       {!loading && (
         !context.progress ?
           <>
+            <Container>
+              <Padding>
+                {restricted && (
+                  <div style={{ color: 'white', background: 'black', textAlign: 'center' }}>
+                    restricted OBJKT
+                  </div>
+                )}
+              </Padding>
+            </Container>
             <div
               style={{
                 position: 'relative',
@@ -241,6 +254,11 @@ export const ObjktDisplay = () => {
                       {TABS.map((tab, index) => {
                         // if nft.owners exist and this is a private route, try to hide the tab.
                         // if nft.owners fails, always show route!
+
+                        if (nft?.restricted && tab.restricted) {
+                          return null
+                        }
+
                         if (nft?.token_holders && tab.private) {
                           let holders_arr = nft.token_holders.map(
                             (e) => e.holder_id
