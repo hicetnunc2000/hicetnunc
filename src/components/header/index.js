@@ -36,7 +36,8 @@ export const Header = () => {
   if (context.acc?.address) {
     // is menu closed?
     if (context.collapsed) {
-      button = walletPreview(context.acc.address)
+      const proxyAddress = context.proxyAddress ? ' (' + context.proxyAddress + ')' : ''
+      button = walletPreview(context.acc.address) + proxyAddress
     } else {
       // menu is open
       button = 'unsync'
@@ -115,13 +116,8 @@ export const Header = () => {
                 <nav className={styles.content}>
                   <ul>
                     <li>
-                      <Button onClick={() => handleRoute('/hdao')}>
-                        <Primary>○</Primary>
-                      </Button>
-                    </li>
-                    <li>
-                      <Button onClick={() => handleRoute('/random')}>
-                        <Primary>random</Primary>
+                      <Button onClick={() => handleRoute('/explore')}>
+                        <Primary>explore</Primary>
                       </Button>
                     </li>
                     <li>
@@ -136,6 +132,11 @@ export const Header = () => {
                         </Primary>
                       </Button>
                     </li>
+{/*                     <li>
+                      <Button onClick={() => handleRoute('/collaborate')}>
+                        <Primary>collaborate</Primary>
+                      </Button>
+                    </li> */}
                     <li>
                       <Button onClick={() => handleRoute('/sync')}>
                         <Primary>manage assets</Primary>
@@ -144,7 +145,7 @@ export const Header = () => {
                     { context.acc?.address ?
                       <li>
                         <Button onClick={() => handleRoute('/config')}>
-                          <Primary>settings</Primary>
+                          <Primary>edit profile</Primary>
                         </Button>
                       </li>
                       :

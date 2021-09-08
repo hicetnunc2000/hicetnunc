@@ -16,6 +16,10 @@
     margin-top: 20px;
   }
 
+  .description {
+    white-space: pre-wrap;
+  }
+
   @include respond-to('tablet') {
     flex-direction: initial;
 

@@ -31,9 +31,15 @@ const HashToURL = (hash, type) => {
     case 'IPFS':
       return hash.replace('ipfs://', 'https://ipfs.io/ipfs/')
     case 'INFURA':
+      try {
       var cidv1 = new ipfsClient.CID(hash.replace('ipfs://', '')).toV1()
       var subdomain = cidv1.toBaseEncodedString('base32')
       return `https://${subdomain}.ipfs.infura-ipfs.io/`
+    } catch (err) {
+      return undefined
+    }
+    case 'DWEB':
+      return hash.replace('ipfs://', 'http://dweb.link/ipfs/')
     default:
       console.error('please specify type')
       return hash
@@ -89,7 +95,6 @@ export const renderMediaType = ({
 }) => {
   let parsedArtifactUri
   let parsedDisplayUri
-  console.log('display', displayView)
   switch (mimeType) {
     /* IMAGES */
     case MIMETYPE.BMP:
@@ -99,7 +104,7 @@ export const renderMediaType = ({
     case MIMETYPE.TIFF:
     case MIMETYPE.WEBP:
       parsedArtifactUri = HashToURL(artifactUri, 'IPFS')
-      parsedDisplayUri = HashToURL(displayUri, 'CLOUDFLARE')
+      parsedDisplayUri = HashToURL(displayUri, 'IPFS')
       // when its a GIF we always load the artifactUri by triggering `onDetailView` to be `true`.
       return (
         <Container interactive={interactive}>

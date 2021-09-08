@@ -2,7 +2,6 @@
 
 # dependencies
 /node_modules
-
 # IDEs
 .vscode
 
@@ -46,5 +45,4 @@ templates/html-image-scale/dist
 templates/html-image-scale/.parcel-cache
 
 # contributor specific (local) folders
-.andre
 .next

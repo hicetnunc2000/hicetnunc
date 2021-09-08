@@ -4,17 +4,18 @@ import { HicetnuncContext } from '../../../context/HicetnuncContext'
 import { Container, Padding } from '../../../components/layout'
 import { Loading } from '../../../components/loading'
 import { Input } from '../../../components/input'
-import { Button, Curate } from '../../../components/button'
-
+import { Button, Curate, Purchase } from '../../../components/button'
+import { stubFalse } from 'lodash'
 export const Swap = ({ total_amount, owners, creator, royalties, token_info, address }) => {
   const { id } = useParams()
-  const { swap, swapv2, acc } = useContext(HicetnuncContext)
+  const { swap, swapv2, acc, swap_hDAO, progress, setProgress, message, setMessage } = useContext(HicetnuncContext)
   const [amount, setAmount] = useState()
   const [price, setPrice] = useState()
-  const [progress, setProgress] = useState(false)
-  const [message, setMessage] = useState('')
+  //const [progress, setProgress] = useState(false)
+  const [currency, setCurrency] = useState('tez')
 
-  console.log('token', creator.address)
+  const onChange = e => setCurrency(e.target.value)
+
   const checkPrice = (value) => {
     if (value <= 0.1) {
       setPrice(value)
@@ -33,69 +34,115 @@ export const Swap = ({ total_amount, owners, creator, royalties, token_info, add
   }
 
   const handleSubmit = () => {
+    console.log(currency)
+
     if (!amount || amount === '' || !price || price === '') {
       // simple validation for now
       alert('invalid input')
     } else {
+      //setProgress(true)
       setProgress(true)
       setMessage('preparing swap')
       // swap is valid call API
-      console.log(acc.address, royalties,parseFloat(price) * 1000000, id, creator.address, parseFloat(amount))
-      swapv2(acc.address, royalties, parseFloat(price) * 1000000, id, creator.address, parseFloat(amount))
-      //swap(parseFloat(amount), id, parseFloat(price) * 1000000)  
-      .then((e) => {
+      console.log(acc.address, royalties, parseFloat(price) * 1000000, id, creator.address, parseFloat(amount))
+
+      if (currency === 'tez') {
+        swapv2(acc.address, royalties, parseFloat(price) * 1000000, id, creator.address, parseFloat(amount))
+          //swap(parseFloat(amount), id, parseFloat(price) * 1000000)  
+          .then((e) => {
+            // when taquito returns a success/fail message
+            //setProgress(false)
+            setProgress(false)
+            setMessage(e.description)
+          })
+          .catch((e) => {
+            setProgress(false)
+            setMessage('error')
+          })
+      }
+
+      if (currency === 'hDAO') {
+        swap_hDAO(acc.address, royalties, parseFloat(price) * 1000000, id, creator.address, parseFloat(amount)).then((e) => {
           // when taquito returns a success/fail message
           setProgress(false)
+          //setProgress(false)
           setMessage(e.description)
-
-          //history.push(`${PATH.ISSUER}/${address}`)
         })
-        .catch((e) => {
-          setProgress(false)
-          setMessage('error')
-        })
+          .catch((e) => {
+            //setProgress(false)
+            setProgress(false)
+            setMessage('error')
+          })
+      }
     }
+  }
+
+  const style = {
+    width: '75% !important'
   }
 
   return (
     <>
-      <Container>
-        <Padding>
-          <Input
-            type="number"
-            placeholder="OBJKT amount"
-            min={1}
-            defaultValue={amount}
-            /* max={total_amount - sales} */
-            onChange={(e) => setAmount(e.target.value)}
-            disabled={progress}
-          />
-          <Input
-            type="number"
-            placeholder="price per OBJKT (in tez)"
-            min={0}
-            max={10000}
-            onChange={(e) => checkPrice(e.target.value)}
-            disabled={progress}
-          />
-          <Button onClick={handleSubmit} fit disabled={progress}>
-            <Curate>swap</Curate>
-          </Button>
+      {
+        !progress ?
           <div>
-            <p>{message}</p>
-            {progress && <Loading />}
-          </div>
-        </Padding>
-      </Container>
+            <Container>
+              <Padding>
+                <Input
+                  type="number"
+                  placeholder="OBJKT amount"
+                  min={1}
+                  defaultValue={amount}
+                  /* max={total_amount - sales} */
+                  onChange={(e) => setAmount(e.target.value)}
+                  onWheel={(e) => e.target.blur()} 
+                  disabled={progress}
+                />
+                <div style={{ width: '100%', display: 'flex' }}>
+                  <div style={{ width: '90%' }}>
+                    <Input
+                      style={style}
+                      type="number"
+                      placeholder="price per OBJKT"
+                      min={0}
+                      max={10000}
+                      onChange={(e) => checkPrice(e.target.value)}
+                      onWheel={(e) => e.target.blur()} 
+                      disabled={progress}
+                    />
+                  </div>
+                  <div>
+                    <select onChange={onChange} style={{ float: 'right', display: 'inline' }}>
+                      <option value="tezos">tez</option>
+                      {/* <option value="hDAO">○ hDAO</option> */}
+                    </select>
+                  </div>
+                </div>
+                <Button onClick={handleSubmit} fit disabled={progress}>
+                  <Purchase>swap</Purchase>
+                </Button>
+              </Padding>
+            </Container>
 
-      <Container>
-        <Padding>
-          <p>
-            swaps which carry values are charged with a 2.5% fee for platform
-            maintenance
-          </p>
-        </Padding>
-      </Container>
+            <Container>
+              <Padding>
+                <p>
+                  swaps which carry values are charged with a 2.5% fee for platform
+                  maintenance
+                </p>
+              </Padding>
+            </Container>
+          </div>
+          :
+          <Container>
+            <Padding>
+              <div>
+                <p>{message}</p>
+                {progress && <Loading />}
+              </div>
+            </Padding>
+          </Container>
+      }
     </>
   )
 }

@@ -1,0 +1,7 @@
+REACT_APP_IPFS_KEY=''
+
+REACT_APP_BLOCKLIST_OBJKT='https://raw.githubusercontent.com/hicetnunc2000/hicetnunc/main/filters/o.json'
+REACT_APP_BLOCKLIST_WALLET='https://raw.githubusercontent.com/hicetnunc2000/hicetnunc/main/filters/w.json'
+REACT_APP_BLOCKLIST_BAN='https://raw.githubusercontent.com/hicetnunc2000/hicetnunc/main/filters/b.json'
+
+REACT_APP_GRAPHQL_API='https://hdapi.teztools.io/v1/graphql'

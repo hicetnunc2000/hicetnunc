@@ -17,6 +17,7 @@ export const getBanBlockList = () => banBlockList
 export const PATH = {
   FEED: '/',
   ISSUER: '/tz',
+  COLLAB: '/kt',
   ABOUT: '/about',
   FAQ: '/faq',
   SYNC: '/sync',
@@ -28,7 +29,7 @@ export const PATH = {
 
 export const MINT_MIN_LIMIT = 1
 export const MINT_MAX_LIMIT = 10000
-export const MINT_FILESIZE = 40
+export const MINT_FILESIZE = 100
 
 export const MIMETYPE = {
   BMP: 'image/bmp',
@@ -53,7 +54,7 @@ export const MIMETYPE = {
   ZIP: 'application/zip',
   ZIP1: 'application/x-zip-compressed',
   ZIP2: 'multipart/x-zip',
-  MD : 'text/markdown'
+  MD : 'text/plain'
 }
 
 export const IPFS_DIRECTORY_MIMETYPE = 'application/x-directory'
@@ -64,7 +65,7 @@ export const ALLOWED_MIMETYPES = Object.keys(MIMETYPE)
 
 export const ALLOWED_FILETYPES_LABEL = Object.entries(MIMETYPE)
   .filter((e) => ALLOWED_MIMETYPES.includes(e[1]))
-  .filter((e) => !['ZIP1', 'ZIP2'].includes(e[0]))
+  .filter((e) => !['ZIP1', 'ZIP2', 'OGA', 'OGV', 'BMP', 'TIFF', 'XWAV', 'QUICKTIME', 'WEBP'].includes(e[0]))
   .map((e) => (e[0] === 'ZIP' ? 'HTML (ZIP ARCHIVE)' : e[0]))
   .join(', ')
 

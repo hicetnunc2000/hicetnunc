@@ -26,15 +26,15 @@ export const Tags = ({ token_tags, preview }) => {
     return (
       <div className={styles.container}>
         {token_tags
-          .filter((e) => e !== '')
+          .filter((e) => e.tag.tag !== '')
           .map((tag, index) => {
             return (
-              <Button
+              <a
                 key={`tag${tag.tag.tag}${index}`}
-                to={`${PATH.TAGS}/${encodeURI(tag.tag.tag)}`}
+                href={`${PATH.TAGS}/${encodeURI(tag.tag.tag)}`}
               >
                 <div className={styles.tag}>{tag.tag.tag}</div>
-              </Button>
+              </a>
             )
           })}
       </div>

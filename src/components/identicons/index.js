@@ -293,7 +293,7 @@ export const Identicon = ({ address = '', logo }) => {
     return (
       <div className={styles.identicon}>
         <img
-          src={`https://services.tzkt.io/v1/avatars2/${address}`}
+          src={'https://dweb.link/ipfs/' + logo.split('//')[1]}
           alt="identicon"
         />
       </div>

@@ -155,9 +155,7 @@ const GetUserClaims = async (walletAddr) => {
  * Get User Metadata
  */
 export const GetUserMetadata = async (walletAddr) => {
-  let tzktData = await axios.get(
-    `https://api.tzkt.io/v1/accounts/${walletAddr}/metadata`
-  )
+  let tzktData = {}
 
   let tzpData = {}
   try {
@@ -173,17 +171,23 @@ export const GetUserMetadata = async (walletAddr) => {
           if (claimJSON.credentialSubject.alias !== "" && !(tzktData.data && tzktData.data.alias))
             tzpData['alias'] = claimJSON.credentialSubject.alias
           tzpData['tzprofile'] = walletAddr
+        } else if (claimJSON.type.includes('DiscordVerification')) {
+          if (!tzktData.data) {
+            tzpData['discord'] = claimJSON.evidence.handle
+          }
+        } else if (claimJSON.type.includes('GitHubVerification')) {
+          if (!tzktData.data) {
+            tzpData['github'] = claimJSON.evidence.handle
+          }
         }
       }
   } catch (e) {
     console.error(e, e.stack);
   }
 
-  if (tzktData.data !== '') {
-    tzktData.data = { ...tzpData, ...tzktData.data }
-  } else if (tzpData) {
+  if (tzpData) {
     tzktData.data = tzpData
   }
-  console.log(tzktData)
+  
   return tzktData
 }

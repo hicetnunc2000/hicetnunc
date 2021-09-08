@@ -1,0 +1,68 @@
+@import '../../styles/layout.scss';
+@import '../../styles/variables.scss';
+
+@for $i from 1 through 3 {
+  .mb#{$i} {
+    margin-bottom: #{$i}em;
+  }
+  
+  .mt#{$i} {
+    margin-bottom: #{$i}em;
+  } 
+}
+
+.muted {
+  opacity: 0.5;
+}
+
+a.muted:hover,
+button.muted:hover {
+  opacity: 1;
+}
+
+// .checkbox {
+//   display: inline-block;
+//   margin-bottom: 1em;
+// }
+
+// .check {
+//   margin-right: 10px;
+// }
+
+// .flex {
+//   display: flex;
+// }
+
+// .flexBetween {
+//   display: flex;
+//   justify-content: space-between;
+// }
+
+// .tipSelect button {
+//   padding-left: 10px;
+//   padding-right: 10px;
+//   margin-left: 10px;
+// }
+
+// .btn {
+//   background: none;
+//   color: white;
+//   border: none;
+//   padding:6px;
+//   font-size: 1em;
+//   cursor: pointer;
+// }
+
+// .btnSecondary {
+//   color: white;
+//   border-bottom: 1px solid white;
+//   border-right: 1px solid white;
+//   padding:6px;
+//   font-size: 1em;
+//   cursor: pointer;
+// }
+
+// .selected {
+//   background: white;
+//   color: black;
+// }
