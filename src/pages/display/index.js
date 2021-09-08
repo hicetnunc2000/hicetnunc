@@ -249,6 +249,7 @@ export default class Display extends Component {
     render: false,
     loading: true,
     hasMore: true,
+    rstricted: false,
     offset: 0,
     results: [],
     objkts: [],
@@ -375,6 +376,8 @@ export default class Display extends Component {
       this.setState({ creations: await fetchCreations(this.state.wallet) })
       this.setState({ objkts: this.state.creations, loading: false, items: [] })
       this.setState({ marketV1: await fetchV1Swaps(this.state.wallet) })
+    } else {
+      this.setState({ restricted: true, loading: false })
     }
 
     this.setState({ items: this.state.objkts.slice(0, 15), offset: 15 })
@@ -478,6 +481,8 @@ export default class Display extends Component {
       this.sortCollection(combinedCollection)
       this.setState({ collection: combinedCollection })
       this.setState({ marketV1: await fetchV1Swaps(this.state.wallet) })
+    } else {
+      this.setState({ restricted: true, loading: false })
     }
 
     this.setState({ objkts: this.state.collection, loading: false, items: [] })
@@ -805,6 +810,18 @@ export default class Display extends Component {
           </Container>
         )}
 
+        {
+          !this.state.loading && this.state.restricted && (
+            <Container>
+              <Padding>
+                <div style={{ color: 'white', background: 'black', textAlign: 'center' }}>
+                  retricted account
+                </div>
+              </Padding>
+            </Container>
+          )
+        }
+
         {!this.state.loading && this.state.creationsState && (
           <Container xlarge>
             {this.state.filter && (
@@ -1040,7 +1057,7 @@ export default class Display extends Component {
 
           </Container>
         )}
-{/*       <BottomBanner>
+        {/*       <BottomBanner>
         API is down due to heavy server load — We're working to fix the issue — please be patient with us. <a href="https://discord.gg/mNNSpxpDce" target="_blank">Join the discord</a> for updates.
       </BottomBanner> */}
       </Page>

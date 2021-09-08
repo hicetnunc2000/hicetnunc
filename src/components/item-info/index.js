@@ -21,6 +21,7 @@ export const ItemInfo = ({
   // total_amount,
   hDAO_balance,
   isDetailView,
+  restricted
 }) => {
   const { syncTaquito, collect, curate, claim_hDAO, acc } =
     useContext(HicetnuncContext)
@@ -141,7 +142,7 @@ export const ItemInfo = ({
           )}
         </div>
 
-        {isDetailView && (
+        {isDetailView && !restricted && (
           <div className={styles.spread}>
             <p style={{ paddingBottom: '7.5px' }}>OBJKT#{id}</p>
             <Button onClick={() => handleCollect()}>
