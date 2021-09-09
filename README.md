@@ -16,6 +16,12 @@ npm i
 npm start
 ```
 
+storybook development
+
+```
+npm run storybook
+```
+
 docker
 
 ```

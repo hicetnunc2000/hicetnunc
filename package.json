@@ -55,10 +55,22 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "eb:prod": "npm run build && npm run start:prod",
-    "prettier": "prettier --write \"./src/**/*.{js,jsx}\""
+    "prettier": "prettier --write \"./src/**/*.{js,jsx}\"",
+    "storybook": "start-storybook",
+    "build-storybook": "build-storybook -s storybook-static"
   },
   "eslintConfig": {
-    "extends": "react-app"
+    "extends": "react-app",
+    "overrides": [
+      {
+        "files": [
+          "**/*.stories.*"
+        ],
+        "rules": {
+          "import/no-anonymous-default-export": "off"
+        }
+      }
+    ]
   },
   "browserslist": {
     "production": [
@@ -73,7 +85,14 @@
     ]
   },
   "devDependencies": {
-    "prettier": "^2.3.0"
+    "@storybook/addon-actions": "^6.2.9",
+    "@storybook/addon-essentials": "^6.2.9",
+    "@storybook/addon-links": "^6.2.9",
+    "@storybook/node-logger": "^6.2.9",
+    "@storybook/preset-create-react-app": "^3.1.7",
+    "@storybook/react": "^6.2.9",
+    "prettier": "^2.3.0",
+    "storybook-design-token": "^1.0.1"
   },
   "module": "commonjs"
 }

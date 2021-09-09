@@ -1,9 +1,25 @@
 :root {
+  /**
+  * @tokens Colors
+  * @presenter Color
+  */
+
   --background-color: #ffffff;
   --text-color: #000000;
   --border-color: rgba(0, 0, 0, 0.1);
   --shadow-color: rgba(0, 0, 0, 0.2);
 }
 
+/**
+  * @tokens Animation
+  * @presenter Animation
+  */
+
 $theme-duration: 0.5s;
+
+/**
+  * @tokens Spacing
+  * @presenter Spacing
+  */
+
 $mobile-padding: 1.25rem;
