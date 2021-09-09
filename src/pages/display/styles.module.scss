@@ -42,14 +42,15 @@
 .card {
   position: absolute;
   left: 0;
-  top: 0;
   right: 0;
   bottom: 0;
   width: 100%;
-  height: 100%;
-  background: black;
+  height: 30%;
+  min-height: 150px;
+  
+  background-color: var(--text-color);
   transition: background-color #{$theme-duration} ease-out,
-  color #{$theme-duration} ease-out, opacity ease-out 0.2s;
+  color #{$theme-duration} ease-out, opacity ease-out #{$theme-duration};
   z-index: 100;
   opacity: 0;
   &:hover {
@@ -58,11 +59,24 @@
 }
 
 .cardText {
+  position: relative;
+  color: var(--background-color);
+  margin-top: 20px;
+  margin-left: 20px;
+}
+
+.cardCollect {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  color: white;
+  bottom: 0;
+  right: 0;
+  border-right: 2px solid var(--background-color);
+  border-bottom: 2px solid var(--background-color);
+  margin-bottom: 20px;
+  margin-right: 20px;
+
+  .cardCollectPrice {
+    color: var(--background-color);
+  }
 }
 
 .tag {
