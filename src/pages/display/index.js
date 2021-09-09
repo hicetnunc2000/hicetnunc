@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Button, Primary, Secondary } from '../../components/button'
+import { Button, Primary, Secondary, Purchase } from '../../components/button'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
 import { Page, Container, Padding } from '../../components/layout'
 import { BottomBanner } from '../../components/bottom-banner'
@@ -45,10 +45,6 @@ query collectorGallery($address: String!) {
       creator {
         address
         name
-      }
-      swaps {
-        amount
-        price
       }
     }
   }
@@ -797,7 +793,9 @@ export default class Display extends Component {
                   collection
                 </Primary>
               </Button>
-              <Button onClick={() => this.setState({ filter: !this.state.filter })}>
+              <Button onClick={() => this.setState({ 
+                  filter: !this.state.filter 
+                })}>
                 <Primary>
                   filter
                 </Primary>
@@ -1055,13 +1053,22 @@ export default class Display extends Component {
                 {this.state.items.map((nft) => {
                   console.log('nft asdfadf: ' + JSON.stringify(nft))
                   return (
-                    <Button style={{ position: 'relative' }} key={nft.token.id} to={`${PATH.OBJKT}/${nft.token.id}`}>
+                    <Button className={styles.cardContainer} 
+                      style={{ position: 'relative' }} 
+                      key={nft.token.id} 
+                      to={`${PATH.OBJKT}/${nft.token.id}`}>
                       <div className={styles.card}>
                         <div className={styles.cardText}>
-                          <div>#{nft.token.id}</div>
+                          <div>OBJKT#{nft.token.id}</div>
                           <div>{nft.token.title}</div>
                           <div>{nft.token.creator.name}</div>
-                          <div>24tez</div>
+                        </div>
+                        <div className={styles.cardCollect}>
+                          <Purchase>
+                            <div className={styles.cardCollectPrice}>
+                              collect for 24 tez
+                            </div>
+                          </Purchase>
                         </div>
                       </div>
                       <div className={styles.container}>
