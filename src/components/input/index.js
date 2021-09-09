@@ -29,7 +29,6 @@ export const Input = ({
         onBlur={onBlur}
         disabled={disabled}
         pattern={pattern}
-        onWheel={(e) => e.target.blur()}
       />
       <p>{label}</p>
     </label>
