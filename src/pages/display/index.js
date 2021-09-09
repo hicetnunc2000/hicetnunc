@@ -44,6 +44,11 @@ query collectorGallery($address: String!) {
       royalties
       creator {
         address
+        name
+      }
+      swaps {
+        amount
+        price
       }
     }
   }
@@ -787,7 +792,6 @@ export default class Display extends Component {
                   creations
                 </Primary>
               </Button>
-
               <Button onClick={this.collectionFull}>
                 <Primary selected={this.state.collectionState}>
                   collection
@@ -922,8 +926,19 @@ export default class Display extends Component {
             >
               <ResponsiveMasonry>
                 {this.state.items.map((nft) => {
+                  console.log(nft)
                   return (
-                    <Button key={nft.id} to={`${PATH.OBJKT}/${nft.id}`}>
+                    <Button 
+                      style={{ positon: 'relative' }} 
+                      key={nft.id} 
+                      to={`${PATH.OBJKT}/${nft.id}`}>
+                      <div className={styles.card}>
+                        <div className={styles.cardText}>
+                          <div>#{nft.id}</div>
+                          <div>{nft.title}</div>
+                          <div>24tez</div>
+                        </div>
+                      </div>
                       <div className={styles.container}>
                         {renderMediaType({
                           mimeType: nft.mime,
@@ -1038,9 +1053,17 @@ export default class Display extends Component {
             >
               <ResponsiveMasonry>
                 {this.state.items.map((nft) => {
-                  // console.log('nft : ' + nft)
+                  console.log('nft asdfadf: ' + JSON.stringify(nft))
                   return (
-                    <Button key={nft.token.id} to={`${PATH.OBJKT}/${nft.token.id}`}>
+                    <Button style={{ position: 'relative' }} key={nft.token.id} to={`${PATH.OBJKT}/${nft.token.id}`}>
+                      <div className={styles.card}>
+                        <div className={styles.cardText}>
+                          <div>#{nft.token.id}</div>
+                          <div>{nft.token.title}</div>
+                          <div>{nft.token.creator.name}</div>
+                          <div>24tez</div>
+                        </div>
+                      </div>
                       <div className={styles.container}>
                         {renderMediaType({
                           mimeType: nft.token.mime,

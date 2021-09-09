@@ -9,6 +9,7 @@
   background-clip: padding-box;
 
   & > * {
+    position: relative;
     display: block;
     margin-bottom: 5px;
   }
