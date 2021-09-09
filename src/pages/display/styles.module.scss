@@ -39,6 +39,32 @@
   }
 }
 
+.card {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  background: black;
+  transition: background-color #{$theme-duration} ease-out,
+  color #{$theme-duration} ease-out, opacity ease-out 0.2s;
+  z-index: 100;
+  opacity: 0;
+  &:hover {
+    opacity: 1;
+  }
+}
+
+.cardText {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+}
+
 .tag {
   display: inline-flex;
   color: var(--text-color);
