@@ -934,7 +934,13 @@ export default class Display extends Component {
                         <div className={styles.cardText}>
                           <div>#{nft.id}</div>
                           <div>{nft.title}</div>
-                          <div>24tez</div>
+                        </div>
+                        <div className={styles.cardCollect}>
+                          <Purchase>
+                            <div className={styles.cardCollectPrice}>
+                              collect for 24 tez
+                            </div>
+                          </Purchase>
                         </div>
                       </div>
                       <div className={styles.container}>
