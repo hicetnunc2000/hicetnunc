@@ -4,6 +4,7 @@ import { Primary } from '../../../components/button'
 import { HicetnuncContext } from '../../../context/HicetnuncContext'
 import { walletPreview } from '../../../utils/string'
 import styles from '../styles.module.scss'
+import { parse } from '@babel/core'
 
 
 export const History = (token_info) => {
@@ -20,22 +21,98 @@ export const History = (token_info) => {
 
     let history = [...trades, ...swaps].sort((a, b) => Date.parse(a.timestamp) - Date.parse(b.timestamp)).reverse()
 
+    const getTimeAgo = (props) => {
+        let stamp = Math.round(new Date(props).getTime() / 1000)
+        let now = Math.round(new Date().getTime() / 1000)
+
+        let difference = now - stamp
+
+        if (difference / 60 > 0) {
+            console.log('Minutes' + difference / 60)
+        }
+
+        console.log(stamp, now)
+
+        return props
+    }
+
     return (
         <div>
             <Container>
                 <Padding>
+                    <div className={styles.history__labels}>
+                        <div className={styles.history__event} style={{ width: 'calc(7% + 35px)' }}>event</div>
+                        <div className={styles.history__from}>from</div>
+                        <div className={styles.history__to}>to</div>
+                        <div className={styles.history__ed}>ed.</div>
+                        <div className={styles.history__price}>price</div>
+                        <div className={styles.history__date}>date</div>
+                    </div>
                     {
                         history.map(e => {
                             if (e.trade) {
                                 return (
                                     <div className={styles.history}>
-                                        trade {e.timestamp} { encodeURI(e.seller.name) ? <span><a href={`/tz/${encodeURI(e.seller.address)}`}> <Primary>&nbsp;{encodeURI(e.seller.name)}</Primary></a></span> : <span><a href={`/tz/${e.seller.address}`}><Primary>&nbsp;{walletPreview(e.seller.address)}</Primary></a></span>}&nbsp;{e.amount} ed. {parseFloat(e.swap.price / 1000000)} tez{e.buyer.name ? <span><a href={`/${encodeURI(e.buyer.name)}`}><Primary>&nbsp;{encodeURI(e.buyer.name)}</Primary></a></span> : <span><a href={`/tz/${e.buyer.address}`}><Primary>&nbsp;{walletPreview(e.buyer.address)}</Primary></a></span>}
+                                        <div className={styles.history__event__container}>
+                                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <line x1="0.75" y1="-0.75" x2="9.57625" y2="-0.75" transform="matrix(0.693707 0.720257 -0.693707 0.720257 1.5155 6.98877)" stroke="black" stroke-width="1.5" stroke-linecap="round"/>
+                                                <path d="M2.06618 10.708V6.70315H5.92339" stroke="black" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                                <line x1="0.75" y1="-0.75" x2="9.57625" y2="-0.75" transform="matrix(0.693707 0.720257 -0.693707 0.720257 5.92212 2.41162)" stroke="black" stroke-width="1.5" stroke-linecap="round"/>
+                                                <path d="M10.2153 10.0547H14.0725V6.04987" stroke="black" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                            </svg>
+
+                                            <a href={`https://tzkt.io/${e.ophash}`}>trade</a>
+                                        </div>
+
+                                        <div className={styles.history__from}>
+                                            {e.seller.name ? <span><a href={`/tz/${encodeURI(e.seller.address)}`}><Primary>{encodeURI(e.seller.name)}</Primary></a></span> : <span><a href={`/tz/${e.seller.address}`}><Primary>{walletPreview(e.seller.address)}</Primary></a></span>}
+                                        </div>
+
+                                        <div className={styles.history__to}>
+                                            {e.buyer.name ? <span><a href={`/${encodeURI(e.buyer.name)}`}><Primary>{encodeURI(e.buyer.name)}</Primary></a></span> : <span><a href={`/tz/${e.buyer.address}`}><Primary>{walletPreview(e.buyer.address)}</Primary></a></span>}
+                                        </div>
+
+                                        <div className={styles.history__ed}>
+                                            {e.amount} ed.
+                                        </div>
+                                        
+                                        <div className={styles.history__price}>
+                                            {parseFloat(e.swap.price / 1e6)} tez
+                                        </div>
+
+                                        <div className={styles.history__date}>
+                                            {getTimeAgo(e.timestamp)}
+                                        </div>
                                     </div>
                                 )
                             } else {
                                 return (
                                     <div className={styles.history}>
-                                        swap {e.timestamp} {e.creator.name ? <span><a href={`/tz/${e.creator.address}`}><Primary>&nbsp;{encodeURI(e.creator.name)}&nbsp;</Primary></a></span> : <span><a href={`/tz/${e.creator.address}`}><Primary>&nbsp;{walletPreview(e.creator.address)}</Primary></a></span>} {e.amount} ed. {parseFloat(e.price / 1000000)} tez
+                                        <div className={styles.history__event__container}>
+                                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path fill-rule="evenodd" clip-rule="evenodd" d="M2.75327 2.75308L3.13537 8.64172L9.15184 14.6582C9.34813 14.8545 9.66639 14.8545 9.86268 14.6582L14.6584 9.86249C14.8547 9.66619 14.8547 9.34794 14.6584 9.15164L8.64192 3.13518L2.75327 2.75308ZM7.28169 7.21072C7.81059 6.68182 7.81059 5.8243 7.28169 5.2954C6.75279 4.7665 5.89527 4.7665 5.36637 5.2954C4.83747 5.8243 4.83747 6.68182 5.36637 7.21072C5.89527 7.73962 6.75279 7.73962 7.28169 7.21072Z" fill="black"/>
+                                            </svg>
+                                            
+                                            <a href={`https://tzkt.io/${e.ophash}`}>swap</a>
+                                        </div>
+
+                                        <div className={styles.history__from}>
+                                            {e.creator.name ? <span><a href={`/tz/${encodeURI(e.creator.address)}`}><Primary>{encodeURI(e.creator.name)}</Primary></a></span> : <span><a href={`/tz/${e.creator.address}`}><Primary>{walletPreview(e.creator.address)}</Primary></a></span>}
+                                        </div>
+
+                                        <div className={styles.history__to} />
+
+                                        <div className={styles.history__ed}>
+                                            {e.amount} ed.
+                                        </div>
+                                        
+                                        <div className={styles.history__price}>
+                                            {parseFloat(e.price / 1e6)} tez
+                                        </div>
+
+                                        <div className={styles.history__date}>
+                                            {getTimeAgo(e.timestamp)}
+                                        </div>
                                     </div>
                                 )
                             }
