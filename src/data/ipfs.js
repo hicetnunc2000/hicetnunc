@@ -142,11 +142,6 @@ export const prepareDirectory = async ({
 
   // upload thumbnail image
   let thumbnailUri = IPFS_DEFAULT_THUMBNAIL_URI
-  if (generateDisplayUri) {
-    const thumbnailInfo = await ipfs.add(thumbnail.buffer)
-    const thumbnailHash = thumbnailInfo.path
-    thumbnailUri = `ipfs://${thumbnailHash}`
-  }
 
   return await uploadMetadataFile({
     name,
