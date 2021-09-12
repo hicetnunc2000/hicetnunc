@@ -111,7 +111,7 @@ export const HTMLComponent = (props) => {
             ref={iframeRef}
             title="html-zip-embed"
             src={`https://hicetnunc2000.github.io/hicetnunc/gh-pages/html-preview/?uid=${uid}&creator=${_creator_}&viewer=${_viewer_}&objkt=${_objectId_}`}
-            sandbox="allow-scripts allow-same-origin allow-modals"
+            sandbox="allow-scripts allow-same-origin allow-modals allow-top-navigation-by-user-activation"
             allow="accelerometer; camera; gyroscope; microphone; xr-spatial-tracking;"
           />
         </div>
