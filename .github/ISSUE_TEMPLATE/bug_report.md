@@ -2,13 +2,18 @@
 name: Bug report
 about: Create a report to help us improve
 title: ''
-labels: 'bug'
+labels: bug
 assignees: ''
 
 ---
 
 **Describe the bug**
 A clear and concise description of what the bug is.
+
+**Please give us your profile link, tezos wallet address, and objkt numbers**
+- profile link
+- tezos wallet address
+- objkt #'s that are being affected
 
 **To Reproduce**
 Steps to reproduce the behavior:
