@@ -820,7 +820,7 @@ export default class Display extends Component {
             <Container>
               <Padding>
                 <div style={{ color: 'white', background: 'black', textAlign: 'center' }}>
-                  retricted account
+                  restricted account
                 </div>
               </Padding>
             </Container>
