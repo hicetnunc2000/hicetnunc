@@ -85,14 +85,14 @@ export const prepareFile = async ({
 
   const hash = await ipfs.add(new Blob([buffer]))
   console.log(hash)
-  const cid = `ipfs://${hash}`
+  const cid = `ipfs://${hash.path}`
 
   // upload cover image
   let displayUri = ''
   if (generateDisplayUri) {
     const coverHash = await ipfs.add(new Blob([cover.buffer]))
     console.log(coverHash)
-    displayUri = `ipfs://${coverHash}`
+    displayUri = `ipfs://${coverHash.path}`
   }
 
   // upload thumbnail image
