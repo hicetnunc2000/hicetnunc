@@ -9,29 +9,22 @@ import { BottomBanner } from '../../components/bottom-banner'
 import styles from './styles.module.scss'
 
 
-async function fetchObjkt(id) {
-
-  const { errors, data } = await fetchGraphQL(
-    `
-    query objkt($id: bigint!) {
-      hic_et_nunc_token_by_pk(id: $id) {
+async function fetchObjkts(ids) {
+  const { errors, data } = await fetchGraphQL(`
+    query Objkts($_in: [bigint!] = "") {
+      hic_et_nunc_token(where: { id: {_in: $_in}}) {
+        artifact_uri
+        display_uri
+        creator_id
         id
         mime
-        display_uri
-        artifact_uri
-        metadata
+        thumbnail_uri
+        timestamp
+        title
+        hdao_balance
       }
-    `
-    , 'objkt', {
-    id: id
-  })
-  if (errors) {
-    console.error(errors)
-  }
-  const result = data.hic_et_nunc_token_by_pk
-  console.log(result)
-  return result
-
+    }`, "Objkts", { "_in" : ids })
+  return data.hic_et_nunc_token
 }
 
 async function fetchGraphQL(operationsDoc, operationName, variables) {
@@ -61,7 +54,7 @@ export const Galleries = () => {
       .then(async (galleries) => {
         const g = []
         let c = 0
-        console.log(galleries.map(e => e.display))
+        console.log(await fetchObjkts(galleries.map(e => e.id)))
         galleries.forEach(async (element) => {
           await GetOBJKT({ id: element.thumbnail }).then((e) => {
             const found = galleries.find((e) => e.uid === element.uid)
