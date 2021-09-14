@@ -81,14 +81,17 @@ export const prepareFile = async ({
   const ipfs = create(infuraUrl)
 
   // upload main file
-  const hash = await storage.storeBlob(new Blob([buffer]))
+ // const ipfs = create(infuraUrl)
 
+  const hash = await ipfs.add(new Blob([buffer]))
+  console.log(hash)
   const cid = `ipfs://${hash}`
 
   // upload cover image
   let displayUri = ''
   if (generateDisplayUri) {
-    const coverHash = await storage.storeBlob(new Blob([cover.buffer]))
+    const coverHash = await ipfs.add(new Blob([cover.buffer]))
+    console.log(coverHash)
     displayUri = `ipfs://${coverHash}`
   }
 

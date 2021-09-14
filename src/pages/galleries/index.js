@@ -8,6 +8,44 @@ import { ResponsiveMasonry } from '../../components/responsive-masonry'
 import { BottomBanner } from '../../components/bottom-banner'
 import styles from './styles.module.scss'
 
+
+async function fetchObjkt(id) {
+
+  const { errors, data } = await fetchGraphQL(
+    `
+    query objkt($id: bigint!) {
+      hic_et_nunc_token_by_pk(id: $id) {
+        id
+        mime
+        display_uri
+        artifact_uri
+        metadata
+      }
+    `
+    , 'objkt', {
+    id: id
+  })
+  if (errors) {
+    console.error(errors)
+  }
+  const result = data.hic_et_nunc_token_by_pk
+  console.log(result)
+  return result
+
+}
+
+async function fetchGraphQL(operationsDoc, operationName, variables) {
+  let result = await fetch(process.env.REACT_APP_GRAPHQL_API, {
+    method: 'POST',
+    body: JSON.stringify({
+      query: operationsDoc,
+      variables: variables,
+      operationName: operationName,
+    }),
+  })
+  return await result.json()
+}
+
 const sortByThumbnailTokenId = (a, b) => {
   const ia = parseInt(a.thumbnail)
   const ib = parseInt(b.thumbnail)
@@ -23,6 +61,7 @@ export const Galleries = () => {
       .then(async (galleries) => {
         const g = []
         let c = 0
+        console.log(galleries.map(e => e.display))
         galleries.forEach(async (element) => {
           await GetOBJKT({ id: element.thumbnail }).then((e) => {
             const found = galleries.find((e) => e.uid === element.uid)
@@ -69,7 +108,7 @@ export const Galleries = () => {
           </ResponsiveMasonry>
         </Padding>
       </Container>
-{/*       <BottomBanner>
+      {/*       <BottomBanner>
         Collecting has been temporarily disabled. Follow <a href="https://twitter.com/hicetnunc2000" target="_blank">@hicetnunc2000</a> or <a href="https://discord.gg/jKNy6PynPK" target="_blank">join the discord</a> for updates.
       </BottomBanner> */}
     </Page>
