@@ -158,7 +158,8 @@ export function injectCSPMetaTagIntoHTML(html) {
       https://cloudflare-ipfs.com/
       https://ipfs.io/
       https://templewallet.com/logo.png
-      https://gateway.pinata.cloud/;
+      https://gateway.pinata.cloud/
+      https://*.teztools.io;
     font-src
       'self'
       data:
@@ -167,7 +168,8 @@ export function injectCSPMetaTagIntoHTML(html) {
       https://cloudflare-ipfs.com/
       https://fonts.googleapis.com/
       https://ipfs.io/
-      https://gateway.pinata.cloud/;
+      https://gateway.pinata.cloud/
+      https://*.teztools.io;
     connect-src
       'self'
       https://better-call.dev
@@ -195,7 +197,8 @@ export function injectCSPMetaTagIntoHTML(html) {
       https://*.coinmarketcap.com
       https://api.openweathermap.org
       https://hicetnunc.xyz
-      https://*.hicetnunc.xyz;
+      https://*.hicetnunc.xyz
+      https://*.teztools.io;
     manifest-src
       'self';
     base-uri
@@ -211,7 +214,8 @@ export function injectCSPMetaTagIntoHTML(html) {
       https://*.infura-ipfs.io
       https://cloudflare-ipfs.com/
       https://ipfs.io/
-      https://gateway.pinata.cloud/;
+      https://gateway.pinata.cloud/
+      https://*.teztools.io;
     prefetch-src
       'self'
       https://ipfs.infura.io
@@ -219,7 +223,8 @@ export function injectCSPMetaTagIntoHTML(html) {
       https://cloudflare-ipfs.com/
       https://fonts.googleapis.com/
       https://ipfs.io/
-      https://gateway.pinata.cloud/;
+      https://gateway.pinata.cloud/
+      https://*.teztools.io;
     worker-src
       'self'
       'unsafe-inline'
