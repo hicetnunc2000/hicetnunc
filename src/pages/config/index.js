@@ -93,7 +93,7 @@ export class Config extends Component {
   }
 
   handleChange = (e) => {
-    if (e.target.name == 'subjkt' && !e.target.checkValidity()){
+    if (e.target.name == 'subjkt' && !e.target.checkValidity()) {
       console.log(e.target.pattern)
       e.target.value = e.target.value.replace(/[^a-z0-9-._]/g, "")
     }
@@ -222,7 +222,13 @@ export class Config extends Component {
           </Padding>
           <div style={{ display: 'inline' }}>
             <span>link your Twitter, Discord, GitHub, and website with </span>
-            <span><a style={{color : 'black', fontWeight : 'bold'}}href="https://tzprofiles.com">Tezos Profiles</a></span>
+            <span>
+              <a href="https://tzprofiles.com">
+                <Button>
+                  <Primary>Tezos Profiles</Primary>
+                </Button>
+              </a>
+            </span>
           </div>
         </Container>
 
