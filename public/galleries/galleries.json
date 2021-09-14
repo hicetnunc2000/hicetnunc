@@ -3,18 +3,21 @@
     "uid": "pupiladilatada",
     "name": "Pupila Dilatada",
     "endpoint": "/galleries/pupiladilatada.json",
-    "thumbnail": "833"
+    "display": "833",
+    "displayUri": "ipfs://QmYDQZVX3Z3jeSqRnfw4BwMMZoCfom1Ho644tRmb2m9Ah9"
   },
   {
     "uid": "objkt4objkt",
     "name": "OBJKT4OBJKT",
     "endpoint": "/galleries/objkt4objkt.json",
-    "thumbnail": "12077"
+    "display": "12077",
+    "displayUri": "ipfs://QmNdTqYdh1hUex8f6J2kyq8YBFCVrMJa2gTbhVhDRpzBpN" 
   },
   {
     "uid": "thefen",
     "name": "The FEN",
     "endpoint": "https://raw.githubusercontent.com/joanielemercier/The_fen/main/thefen.json",
-    "thumbnail": "34413"
+    "display": "34413",
+    "displayUri": "ipfs://QmUHNW5Bg6vdTM22QBf4nhXqyxSiv6N3DHEtJXFgnuKyzh"
   }
 ]
