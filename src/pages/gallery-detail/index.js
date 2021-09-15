@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import { AnimatePresence } from 'framer-motion'
+import { HicetnuncContext } from '../../context/HicetnuncContext'
 import { useParams } from 'react-router'
 import { Page, Container, Padding } from '../../components/layout'
 import { Loading } from '../../components/loading'
@@ -8,23 +9,11 @@ import { Item } from './item'
 import { ItemModal } from './item-modal'
 import { Artist } from './artist'
 import { ResponsiveMasonry } from '../../components/responsive-masonry'
+import { renderMediaType } from '../../components/media-types'
+import InfiniteScroll from 'react-infinite-scroll-component'
 import styles from './styles.module.scss'
-
-async function fetchGraphQL(operationsDoc, operationName, variables) {
-  const result = await fetch(
-    process.env.REACT_APP_GRAPHQL_API,
-    {
-      method: "POST",
-      body: JSON.stringify({
-        query: operationsDoc,
-        variables: variables,
-        operationName: operationName
-      })
-    }
-  );
-
-  return await result.json()
-}
+import { flattenDeep } from 'lodash'
+import axios from 'axios'
 
 async function fetchObjkts(ids) {
   const { errors, data } = await fetchGraphQL(`
@@ -40,15 +29,32 @@ async function fetchObjkts(ids) {
         title
         hdao_balance
       }
-    }`, "Objkts", { "_in" : ids })
+    }`, "Objkts", { "_in": ids })
   return data.hic_et_nunc_token
 }
 
+async function fetchGraphQL(operationsDoc, operationName, variables) {
+  let result = await fetch(process.env.REACT_APP_GRAPHQL_API, {
+    method: 'POST',
+    body: JSON.stringify({
+      query: operationsDoc,
+      variables: variables,
+      operationName: operationName,
+    }),
+  })
+  return await result.json()
+}
+
 export const GalleryDetail = () => {
+  const context = useContext(HicetnuncContext)
   const { id } = useParams()
   const [loaded, setLoaded] = useState(false)
   const [collection, setCollection] = useState([])
   const [modal, setModal] = useState()
+  const [hasMore, setHasMore] = useState(true)
+  const [items, setItems] = useState([])
+  const [feed, setFeed] = useState([])
+  const [offset, setOffset] = useState(0)
 
   const showModal = (info) => {
     setModal(info)
@@ -64,13 +70,31 @@ export const GalleryDetail = () => {
     fetch('/galleries/galleries.json')
       .then((e) => e.json())
       .then((galleries) => {
+        console.log(id)
         const found = galleries.find((e) => e.uid === id)
-        
+//https://raw.githubusercontent.com/joanielemercier/The_fen/main/thefen.json
         if (found) {
           fetch(found.endpoint)
             .then((e) => e.json())
-            .then((data) => {
+            .then(async (data) => {
+              console.log(data)
+              console.log(data.data[0].objkt)
+              let res = []
+              if (id == 'thefen') {
+                res = await axios.get('https://raw.githubusercontent.com/joanielemercier/The_fen/main/thefen.json').then(res => res.data.data.map(e => e.objkt))
+                res = res.reduce((a, b) => [...a, ...b], [])
+                console.log(res)
+                res = await(fetchObjkts(res))
+                res = res.filter(e => ![34413, 35798, 41628].includes(e.id))
+              } else {
+                res = await fetchObjkts(data.data[0].objkt)
+              } 
+              console.log(res)
+              setItems(res)
               setCollection(data)
+              setFeed(res.slice(0, 15))
+              context.feed = res.slice(0, 15)
+              console.log(context.feed)
               setLoaded(true)
             })
         } else {
@@ -83,11 +107,18 @@ export const GalleryDetail = () => {
     }
   }, [id])
 
+  const loadMore = () => {
+    setFeed([...feed, ...items.slice(offset, offset + 15)])
+    context.feed = [...context.feed, ...items.slice(offset, offset + 15)]
+    setOffset(offset + 15)
+    if (feed.length == items.lenght) setHasMore(false)
+  }
+
   return (
     <Page title={collection?.title}>
       {!loaded ? (
         <Container>
-{/*           <Padding>
+          {/*           <Padding>
             <Loading />
           </Padding> */}
         </Container>
@@ -117,28 +148,35 @@ export const GalleryDetail = () => {
 
           <Container xlarge>
             <Padding>
-              <div className={styles.content}>
-                {collection.data.map((artist, i) => {
-                  return (
-                    <div className={styles.block} key={`artist${i}`}>
-                      <Artist artist={artist} />
-                      <ResponsiveMasonry>
-                        {artist.objkt.map((objkt) => {
-                          
-                          return (
-                            <Item
-                              key={objkt}
-                              objkt={objkt}
-                              onClick={(info) => showModal(info)}
-                              minimal={collection.minimal}
-                            />
-                          )
-                        })}
-                      </ResponsiveMasonry>
-                    </div>
-                  )
-                })}
-              </div>
+              <InfiniteScroll
+                dataLength={context.feed.length}
+                next={loadMore}
+                hasMore={hasMore}
+                loader={undefined}
+                endMessage={undefined}
+              >
+                <ResponsiveMasonry>
+                  {
+                    context.feed.map(e => {
+                      return (
+                        <Button key={e.id} to={`/objkt/${e.id}`}>
+                          <div className={styles.item}>
+                            {renderMediaType({
+                              mimeType: e.mime,
+                              artifactUri: e.artifact_uri,
+                              displayUri: e.display_uri,
+                              creator: "",
+                              objkt: e.id,
+                              interactive: false,
+                              displayView: true
+                            })}
+                          </div>
+                        </Button>
+                      )
+                    })
+                  }
+                </ResponsiveMasonry>
+              </InfiniteScroll>
             </Padding>
           </Container>
 

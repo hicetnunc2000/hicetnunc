@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Button } from '../../components/button'
+import { Button, Purchase, Primary } from '../../components/button'
 import { Page, Container, Padding } from '../../components/layout'
 import { GetOBJKT } from '../../data/api'
 import { renderMediaType } from '../../components/media-types'
@@ -8,6 +8,7 @@ import { ResponsiveMasonry } from '../../components/responsive-masonry'
 import { BottomBanner } from '../../components/bottom-banner'
 import styles from './styles.module.scss'
 
+const _ = require('lodash')
 
 async function fetchObjkts(ids) {
   const { errors, data } = await fetchGraphQL(`
@@ -52,21 +53,15 @@ export const Galleries = () => {
     fetch('/galleries/galleries.json')
       .then((e) => e.json())
       .then(async (galleries) => {
-        const g = []
-        let c = 0
-        console.log(await fetchObjkts(galleries.map(e => e.id)))
-        galleries.forEach(async (element) => {
-          await GetOBJKT({ id: element.thumbnail }).then((e) => {
-            const found = galleries.find((e) => e.uid === element.uid)
-            g.push(Object.assign({}, found, e))
-            c++
+        console.log(galleries)
+         let res = await fetchObjkts(galleries.map(e => e.id))
 
-            if (c === galleries.length) {
-              g.sort(sortByThumbnailTokenId)
-              setData(g)
-            }
-          })
-        })
+         let merged = _.merge(_.keyBy(galleries, 'id'), _.merge(_.keyBy(res, 'id')))
+
+         let values = _.values(merged)
+
+         setData(values.reverse())
+
       })
 
     return () => {
@@ -81,19 +76,24 @@ export const Galleries = () => {
           <ResponsiveMasonry>
             {data.map((e) => {
               const { token_info } = e
+              console.log(e)
               return (
                 <Button key={e.uid} to={`${PATH.GALLERY}/${e.uid}`}>
                   <div className={styles.item}>
                     {renderMediaType({
-                      mimeType: token_info.formats[0].mimeType,
-                      artifactUri: token_info.artifactUri,
-                      displayUri: token_info.displayUri,
-                      creator: token_info.creators[0],
-                      objkt: e.token_id,
+                      mimeType: e.mime,
+                      artifactUri: e.artifact_uri,
+                      displayUri: e.display_uri,
+                      creator: "",
+                      objkt: e.id,
                       interactive: false,
                       displayView: true
                     })}
-                    <div className={styles.number}>{e.name}</div>
+                    <Button>
+                      <Primary>
+                        <div className={styles.number}>{e.name}</div>
+                      </Primary>
+                    </Button>
                   </div>
                 </Button>
               )
