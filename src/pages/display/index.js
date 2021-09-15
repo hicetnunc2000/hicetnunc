@@ -350,7 +350,6 @@ export default class Display extends Component {
         if (data.data.discord) this.setState({ discord })
         if (data.data.twitter) this.setState({ twitter })
         if (data.data.tzprofile) this.setState({ tzprofile })
-        this.onReady()
       })
       this.onReady()
     }

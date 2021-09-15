@@ -94,7 +94,7 @@ export const Burn = (props) => {
         <div>
           <p tyle={{
           position: 'absolute',
-          left: '46%',
+          left: '50%',
           top: '35%',
       }}> {message}</p>
           {progress && <Loading />}
