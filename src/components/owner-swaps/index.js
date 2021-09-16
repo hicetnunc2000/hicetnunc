@@ -12,7 +12,7 @@ export const OwnerSwaps = ({ swaps, handleCollect, acc, cancel, restricted, canc
   let v2 = swaps.filter(e => parseInt(e.contract_version) === 2 && parseInt(e.status) === 0 && e.is_valid)
   console.log('v2', swaps)
 
-  let v1 = swaps.filter(e => parseInt(e.contract_version) === 1)
+  let v1 = swaps.filter(e => parseInt(e.contract_version) === 1 && parseInt(e.status) === 0)
   console.log(v1)
   return (
     <div className={styles.container}>
