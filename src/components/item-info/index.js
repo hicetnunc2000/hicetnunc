@@ -124,7 +124,7 @@ export const ItemInfo = ({
               <div>
                 <p>
                   <span>
-                    Editions:
+                    Editions:&nbsp;
                     <span>
                       {ed}/{total}
                     </span>
@@ -142,26 +142,29 @@ export const ItemInfo = ({
           )}
         </div>
 
-        {isDetailView && !restricted && (
-          <div className={styles.spread}>
-            <p style={{ paddingBottom: '7.5px' }}>OBJKT#{id}</p>
+        <div className={styles.spread}>
+          <div className={styles.spread__inner} style={{ paddingBottom: '7.5px' }}>
+            {isDetailView && !restricted && (
+                <p>OBJKT#{id}</p>
+            )}
+            <Button onClick={() => curate(id)}>
+              <Primary>
+                <span
+                  className={styles.top}
+                  data-position={'top'}
+                  data-tooltip={'curate'}
+                >
+                  〇
+                </span>
+              </Primary>
+            </Button>
+          </div>
+
+          {isDetailView && !restricted && (
             <Button onClick={() => handleCollect()}>
               <Purchase>{message}</Purchase>
             </Button>
-          </div>
-        )}
-        <div className={styles.spread}>
-          <Button onClick={() => curate(id)}>
-            <Primary>
-              <span
-                className={styles.top}
-                data-position={'top'}
-                data-tooltip={'curate'}
-              >
-                〇
-              </span>
-            </Primary>
-          </Button>
+          )}
         </div>
       </>
     )

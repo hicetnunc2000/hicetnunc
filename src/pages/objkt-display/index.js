@@ -282,6 +282,8 @@ export const ObjktDisplay = () => {
                           <Button
                             key={tab.title}
                             onClick={() => setTabIndex(index)}
+
+                            objktView={true}
                           >
                             <Primary selected={tabIndex === index}>
                               {tab.title}
