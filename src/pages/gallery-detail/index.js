@@ -70,31 +70,25 @@ export const GalleryDetail = () => {
     fetch('/galleries/galleries.json')
       .then((e) => e.json())
       .then((galleries) => {
-        console.log(id)
         const found = galleries.find((e) => e.uid === id)
-//https://raw.githubusercontent.com/joanielemercier/The_fen/main/thefen.json
         if (found) {
           fetch(found.endpoint)
             .then((e) => e.json())
             .then(async (data) => {
-              console.log(data)
-              console.log(data.data[0].objkt)
               let res = []
+
               if (id == 'thefen') {
                 res = await axios.get('https://raw.githubusercontent.com/joanielemercier/The_fen/main/thefen.json').then(res => res.data.data.map(e => e.objkt))
                 res = res.reduce((a, b) => [...a, ...b], [])
-                console.log(res)
                 res = await(fetchObjkts(res))
                 res = res.filter(e => ![34413, 35798, 41628].includes(e.id))
               } else {
                 res = await fetchObjkts(data.data[0].objkt)
               } 
-              console.log(res)
+
               setItems(res)
               setCollection(data)
-              setFeed(res.slice(0, 15))
               context.feed = res.slice(0, 15)
-              console.log(context.feed)
               setLoaded(true)
             })
         } else {
