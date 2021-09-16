@@ -200,7 +200,7 @@ export const History = (token_info) => {
                             </div>
 
                             <div className={styles.history__ed}>
-                                ed. {token_info.amount}
+                                ed. {token_info.supply}
                             </div>
                             
                             <div className={styles.history__price} />
