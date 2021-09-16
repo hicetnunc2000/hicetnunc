@@ -7,7 +7,7 @@ const sortByPrice = (a, b) => {
   return Number(a.xtz_per_objkt) - Number(b.xtz_per_objkt)
 }
 
-export const OwnerSwaps = ({ swaps, handleCollect, acc, cancel, restricted }) => {
+export const OwnerSwaps = ({ swaps, handleCollect, acc, cancel, restricted, cancelv1 }) => {
 
   let v2 = swaps.filter(e => parseInt(e.contract_version) === 2 && parseInt(e.status) === 0 && e.is_valid)
   console.log('v2', swaps)
@@ -32,7 +32,7 @@ export const OwnerSwaps = ({ swaps, handleCollect, acc, cancel, restricted }) =>
                           </Button>
                         </div>
                         <div className={styles.buttons}>
-                          <Button onClick={() => cancel(e.id)}>
+                          <Button onClick={() => cancelv1(e.id)}>
                             <Purchase>cancel</Purchase>
                           </Button>
                         </div>
