@@ -104,16 +104,16 @@ export const History = (token_info) => {
                                         </div>
 
                                         <div className={styles.history__inner__mobile}>
+                                            <div className={styles.history__date}>
+                                                {getTimeAgo(e.timestamp)}
+                                            </div>
+
                                             <div className={styles.history__ed}>
-                                                {e.amount}
+                                                ed. {e.amount}
                                             </div>
                                             
                                             <div className={styles.history__price}>
                                                 {parseFloat(e.swap.price / 1e6)} tez
-                                            </div>
-
-                                            <div className={styles.history__date}>
-                                                {getTimeAgo(e.timestamp)}
                                             </div>
                                         </div>
                                     </div>
