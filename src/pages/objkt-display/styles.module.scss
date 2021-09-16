@@ -147,18 +147,13 @@
   @include respond-to('desktop') {
   font-size: 13.33px;
   margin-top: 20px;
+  margin-left: 0;
   padding-top: 10px;
 
   width: 33.333333333%;
   border-top: 1px solid #D9D9D9;    
   }
 }
-
-// .history__inner__desktop {
-//   @media (max-width: 1024px) {
-//     display: none;
-//   }
-// }
 
 .history__secondary {
   color: #4D4D4D;
