@@ -570,9 +570,9 @@ export default class Display extends Component {
     const missingSize = handleSize - 6;
     const spaces = ' '.repeat(Math.ceil(Math.abs(missingSize / 2)));
     if (missingSize < 0) {
-      return `${this.state.copied ? 'Copied' : `${spaces}${this.state.discord}${spaces}`}`;
+      return this.state.copied ? 'Copied' : `${spaces}${this.state.discord}${spaces}`;
     } else {
-      return `${this.state.copied ? `${spaces}Copied${spaces}` : `${this.state.discord}`}`;
+      return this.state.copied ? `${spaces}Copied${spaces}` : `${this.state.discord}`;
     }
   }
 
@@ -595,9 +595,18 @@ export default class Display extends Component {
                   </p>
                 )}
                 {this.state.description && <p>{this.state.description}</p>}
-                <Button href={`https://tzkt.io/${this.state.wallet}`}>
-                  <Primary>{walletPreview(this.state.wallet)}</Primary>
-                </Button>
+                <div style={{ display: 'flex' }}>
+                  <Button href={`https://tzkt.io/${this.state.wallet}`}>
+                    <Primary>{walletPreview(this.state.wallet)}</Primary>
+                  </Button>
+                  <div style={{marginLeft: '0.5em'}} 
+                    data-position={'top'}
+                    data-tooltip="blah">
+                    <Button onClick={()=>{navigator.clipboard.writeText(this.state.wallet)}}>
+                      <Primary>🔗</Primary>
+                    </Button>
+                  </div>
+                </div>
 
                 <p>{this.state.hdao} ○</p>
 

@@ -107,17 +107,24 @@ export const ItemInfo = ({
                 <CollabIssuerInfo address={ creatorAddress } />
               )}
               {!isCollab && (
-                <Button
-                  to={
-                    `/tz/${creator.address}`
-                  }
-                >
-                  {creator.name ? (
-                    <Primary>{encodeURI(creator.name)}</Primary>
-                  ) : (
-                    <Primary>{walletPreview(creator.address)}</Primary>
-                  )}
-                </Button>
+                <div style={{ display: 'flex' }}>
+                  <Button
+                    to={
+                      `/tz/${creator.address}`
+                    }
+                  >
+                    {creator.name ? (
+                      <Primary>{encodeURI(creator.name)}</Primary>
+                    ) : (
+                      <Primary>{walletPreview(creator.address)}</Primary>
+                    )}
+                  </Button>
+                  <div style={{marginLeft: '0.5em'}}>
+                    <Button onClick={()=>{navigator.clipboard.writeText(creator.address)}}>
+                      <Primary>🔗</Primary>
+                    </Button>
+                  </div>
+                </div>
               )}
             </div>
             {!feed && (
