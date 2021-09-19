@@ -148,6 +148,22 @@ export class Config extends Component {
     ls.set('hDAO_config', this.state.vote)
   }
 
+  hDAO_config_default = () => {
+    this.setState({ vote: '' })
+    document.querySelector('input[name="vote"]').value = ''
+    ls.set('hDAO_config', '')
+  }
+
+  rpc_config = () => {
+    ls.set('rpc_config', this.state.rpc)
+  }
+
+  rpc_config_default = () => {
+    this.setState({ rpc: '' })
+    document.querySelector('input[name="rpc"]').value = ''
+    ls.set('rpc_config', '')
+  }
+
   toogle = () => this.setState({ toogled: !this.state.toogled })
   /*     
 
@@ -244,21 +260,46 @@ export class Config extends Component {
         {
           this.state.toogled ?
             <Container>
-              <Padding>
-                <Input
-                  name="vote"
-                  onChange={this.handleChange}
-                  placeholder="hDAO Curation"
-                  label="hDAO Curation"
-                  value={undefined}
-                />
+              <div style={{background: '#8881',padding: '1rem'}}>
+                <br/>
+                <Padding>
+                  <Input
+                    name="vote"
+                    onChange={this.handleChange}
+                    placeholder="hDAO Curation"
+                    label="hDAO Curation Value"
+                    value={ls.get('hDAO_config')}
+                  />
 
-                <Button onClick={this.hDAO_config}>
-                  <Curate>Save ○</Curate>
-                </Button>
+                  <Button onClick={this.hDAO_config}>
+                    <Curate>Update ○</Curate>
+                  </Button>
+                  &nbsp;
+                  <Button onClick={this.hDAO_config_default}>
+                    <Curate>Default ○</Curate>
+                  </Button>
 
-                <p>hic et nunc DAO ○ curation parameter</p>
-              </Padding>
+                </Padding>
+                <br/>
+                <Padding>
+                  <Input
+                    name="rpc"
+                    onChange={this.handleChange}
+                    placeholder="RPC Node"
+                    label="RPC Node"
+                    value={ls.get('rpc_config')}
+                  />
+
+                  <Button onClick={this.rpc_config}>
+                    <Curate>Update Node</Curate>
+                  </Button>
+                  &nbsp;
+                  <Button onClick={this.rpc_config_default}>
+                    <Curate>Default ○</Curate>
+                  </Button>
+
+                </Padding>
+              </div>
             </Container>
             :
             undefined
