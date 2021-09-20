@@ -13,6 +13,7 @@ import { GetUserMetadata } from '../../data/api'
 import { ResponsiveMasonry } from '../../components/responsive-masonry'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import styles from './styles.module.scss'
+import { NFTStorage } from 'nft.storage'
 
 const axios = require('axios')
 const fetch = require('node-fetch')
@@ -563,6 +564,10 @@ export default class Display extends Component {
     this.context.batch_cancel(this.state.marketV1.slice(0, 10))
   }
 
+  collect = (event) => {
+    alert('hello')
+  }
+
   getDiscordTooltip() {
     const handleSize = this.state.discord.length;
     const missingSize = handleSize - 6;
@@ -924,34 +929,41 @@ export default class Display extends Component {
             >
               <ResponsiveMasonry>
                 {this.state.items.map((nft) => {
-                  console.log(nft)
+                  // console.log('swappssss ' + JSON.stringify(nft))
+                  // console.log(nft.swaps.length > 0 ? 'nft asdfadf: ' + JSON.stringify(nft.swaps[0].price) : 'asdf')
                   return (
-                    <Button 
-                      style={{ positon: 'relative' }} 
-                      key={nft.id} 
-                      to={`${PATH.OBJKT}/${nft.id}`}>
-                      <div className={styles.card}>
-                        <div className={styles.cardText}>
-                          <div>#{nft.id}</div>
-                          <div>{nft.title}</div>
+                    <div className={styles.cardContainer}>
+                      <Button 
+                        style={{ positon: 'relative' }} 
+                        key={nft.id} 
+                        to={`${PATH.OBJKT}/${nft.id}`}>
+                        <div className={styles.container}>
+                          {renderMediaType({
+                            mimeType: nft.mime,
+                            artifactUri: nft.artifact_uri,
+                            displayUri: nft.display_uri,
+                            displayView: true
+                          })}
                         </div>
-                        <div className={styles.cardCollect}>
-                          <Purchase>
-                            <div className={styles.cardCollectPrice}>
-                              collect for 24 tez
-                            </div>
-                          </Purchase>
+                      </Button>
+                      <div className={styles.cardContainer}>
+                        <div className={styles.card}>
+                          <div className={styles.cardText}>
+                            <div>OBJKT#{nft.id}</div>
+                            <div>{nft.title}</div>
+                          </div>
+                          <div className={styles.cardCollect}>
+                            <Button onClick={() => this.collect(nft.id, nft.id)}>
+                              <Purchase>
+                                <div className={styles.cardCollectPrice}>
+                                  {nft.swaps && nft.swaps.length > 0 ? 'collect for ' + nft.swaps[0].price / 1000000 + ' tez' : 'not for sale'}
+                                </div>
+                              </Purchase>
+                            </Button>
+                          </div>
                         </div>
                       </div>
-                      <div className={styles.container}>
-                        {renderMediaType({
-                          mimeType: nft.mime,
-                          artifactUri: nft.artifact_uri,
-                          displayUri: nft.display_uri,
-                          displayView: true
-                        })}
-                      </div>
-                    </Button>
+                    </div>
                   )
                 })}
               </ResponsiveMasonry>
@@ -1057,12 +1069,22 @@ export default class Display extends Component {
             >
               <ResponsiveMasonry>
                 {this.state.items.map((nft) => {
-                  console.log('nft asdfadf: ' + JSON.stringify(nft))
+                  console.log('nft: ' + JSON.stringify(nft))
                   return (
-                    <Button className={styles.cardContainer} 
-                      style={{ position: 'relative' }} 
-                      key={nft.token.id} 
-                      to={`${PATH.OBJKT}/${nft.token.id}`}>
+                    <div className={styles.cardContainer}>
+                      <Button
+                        style={{ position: 'relative' }}
+                        key={nft.token.id}
+                        to={`${PATH.OBJKT}/${nft.token.id}`}>
+                        <div className={styles.container}>
+                          {renderMediaType({
+                            mimeType: nft.token.mime,
+                            artifactUri: nft.token.artifact_uri,
+                            displayUri: nft.token.display_uri,
+                            displayView: true
+                          })}
+                        </div>
+                      </Button>
                       <div className={styles.card}>
                         <div className={styles.cardText}>
                           <div>OBJKT#{nft.token.id}</div>
@@ -1070,22 +1092,16 @@ export default class Display extends Component {
                           <div>{nft.token.creator.name}</div>
                         </div>
                         <div className={styles.cardCollect}>
-                          <Purchase>
-                            <div className={styles.cardCollectPrice}>
-                              collect for 24 tez
-                            </div>
-                          </Purchase>
+                          <Button onClick={() => this.collect(nft.token.id, nft.token.id)}>
+                            <Purchase>
+                              <div className={styles.cardCollectPrice}>
+                                {nft.price ? 'collect for ' + nft.price / 1000000 : 'not for sale'}
+                              </div>
+                            </Purchase>
+                          </Button>
                         </div>
                       </div>
-                      <div className={styles.container}>
-                        {renderMediaType({
-                          mimeType: nft.token.mime,
-                          artifactUri: nft.token.artifact_uri,
-                          displayUri: nft.token.display_uri,
-                          displayView: true
-                        })}
-                      </div>
-                    </Button>
+                    </div>
                   )
                 })}
               </ResponsiveMasonry>

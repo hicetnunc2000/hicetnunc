@@ -1,4 +1,5 @@
 @import '../../styles/layout.scss';
+@import '../../styles/mixins.scss';
 @import '../../styles/variables.scss';
 
 .profile {
@@ -53,9 +54,10 @@
   color #{$theme-duration} ease-out, opacity ease-out #{$theme-duration};
   z-index: 100;
   opacity: 0;
-  &:hover {
-    opacity: 1;
-  }
+}
+
+.cardContainer:hover .card {
+  opacity: 1;
 }
 
 .cardText {
@@ -66,6 +68,7 @@
 }
 
 .cardCollect {
+  @include resetButton;
   position: absolute;
   bottom: 0;
   right: 0;
