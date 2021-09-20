@@ -42,6 +42,7 @@ thumbnail_uri
 title
 supply
 royalties
+extra
 swaps {
   amount
   amount_left
@@ -244,6 +245,7 @@ export const ObjktDisplay = () => {
               <div>
                 <Container>
                   <Padding>
+                    { console.log(nft) }
                     <ItemInfo {...nft} isDetailView />
                   </Padding>
                 </Container>
