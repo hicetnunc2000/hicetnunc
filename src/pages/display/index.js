@@ -372,6 +372,8 @@ export default class Display extends Component {
       collectionType: 'notForSale'
     })
 
+    this.reset()
+
     let list = await getRestrictedAddresses()
     // console.log(this.state.wallet)
     // console.log(!list.includes(this.state.wallet))
@@ -402,7 +404,6 @@ export default class Display extends Component {
     })
 
     this.setState({ items: this.state.objkts.slice(0, 15), offset: 15 })
-    this.filterCreationsForSale()
   }
 
   filterCreationsNotForSale = async () => {
@@ -424,16 +425,24 @@ export default class Display extends Component {
 
     this.setState({ marketV1: v1Swaps, loading: false })
 
+    console.log("hello")
+
+    console.log("the creations" + this.state.creations.length)
+    console.log("the objkts" + this.state.objkts.length)
+
+    this.setState({ objkts: this.state.creations, loading: false, items: [] })
+
+    console.log("the creations" + this.state.creations.length)
+    console.log("the objkts" + this.state.objkts.length)
+
     if (forSaleType !== null) {
       if (forSaleType == 0) {
         this.setState({
-          objkts: await this.filterCreationsForSalePrimary(this.state.objkts),
-          items: []
+          objkts: await this.filterCreationsForSalePrimary(this.state.objkts)        
         })
       } else if (forSaleType == 1) {
         this.setState({
-          objkts: await this.filterCreationsForSaleSecondary(this.state.objkts),
-          items: []
+          objkts: await this.filterCreationsForSaleSecondary(this.state.objkts)        
         })
       }
     } else {
@@ -457,7 +466,7 @@ export default class Display extends Component {
   filterCreationsForSaleSecondary = async () => {
     let objkts = this.state.creations.filter(item => {
       const swaps = item.swaps.filter(swaps => {
-        return swaps.status == 0
+        return swaps.status == 0 && swaps.creator_id !== this.state.wallet
       })
       return swaps && swaps.length > 0
     });
