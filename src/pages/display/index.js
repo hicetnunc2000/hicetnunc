@@ -92,6 +92,7 @@ query creatorGallery($address: String!) {
       status
       amount_left
       creator_id
+      contract_version
       creator {
         address
       }
@@ -413,7 +414,7 @@ export default class Display extends Component {
     return objkts
   }
 
-  creationsForSale = async () => {
+  creationsForSale = async (forSaleType) => {
     this.setState({ collectionType: 'forSale' })
 
     let v1Swaps = this.state.marketV1.filter(item => {
@@ -423,15 +424,37 @@ export default class Display extends Component {
 
     this.setState({ marketV1: v1Swaps, loading: false })
 
-    this.setState({
-      objkts: await this.filterCreationsForSale(this.state.objkts),
-      items: []
-    })
+    if (forSaleType !== null) {
+      if (forSaleType == 0) {
+        this.setState({
+          objkts: await this.filterCreationsForSalePrimary(this.state.objkts),
+          items: []
+        })
+      } else if (forSaleType == 1) {
+        this.setState({
+          objkts: await this.filterCreationsForSaleSecondary(this.state.objkts),
+          items: []
+        })
+      }
+    } else {
+      console.log("forSaleType is null")
+    }
 
     this.setState({ items: this.state.objkts.slice(0, 15), offset: 15 })
   }
 
-  filterCreationsForSale = async () => {
+  filterCreationsForSalePrimary = async () => {
+    let objkts = this.state.creations.filter(item => {
+      const swaps = item.swaps.filter(swaps => {
+        return swaps.status == 0 && swaps.contract_version == 2 && swaps.creator_id == this.state.wallet
+      })
+      return swaps && swaps.length > 0
+    });
+
+    return objkts
+  }
+
+  filterCreationsForSaleSecondary = async () => {
     let objkts = this.state.creations.filter(item => {
       const swaps = item.swaps.filter(swaps => {
         return swaps.status == 0
@@ -841,10 +864,18 @@ export default class Display extends Component {
                 </Button>
                 <Button
                   onClick={() => {
-                    this.creationsForSale();
+                    this.creationsForSale(0);
                   }}>
                   <div className={styles.tag}>
-                    for sale
+                    primary
+                  </div>
+                </Button>
+                <Button
+                  onClick={() => {
+                    this.creationsForSale(1);
+                  }}>
+                  <div className={styles.tag}>
+                    secondary
                   </div>
                 </Button>
                 <Button
