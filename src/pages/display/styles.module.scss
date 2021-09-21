@@ -27,7 +27,6 @@
 }
 
 .container {
-  position: relative;
   .number {
     position: absolute;
     bottom: 6px;
@@ -38,6 +37,15 @@
     transition: background-color #{$theme-duration} ease-out,
       color #{$theme-duration} ease-out;
   }
+}
+
+.filter {
+  position: relative;
+  top: 2px;
+  left: -2px;
+  width: 20px;
+  height: 20px;
+  fill: var(--text-color);
 }
 
 .card {

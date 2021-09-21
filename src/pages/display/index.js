@@ -833,9 +833,13 @@ export default class Display extends Component {
               <Button onClick={() => this.setState({ 
                   filter: !this.state.filter 
                 })}>
-                <Primary>
-                  filter
-                </Primary>
+                <div className={styles.filter}>
+                  <Primary>
+                    <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 62.02 63.39">
+                      <path d="M61.61,2.53A3.23,3.23,0,0,0,58.78.87H3.23A3.23,3.23,0,0,0,.49,5.81L21.86,35V64.26l18.31-6.79V35L61.45,5.93l.08-.12A3.24,3.24,0,0,0,61.61,2.53ZM36.16,33.68v21l-10.3,3.83V33.68L4.75,4.87H57.27Z" transform="translate(0 -0.87)"/>
+                    </svg>
+                  </Primary>
+                </div>
               </Button>
             </div>
           </Padding>
