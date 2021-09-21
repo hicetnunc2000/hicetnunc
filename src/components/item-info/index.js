@@ -92,6 +92,11 @@ export const ItemInfo = ({
       )
     }
 
+    const reverseImageSearch = (imgurl) => {
+      window.open(`https://tineye.com/search/?url=${imgurl.replace('ipfs://','https://ipfs.io/ipfs/')}`,'_blank');
+      window.open(`https://www.google.com/searchbyimage?image_url=${imgurl.replace('ipfs://','https://ipfs.io/ipfs/')}`,'_blank');
+    }
+
     // the issuer path depends on whether it's a collab address (KT) or individual (tz)
     const { ISSUER, COLLAB } = PATH
     const creatorAddress = creator.address
@@ -180,11 +185,7 @@ export const ItemInfo = ({
                 </Primary>
               </Button>
               &nbsp; */}
-              <Button onClick={(e)=>{
-                e.preventDefault()
-                window.open(`https://tineye.com/search/?url=${artifact_uri.replace('ipfs://','https://ipfs.io/ipfs/')}`,'_blank');
-                window.open(`https://www.google.com/searchbyimage?image_url=${artifact_uri.replace('ipfs://','https://ipfs.io/ipfs/')}`,'_blank');
-              }}>
+              <Button onClick={()=>{reverseImageSearch(artifact_uri)}}>
                 <Primary>
                   <span
                     className={styles.top}
