@@ -262,7 +262,7 @@ export const Feeds = ({ type }) => {
     setCreators(creators.concat(result.map(e => e.creator_id)))
     result = result.filter(e => !creators.includes(e.creator_id))
     let arr = result.map(e => e.creator_id)
-    console.log(await GetUserClaims(arr))
+    //console.log(await GetUserClaims(arr))
     let restricted = await getRestrictedAddresses()
     result = result.filter(e => !restricted.includes(e.creator_id))
     const next = items.concat(result)
