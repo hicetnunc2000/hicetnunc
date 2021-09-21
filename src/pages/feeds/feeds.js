@@ -20,7 +20,7 @@ const customFloor = function (value, roundTo) {
   return Math.floor(value / roundTo) * roundTo
 }
 
-const GetUserClaims = async (arr) => {
+/* const GetUserClaims = async (arr) => {
   console.log(JSON.stringify(arr))
   return await axios.post('https://indexer.tzprofiles.com/v1/graphql', {
     query: `query MyQuery {
@@ -32,7 +32,7 @@ const GetUserClaims = async (arr) => {
     variables: undefined,
     operationName: 'MyQuery',
   })
-}
+} */
 
 const latest_feed = `
 query LatestFeed($lastId: bigint = 99999999) {
