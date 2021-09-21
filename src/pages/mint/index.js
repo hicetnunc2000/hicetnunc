@@ -20,6 +20,8 @@ import {
   MIN_ROYALTIES,
   MAX_ROYALTIES,
 } from '../../constants'
+import styles from './styles.module.scss'
+
 
 const coverOptions = {
   quality: 0.85,
@@ -262,6 +264,12 @@ export const Mint = () => {
         <>
           <Container>
             <Padding>
+              <div className={styles.titlediv}>
+                <h2 className={styles.title}>
+                    Mint OBJKT
+                </h2>
+              </div>
+
               <Input
                 type="text"
                 onChange={(e) => setTitle(e.target.value)}
@@ -354,6 +362,11 @@ export const Mint = () => {
         <>
           <Container>
             <Padding>
+            <div className={styles.titlediv}>
+                <h2 className={styles.title}>
+                    Mint OBJKT / Preview
+                </h2>
+              </div>
               <div style={{ display: 'flex' }}>
                 <Button onClick={() => setStep(0)} fit>
                   <Primary>

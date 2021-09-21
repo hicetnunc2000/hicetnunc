@@ -33,7 +33,8 @@
       letter-spacing: $letter-spacing;
       // border-bottom: 1px solid var(--text-color);
       // border: 1px dashed red;
-      margin-bottom: 10px;
+      margin-bottom: 35px;
+      border-bottom: 1px solid var(--border-color);
 
       &::placeholder {
         color: var(--text-color);
