@@ -20,14 +20,19 @@ const customFloor = function (value, roundTo) {
   return Math.floor(value / roundTo) * roundTo
 }
 
-const tz_profiles = `
-query profiles {
-  tzprofiles(where: {account: {_in: $arr }}) {
-    account
-    contract
-  }
+const GetUserClaims = async (arr) => {
+  console.log(JSON.stringify(arr))
+  return await axios.post('https://indexer.tzprofiles.com/v1/graphql', {
+    query: `query MyQuery {
+      tzprofiles(where: {account: {_in: ${JSON.stringify(arr)}}}) { 
+        account 
+        valid_claims 
+      }
+    }`,
+    variables: undefined,
+    operationName: 'MyQuery',
+  })
 }
-`
 
 const latest_feed = `
 query LatestFeed($lastId: bigint = 99999999) {
@@ -66,7 +71,9 @@ const query_hdao = `query hDAOFeed($offset: Int = 0) {
 }`
 
 async function fetchProfiles(arr) {
-  const { errors, data } = await fetchGraphQLProfiles(tz_profiles, "profiles", { "arr": arr })
+  const { errors, data } = await fetchGraphQLProfiles(
+  tzprofiles, "MyQuery", {})
+  console.log(data)
   return data.tzprofiles
 }
 
@@ -254,7 +261,8 @@ export const Feeds = ({ type }) => {
     result = _.uniqBy(result, 'creator_id')
     setCreators(creators.concat(result.map(e => e.creator_id)))
     result = result.filter(e => !creators.includes(e.creator_id))
-
+    let arr = result.map(e => e.creator_id)
+    console.log(await GetUserClaims(arr))
     let restricted = await getRestrictedAddresses()
     result = result.filter(e => !restricted.includes(e.creator_id))
     const next = items.concat(result)
