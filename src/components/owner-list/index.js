@@ -1,14 +1,12 @@
 import React from 'react'
-import { Button, Primary } from '../button'
+import { Button, Primary, Purchase } from '../button'
 import { walletPreview } from '../../utils/string'
 import styles from './styles.module.scss'
 
-export const OwnerList = ({ owners, creator_id, acc, swaps }) => {
-
-  owners = owners.filter(e => e.holder_id !== 'tz1burnburnburnburnburnburnburjAYjjX' && e.holder_id !== 'KT1HbQepzV1nVGg8QVznG7z4RcHseD5kwqBn' && e.holder_id !== 'KT1Hkg5qeNhfwpKW4fXvq7HGZB9z2EnmCCA9')
-
+export const OwnerList = ({ owners, creator_id, acc, swaps, cancelv1 }) => {
+  console.log(swaps)
+  owners = owners.filter(e => e.holder_id !== 'tz1burnburnburnburnburnburnburjAYjjX' && e.holder_id !== 'KT1HbQepzV1nVGg8QVznG7z4RcHseD5kwqBn')
   return (
-
 
     <div className={styles.container}>
       {owners.map(({ quantity, holder_id, holder, creator_id }, index) => (
@@ -28,27 +26,12 @@ export const OwnerList = ({ owners, creator_id, acc, swaps }) => {
                   <Primary>{walletPreview(holder_id)}</Primary>
                 </Button>
                 :
-                undefined
+                <Button to={`/tz/${holder_id}`}>
+                  <Primary>OBJKTSWAP_V1</Primary>
+                </Button>
           }
         </div>
       ))}
-      {
-        swaps.map((e, index) => {
-
-              return (
-                <div>
-                  <div key={`${e.id}-${index}`} className={styles.swap}>
-                    <div className={styles.issuer}>
-                      {e.amount_left} ed.&nbsp;
-                      <Button to={'/tz/KT1Hkg5qeNhfwpKW4fXvq7HGZB9z2EnmCCA9'}>
-                        <Primary>OBJKTSWAP V1</Primary>
-                      </Button>
-                    </div>
-                  </div>
-                </div>
-              )
-        })
-      }
     </div>
   )
 }
