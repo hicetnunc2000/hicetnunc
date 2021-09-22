@@ -40,12 +40,17 @@
 }
 
 .filter {
-  position: relative;
-  top: 2px;
-  left: -2px;
-  width: 20px;
-  height: 20px;
-  fill: var(--text-color);
+  display: inline;
+  float: right;
+
+  svg {
+    position: relative;
+    top: 2px;
+    left: -2px;
+    width: 20px;
+    height: 20px;
+    fill: var(--background-color);
+  }
 }
 
 .card {
