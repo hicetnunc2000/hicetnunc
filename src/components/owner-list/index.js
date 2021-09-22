@@ -34,8 +34,7 @@ export const OwnerList = ({ owners, creator_id, acc, swaps }) => {
       ))}
       {
         swaps.map((e, index) => {
-          if (acc) {
-            if (acc && !acc.address == e.creator_id) {
+
               return (
                 <div>
                   <div key={`${e.id}-${index}`} className={styles.swap}>
@@ -48,12 +47,6 @@ export const OwnerList = ({ owners, creator_id, acc, swaps }) => {
                   </div>
                 </div>
               )
-            } else {
-              return undefined
-            }
-          } else {
-            return undefined
-          }
         })
       }
     </div>
