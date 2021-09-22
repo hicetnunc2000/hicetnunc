@@ -46,21 +46,13 @@
 }
 
 .purchase {
-  margin-top: 1em;
-  margin-bottom: 2em;
-  width: calc(100vw - 1em);
-
   padding: 2px 6px;
+
   color: var(--text-color);
   border-right: 2px solid var(--text-color);
   border-bottom: 2px solid var(--text-color);
   transition: border-color #{$theme-duration} ease-out,
     color #{$theme-duration} ease-out;
-
-  @include respond-to('desktop'){
-    width: auto;
-    margin: 0;
-  }
 }
 
 .curate {
@@ -76,4 +68,16 @@
   border-bottom: 2px solid var(--text-color);
   transition: border-color #{$theme-duration} ease-out,
     color #{$theme-duration} ease-out;
+}
+
+.primary__purchase {
+  width: calc(100vw - 2em);
+
+  margin-top: 1em;
+  margin-bottom: 2em;
+
+  @include respond-to('desktop'){
+    width: auto;
+    margin: 0;
+  }
 }

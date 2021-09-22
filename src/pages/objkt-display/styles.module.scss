@@ -15,8 +15,12 @@
   }
 }
 
+.history__container {
+  margin: 0 1em;
+}
+
 .history {
-  margin: 0 20px;
+  // margin: 0 20px;
   height: 95px;
 
   font-size: 14.2px;
@@ -28,12 +32,10 @@
 
   margin-top: 18px;
   margin-bottom: 15px;
-  border-bottom: 1px solid #E6E6E6;
+  border-bottom: 1px solid var(--border-color);
 
   a, .history__mint__op {
     min-width: 0px;
-
-    margin-right: 14px;
 
     font-size: 13.33px;
 
@@ -79,7 +81,7 @@
   font-size: 14.2px;
   margin-bottom: 8px;
 
-  color: #666666;
+  color: var(--border-color);
 
   @include respond-to('desktop') {
     display: flex;
@@ -99,6 +101,11 @@
 
     width: calc(7% + 35px);
   }
+
+  svg {
+    width: 16px;
+    height: 16px;
+  }
 }
 
 .history__event, .history__from, .history__to, .history__ed, .history__price, .history__date {
@@ -112,6 +119,10 @@
     overflow: hidden;
     text-overflow: clip;
   }
+}
+
+.history__date {
+  overflow: visible;
 }
 
 .history__event {
@@ -156,7 +167,7 @@
 }
 
 .history__secondary {
-  color: #4D4D4D;
+  color: var(--secondary-color);
   margin-right: 1em;
 }
 

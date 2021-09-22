@@ -60,10 +60,11 @@ export const Secondary = ({ children = null, selected }) => {
   return <div className={classes}>{children}</div>
 }
 
-export const Purchase = ({ children = null, selected }) => {
+export const Purchase = ({ children = null, selected, primary }) => {
   const classes = classnames({
     [styles.purchase]: true,
     [styles.selected]: selected,
+    [styles.primary__purchase]: primary,
   })
   return <div className={classes}>{children}</div>
 }
