@@ -73,9 +73,7 @@
 .primary__purchase {
   width: calc(100vw - 2em);
 
-  margin-top: 1em;
-  margin-bottom: 2em;
-
+  margin: 1em 0;
   @include respond-to('desktop'){
     width: auto;
     margin: 0;

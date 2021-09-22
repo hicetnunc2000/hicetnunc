@@ -31,23 +31,24 @@ export const OwnerSwaps = ({ swaps, handleCollect, acc, cancel, restricted }) =>
             {!restricted && (
               <div className={styles.buttons}>
                 <Button onClick={() => handleCollect(swap.id, swap.price)}>
-                  <Purchase>
+                  <Purchase primary={true}>
                     collect for {parseFloat(swap.price / 1000000)} tez
                   </Purchase>
                 </Button>
+
+                {swap.creator.address ===
+                  (acc !== undefined ? acc.address : '') && (
+                    <Button onClick={() => cancel(swap.id)}>
+                      <Purchase primary={true}>cancel</Purchase>
+                    </Button>
+                  )
+                }
               </div>
             )}
-            <div className={styles.buttons}>
-              {swap.creator.address ===
-                (acc !== undefined ? acc.address : '') && (
-                  <Button onClick={() => cancel(swap.id)}>
-                    <Purchase>cancel</Purchase>
-                  </Button>
-                )}
-            </div>
           </div>
         )
       })}
+      <div className={styles.border} />
     </div>
   )
 }

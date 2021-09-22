@@ -4,9 +4,13 @@
   display: flex;
   flex-direction: column;
 
+  margin: 0 1em;
+
   .owner {
     display: flex;
     align-items: center;
     color: var(--text-color);
+
+    margin-bottom: 10px;
   }
 }
