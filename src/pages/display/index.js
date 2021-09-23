@@ -994,7 +994,7 @@ export default class Display extends Component {
                         <div className={styles.card}>
                           <div className={styles.cardText}>
                             <div>OBJKT#{nft.id}</div>
-                            <div>{nft.title}</div>
+                            <div className={styles.cardTitle}>{nft.title}</div>
                           </div>
                           <div className={styles.cardCollect}>
                             <Button onClick={() => this.collect(nft.id, nft.id)}>
