@@ -27,7 +27,7 @@ export const OwnerList = ({ owners, creator_id, acc, swaps, cancelv1 }) => {
                 </Button>
                 :
                 <Button to={`/tz/${holder_id}`}>
-                  <Primary>OBJKTSWAP_V1</Primary>
+                  <Primary>OBJKTSWAP V1</Primary>
                 </Button>
           }
         </div>
