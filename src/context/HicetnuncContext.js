@@ -391,6 +391,10 @@ class HicetnuncContextProviderClass extends Component {
       },
 
       collect: async (swap_id, amount) => {
+        console.log('collectv2')
+        console.log('swap_id ' + swap_id)
+        console.log('xtz ' + amount)
+        console.log('collectv2')
         return await Tezos.wallet
           .at(this.state.proxyAddress || this.state.v2)
           .then((c) =>
