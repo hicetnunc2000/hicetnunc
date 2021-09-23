@@ -20,19 +20,14 @@ const customFloor = function (value, roundTo) {
   return Math.floor(value / roundTo) * roundTo
 }
 
-/* const GetUserClaims = async (arr) => {
-  console.log(JSON.stringify(arr))
-  return await axios.post('https://indexer.tzprofiles.com/v1/graphql', {
-    query: `query MyQuery {
-      tzprofiles(where: {account: {_in: ${JSON.stringify(arr)}}}) { 
-        account 
-        valid_claims 
-      }
-    }`,
-    variables: undefined,
-    operationName: 'MyQuery',
-  })
-} */
+const tz_profiles = `
+query profiles {
+  tzprofiles(where: {account: {_in: $arr }}) {
+    account
+    contract
+  }
+}
+`
 
 const latest_feed = `
 query LatestFeed($lastId: bigint = 99999999) {
@@ -71,9 +66,7 @@ const query_hdao = `query hDAOFeed($offset: Int = 0) {
 }`
 
 async function fetchProfiles(arr) {
-  const { errors, data } = await fetchGraphQLProfiles(
-  tzprofiles, "MyQuery", {})
-  console.log(data)
+  const { errors, data } = await fetchGraphQLProfiles(tz_profiles, "profiles", { "arr": arr })
   return data.tzprofiles
 }
 
@@ -184,9 +177,17 @@ async function fetchRandomObjkts() {
 const getRestrictedAddresses = async () =>
   await axios
     .get(
-      'https://raw.githubusercontent.com/hicetnunc2000/hicetnunc-reports/main/filters/w.json'
+      'https://raw.githubusercontent.com/hicetnunc2000/hicetnunc/main/filters/w.json'
     )
     .then((res) => res.data)
+
+const GetUserClaims = async (arr) => {
+  return await axios.post('https://indexer.tzprofiles.com/v1/graphql', {
+    query: `query MyQuery { tzprofiles_by_pk(account: \"${walletAddr}\") { valid_claims } }`,
+    variables: null,
+    operationName: 'MyQuery',
+  })
+}
 
 const ONE_MINUTE_MILLIS = 60 * 1000
 
@@ -201,11 +202,11 @@ export const Feeds = ({ type }) => {
   const startTime = customFloor(Date.now(), ONE_MINUTE_MILLIS)
 
   const loadMore = async () => {
-    if (type === 1) {
+/*     if (type === 1) {
       await getHdaoFeed()
-    }
-    if (type === 2) await getRandomFeed()
-    if (type === 3) await getLatest(Math.min.apply(Math, items.map(e => e.id)))
+    } */
+    await getRandomFeed()
+    //if (type === 3) await getLatest(Math.min.apply(Math, items.map(e => e.id)))
   }
 
   useEffect(async () => {
@@ -214,7 +215,7 @@ export const Feeds = ({ type }) => {
       return
     }
     console.log(type)
-    if (type === 0) {
+/*     if (type === 0) {
       GetLatestFeed({ counter: count, max_time: startTime })
         .then((result) => {
           const next = items.concat(result)
@@ -230,10 +231,10 @@ export const Feeds = ({ type }) => {
         })
     } else if (type === 1) {
       await getHdaoFeed()
-    } else if (type === 2) {
+    } else if (type === 2) { */
       await getRandomFeed()
-    } else if (type === 3) {
-      await getLatest(lastId)
+/*     } else if (type === 3) {
+      await getLatest(lastId) */
 
       /*       GetFeaturedFeed({ counter: count, max_time: startTime })
         .then((result) => {
@@ -249,7 +250,7 @@ export const Feeds = ({ type }) => {
         .catch((e) => {
           setError(true)
         }) */
-    }
+    //}
   }, [count, type])
 
   const getLatest = async (id) => {
@@ -261,8 +262,7 @@ export const Feeds = ({ type }) => {
     result = _.uniqBy(result, 'creator_id')
     setCreators(creators.concat(result.map(e => e.creator_id)))
     result = result.filter(e => !creators.includes(e.creator_id))
-    let arr = result.map(e => e.creator_id)
-    //console.log(await GetUserClaims(arr))
+
     let restricted = await getRestrictedAddresses()
     result = result.filter(e => !restricted.includes(e.creator_id))
     const next = items.concat(result)
@@ -322,7 +322,7 @@ export const Feeds = ({ type }) => {
           </Padding>
         </Container>
       }
-{/*       <BottomBanner>
+      {/*       <BottomBanner>
         API is down due to heavy server load — We're working to fix the issue — please be patient with us. <a href="https://discord.gg/mNNSpxpDce" target="_blank">Join the discord</a> for updates.
       </BottomBanner> */}
     </Page>
