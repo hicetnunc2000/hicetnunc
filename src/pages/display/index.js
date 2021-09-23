@@ -89,6 +89,7 @@ query creatorGallery($address: String!) {
     description
     supply
     swaps(order_by: {price: asc}, limit: 1, where: {amount_left: {_gte: "1"}, status: {_eq: "0"}}) {
+      id
       status
       amount_left
       creator_id
@@ -997,7 +998,7 @@ export default class Display extends Component {
                             <div className={styles.cardTitle}>{nft.title}</div>
                           </div>
                           <div className={styles.cardCollect}>
-                            <Button onClick={() => this.collect(nft.id, nft.id)}>
+                            <Button onClick={() => this.context.collect(nft.swaps[0].id, nft.swaps[0].price)}>
                               <Purchase>
                                 <div className={styles.cardCollectPrice}>
                                   {nft.swaps && nft.swaps.length > 0 ? 'collect for ' + nft.swaps[0].price / 1000000 + ' tez' : 'not for sale'}
@@ -1136,7 +1137,7 @@ export default class Display extends Component {
                           <div>{nft.token.creator.name}</div>
                         </div>
                         <div className={styles.cardCollect}>
-                          <Button onClick={() => this.collect(nft.token.id, nft.token.id)}>
+                          <Button onClick={() => this.context.collect(nft.id, nft.price)}>
                             <Purchase>
                               <div className={styles.cardCollectPrice}>
                                 {nft.price ? 'collect for ' + nft.price / 1000000 : 'not for sale'}
