@@ -425,16 +425,7 @@ export default class Display extends Component {
     })
 
     this.setState({ marketV1: v1Swaps, loading: false })
-
-    console.log("hello")
-
-    console.log("the creations" + this.state.creations.length)
-    console.log("the objkts" + this.state.objkts.length)
-
     this.setState({ objkts: this.state.creations, loading: false, items: [] })
-
-    console.log("the creations" + this.state.creations.length)
-    console.log("the objkts" + this.state.objkts.length)
 
     if (forSaleType !== null) {
       if (forSaleType == 0) {
@@ -595,10 +586,6 @@ export default class Display extends Component {
 
   cancel_batch = async () => {
     this.context.batch_cancel(this.state.marketV1.slice(0, 10))
-  }
-
-  collect = (event) => {
-    alert('hello')
   }
 
   getDiscordTooltip() {
@@ -974,8 +961,7 @@ export default class Display extends Component {
             >
               <ResponsiveMasonry>
                 {this.state.items.map((nft) => {
-                  // console.log('swappssss ' + JSON.stringify(nft))
-                  // console.log(nft.swaps.length > 0 ? 'nft asdfadf: ' + JSON.stringify(nft.swaps[0].price) : 'asdf')
+                  // console.log('swaps ' + JSON.stringify(nft))
                   return (
                     <div className={styles.cardContainer}>
                       <Button 
@@ -1114,7 +1100,7 @@ export default class Display extends Component {
             >
               <ResponsiveMasonry>
                 {this.state.items.map((nft) => {
-                  console.log('nft: ' + JSON.stringify(nft))
+                  //console.log('nft: ' + JSON.stringify(nft))
                   return (
                     <div className={styles.cardContainer}>
                       <Button
