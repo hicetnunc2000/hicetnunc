@@ -63,3 +63,7 @@
   transition: border-color #{$theme-duration} ease-out,
     color #{$theme-duration} ease-out;
 }
+
+.left {
+  text-align: left;
+}

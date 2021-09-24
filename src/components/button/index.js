@@ -44,10 +44,11 @@ export const Button = ({
   )
 }
 
-export const Primary = ({ children = null, selected }) => {
+export const Primary = ({ children = null, selected, left }) => {
   const classes = classnames({
     [styles.primary]: true,
     [styles.selected]: selected,
+    [styles.left]: left,
   })
   return <div className={classes}>{children}</div>
 }
