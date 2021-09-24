@@ -136,7 +136,7 @@ export const ItemInfo = ({
           {feed && (
             <div className={styles.objktContainer}>
               <Button to={`${PATH.OBJKT}/${id}`} disabled={isDetailView}>
-                <Primary>OBJKT#{id}</Primary>
+                <Primary>OBJKT&nbsp;#{id}</Primary>
               </Button>
             </div>
           )}
@@ -145,7 +145,7 @@ export const ItemInfo = ({
         <div className={styles.spread}>
           <div className={styles.spread__inner} style={{ paddingBottom: '7.5px' }}>
             {isDetailView && !restricted && (
-                <p>OBJKT#{id}</p>
+                <p>OBJKT&nbsp;#{id}</p>
             )}
             <Button onClick={() => curate(id)}>
               <Primary>
@@ -187,7 +187,7 @@ export const ItemInfo = ({
           </div>
           <div className={styles.objktContainer}>
             <Button to={`${PATH.OBJKT}/${id}`}>
-              <Primary>OBJKT#{id}</Primary>
+              <Primary>OBJKT&nbsp;#{id}</Primary>
             </Button>
             <Button onClick={() => curate(id)}>
               <Primary>

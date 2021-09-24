@@ -81,7 +81,7 @@
   font-size: 14.2px;
   margin-bottom: 8px;
 
-  color: var(--border-color);
+  color: var(--secondary-color);
 
   @include respond-to('desktop') {
     display: flex;
