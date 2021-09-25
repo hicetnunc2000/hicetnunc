@@ -28,49 +28,49 @@ export class FAQ extends Component {
                 <li className={styles.buttons}>
                   <Button href="https://github.com/hicetnunc2000/hicetnunc/wiki/Getting-Started-with-Tezos">
                     <Primary>
-                      how do I get tezos/make a wallet?
+                      How do I get tezos/make a wallet?
                     </Primary>
                   </Button>
                 </li>
                 <li className={styles.buttons}>
                   <Button href="https://github.com/hicetnunc2000/hicetnunc/wiki/Introduction">
                     <Primary>
-                      how do I mint?
+                      How do I mint?
                     </Primary>
                   </Button>
                 </li>
                 <li className={styles.buttons}>
                   <Button href="https://github.com/hicetnunc2000/hicetnunc/wiki/Edit-your-profile">
                     <Primary>
-                      how do I edit my profile?
+                      How do I edit my profile?
                     </Primary>
                   </Button>
                 </li>
                 <li className={styles.buttons}>
                   <Button href="https://github.com/hicetnunc2000/hicetnunc/wiki/How-to-swap-%F0%9F%94%83">
                     <Primary>
-                      how do I add/change the price of my OBJKT?
+                      How do I add/change the price of my OBJKT?
                     </Primary>
                   </Button>
                 </li>
                 <li className={styles.buttons}>
                   <Button href="https://github.com/hicetnunc2000/hicetnunc/wiki/How-to-burn-%F0%9F%94%A5">
                     <Primary>
-                      how do I burn my OBJKT?
+                      How do I burn my OBJKT?
                     </Primary>
                   </Button>
                 </li>
                 <li className={styles.buttons}>
                   <Button href="https://github.com/hicetnunc2000/hicetnunc/wiki/How-to-resell-%F0%9F%8F%AA">
                     <Primary>
-                      how do I resell an OBJKT?
+                      How do I resell an OBJKT?
                     </Primary>
                   </Button>
                 </li>
                 <li className={styles.buttons}>
                   <Button href="https://github.com/hicetnunc2000/hicetnunc/wiki/hDAO">
                     <Primary>
-                      what is hDAO ○?
+                      What is hDAO?
                     </Primary>
                   </Button>
                 </li>
@@ -94,21 +94,21 @@ export class FAQ extends Component {
                 <li className={styles.buttons}>
                   <Button href="https://github.com/hicetnunc2000/hicetnunc/wiki/General">
                     <Primary>
-                      general faq
+                      General FAQ
                     </Primary>
                   </Button>
                 </li>
                 <li className={styles.buttons}>
                   <Button href="https://github.com/hicetnunc2000/hicetnunc/wiki/Troubleshooting">
                     <Primary>
-                      troubleshooting
+                      Troubleshooting
                     </Primary>
                   </Button>
                 </li>
                 <li className={styles.buttons}>
                   <Button href="https://github.com/hicetnunc2000/hicetnunc/wiki/Tools-made-by-the-community">
                     <Primary>
-                      useful tools
+                      Useful tools
                     </Primary>
                   </Button>
                 </li>

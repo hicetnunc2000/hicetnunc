@@ -15,7 +15,7 @@
   }
 
   margin-bottom: 20px;
-  
+
   @include respond-to('desktop') {
     margin-bottom: 30px;    
   }
@@ -34,12 +34,6 @@
   font-weight: bold;
 
   margin-bottom: 0.2em;
-}
-
-.divider {
-  @include respond-to('desktop') {
-    margin-left: -1em;
-  }
 }
 
 .faq__outer__container {
