@@ -14,7 +14,7 @@ export const Info = (token_info) => {
     "&:hover": {
       textDecoration : "underline"
     },
-    color : "var(--text-color)"
+    color : "var(--gray-80)"
   }
   return (
     <>
@@ -47,8 +47,10 @@ export const Info = (token_info) => {
 
       <Container>
         <div style={{ margin: '0 1em' }}>
-          <hr style={{ marginBottom: '1em' }}/>
-          <Padding>mimetype: {mime}</Padding>
+          <hr style={{ color: 'var(--gray-20)',marginBottom: '1em' }}/>
+          <div style={{ marginBottom: '0.5em' }}>
+            <Padding>mimetype: {mime}</Padding>
+          </div>
           <Padding className="tag">
             <div style={{ fontWeight: 'bold' }}>
               <a style={tag} href={metadata.replace('ipfs://', IPFS)}>

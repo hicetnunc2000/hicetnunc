@@ -285,7 +285,7 @@ export const ObjktDisplay = () => {
 
                             objktView={true}
                           >
-                            <Primary selected={tabIndex === index}>
+                            <Primary selected={tabIndex === index} menu>
                               {tab.title}
                             </Primary>
                           </Button>

@@ -783,17 +783,17 @@ export default class Display extends Component {
             </p>
             <div className={styles.menu}>
               <Button onClick={this.creations}>
-                <Primary selected={this.state.creationsState}>
+                <Primary selected={this.state.creationsState} menu>
                   creations
                 </Primary>
               </Button>
 
               <Button onClick={this.collectionFull}>
-                <Primary selected={this.state.collectionState}>
+                <Primary selected={this.state.collectionState} menu>
                   collection
                 </Primary>
               </Button>
-              <Button onClick={() => this.setState({ filter: !this.state.filter })}>
+              <Button onClick={() => this.setState({ filter: !this.state.filter })} menu>
                 <Primary>
                   filter
                 </Primary>

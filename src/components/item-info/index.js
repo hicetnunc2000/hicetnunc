@@ -124,7 +124,7 @@ export const ItemInfo = ({
               <div>
                 <p>
                   <span>
-                    Editions:&nbsp;
+                    editions:&nbsp;
                     <span>
                       {ed}/{total}
                     </span>
