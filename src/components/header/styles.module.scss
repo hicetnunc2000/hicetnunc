@@ -15,6 +15,10 @@
   align-items: center;
   justify-content: center;
 
+  @include respond-to('desktop') {
+    padding: 0;
+  }
+
   .content {
     width: 100%;
     display: flex;
@@ -42,6 +46,7 @@
         width: auto;
         height: 37px;
       }
+
     }
 
     .right {
