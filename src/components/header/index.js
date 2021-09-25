@@ -141,7 +141,7 @@ export const Header = () => {
                       </Button>
                     </li>
                   </ul>
-                  { context.acc?.address ?
+                  {context.acc?.address ?
                     <ul>
                       <div className={styles.address}>
                         {walletPreview(context.acc.address)}
@@ -165,7 +165,9 @@ export const Header = () => {
                       </li>
                     </ul>
                      :
-                      null
+                     <ul>
+                        <div className={styles.no__address__text}>The present decentralized application allows its users to manage decentralized digital assets, serving as a public smart contract infrastructure on Tezos Blockchain.</div>
+                     </ul>
                     }
                 </nav>
               </Padding>

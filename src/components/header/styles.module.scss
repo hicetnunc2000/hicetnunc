@@ -134,6 +134,15 @@
 .address {
   position: absolute;
 
-  color: var(--border-color);
+  color: var(--secondary-color);
   transform: translateY(-100%);
+}
+
+.no__address__text {
+  width: 125px;
+  word-break: keep-all;
+
+  @include respond-to('desktop') {
+    width: 250px;    
+  }
 }
