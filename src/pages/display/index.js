@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Button, Primary, Secondary } from '../../components/button'
+import { Button, Primary, Secondary, Purchase } from '../../components/button'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
 import { Page, Container, Padding } from '../../components/layout'
 import { BottomBanner } from '../../components/bottom-banner'
@@ -13,6 +13,7 @@ import { GetUserMetadata } from '../../data/api'
 import { ResponsiveMasonry } from '../../components/responsive-masonry'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import styles from './styles.module.scss'
+import { NFTStorage } from 'nft.storage'
 
 const axios = require('axios')
 const fetch = require('node-fetch')
@@ -44,6 +45,7 @@ query collectorGallery($address: String!) {
       royalties
       creator {
         address
+        name
       }
     }
   }
@@ -87,9 +89,11 @@ query creatorGallery($address: String!) {
     description
     supply
     swaps(order_by: {price: asc}, limit: 1, where: {amount_left: {_gte: "1"}, status: {_eq: "0"}}) {
+      id
       status
       amount_left
       creator_id
+      contract_version
       creator {
         address
       }
@@ -372,6 +376,8 @@ export default class Display extends Component {
       collectionType: 'notForSale'
     })
 
+    this.reset()
+
     let list = await getRestrictedAddresses()
     // console.log(this.state.wallet)
     // console.log(!list.includes(this.state.wallet))
@@ -402,7 +408,6 @@ export default class Display extends Component {
     })
 
     this.setState({ items: this.state.objkts.slice(0, 15), offset: 15 })
-    this.filterCreationsForSale()
   }
 
   filterCreationsNotForSale = async () => {
@@ -414,7 +419,7 @@ export default class Display extends Component {
     return objkts
   }
 
-  creationsForSale = async () => {
+  creationsForSale = async (forSaleType) => {
     this.setState({ collectionType: 'forSale' })
 
     let v1Swaps = this.state.marketV1.filter(item => {
@@ -423,19 +428,40 @@ export default class Display extends Component {
     })
 
     this.setState({ marketV1: v1Swaps, loading: false })
+    this.setState({ objkts: this.state.creations, loading: false, items: [] })
 
-    this.setState({
-      objkts: await this.filterCreationsForSale(this.state.objkts),
-      items: []
-    })
+    if (forSaleType !== null) {
+      if (forSaleType == 0) {
+        this.setState({
+          objkts: await this.filterCreationsForSalePrimary(this.state.objkts)        
+        })
+      } else if (forSaleType == 1) {
+        this.setState({
+          objkts: await this.filterCreationsForSaleSecondary(this.state.objkts)        
+        })
+      }
+    } else {
+      console.log("forSaleType is null")
+    }
 
     this.setState({ items: this.state.objkts.slice(0, 15), offset: 15 })
   }
 
-  filterCreationsForSale = async () => {
+  filterCreationsForSalePrimary = async () => {
     let objkts = this.state.creations.filter(item => {
       const swaps = item.swaps.filter(swaps => {
-        return swaps.status == 0
+        return swaps.status == 0 && swaps.contract_version == 2 && swaps.creator_id == this.state.wallet
+      })
+      return swaps && swaps.length > 0
+    });
+
+    return objkts
+  }
+
+  filterCreationsForSaleSecondary = async () => {
+    let objkts = this.state.creations.filter(item => {
+      const swaps = item.swaps.filter(swaps => {
+        return swaps.status == 0 && swaps.creator_id !== this.state.wallet
       })
       return swaps && swaps.length > 0
     });
@@ -791,17 +817,22 @@ export default class Display extends Component {
                   creations
                 </Primary>
               </Button>
-
               <Button onClick={this.collectionFull}>
                 <Primary selected={this.state.collectionState}>
                   collection
                 </Primary>
               </Button>
-              <Button onClick={() => this.setState({ filter: !this.state.filter })}>
-                <Primary>
-                  filter
-                </Primary>
-              </Button>
+              <div className={styles.filter}>
+                <Button onClick={() => this.setState({ 
+                    filter: !this.state.filter 
+                  })}>
+                    <Primary>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-filter">
+                        <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+                      </svg>                    
+                    </Primary>
+                </Button>
+              </div>
             </div>
           </Padding>
         </Container>
@@ -838,10 +869,18 @@ export default class Display extends Component {
                 </Button>
                 <Button
                   onClick={() => {
-                    this.creationsForSale();
+                    this.creationsForSale(0);
                   }}>
                   <div className={styles.tag}>
-                    for sale
+                    primary
+                  </div>
+                </Button>
+                <Button
+                  onClick={() => {
+                    this.creationsForSale(1);
+                  }}>
+                  <div className={styles.tag}>
+                    secondary
                   </div>
                 </Button>
                 <Button
@@ -926,17 +965,40 @@ export default class Display extends Component {
             >
               <ResponsiveMasonry>
                 {this.state.items.map((nft) => {
+                  // console.log('swaps ' + JSON.stringify(nft))
                   return (
-                    <Button key={nft.id} to={`${PATH.OBJKT}/${nft.id}`}>
-                      <div className={styles.container}>
-                        {renderMediaType({
-                          mimeType: nft.mime,
-                          artifactUri: nft.artifact_uri,
-                          displayUri: nft.display_uri,
-                          displayView: true
-                        })}
+                    <div className={styles.cardContainer}>
+                      <Button 
+                        style={{ positon: 'relative' }} 
+                        key={nft.id} 
+                        to={`${PATH.OBJKT}/${nft.id}`}>
+                        <div className={styles.container}>
+                          {renderMediaType({
+                            mimeType: nft.mime,
+                            artifactUri: nft.artifact_uri,
+                            displayUri: nft.display_uri,
+                            displayView: true
+                          })}
+                        </div>
+                      </Button>
+                      <div className={styles.cardContainer}>
+                        <div className={styles.card}>
+                          <div className={styles.cardText}>
+                            <div>OBJKT#{nft.id}</div>
+                            <div className={styles.cardTitle}>{nft.title}</div>
+                          </div>
+                          <div className={styles.cardCollect}>
+                            <Button onClick={() => this.context.collect(nft.swaps[0].id, nft.swaps[0].price)}>
+                              <Purchase>
+                                <div className={styles.cardCollectPrice}>
+                                  {nft.swaps && nft.swaps.length > 0 ? 'collect for ' + nft.swaps[0].price / 1000000 + ' tez' : 'not for sale'}
+                                </div>
+                              </Purchase>
+                            </Button>
+                          </div>
+                        </div>
                       </div>
-                    </Button>
+                    </div>
                   )
                 })}
               </ResponsiveMasonry>
@@ -1042,18 +1104,39 @@ export default class Display extends Component {
             >
               <ResponsiveMasonry>
                 {this.state.items.map((nft) => {
-                  // console.log('nft : ' + nft)
+                  //console.log('nft: ' + JSON.stringify(nft))
                   return (
-                    <Button key={nft.token.id} to={`${PATH.OBJKT}/${nft.token.id}`}>
-                      <div className={styles.container}>
-                        {renderMediaType({
-                          mimeType: nft.token.mime,
-                          artifactUri: nft.token.artifact_uri,
-                          displayUri: nft.token.display_uri,
-                          displayView: true
-                        })}
+                    <div className={styles.cardContainer}>
+                      <Button
+                        style={{ position: 'relative' }}
+                        key={nft.token.id}
+                        to={`${PATH.OBJKT}/${nft.token.id}`}>
+                        <div className={styles.container}>
+                          {renderMediaType({
+                            mimeType: nft.token.mime,
+                            artifactUri: nft.token.artifact_uri,
+                            displayUri: nft.token.display_uri,
+                            displayView: true
+                          })}
+                        </div>
+                      </Button>
+                      <div className={styles.card}>
+                        <div className={styles.cardText}>
+                          <div>OBJKT#{nft.token.id}</div>
+                          <div>{nft.token.title}</div>
+                          <div>{nft.token.creator.name}</div>
+                        </div>
+                        <div className={styles.cardCollect}>
+                          <Button onClick={() => this.context.collect(nft.id, nft.price)}>
+                            <Purchase>
+                              <div className={styles.cardCollectPrice}>
+                                {nft.price ? 'collect for ' + nft.price / 1000000 : 'not for sale'}
+                              </div>
+                            </Purchase>
+                          </Button>
+                        </div>
                       </div>
-                    </Button>
+                    </div>
                   )
                 })}
               </ResponsiveMasonry>
