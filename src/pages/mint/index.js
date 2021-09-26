@@ -379,12 +379,16 @@ export const Mint = () => {
 
           <Container>
             <Padding>
+
               <Preview
                 mimeType={file.mimeType}
                 previewUri={file.reader}
                 title={title}
                 description={description}
                 tags={tags}
+
+                coverUri={file.mimeType.split('/')[0] === 'audio' && cover.reader}
+                coverMime={file.mimeType.split('/')[0] === 'audio' && cover.mimeType}
               />
             </Padding>
           </Container>
