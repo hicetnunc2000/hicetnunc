@@ -116,8 +116,8 @@ export const Header = () => {
                 <nav className={styles.content}>
                   <ul>
                     <li>
-                      <Button onClick={() => handleRoute('/explore')}>
-                        <Primary>explore</Primary>
+                      <Button onClick={() => handleRoute('/search')}>
+                        <Primary>search</Primary>
                       </Button>
                     </li>
                     <li>
