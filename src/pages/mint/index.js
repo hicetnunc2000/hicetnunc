@@ -370,7 +370,7 @@ export const Mint = () => {
               <div style={{ display: 'flex' }}>
                 <Button onClick={() => setStep(0)} fit>
                   <Primary>
-                    <strong>back</strong>
+                    &#60; back
                   </Primary>
                 </Button>
               </div>
