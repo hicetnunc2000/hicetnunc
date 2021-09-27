@@ -126,8 +126,6 @@ export const HTMLComponent = (props) => {
     }
   }
 
-
-  console.log(onDetailView)
   if (!onDetailView) {
     return (
       <div className={classes}>

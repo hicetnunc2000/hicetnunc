@@ -94,6 +94,8 @@ class HicetnuncContextProviderClass extends Component {
       hDAO_curation: 'KT1TybhR7XraG75JFYKSrh7KnxukMBT5dor6',
       hDAO_marketplace: 'KT1QPvv7sWVaT9PcPiC4fN9BgfX8NB2d5WzL',
 
+      lastId: undefined,
+
       subjktInfo: {},
       setSubjktInfo: (subjkt) => this.setState({ subjktInfo: subjkt }),
 
@@ -422,25 +424,19 @@ class HicetnuncContextProviderClass extends Component {
       },
 
       curate: async (objkt_id) => {
-        await axios
-          .get(process.env.REACT_APP_REC_CURATE)
-          .then((res) => {
-            return res.data.amount
-          })
-          .then((amt) => {
-            Tezos.wallet
-              .at(this.state.proxyAddress || this.state.v1)
+        await Tezos.wallet
+              .at(this.state.v1)
               .then((c) =>
                 c.methods
                   .curate(
                     ls.get('hDAO_config') != null
                       ? parseInt(ls.get('hDAO_config'))
-                      : amt,
+                      :
+                      1,
                     objkt_id
                   )
                   .send()
               )
-          })
       },
 
       claim_hDAO: async (hDAO_amount, objkt_id) => {
