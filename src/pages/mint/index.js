@@ -386,6 +386,7 @@ export const Mint = () => {
                 title={title}
                 description={description}
                 tags={tags}
+                supply={amount}
 
                 coverUri={file.mimeType.split('/')[0] === 'audio' && cover.reader}
                 coverMime={file.mimeType.split('/')[0] === 'audio' && cover.mimeType}
@@ -395,18 +396,23 @@ export const Mint = () => {
 
           <Container>
             <Padding>
-              <Button onClick={handleMint} fit>
-                <Purchase>mint OBJKT</Purchase>
-              </Button>
+              <div className={styles.preview__disclaimer}>
+                <p>your royalties upon each sale are {royalties}%</p>
+                <p>this operation costs 0.08 tez</p>
+              </div>
             </Padding>
           </Container>
 
           <Container>
-            <Padding>
-              <p>this operation costs 0.08~ tez</p>
-              <p>Your royalties upon each sale are {royalties}%</p>
-            </Padding>
+            <div className={styles.preview__container}>
+              <Padding>
+                <Button onClick={handleMint} fit>
+                  <Purchase>mint</Purchase>
+                </Button>
+              </Padding>
+            </div>
           </Container>
+
         </>
       )}
 {/*       <BottomBanner>

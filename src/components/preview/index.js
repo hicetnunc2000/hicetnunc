@@ -13,7 +13,7 @@ function isHTML(mimeType) {
   )
 }
 
-export const Preview = ({ title, description, mimeType, previewUri, tags, coverUri, coverMime }) => {
+export const Preview = ({ title, description, mimeType, previewUri, tags, coverUri, coverMime, supply }) => {
   const token_tags = tags !== '' ? tags.replace(/\s/g, '').split(',') : []
   return (
     <div className={styles.container}>
@@ -38,7 +38,10 @@ export const Preview = ({ title, description, mimeType, previewUri, tags, coverU
         })}
       </div>
       <div className={styles.info}>
-        <div className={styles.title}>{title}</div>
+        <div className={styles.title__container}>
+          <div className={styles.title}>{title}</div>
+          <div>editions: {supply}</div>
+        </div>
         <div className={styles.description}>{description}</div>
         <Tags token_tags={token_tags} preview={true} />
       </div>

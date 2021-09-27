@@ -7,7 +7,8 @@
 
   .tag {
     display: inline-flex;
-    font-weight: bold;
+    padding: 3px 8px;
+    background-color: var(--border-color);
     color: var(--text-color);
     margin-right: 12.5px;
     margin-bottom: 6px;
