@@ -26,20 +26,19 @@
     .media,
     .info {
       width: 100%;
-      margin-bottom: 1.5em;
     }
 
     .media {
+      min-height: 70vh;
       display: flex;
       align-items: center;
       justify-content: center;
-
-      flex-direction: column;
     }
 
     .info {
       display: flex;
       flex-direction: column;
+      padding-left: 10px;
 
       .title,
       .description {
@@ -47,14 +46,10 @@
       }
 
       .title {
+        font-family: 'iosevka-extended';
+        font-weight: bold;
         font-size: 20px;
       }
     }
   }
-}
-
-.title__container {
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
 }

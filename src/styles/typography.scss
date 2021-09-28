@@ -8,3 +8,13 @@
   font-weight: normal;
   font-style: normal;
 }
+
+@font-face {
+	font-family: 'iosevka-extended';
+	font-display: swap;
+	font-weight: 400;
+	font-stretch: expanded;
+	font-style: normal;
+	src:  url('fonts/iosevka-extended.woff2') format('woff2'), 
+        url('fonts/iosevka-extended.ttf') format('truetype');
+}
