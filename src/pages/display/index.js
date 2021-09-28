@@ -432,11 +432,11 @@ export default class Display extends Component {
     if (forSaleType !== null) {
       if (forSaleType == 0) {
         this.setState({
-          objkts: await this.filterCreationsForSalePrimary(this.state.objkts)        
+          objkts: await this.filterCreationsForSalePrimary(this.state.objkts)
         })
       } else if (forSaleType == 1) {
         this.setState({
-          objkts: await this.filterCreationsForSaleSecondary(this.state.objkts)        
+          objkts: await this.filterCreationsForSaleSecondary(this.state.objkts)
         })
       }
     } else {
@@ -822,14 +822,14 @@ export default class Display extends Component {
                 </Primary>
               </Button>
               <div className={styles.filter}>
-                <Button onClick={() => this.setState({ 
-                    filter: !this.state.filter 
-                  })}>
-                    <Primary>
-                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-filter">
-                        <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
-                      </svg>                    
-                    </Primary>
+                <Button onClick={() => this.setState({
+                  filter: !this.state.filter
+                })}>
+                  <Primary>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-filter">
+                      <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+                    </svg>
+                  </Primary>
                 </Button>
               </div>
             </div>
@@ -857,130 +857,133 @@ export default class Display extends Component {
         }
 
         {!this.state.loading && this.state.creationsState && (
-          <Container xlarge>
-            {this.state.filter && (
-              <div style={{ display: "flex", justifyContent: "flex-end" }}>
-                <Button
-                  onClick={() => { this.creations() }}>
-                  <div className={styles.tag}>
-                    all
+          <div>
+            <Container>
+              <Padding>
+                {this.state.filter && (
+                  <div style={{ display: "flex", justifyContent: "flex-end" }}>
+                    <Button
+                      onClick={() => { this.creations() }}>
+                      <div className={styles.tag}>
+                        all
+                      </div>
+                    </Button>
+                    <Button
+                      onClick={() => {
+                        this.creationsForSale(0);
+                      }}>
+                      <div className={styles.tag}>
+                        primary
+                      </div>
+                    </Button>
+                    <Button
+                      onClick={() => {
+                        this.creationsForSale(1);
+                      }}>
+                      <div className={styles.tag}>
+                        secondary
+                      </div>
+                    </Button>
+                    <Button
+                      onClick={() => { this.creationsNotForSale() }}>
+                      <div className={styles.tag}>
+                        not for sale
+                      </div>
+                    </Button>
                   </div>
-                </Button>
-                <Button
-                  onClick={() => {
-                    this.creationsForSale(0);
-                  }}>
-                  <div className={styles.tag}>
-                    primary
-                  </div>
-                </Button>
-                <Button
-                  onClick={() => {
-                    this.creationsForSale(1);
-                  }}>
-                  <div className={styles.tag}>
-                    secondary
-                  </div>
-                </Button>
-                <Button
-                  onClick={() => { this.creationsNotForSale() }}>
-                  <div className={styles.tag}>
-                    not for sale
-                  </div>
-                </Button>
-              </div>
-            )}
-
-            {this.state.collectionType == 'forSale' ?
-              <>
-                {this.context.acc != null && this.context.acc.address == this.state.wallet ?
-                  <>
-                    {Object.keys(this.state.marketV1).length !== 0 && (
-                      <>
-                        <Container>
-                          <Padding>
-                            <p>We're currently migrating the marketplace smart contract. We ask for
-                              users to cancel their listings as the v1 marketplace will no longer be
-                              maintained. Auditing tools for the v1 protocol can be found at <a href='https://hictory.xyz'>hictory.xyz</a>
-                            </p>
-                          </Padding>
-                        </Container>
-                      </>
-                    )}
-
-                    {this.state.marketV1.length !== 0 ?
-                      <Container>
-                        <Padding>
-                          <p>
-                            One can delist multiple swaps in once batch transaction or delist each single one at a time.
-                          </p>
-                          <br />
-                          <Button onClick={this.cancel_batch}>
-                            <Primary>
-                              Batch Cancel
-                            </Primary>
-                          </Button>
-                        </Padding>
-                      </Container>
-                      :
-                      null
-                    }
-
-                    {this.state.marketV1.map((e, key) => {
-                      // console.log(e)
-                      return (
+                )}
+              </Padding>
+            </Container>
+            <Container xlarge>
+              {this.state.collectionType == 'forSale' ?
+                <>
+                  {this.context.acc != null && this.context.acc.address == this.state.wallet ?
+                    <>
+                      {Object.keys(this.state.marketV1).length !== 0 && (
                         <>
-                          <Container key={key}>
+                          <Container>
                             <Padding>
-                              <Button to={`${PATH.OBJKT}/${e.token_id}`}>
-                                {/* {console.log(e)} */}
-                                <Primary>
-                                  <strong>{e.amount_left}x OBJKT#{e.token_id} {e.price}µtez</strong>
-                                </Primary>
-                              </Button>
-                              <Button onClick={() => this.context.cancel(e.id)}>
-                                <Secondary>
-                                  Cancel Swap
-                                </Secondary>
-                              </Button>
+                              <p>We're currently migrating the marketplace smart contract. We ask for
+                                users to cancel their listings as the v1 marketplace will no longer be
+                                maintained. Auditing tools for the v1 protocol can be found at <a href='https://hictory.xyz'>hictory.xyz</a>
+                              </p>
                             </Padding>
                           </Container>
                         </>
-                      )
-                    })
-                    }
-                  </> : null}
-              </>
-              :
-              null
-            }
+                      )}
 
-            <InfiniteScroll
-              dataLength={this.state.items.length}
-              next={this.loadMore}
-              hasMore={this.state.hasMore}
-              loader={undefined}
-              endMessage={undefined}
-            >
-              <ResponsiveMasonry>
-                {this.state.items.map((nft) => {
-                  // console.log('swaps ' + JSON.stringify(nft))
-                  return (
-                    <div className={styles.cardContainer}>
-                      <Button 
-                        style={{ positon: 'relative' }} 
-                        key={nft.id} 
-                        to={`${PATH.OBJKT}/${nft.id}`}>
-                        <div className={styles.container}>
-                          {renderMediaType({
-                            mimeType: nft.mime,
-                            artifactUri: nft.artifact_uri,
-                            displayUri: nft.display_uri,
-                            displayView: true
-                          })}
-                        </div>
-                      </Button>
+                      {this.state.marketV1.length !== 0 ?
+                        <Container>
+                          <Padding>
+                            <p>
+                              One can delist multiple swaps in once batch transaction or delist each single one at a time.
+                            </p>
+                            <br />
+                            <Button onClick={this.cancel_batch}>
+                              <Primary>
+                                Batch Cancel
+                              </Primary>
+                            </Button>
+                          </Padding>
+                        </Container>
+                        :
+                        null
+                      }
+
+                      {this.state.marketV1.map((e, key) => {
+                        // console.log(e)
+                        return (
+                          <>
+                            <Container key={key}>
+                              <Padding>
+                                <Button to={`${PATH.OBJKT}/${e.token_id}`}>
+                                  {/* {console.log(e)} */}
+                                  <Primary>
+                                    <strong>{e.amount_left}x OBJKT#{e.token_id} {e.price}µtez</strong>
+                                  </Primary>
+                                </Button>
+                                <Button onClick={() => this.context.cancel(e.id)}>
+                                  <Secondary>
+                                    Cancel Swap
+                                  </Secondary>
+                                </Button>
+                              </Padding>
+                            </Container>
+                          </>
+                        )
+                      })
+                      }
+                    </> : null}
+                </>
+                :
+                null
+              }
+              <InfiniteScroll
+                dataLength={this.state.items.length}
+                next={this.loadMore}
+                hasMore={this.state.hasMore}
+                loader={undefined}
+                endMessage={undefined}
+              >
+                <ResponsiveMasonry>
+                  {this.state.items.map((nft) => {
+                    // console.log('swaps ' + JSON.stringify(nft))
+                    return (
                       <div className={styles.cardContainer}>
+                        <Button
+                          style={{ positon: 'relative' }}
+                          key={nft.id}
+                          to={`${PATH.OBJKT}/${nft.id}`}>
+                          <div className={styles.container}>
+                            {renderMediaType({
+                              mimeType: nft.mime,
+                              artifactUri: nft.artifact_uri,
+                              displayUri: nft.display_uri,
+                              displayView: true
+                            })}
+                          </div>
+                        </Button>
+                        {/* <div className={styles.cardContainer}>
                         <div className={styles.card}>
                           <div className={styles.cardText}>
                             <div>OBJKT#{nft.id}</div>
@@ -996,18 +999,21 @@ export default class Display extends Component {
                             </Button>
                           </div>
                         </div>
+                      </div> */}
                       </div>
-                    </div>
-                  )
-                })}
-              </ResponsiveMasonry>
-            </InfiniteScroll>
-          </Container>
+                    )
+                  })}
+                </ResponsiveMasonry>
+              </InfiniteScroll>
+            </Container>
+          </div>
         )}
 
         {!this.state.loading && this.state.collectionState && (
-          <Container xlarge>
-            {this.state.filter && (
+          <div>
+            <Container>
+              <Padding>
+              {this.state.filter && (
               <div>
                 <div style={{ display: "flex", justifyContent: "flex-end" }}>
                   <Button
@@ -1029,6 +1035,9 @@ export default class Display extends Component {
                 </div>
               </div>
             )}
+              </Padding>
+            </Container>
+          <Container xlarge>
 
             {this.state.collectionType == 'forSale' ?
               <>
@@ -1119,7 +1128,7 @@ export default class Display extends Component {
                           })}
                         </div>
                       </Button>
-                      <div className={styles.card}>
+                      {/*                       <div className={styles.card}>
                         <div className={styles.cardText}>
                           <div>OBJKT#{nft.token.id}</div>
                           <div>{nft.token.title}</div>
@@ -1134,14 +1143,14 @@ export default class Display extends Component {
                             </Purchase>
                           </Button>
                         </div>
-                      </div>
+                      </div> */}
                     </div>
                   )
                 })}
               </ResponsiveMasonry>
             </InfiniteScroll>
-
           </Container>
+          </div>
         )}
         {/*       <BottomBanner>
         API is down due to heavy server load — We're working to fix the issue — please be patient with us. <a href="https://discord.gg/mNNSpxpDce" target="_blank">Join the discord</a> for updates.
