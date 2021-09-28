@@ -213,8 +213,8 @@ export const Feeds = ({ type }) => {
 /*     if (type === 1) {
       await getHdaoFeed()
     } */
-    await getRandomFeed()
-    //if (type === 3) await getLatest(Math.min.apply(Math, items.map(e => e.id)))
+    //await getRandomFeed()
+    await getLatest(Math.min.apply(Math, items.map(e => e.id)))
   }
 
   useEffect(async () => {
@@ -240,9 +240,9 @@ export const Feeds = ({ type }) => {
     } else if (type === 1) {
       await getHdaoFeed()
     } else if (type === 2) { */
-      await getRandomFeed()
-/*     } else if (type === 3) {
-      await getLatest(lastId) */
+      //await getRandomFeed()
+    //} else if (type === 3) {
+      await getLatest(lastId)
 
       /*       GetFeaturedFeed({ counter: count, max_time: startTime })
         .then((result) => {
