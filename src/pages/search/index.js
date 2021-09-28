@@ -519,8 +519,8 @@ export class Search extends Component {
     lastId: undefined,
     tags: [
       { id: 0, value: '○' },
-      { id: 1, value: 'latest sales' },
-      { id: 2, value: 'latest mints' },
+      { id: 1, value: 'random' },
+      { id: 2, value: 'latest sales' },
       { id: 3, value: 'glb' },
       { id: 4, value: 'music' },
       { id: 5, value: 'interactive' },
@@ -645,10 +645,9 @@ export class Search extends Component {
       let result = await fetchFeed(999999 || this.context.lastId)
       result = result.filter(e => !arr.includes(e.creator_id))
       console.log(result)
-      result = _.uniqBy([...this.state.feed, ...result], 'creator_id')
       //console.log(await GetUserClaims(arr))
       //console.log(Math.min.apply(Math, result.map(e => e.id)))
-      this.setState({ feed: result, lastId: Math.min.apply(Math, result.map(e => e.id))})
+      this.setState({ feed: _.uniqBy([...this.state.feed, ...result], 'creator_id'), lastId: Math.min.apply(Math, result.map(e => e.id))})
       //this.context.lastId = Math.min.apply(Math, result.map(e => e.id))
       this.context.setId(Math.min.apply(Math, result.map(e => e.id)))
     }
