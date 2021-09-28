@@ -13,7 +13,6 @@ import { GetUserMetadata } from '../../data/api'
 import { ResponsiveMasonry } from '../../components/responsive-masonry'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import styles from './styles.module.scss'
-import { NFTStorage } from 'nft.storage'
 
 const axios = require('axios')
 const fetch = require('node-fetch')
