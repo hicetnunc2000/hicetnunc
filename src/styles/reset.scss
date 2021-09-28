@@ -177,3 +177,11 @@ h4,
 h5 {
   font-weight: normal;
 }
+
+hr {
+  border-bottom: none;
+  border-right: none;
+  border-left: none;
+
+  color: var(--gray-20);
+}

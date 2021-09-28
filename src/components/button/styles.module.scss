@@ -95,3 +95,13 @@
     margin: 0;
   }
 }
+
+.dark {
+  background-color: var(--gray-15);
+  border-right: 2px solid var(--gray-100);
+  border-bottom: 2px solid var(--gray-100);
+}
+
+.dark:hover {
+  background-color: var(--gray-15);
+}
