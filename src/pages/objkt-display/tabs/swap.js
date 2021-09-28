@@ -6,7 +6,7 @@ import { Loading } from '../../../components/loading'
 import { Input } from '../../../components/input'
 import { Button, Curate, Purchase } from '../../../components/button'
 import { stubFalse } from 'lodash'
-export const Swap = ({ total_amount, owners, creator, royalties, token_info, address }) => {
+export const Swap = ({ total_amount, owners, creator, royalties, token_info, address, restricted }) => {
   const { id } = useParams()
   const { swap, swapv2, acc, swap_hDAO, progress, setProgress, message, setMessage } = useContext(HicetnuncContext)
   const [amount, setAmount] = useState()
@@ -47,8 +47,8 @@ export const Swap = ({ total_amount, owners, creator, royalties, token_info, add
       console.log(acc.address, royalties, parseFloat(price) * 1000000, id, creator.address, parseFloat(amount))
 
       if (currency === 'tez') {
-        swapv2(acc.address, royalties, parseFloat(price) * 1000000, id, creator.address, parseFloat(amount))
-          //swap(parseFloat(amount), id, parseFloat(price) * 1000000)  
+      swapv2(acc.address, royalties, parseFloat(price) * 1000000, id, creator.address, parseFloat(amount))
+      //swap(parseFloat(amount), id, parseFloat(price) * 1000000)  
           .then((e) => {
             // when taquito returns a success/fail message
             //setProgress(false)
