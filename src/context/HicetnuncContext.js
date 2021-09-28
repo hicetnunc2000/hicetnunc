@@ -422,25 +422,18 @@ class HicetnuncContextProviderClass extends Component {
       },
 
       curate: async (objkt_id) => {
-        await axios
-          .get(process.env.REACT_APP_REC_CURATE)
-          .then((res) => {
-            return res.data.amount
-          })
-          .then((amt) => {
-            Tezos.wallet
-              .at(this.state.proxyAddress || this.state.v1)
+        await Tezos.wallet
+              .at(this.state.v1)
               .then((c) =>
                 c.methods
                   .curate(
                     ls.get('hDAO_config') != null
                       ? parseInt(ls.get('hDAO_config'))
-                      : amt,
+                      : 1,
                     objkt_id
                   )
                   .send()
               )
-          })
       },
 
       claim_hDAO: async (hDAO_amount, objkt_id) => {
