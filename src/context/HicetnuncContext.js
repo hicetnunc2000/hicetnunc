@@ -94,6 +94,9 @@ class HicetnuncContextProviderClass extends Component {
       hDAO_curation: 'KT1TybhR7XraG75JFYKSrh7KnxukMBT5dor6',
       hDAO_marketplace: 'KT1QPvv7sWVaT9PcPiC4fN9BgfX8NB2d5WzL',
 
+      lastId : undefined,
+      setId : (id) => this.setState({ lastId : id }),
+
       subjktInfo: {},
       setSubjktInfo: (subjkt) => this.setState({ subjktInfo: subjkt }),
 

@@ -17,9 +17,11 @@ const _ = require('lodash')
 
 const isFloat = (n) => Number(n) === n && n % 1 !== 0
 
-const latest_feed = `
-query LatestFeed($lastId: bigint = 99999999) {
-  hic_et_nunc_token(order_by: {id: desc}, limit: 15, where: {id: {_lt: $lastId}, artifact_uri: {_neq: ""}}) {
+
+async function fetchFeed(lastId) {
+  const { errors, data } = await fetchGraphQL(`
+query LatestFeed {
+  hic_et_nunc_token(order_by: {id: desc}, limit: 35, where: {id: {_lt: ${lastId}}, artifact_uri: {_neq: ""}}) {
     artifact_uri
     display_uri
     creator_id
@@ -33,10 +35,7 @@ query LatestFeed($lastId: bigint = 99999999) {
       address
     }
   }
-}`
-
-async function fetchFeed(lastId) {
-  const { errors, data } = await fetchGraphQL(latest_feed, "LatestFeed", { "lastId": lastId });
+}`, "LatestFeed", {});
   if (errors) {
     console.error(errors);
   }
@@ -498,7 +497,12 @@ async function fetchHdao(offset) {
   return result
 }
 
-
+const getRestrictedAddresses = async () =>
+  await axios
+    .get(
+      'https://raw.githubusercontent.com/hicetnunc2000/hicetnunc-reports/main/filters/w.json'
+    )
+    .then((res) => res.data)
 
 export class Search extends Component {
   static contextType = HicetnuncContext
@@ -521,8 +525,8 @@ export class Search extends Component {
       { id: 4, value: 'music' },
       { id: 5, value: 'interactive' },
       { id: 6, value: 'gif' },
-      { id: 7, value: '1D'},
-      { id: 8, value: '1W'}
+      { id: 7, value: '1D' },
+      { id: 8, value: '1W' }
       /*       { id: 4, value: 'illustration' }, */
       /*       { id: 5, value: 'gif' } */
 
@@ -552,6 +556,8 @@ export class Search extends Component {
 
   update = async (e, reset) => {
 
+    let arr = await getRestrictedAddresses()
+
     this.setState({ select: e })
     if (reset) {
       this.state.feed = []
@@ -559,26 +565,26 @@ export class Search extends Component {
     }
 
     if (e === '1D') {
-      console.log(new Date((new Date()).getTime() - 60*60*24*1000))
+      console.log(new Date((new Date()).getTime() - 60 * 60 * 24 * 1000))
 
-      let list = await fetchDay(new Date((new Date()).getTime() - 60*60*24*1000).toISOString(), this.state.offset)
+      let list = await fetchDay(new Date((new Date()).getTime() - 60 * 60 * 24 * 1000).toISOString(), this.state.offset)
       list = list.map(e => e.token)
       list = [...this.state.feed, ...(list)]
       list = _.uniqBy(list, 'id')
 
       this.setState({
-        feed : list
+        feed: list
       })
     }
 
     if (e === '1W') {
-      let list = await fetchDay(new Date((new Date()).getTime() - 60*60*24*30*1000).toISOString(), this.state.offset)
+      let list = await fetchDay(new Date((new Date()).getTime() - 60 * 60 * 24 * 30 * 1000).toISOString(), this.state.offset)
       list = list.map(e => e.token)
       list = [...this.state.feed, ...(list)]
       list = _.uniqBy(list, 'id')
 
       this.setState({
-        feed : list
+        feed: list
       })
     }
 
@@ -631,12 +637,20 @@ export class Search extends Component {
       tokens = tokens.map(e => e.token)
       tokens = _.uniqBy(tokens, 'id')
 
-      this.setState({ feed: _.uniqBy([...this.state.feed, ...tokens], 'id')})
+      this.setState({ feed: _.uniqBy([...this.state.feed, ...tokens], 'id') })
     }
 
-    if (e == 'latest mints') {
-      this.setState({ feed: [...this.state.feed, ...(await fetchFeed(999999 || this.state.lastId))] })
-      this.setState({ lastId : Math.min.apply(Math, this.state.feed.map(e => e.id))})
+    if (this.state.select == 'latest mints') {
+      console.log(999999 || this.context.lastId)
+      let result = await fetchFeed(999999 || this.context.lastId)
+      result = result.filter(e => !arr.includes(e.creator_id))
+      console.log(result)
+      result = _.uniqBy([...this.state.feed, ...result], 'creator_id')
+      //console.log(await GetUserClaims(arr))
+      //console.log(Math.min.apply(Math, result.map(e => e.id)))
+      this.setState({ feed: result, lastId: Math.min.apply(Math, result.map(e => e.id))})
+      //this.context.lastId = Math.min.apply(Math, result.map(e => e.id))
+      this.context.setId(Math.min.apply(Math, result.map(e => e.id)))
     }
 
     this.setState({ reset: false })
