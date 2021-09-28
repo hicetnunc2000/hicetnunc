@@ -520,11 +520,11 @@ export class Search extends Component {
     tags: [
       { id: 0, value: '○' },
       { id: 1, value: 'random' },
-      { id: 2, value: 'latest sales' },
-      { id: 3, value: 'glb' },
-      { id: 4, value: 'music' },
-      { id: 5, value: 'interactive' },
-      { id: 6, value: 'gif' },
+      { id: 2, value: 'glb' },
+      { id: 3, value: 'music' },
+      { id: 4, value: 'interactive' },
+      { id: 5, value: 'gif' },
+      { id: 6, value: 'latest sales' },
       { id: 7, value: '1D' },
       { id: 8, value: '1W' }
       /*       { id: 4, value: 'illustration' }, */
