@@ -225,7 +225,7 @@ export class Config extends Component {
             <span>
               <a href="https://tzprofiles.com">
                 <Button>
-                  <Primary>Tezos Profiles</Primary>
+                  <a href='#' style={{fontWeight : 'bold'}}>Tezos Profiles</a>
                 </Button>
               </a>
             </span>

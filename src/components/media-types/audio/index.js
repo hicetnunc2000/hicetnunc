@@ -15,7 +15,6 @@ export const AudioComponent = ({
   const visualiser = useRef()
   const [userTouched, setUserTouched] = useState(false)
   const [play, setPlay] = useState(false)
-  console.log('sound', displayView)
   const togglePlay = () => {
     setUserTouched(true)
     setPlay(!play)
