@@ -179,6 +179,10 @@ export const GetUserMetadata = async (walletAddr) => {
           if (!tzktData.data) {
             tzpData['github'] = claimJSON.evidence.handle
           }
+        } else if (claimJSON.type.includes('DnsVerification')) {
+          if (!tzktData.data) {
+            tzpData['dns'] = claimJSON.credentialSubject.sameAs.slice(4)
+          }
         }
       }
   } catch (e) {

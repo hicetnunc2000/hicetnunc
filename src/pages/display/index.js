@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Button, Primary, Secondary } from '../../components/button'
+import { Button, Primary, Secondary, Purchase } from '../../components/button'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
 import { Page, Container, Padding } from '../../components/layout'
 import { BottomBanner } from '../../components/bottom-banner'
@@ -24,7 +24,7 @@ const sortByTokenId = (a, b) => {
 const getRestrictedAddresses = async () =>
   await axios
     .get(
-      'https://raw.githubusercontent.com/hicetnunc2000/hicetnunc/main/filters/w.json'
+      'https://raw.githubusercontent.com/hicetnunc2000/hicetnunc-reports/main/filters/w.json'
     )
     .then((res) => res.data)
 
@@ -44,6 +44,7 @@ query collectorGallery($address: String!) {
       royalties
       creator {
         address
+        name
       }
     }
   }
@@ -87,9 +88,11 @@ query creatorGallery($address: String!) {
     description
     supply
     swaps(order_by: {price: asc}, limit: 1, where: {amount_left: {_gte: "1"}, status: {_eq: "0"}}) {
+      id
       status
       amount_left
       creator_id
+      contract_version
       creator {
         address
       }
@@ -285,12 +288,14 @@ export default class Display extends Component {
           tzprofile,
           discord,
           github,
+          dns,
         } = data.data
 
         if (data.data.twitter) this.setState({ twitter })
         if (data.data.tzprofile) this.setState({ tzprofile })
         if (data.data.discord) this.setState({ discord, copied: false })
         if (data.data.github) this.setState({ github })
+        if (data.data.dns) this.setState({ dns })
       })
 
       let res = await fetchTz(wallet)
@@ -337,16 +342,17 @@ export default class Display extends Component {
 
       await GetUserMetadata(this.state.wallet).then((data) => {
         const {
+          dns,
           github,
           discord,
           twitter,
           tzprofile
         } = data.data
+        if (data.data.dns) this.setState({ dns })
         if (data.data.github) this.setState({ github })
         if (data.data.discord) this.setState({ discord })
         if (data.data.twitter) this.setState({ twitter })
         if (data.data.tzprofile) this.setState({ tzprofile })
-        this.onReady()
       })
       this.onReady()
     }
@@ -368,6 +374,8 @@ export default class Display extends Component {
       collectionState: false,
       collectionType: 'notForSale'
     })
+
+    this.reset()
 
     let list = await getRestrictedAddresses()
     // console.log(this.state.wallet)
@@ -399,7 +407,6 @@ export default class Display extends Component {
     })
 
     this.setState({ items: this.state.objkts.slice(0, 15), offset: 15 })
-    this.filterCreationsForSale()
   }
 
   filterCreationsNotForSale = async () => {
@@ -411,7 +418,7 @@ export default class Display extends Component {
     return objkts
   }
 
-  creationsForSale = async () => {
+  creationsForSale = async (forSaleType) => {
     this.setState({ collectionType: 'forSale' })
 
     let v1Swaps = this.state.marketV1.filter(item => {
@@ -420,19 +427,40 @@ export default class Display extends Component {
     })
 
     this.setState({ marketV1: v1Swaps, loading: false })
+    this.setState({ objkts: this.state.creations, loading: false, items: [] })
 
-    this.setState({
-      objkts: await this.filterCreationsForSale(this.state.objkts),
-      items: []
-    })
+    if (forSaleType !== null) {
+      if (forSaleType == 0) {
+        this.setState({
+          objkts: await this.filterCreationsForSalePrimary(this.state.objkts)
+        })
+      } else if (forSaleType == 1) {
+        this.setState({
+          objkts: await this.filterCreationsForSaleSecondary(this.state.objkts)
+        })
+      }
+    } else {
+      console.log("forSaleType is null")
+    }
 
     this.setState({ items: this.state.objkts.slice(0, 15), offset: 15 })
   }
 
-  filterCreationsForSale = async () => {
+  filterCreationsForSalePrimary = async () => {
     let objkts = this.state.creations.filter(item => {
       const swaps = item.swaps.filter(swaps => {
-        return swaps.status == 0
+        return swaps.status == 0 && swaps.contract_version == 2 && swaps.creator_id == this.state.wallet
+      })
+      return swaps && swaps.length > 0
+    });
+
+    return objkts
+  }
+
+  filterCreationsForSaleSecondary = async () => {
+    let objkts = this.state.creations.filter(item => {
+      const swaps = item.swaps.filter(swaps => {
+        return swaps.status == 0 && swaps.creator_id !== this.state.wallet
       })
       return swaps && swaps.length > 0
     });
@@ -599,25 +627,7 @@ export default class Display extends Component {
                 <p>{this.state.hdao} ○</p>
 
                 <div>
-                  {/* {this.state.site && (
-                    <Button href={this.state.site}>
-                      <VisuallyHidden>{this.state.site}</VisuallyHidden>
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="16"
-                        height="16"
-                        fill="currentColor"
-                        viewBox="0 0 16 16"
-                        style={{
-                          fill: 'var(--text-color)',
-                          stroke: 'transparent',
-                          marginRight: '10px',
-                        }}
-                      >
-                        <path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm7.5-6.923c-.67.204-1.335.82-1.887 1.855A7.97 7.97 0 0 0 5.145 4H7.5V1.077zM4.09 4a9.267 9.267 0 0 1 .64-1.539 6.7 6.7 0 0 1 .597-.933A7.025 7.025 0 0 0 2.255 4H4.09zm-.582 3.5c.03-.877.138-1.718.312-2.5H1.674a6.958 6.958 0 0 0-.656 2.5h2.49zM4.847 5a12.5 12.5 0 0 0-.338 2.5H7.5V5H4.847zM8.5 5v2.5h2.99a12.495 12.495 0 0 0-.337-2.5H8.5zM4.51 8.5a12.5 12.5 0 0 0 .337 2.5H7.5V8.5H4.51zm3.99 0V11h2.653c.187-.765.306-1.608.338-2.5H8.5zM5.145 12c.138.386.295.744.468 1.068.552 1.035 1.218 1.65 1.887 1.855V12H5.145zm.182 2.472a6.696 6.696 0 0 1-.597-.933A9.268 9.268 0 0 1 4.09 12H2.255a7.024 7.024 0 0 0 3.072 2.472zM3.82 11a13.652 13.652 0 0 1-.312-2.5h-2.49c.062.89.291 1.733.656 2.5H3.82zm6.853 3.472A7.024 7.024 0 0 0 13.745 12H11.91a9.27 9.27 0 0 1-.64 1.539 6.688 6.688 0 0 1-.597.933zM8.5 12v2.923c.67-.204 1.335-.82 1.887-1.855.173-.324.33-.682.468-1.068H8.5zm3.68-1h2.146c.365-.767.594-1.61.656-2.5h-2.49a13.65 13.65 0 0 1-.312 2.5zm2.802-3.5a6.959 6.959 0 0 0-.656-2.5H12.18c.174.782.282 1.623.312 2.5h2.49zM11.27 2.461c.247.464.462.98.64 1.539h1.835a7.024 7.024 0 0 0-3.072-2.472c.218.284.418.598.597.933zM10.855 4a7.966 7.966 0 0 0-.468-1.068C9.835 1.897 9.17 1.282 8.5 1.077V4h2.355z" />
-                      </svg>
-                    </Button>
-                  )}
+                  {/* 
                   {this.state.telegram && (
                     <Button href={`https://t.me/${this.state.telegram}`}>
                       <VisuallyHidden>{`https://t.me/${this.state.telegram}`}</VisuallyHidden>
@@ -771,6 +781,25 @@ export default class Display extends Component {
                       </svg>
                     </Button>
                   )}
+                  {this.state.dns && (
+                    <Button href={`http://${this.state.dns}`}>
+                      <VisuallyHidden>{this.state.dns}</VisuallyHidden>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="16"
+                        height="16"
+                        fill="currentColor"
+                        viewBox="0 0 16 16"
+                        style={{
+                          fill: 'var(--text-color)',
+                          stroke: 'transparent',
+                          marginRight: '10px',
+                        }}
+                      >
+                        <path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm7.5-6.923c-.67.204-1.335.82-1.887 1.855A7.97 7.97 0 0 0 5.145 4H7.5V1.077zM4.09 4a9.267 9.267 0 0 1 .64-1.539 6.7 6.7 0 0 1 .597-.933A7.025 7.025 0 0 0 2.255 4H4.09zm-.582 3.5c.03-.877.138-1.718.312-2.5H1.674a6.958 6.958 0 0 0-.656 2.5h2.49zM4.847 5a12.5 12.5 0 0 0-.338 2.5H7.5V5H4.847zM8.5 5v2.5h2.99a12.495 12.495 0 0 0-.337-2.5H8.5zM4.51 8.5a12.5 12.5 0 0 0 .337 2.5H7.5V8.5H4.51zm3.99 0V11h2.653c.187-.765.306-1.608.338-2.5H8.5zM5.145 12c.138.386.295.744.468 1.068.552 1.035 1.218 1.65 1.887 1.855V12H5.145zm.182 2.472a6.696 6.696 0 0 1-.597-.933A9.268 9.268 0 0 1 4.09 12H2.255a7.024 7.024 0 0 0 3.072 2.472zM3.82 11a13.652 13.652 0 0 1-.312-2.5h-2.49c.062.89.291 1.733.656 2.5H3.82zm6.853 3.472A7.024 7.024 0 0 0 13.745 12H11.91a9.27 9.27 0 0 1-.64 1.539 6.688 6.688 0 0 1-.597.933zM8.5 12v2.923c.67-.204 1.335-.82 1.887-1.855.173-.324.33-.682.468-1.068H8.5zm3.68-1h2.146c.365-.767.594-1.61.656-2.5h-2.49a13.65 13.65 0 0 1-.312 2.5zm2.802-3.5a6.959 6.959 0 0 0-.656-2.5H12.18c.174.782.282 1.623.312 2.5h2.49zM11.27 2.461c.247.464.462.98.64 1.539h1.835a7.024 7.024 0 0 0-3.072-2.472c.218.284.418.598.597.933zM10.855 4a7.966 7.966 0 0 0-.468-1.068C9.835 1.897 9.17 1.282 8.5 1.077V4h2.355z" />
+                      </svg>
+                    </Button>
+                  )}
                 </div>
               </div>
             </div>
@@ -787,17 +816,22 @@ export default class Display extends Component {
                   creations
                 </Primary>
               </Button>
-
               <Button onClick={this.collectionFull}>
                 <Primary selected={this.state.collectionState} menu>
                   collection
                 </Primary>
               </Button>
-              <Button onClick={() => this.setState({ filter: !this.state.filter })} menu>
-                <Primary>
-                  filter
-                </Primary>
-              </Button>
+              <div className={styles.filter}>
+                <Button onClick={() => this.setState({
+                  filter: !this.state.filter
+                })}>
+                  <Primary>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-filter">
+                      <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+                    </svg>
+                  </Primary>
+                </Button>
+              </div>
             </div>
           </Padding>
         </Container>
@@ -815,7 +849,7 @@ export default class Display extends Component {
             <Container>
               <Padding>
                 <div style={{ color: 'white', background: 'black', textAlign: 'center' }}>
-                  retricted account
+                  restricted account
                 </div>
               </Padding>
             </Container>
@@ -823,126 +857,163 @@ export default class Display extends Component {
         }
 
         {!this.state.loading && this.state.creationsState && (
-          <Container xlarge>
-            {this.state.filter && (
-              <div style={{ display: "flex", justifyContent: "flex-end" }}>
-                <Button
-                  onClick={() => { this.creations() }}>
-                  <div className={styles.tag}>
-                    all
+          <div>
+            <Container>
+              <Padding>
+                {this.state.filter && (
+                  <div style={{ display: "flex", justifyContent: "flex-end" }}>
+                    <Button
+                      onClick={() => { this.creations() }}>
+                      <div className={styles.tag}>
+                        all
+                      </div>
+                    </Button>
+                    <Button
+                      onClick={() => {
+                        this.creationsForSale(0);
+                      }}>
+                      <div className={styles.tag}>
+                        primary
+                      </div>
+                    </Button>
+                    <Button
+                      onClick={() => {
+                        this.creationsForSale(1);
+                      }}>
+                      <div className={styles.tag}>
+                        secondary
+                      </div>
+                    </Button>
+                    <Button
+                      onClick={() => { this.creationsNotForSale() }}>
+                      <div className={styles.tag}>
+                        not for sale
+                      </div>
+                    </Button>
                   </div>
-                </Button>
-                <Button
-                  onClick={() => {
-                    this.creationsForSale();
-                  }}>
-                  <div className={styles.tag}>
-                    for sale
-                  </div>
-                </Button>
-                <Button
-                  onClick={() => { this.creationsNotForSale() }}>
-                  <div className={styles.tag}>
-                    not for sale
-                  </div>
-                </Button>
-              </div>
-            )}
-
-            {this.state.collectionType == 'forSale' ?
-              <>
-                {this.context.acc != null && this.context.acc.address == this.state.wallet ?
-                  <>
-                    {Object.keys(this.state.marketV1).length !== 0 && (
-                      <>
-                        <Container>
-                          <Padding>
-                            <p>We're currently migrating the marketplace smart contract. We ask for
-                              users to cancel their listings as the v1 marketplace will no longer be
-                              maintained. Auditing tools for the v1 protocol can be found at <a href='https://hictory.xyz'>hictory.xyz</a>
-                            </p>
-                          </Padding>
-                        </Container>
-                      </>
-                    )}
-
-                    {this.state.marketV1.length !== 0 ?
-                      <Container>
-                        <Padding>
-                          <p>
-                            One can delist multiple swaps in once batch transaction or delist each single one at a time.
-                          </p>
-                          <br />
-                          <Button onClick={this.cancel_batch}>
-                            <Primary>
-                              Batch Cancel
-                            </Primary>
-                          </Button>
-                        </Padding>
-                      </Container>
-                      :
-                      null
-                    }
-
-                    {this.state.marketV1.map((e, key) => {
-                      // console.log(e)
-                      return (
+                )}
+              </Padding>
+            </Container>
+            <Container xlarge>
+              {this.state.collectionType == 'forSale' ?
+                <>
+                  {this.context.acc != null && this.context.acc.address == this.state.wallet ?
+                    <>
+                      {Object.keys(this.state.marketV1).length !== 0 && (
                         <>
-                          <Container key={key}>
+                          <Container>
                             <Padding>
-                              <Button to={`${PATH.OBJKT}/${e.token_id}`}>
-                                {/* {console.log(e)} */}
-                                <Primary>
-                                  <strong>{e.amount_left}x OBJKT#{e.token_id} {e.price}µtez</strong>
-                                </Primary>
-                              </Button>
-                              <Button onClick={() => this.context.cancel(e.id)}>
-                                <Secondary>
-                                  Cancel Swap
-                                </Secondary>
-                              </Button>
+                              <p>We're currently migrating the marketplace smart contract. We ask for
+                                users to cancel their listings as the v1 marketplace will no longer be
+                                maintained. Auditing tools for the v1 protocol can be found at <a href='https://hictory.xyz'>hictory.xyz</a>
+                              </p>
                             </Padding>
                           </Container>
                         </>
-                      )
-                    })
-                    }
-                  </> : null}
-              </>
-              :
-              null
-            }
+                      )}
 
-            <InfiniteScroll
-              dataLength={this.state.items.length}
-              next={this.loadMore}
-              hasMore={this.state.hasMore}
-              loader={undefined}
-              endMessage={undefined}
-            >
-              <ResponsiveMasonry>
-                {this.state.items.map((nft) => {
-                  return (
-                    <Button key={nft.id} to={`${PATH.OBJKT}/${nft.id}`}>
-                      <div className={styles.container}>
-                        {renderMediaType({
-                          mimeType: nft.mime,
-                          artifactUri: nft.artifact_uri,
-                          displayUri: nft.display_uri,
-                          displayView: true
-                        })}
+                      {this.state.marketV1.length !== 0 ?
+                        <Container>
+                          <Padding>
+                            <p>
+                              One can delist multiple swaps in once batch transaction or delist each single one at a time.
+                            </p>
+                            <br />
+                            <Button onClick={this.cancel_batch}>
+                              <Primary>
+                                Batch Cancel
+                              </Primary>
+                            </Button>
+                          </Padding>
+                        </Container>
+                        :
+                        null
+                      }
+
+                      {this.state.marketV1.map((e, key) => {
+                        // console.log(e)
+                        return (
+                          <>
+                            <Container key={key}>
+                              <Padding>
+                                <Button to={`${PATH.OBJKT}/${e.token_id}`}>
+                                  {/* {console.log(e)} */}
+                                  <Primary>
+                                    <strong>{e.amount_left}x OBJKT#{e.token_id} {e.price}µtez</strong>
+                                  </Primary>
+                                </Button>
+                                <Button onClick={() => this.context.cancel(e.id)}>
+                                  <Secondary>
+                                    Cancel Swap
+                                  </Secondary>
+                                </Button>
+                              </Padding>
+                            </Container>
+                          </>
+                        )
+                      })
+                      }
+                    </> : null}
+                </>
+                :
+                null
+              }
+              <InfiniteScroll
+                dataLength={this.state.items.length}
+                next={this.loadMore}
+                hasMore={this.state.hasMore}
+                loader={undefined}
+                endMessage={undefined}
+              >
+                <ResponsiveMasonry>
+                  {this.state.items.map((nft) => {
+                    // console.log('swaps ' + JSON.stringify(nft))
+                    return (
+                      <div className={styles.cardContainer}>
+                        <Button
+                          style={{ positon: 'relative' }}
+                          key={nft.id}
+                          to={`${PATH.OBJKT}/${nft.id}`}>
+                          <div className={styles.container}>
+                            {renderMediaType({
+                              mimeType: nft.mime,
+                              artifactUri: nft.artifact_uri,
+                              displayUri: nft.display_uri,
+                              displayView: true
+                            })}
+                          </div>
+                        </Button>
+                        {/* <div className={styles.cardContainer}>
+                        <div className={styles.card}>
+                          <div className={styles.cardText}>
+                            <div>OBJKT#{nft.id}</div>
+                            <div className={styles.cardTitle}>{nft.title}</div>
+                          </div>
+                          <div className={styles.cardCollect}>
+                            <Button onClick={() => this.context.collect(nft.swaps[0].id, nft.swaps[0].price)}>
+                              <Purchase>
+                                <div className={styles.cardCollectPrice}>
+                                  {nft.swaps && nft.swaps.length > 0 ? 'collect for ' + nft.swaps[0].price / 1000000 + ' tez' : 'not for sale'}
+                                </div>
+                              </Purchase>
+                            </Button>
+                          </div>
+                        </div>
+                      </div> */}
                       </div>
-                    </Button>
-                  )
-                })}
-              </ResponsiveMasonry>
-            </InfiniteScroll>
-          </Container>
+                    )
+                  })}
+                </ResponsiveMasonry>
+              </InfiniteScroll>
+            </Container>
+          </div>
         )}
 
         {!this.state.loading && this.state.collectionState && (
-          <Container xlarge>
-            {this.state.filter && (
+          <div>
+            <Container>
+              <Padding>
+              {this.state.filter && (
               <div>
                 <div style={{ display: "flex", justifyContent: "flex-end" }}>
                   <Button
@@ -964,6 +1035,9 @@ export default class Display extends Component {
                 </div>
               </div>
             )}
+              </Padding>
+            </Container>
+          <Container xlarge>
 
             {this.state.collectionType == 'forSale' ?
               <>
@@ -1038,24 +1112,45 @@ export default class Display extends Component {
             >
               <ResponsiveMasonry>
                 {this.state.items.map((nft) => {
-                  // console.log('nft : ' + nft)
+                  //console.log('nft: ' + JSON.stringify(nft))
                   return (
-                    <Button key={nft.token.id} to={`${PATH.OBJKT}/${nft.token.id}`}>
-                      <div className={styles.container}>
-                        {renderMediaType({
-                          mimeType: nft.token.mime,
-                          artifactUri: nft.token.artifact_uri,
-                          displayUri: nft.token.display_uri,
-                          displayView: true
-                        })}
-                      </div>
-                    </Button>
+                    <div className={styles.cardContainer}>
+                      <Button
+                        style={{ position: 'relative' }}
+                        key={nft.token.id}
+                        to={`${PATH.OBJKT}/${nft.token.id}`}>
+                        <div className={styles.container}>
+                          {renderMediaType({
+                            mimeType: nft.token.mime,
+                            artifactUri: nft.token.artifact_uri,
+                            displayUri: nft.token.display_uri,
+                            displayView: true
+                          })}
+                        </div>
+                      </Button>
+                      {/*                       <div className={styles.card}>
+                        <div className={styles.cardText}>
+                          <div>OBJKT#{nft.token.id}</div>
+                          <div>{nft.token.title}</div>
+                          <div>{nft.token.creator.name}</div>
+                        </div>
+                        <div className={styles.cardCollect}>
+                          <Button onClick={() => this.context.collect(nft.id, nft.price)}>
+                            <Purchase>
+                              <div className={styles.cardCollectPrice}>
+                                {nft.price ? 'collect for ' + nft.price / 1000000 : 'not for sale'}
+                              </div>
+                            </Purchase>
+                          </Button>
+                        </div>
+                      </div> */}
+                    </div>
                   )
                 })}
               </ResponsiveMasonry>
             </InfiniteScroll>
-
           </Container>
+          </div>
         )}
         {/*       <BottomBanner>
         API is down due to heavy server load — We're working to fix the issue — please be patient with us. <a href="https://discord.gg/mNNSpxpDce" target="_blank">Join the discord</a> for updates.

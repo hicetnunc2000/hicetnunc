@@ -181,6 +181,14 @@ const getRestrictedAddresses = async () =>
     )
     .then((res) => res.data)
 
+const GetUserClaims = async (arr) => {
+  return await axios.post('https://indexer.tzprofiles.com/v1/graphql', {
+    query: `query MyQuery { tzprofiles_by_pk(account: \"${walletAddr}\") { valid_claims } }`,
+    variables: null,
+    operationName: 'MyQuery',
+  })
+}
+
 const ONE_MINUTE_MILLIS = 60 * 1000
 
 export const Feeds = ({ type }) => {
@@ -194,11 +202,11 @@ export const Feeds = ({ type }) => {
   const startTime = customFloor(Date.now(), ONE_MINUTE_MILLIS)
 
   const loadMore = async () => {
-    if (type === 1) {
+/*     if (type === 1) {
       await getHdaoFeed()
-    }
-    if (type === 2) await getRandomFeed()
-    if (type === 3) await getLatest(Math.min.apply(Math, items.map(e => e.id)))
+    } */
+    await getRandomFeed()
+    //if (type === 3) await getLatest(Math.min.apply(Math, items.map(e => e.id)))
   }
 
   useEffect(async () => {
@@ -207,7 +215,7 @@ export const Feeds = ({ type }) => {
       return
     }
     console.log(type)
-    if (type === 0) {
+/*     if (type === 0) {
       GetLatestFeed({ counter: count, max_time: startTime })
         .then((result) => {
           const next = items.concat(result)
@@ -223,10 +231,10 @@ export const Feeds = ({ type }) => {
         })
     } else if (type === 1) {
       await getHdaoFeed()
-    } else if (type === 2) {
+    } else if (type === 2) { */
       await getRandomFeed()
-    } else if (type === 3) {
-      await getLatest(lastId)
+/*     } else if (type === 3) {
+      await getLatest(lastId) */
 
       /*       GetFeaturedFeed({ counter: count, max_time: startTime })
         .then((result) => {
@@ -242,7 +250,7 @@ export const Feeds = ({ type }) => {
         .catch((e) => {
           setError(true)
         }) */
-    }
+    //}
   }, [count, type])
 
   const getLatest = async (id) => {
@@ -314,7 +322,7 @@ export const Feeds = ({ type }) => {
           </Padding>
         </Container>
       }
-{/*       <BottomBanner>
+      {/*       <BottomBanner>
         API is down due to heavy server load — We're working to fix the issue — please be patient with us. <a href="https://discord.gg/mNNSpxpDce" target="_blank">Join the discord</a> for updates.
       </BottomBanner> */}
     </Page>

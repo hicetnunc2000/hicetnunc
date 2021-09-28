@@ -16,7 +16,6 @@ body {
   // font-family: 'Courier New', 'Courier', monospace; // README: old font
   overflow-x: hidden;
   color: var(--text-color);
-  
   background-color: var(--background-color);
   transition: background-color #{$theme-duration} ease-out,
     color #{$theme-duration} ease-out;

@@ -94,7 +94,7 @@ export const routes = [
   },
   {
     exact: false,
-    path: '/explore',
+    path: '/search',
     component: Search,
   },
   {

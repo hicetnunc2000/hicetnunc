@@ -175,13 +175,13 @@ export const ItemInfo = ({
           <div className={styles.inline}>
             <Button
               to={
-                `/tz/${creator.address}`
+                `/tz/${creator?.address}`
               }
             >
-              {creator.name ? (
-                <Primary>{encodeURI(creator.name)}</Primary>
+              {creator?.name ? (
+                <Primary>{encodeURI(creator?.name)}</Primary>
               ) : (
-                <Primary>{walletPreview(creator.address)}</Primary>
+                <Primary>{walletPreview(creator?.address)}</Primary>
               )}
             </Button>
           </div>

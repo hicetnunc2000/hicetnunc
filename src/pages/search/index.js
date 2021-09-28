@@ -9,6 +9,7 @@ import { Input } from '../../components/input'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { renderMediaType } from '../../components/media-types'
 import './style.css'
+import { last } from 'lodash'
 
 const axios = require('axios')
 const ls = require('local-storage')
@@ -174,7 +175,7 @@ async function fetchGLB(offset) {
 async function fetchInteractive(offset) {
   const { errors, data } = await fetchGraphQL(`
     query InteractiveObjkts {
-      hic_et_nunc_token(where: { mime: {_in : [ "application/x-directory" ]}, supply : { _neq : 0 } }, limit : 15, offset : ${offset}, order_by: {id: desc}) {
+      hic_et_nunc_token(where: { mime: {_in : [ "application/x-directory", "image/svg+xml" ]}, supply : { _neq : 0 } }, limit : 15, offset : ${offset}, order_by: {id: desc}) {
         id
         artifact_uri
         display_uri
@@ -341,6 +342,7 @@ async function fetchRandomObjkts() {
 }
 
 async function fetchDay(day, offset) {
+  console.log(day)
   const { errors, data } = await fetchGraphQL(`query dayTrades {
     hic_et_nunc_trade(where: {timestamp: {_gte: "${day}"}}, order_by: {swap: {price: desc}}, limit : 15, offset : ${offset}) {
       timestamp
@@ -355,6 +357,38 @@ async function fetchDay(day, offset) {
       }
     }
   }`, 'dayTrades', {})
+
+  if (errors) {
+    console.log(errors)
+  }
+
+  let result = []
+
+  try {
+    result = data.hic_et_nunc_trade
+  } catch (e) { }
+
+  return result
+
+}
+
+async function fetchSales(offset) {
+  console.log(offset)
+  const { errors, data } = await fetchGraphQL(`
+  query sales {
+    hic_et_nunc_trade(order_by: {timestamp: desc}, limit : 15, offset : ${offset}) {
+      timestamp
+      swap {
+        price
+      }
+      token {
+        artifact_uri
+        display_uri
+        id
+        mime
+      }
+    }
+  }`, 'sales', {})
 
   if (errors) {
     console.log(errors)
@@ -464,6 +498,8 @@ async function fetchHdao(offset) {
   return result
 }
 
+
+
 export class Search extends Component {
   static contextType = HicetnuncContext
 
@@ -476,15 +512,17 @@ export class Search extends Component {
     prev: '',
     reset: false,
     flag: false,
+    lastId: undefined,
     tags: [
       { id: 0, value: '○' },
-      { id: 1, value: 'random' },
-      { id: 2, value: 'glb' },
-      { id: 3, value: 'music' },
-      { id: 4, value: 'interactive' },
-      { id: 5, value: 'gif' },
-      { id: 6, value: '1D'},
-      { id: 7, value: '1W'},
+      { id: 1, value: 'latest sales' },
+      { id: 2, value: 'latest mints' },
+      { id: 3, value: 'glb' },
+      { id: 4, value: 'music' },
+      { id: 5, value: 'interactive' },
+      { id: 6, value: 'gif' },
+      { id: 7, value: '1D'},
+      { id: 8, value: '1W'}
       /*       { id: 4, value: 'illustration' }, */
       /*       { id: 5, value: 'gif' } */
 
@@ -586,6 +624,19 @@ export class Search extends Component {
     if (e == 'tag') {
       console.log(this.state.feed.length)
       this.setState({ feed: [...this.state.feed, ...(await fetchTag(this.state.search, this.state.feed[this.state.feed.length - 1].id))] })
+    }
+
+    if (e == 'latest sales') {
+      let tokens = await fetchSales(this.state.offset + 250)
+      tokens = tokens.map(e => e.token)
+      tokens = _.uniqBy(tokens, 'id')
+
+      this.setState({ feed: _.uniqBy([...this.state.feed, ...tokens], 'id')})
+    }
+
+    if (e == 'latest mints') {
+      this.setState({ feed: [...this.state.feed, ...(await fetchFeed(999999 || this.state.lastId))] })
+      this.setState({ lastId : Math.min.apply(Math, this.state.feed.map(e => e.id))})
     }
 
     this.setState({ reset: false })

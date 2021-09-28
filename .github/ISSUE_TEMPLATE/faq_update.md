@@ -1,7 +1,7 @@
 ---
 name: FAQ update
 about: Submit an update to the Hic et Nunc FAQs
-title: "FAQ: [summary of change]"
+title: 'FAQ: [summary of change]'
 labels: FAQ
 assignees: violetforest
 
