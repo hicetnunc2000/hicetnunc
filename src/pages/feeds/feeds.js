@@ -165,7 +165,7 @@ async function fetchRandomObjkts() {
   const lastId = await getLastId()
 
   const uniqueIds = new Set()
-  while (uniqueIds.size < 50) {
+  while (uniqueIds.size < 10) {
     uniqueIds.add(rnd(firstId, lastId))
   }
 
