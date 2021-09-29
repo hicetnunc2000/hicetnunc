@@ -114,9 +114,9 @@ export const Header = () => {
             <Container>
               <Padding>
                 <nav className={styles.content}>
-                  <ul>
+                  <ul style={{ borderRight: '1px solid var(--border-color)' }}>
                     <li>
-                      <Button onClick={() => handleRoute('/search')}>
+                      <Button onClick={() => handleRoute('/explore')}>
                         <Primary>search</Primary>
                       </Button>
                     </li>
@@ -125,32 +125,11 @@ export const Header = () => {
                         <Primary>galleries</Primary>
                       </Button>
                     </li>
-                    <li>
-                      <Button onClick={() => handleRoute('/mint')}>
-                        <Primary>
-                          OBJKT<span style={{ fontSize: '16px' }}> (mint)</span>
-                        </Primary>
-                      </Button>
-                    </li>
 {/*                     <li>
                       <Button onClick={() => handleRoute('/collaborate')}>
                         <Primary>collaborate</Primary>
                       </Button>
                     </li> */}
-                    <li>
-                      <Button onClick={() => handleRoute('/sync')}>
-                        <Primary>manage assets</Primary>
-                      </Button>
-                    </li>
-                    { context.acc?.address ?
-                      <li>
-                        <Button onClick={() => handleRoute('/config')}>
-                          <Primary>edit profile</Primary>
-                        </Button>
-                      </li>
-                      :
-                      null
-                    }
                     <li>
                       <Button onClick={() => handleRoute('/about')}>
                         <Primary>about</Primary>
@@ -162,6 +141,34 @@ export const Header = () => {
                       </Button>
                     </li>
                   </ul>
+                  {context.acc?.address ?
+                    <ul>
+                      <div className={styles.address}>
+                        {walletPreview(context.acc.address)}
+                      </div>
+                      <li style={{ textAlign: 'left' }}>
+                        <Button onClick={() => handleRoute('/mint')}>
+                          <Primary left>
+                            mint OBJKT
+                          </Primary>
+                        </Button>
+                      </li>
+                      <li style={{ textAlign: 'left' }}>
+                        <Button onClick={() => handleRoute('/sync')}>
+                          <Primary left>manage assets</Primary>
+                        </Button>
+                      </li>
+                      <li style={{ textAlign: 'left' }}>
+                        <Button onClick={() => handleRoute('/config')}>
+                          <Primary left>profile</Primary>
+                        </Button>
+                      </li>
+                    </ul>
+                     :
+                     <ul>
+                        <div className={styles.no__address__text}>The present decentralized application allows its users to manage decentralized digital assets, serving as a public smart contract infrastructure on Tezos Blockchain.</div>
+                     </ul>
+                    }
                 </nav>
               </Padding>
             </Container>

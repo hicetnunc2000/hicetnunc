@@ -94,8 +94,7 @@ class HicetnuncContextProviderClass extends Component {
       hDAO_curation: 'KT1TybhR7XraG75JFYKSrh7KnxukMBT5dor6',
       hDAO_marketplace: 'KT1QPvv7sWVaT9PcPiC4fN9BgfX8NB2d5WzL',
 
-      lastId : undefined,
-      setId : (id) => this.setState({ lastId : id }),
+      lastId: undefined,
 
       subjktInfo: {},
       setSubjktInfo: (subjkt) => this.setState({ subjktInfo: subjkt }),
@@ -228,6 +227,10 @@ class HicetnuncContextProviderClass extends Component {
         root.style.setProperty(
           '--shadow-color',
           light ? 'rgba(0,0,0,0.2)' : 'rgba(255,255,255,0.3)'
+        )
+        root.style.setProperty(
+          '--secondary-color',
+          light ? 'rgba(0, 0, 0, 0.5)' : 'rgba(255, 255, 255, 0.5)'
         )
 
         this.setState({ theme })
@@ -432,7 +435,8 @@ class HicetnuncContextProviderClass extends Component {
                   .curate(
                     ls.get('hDAO_config') != null
                       ? parseInt(ls.get('hDAO_config'))
-                      : 1,
+                      :
+                      1,
                     objkt_id
                   )
                   .send()
