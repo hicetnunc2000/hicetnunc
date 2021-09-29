@@ -68,7 +68,7 @@ export const OwnerSwaps = ({ swaps, handleCollect, acc, cancel, restricted, canc
             <div className={styles.buttons}>
               {!restricted && (
                 <Button onClick={() => handleCollect(swap.id, swap.price)}>
-                  <Purchase>
+                  <Purchase primary={true}>
                     collect for {parseFloat(swap.price / 1000000)} tez
                   </Purchase>
                 </Button>
@@ -76,13 +76,14 @@ export const OwnerSwaps = ({ swaps, handleCollect, acc, cancel, restricted, canc
               {swap.creator.address ===
                 (acc !== undefined ? acc.address : '') && (
                   <Button onClick={() => cancel(swap.id)}>
-                    <Purchase>cancel</Purchase>
+                    <Purchase primary={true}>cancel</Purchase>
                   </Button>
                 )}
             </div>
           </div>
         )
       })}
+      <div className={styles.border} />
     </div>
   )
 }

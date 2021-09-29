@@ -18,14 +18,27 @@
 
 .primary {
   color: var(--text-color);
+
   transition: color #{$theme-duration} ease-out;
 
   &.selected {
     font-weight: bold;
+
+    margin-bottom: -1px;
+    border-bottom: 1px solid var(--text-color);
+    padding: 6px 0;
   }
 
   @include hover {
-    &:not(.selected) {
+    &.menu {
+      margin-bottom: -1px;
+      border-bottom: 1px solid var(--text-color);
+      padding: 6px 0;
+
+      text-decoration: none;
+    }
+
+    &:not(.selected):not(.menu) {
       text-decoration: underline;
     }
   }
@@ -42,11 +55,20 @@
 
 .purchase {
   padding: 2px 6px;
-  color: var(--text-color);
-  border-right: 2px solid var(--text-color);
-  border-bottom: 2px solid var(--text-color);
+
+  color: var(--gray-100);
+  background-color: var(--gray-5);
+  border-right: 2px solid var(--gray-100);
+  border-bottom: 2px solid var(--gray-100);
   transition: border-color #{$theme-duration} ease-out,
     color #{$theme-duration} ease-out;
+}
+
+.purchase:hover {
+  color: var(--gray-100);
+  background-color: var(--gray-5);
+  border-right: 2px solid var(--gray-50);
+  border-bottom: 2px solid var(--gray-50);
 }
 
 .curate {
@@ -62,4 +84,24 @@
   border-bottom: 2px solid var(--text-color);
   transition: border-color #{$theme-duration} ease-out,
     color #{$theme-duration} ease-out;
+}
+
+.primary__purchase {
+  width: calc(100vw - 2em);
+
+  margin: 1em 0;
+  @include respond-to('desktop'){
+    width: auto;
+    margin: 0;
+  }
+}
+
+.dark {
+  background-color: var(--gray-15);
+  border-right: 2px solid var(--gray-100);
+  border-bottom: 2px solid var(--gray-100);
+}
+
+.dark:hover {
+  background-color: var(--gray-15);
 }

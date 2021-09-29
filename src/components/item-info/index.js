@@ -124,7 +124,7 @@ export const ItemInfo = ({
               <div>
                 <p>
                   <span>
-                    Editions:
+                    editions:&nbsp;
                     <span>
                       {ed}/{total}
                     </span>
@@ -136,32 +136,35 @@ export const ItemInfo = ({
           {feed && (
             <div className={styles.objktContainer}>
               <Button to={`${PATH.OBJKT}/${id}`} disabled={isDetailView}>
-                <Primary>OBJKT#{id}</Primary>
+                <Primary>OBJKT&nbsp;#{id}</Primary>
               </Button>
             </div>
           )}
         </div>
 
-        {isDetailView && !restricted && (
-          <div className={styles.spread}>
-            <p style={{ paddingBottom: '7.5px' }}>OBJKT#{id}</p>
-            <Button onClick={() => handleCollect()}>
-              <Purchase>{message}</Purchase>
+        <div className={styles.spread}>
+          <div className={styles.spread__inner} style={{ paddingBottom: '7.5px' }}>
+            {isDetailView && !restricted && (
+                <p>OBJKT&nbsp;#{id}</p>
+            )}
+            <Button onClick={() => curate(id)}>
+              <Primary>
+                <span
+                  className={styles.top}
+                  data-position={'top'}
+                  data-tooltip={'curate'}
+                >
+                  〇
+                </span>
+              </Primary>
             </Button>
           </div>
-        )}
-        <div className={styles.spread}>
-          <Button onClick={() => curate(id)}>
-            <Primary>
-              <span
-                className={styles.top}
-                data-position={'top'}
-                data-tooltip={'curate'}
-              >
-                〇
-              </span>
-            </Primary>
-          </Button>
+
+          {isDetailView && !restricted && (
+            <Button onClick={() => handleCollect()}>
+              <Purchase primary={true}>{message}</Purchase>
+            </Button>
+          )}
         </div>
       </>
     )
@@ -184,7 +187,7 @@ export const ItemInfo = ({
           </div>
           <div className={styles.objktContainer}>
             <Button to={`${PATH.OBJKT}/${id}`}>
-              <Primary>OBJKT#{id}</Primary>
+              <Primary>OBJKT&nbsp;#{id}</Primary>
             </Button>
             <Button onClick={() => curate(id)}>
               <Primary>

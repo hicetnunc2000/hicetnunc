@@ -94,8 +94,7 @@ class HicetnuncContextProviderClass extends Component {
       hDAO_curation: 'KT1TybhR7XraG75JFYKSrh7KnxukMBT5dor6',
       hDAO_marketplace: 'KT1QPvv7sWVaT9PcPiC4fN9BgfX8NB2d5WzL',
 
-      lastId : undefined,
-      setId : (id) => this.setState({ lastId : id }),
+      lastId: undefined,
 
       subjktInfo: {},
       setSubjktInfo: (subjkt) => this.setState({ subjktInfo: subjkt }),
@@ -229,6 +228,66 @@ class HicetnuncContextProviderClass extends Component {
           '--shadow-color',
           light ? 'rgba(0,0,0,0.2)' : 'rgba(255,255,255,0.3)'
         )
+        root.style.setProperty(
+          '--secondary-color',
+          light ? 'rgba(0, 0, 0, 0.5)' : 'rgba(255, 255, 255, 0.5)'
+        )
+
+        //greyscale
+        root.style.setProperty(
+          '--gray-0',
+          light ? '#FFFFFF' : '#000000'
+        )
+        root.style.setProperty(
+          '--gray-5',
+          light ? '#F2F2F2' : '#0D0D0D'
+        )
+        root.style.setProperty(
+          '--gray-10',
+          light ? '#E6E6E6' : '#1A1A1A'
+        )
+        root.style.setProperty(
+          '--gray-15',
+          light ? '#D9D9D9' : '#262626'
+        )
+        root.style.setProperty(
+          '--gray-20',
+          light ? '#CCCCCC' : '#333333'
+        )
+        root.style.setProperty(
+          '--gray-30',
+          light ? '#B3B3B3' : '#4D4D4D'
+        )
+        root.style.setProperty(
+          '--gray-40',
+          light ? '#999999' : '#666666'
+        )
+        root.style.setProperty(
+          '--gray-50',
+          light ? '#808080' : '#808080'
+        )
+        root.style.setProperty(
+          '--gray-60',
+          light ? '#666666' : '#999999'
+        )
+        root.style.setProperty(
+          '--gray-70',
+          light ? '#4D4D4D' : '#B3B3B3'
+        )
+        root.style.setProperty(
+          '--gray-80',
+          light ? '#333333' : '#CCCCCC'
+        )
+        root.style.setProperty(
+          '--gray-90',
+          light ? '#191919' : '#E6E6E6'
+        )
+        root.style.setProperty(
+          '--gray-100',
+          light ? '#000000' : '#FFFFFF'
+        )
+        
+
 
         this.setState({ theme })
       },
@@ -432,7 +491,8 @@ class HicetnuncContextProviderClass extends Component {
                   .curate(
                     ls.get('hDAO_config') != null
                       ? parseInt(ls.get('hDAO_config'))
-                      : 1,
+                      :
+                      1,
                     objkt_id
                   )
                   .send()

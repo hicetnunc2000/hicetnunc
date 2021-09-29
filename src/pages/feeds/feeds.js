@@ -152,20 +152,12 @@ function rnd(min, max) {
   return Math.floor(Math.random() * (max - min + 1) + min)
 }
 
-function shuffle(a) {
-  for (let i = a.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [a[i], a[j]] = [a[j], a[i]];
-  }
-  return a;
-}
-
 async function fetchRandomObjkts() {
   const firstId = 196
   const lastId = await getLastId()
 
   const uniqueIds = new Set()
-  while (uniqueIds.size < 10) {
+  while (uniqueIds.size < 7) {
     uniqueIds.add(rnd(firstId, lastId))
   }
 
@@ -179,7 +171,7 @@ async function fetchRandomObjkts() {
   }
 
   const result = data
-  return shuffle(objkts.hic_et_nunc_token)
+  return objkts.hic_et_nunc_token
 }
 
 const getRestrictedAddresses = async () =>
@@ -213,8 +205,8 @@ export const Feeds = ({ type }) => {
 /*     if (type === 1) {
       await getHdaoFeed()
     } */
-    //await getRandomFeed()
-    await getLatest(Math.min.apply(Math, items.map(e => e.id)))
+    await getRandomFeed()
+    //if (type === 3) await getLatest(Math.min.apply(Math, items.map(e => e.id)))
   }
 
   useEffect(async () => {
@@ -240,9 +232,9 @@ export const Feeds = ({ type }) => {
     } else if (type === 1) {
       await getHdaoFeed()
     } else if (type === 2) { */
-      //await getRandomFeed()
-    //} else if (type === 3) {
-      await getLatest(lastId)
+      await getRandomFeed()
+/*     } else if (type === 3) {
+      await getLatest(lastId) */
 
       /*       GetFeaturedFeed({ counter: count, max_time: startTime })
         .then((result) => {
