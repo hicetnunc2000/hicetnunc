@@ -32,8 +32,8 @@ const createProxySchema = `
 // This should be moved to a service so it is only done once on page load
 //const Tezos = new TezosToolkit('https://api.tez.ie/rpc/mainnet')
 //const Tezos = new TezosToolkit('https://mainnet-tezos.giganode.io')
-//const Tezos = new TezosToolkit('https://mainnet.smartpy.io')
-const Tezos = new TezosToolkit('https://mainnet.api.tez.ie')
+const Tezos = new TezosToolkit('https://mainnet.smartpy.io')
+//const Tezos = new TezosToolkit('https://mainnet.api.tez.ie')
 //const Tezos = new TezosToolkit('https://api.tez.ie/rpc/mainnet')
 // storage fee adjustment
 
