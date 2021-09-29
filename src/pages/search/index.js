@@ -9,7 +9,7 @@ import { Input } from '../../components/input'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { renderMediaType } from '../../components/media-types'
 import './style.css'
-import { last } from 'lodash'
+import { concat, last } from 'lodash'
 
 const axios = require('axios')
 const ls = require('local-storage')
@@ -17,11 +17,9 @@ const _ = require('lodash')
 
 const isFloat = (n) => Number(n) === n && n % 1 !== 0
 
-
-async function fetchFeed(lastId) {
-  const { errors, data } = await fetchGraphQL(`
-query LatestFeed {
-  hic_et_nunc_token(order_by: {id: desc}, limit: 35, where: {id: {_lt: ${lastId}}, artifact_uri: {_neq: ""}}) {
+const latest_feed = `
+query LatestFeed($lastId: bigint = 99999999) {
+  hic_et_nunc_token(order_by: {id: desc}, limit: 15, where: {id: {_lt: $lastId}, artifact_uri: {_neq: ""}}) {
     artifact_uri
     display_uri
     creator_id
@@ -35,7 +33,10 @@ query LatestFeed {
       address
     }
   }
-}`, "LatestFeed", {});
+}`
+
+async function fetchFeed(lastId) {
+  const { errors, data } = await fetchGraphQL(latest_feed, "LatestFeed", { "lastId": lastId });
   if (errors) {
     console.error(errors);
   }
@@ -163,7 +164,6 @@ async function fetchGLB(offset) {
   }
   `, 'GLBObjkts', {}
   )
-  console.log('glb', data.hic_et_nunc_token)
   try {
     return data.hic_et_nunc_token
   } catch (e) {
@@ -292,7 +292,6 @@ query creatorGallery {
     console.error(errors)
   }
   const result = data.hic_et_nunc_token
-  /* console.log({ result }) */
   return result
 }
 
@@ -372,7 +371,6 @@ async function fetchDay(day, offset) {
 }
 
 async function fetchSales(offset) {
-  console.log(offset)
   const { errors, data } = await fetchGraphQL(`
   query sales {
     hic_et_nunc_trade(order_by: {timestamp: desc}, limit : 15, offset : ${offset}) {
@@ -431,11 +429,12 @@ async function fetchSubjkts(subjkt) {
 async function fetchTag(tag, offset) {
   const { errors, data } = await fetchGraphQL(
     `query ObjktsByTag {
-  hic_et_nunc_token(where: {supply : { _neq : 0 }, token_tags: {tag: {tag: {_eq: ${tag}}}}, id: {_lt: ${offset}}}, limit : 15, order_by: {id: desc}) {
+  hic_et_nunc_token(where: {supply : { _neq : 0 }, token_tags: {tag: {tag: {_eq: ${tag}}}}}, limit : 30, order_by: {id: desc}, offset : ${offset}) {
     id
     artifact_uri
     display_uri
     mime
+    creator_id
     token_tags {
       tag {
         tag
@@ -500,7 +499,7 @@ async function fetchHdao(offset) {
 const getRestrictedAddresses = async () =>
   await axios
     .get(
-      'https://raw.githubusercontent.com/hicetnunc2000/hicetnunc-reports/main/filters/w.json'
+      'https://raw.githubusercontent.com/hicetnunc2000/hicetnunc/main/filters/w.json'
     )
     .then((res) => res.data)
 
@@ -511,6 +510,7 @@ export class Search extends Component {
     subjkt: [],
     items: [],
     feed: [],
+    filter: [],
     search: '',
     select: '',
     prev: '',
@@ -519,14 +519,14 @@ export class Search extends Component {
     lastId: undefined,
     tags: [
       { id: 0, value: '○' },
-      { id: 1, value: 'random' },
-      { id: 2, value: 'glb' },
-      { id: 3, value: 'music' },
-      { id: 4, value: 'interactive' },
-      { id: 5, value: 'gif' },
-      { id: 6, value: 'latest sales' },
-      { id: 7, value: '1D' },
-      { id: 8, value: '1W' }
+      { id: 1, value: 'latest sales' },
+      { id: 2, value: 'latest creations' },
+      { id: 3, value: 'glb' },
+      { id: 4, value: 'music' },
+      { id: 5, value: 'interactive' },
+      { id: 6, value: 'gif' },
+      { id: 7, value: '1D'},
+      { id: 8, value: '1W'}
       /*       { id: 4, value: 'illustration' }, */
       /*       { id: 5, value: 'gif' } */
 
@@ -557,49 +557,48 @@ export class Search extends Component {
   update = async (e, reset) => {
 
     let arr = await getRestrictedAddresses()
-
     this.setState({ select: e })
+
     if (reset) {
       this.state.feed = []
       this.state.offset = 0
     }
 
     if (e === '1D') {
-      console.log(new Date((new Date()).getTime() - 60 * 60 * 24 * 1000))
+      //console.log(new Date((new Date()).getTime() - 60*60*24*1000))
 
-      let list = await fetchDay(new Date((new Date()).getTime() - 60 * 60 * 24 * 1000).toISOString(), this.state.offset)
+      let list = await fetchDay(new Date((new Date()).getTime() - 60*60*24*1000).toISOString(), this.state.offset)
       list = list.map(e => e.token)
       list = [...this.state.feed, ...(list)]
       list = _.uniqBy(list, 'id')
 
       this.setState({
-        feed: list
+        feed : list
       })
     }
 
     if (e === '1W') {
-      let list = await fetchDay(new Date((new Date()).getTime() - 60 * 60 * 24 * 30 * 1000).toISOString(), this.state.offset)
+      let list = await fetchDay(new Date((new Date()).getTime() - 60*60*24*30*1000).toISOString(), this.state.offset)
       list = list.map(e => e.token)
       list = [...this.state.feed, ...(list)]
       list = _.uniqBy(list, 'id')
-
       this.setState({
-        feed: list
+        feed : list.filter(e => !arr.includes(e.creator_id))
       })
     }
 
     if (e === 'num') {
       this.setState({
-        feed: [...this.state.feed, ...(await fetchFeed(Number(this.state.search) + 1 - this.state.offset))]
+        feed: [...this.state.feed, ...(await fetchFeed(Number(this.state.search) + 1 - this.state.offset))].filter(e => !arr.includes(e.creator_id))
       })
     }
 
     if (e === '○') {
-      this.setState({ feed: [...this.state.feed, ...(await fetchHdao(this.state.offset))], hdao: true })
+      this.setState({ feed: [...this.state.feed, ...(await fetchHdao(this.state.offset))].filter(e => !arr.includes(e.creator_id)), hdao: true })
     }
 
     if (e === 'music') {
-      this.setState({ feed: [...this.state.feed, ...(await fetchMusic(this.state.offset))] })
+      this.setState({ feed: [...this.state.feed, ...(await fetchMusic(this.state.offset))].filter(e => !arr.includes(e.creator_id)) })
     }
 
     if (e === 'video') {
@@ -607,19 +606,19 @@ export class Search extends Component {
     }
 
     if (e === 'glb') {
-      this.setState({ feed: [...this.state.feed, ...(await fetchGLB(this.state.offset))] })
+      this.setState({ feed: [...this.state.feed, ...(await fetchGLB(this.state.offset))].filter(e => !arr.includes(e.creator_id)) })
     }
 
     if (e === 'interactive') {
-      this.setState({ feed: [...this.state.feed, ...(await fetchInteractive(this.state.offset))] })
+      this.setState({ feed: [...this.state.feed, ...(await fetchInteractive(this.state.offset))].filter(e => !arr.includes(e.creator_id)) })
     }
 
     if (e == 'random') {
-      this.setState({ feed: [...this.state.feed, ...(await fetchRandomObjkts())] })
+      this.setState({ feed: [...this.state.feed, ...(await fetchRandomObjkts())].filter(e => !arr.includes(e.creator_id)) })
     }
 
     if (e == 'gif') {
-      this.setState({ feed: [...this.state.feed, ...(await fetchGifs(this.state.offset))] })
+      this.setState({ feed: _.uniqBy([...this.state.feed, ...(await fetchGifs(this.state.offset))].filter(e => !arr.includes(e.creator_id)), 'creator_id') })
       //this.setState({ feed: [...this.state.feed, ...(await fetchGifs(this.state.offset))] })
     }
 
@@ -629,7 +628,7 @@ export class Search extends Component {
 
     if (e == 'tag') {
       console.log(this.state.feed.length)
-      this.setState({ feed: [...this.state.feed, ...(await fetchTag(this.state.search, this.state.feed[this.state.feed.length - 1].id))] })
+      this.setState({ feed: _.uniqBy([...this.state.feed, ...(await fetchTag(this.state.search, this.state.offset + 15))].filter(e => !arr.includes(e.creator_id)), 'creator_id') })
     }
 
     if (e == 'latest sales') {
@@ -637,34 +636,33 @@ export class Search extends Component {
       tokens = tokens.map(e => e.token)
       tokens = _.uniqBy(tokens, 'id')
 
-      this.setState({ feed: _.uniqBy([...this.state.feed, ...tokens], 'id') })
+      this.setState({ feed: _.uniqBy([...this.state.feed, ...tokens].filter(e => !arr.includes(e.creator_id)), 'id')})
     }
 
-    if (this.state.select == 'latest mints') {
-      console.log(999999 || this.context.lastId)
-      let result = await fetchFeed(999999 || this.context.lastId)
-      result = result.filter(e => !arr.includes(e.creator_id))
-      console.log(result)
-      //console.log(await GetUserClaims(arr))
-      //console.log(Math.min.apply(Math, result.map(e => e.id)))
-      this.setState({ feed: _.uniqBy([...this.state.feed, ...result], 'creator_id'), lastId: Math.min.apply(Math, result.map(e => e.id))})
-      //this.context.lastId = Math.min.apply(Math, result.map(e => e.id))
-      this.context.setId(Math.min.apply(Math, result.map(e => e.id)))
+    if (e == 'latest mints') {
+      let id = this.context.lastId || 999999
+      this.setState({ feed: _.uniqBy(this.state.feed.concat(...(await fetchFeed(id)).filter(e => !arr.includes(e.creator_id))), 'creator_id') })
+      this.setState({ lastId : Math.min.apply(Math, this.state.feed.map(e => e.id))})
+      this.context.lastId = Math.min.apply(Math, this.state.feed.map(e => e.id))
     }
 
+    //let arr = await getRestrictedAddresses()
     this.setState({ reset: false })
 
-    //this.setState({ feed : this.state.feed })
+    //console.log(arr)
+
+    //console.log(this.state.feed.filter(e => arr.includes(e.creator_address)))
+    //this.setState({ feed : this.state.feed.filter(e => arr.includes(e.creator_address)) })
 
   }
 
   search = async (e) => {
     //console.log(await fetchGLB())
     //console.log(await fetchMusic())
+    let arr = await getRestrictedAddresses()
 
     this.setState({ items: [], feed: [], search: e })
     // search for alias
-    console.log(await fetchSubjkts(e))
     this.setState({ subjkt: await fetchSubjkts(this.state.search) })
 
     if ((this.state.subjkt[0]?.hdao_balance > 30000000) || (isFloat(Number(this.state.search)))) {
@@ -673,7 +671,7 @@ export class Search extends Component {
       //await fetchLatest(this.state.search)
       this.setState({ feed: await fetchFeed(Number(this.state.search) + 1), select: 'num' })
     } else {
-      this.setState({ feed: await fetchTag(this.state.search.toLowerCase(), 9999999), select: 'tag' })
+      this.setState({ feed: _.uniqBy((await fetchTag(this.state.search.toLowerCase(), 0)).filter(e => !arr.includes(e.creator_id)), 'creator_id'), select: 'tag' })
       //console.log('tags', await fetchTag(this.state.search.toLowerCase()))
       // search for objkt titles/descriptions
 
@@ -691,7 +689,6 @@ export class Search extends Component {
 
 
     // verify if tz profiles/hdao
-    console.log('test', this.state.feed)
 
     // results from creator
     //if (this.state.subjkt.length > 0) {
@@ -707,7 +704,6 @@ export class Search extends Component {
 
     // search for objkt id
 
-    console.log(this.state)
 
   }
 
@@ -717,7 +713,6 @@ export class Search extends Component {
 
   loadMore = () => {
     this.setState({ offset: this.state.offset + 15 })
-    console.log(this.context.offset)
     //this.setState({ feed: [...this.state.feed, ...this.state.items.slice(this.state.offset + 20, this.state.offset + 40)], offset: this.state.offset + 20 })
     this.update(this.state.select, false)
 

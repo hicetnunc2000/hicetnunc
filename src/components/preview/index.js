@@ -13,12 +13,22 @@ function isHTML(mimeType) {
   )
 }
 
-export const Preview = ({ title, description, mimeType, previewUri, tags }) => {
+export const Preview = ({ title, description, mimeType, previewUri, tags, coverUri, coverMime, supply }) => {
   const token_tags = tags !== '' ? tags.replace(/\s/g, '').split(',') : []
   return (
     <div className={styles.container}>
       {isHTML(mimeType) && <HTMLWarning />}
       <div className={styles.media}>
+        {mimeType.split('/')[0] === 'audio' && (
+          renderMediaType({
+            mimeType: coverMime,
+            previewUri: coverUri,
+            interactive: true,
+            preview: true,
+            displayView: true,
+          })
+        )}
+
         {renderMediaType({
           mimeType,
           previewUri,
@@ -28,7 +38,10 @@ export const Preview = ({ title, description, mimeType, previewUri, tags }) => {
         })}
       </div>
       <div className={styles.info}>
-        <div className={styles.title}>{title}</div>
+        <div className={styles.title__container}>
+          <div className={styles.title}>{title}</div>
+          <div>editions: {supply}</div>
+        </div>
         <div className={styles.description}>{description}</div>
         <Tags token_tags={token_tags} preview={true} />
       </div>

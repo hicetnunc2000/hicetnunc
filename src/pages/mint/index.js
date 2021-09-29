@@ -20,6 +20,8 @@ import {
   MIN_ROYALTIES,
   MAX_ROYALTIES,
 } from '../../constants'
+import styles from './styles.module.scss'
+
 
 const coverOptions = {
   quality: 0.85,
@@ -262,6 +264,12 @@ export const Mint = () => {
         <>
           <Container>
             <Padding>
+              <div className={styles.titlediv}>
+                <h2 className={styles.title}>
+                    Mint OBJKT
+                </h2>
+              </div>
+
               <Input
                 type="text"
                 onChange={(e) => setTitle(e.target.value)}
@@ -354,10 +362,15 @@ export const Mint = () => {
         <>
           <Container>
             <Padding>
+            <div className={styles.titlediv}>
+                <h2 className={styles.title}>
+                    Mint OBJKT / Preview
+                </h2>
+              </div>
               <div style={{ display: 'flex' }}>
                 <Button onClick={() => setStep(0)} fit>
                   <Primary>
-                    <strong>back</strong>
+                    &#60; back
                   </Primary>
                 </Button>
               </div>
@@ -366,30 +379,40 @@ export const Mint = () => {
 
           <Container>
             <Padding>
+
               <Preview
                 mimeType={file.mimeType}
                 previewUri={file.reader}
                 title={title}
                 description={description}
                 tags={tags}
+                supply={amount}
+
+                coverUri={file.mimeType.split('/')[0] === 'audio' && cover.reader}
+                coverMime={file.mimeType.split('/')[0] === 'audio' && cover.mimeType}
               />
             </Padding>
           </Container>
 
           <Container>
             <Padding>
-              <Button onClick={handleMint} fit>
-                <Purchase>mint OBJKT</Purchase>
-              </Button>
+              <div className={styles.preview__disclaimer}>
+                <p>your royalties upon each sale are {royalties}%</p>
+                <p>this operation costs 0.08 tez</p>
+              </div>
             </Padding>
           </Container>
 
           <Container>
-            <Padding>
-              <p>this operation costs 0.08~ tez</p>
-              <p>Your royalties upon each sale are {royalties}%</p>
-            </Padding>
+            <div className={styles.preview__container}>
+              <Padding>
+                <Button onClick={handleMint} fit>
+                  <Purchase>mint</Purchase>
+                </Button>
+              </Padding>
+            </div>
           </Container>
+
         </>
       )}
 {/*       <BottomBanner>

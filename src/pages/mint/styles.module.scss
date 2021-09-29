@@ -1,0 +1,21 @@
+.titlediv {
+    margin-top: -4rem;
+    margin-bottom: 2rem;
+}
+
+.title {
+    font-size: 2rem;
+}
+
+.preview__container {
+    padding-bottom: 100px;
+}
+
+.preview__disclaimer {
+    border-top: 1px solid var(--border-color);
+    padding: 1em 0 35px;
+
+    p:first-child {
+        margin-bottom: 0.4em;
+    }
+}
