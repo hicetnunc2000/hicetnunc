@@ -2,6 +2,7 @@ import React from 'react'
 import { Container, Padding } from '../../../components/layout'
 import { Button, Primary, Purchase } from '../../../components/button'
 import { Tags } from '../../../components/tags'
+import styles from '../styles.module.scss'
 import '../style.css'
 
 export const Info = (token_info) => {
@@ -21,10 +22,8 @@ export const Info = (token_info) => {
       <Container>
         <Padding>
           <div
+            className={styles.objkt__title}
             style={{
-              fontFamily: 'monospace',
-              fontWeight: 'bold',
-              fontSize: '20px',
               margin: '0 1em'
             }}
           >
@@ -47,7 +46,7 @@ export const Info = (token_info) => {
 
       <Container>
         <div style={{ margin: '0 1em' }}>
-          <hr style={{ color: 'var(--gray-20)',marginBottom: '1em' }}/>
+          <hr style={{ color: 'var(--gray-20)', marginBottom: '1em' }}/>
           <div style={{ marginBottom: '0.5em' }}>
             <Padding>mimetype: {mime}</Padding>
           </div>

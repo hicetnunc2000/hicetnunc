@@ -210,3 +210,12 @@
     display: block;
   }
 }
+
+.objkt__title {
+  font-weight: bold;
+  font-size: $font-large-mobile;
+
+  @include respond-to('desktop') {
+    font-size: $font-large;
+  }
+}

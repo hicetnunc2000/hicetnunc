@@ -25,11 +25,16 @@
     padding: 3px 8px;
     text-transform: lowercase;
     text-decoration: none;
-    font-size: small;
+    font-size: $font-small-mobile;
 
     transition: background-color #{$theme-duration} ease-out,
       color #{$theme-duration} ease-out;
+  
+    @include respond-to('desktop') {
+      font-size: $font-small;
+    }
   }
+  
 }
 
 .light {

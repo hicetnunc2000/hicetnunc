@@ -1,3 +1,6 @@
+@import './variables.scss';
+@import './mixins.scss';
+
 @font-face {
   font-family: 'basier_circle_monoregular';
   src: url('fonts/basiercirclemono-regular-webfont.eot');
@@ -18,3 +21,36 @@
 	src:  url('fonts/iosevka-extended.woff2') format('woff2'), 
         url('fonts/iosevka-extended.ttf') format('truetype');
 }
+
+h1 {
+  font-size: $font-h1-mobile;
+
+  @include respond-to('desktop') {
+    font-size: $font-h1;
+  }
+}
+
+h2 {
+  font-size: $font-h2-mobile;
+
+  @include respond-to('desktop') {
+    font-size: $font-h2;
+  }
+}
+
+h3 {
+  font-size: $font-h3-mobile;
+
+  @include respond-to('desktop') {
+    font-size: $font-h3;
+  }
+}
+
+body {
+  font-size: $font-body-mobile;
+
+  @include respond-to('desktop') {
+    font-size: $font-body;
+  }
+}
+
