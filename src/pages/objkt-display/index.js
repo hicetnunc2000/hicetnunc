@@ -221,7 +221,8 @@ export const ObjktDisplay = () => {
               style={{
                 position: 'relative',
                 display: 'block',
-                width: '100%'
+                width: `calc(100% - ${window.innerWidth - window.visualViewport.width}px)`,
+                marginRight: `${window.innerWidth - window.visualViewport.width}px`
               }}
               className="objkt-display">
               <div className={
