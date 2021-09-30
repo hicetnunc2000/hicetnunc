@@ -59,7 +59,7 @@
   right: 0;
   bottom: 0;
   width: 100%;
-  height: 30%;
+  height: 30%;  
   min-height: 150px;
   
   background-color: var(--text-color);
@@ -67,12 +67,6 @@
   color #{$theme-duration} ease-out, opacity ease-out #{$theme-duration};
   z-index: 100;
   opacity: 0;
-}
-
-.cardContainer {
-  .container {
-    min-height: 175px;
-  }
 }
 
 .cardContainer:hover .card {
