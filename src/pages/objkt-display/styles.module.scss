@@ -153,12 +153,9 @@
 }
 
 .history__royalties {
-  margin-left: 1em;
-
   @include respond-to('desktop') {
   font-size: 13.33px;
   margin-top: 20px;
-  margin-left: 0;
   padding-top: 10px;
 
   width: 33.333333333%;

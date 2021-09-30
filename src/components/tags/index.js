@@ -1,9 +1,12 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { PATH } from '../../constants'
+import { HicetnuncContext } from '../../context/HicetnuncContext'
 import { Button } from '../button'
 import styles from './styles.module.scss'
 
 export const Tags = ({ token_tags, preview }) => {
+  const context = useContext(HicetnuncContext)
+
   console.log(token_tags)
   if (preview) {
     return (
@@ -33,7 +36,7 @@ export const Tags = ({ token_tags, preview }) => {
                 key={`tag${tag.tag.tag}${index}`}
                 href={`${PATH.TAGS}/${encodeURI(tag.tag.tag)}`}
               >
-                <div className={styles.tag}>{tag.tag.tag}</div>
+                <div className={`${styles.tag} ${context.theme === 'light' ? styles.light : styles.dark}`}>{tag.tag.tag}</div>
               </a>
             )
           })}

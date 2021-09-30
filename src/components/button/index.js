@@ -11,11 +11,13 @@ export const Button = ({
   children,
   disabled,
   fit,
+  full
 }) => {
   const classes = classnames({
     [styles.container]: true,
     [styles.disabled]: disabled,
     [styles.fit]: fit,
+    [styles.full]: full,
   })
 
   if (to) {

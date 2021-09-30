@@ -13,7 +13,7 @@
     flex-direction: column;
 
     justify-content: space-between;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
 
     @include respond-to('desktop') {
       flex-direction: row;
@@ -35,7 +35,7 @@
       justify-content: flex-end;
 
       & > * {
-        margin-left: 10px;
+        margin-top: 1em;
       }
     }
   }

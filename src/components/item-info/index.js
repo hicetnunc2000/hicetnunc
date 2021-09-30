@@ -161,7 +161,7 @@ export const ItemInfo = ({
           </div>
 
           {isDetailView && !restricted && (
-            <Button onClick={() => handleCollect()}>
+            <Button onClick={() => handleCollect()} full={true}>
               <Purchase primary={true}>{message}</Purchase>
             </Button>
           )}

@@ -1,4 +1,5 @@
 @import '../../styles/variables.scss';
+@import '../../styles/mixins.scss';
 
 .container {
   display: flex;
@@ -7,16 +8,45 @@
 
   margin: 0 1em 2em;
 
+  a {
+    margin: 0 20px 20px 0;
+
+    @include respond-to('desktop') {
+      margin: 0 10px 10px 0;
+    }
+  }
+
+  a:hover {
+    text-decoration: none;
+  }
+
   .tag {
     display: inline-flex;
     padding: 3px 8px;
-    background-color: var(--border-color);
-    color: var(--gray-80);
-    margin-right: 12.5px;
-    margin-bottom: 6px;
     text-transform: lowercase;
-    font-size: 16px;
+    text-decoration: none;
+    font-size: small;
+
     transition: background-color #{$theme-duration} ease-out,
       color #{$theme-duration} ease-out;
   }
+}
+
+.light {
+  background-color: var(--gray-5);
+  color: var(--gray-80);
+}
+
+.light:hover {
+  color: var(--gray-50);
+}
+
+.dark {
+  background-color: var(--gray-15);
+  color: var(--gray-60);
+}
+
+.dark:hover {
+  background-color: var(--gray-10);
+  color: var(--gray-40);
 }
