@@ -143,7 +143,7 @@ export const ItemInfo = ({
         </div>
 
         <div className={styles.spread}>
-          <div className={styles.spread__inner} style={{ paddingBottom: '7.5px' }}>
+          <div className={styles.spread__inner} style={{ paddingBottom: '15px' }}>
             {isDetailView && !restricted && (
                 <p>OBJKT&nbsp;#{id}</p>
             )}
