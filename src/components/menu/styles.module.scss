@@ -3,7 +3,7 @@
 .container {
   margin: 0 1em;
 
-  border-bottom: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--gray-20);
   transition: border-color #{$theme-duration} ease-out;
 
   & > * {
