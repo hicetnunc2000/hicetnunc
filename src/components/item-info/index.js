@@ -124,7 +124,7 @@ export const ItemInfo = ({
               <div>
                 <p>
                   <span>
-                    editions:&nbsp;
+                    <span className={styles.edition__title}>editions:&nbsp;</span>
                     <span>
                       {ed}/{total}
                     </span>

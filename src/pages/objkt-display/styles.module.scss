@@ -23,7 +23,7 @@
   // margin: 0 20px;
   height: 95px;
 
-  font-size: 14.2px;
+  font-size: $font-small-mobile;
 
   display: flex;
   flex-direction: column;
@@ -37,9 +37,11 @@
   a, .history__mint__op {
     min-width: 0px;
 
-    font-size: 13.33px;
+    font-size: $font-small-mobile;
 
     @include respond-to('desktop') {
+      font-size: $font-small;
+
       height: auto;
       width: 7%;
       min-width: 50px;
@@ -67,7 +69,7 @@
     margin: 0;
     margin-bottom: 10px;
 
-    font-size: 13.33px;
+    font-size: $font-small;
     height: 20px;
     border-bottom: none;
   }
@@ -78,14 +80,14 @@
 
   justify-content: space-between;
 
-  font-size: 14.2px;
+  font-size: $font-small-mobile;
   margin-bottom: 8px;
 
   color: var(--secondary-color);
 
   @include respond-to('desktop') {
     display: flex;
-    font-size: 13.33px;
+    font-size: $font-small;
   }
 }
 
@@ -153,8 +155,10 @@
 }
 
 .history__royalties {
+  font-size: $font-small-mobile;
+
   @include respond-to('desktop') {
-  font-size: 13.33px;
+  font-size: $font-small;
   margin-top: 20px;
   padding-top: 10px;
 

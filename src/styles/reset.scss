@@ -179,9 +179,8 @@ h5 {
 }
 
 hr {
+  border-top: 1px solid var(--gray-20);
   border-bottom: none;
   border-right: none;
   border-left: none;
-
-  color: var(--gray-20);
 }

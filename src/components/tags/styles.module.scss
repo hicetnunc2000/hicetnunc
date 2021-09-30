@@ -9,7 +9,7 @@
   margin: 0 1em 2em;
 
   a {
-    margin: 0 20px 20px 0;
+    margin: 0 15px 15px 0;
 
     @include respond-to('desktop') {
       margin: 0 10px 10px 0;

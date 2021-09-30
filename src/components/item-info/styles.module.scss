@@ -65,6 +65,14 @@
   }
 }
 
+.edition__title {
+  display: none;
+  
+  @include respond-to('desktop') {
+    display: contents;
+  }
+}
+
 .hdaoButton {
   padding-left: 20px;
 }

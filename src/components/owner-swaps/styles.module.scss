@@ -13,10 +13,11 @@
     flex-direction: column;
 
     justify-content: space-between;
-    margin-bottom: 10px;
+    margin-bottom: 30px;
 
     @include respond-to('desktop') {
       flex-direction: row;
+      margin-bottom: 10px;
     }
 
     .issuer {
@@ -36,6 +37,10 @@
 
       & > * {
         margin-top: 1em;
+
+        @include respond-to('desktop') {
+          margin-top: 0;
+        }
       }
     }
   }
@@ -43,7 +48,9 @@
 
 .border {
   width: 100%;
-  border-bottom: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--gray-20);
+
+  padding-top: 1em;
 
   @include respond-to('desktop') {
     width: 45%;
