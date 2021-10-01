@@ -392,10 +392,10 @@ export default class Display extends Component {
 
     if (this.state.subjkt !== '') {
       // if alias route
-      this.props.history.push(`/${this.state.subjkt}/creations`)
+      this.props.history.push(`/${this.state.subjkt}`)
     } else {
       // if tz/wallethash route
-      this.props.history.push(`/tz/${this.state.wallet}/creations`)
+      this.props.history.push(`/tz/${this.state.wallet}`)
     }
   }
 
