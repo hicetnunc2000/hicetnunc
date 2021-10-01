@@ -7,13 +7,34 @@ assignees: ''
 
 ---
 
+If you need help with minting or managing assets, we ask to please wait at least 24 hours for issues to clear up. 
+
+Here are some useful tools that you can use to troubleshoot without us in the meantime:
+
+*See transaction history for an objkt*
+https://hicdex.com/objkt
+
+*See transaction history for your wallet address*
+https://hicdex.com/sold
+
+Please note that the discord is usually the best place to get the fastest support as there are mostly likely others experiencing the same issues as you and active HEN team members assisting with troubleshooting. Please seek help in the #help channel, and read recent dev updates in #dev-announcements. You can join the discord here: https://discord.gg/HhSYY7q5A8 
+
+-----------------------------------------------
+*Please fill out the following Bug Report Template
+
 **Describe the bug**
 A clear and concise description of what the bug is.
 
-**Please give us your profile link, tezos wallet address, and objkt numbers**
-- profile link
+**If you need help with minting or managing assets, please give us the following information**
+- your profile link
+- any other profile links affected
 - tezos wallet address
 - objkt #'s that are being affected
+
+**Screenshots**
+- screenshots of your minting process
+- screenshots of profiles affected
+- screenshots of the browser console (in chrome windows, press ctrl + shift + j to open the developer console)
 
 **To Reproduce**
 Steps to reproduce the behavior:
