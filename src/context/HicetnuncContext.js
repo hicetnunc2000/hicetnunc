@@ -133,7 +133,7 @@ class HicetnuncContextProviderClass extends Component {
         let list = [
           {
             kind: OpKind.TRANSACTION,
-            ...objkts.methods.update_operators([{ add_operator: { operator: this.state.hDAO_marketplace, token_id: parseFloat(objkt_id), owner: from } }]).toTransferParams({ amount: 0, mutez: true, storageLimit: 150 })
+            ...objkts.methods.update_operators([{ add_operator: { operator: this.state.hDAO_marketplace, token_id: parseFloat(objkt_id), owner: from } }]).toTransferParams({ amount: 0, mutez: true, storageLimit: 175 })
           },
           {
             kind: OpKind.TRANSACTION,
