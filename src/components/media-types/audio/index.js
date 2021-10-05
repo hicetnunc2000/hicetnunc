@@ -1,6 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useRef, useState } from 'react'
-import classnames from 'classnames'
 import { PauseIcon, PlayIcon } from './icons'
 import { Visualiser } from './visualiser'
 import styles from './styles.module.scss'
@@ -15,7 +14,6 @@ export const AudioComponent = ({
   const visualiser = useRef()
   const [userTouched, setUserTouched] = useState(false)
   const [play, setPlay] = useState(false)
-  console.log('sound', displayView)
   const togglePlay = () => {
     setUserTouched(true)
     setPlay(!play)
@@ -38,12 +36,6 @@ export const AudioComponent = ({
     }
   }, [play])
 
-  const classes = classnames({
-    [styles.container]: true,
-    [styles.userTouch]: userTouched,
-  })
-  /*   console.log(displayUri)
-   */
 
   if (!displayView) {
     return (

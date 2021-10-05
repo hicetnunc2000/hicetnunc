@@ -3,22 +3,23 @@ import { Page, Container, Padding } from '../../components/layout'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
 import { ResponsiveMasonry } from '../../components/responsive-masonry'
 import { PATH } from '../../constants'
-import { Loading } from '../../components/loading'
-import { Button, Primary } from '../../components/button'
+import { Button } from '../../components/button'
 import { Input } from '../../components/input'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { renderMediaType } from '../../components/media-types'
 import './style.css'
 
 const axios = require('axios')
-const ls = require('local-storage')
+// const ls = require('local-storage')
 const _ = require('lodash')
 
 const isFloat = (n) => Number(n) === n && n % 1 !== 0
 
-const latest_feed = `
-query LatestFeed($lastId: bigint = 99999999) {
-  hic_et_nunc_token(order_by: {id: desc}, limit: 15, where: {id: {_lt: $lastId}, artifact_uri: {_neq: ""}}) {
+
+async function fetchFeed(lastId) {
+  const { errors, data } = await fetchGraphQL(`
+query LatestFeed {
+  hic_et_nunc_token(order_by: {id: desc}, limit: 35, where: {id: {_lt: ${lastId}}, artifact_uri: {_neq: ""}}) {
     artifact_uri
     display_uri
     creator_id
@@ -32,15 +33,10 @@ query LatestFeed($lastId: bigint = 99999999) {
       address
     }
   }
-}`
-
-async function fetchFeed(lastId) {
-  const { errors, data } = await fetchGraphQL(latest_feed, "LatestFeed", { "lastId": lastId });
-  if (errors) {
-    console.error(errors);
-  }
+}`, "LatestFeed", {});
+  if (errors) console.error(errors);
+  
   const result = data.hic_et_nunc_token
-  /* console.log({ result }) */
   return result
 }
 
@@ -127,9 +123,7 @@ async function fetchObjkts(ids) {
         }
       }
     }`, "Objkts", { "ids": ids });
-  if (errors) {
-    console.log(errors)
-  }
+  if (errors) console.error(errors)
   return data
 }
 
@@ -163,6 +157,7 @@ async function fetchGLB(offset) {
   }
   `, 'GLBObjkts', {}
   )
+  if (errors) console.error(errors)
   console.log('glb', data.hic_et_nunc_token)
   try {
     return data.hic_et_nunc_token
@@ -174,7 +169,7 @@ async function fetchGLB(offset) {
 async function fetchInteractive(offset) {
   const { errors, data } = await fetchGraphQL(`
     query InteractiveObjkts {
-      hic_et_nunc_token(where: { mime: {_in : [ "application/x-directory" ]}, supply : { _neq : 0 } }, limit : 15, offset : ${offset}, order_by: {id: desc}) {
+      hic_et_nunc_token(where: { mime: {_in : [ "application/x-directory", "image/svg+xml" ]}, supply : { _neq : 0 } }, limit : 15, offset : ${offset}, order_by: {id: desc}) {
         id
         artifact_uri
         display_uri
@@ -186,6 +181,7 @@ async function fetchInteractive(offset) {
       }
     }
   `, 'InteractiveObjkts', {})
+  if (errors) console.error(errors)
 
   try {
     return data.hic_et_nunc_token
@@ -209,6 +205,7 @@ async function fetchGifs(offset) {
       }
     }
   `, 'Gifs', {})
+  if (errors) console.error(errors)
 
   try {
     return data.hic_et_nunc_token
@@ -233,6 +230,7 @@ async function fetchMusic(offset) {
   }
   `, 'AudioObjkts', {}
   )
+  if (errors) console.error(errors)
 
   try {
     return data.hic_et_nunc_token
@@ -256,6 +254,7 @@ async function fetchTitle(title, offset) {
     }
   }
   `, 'queryTitles', {})
+  if (errors) console.error(errors)
 
   try {
     return data.hic_et_nunc_token
@@ -288,9 +287,8 @@ query creatorGallery {
     'creatorGallery',
     {}
   )
-  if (errors) {
-    console.error(errors)
-  }
+  if (errors) console.error(errors)
+
   const result = data.hic_et_nunc_token
   /* console.log({ result }) */
   return result
@@ -311,6 +309,7 @@ async function fetchDescription(description, offset) {
     }
   }
   `, 'queryDescriptions', {})
+  if (errors) console.error(errors)
 
   try {
     return data.hic_et_nunc_token
@@ -329,18 +328,13 @@ async function fetchRandomObjkts() {
   }
 
   const { errors, data } = await fetchObjkts(Array.from(uniqueIds));
+  if (errors) console.error(errors)
 
-  let objkts = await fetchObjkts(Array.from(uniqueIds));
-
-  if (errors) {
-    console.error(errors);
-  }
-
-  const result = data
-  return objkts.hic_et_nunc_token
+  return data.hic_et_nunc_token
 }
 
 async function fetchDay(day, offset) {
+  console.log(day)
   const { errors, data } = await fetchGraphQL(`query dayTrades {
     hic_et_nunc_trade(where: {timestamp: {_gte: "${day}"}}, order_by: {swap: {price: desc}}, limit : 15, offset : ${offset}) {
       timestamp
@@ -356,9 +350,37 @@ async function fetchDay(day, offset) {
     }
   }`, 'dayTrades', {})
 
-  if (errors) {
-    console.log(errors)
-  }
+  if (errors) console.error(errors)
+
+  let result = []
+
+  try {
+    result = data.hic_et_nunc_trade
+  } catch (e) { }
+
+  return result
+
+}
+
+async function fetchSales(offset) {
+  console.log(offset)
+  const { errors, data } = await fetchGraphQL(`
+  query sales {
+    hic_et_nunc_trade(order_by: {timestamp: desc}, limit : 15, offset : ${offset}) {
+      timestamp
+      swap {
+        price
+      }
+      token {
+        artifact_uri
+        display_uri
+        id
+        mime
+      }
+    }
+  }`, 'sales', {})
+
+  if (errors) console.error(errors)
 
   let result = []
 
@@ -382,9 +404,8 @@ async function fetchSubjkts(subjkt) {
     }
   }
   `, 'subjktsQuery', {})
-  if (errors) {
-    console.error(errors)
-  }
+
+  if (errors) console.error(errors)
 
   let result = []
 
@@ -415,9 +436,8 @@ async function fetchTag(tag, offset) {
   }
 }`
     , "ObjktsByTag", {});
-  if (errors) {
-    console.error(errors);
-  }
+  if (errors) console.error(errors)
+
   const result = data.hic_et_nunc_token
   return result
 }
@@ -457,12 +477,17 @@ const query_hdao = `query hDAOFeed($offset: Int = 0) {
 
 async function fetchHdao(offset) {
   const { errors, data } = await fetchGraphQL(query_hdao, "hDAOFeed", { "offset": offset })
-  if (errors) {
-    console.error(errors);
-  }
+  if (errors) console.error(errors)
   const result = data.hic_et_nunc_token
   return result
 }
+
+const getRestrictedAddresses = async () =>
+  await axios
+    .get(
+      'https://raw.githubusercontent.com/hicetnunc2000/hicetnunc-reports/main/filters/w.json'
+    )
+    .then((res) => res.data)
 
 export class Search extends Component {
   static contextType = HicetnuncContext
@@ -476,6 +501,7 @@ export class Search extends Component {
     prev: '',
     reset: false,
     flag: false,
+    lastId: undefined,
     tags: [
       { id: 0, value: '○' },
       { id: 1, value: 'random' },
@@ -483,8 +509,9 @@ export class Search extends Component {
       { id: 3, value: 'music' },
       { id: 4, value: 'interactive' },
       { id: 5, value: 'gif' },
-      { id: 6, value: '1D'},
-      { id: 7, value: '1W'},
+      { id: 6, value: 'latest sales' },
+      { id: 7, value: '1D' },
+      { id: 8, value: '1W' }
       /*       { id: 4, value: 'illustration' }, */
       /*       { id: 5, value: 'gif' } */
 
@@ -495,7 +522,6 @@ export class Search extends Component {
       // week
 
     ],
-    select: [],
     mouse: false,
     hasMore: true,
     offset: 0
@@ -514,6 +540,8 @@ export class Search extends Component {
 
   update = async (e, reset) => {
 
+    let arr = await getRestrictedAddresses()
+
     this.setState({ select: e })
     if (reset) {
       this.state.feed = []
@@ -521,26 +549,26 @@ export class Search extends Component {
     }
 
     if (e === '1D') {
-      console.log(new Date((new Date()).getTime() - 60*60*24*1000))
+      console.log(new Date((new Date()).getTime() - 60 * 60 * 24 * 1000))
 
-      let list = await fetchDay(new Date((new Date()).getTime() - 60*60*24*1000).toISOString(), this.state.offset)
+      let list = await fetchDay(new Date((new Date()).getTime() - 60 * 60 * 24 * 1000).toISOString(), this.state.offset)
       list = list.map(e => e.token)
       list = [...this.state.feed, ...(list)]
       list = _.uniqBy(list, 'id')
 
       this.setState({
-        feed : list
+        feed: list
       })
     }
 
     if (e === '1W') {
-      let list = await fetchDay(new Date((new Date()).getTime() - 60*60*24*30*1000).toISOString(), this.state.offset)
+      let list = await fetchDay(new Date((new Date()).getTime() - 60 * 60 * 24 * 30 * 1000).toISOString(), this.state.offset)
       list = list.map(e => e.token)
       list = [...this.state.feed, ...(list)]
       list = _.uniqBy(list, 'id')
 
       this.setState({
-        feed : list
+        feed: list
       })
     }
 
@@ -570,22 +598,42 @@ export class Search extends Component {
       this.setState({ feed: [...this.state.feed, ...(await fetchInteractive(this.state.offset))] })
     }
 
-    if (e == 'random') {
+    if (e === 'random') {
       this.setState({ feed: [...this.state.feed, ...(await fetchRandomObjkts())] })
     }
 
-    if (e == 'gif') {
+    if (e === 'gif') {
       this.setState({ feed: [...this.state.feed, ...(await fetchGifs(this.state.offset))] })
       //this.setState({ feed: [...this.state.feed, ...(await fetchGifs(this.state.offset))] })
     }
 
-    if (e == 'illustration') {
+    if (e === 'illustration') {
       console.log(await fetchTag('illustration'))
     }
 
-    if (e == 'tag') {
+    if (e === 'tag') {
       console.log(this.state.feed.length)
       this.setState({ feed: [...this.state.feed, ...(await fetchTag(this.state.search, this.state.feed[this.state.feed.length - 1].id))] })
+    }
+
+    if (e === 'latest sales') {
+      let tokens = await fetchSales(this.state.offset + 250)
+      tokens = tokens.map(e => e.token)
+      tokens = _.uniqBy(tokens, 'id')
+
+      this.setState({ feed: _.uniqBy([...this.state.feed, ...tokens], 'id') })
+    }
+
+    if (this.state.select === 'latest mints') {
+      console.log(999999 || this.context.lastId)
+      let result = await fetchFeed(999999 || this.context.lastId)
+      result = result.filter(e => !arr.includes(e.creator_id))
+      console.log(result)
+      //console.log(await GetUserClaims(arr))
+      //console.log(Math.min.apply(Math, result.map(e => e.id)))
+      this.setState({ feed: _.uniqBy([...this.state.feed, ...result], 'creator_id'), lastId: Math.min.apply(Math, result.map(e => e.id))})
+      //this.context.lastId = Math.min.apply(Math, result.map(e => e.id))
+      this.context.setId(Math.min.apply(Math, result.map(e => e.id)))
     }
 
     this.setState({ reset: false })
@@ -665,8 +713,6 @@ export class Search extends Component {
   }
   render() {
 
-    let mouse = true
-
     return (
       <Page>
         <Container>
@@ -680,8 +726,8 @@ export class Search extends Component {
               label="objkt id, artists, tags"
               placeholder="objkt id, artists, tags"
             />
-            {/*             <button onClick={this.search}>search</button>
- */}            {/*             {
+            {/* <button onClick={this.search}>search</button> */}            
+            {/* {
               this.state.tags.map(e => {
                 return <span>{e._id.tag} </span>
               })

@@ -152,12 +152,20 @@ function rnd(min, max) {
   return Math.floor(Math.random() * (max - min + 1) + min)
 }
 
+function shuffle(a) {
+  for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
 async function fetchRandomObjkts() {
   const firstId = 196
   const lastId = await getLastId()
 
   const uniqueIds = new Set()
-  while (uniqueIds.size < 50) {
+  while (uniqueIds.size < 10) {
     uniqueIds.add(rnd(firstId, lastId))
   }
 
@@ -171,15 +179,23 @@ async function fetchRandomObjkts() {
   }
 
   const result = data
-  return objkts.hic_et_nunc_token
+  return shuffle(objkts.hic_et_nunc_token)
 }
 
 const getRestrictedAddresses = async () =>
   await axios
     .get(
-      'https://raw.githubusercontent.com/hicetnunc2000/hicetnunc/main/filters/w.json'
+      'https://raw.githubusercontent.com/hicetnunc2000/hicetnunc-reports/main/filters/w.json'
     )
     .then((res) => res.data)
+
+const GetUserClaims = async (arr) => {
+  return await axios.post('https://indexer.tzprofiles.com/v1/graphql', {
+    query: `query MyQuery { tzprofiles_by_pk(account: \"${walletAddr}\") { valid_claims } }`,
+    variables: null,
+    operationName: 'MyQuery',
+  })
+}
 
 const ONE_MINUTE_MILLIS = 60 * 1000
 
@@ -194,11 +210,11 @@ export const Feeds = ({ type }) => {
   const startTime = customFloor(Date.now(), ONE_MINUTE_MILLIS)
 
   const loadMore = async () => {
-    if (type === 1) {
+/*     if (type === 1) {
       await getHdaoFeed()
-    }
-    if (type === 2) await getRandomFeed()
-    if (type === 3) await getLatest(Math.min.apply(Math, items.map(e => e.id)))
+    } */
+    //await getRandomFeed()
+    await getLatest(Math.min.apply(Math, items.map(e => e.id)))
   }
 
   useEffect(async () => {
@@ -207,7 +223,7 @@ export const Feeds = ({ type }) => {
       return
     }
     console.log(type)
-    if (type === 0) {
+/*     if (type === 0) {
       GetLatestFeed({ counter: count, max_time: startTime })
         .then((result) => {
           const next = items.concat(result)
@@ -223,9 +239,9 @@ export const Feeds = ({ type }) => {
         })
     } else if (type === 1) {
       await getHdaoFeed()
-    } else if (type === 2) {
-      await getRandomFeed()
-    } else if (type === 3) {
+    } else if (type === 2) { */
+      //await getRandomFeed()
+    //} else if (type === 3) {
       await getLatest(lastId)
 
       /*       GetFeaturedFeed({ counter: count, max_time: startTime })
@@ -242,7 +258,7 @@ export const Feeds = ({ type }) => {
         .catch((e) => {
           setError(true)
         }) */
-    }
+    //}
   }, [count, type])
 
   const getLatest = async (id) => {
@@ -314,7 +330,7 @@ export const Feeds = ({ type }) => {
           </Padding>
         </Container>
       }
-{/*       <BottomBanner>
+      {/*       <BottomBanner>
         API is down due to heavy server load — We're working to fix the issue — please be patient with us. <a href="https://discord.gg/mNNSpxpDce" target="_blank">Join the discord</a> for updates.
       </BottomBanner> */}
     </Page>
