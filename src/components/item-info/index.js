@@ -16,7 +16,9 @@ export const ItemInfo = ({
   token_holders,
   supply,
   isDetailView,
-  restricted
+  restricted,
+  artifact_uri,
+  mime
 }) => {
   const { syncTaquito, collect, curate, claim_hDAO, acc } =
     useContext(HicetnuncContext)
@@ -82,6 +84,11 @@ export const ItemInfo = ({
       )
     }
 
+    const reverseImageSearch = (imgurl) => {
+      window.open(`https://tineye.com/search/?url=${imgurl.replace('ipfs://','https://ipfs.io/ipfs/')}`,'_blank');
+      window.open(`https://www.google.com/searchbyimage?image_url=${imgurl.replace('ipfs://','https://ipfs.io/ipfs/')}`,'_blank');
+    }
+
     // the issuer path depends on whether it's a collab address (KT) or individual (tz)
     const { ISSUER, COLLAB } = PATH
     const creatorAddress = creator.address
@@ -142,7 +149,7 @@ export const ItemInfo = ({
             </Button>
           </div>
         )}
-        <div className={styles.spread}>
+        <div style={{display:'flex'}}>
           <Button onClick={() => curate(id)}>
             <Primary>
               <span
@@ -154,6 +161,36 @@ export const ItemInfo = ({
               </span>
             </Primary>
           </Button>
+          &nbsp;
+          {
+            mime.includes('image') && (
+              <>
+              {/* <Button href={`https://www.google.com/searchbyimage?image_url=${artifact_uri.replace('ipfs://','https://ipfs.io/ipfs/')}`}>
+                <Primary>
+                  <span
+                    className={styles.top}
+                    data-position={'top'}
+                    data-tooltip={'search image'}
+                  >
+                    <svg style={{marginBottom: '-4px'}} xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                  </span>
+                </Primary>
+              </Button>
+              &nbsp; */}
+              <Button onClick={()=>{reverseImageSearch(artifact_uri)}}>
+                <Primary>
+                  <span
+                    className={styles.top}
+                    data-position={'top'}
+                    data-tooltip={'image search'}
+                  >
+                    <svg style={{marginBottom: '-4px'}} xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                  </span>
+                </Primary>
+              </Button>
+              </>
+            )
+          }
         </div>
       </>
     )
