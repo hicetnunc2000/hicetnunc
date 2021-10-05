@@ -9,10 +9,10 @@ import { TezosToolkit, OpKind, MichelsonMap } from '@taquito/taquito'
 import { Parser, Expr } from "@taquito/michel-codec";
 import { Schema } from "@taquito/michelson-encoder";
 import { setItem } from '../utils/storage'
-import { KeyStoreUtils } from 'conseiljs-softsigner'
-import { PermissionScope } from '@airgap/beacon-sdk'
-import { UnitValue } from '@taquito/michelson-encoder'
-import { contentType } from 'mime-types';
+// import { KeyStoreUtils } from 'conseiljs-softsigner'
+// import { PermissionScope } from '@airgap/beacon-sdk'
+// import { UnitValue } from '@taquito/michelson-encoder'
+// import { contentType } from 'mime-types';
 
 const { NetworkType } = require('@airgap/beacon-sdk')
 var ls = require('local-storage')
@@ -29,12 +29,12 @@ const createProxySchema = `
 //const bandwidth = navigator.connection.downlink
 //const connectionType = navigator.connection
 //console.log('band', bandwidth, 'type', connectionType)
+
 // This should be moved to a service so it is only done once on page load
-//const Tezos = new TezosToolkit('https://api.tez.ie/rpc/mainnet')
-//const Tezos = new TezosToolkit('https://mainnet-tezos.giganode.io')
-const Tezos = new TezosToolkit('https://mainnet.smartpy.io')
-//const Tezos = new TezosToolkit('https://mainnet.api.tez.ie')
-//const Tezos = new TezosToolkit('https://api.tez.ie/rpc/mainnet')
+const Tezos = new TezosToolkit(ls.get('rpc_config') || 'https://mainnet.smartpy.io') 
+// https://mainnet.api.tez.ie
+// https://mainnet-tezos.giganode.io
+
 // storage fee adjustment
 
 /* export class PatchedBeaconWallet extends BeaconWallet {
