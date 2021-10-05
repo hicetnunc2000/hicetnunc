@@ -1,17 +1,13 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react'
-import { BottomBanner } from '../../components/bottom-banner'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { useParams } from 'react-router'
 import { Button } from '../../components/button'
 import { ResponsiveMasonry } from '../../components/responsive-masonry'
-import { Loading } from '../../components/loading'
 import { renderMediaType } from '../../components/media-types'
-import { Page, Container, Padding } from '../../components/layout'
+import { Page, Container } from '../../components/layout'
 import { PATH } from '../../constants'
 import styles from './styles.module.scss'
-
-const axios = require('axios')
 
 async function fetchGraphQL(operationsDoc, operationName, variables) {
   const result = await fetch(
@@ -45,6 +41,8 @@ async function fetchTag(tag) {
     { tag: tag }
   )
 
+  if (errors) console.error(errors)
+
   try {
     return data.hic_et_nunc_token
   } catch (e) {
@@ -53,7 +51,7 @@ async function fetchTag(tag) {
 }
 export const Tags = () => {
   const { id } = useParams()
-  const [error, setError] = useState(false)
+  // const [error, setError] = useState(false)
   const [items, setItems] = useState([])
   const [feed, setFeed] = useState([])
   const [count, setCount] = useState(0)
@@ -69,6 +67,7 @@ export const Tags = () => {
     let arr = await fetchTag(id)
     setItems(arr)
     setFeed(arr.slice(0, 15))
+    if (arr.length < 15) setHasMore(false)
   }, [])
 
   return (
@@ -103,9 +102,6 @@ export const Tags = () => {
             </Container>
           </div>
         </InfiniteScroll>
-        {/*         <BottomBanner>
-                v2 migration: All OBJKTs listed on market before June 28th must be relisted on market due smart contract migration. managed assets > v1 swaps > batch cancel > relist.
-        </BottomBanner> */}
       </div>
     </Page>
   )

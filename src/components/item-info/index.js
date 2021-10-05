@@ -10,23 +10,16 @@ const _ = require('lodash')
 
 export const ItemInfo = ({
   id,
-  creator_id,
-  owners,
   swaps,
   creator,
-  // transfered,
   feed,
   token_holders,
   supply,
-  // total_amount,
-  hDAO_balance,
   isDetailView,
   restricted
 }) => {
   const { syncTaquito, collect, curate, claim_hDAO, acc } =
     useContext(HicetnuncContext)
-  const reducer = (accumulator, currentValue) =>
-    parseInt(accumulator) + parseInt(currentValue)
 
   if (isDetailView) {
     // subtract burned pieces from total
@@ -44,7 +37,6 @@ export const ItemInfo = ({
     swaps = swaps.filter(e => parseInt(e.contract_version) === 2 && parseInt(e.status) === 0 && e.is_valid)
     console.log(swaps)
     let s = _.minBy(swaps, (o) => Number(o.price))
-    let maxPrice = _.maxBy(swaps, (o) => Number(o.price))
 
     var message = ''
 
@@ -94,7 +86,7 @@ export const ItemInfo = ({
     const { ISSUER, COLLAB } = PATH
     const creatorAddress = creator.address
     const isCollab = creatorAddress.substring(0, 2) === 'KT'
-    const issuerPath = isCollab ? COLLAB : ISSUER
+    // const issuerPath = isCollab ? COLLAB : ISSUER
 
     return (
       <>

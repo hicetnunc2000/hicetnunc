@@ -3,16 +3,14 @@ import { Page, Container, Padding } from '../../components/layout'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
 import { ResponsiveMasonry } from '../../components/responsive-masonry'
 import { PATH } from '../../constants'
-import { Loading } from '../../components/loading'
-import { Button, Primary } from '../../components/button'
+import { Button } from '../../components/button'
 import { Input } from '../../components/input'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { renderMediaType } from '../../components/media-types'
 import './style.css'
-import { last } from 'lodash'
 
 const axios = require('axios')
-const ls = require('local-storage')
+// const ls = require('local-storage')
 const _ = require('lodash')
 
 const isFloat = (n) => Number(n) === n && n % 1 !== 0
@@ -36,11 +34,9 @@ query LatestFeed {
     }
   }
 }`, "LatestFeed", {});
-  if (errors) {
-    console.error(errors);
-  }
+  if (errors) console.error(errors);
+  
   const result = data.hic_et_nunc_token
-  /* console.log({ result }) */
   return result
 }
 
@@ -127,9 +123,7 @@ async function fetchObjkts(ids) {
         }
       }
     }`, "Objkts", { "ids": ids });
-  if (errors) {
-    console.log(errors)
-  }
+  if (errors) console.error(errors)
   return data
 }
 
@@ -163,6 +157,7 @@ async function fetchGLB(offset) {
   }
   `, 'GLBObjkts', {}
   )
+  if (errors) console.error(errors)
   console.log('glb', data.hic_et_nunc_token)
   try {
     return data.hic_et_nunc_token
@@ -186,6 +181,7 @@ async function fetchInteractive(offset) {
       }
     }
   `, 'InteractiveObjkts', {})
+  if (errors) console.error(errors)
 
   try {
     return data.hic_et_nunc_token
@@ -209,6 +205,7 @@ async function fetchGifs(offset) {
       }
     }
   `, 'Gifs', {})
+  if (errors) console.error(errors)
 
   try {
     return data.hic_et_nunc_token
@@ -233,6 +230,7 @@ async function fetchMusic(offset) {
   }
   `, 'AudioObjkts', {}
   )
+  if (errors) console.error(errors)
 
   try {
     return data.hic_et_nunc_token
@@ -256,6 +254,7 @@ async function fetchTitle(title, offset) {
     }
   }
   `, 'queryTitles', {})
+  if (errors) console.error(errors)
 
   try {
     return data.hic_et_nunc_token
@@ -288,9 +287,8 @@ query creatorGallery {
     'creatorGallery',
     {}
   )
-  if (errors) {
-    console.error(errors)
-  }
+  if (errors) console.error(errors)
+
   const result = data.hic_et_nunc_token
   /* console.log({ result }) */
   return result
@@ -311,6 +309,7 @@ async function fetchDescription(description, offset) {
     }
   }
   `, 'queryDescriptions', {})
+  if (errors) console.error(errors)
 
   try {
     return data.hic_et_nunc_token
@@ -329,15 +328,9 @@ async function fetchRandomObjkts() {
   }
 
   const { errors, data } = await fetchObjkts(Array.from(uniqueIds));
+  if (errors) console.error(errors)
 
-  let objkts = await fetchObjkts(Array.from(uniqueIds));
-
-  if (errors) {
-    console.error(errors);
-  }
-
-  const result = data
-  return objkts.hic_et_nunc_token
+  return data.hic_et_nunc_token
 }
 
 async function fetchDay(day, offset) {
@@ -357,9 +350,7 @@ async function fetchDay(day, offset) {
     }
   }`, 'dayTrades', {})
 
-  if (errors) {
-    console.log(errors)
-  }
+  if (errors) console.error(errors)
 
   let result = []
 
@@ -389,9 +380,7 @@ async function fetchSales(offset) {
     }
   }`, 'sales', {})
 
-  if (errors) {
-    console.log(errors)
-  }
+  if (errors) console.error(errors)
 
   let result = []
 
@@ -415,9 +404,8 @@ async function fetchSubjkts(subjkt) {
     }
   }
   `, 'subjktsQuery', {})
-  if (errors) {
-    console.error(errors)
-  }
+
+  if (errors) console.error(errors)
 
   let result = []
 
@@ -448,9 +436,8 @@ async function fetchTag(tag, offset) {
   }
 }`
     , "ObjktsByTag", {});
-  if (errors) {
-    console.error(errors);
-  }
+  if (errors) console.error(errors)
+
   const result = data.hic_et_nunc_token
   return result
 }
@@ -490,9 +477,7 @@ const query_hdao = `query hDAOFeed($offset: Int = 0) {
 
 async function fetchHdao(offset) {
   const { errors, data } = await fetchGraphQL(query_hdao, "hDAOFeed", { "offset": offset })
-  if (errors) {
-    console.error(errors);
-  }
+  if (errors) console.error(errors)
   const result = data.hic_et_nunc_token
   return result
 }
@@ -537,7 +522,6 @@ export class Search extends Component {
       // week
 
     ],
-    select: [],
     mouse: false,
     hasMore: true,
     offset: 0
@@ -614,25 +598,25 @@ export class Search extends Component {
       this.setState({ feed: [...this.state.feed, ...(await fetchInteractive(this.state.offset))] })
     }
 
-    if (e == 'random') {
+    if (e === 'random') {
       this.setState({ feed: [...this.state.feed, ...(await fetchRandomObjkts())] })
     }
 
-    if (e == 'gif') {
+    if (e === 'gif') {
       this.setState({ feed: [...this.state.feed, ...(await fetchGifs(this.state.offset))] })
       //this.setState({ feed: [...this.state.feed, ...(await fetchGifs(this.state.offset))] })
     }
 
-    if (e == 'illustration') {
+    if (e === 'illustration') {
       console.log(await fetchTag('illustration'))
     }
 
-    if (e == 'tag') {
+    if (e === 'tag') {
       console.log(this.state.feed.length)
       this.setState({ feed: [...this.state.feed, ...(await fetchTag(this.state.search, this.state.feed[this.state.feed.length - 1].id))] })
     }
 
-    if (e == 'latest sales') {
+    if (e === 'latest sales') {
       let tokens = await fetchSales(this.state.offset + 250)
       tokens = tokens.map(e => e.token)
       tokens = _.uniqBy(tokens, 'id')
@@ -640,7 +624,7 @@ export class Search extends Component {
       this.setState({ feed: _.uniqBy([...this.state.feed, ...tokens], 'id') })
     }
 
-    if (this.state.select == 'latest mints') {
+    if (this.state.select === 'latest mints') {
       console.log(999999 || this.context.lastId)
       let result = await fetchFeed(999999 || this.context.lastId)
       result = result.filter(e => !arr.includes(e.creator_id))
@@ -729,8 +713,6 @@ export class Search extends Component {
   }
   render() {
 
-    let mouse = true
-
     return (
       <Page>
         <Container>
@@ -744,8 +726,8 @@ export class Search extends Component {
               label="objkt id, artists, tags"
               placeholder="objkt id, artists, tags"
             />
-            {/*             <button onClick={this.search}>search</button>
- */}            {/*             {
+            {/* <button onClick={this.search}>search</button> */}            
+            {/* {
               this.state.tags.map(e => {
                 return <span>{e._id.tag} </span>
               })
