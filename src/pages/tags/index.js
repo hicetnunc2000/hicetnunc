@@ -61,14 +61,14 @@ export const Tags = () => {
 
   const loadMore = () => {
     console.log(items.slice(count + 25, count + 50))
-    setFeed([...feed, ...items.slice(count + 25, count + 50)])
-    setCount(count + 25)
+    setFeed([...feed, ...items.slice(count + 15, count + 30)])
+    setCount(count + 15)
   }
 
   useEffect(async () => {
     let arr = await fetchTag(id)
     setItems(arr)
-    setFeed(arr.slice(0, 25))
+    setFeed(arr.slice(0, 15))
   }, [])
 
   return (

@@ -5,7 +5,7 @@ import { HicetnuncContext } from '../../context/HicetnuncContext'
 import { Container, Padding, Page } from '../../components/layout'
 import { BottomBanner } from '../../components/bottom-banner'
 import { Input, Textarea } from '../../components/input'
-import { Button, Curate, Primary } from '../../components/button'
+import { Button, Curate, Primary, Purchase } from '../../components/button'
 import { Upload } from '../../components/upload'
 import { Identicon } from '../../components/identicons'
 import { SigningType } from '@airgap/beacon-sdk'
@@ -217,18 +217,21 @@ export class Config extends Component {
               value={this.state.description}
             />
             <Button onClick={this.subjkt_config}>
-              <Curate>Save Profile</Curate>
+              <Purchase>Save Profile</Purchase>
             </Button>
           </Padding>
           <div style={{ display: 'inline' }}>
-            <span>link your Twitter, Discord, GitHub, and website with </span>
-            <span>
-              <a href="https://tzprofiles.com">
-                <Button>
-                  <a href='#' style={{fontWeight : 'bold'}}>Tezos Profiles</a>
-                </Button>
-              </a>
-            </span>
+            <p style={{paddingTop : '7.5px' }}>
+              <span>
+                link your Twitter, Discord, GitHub, and website with </span>
+              <span>
+                <a href="https://tzprofiles.com">
+                  <Button>
+                    <a href='#' style={{ fontWeight: 'bold' }}>Tezos Profiles</a>
+                  </Button>
+                </a>
+              </span>
+            </p>
           </div>
         </Container>
 
@@ -254,10 +257,10 @@ export class Config extends Component {
                 />
 
                 <Button onClick={this.hDAO_config}>
-                  <Curate>Save ○</Curate>
+                  <Purchase>Save ○</Purchase>
                 </Button>
 
-                <p>hic et nunc DAO ○ curation parameter</p>
+                <p style={{ marginTop : '7.5px' }}>hic et nunc DAO ○ curation parameter</p>
               </Padding>
             </Container>
             :
