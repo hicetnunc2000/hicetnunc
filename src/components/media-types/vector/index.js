@@ -6,7 +6,6 @@ import './index.css'
 
 export const VectorComponent = ({
   artifactUri,
-  displayUri,
   previewUri,
   creator,
   objkt,

@@ -10,23 +10,18 @@ const _ = require('lodash')
 
 export const ItemInfo = ({
   id,
-  creator_id,
-  owners,
   swaps,
   creator,
-  // transfered,
   feed,
   token_holders,
   supply,
-  // total_amount,
-  hDAO_balance,
   isDetailView,
-  restricted
+  restricted,
+  artifact_uri,
+  mime
 }) => {
   const { syncTaquito, collect, curate, claim_hDAO, acc } =
     useContext(HicetnuncContext)
-  const reducer = (accumulator, currentValue) =>
-    parseInt(accumulator) + parseInt(currentValue)
 
   if (isDetailView) {
     // subtract burned pieces from total
@@ -44,7 +39,6 @@ export const ItemInfo = ({
     swaps = swaps.filter(e => parseInt(e.contract_version) === 2 && parseInt(e.status) === 0 && e.is_valid)
     console.log(swaps)
     let s = _.minBy(swaps, (o) => Number(o.price))
-    let maxPrice = _.maxBy(swaps, (o) => Number(o.price))
 
     var message = ''
 
@@ -90,11 +84,16 @@ export const ItemInfo = ({
       )
     }
 
+    const reverseImageSearch = (imgurl) => {
+      window.open(`https://tineye.com/search/?url=${imgurl.replace('ipfs://','https://ipfs.io/ipfs/')}`,'_blank');
+      window.open(`https://www.google.com/searchbyimage?image_url=${imgurl.replace('ipfs://','https://ipfs.io/ipfs/')}`,'_blank');
+    }
+
     // the issuer path depends on whether it's a collab address (KT) or individual (tz)
     const { ISSUER, COLLAB } = PATH
     const creatorAddress = creator.address
     const isCollab = creatorAddress.substring(0, 2) === 'KT'
-    const issuerPath = isCollab ? COLLAB : ISSUER
+    // const issuerPath = isCollab ? COLLAB : ISSUER
 
     return (
       <>
@@ -107,17 +106,28 @@ export const ItemInfo = ({
                 <CollabIssuerInfo address={ creatorAddress } />
               )}
               {!isCollab && (
-                <Button
-                  to={
-                    `/tz/${creator.address}`
-                  }
-                >
-                  {creator.name ? (
-                    <Primary>{encodeURI(creator.name)}</Primary>
-                  ) : (
-                    <Primary>{walletPreview(creator.address)}</Primary>
-                  )}
-                </Button>
+                <div style={{ display: 'flex' }}>
+                  <Button
+                    to={
+                      `/tz/${creator.address}`
+                    }
+                  >
+                    {creator.name ? (
+                      <Primary>{encodeURI(creator.name)}</Primary>
+                    ) : (
+                      <Primary>{walletPreview(creator.address)}</Primary>
+                    )}
+                  </Button>
+                  <div style={{marginLeft: '0.5em'}}>
+                    <Button onClick={()=>{navigator.clipboard.writeText(creator.address);}} >
+                      <Primary>
+                        <span data-position={'top'} data-tooltip={'copy'} className={styles.top}>
+                          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                        </span>
+                      </Primary>
+                    </Button>
+                  </div>
+                </div>
               )}
             </div>
             {!feed && (
@@ -150,7 +160,7 @@ export const ItemInfo = ({
             </Button>
           </div>
         )}
-        <div>
+        <div style={{display:'flex'}}>
           <Button onClick={() => curate(id)}>
             <Primary>
               <span
@@ -172,6 +182,35 @@ export const ItemInfo = ({
               ⚐
             </span>
           </a>
+          {
+            mime.includes('image') && (
+              <>
+              {/* <Button href={`https://www.google.com/searchbyimage?image_url=${artifact_uri.replace('ipfs://','https://ipfs.io/ipfs/')}`}>
+                <Primary>
+                  <span
+                    className={styles.top}
+                    data-position={'top'}
+                    data-tooltip={'search image'}
+                  >
+                    <svg style={{marginBottom: '-4px'}} xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                  </span>
+                </Primary>
+              </Button>
+              &nbsp; */}
+              <Button onClick={()=>{reverseImageSearch(artifact_uri)}}>
+                <Primary>
+                  <span
+                    className={styles.top}
+                    data-position={'top'}
+                    data-tooltip={'image search'}
+                  >
+                    <svg style={{marginBottom: '-4px'}} xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                  </span>
+                </Primary>
+              </Button>
+              </>
+            )
+          }
         </div>
       </>
     )
@@ -182,13 +221,13 @@ export const ItemInfo = ({
           <div className={styles.inline}>
             <Button
               to={
-                `/tz/${creator.address}`
+                `/tz/${creator?.address}`
               }
             >
-              {creator.name ? (
-                <Primary>{encodeURI(creator.name)}</Primary>
+              {creator?.name ? (
+                <Primary>{encodeURI(creator?.name)}</Primary>
               ) : (
-                <Primary>{walletPreview(creator.address)}</Primary>
+                <Primary>{walletPreview(creator?.address)}</Primary>
               )}
             </Button>
           </div>

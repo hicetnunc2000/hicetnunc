@@ -4,14 +4,12 @@ import { HicetnuncContext } from '../../../context/HicetnuncContext'
 import { Container, Padding } from '../../../components/layout'
 import { Loading } from '../../../components/loading'
 import { Input } from '../../../components/input'
-import { Button, Curate, Purchase } from '../../../components/button'
-import { stubFalse } from 'lodash'
-export const Swap = ({ total_amount, owners, creator, royalties, token_info, address }) => {
+import { Button, Purchase } from '../../../components/button'
+export const Swap = ({ creator, royalties }) => {
   const { id } = useParams()
-  const { swap, swapv2, acc, swap_hDAO, progress, setProgress, message, setMessage } = useContext(HicetnuncContext)
+  const { swapv2, acc, swap_hDAO, progress, setProgress, message, setMessage } = useContext(HicetnuncContext)
   const [amount, setAmount] = useState()
   const [price, setPrice] = useState()
-  //const [progress, setProgress] = useState(false)
   const [currency, setCurrency] = useState('tez')
 
   const onChange = e => setCurrency(e.target.value)
@@ -40,18 +38,15 @@ export const Swap = ({ total_amount, owners, creator, royalties, token_info, add
       // simple validation for now
       alert('invalid input')
     } else {
-      //setProgress(true)
       setProgress(true)
       setMessage('preparing swap')
       // swap is valid call API
       console.log(acc.address, royalties, parseFloat(price) * 1000000, id, creator.address, parseFloat(amount))
 
       if (currency === 'tez') {
-        swapv2(acc.address, royalties, parseFloat(price) * 1000000, id, creator.address, parseFloat(amount))
-          //swap(parseFloat(amount), id, parseFloat(price) * 1000000)  
+      swapv2(acc.address, royalties, parseFloat(price) * 1000000, id, creator.address, parseFloat(amount))
           .then((e) => {
             // when taquito returns a success/fail message
-            //setProgress(false)
             setProgress(false)
             setMessage(e.description)
           })
@@ -65,11 +60,9 @@ export const Swap = ({ total_amount, owners, creator, royalties, token_info, add
         swap_hDAO(acc.address, royalties, parseFloat(price) * 1000000, id, creator.address, parseFloat(amount)).then((e) => {
           // when taquito returns a success/fail message
           setProgress(false)
-          //setProgress(false)
           setMessage(e.description)
         })
           .catch((e) => {
-            //setProgress(false)
             setProgress(false)
             setMessage('error')
           })

@@ -3,6 +3,8 @@ import { Helmet } from 'react-helmet'
 import classnames from 'classnames'
 import { VisuallyHidden } from '../../visually-hidden'
 import styles from './styles.module.scss'
+import { BottomBanner } from '../../bottom-banner'
+
 
 export const Page = ({ title = 'hic et nunc', children = null, large }) => {
   const classes = classnames({
@@ -20,6 +22,7 @@ export const Page = ({ title = 'hic et nunc', children = null, large }) => {
       </Helmet>
       <VisuallyHidden as="h1">{title}</VisuallyHidden>
       {children}
+      <BottomBanner></BottomBanner>
     </main>
   )
 }

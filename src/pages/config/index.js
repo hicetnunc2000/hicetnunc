@@ -3,14 +3,10 @@
 import React, { Component } from 'react'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
 import { Container, Padding, Page } from '../../components/layout'
-import { BottomBanner } from '../../components/bottom-banner'
-import { Input, Textarea } from '../../components/input'
-import { Button, Curate, Primary } from '../../components/button'
-import { Upload } from '../../components/upload'
+import { Input } from '../../components/input'
+import { Button, Curate, Primary, Purchase } from '../../components/button'
 import { Identicon } from '../../components/identicons'
-import { SigningType } from '@airgap/beacon-sdk'
-import { char2Bytes } from '@taquito/utils'
-import styles from './styles.module.scss'
+// import styles from './styles.module.scss'
 import axios from 'axios'
 const { create } = require('ipfs-http-client')
 const infuraUrl = 'https://ipfs.infura.io:5001'
@@ -34,11 +30,8 @@ async function fetchTz(addr) {
   const { errors, data } = await fetchGraphQL(query_tz, 'addressQuery', {
     address: addr,
   })
-  if (errors) {
-    console.error(errors)
-  }
+  if (errors) console.error(errors)
   const result = data.hic_et_nunc_holder
-  // console.log({ result })
   return result
 }
 
@@ -86,14 +79,13 @@ export class Config extends Component {
       if (cid.description) this.setState({ description: cid.description })
       if (cid.identicon) this.setState({ identicon: cid.identicon })
       if (this.context.subjktInfo.name) this.setState({ subjkt: this.context.subjktInfo.name })
-
     }
-    //console.log(this.context.subjktInfo)
+    
     this.setState({ loading: false })
   }
 
   handleChange = (e) => {
-    if (e.target.name == 'subjkt' && !e.target.checkValidity()){
+    if (e.target.name == 'subjkt' && !e.target.checkValidity()) {
       console.log(e.target.pattern)
       e.target.value = e.target.value.replace(/[^a-z0-9-._]/g, "")
     }
@@ -148,29 +140,23 @@ export class Config extends Component {
     ls.set('hDAO_config', this.state.vote)
   }
 
-  toogle = () => this.setState({ toogled: !this.state.toogled })
-  /*     
+  hDAO_config_default = () => {
+    this.setState({ vote: '' })
+    document.querySelector('input[name="vote"]').value = ''
+    ls.set('hDAO_config', '')
+  }
 
-   signature studies
-   
-   const bytes =
-         '05' +
-         char2Bytes(
-           JSON.stringify({
-             alias: this.state.alias,
-             description: this.state.description,
-           })
-         )
-       console.log(bytes)
-       const payload = {
-         signingType: SigningType.MICHELINE,
-         payload: bytes,
-         sourceAddress: this.context.addr,
-       }
-       console.log(payload)
-       this.context.sign(payload) 
-       
-  */
+  rpc_config = () => {
+    ls.set('rpc_config', this.state.rpc)
+  }
+
+  rpc_config_default = () => {
+    this.setState({ rpc: '' })
+    document.querySelector('input[name="rpc"]').value = ''
+    ls.set('rpc_config', '')
+  }
+
+  toogle = () => this.setState({ toogled: !this.state.toogled })
 
   sign = () => {
     console.log(this.context.addr)
@@ -217,12 +203,21 @@ export class Config extends Component {
               value={this.state.description}
             />
             <Button onClick={this.subjkt_config}>
-              <Curate>Save Profile</Curate>
+              <Purchase>Save Profile</Purchase>
             </Button>
           </Padding>
           <div style={{ display: 'inline' }}>
-            <span>link your Twitter, Discord, GitHub, and website with </span>
-            <span><a style={{color : 'black', fontWeight : 'bold'}}href="https://tzprofiles.com">Tezos Profiles</a></span>
+            <p style={{paddingTop : '7.5px' }}>
+              <span>
+                link your Twitter, Discord, GitHub, and website with </span>
+              <span>
+                <a href="https://tzprofiles.com">
+                  <Button>
+                    <a href='#' style={{ fontWeight: 'bold' }}>Tezos Profiles</a>
+                  </Button>
+                </a>
+              </span>
+            </p>
           </div>
         </Container>
 
@@ -238,21 +233,46 @@ export class Config extends Component {
         {
           this.state.toogled ?
             <Container>
-              <Padding>
-                <Input
-                  name="vote"
-                  onChange={this.handleChange}
-                  placeholder="hDAO Curation"
-                  label="hDAO Curation"
-                  value={undefined}
-                />
+              <div style={{background: '#8881',padding: '1rem'}}>
+                <br/>
+                <Padding>
+                  <Input
+                    name="vote"
+                    onChange={this.handleChange}
+                    placeholder="hDAO Curation"
+                    label="hDAO Curation Value"
+                    value={ls.get('hDAO_config')}
+                  />
 
-                <Button onClick={this.hDAO_config}>
-                  <Curate>Save ○</Curate>
-                </Button>
+                  <Button onClick={this.hDAO_config}>
+                    <Purchase>Update ○</Purchase>
+                  </Button>
+                  &nbsp;
+                  <Button onClick={this.hDAO_config_default}>
+                    <Curate>Default ○</Curate>
+                  </Button>
 
-                <p>hic et nunc DAO ○ curation parameter</p>
-              </Padding>
+                </Padding>
+                <br/>
+                <Padding>
+                  <Input
+                    name="rpc"
+                    onChange={this.handleChange}
+                    placeholder="RPC Node"
+                    label="RPC Node"
+                    value={ls.get('rpc_config')}
+                  />
+
+                  <Button onClick={this.rpc_config}>
+                    <Purchase>Update Node</Purchase>
+                  </Button>
+                  &nbsp;
+                  <Button onClick={this.rpc_config_default}>
+                    <Curate>Default ○</Curate>
+                  </Button>
+
+                </Padding>
+              </div>
             </Container>
             :
             undefined
@@ -266,9 +286,6 @@ export class Config extends Component {
             </Button>
           </Padding>
         </Container> */}
-        {/*         <BottomBanner>
-          The dApp has been temporarily disabled for a contract migration. Follow <a href="https://twitter.com/hicetnunc2000" target="_blank">@hicetnunc2000</a> or <a href="https://discord.gg/jKNy6PynPK" target="_blank">join the discord</a> for updates.
-        </BottomBanner> */}
       </Page>
     )
   }
