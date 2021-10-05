@@ -2,13 +2,6 @@
 /* eslint-disable */
 import React, { useEffect, useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
-import { BottomBanner } from '../../components/bottom-banner'
-import {
-  GetLatestFeed,
-  // GethDAOFeed,
-  // GetRandomFeed,
-  // GetFeaturedFeed,
-} from '../../data/api'
 import { Page, Container, Padding } from '../../components/layout'
 import { FeedItem } from '../../components/feed-item'
 import { Loading } from '../../components/loading'
@@ -67,26 +60,21 @@ const query_hdao = `query hDAOFeed($offset: Int = 0) {
 
 async function fetchProfiles(arr) {
   const { errors, data } = await fetchGraphQLProfiles(tz_profiles, "profiles", { "arr": arr })
+  if (errors) console.error(errors)
   return data.tzprofiles
 }
 
 async function fetchHdao(offset) {
   const { errors, data } = await fetchGraphQL(query_hdao, "hDAOFeed", { "offset": offset })
-  if (errors) {
-    console.error(errors);
-  }
+  if (errors) console.error(errors)
   const result = data.hic_et_nunc_token
-  /* console.log({ result }) */
   return result
 }
 
 async function fetchFeed(lastId) {
   const { errors, data } = await fetchGraphQL(latest_feed, "LatestFeed", { "lastId": lastId });
-  if (errors) {
-    console.error(errors);
-  }
+  if (errors) console.error(errors)
   const result = data.hic_et_nunc_token
-  /* console.log({ result }) */
   return result
 }
 
@@ -132,9 +120,7 @@ async function fetchObjkts(ids) {
         }
       }
     }`, "Objkts", { "ids": ids });
-  if (errors) {
-    console.log(errors)
-  }
+  if (errors) console.error(errors)
   return data
 }
 
@@ -145,6 +131,7 @@ async function getLastId() {
         id
       }
     }`, "LastId");
+  if (errors) console.error(errors)
   return data.hic_et_nunc_token[0].id
 }
 
@@ -170,16 +157,9 @@ async function fetchRandomObjkts() {
   }
 
   const { errors, data } = await fetchObjkts(Array.from(uniqueIds));
-
-  let objkts = await fetchObjkts(Array.from(uniqueIds));
-  console.log(objkts.hic_et_nunc_token)
-
-  if (errors) {
-    console.error(errors);
-  }
-
-  const result = data
-  return shuffle(objkts.hic_et_nunc_token)
+  if (errors) console.error(errors)
+  
+  return shuffle(data.hic_et_nunc_token)
 }
 
 const getRestrictedAddresses = async () =>
@@ -188,14 +168,6 @@ const getRestrictedAddresses = async () =>
       'https://raw.githubusercontent.com/hicetnunc2000/hicetnunc-reports/main/filters/w.json'
     )
     .then((res) => res.data)
-
-const GetUserClaims = async (arr) => {
-  return await axios.post('https://indexer.tzprofiles.com/v1/graphql', {
-    query: `query MyQuery { tzprofiles_by_pk(account: \"${walletAddr}\") { valid_claims } }`,
-    variables: null,
-    operationName: 'MyQuery',
-  })
-}
 
 const ONE_MINUTE_MILLIS = 60 * 1000
 
@@ -210,61 +182,19 @@ export const Feeds = ({ type }) => {
   const startTime = customFloor(Date.now(), ONE_MINUTE_MILLIS)
 
   const loadMore = async () => {
-/*     if (type === 1) {
-      await getHdaoFeed()
-    } */
-    //await getRandomFeed()
     await getLatest(Math.min.apply(Math, items.map(e => e.id)))
   }
 
   useEffect(async () => {
-    if (error) {
-      console.log('returning on error')
-      return
-    }
+    if (error) console.error(error)
     console.log(type)
-/*     if (type === 0) {
-      GetLatestFeed({ counter: count, max_time: startTime })
-        .then((result) => {
-          const next = items.concat(result)
-          setItems(next)
-
-          // if original returns less than 10, then there's no more data coming from API
-          if (result.length < 10) {
-            setHasMore(false)
-          }
-        })
-        .catch((e) => {
-          setError(true)
-        })
-    } else if (type === 1) {
-      await getHdaoFeed()
-    } else if (type === 2) { */
-      //await getRandomFeed()
-    //} else if (type === 3) {
-      await getLatest(lastId)
-
-      /*       GetFeaturedFeed({ counter: count, max_time: startTime })
-        .then((result) => {
-          // filtered isn't guaranteed to always be 10. if we're filtering they might be less.
-          const next = items.concat(result)
-          setItems(next)
-
-          // if original returns less than 10, then there's no more data coming from API
-          if (result.length < 10) {
-            setHasMore(false)
-          }
-        })
-        .catch((e) => {
-          setError(true)
-        }) */
-    //}
+    await getLatest(lastId)
   }, [count, type])
 
   const getLatest = async (id) => {
     console.log(id)
     let result = await fetchFeed(id)
-    //console.log('feed', await fetchProfiles(result.map(e => e.creator_id)))
+    
     setCreators([...creators, result.map(e => e.creator_id)])
 
     result = _.uniqBy(result, 'creator_id')
@@ -330,9 +260,6 @@ export const Feeds = ({ type }) => {
           </Padding>
         </Container>
       }
-      {/*       <BottomBanner>
-        API is down due to heavy server load — We're working to fix the issue — please be patient with us. <a href="https://discord.gg/mNNSpxpDce" target="_blank">Join the discord</a> for updates.
-      </BottomBanner> */}
     </Page>
   )
 }

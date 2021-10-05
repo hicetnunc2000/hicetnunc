@@ -3,16 +3,12 @@ import { AnimatePresence } from 'framer-motion'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
 import { useParams } from 'react-router'
 import { Page, Container, Padding } from '../../components/layout'
-import { Loading } from '../../components/loading'
 import { Button, Primary } from '../../components/button'
-import { Item } from './item'
 import { ItemModal } from './item-modal'
-import { Artist } from './artist'
 import { ResponsiveMasonry } from '../../components/responsive-masonry'
 import { renderMediaType } from '../../components/media-types'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import styles from './styles.module.scss'
-import { flattenDeep } from 'lodash'
 import axios from 'axios'
 
 async function fetchObjkts(ids) {
@@ -30,6 +26,7 @@ async function fetchObjkts(ids) {
         hdao_balance
       }
     }`, "Objkts", { "_in": ids })
+  if (errors) console.error(errors)
   return data.hic_et_nunc_token
 }
 

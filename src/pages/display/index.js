@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import { Button, Primary, Secondary, Purchase } from '../../components/button'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
 import { Page, Container, Padding } from '../../components/layout'
-import { BottomBanner } from '../../components/bottom-banner'
 import { Loading } from '../../components/loading'
 import { renderMediaType } from '../../components/media-types'
 import { Identicon } from '../../components/identicons'
@@ -16,10 +15,6 @@ import styles from './styles.module.scss'
 
 const axios = require('axios')
 const fetch = require('node-fetch')
-
-const sortByTokenId = (a, b) => {
-  return b.id - a.id
-}
 
 const getRestrictedAddresses = async () =>
   await axios
@@ -69,11 +64,9 @@ async function fetchCollection(addr) {
     'collectorGallery',
     { address: addr }
   )
-  if (errors) {
-    console.error(errors)
-  }
+  if (errors) console.error(errors)
+
   const result = data.hic_et_nunc_token_holder
-  // console.log('collection result' + { result })
   return result
 }
 
@@ -183,7 +176,6 @@ async function fetchV1Swaps(address) {
     console.error(errors)
   }
   const result = data.hic_et_nunc_swap
-  // console.log('swapresultv1 ' + JSON.stringify(result))
   return result
 }
 
@@ -196,7 +188,6 @@ async function fetchV2Swaps(address) {
     console.error(errors)
   }
   const result = data.hic_et_nunc_swap
-  // console.log('swapresultv2 ' + JSON.stringify(result))
 
   return result
 }
@@ -209,7 +200,7 @@ async function fetchSubjkts(subjkt) {
     console.error(errors)
   }
   const result = data.hic_et_nunc_holder
-  /* console.log({ result }) */
+  
   return result
 }
 
@@ -223,7 +214,7 @@ async function fetchCreations(addr) {
     console.error(errors)
   }
   const result = data.hic_et_nunc_token
-  /* console.log({ result }) */
+  
   return result
 }
 
@@ -235,7 +226,7 @@ async function fetchTz(addr) {
     console.error(errors)
   }
   const result = data.hic_et_nunc_holder
-  // console.log({ result })
+  
   return result
 }
 
@@ -271,7 +262,6 @@ export default class Display extends Component {
   componentWillMount = async () => {
 
     const id = window.location.pathname.split('/')[1]
-    // console.log(window.location.pathname.split('/'))
 
     if (id === 'tz') {
 
@@ -280,8 +270,7 @@ export default class Display extends Component {
         wallet,
         walletPreview: walletPreview(wallet),
       })
-      //let res = await fetchSubjkts(decodeURI(window.location.pathname.split('/')[1]))
-      // console.log(decodeURI(window.location.pathname.split('/')[1]))
+
       await GetUserMetadata(wallet).then((data) => {
         const {
           twitter,
@@ -316,7 +305,7 @@ export default class Display extends Component {
       this.onReady()
     } else {
       let res = await fetchSubjkts(decodeURI(window.location.pathname.split('/')[1]))
-      // console.log(decodeURI(window.location.pathname.split('/')[1]))
+      
       console.log(res)
       if (res[0].metadata_file) {
         let meta = await axios.get('https://cloudflare-ipfs.com/ipfs/' + res[0].metadata_file.split('//')[1]).then(res => res.data)
@@ -378,8 +367,7 @@ export default class Display extends Component {
     this.reset()
 
     let list = await getRestrictedAddresses()
-    // console.log(this.state.wallet)
-    // console.log(!list.includes(this.state.wallet))
+    
     if (!list.includes(this.state.wallet)) {
       this.setState({ creations: await fetchCreations(this.state.wallet) })
       this.setState({ objkts: this.state.creations, loading: false, items: [] })
@@ -422,7 +410,7 @@ export default class Display extends Component {
     this.setState({ collectionType: 'forSale' })
 
     let v1Swaps = this.state.marketV1.filter(item => {
-      const objkts = item.token.creator.address == this.state.wallet
+      const objkts = item.token.creator.address === this.state.wallet
       return objkts
     })
 
@@ -430,11 +418,11 @@ export default class Display extends Component {
     this.setState({ objkts: this.state.creations, loading: false, items: [] })
 
     if (forSaleType !== null) {
-      if (forSaleType == 0) {
+      if (forSaleType === 0) {
         this.setState({
           objkts: await this.filterCreationsForSalePrimary(this.state.objkts)
         })
-      } else if (forSaleType == 1) {
+      } else if (forSaleType === 1) {
         this.setState({
           objkts: await this.filterCreationsForSaleSecondary(this.state.objkts)
         })
@@ -449,7 +437,7 @@ export default class Display extends Component {
   filterCreationsForSalePrimary = async () => {
     let objkts = this.state.creations.filter(item => {
       const swaps = item.swaps.filter(swaps => {
-        return swaps.status == 0 && swaps.contract_version == 2 && swaps.creator_id == this.state.wallet
+        return swaps.status === 0 && swaps.contract_version === 2 && swaps.creator_id === this.state.wallet
       })
       return swaps && swaps.length > 0
     });
@@ -460,7 +448,7 @@ export default class Display extends Component {
   filterCreationsForSaleSecondary = async () => {
     let objkts = this.state.creations.filter(item => {
       const swaps = item.swaps.filter(swaps => {
-        return swaps.status == 0 && swaps.creator_id !== this.state.wallet
+        return swaps.status === 0 && swaps.creator_id !== this.state.wallet
       })
       return swaps && swaps.length > 0
     });
@@ -908,9 +896,9 @@ export default class Display extends Component {
               </Padding>
             </Container>
             <Container xlarge>
-              {this.state.collectionType == 'forSale' ?
+              {this.state.collectionType === 'forSale' ?
                 <>
-                  {this.context.acc != null && this.context.acc.address == this.state.wallet ?
+                  {this.context.acc != null && this.context.acc.address === this.state.wallet ?
                     <>
                       {Object.keys(this.state.marketV1).length !== 0 && (
                         <>
@@ -1052,9 +1040,9 @@ export default class Display extends Component {
             </Container>
           <Container xlarge>
 
-            {this.state.collectionType == 'forSale' ?
+            {this.state.collectionType === 'forSale' ?
               <>
-                {this.context.acc != null && this.context.acc.address == this.state.wallet ?
+                {this.context.acc != null && this.context.acc.address === this.state.wallet ?
                   <>
                     {Object.keys(this.state.marketV1).length !== 0 && (
                       <>
@@ -1165,9 +1153,6 @@ export default class Display extends Component {
           </Container>
           </div>
         )}
-        {/*       <BottomBanner>
-        API is down due to heavy server load — We're working to fix the issue — please be patient with us. <a href="https://discord.gg/mNNSpxpDce" target="_blank">Join the discord</a> for updates.
-      </BottomBanner> */}
       </Page>
     )
   }

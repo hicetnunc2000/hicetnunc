@@ -9,12 +9,9 @@ import { Page, Container, Padding } from '../../components/layout'
 import { renderMediaType } from '../../components/media-types'
 import { ItemInfo } from '../../components/item-info'
 import { Menu } from '../../components/menu'
-import { BottomBanner } from '../../components/bottom-banner'
 import { Info, Collectors, Swap, Burn, History } from './tabs'
 import styles from './styles.module.scss'
 import './style.css'
-
-const axios = require('axios')
 
 const TABS = [
   { title: 'info', component: Info }, // public tab
@@ -222,13 +219,13 @@ export const ObjktDisplay = () => {
               }}
               className="objkt-display">
               <div className={
-                nft.mime == 'application/x-directory' || nft.mime == 'image/svg+xml' ? 'objktview-zipembed objktview ' + styles.objktview :
+                nft.mime === 'application/x-directory' || nft.mime == 'image/svg+xml' ? 'objktview-zipembed objktview ' + styles.objktview :
                   [(
-                    nft.mime == 'video/mp4' ||
-                      nft.mime == 'video/ogv' ||
-                      nft.mime == 'video/quicktime' ||
-                      nft.mime == 'video/webm' ||
-                      nft.mime == 'application/pdf' ? 'no-fullscreen' : 'objktview ' + styles.objktview
+                    nft.mime === 'video/mp4' ||
+                      nft.mime === 'video/ogv' ||
+                      nft.mime === 'video/quicktime' ||
+                      nft.mime === 'video/webm' ||
+                      nft.mime === 'application/pdf' ? 'no-fullscreen' : 'objktview ' + styles.objktview
                   )]
               }>
                 {renderMediaType({

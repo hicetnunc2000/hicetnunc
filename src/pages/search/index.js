@@ -10,7 +10,6 @@ import { renderMediaType } from '../../components/media-types'
 import './style.css'
 
 const axios = require('axios')
-// const ls = require('local-storage')
 const _ = require('lodash')
 
 const isFloat = (n) => Number(n) === n && n % 1 !== 0
@@ -40,70 +39,45 @@ query LatestFeed {
   return result
 }
 
-const query_creations = `
-query creatorGallery($address: String!) {
-  hic_et_nunc_token(where: {creator: {address: {_eq: $address}}, supply: {_gt: 0}}, order_by: {id: desc}, limit : 15, offset : $offset ) {
-    id
-    artifact_uri
-    display_uri
-    thumbnail_uri
-    timestamp
-    mime
-    title
-    description
-    supply
-    token_tags {
-      tag {
-        tag
-      }
-    }
-  }
-}
-`
+// const query_creations = `
+// query creatorGallery($address: String!) {
+//   hic_et_nunc_token(where: {creator: {address: {_eq: $address}}, supply: {_gt: 0}}, order_by: {id: desc}, limit : 15, offset : $offset ) {
+//     id
+//     artifact_uri
+//     display_uri
+//     thumbnail_uri
+//     timestamp
+//     mime
+//     title
+//     description
+//     supply
+//     token_tags {
+//       tag {
+//         tag
+//       }
+//     }
+//   }
+// }
+// `
 
-const query_tag = `
-query ObjktsByTag {
-  hic_et_nunc_token(where: {supply : { _neq : 0 }, token_tags: {tag: {tag: {_eq: $tag}}}, id: {_lt: $lastId}}, limit : 15, order_by: {id: desc}) {
-    id
-    artifact_uri
-    display_uri
-    mime
-    token_tags {
-      tag {
-        tag
-      }
-    }
-    creator {
-      address
-      name
-    }
-  }
-}`
-
-async function fetchID(id) {
-  const { errors, data } = await fetchGraphQL(`
-  query objktId {
-    hic_et_nunc_token(where : { id : { _eq : $id }}) {
-      id
-      artifact_uri
-      display_uri
-      mime
-      creator {
-        address
-        name
-      }
-    }
-  }
-  `, 'objktId', {
-    id: id
-  })
-
-  try {
-    return data.hic_et_nunc_token
-  } catch (e) {
-    return undefined
-  }
-}
+// const query_tag = `
+// query ObjktsByTag {
+//   hic_et_nunc_token(where: {supply : { _neq : 0 }, token_tags: {tag: {tag: {_eq: $tag}}}, id: {_lt: $lastId}}, limit : 15, order_by: {id: desc}) {
+//     id
+//     artifact_uri
+//     display_uri
+//     mime
+//     token_tags {
+//       tag {
+//         tag
+//       }
+//     }
+//     creator {
+//       address
+//       name
+//     }
+//   }
+// }`
 
 async function fetchObjkts(ids) {
   const { errors, data } = await fetchGraphQL(`
@@ -134,6 +108,7 @@ async function getLastId() {
         id
       }
     }`, "LastId");
+  if (errors) console.error(errors)
   return data.hic_et_nunc_token[0].id
 }
 
@@ -158,7 +133,7 @@ async function fetchGLB(offset) {
   `, 'GLBObjkts', {}
   )
   if (errors) console.error(errors)
-  console.log('glb', data.hic_et_nunc_token)
+  
   try {
     return data.hic_et_nunc_token
   } catch (e) {
@@ -239,30 +214,6 @@ async function fetchMusic(offset) {
   }
 }
 
-async function fetchTitle(title, offset) {
-  const { errors, data } = await fetchGraphQL(`
-  query queryTitles {
-    hic_et_nunc_token(where: {title: {_like: "%${title}%"}}) {
-      id
-      artifact_uri
-      display_uri
-      mime
-      creator {
-        address
-        name
-      }
-    }
-  }
-  `, 'queryTitles', {})
-  if (errors) console.error(errors)
-
-  try {
-    return data.hic_et_nunc_token
-  } catch (e) {
-    return undefined
-  }
-}
-
 async function fetchCreations(addr, offset) {
   const { errors, data } = await fetchGraphQL(`
 query creatorGallery {
@@ -292,30 +243,6 @@ query creatorGallery {
   const result = data.hic_et_nunc_token
   /* console.log({ result }) */
   return result
-}
-
-async function fetchDescription(description, offset) {
-  const { errors, data } = await fetchGraphQL(`
-  query queryDescriptions {
-    hic_et_nunc_token(where: {description: {_like: "%${description}%"}}) {
-      id
-      artifact_uri
-      display_uri
-      mime
-      creator {
-        address
-        name
-      }
-    }
-  }
-  `, 'queryDescriptions', {})
-  if (errors) console.error(errors)
-
-  try {
-    return data.hic_et_nunc_token
-  } catch (e) {
-    return undefined
-  }
 }
 
 async function fetchRandomObjkts() {
@@ -659,17 +586,6 @@ export class Search extends Component {
     } else {
       this.setState({ feed: await fetchTag(this.state.search.toLowerCase(), 9999999), select: 'tag' })
       //console.log('tags', await fetchTag(this.state.search.toLowerCase()))
-      // search for objkt titles/descriptions
-
-      /*       
-            let title = await fetchTitle(this.state.search)
-            console.log('title', title)
-            if (await title) this.setState({ items: [...this.state.items, ...(await title)] })
-            let description = await fetchDescription(this.state.search)
-            console.log('description', description)
-            if (await description) this.setState({ items: [...this.state.items, ...(await description)] })       
-      */
-
     }
 
 

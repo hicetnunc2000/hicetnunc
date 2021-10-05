@@ -1,13 +1,12 @@
 import React, { useContext, useState } from 'react'
 import Compressor from 'compressorjs'
-import { BottomBanner } from '../../components/bottom-banner'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
 import { Page, Container, Padding } from '../../components/layout'
 import { Input, Textarea } from '../../components/input'
 import { Button, Curate, Primary, Purchase } from '../../components/button'
 import { Upload } from '../../components/upload'
 import { Preview } from '../../components/preview'
-import { prepareFile, prepareFile100MB, prepareDirectory } from '../../data/ipfs'
+import { prepareFile, prepareDirectory } from '../../data/ipfs'
 import { prepareFilesFromZIP } from '../../utils/html'
 import {
   ALLOWED_MIMETYPES,
@@ -37,9 +36,9 @@ const thumbnailOptions = {
 const GENERATE_DISPLAY_AND_THUMBNAIL = true
 
 export const Mint = () => {
-  const { mint, getAuth, acc, setAccount, getProxy, setFeedback, syncTaquito } =
+  const { mint, acc, setAccount, getProxy, setFeedback, syncTaquito } =
     useContext(HicetnuncContext)
-  // const history = useHistory()
+
   const [step, setStep] = useState(0)
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
@@ -72,10 +71,6 @@ export const Mint = () => {
       console.log(ALLOWED_MIMETYPES)
       // check mime type
       if (ALLOWED_MIMETYPES.indexOf(file.mimeType) === -1) {
-        // alert(
-        //   `File format invalid. supported formats include: ${ALLOWED_FILETYPES_LABEL.toLocaleLowerCase()}`
-        // )
-
         setFeedback({
           visible: true,
           message: `File format invalid. supported formats include: ${ALLOWED_FILETYPES_LABEL.toLocaleLowerCase()}`,
@@ -92,10 +87,6 @@ export const Mint = () => {
       // check file size
       const filesize = (file.file.size / 1024 / 1024).toFixed(4)
       if (filesize > MINT_FILESIZE) {
-        // alert(
-        //   `File too big (${filesize}). Limit is currently set at ${MINT_FILESIZE}MB`
-        // )
-
         setFeedback({
           visible: true,
           message: `Max file size (${filesize}). Limit is currently ${MINT_FILESIZE}MB`,
@@ -120,10 +111,8 @@ export const Mint = () => {
         confirm: false,
       })
 
-      // if proxyContract is selected, using it as a the miterAddress:
+      // if proxyContract is selected, using it as a the minterAddress:
       const minterAddress = getProxy() || acc.address
-      // ztepler: I have not understand the difference between acc.address and getAuth here
-      //    so I am using acc.address (minterAddress) in both nftCid.address and in mint call
 
       // upload file(s)
       let nftCid
@@ -392,9 +381,6 @@ export const Mint = () => {
           </Container>
         </>
       )}
-{/*       <BottomBanner>
-      Collecting has been temporarily disabled. Follow <a href="https://twitter.com/hicetnunc2000" target="_blank">@hicetnunc2000</a> or <a href="https://discord.gg/jKNy6PynPK" target="_blank">join the discord</a> for updates.
-      </BottomBanner> */}
     </Page>
   )
 }

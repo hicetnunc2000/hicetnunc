@@ -3,14 +3,10 @@
 import React, { Component } from 'react'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
 import { Container, Padding, Page } from '../../components/layout'
-import { BottomBanner } from '../../components/bottom-banner'
-import { Input, Textarea } from '../../components/input'
+import { Input } from '../../components/input'
 import { Button, Curate, Primary, Purchase } from '../../components/button'
-import { Upload } from '../../components/upload'
 import { Identicon } from '../../components/identicons'
-import { SigningType } from '@airgap/beacon-sdk'
-import { char2Bytes } from '@taquito/utils'
-import styles from './styles.module.scss'
+// import styles from './styles.module.scss'
 import axios from 'axios'
 const { create } = require('ipfs-http-client')
 const infuraUrl = 'https://ipfs.infura.io:5001'
@@ -34,11 +30,8 @@ async function fetchTz(addr) {
   const { errors, data } = await fetchGraphQL(query_tz, 'addressQuery', {
     address: addr,
   })
-  if (errors) {
-    console.error(errors)
-  }
+  if (errors) console.error(errors)
   const result = data.hic_et_nunc_holder
-  // console.log({ result })
   return result
 }
 
@@ -86,9 +79,8 @@ export class Config extends Component {
       if (cid.description) this.setState({ description: cid.description })
       if (cid.identicon) this.setState({ identicon: cid.identicon })
       if (this.context.subjktInfo.name) this.setState({ subjkt: this.context.subjktInfo.name })
-
     }
-    //console.log(this.context.subjktInfo)
+    
     this.setState({ loading: false })
   }
 
@@ -165,28 +157,6 @@ export class Config extends Component {
   }
 
   toogle = () => this.setState({ toogled: !this.state.toogled })
-  /*     
-
-   signature studies
-   
-   const bytes =
-         '05' +
-         char2Bytes(
-           JSON.stringify({
-             alias: this.state.alias,
-             description: this.state.description,
-           })
-         )
-       console.log(bytes)
-       const payload = {
-         signingType: SigningType.MICHELINE,
-         payload: bytes,
-         sourceAddress: this.context.addr,
-       }
-       console.log(payload)
-       this.context.sign(payload) 
-       
-  */
 
   sign = () => {
     console.log(this.context.addr)
@@ -316,9 +286,6 @@ export class Config extends Component {
             </Button>
           </Padding>
         </Container> */}
-        {/*         <BottomBanner>
-          The dApp has been temporarily disabled for a contract migration. Follow <a href="https://twitter.com/hicetnunc2000" target="_blank">@hicetnunc2000</a> or <a href="https://discord.gg/jKNy6PynPK" target="_blank">join the discord</a> for updates.
-        </BottomBanner> */}
       </Page>
     )
   }
