@@ -19,14 +19,14 @@ export const ImageComponent = ({
   if (displayView) {
     return (
       <div className={styles.container}>
-        <LazyLoadImage className={styles.image} src={src} alt="💥" />
+        <LazyLoadImage className={styles.image} src={src} /* alt="💥" */ />
       </div>
     )
   } else {
     return (
       <div>
         <div>
-          <LazyLoadImage className={styles.style} src={src} alt="💥" />
+          <LazyLoadImage className={styles.style} src={src} /* alt="💥" */ />
         </div>
       </div>
     )
