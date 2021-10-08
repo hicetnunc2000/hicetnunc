@@ -31,7 +31,7 @@ query profiles {
 
 const latest_feed = `
 query LatestFeed($lastId: bigint = 99999999) {
-  hic_et_nunc_token(order_by: {id: desc}, limit: 10, where: {id: {_lt: $lastId}, artifact_uri: {_neq: ""}}) {
+  hic_et_nunc_token(order_by: {id: desc}, limit: 5, where: {id: {_lt: $lastId}, artifact_uri: {_neq: ""}}) {
     artifact_uri
     display_uri
     creator_id
@@ -154,8 +154,8 @@ function rnd(min, max) {
 
 function shuffle(a) {
   for (let i = a.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [a[i], a[j]] = [a[j], a[i]];
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
   }
   return a;
 }
@@ -210,9 +210,9 @@ export const Feeds = ({ type }) => {
   const startTime = customFloor(Date.now(), ONE_MINUTE_MILLIS)
 
   const loadMore = async () => {
-/*     if (type === 1) {
-      await getHdaoFeed()
-    } */
+    /*     if (type === 1) {
+          await getHdaoFeed()
+        } */
     //await getRandomFeed()
     await getLatest(Math.min.apply(Math, items.map(e => e.id)))
   }
@@ -223,41 +223,41 @@ export const Feeds = ({ type }) => {
       return
     }
     console.log(type)
-/*     if (type === 0) {
-      GetLatestFeed({ counter: count, max_time: startTime })
-        .then((result) => {
-          const next = items.concat(result)
-          setItems(next)
-
-          // if original returns less than 10, then there's no more data coming from API
-          if (result.length < 10) {
-            setHasMore(false)
-          }
-        })
-        .catch((e) => {
-          setError(true)
-        })
-    } else if (type === 1) {
-      await getHdaoFeed()
-    } else if (type === 2) { */
-      //await getRandomFeed()
+    /*     if (type === 0) {
+          GetLatestFeed({ counter: count, max_time: startTime })
+            .then((result) => {
+              const next = items.concat(result)
+              setItems(next)
+    
+              // if original returns less than 10, then there's no more data coming from API
+              if (result.length < 10) {
+                setHasMore(false)
+              }
+            })
+            .catch((e) => {
+              setError(true)
+            })
+        } else if (type === 1) {
+          await getHdaoFeed()
+        } else if (type === 2) { */
+    //await getRandomFeed()
     //} else if (type === 3) {
-      await getLatest(lastId)
+    await getLatest(lastId)
 
-      /*       GetFeaturedFeed({ counter: count, max_time: startTime })
-        .then((result) => {
-          // filtered isn't guaranteed to always be 10. if we're filtering they might be less.
-          const next = items.concat(result)
-          setItems(next)
+    /*       GetFeaturedFeed({ counter: count, max_time: startTime })
+      .then((result) => {
+        // filtered isn't guaranteed to always be 10. if we're filtering they might be less.
+        const next = items.concat(result)
+        setItems(next)
 
-          // if original returns less than 10, then there's no more data coming from API
-          if (result.length < 10) {
-            setHasMore(false)
-          }
-        })
-        .catch((e) => {
-          setError(true)
-        }) */
+        // if original returns less than 10, then there's no more data coming from API
+        if (result.length < 10) {
+          setHasMore(false)
+        }
+      })
+      .catch((e) => {
+        setError(true)
+      }) */
     //}
   }, [count, type])
 
@@ -273,6 +273,10 @@ export const Feeds = ({ type }) => {
 
     let restricted = await getRestrictedAddresses()
     result = result.filter(e => !restricted.includes(e.creator_id))
+
+    let addrs = result.map(e => console.log(e.creator_id))
+    console.log(addrs)
+    //fetchProfiles(addrs)
     const next = items.concat(result)
     setItems(next)
   }
@@ -301,28 +305,30 @@ export const Feeds = ({ type }) => {
   return (
     <Page title="">
       {items.length > 0 ?
-        <InfiniteScroll
-          dataLength={items.length}
-          next={loadMore}
-          hasMore={hasMore}
-          loader={undefined}
-          endMessage={
-            <p>
-              mint mint mint{' '}
-              <span role="img" aria-labelledby={'Sparkles emoji'}>
-                ✨
-              </span>
-            </p>
-          }
-        >
-          <Container>
-            <Padding>
-              {items.map((item, index) => (
-                <FeedItem key={`${item.id}-${index}`} {...item} />
-              ))}
-            </Padding>
-          </Container>
-        </InfiniteScroll>
+        <Container xlarge>
+          <InfiniteScroll
+            dataLength={items.length}
+            next={loadMore}
+            hasMore={hasMore}
+            loader={undefined}
+            endMessage={
+              <p>
+                mint mint mint{' '}
+                <span role="img" aria-labelledby={'Sparkles emoji'}>
+                  ✨
+                </span>
+              </p>
+            }
+          >
+            <Container>
+              <Padding>
+                {items.map((item, index) => (
+                  <FeedItem key={`${item.id}-${index}`} {...item} />
+                ))}
+              </Padding>
+            </Container>
+          </InfiniteScroll> 
+        </Container>
         :
         <Container>
           <Padding>
