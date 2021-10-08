@@ -258,6 +258,22 @@ async function fetchTz(addr) {
   return result
 }
 
+async function fetchBalance(addr) {
+  const { errors, data } = await fetchGraphQL(`
+  query hdaobalances {
+    hic_et_nunc_token(where: {creator_id: {_eq: "${addr}"}, supply: {_gt: 0}, hdao_balance : {_gt: 0}}) {
+      id
+      hdao_balance
+    }
+  }
+  `, 'hdaobalances', {})
+  if (errors) {
+    console.log(errors)
+  }
+  const result = data.hic_et_nunc_token
+  return result
+}
+
 export default class Display extends Component {
   static contextType = HicetnuncContext
 
@@ -295,6 +311,7 @@ export default class Display extends Component {
     if (id === 'tz') {
 
       const wallet = window.location.pathname.split('/')[2]
+
       this.setState({
         wallet,
         walletPreview: walletPreview(wallet),
@@ -316,7 +333,6 @@ export default class Display extends Component {
         if (data.data.github) this.setState({ github })
         if (data.data.dns) this.setState({ dns })
       })
-
       let res = await fetchTz(wallet)
       try {
         if (res[0]) {
@@ -330,8 +346,6 @@ export default class Display extends Component {
       } catch (e) {
         console.log("error " + e)
       }
-
-
       this.onReady()
     } else {
       let res = await fetchSubjkts(decodeURI(window.location.pathname.split('/')[1]))
@@ -343,16 +357,12 @@ export default class Display extends Component {
         if (meta.description) this.setState({ description: meta.description })
         if (meta.identicon) this.setState({ identicon: meta.identicon })
       }
-
       if (res.length >= 1) {
-        console.log(res)
-
         this.setState({
           wallet: res[0].address,
           walletPreview: walletPreview(res[0].address),
           subjkt: window.location.pathname.split('/')[1]
         })
-
         let resTz = await fetchTz(this.state.wallet)
         this.setState({ hdao: Math.floor(resTz[0].hdao_balance / 1000000) })
       } else {
@@ -375,6 +385,9 @@ export default class Display extends Component {
       })
       this.onReady()
     }
+
+    let hdao = await fetchBalance(this.state.wallet)
+    console.log(hdao)
   }
 
   reset() {
