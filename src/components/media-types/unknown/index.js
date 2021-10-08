@@ -8,7 +8,7 @@ export const UnknownComponent = ({ mimeType }) => {
  */
   return (
     <div className={styles.container}>
-      <div className={styles.square}>Metadata on queue</div>
+      <div className={styles.square}>Database cell glitch</div>
     </div>
   )
 }
