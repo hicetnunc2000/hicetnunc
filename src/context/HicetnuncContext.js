@@ -451,6 +451,7 @@ class HicetnuncContextProviderClass extends Component {
       },
 
       batch_claim: async (arr) => {
+        console.log(arr)
         let curation = await Tezos.wallet.at(this.state.hDAO_curation)
         let transactions = arr.map(e => {
           return {
