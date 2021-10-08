@@ -22,7 +22,7 @@ const isFloat = (n) => Number(n) === n && n % 1 !== 0
 async function fetchFeed(lastId) {
   const { errors, data } = await fetchGraphQL(`
 query LatestFeed {
-  hic_et_nunc_token(order_by: {id: desc}, limit: 15, where: {id: {_lt: ${lastId}}, artifact_uri: {_neq: ""}}) {
+  hic_et_nunc_token(order_by: {id: desc}, limit: 10, where: {id: {_lt: ${lastId}}, artifact_uri: {_neq: ""}}) {
     artifact_uri
     display_uri
     creator_id
@@ -47,7 +47,7 @@ query LatestFeed {
 
 const query_creations = `
 query creatorGallery($address: String!) {
-  hic_et_nunc_token(where: {creator: {address: {_eq: $address}}, supply: {_gt: 0}}, order_by: {id: desc}, limit : 15, offset : $offset ) {
+  hic_et_nunc_token(where: {creator: {address: {_eq: $address}}, supply: {_gt: 0}}, order_by: {id: desc}, limit : 10, offset : $offset ) {
     id
     artifact_uri
     display_uri
@@ -68,7 +68,7 @@ query creatorGallery($address: String!) {
 
 const query_tag = `
 query ObjktsByTag {
-  hic_et_nunc_token(where: {supply : { _neq : 0 }, token_tags: {tag: {tag: {_eq: $tag}}}, id: {_lt: $lastId}}, limit : 15, order_by: {id: desc}) {
+  hic_et_nunc_token(where: {supply : { _neq : 0 }, token_tags: {tag: {tag: {_eq: $tag}}}, id: {_lt: $lastId}}, limit : 10, order_by: {id: desc}) {
     id
     artifact_uri
     display_uri
@@ -151,7 +151,7 @@ function rnd(min, max) {
 async function fetchGLB(offset) {
   const { errors, data } = await fetchGraphQL(`
   query GLBObjkts {
-    hic_et_nunc_token(where : { mime : {_in : ["model/gltf-binary"] }, supply : { _neq : 0 }}, limit : 15, offset : ${offset}, order_by: {id: desc}) {
+    hic_et_nunc_token(where : { mime : {_in : ["model/gltf-binary"] }, supply : { _neq : 0 }}, limit : 10, offset : ${offset}, order_by: {id: desc}) {
       id
       artifact_uri
       display_uri
@@ -176,7 +176,7 @@ async function fetchGLB(offset) {
 async function fetchInteractive(offset) {
   const { errors, data } = await fetchGraphQL(`
     query InteractiveObjkts {
-      hic_et_nunc_token(where: { mime: {_in : [ "application/x-directory", "image/svg+xml" ]}, supply : { _neq : 0 } }, limit : 15, offset : ${offset}, order_by: {id: desc}) {
+      hic_et_nunc_token(where: { mime: {_in : [ "application/x-directory", "image/svg+xml" ]}, supply : { _neq : 0 } }, limit : 10, offset : ${offset}, order_by: {id: desc}) {
         id
         artifact_uri
         display_uri
@@ -200,7 +200,7 @@ async function fetchInteractive(offset) {
 async function fetchGifs(offset) {
   const { errors, data } = await fetchGraphQL(`
     query Gifs ($offset: Int = 0) {
-      hic_et_nunc_token(where: { mime: {_in : [ "image/gif" ]}, supply : { _neq : 0 }}, order_by: {id: desc}, limit: 15, offset: ${offset}) {
+      hic_et_nunc_token(where: { mime: {_in : [ "image/gif" ]}, supply : { _neq : 0 }}, order_by: {id: desc}, limit: 10, offset: ${offset}) {
         id
         artifact_uri
         display_uri
@@ -224,7 +224,7 @@ async function fetchGifs(offset) {
 async function fetchMusic(offset) {
   const { errors, data } = await fetchGraphQL(`
   query AudioObjkts {
-    hic_et_nunc_token(where: {mime: {_in: ["audio/ogg", "audio/wav", "audio/mpeg"]}, supply : { _neq : 0 }}, limit : 15, offset : ${offset}, order_by: {id: desc}) {
+    hic_et_nunc_token(where: {mime: {_in: ["audio/ogg", "audio/wav", "audio/mpeg"]}, supply : { _neq : 0 }}, limit : 10, offset : ${offset}, order_by: {id: desc}) {
       id
       artifact_uri
       display_uri
@@ -272,7 +272,7 @@ async function fetchTitle(title, offset) {
 async function fetchCreations(addr, offset) {
   const { errors, data } = await fetchGraphQL(`
 query creatorGallery {
-  hic_et_nunc_token(where: {creator: {address: {_eq: ${addr}}}, supply: {_gt: 0}}, order_by: {id: desc}, limit : 15, offset : ${offset} ) {
+  hic_et_nunc_token(where: {creator: {address: {_eq: ${addr}}}, supply: {_gt: 0}}, order_by: {id: desc}, limit : 10, offset : ${offset} ) {
     id
     artifact_uri
     display_uri
@@ -329,7 +329,7 @@ async function fetchRandomObjkts() {
   const lastId = await getLastId()
 
   const uniqueIds = new Set()
-  while (uniqueIds.size < 15) {
+  while (uniqueIds.size < 10) {
     uniqueIds.add(rnd(firstId, lastId))
   }
 
@@ -348,7 +348,7 @@ async function fetchRandomObjkts() {
 async function fetchDay(day, offset) {
   console.log(day)
   const { errors, data } = await fetchGraphQL(`query dayTrades {
-    hic_et_nunc_trade(where: {timestamp: {_gte: "${day}"}}, order_by: {swap: {price: desc}}, limit : 15, offset : ${offset}) {
+    hic_et_nunc_trade(where: {timestamp: {_gte: "${day}"}}, order_by: {swap: {price: desc}}, limit : 10, offset : ${offset}) {
       timestamp
       swap {
         price
@@ -384,7 +384,7 @@ async function fetchSales(offset) {
   console.log(offset)
   const { errors, data } = await fetchGraphQL(`
   query sales {
-    hic_et_nunc_trade(order_by: {timestamp: desc}, limit : 15, offset : ${offset}) {
+    hic_et_nunc_trade(order_by: {timestamp: desc}, limit : 10, offset : ${offset}) {
       timestamp
       swap {
         price
@@ -444,7 +444,7 @@ async function fetchSubjkts(subjkt) {
 async function fetchTag(tag, offset) {
   const { errors, data } = await fetchGraphQL(
     `query ObjktsByTag {
-  hic_et_nunc_token(where: {supply : { _neq : 0 }, token_tags: {tag: {tag: {_eq: ${tag}}}}, id: {_lt: ${offset}}}, limit : 15, order_by: {id: desc}) {
+  hic_et_nunc_token(where: {supply : { _neq : 0 }, token_tags: {tag: {tag: {_eq: ${tag}}}}, id: {_lt: ${offset}}}, limit : 10, order_by: {id: desc}) {
     id
     artifact_uri
     display_uri
@@ -485,7 +485,7 @@ async function fetchGraphQL(operationsDoc, operationName, variables) {
 }
 
 const query_hdao = `query hDAOFeed($offset: Int = 0) {
-  hic_et_nunc_token(order_by: {hdao_balance: desc}, limit: 5, where: {hdao_balance: {_gt: 100}}, offset: $offset) {
+  hic_et_nunc_token(order_by: {hdao_balance: desc}, limit: 10, where: {hdao_balance: {_gt: 100}}, offset: $offset) {
     artifact_uri
     display_uri
     creator_id
@@ -734,7 +734,7 @@ export class Search extends Component {
   select = (id) => this.setState({ select: [...this.state.select, id] })
 
   loadMore = () => {
-    this.setState({ offset: this.state.offset + 15 })
+    this.setState({ offset: this.state.offset + 10 })
     console.log(this.context.offset)
     //this.setState({ feed: [...this.state.feed, ...this.state.items.slice(this.state.offset + 20, this.state.offset + 40)], offset: this.state.offset + 20 })
     this.update(this.state.select, false)
