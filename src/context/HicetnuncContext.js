@@ -138,7 +138,7 @@ class HicetnuncContextProviderClass extends Component {
           },
           {
             kind: OpKind.TRANSACTION,
-            ...marketplace.methods.swap(this.state.hDAO_marketplace, creator, parseFloat(objkt_amount), parseFloat(objkt_id), parseFloat(royalties), parseFloat(0), parseFloat(token_per_objkt)).toTransferParams({ amount: 0, mutez: true, storageLimit: 250 })
+            ...marketplace.methods.swap(this.state.hDAO_marketplace, creator, parseFloat(objkt_amount), parseFloat(objkt_id), parseFloat(royalties), parseFloat(0), parseFloat(token_per_objkt)).toTransferParams({ amount: 0, mutez: true, storageLimit: 300 })
           }
         ]
 
@@ -176,11 +176,11 @@ class HicetnuncContextProviderClass extends Component {
           {
             kind: OpKind.TRANSACTION,
             ...objkts.methods.update_operators([{ add_operator: { operator: this.state.v2, token_id: parseFloat(objkt_id), owner: ownerAddress } }])
-              .toTransferParams({ amount: 0, mutez: true, storageLimit: 100 })
+              .toTransferParams({ amount: 0, mutez: true, storageLimit: 175 })
           },
           {
             kind: OpKind.TRANSACTION,
-            ...marketplace.methods.swap(creator, parseFloat(objkt_amount), parseFloat(objkt_id), parseFloat(royalties), parseFloat(xtz_per_objkt)).toTransferParams({ amount: 0, mutez: true, storageLimit: 270 })
+            ...marketplace.methods.swap(creator, parseFloat(objkt_amount), parseFloat(objkt_id), parseFloat(royalties), parseFloat(xtz_per_objkt)).toTransferParams({ amount: 0, mutez: true, storageLimit: 300 })
           }
         ]
 
@@ -448,6 +448,19 @@ class HicetnuncContextProviderClass extends Component {
               .claim_hDAO(parseInt(hDAO_amount), parseInt(objkt_id))
               .send()
           })
+      },
+
+      batch_claim: async (arr) => {
+        let curation = await Tezos.wallet.at(this.state.hDAO_curation)
+        let transactions = arr.map(e => {
+          return {
+            kind: OpKind.TRANSACTION,
+            ...curation.methods.claim_hDAO(e.hdao_balance, e.id)
+              .toTransferParams({ amount: 0, mutez: true, storageLimit: 175 })
+          }
+        })
+        let batch = await Tezos.wallet.batch(transactions)
+        return await batch.send()
       },
 
       burn: async (objkt_id, amount) => {
