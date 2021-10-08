@@ -156,6 +156,7 @@ async function fetchGLB(offset) {
       artifact_uri
       display_uri
       mime
+      creator_id
       creator {
         address
         name
@@ -204,6 +205,7 @@ async function fetchGifs(offset) {
         artifact_uri
         display_uri
         mime
+        creator_id
         creator {
           name
           address
