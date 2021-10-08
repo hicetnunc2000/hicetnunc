@@ -346,7 +346,6 @@ async function fetchRandomObjkts() {
 }
 
 async function fetchDay(day, offset) {
-  console.log(day)
   const { errors, data } = await fetchGraphQL(`query dayTrades {
     hic_et_nunc_trade(where: {timestamp: {_gte: "${day}"}}, order_by: {swap: {price: desc}}, limit : 15, offset : ${offset}) {
       timestamp
@@ -381,7 +380,6 @@ async function fetchDay(day, offset) {
 }
 
 async function fetchSales(offset) {
-  console.log(offset)
   const { errors, data } = await fetchGraphQL(`
   query sales {
     hic_et_nunc_trade(order_by: {timestamp: desc}, limit : 15, offset : ${offset}) {

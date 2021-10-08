@@ -172,7 +172,6 @@ async function fetchRandomObjkts() {
   const { errors, data } = await fetchObjkts(Array.from(uniqueIds));
 
   let objkts = await fetchObjkts(Array.from(uniqueIds));
-  console.log(objkts.hic_et_nunc_token)
 
   if (errors) {
     console.error(errors);
@@ -222,7 +221,6 @@ export const Feeds = ({ type }) => {
       console.log('returning on error')
       return
     }
-    console.log(type)
     /*     if (type === 0) {
           GetLatestFeed({ counter: count, max_time: startTime })
             .then((result) => {
@@ -262,7 +260,6 @@ export const Feeds = ({ type }) => {
   }, [count, type])
 
   const getLatest = async (id) => {
-    console.log(id)
     let result = await fetchFeed(id)
     //console.log('feed', await fetchProfiles(result.map(e => e.creator_id)))
     setCreators([...creators, result.map(e => e.creator_id)])
@@ -274,8 +271,6 @@ export const Feeds = ({ type }) => {
     let restricted = await getRestrictedAddresses()
     result = result.filter(e => !restricted.includes(e.creator_id))
 
-    let addrs = result.map(e => console.log(e.creator_id))
-    console.log(addrs)
     //fetchProfiles(addrs)
     const next = items.concat(result)
     setItems(next)
