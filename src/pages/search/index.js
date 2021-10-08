@@ -6,6 +6,7 @@ import { PATH } from '../../constants'
 import { Loading } from '../../components/loading'
 import { Button, Primary } from '../../components/button'
 import { Input } from '../../components/input'
+import { FeedItem } from '../../components/feed-item'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { renderMediaType } from '../../components/media-types'
 import './style.css'
@@ -21,7 +22,7 @@ const isFloat = (n) => Number(n) === n && n % 1 !== 0
 async function fetchFeed(lastId) {
   const { errors, data } = await fetchGraphQL(`
 query LatestFeed {
-  hic_et_nunc_token(order_by: {id: desc}, limit: 35, where: {id: {_lt: ${lastId}}, artifact_uri: {_neq: ""}}) {
+  hic_et_nunc_token(order_by: {id: desc}, limit: 15, where: {id: {_lt: ${lastId}}, artifact_uri: {_neq: ""}}) {
     artifact_uri
     display_uri
     creator_id
@@ -179,6 +180,7 @@ async function fetchInteractive(offset) {
         artifact_uri
         display_uri
         mime
+        creator_id
         creator {
           name
           address
@@ -225,6 +227,7 @@ async function fetchMusic(offset) {
       artifact_uri
       display_uri
       mime
+      creator_id
       creator {
         address
         name
@@ -353,6 +356,10 @@ async function fetchDay(day, offset) {
         display_uri
         id
         mime
+        creator {
+          name
+          address
+        }
       }
     }
   }`, 'dayTrades', {})
@@ -385,6 +392,10 @@ async function fetchSales(offset) {
         display_uri
         id
         mime
+        creator {
+          name
+          address
+        }
       }
     }
   }`, 'sales', {})
@@ -436,6 +447,7 @@ async function fetchTag(tag, offset) {
     artifact_uri
     display_uri
     mime
+    creator_id
     token_tags {
       tag {
         tag
@@ -471,7 +483,7 @@ async function fetchGraphQL(operationsDoc, operationName, variables) {
 }
 
 const query_hdao = `query hDAOFeed($offset: Int = 0) {
-  hic_et_nunc_token(order_by: {hdao_balance: desc}, limit: 15, where: {hdao_balance: {_gt: 100}}, offset: $offset) {
+  hic_et_nunc_token(order_by: {hdao_balance: desc}, limit: 5, where: {hdao_balance: {_gt: 100}}, offset: $offset) {
     artifact_uri
     display_uri
     creator_id
@@ -548,6 +560,10 @@ export class Search extends Component {
       this.state.tags.map(e => console.log(e))
     } */
 
+  componentWillMount = async () => {
+    this.setState({ feed: await fetchHdao(this.state.offset), hdao: true, select : '○' })
+  }
+
   handleChange = (e) => {
     this.setState({ [e.target.name]: e.target.value })
 
@@ -599,7 +615,7 @@ export class Search extends Component {
     }
 
     if (e === 'music') {
-      this.setState({ feed: [...this.state.feed, ...(await fetchMusic(this.state.offset))] })
+      this.setState({ feed: _.uniqBy([...this.state.feed, ...(await fetchMusic(this.state.offset))], 'creator_id') })
     }
 
     if (e === 'video') {
@@ -607,11 +623,11 @@ export class Search extends Component {
     }
 
     if (e === 'glb') {
-      this.setState({ feed: [...this.state.feed, ...(await fetchGLB(this.state.offset))] })
+      this.setState({ feed: _.uniqBy([...this.state.feed, ...(await fetchGLB(this.state.offset))], 'creator_id') })
     }
 
     if (e === 'interactive') {
-      this.setState({ feed: [...this.state.feed, ...(await fetchInteractive(this.state.offset))] })
+      this.setState({ feed: _.uniqBy([...this.state.feed, ...(await fetchInteractive(this.state.offset))], 'creator_id') })
     }
 
     if (e == 'random') {
@@ -619,7 +635,7 @@ export class Search extends Component {
     }
 
     if (e == 'gif') {
-      this.setState({ feed: [...this.state.feed, ...(await fetchGifs(this.state.offset))] })
+      this.setState({ feed: _.uniqBy([...this.state.feed, ...(await fetchGifs(this.state.offset))], 'creator_id') })
       //this.setState({ feed: [...this.state.feed, ...(await fetchGifs(this.state.offset))] })
     }
 
@@ -629,7 +645,7 @@ export class Search extends Component {
 
     if (e == 'tag') {
       console.log(this.state.feed.length)
-      this.setState({ feed: [...this.state.feed, ...(await fetchTag(this.state.search, this.state.feed[this.state.feed.length - 1].id))] })
+      this.setState({ feed: _.uniqBy([...this.state.feed, ...(await fetchTag(this.state.search, this.state.feed[this.state.feed.length - 1].id))], 'creator_id') })
     }
 
     if (e == 'latest sales') {
@@ -647,7 +663,7 @@ export class Search extends Component {
       console.log(result)
       //console.log(await GetUserClaims(arr))
       //console.log(Math.min.apply(Math, result.map(e => e.id)))
-      this.setState({ feed: _.uniqBy([...this.state.feed, ...result], 'creator_id'), lastId: Math.min.apply(Math, result.map(e => e.id))})
+      this.setState({ feed: _.uniqBy([...this.state.feed, ...result], 'creator_id'), lastId: Math.min.apply(Math, result.map(e => e.id)) })
       //this.context.lastId = Math.min.apply(Math, result.map(e => e.id))
       this.context.setId(Math.min.apply(Math, result.map(e => e.id)))
     }
@@ -673,7 +689,7 @@ export class Search extends Component {
       //await fetchLatest(this.state.search)
       this.setState({ feed: await fetchFeed(Number(this.state.search) + 1), select: 'num' })
     } else {
-      this.setState({ feed: await fetchTag(this.state.search.toLowerCase(), 9999999), select: 'tag' })
+      this.setState({ feed: _.uniqBy(await fetchTag(this.state.search.toLowerCase(), 9999999), 'creator_id'), select: 'tag' })
       //console.log('tags', await fetchTag(this.state.search.toLowerCase()))
       // search for objkt titles/descriptions
 
@@ -779,22 +795,27 @@ export class Search extends Component {
                 loader={undefined}
                 endMessage={undefined}
               >
-                <ResponsiveMasonry>
-                  {this.state.feed.map((nft) => {
-                    return (
-                      <Button key={nft.id} to={`${PATH.OBJKT}/${nft.id}`}>
-                        <div >
-                          {renderMediaType({
-                            mimeType: nft.mime,
-                            artifactUri: nft.artifact_uri,
-                            displayUri: nft.display_uri,
-                            displayView: true
-                          })}
-                        </div>
-                      </Button>
-                    )
-                  })}
-                </ResponsiveMasonry>
+                <Container>
+                  <Padding>
+                    {this.state.feed.map((item, index) => (
+                      <FeedItem key={`${item.id}-${index}`} {...item} />
+                    ))}
+                  </Padding>
+                </Container>
+{/*                 {this.state.feed.map((nft) => {
+                  return (
+                    <Button key={nft.id} to={`${PATH.OBJKT}/${nft.id}`}>
+                      <div >
+                        {renderMediaType({
+                          mimeType: nft.mime,
+                          artifactUri: nft.artifact_uri,
+                          displayUri: nft.display_uri,
+                          displayView: true
+                        })}
+                      </div>
+                    </Button>
+                  )
+                })} */}
               </InfiniteScroll>
               :
               undefined

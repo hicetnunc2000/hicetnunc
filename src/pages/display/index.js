@@ -175,6 +175,25 @@ query querySwaps($address: String!) {
 }
 `
 
+async function hDAOClaim(address) {
+  const { errors, data } = await fetchGraphQL(`
+  query hdaoClaim {
+    hic_et_nunc_token(where: {creator_id : {_eq : ${address}}, supply: {_gt: 0}, hdao_balance :{_gt : 0}}) {
+      id
+      hdao_balance
+    }
+  }
+  `, 'hDAOClaim',
+  {})
+
+  if (errors) {
+    console.log(errors)
+  }
+
+  const result = data.hic_et_nunc_token
+  return result
+}
+
 async function fetchV1Swaps(address) {
   const { errors, data } = await fetchGraphQL(query_v1_swaps, 'querySwaps', {
     address: address
