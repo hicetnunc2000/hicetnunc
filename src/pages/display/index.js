@@ -660,7 +660,7 @@ export default class Display extends Component {
                 </Button>
 
                 {
-                  this.state.length == 0 ?
+                  this.state.claim.length == 0 ?
                     <p>{this.state.hdao} ○</p>
                     :
                     <a href='#' onClick={() => this.context.batch_claim(this.state.claim)}>
