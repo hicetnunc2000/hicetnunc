@@ -530,7 +530,7 @@ export class Search extends Component {
     flag: false,
     lastId: undefined,
     tags: [
-      { id: 0, value: '○' },
+      { id: 0, value: '○ hDAO' },
       { id: 1, value: 'random' },
       { id: 2, value: 'glb' },
       { id: 3, value: 'music' },
@@ -555,13 +555,9 @@ export class Search extends Component {
     offset: 0
   }
 
-  /*   componentWillMount = async () => {
-      await axios.get(process.env.REACT_APP_UNIQUE_TAGS).then(res => this.setState({ tags: res.data.result }))
-      this.state.tags.map(e => console.log(e))
-    } */
-
   componentWillMount = async () => {
-    this.setState({ feed: await fetchHdao(this.state.offset), hdao: true, select : '○' })
+    this.setState({ select : 'latest mints' })
+    this.latest(999999)
   }
 
   handleChange = (e) => {
@@ -581,7 +577,6 @@ export class Search extends Component {
     }
 
     if (e === '1D') {
-      console.log(new Date((new Date()).getTime() - 60 * 60 * 24 * 1000))
 
       let list = await fetchDay(new Date((new Date()).getTime() - 60 * 60 * 24 * 1000).toISOString(), this.state.offset)
       list = list.map(e => e.token)
@@ -605,12 +600,16 @@ export class Search extends Component {
     }
 
     if (e === 'num') {
+      let res = await fetchFeed(Number(this.state.search) + 1 - this.state.offset)
+      res = res.filter(e => !arr.includes(e.creator_id))
       this.setState({
-        feed: [...this.state.feed, ...(await fetchFeed(Number(this.state.search) + 1 - this.state.offset))]
+        feed: [...this.state.feed, ...(res)]
       })
     }
 
-    if (e === '○') {
+    if (e === '○ hDAO') {
+      let res = await fetchHdao(this.state.offset)
+      res = res.filter(e => !arr.includes(e.creator_id))
       this.setState({ feed: [...this.state.feed, ...(await fetchHdao(this.state.offset))], hdao: true })
     }
 
@@ -623,18 +622,26 @@ export class Search extends Component {
     }
 
     if (e === 'glb') {
+      let res = await fetchGLB(this.state.offset)
+      res = res.filter(e => !arr.includes(e.creator_id))
       this.setState({ feed: _.uniqBy([...this.state.feed, ...(await fetchGLB(this.state.offset))], 'creator_id') })
     }
 
     if (e === 'interactive') {
-      this.setState({ feed: _.uniqBy([...this.state.feed, ...(await fetchInteractive(this.state.offset))], 'creator_id') })
+      let res = await fetchInteractive(this.state.offset)
+      res = res.filter(e => !arr.includes(e.creator_id))
+      this.setState({ feed: _.uniqBy([...this.state.feed, ...(res)], 'creator_id') })
     }
 
     if (e == 'random') {
-      this.setState({ feed: [...this.state.feed, ...(await fetchRandomObjkts())] })
+      let res = await fetchRandomObjkts()
+      res = res.filter(e => !arr.includes(e.creator_id))
+      this.setState({ feed: [...this.state.feed, ...(res)] })
     }
 
     if (e == 'gif') {
+      let res = await fetchGifs(this.state.offset)
+      res = res.filter(e => !arr.includes(e.creator_id))
       this.setState({ feed: _.uniqBy([...this.state.feed, ...(await fetchGifs(this.state.offset))], 'creator_id') })
       //this.setState({ feed: [...this.state.feed, ...(await fetchGifs(this.state.offset))] })
     }
@@ -645,7 +652,9 @@ export class Search extends Component {
 
     if (e == 'tag') {
       console.log(this.state.feed.length)
-      this.setState({ feed: _.uniqBy([...this.state.feed, ...(await fetchTag(this.state.search, this.state.feed[this.state.feed.length - 1].id))], 'creator_id') })
+      let res = await fetchTag(this.state.search, this.state.feed[this.state.feed.length - 1].id)
+      res = res.filter(e => !arr.includes(e.creator_id))
+      this.setState({ feed: _.uniqBy([...this.state.feed, ...(res)], 'creator_id') })
     }
 
     if (e == 'latest sales') {
@@ -657,15 +666,7 @@ export class Search extends Component {
     }
 
     if (this.state.select == 'latest mints') {
-      console.log(999999 || this.context.lastId)
-      let result = await fetchFeed(999999 || this.context.lastId)
-      result = result.filter(e => !arr.includes(e.creator_id))
-      console.log(result)
-      //console.log(await GetUserClaims(arr))
-      //console.log(Math.min.apply(Math, result.map(e => e.id)))
-      this.setState({ feed: _.uniqBy([...this.state.feed, ...result], 'creator_id'), lastId: Math.min.apply(Math, result.map(e => e.id)) })
-      //this.context.lastId = Math.min.apply(Math, result.map(e => e.id))
-      this.context.setId(Math.min.apply(Math, result.map(e => e.id)))
+      this.latest(Math.min.apply(Math, this.state.feed.map(e => e.id)))
     }
 
     this.setState({ reset: false })
@@ -674,56 +675,30 @@ export class Search extends Component {
 
   }
 
+  latest = async (id) => {
+
+    let result = await fetchFeed(id)
+    let restricted = await getRestrictedAddresses()
+    result = result.filter(e => !restricted.includes(e.creator_id))
+    this.setState({ feed: _.uniqBy([...this.state.feed, ...result], 'creator_id')})
+
+  }
+
+
   search = async (e) => {
     //console.log(await fetchGLB())
     //console.log(await fetchMusic())
 
     this.setState({ items: [], feed: [], search: e })
-    // search for alias
-    console.log(await fetchSubjkts(e))
     this.setState({ subjkt: await fetchSubjkts(this.state.search) })
 
     if ((this.state.subjkt[0]?.hdao_balance > 30000000) || (isFloat(Number(this.state.search)))) {
       this.setState({ feed: await fetchCreations(this.state.subjkt[0].address, this.state.offset), select: 'creations' })
     } else if (!isNaN(this.state.search)) {
-      //await fetchLatest(this.state.search)
       this.setState({ feed: await fetchFeed(Number(this.state.search) + 1), select: 'num' })
     } else {
       this.setState({ feed: _.uniqBy(await fetchTag(this.state.search.toLowerCase(), 9999999), 'creator_id'), select: 'tag' })
-      //console.log('tags', await fetchTag(this.state.search.toLowerCase()))
-      // search for objkt titles/descriptions
-
-      /*       
-            let title = await fetchTitle(this.state.search)
-            console.log('title', title)
-            if (await title) this.setState({ items: [...this.state.items, ...(await title)] })
-            let description = await fetchDescription(this.state.search)
-            console.log('description', description)
-            if (await description) this.setState({ items: [...this.state.items, ...(await description)] })       
-      */
-
     }
-
-
-
-    // verify if tz profiles/hdao
-    console.log('test', this.state.feed)
-
-    // results from creator
-    //if (this.state.subjkt.length > 0) {
-    //console.log('address', this.state.subjkt[0].address)
-    //console.log('creations', await fetchCreations(this.state.subjkt[0].address))
-    //this.setState({ items : await fetchCreations(this.state.subjkt[0].address) })
-    //this.setState({ feed: [...this.state.feed, this.state.items.slice(0, 20)] })
-    //}
-
-    // search alias creations?
-
-    // search for itemss
-
-    // search for objkt id
-
-    console.log(this.state)
 
   }
 
