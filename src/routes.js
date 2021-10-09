@@ -16,7 +16,7 @@ export const routes = [
   {
     exact: true,
     path: '/',
-    component: Featured,
+    component: Search,
   },
   {
     exact: false,
