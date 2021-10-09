@@ -65,7 +65,7 @@ export const Header = () => {
     <>
       <header className={styles.container}>
         <div className={styles.content}>
-          <Button onClick={() => handleRoute('/')}>
+          <a href='/'>
             <div className={styles.logo}>
               {/* HIC LOGO */}
               {true && (
@@ -91,7 +91,7 @@ export const Header = () => {
               {/* PRIDE LOGO */}
               {false && <img src="/hen-pride.gif" alt="pride 2021" />}
             </div>
-          </Button>
+          </a>
 
           <div className={styles.right}>
             <Button onClick={handleSyncUnsync} secondary>
