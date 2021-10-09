@@ -658,10 +658,8 @@ export class Search extends Component {
     }
 
     if (e == 'latest sales') {
-      let tokens = await fetchSales(this.state.offset + 250)
+      let tokens = await fetchSales(this.state.offset)
       tokens = tokens.map(e => e.token)
-      tokens = _.uniqBy(tokens, 'id')
-
       this.setState({ feed: _.uniqBy([...this.state.feed, ...tokens], 'id') })
     }
 
