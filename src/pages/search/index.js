@@ -165,7 +165,6 @@ async function fetchGLB(offset) {
   }
   `, 'GLBObjkts', {}
   )
-  console.log('glb', data.hic_et_nunc_token)
   try {
     return data.hic_et_nunc_token
   } catch (e) {
@@ -539,15 +538,6 @@ export class Search extends Component {
       { id: 6, value: 'latest sales' },
       { id: 7, value: '1D' },
       { id: 8, value: '1W' }
-      /*       { id: 4, value: 'illustration' }, */
-      /*       { id: 5, value: 'gif' } */
-
-      // video/mp4
-
-      // filter
-      // day
-      // week
-
     ],
     select: [],
     mouse: false,
@@ -556,7 +546,7 @@ export class Search extends Component {
   }
 
   componentWillMount = async () => {
-    this.setState({ select : 'latest mints' })
+    this.setState({ select: 'latest mints' })
     this.latest(999999)
   }
 
@@ -643,7 +633,6 @@ export class Search extends Component {
       let res = await fetchGifs(this.state.offset)
       res = res.filter(e => !arr.includes(e.creator_id))
       this.setState({ feed: _.uniqBy([...this.state.feed, ...(await fetchGifs(this.state.offset))], 'creator_id') })
-      //this.setState({ feed: [...this.state.feed, ...(await fetchGifs(this.state.offset))] })
     }
 
     if (e == 'illustration') {
@@ -651,7 +640,6 @@ export class Search extends Component {
     }
 
     if (e == 'tag') {
-      console.log(this.state.feed.length)
       let res = await fetchTag(this.state.search, this.state.feed[this.state.feed.length - 1].id)
       res = res.filter(e => !arr.includes(e.creator_id))
       this.setState({ feed: _.uniqBy([...this.state.feed, ...(res)], 'creator_id') })
@@ -670,8 +658,6 @@ export class Search extends Component {
 
     this.setState({ reset: false })
 
-    //this.setState({ feed : this.state.feed })
-
   }
 
   latest = async (id) => {
@@ -679,14 +665,12 @@ export class Search extends Component {
     let result = await fetchFeed(id)
     let restricted = await getRestrictedAddresses()
     result = result.filter(e => !restricted.includes(e.creator_id))
-    this.setState({ feed: _.uniqBy([...this.state.feed, ...result], 'creator_id')})
+    this.setState({ feed: _.uniqBy([...this.state.feed, ...result], 'creator_id') })
 
   }
 
 
   search = async (e) => {
-    //console.log(await fetchGLB())
-    //console.log(await fetchMusic())
 
     this.setState({ items: [], feed: [], search: e })
     this.setState({ subjkt: await fetchSubjkts(this.state.search) })
@@ -707,19 +691,10 @@ export class Search extends Component {
 
   loadMore = () => {
     this.setState({ offset: this.state.offset + 15 })
-    console.log(this.context.offset)
-    //this.setState({ feed: [...this.state.feed, ...this.state.items.slice(this.state.offset + 20, this.state.offset + 40)], offset: this.state.offset + 20 })
     this.update(this.state.select, false)
-
-    // console.log(this.state.feed.length)
-
-    /*     if ((this.state.objkts.slice(this.state.offset, this.state.offset + 20).length < 20) && (this.state.offset !== 20)) {
-          this.setState({ hasMore : false })
-        } */
   }
-  render() {
 
-    let mouse = true
+  render() {
 
     return (
       <Page>
@@ -734,12 +709,6 @@ export class Search extends Component {
               label="objkt id, artists, tags"
               placeholder="objkt id, artists, tags"
             />
-            {/*             <button onClick={this.search}>search</button>
- */}            {/*             {
-              this.state.tags.map(e => {
-                return <span>{e._id.tag} </span>
-              })
-            } */}
             {
               <div style={{ marginTop: '15px' }}>
                 {this.state.tags.map(e => <a className='tag' href='#' onClick={() => {
@@ -776,20 +745,6 @@ export class Search extends Component {
                     ))}
                   </Padding>
                 </Container>
-{/*                 {this.state.feed.map((nft) => {
-                  return (
-                    <Button key={nft.id} to={`${PATH.OBJKT}/${nft.id}`}>
-                      <div >
-                        {renderMediaType({
-                          mimeType: nft.mime,
-                          artifactUri: nft.artifact_uri,
-                          displayUri: nft.display_uri,
-                          displayView: true
-                        })}
-                      </div>
-                    </Button>
-                  )
-                })} */}
               </InfiniteScroll>
               :
               undefined
