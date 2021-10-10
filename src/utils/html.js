@@ -138,7 +138,9 @@ export function injectCSPMetaTagIntoHTML(html) {
     frame-src
       'self';
     child-src
-      'self';
+      'self',
+      'unsafe-inline'
+      blob:;
     script-src
       'self'
       'unsafe-inline'
