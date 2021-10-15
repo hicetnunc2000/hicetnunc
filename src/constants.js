@@ -54,7 +54,7 @@ export const MIMETYPE = {
   ZIP: 'application/zip',
   ZIP1: 'application/x-zip-compressed',
   ZIP2: 'multipart/x-zip',
-  MD : 'text/plain'
+  MD : 'text/markdown'
 }
 
 export const IPFS_DIRECTORY_MIMETYPE = 'application/x-directory'
