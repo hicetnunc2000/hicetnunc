@@ -193,7 +193,7 @@ export class Config extends Component {
     return (
       <Page>
 
-        <Container>
+        <Container fixed>
 
           <Identicon address={this.state.address} logo={this.state.identicon} />
 
@@ -221,7 +221,7 @@ export class Config extends Component {
             </Button>
           </Padding>
           <div style={{ display: 'inline' }}>
-            <p style={{paddingTop : '7.5px' }}>
+            <p style={{ paddingTop: '7.5px' }}>
               <span>
                 link your Twitter, Discord, GitHub, and website with </span>
               <span>
@@ -235,7 +235,7 @@ export class Config extends Component {
           </div>
         </Container>
 
-        <Container>
+        <Container fixed>
           <Padding>
             <div onClick={this.toogle}>
               <Primary>
@@ -246,7 +246,7 @@ export class Config extends Component {
         </Container>
         {
           this.state.toogled ?
-            <Container>
+            <Container fixed>
               <Padding>
                 <Input
                   name="vote"
@@ -260,7 +260,7 @@ export class Config extends Component {
                   <Purchase>Save ○</Purchase>
                 </Button>
 
-                <p style={{ marginTop : '7.5px' }}>hic et nunc DAO ○ curation parameter</p>
+                <p style={{ marginTop: '7.5px' }}>hic et nunc DAO ○ curation parameter</p>
               </Padding>
             </Container>
             :

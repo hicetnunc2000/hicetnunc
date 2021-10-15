@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
 import { Footer } from '../footer'
 import { Container, Padding } from '../layout'
-import { Button, Primary } from '../button'
+import { Button, Primary, Purchase } from '../button'
 import { fadeIn } from '../../utils/motion'
 import { Menu } from '../icons'
 import { walletPreview } from '../../utils/string'
@@ -34,14 +34,16 @@ export const Header = () => {
 
   // but if they are
   if (context.acc?.address) {
-    // is menu closed?
-    if (context.collapsed) {
-      const proxyAddress = context.proxyAddress ? ' (' + context.proxyAddress + ')' : ''
-      button = walletPreview(context.acc.address) + proxyAddress
-    } else {
-      // menu is open
-      button = 'unsync'
-    }
+    // // is menu closed?
+    // if (context.collapsed) {
+    //   const proxyAddress = context.proxyAddress ? ' (' + context.proxyAddress + ')' : ''
+    //   button = walletPreview(context.acc.address) + proxyAddress
+    // } else {
+    //   // menu is open
+    //   button = 'unsync'
+    // }
+
+    button = 'unsync'
   }
 
   //const activeAccount = await wallet.client.getActiveAccount()
@@ -52,7 +54,7 @@ export const Header = () => {
   }
 
   const handleSyncUnsync = () => {
-    if (context.acc?.address && !context.collapsed) {
+    if (context.acc?.address) {
       // disconnect wallet
       context.disconnect()
     } else {
@@ -65,45 +67,86 @@ export const Header = () => {
     <>
       <header className={styles.container}>
         <div className={styles.content}>
-          <a href='/'>
-            <div className={styles.logo}>
-              {/* HIC LOGO */}
-              {true && (
-                <svg viewBox="0 0 196.87 53.23" fill={'var(--text-color)'}>
-                  <path
-                    d="M228.9,79.31H211.51a2.26,2.26,0,0,1-.35-.34.75.75,0,0,1-.16-.42c0-11.42,0-22.85,0-34.43H193.24v35H175.41V26.27H228.9Z"
-                    transform="translate(-32.03 -26.27)"
-                  />
-                  <path
-                    d="M67.74,43.78V26.42H85.41V79.19H67.91V62.38a4.24,4.24,0,0,0-.52-.57.77.77,0,0,0-.42-.17H50V79.08H32V26.48H49.78v17.3Z"
-                    transform="translate(-32.03 -26.27)"
-                  />
-                  <path
-                    d="M103.62,43.79V26.43h53.6c.09,5.62,0,11.41.05,17.36Z"
-                    transform="translate(-32.03 -26.27)"
-                  />
-                  <path
-                    d="M103.71,61.71h53.38V78.84c-4.05.69-38.16.91-53.38.31Z"
-                    transform="translate(-32.03 -26.27)"
-                  />
-                </svg>
-              )}
-              {/* PRIDE LOGO */}
-              {false && <img src="/hen-pride.gif" alt="pride 2021" />}
-            </div>
-          </a>
+          <div className={styles.left}>
+            <a href='/'>
+              <div className={styles.logo}>
+                {/* HIC LOGO */}
+                {true && (
+                  <svg viewBox="0 0 196.87 53.23" fill={'var(--text-color)'}>
+                    <path
+                      d="M228.9,79.31H211.51a2.26,2.26,0,0,1-.35-.34.75.75,0,0,1-.16-.42c0-11.42,0-22.85,0-34.43H193.24v35H175.41V26.27H228.9Z"
+                      transform="translate(-32.03 -26.27)"
+                    />
+                    <path
+                      d="M67.74,43.78V26.42H85.41V79.19H67.91V62.38a4.24,4.24,0,0,0-.52-.57.77.77,0,0,0-.42-.17H50V79.08H32V26.48H49.78v17.3Z"
+                      transform="translate(-32.03 -26.27)"
+                    />
+                    <path
+                      d="M103.62,43.79V26.43h53.6c.09,5.62,0,11.41.05,17.36Z"
+                      transform="translate(-32.03 -26.27)"
+                    />
+                    <path
+                      d="M103.71,61.71h53.38V78.84c-4.05.69-38.16.91-53.38.31Z"
+                      transform="translate(-32.03 -26.27)"
+                    />
+                  </svg>
+                )}
+                {/* PRIDE LOGO */}
+                {false && <img src="/hen-pride.gif" alt="pride 2021" />}
+              </div>
+            </a>
+          </div>
 
           <div className={styles.right}>
-            <Button onClick={handleSyncUnsync} secondary>
-              <Primary>{button}</Primary>
-            </Button>
 
-            <Button onClick={context.toogleNavbar} secondary>
-              <VisuallyHidden>
-                {`${context.collapsed ? 'show' : 'hide'} menu`}
-              </VisuallyHidden>
-              <Menu isOpen={!context.collapsed} />
-            </Button>
+            <div className={styles.largeNav}>
+              <Button onClick={() => handleRoute('/')}>
+                <Primary>home</Primary>
+              </Button>
+
+              <Button onClick={() => handleRoute('/galleries')}>
+                <Primary>galleries</Primary>
+              </Button>
+
+              <Button onClick={() => handleRoute('/sync')}>
+                <Primary>profile</Primary>
+              </Button>
+
+              {context.acc?.address ?
+                <Button onClick={() => handleRoute('/config')}>
+                  <Primary>edit</Primary>
+                </Button>
+                :
+                null
+              }
+
+              <Button onClick={handleSyncUnsync} secondary>
+                <Primary>{button}</Primary>
+              </Button>
+
+              {context.acc?.address ?
+                <Button onClick={() => handleRoute('/mint')}>
+                  <Purchase>
+                    mint
+                  </Purchase>
+                </Button>
+                :
+                null
+              }
+            </div>
+
+            <div className={styles.mobileNav}>
+              <Button onClick={handleSyncUnsync} secondary>
+                <Primary>{button}</Primary>
+              </Button>
+
+              <Button onClick={context.toogleNavbar} secondary>
+                <VisuallyHidden>
+                  {`${context.collapsed ? 'show' : 'hide'} menu`}
+                </VisuallyHidden>
+                <Menu isOpen={!context.collapsed} />
+              </Button>
+            </div>
           </div>
         </div>
       </header>
@@ -128,24 +171,24 @@ export const Header = () => {
                     <li>
                       <Button onClick={() => handleRoute('/mint')}>
                         <Primary>
-                          OBJKT<span style={{ fontSize: '16px' }}> (mint)</span>
+                          mint
                         </Primary>
                       </Button>
                     </li>
-{/*                     <li>
+                    {/*                     <li>
                       <Button onClick={() => handleRoute('/collaborate')}>
                         <Primary>collaborate</Primary>
                       </Button>
                     </li> */}
                     <li>
                       <Button onClick={() => handleRoute('/sync')}>
-                        <Primary>manage assets</Primary>
+                        <Primary>profile</Primary>
                       </Button>
                     </li>
-                    { context.acc?.address ?
+                    {context.acc?.address ?
                       <li>
                         <Button onClick={() => handleRoute('/config')}>
-                          <Primary>edit profile</Primary>
+                          <Primary>edit</Primary>
                         </Button>
                       </li>
                       :

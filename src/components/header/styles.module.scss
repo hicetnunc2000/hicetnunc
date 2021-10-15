@@ -22,7 +22,7 @@
     justify-content: space-between;
 
     @include respond-to('desktop') {
-      width: 50%;
+      width: 100%;
       margin: 0 auto;
     }
 
@@ -44,22 +44,62 @@
       }
     }
 
+    .left,
     .right {
       display: flex;
       align-items: center;
 
+    }
+    
+    .left {
       & > * {
         display: flex;
         align-items: center;
         font-size: 16px;
+        margin-right: 16px;
       }
-
+    }
+    
+    .right {
+    
       .hamburger {
         width: 30px;
         height: auto;
         margin-left: 10px;
       }
+
+      .largeNav,
+      .mobileNav {
+        & > * {
+          display: flex;
+          align-items: center;
+          font-size: 16px;
+          margin-left: 16px;
+        }
+      }
+
+      .largeNav {
+        display: none;
+
+        @include respond-to('desktop') {
+          display: flex;
+        }
+      }
+
+      .mobileNav {
+        display: flex;
+
+        & > * {
+          margin-left: 10px;
+        }
+
+        @include respond-to('desktop') {
+          display: none;
+        }
+      }
+
     }
+
   }
 }
 

@@ -5,6 +5,7 @@ import { HicetnuncContext } from '../../context/HicetnuncContext'
 import { Page, Container, Padding } from '../../components/layout'
 import { Input, Textarea } from '../../components/input'
 import { Button, Curate, Primary, Purchase } from '../../components/button'
+import { HeroHeading } from '../../components/hero-heading'
 import { Upload } from '../../components/upload'
 import { Preview } from '../../components/preview'
 import { prepareFile, prepareFile100MB, prepareDirectory } from '../../data/ipfs'
@@ -260,7 +261,9 @@ export const Mint = () => {
     <Page title="mint" large>
       {step === 0 && (
         <>
-          <Container>
+          <Container fixed>
+            <HeroHeading noMarginTop><h1>mint</h1></HeroHeading>
+
             <Padding>
               <Input
                 type="text"
@@ -317,7 +320,7 @@ export const Mint = () => {
             </Padding>
           </Container>
 
-          <Container>
+          <Container fixed>
             <Padding>
               <Upload
                 label="Upload OBJKT"
@@ -328,7 +331,7 @@ export const Mint = () => {
           </Container>
 
           {file && needsCover && (
-            <Container>
+            <Container fixed>
               <Padding>
                 <Upload
                   label="Upload cover image"
@@ -340,7 +343,7 @@ export const Mint = () => {
             </Container>
           )}
 
-          <Container>
+          <Container fixed>
             <Padding>
               <Button onClick={handlePreview} fit disabled={handleValidation()}>
                 <Curate>Preview</Curate>
@@ -352,7 +355,7 @@ export const Mint = () => {
 
       {step === 1 && (
         <>
-          <Container>
+          <Container fixed>
             <Padding>
               <div style={{ display: 'flex' }}>
                 <Button onClick={() => setStep(0)} fit>
@@ -364,7 +367,7 @@ export const Mint = () => {
             </Padding>
           </Container>
 
-          <Container>
+          <Container fixed>
             <Padding>
               <Preview
                 mimeType={file.mimeType}
@@ -376,7 +379,7 @@ export const Mint = () => {
             </Padding>
           </Container>
 
-          <Container>
+          <Container fixed>
             <Padding>
               <Button onClick={handleMint} fit>
                 <Purchase>mint OBJKT</Purchase>
@@ -384,7 +387,7 @@ export const Mint = () => {
             </Padding>
           </Container>
 
-          <Container>
+          <Container fixed>
             <Padding>
               <p>this operation costs 0.08~ tez</p>
               <p>Your royalties upon each sale are {royalties}%</p>
@@ -392,7 +395,7 @@ export const Mint = () => {
           </Container>
         </>
       )}
-{/*       <BottomBanner>
+      {/*       <BottomBanner>
       Collecting has been temporarily disabled. Follow <a href="https://twitter.com/hicetnunc2000" target="_blank">@hicetnunc2000</a> or <a href="https://discord.gg/jKNy6PynPK" target="_blank">join the discord</a> for updates.
       </BottomBanner> */}
     </Page>

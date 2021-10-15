@@ -30,7 +30,7 @@ export default class Sync extends Component {
       <Redirect to={`/tz/${this.context.getProxy() || this.context.acc.address}`} />
     ) : (
       <Page title="">
-        <Container>
+        <Container fixed>
           <Padding>
             <p>requesting permissions</p>
             <Button to="/sync">

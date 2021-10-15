@@ -12,13 +12,13 @@ export const Info = (token_info) => {
   const IPFS = 'https://ipfs.io/ipfs/'
   const tag = {
     "&:hover": {
-      textDecoration : "underline"
+      textDecoration: "underline"
     },
-    color : "var(--text-color)"
+    color: "var(--text-color)"
   }
   return (
     <>
-      <Container>
+      <Container fixed>
         <Padding>
           <div
             style={{
@@ -32,30 +32,30 @@ export const Info = (token_info) => {
         </Padding>
       </Container>
 
-      <Container>
+      <Container fixed>
         <Padding>
           <div style={{ whiteSpace: 'pre-wrap' }}>{description}</div>
         </Padding>
       </Container>
 
-      <Container>
+      <Container fixed>
         <Padding>
           <Tags token_tags={token_tags} />
         </Padding>
       </Container>
 
-      <Container>
+      <Container fixed>
         {/*         <Padding>{royalties / 10}% royalties</Padding>
         <Padding>timestamp: {timestamp}</Padding> */}
         <Padding>mimetype: {mime}</Padding>
         <Padding className="tag">
           <div>
-          <br/>
+            <br />
             <a style={tag} href={metadata.replace('ipfs://', IPFS)}>
               metadata
-            </a>&nbsp;//&nbsp;  
+            </a>&nbsp;//&nbsp;
             <a style={tag} href={artifact_uri.replace('ipfs://', IPFS)}>
-                view on ipfs
+              view on ipfs
             </a>
           </div>
         </Padding>

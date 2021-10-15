@@ -180,7 +180,7 @@ export const ObjktDisplay = () => {
   return (
     <Page title={nft?.title}>
       {loading && (
-        <Container>
+        <Container fixed>
           <Padding>
             <Loading />
           </Padding>
@@ -188,7 +188,7 @@ export const ObjktDisplay = () => {
       )}
 
       {error && (
-        <Container>
+        <Container fixed>
           <Padding>
             <p>{error}</p>
           </Padding>
@@ -205,7 +205,7 @@ export const ObjktDisplay = () => {
       {!loading && (
         !context.progress ?
           <>
-            <Container>
+            <Container fixed>
               <Padding>
                 {restricted && (
                   <div style={{ color: 'white', background: 'black', textAlign: 'center' }}>
@@ -242,13 +242,13 @@ export const ObjktDisplay = () => {
                 })}
               </div>
               <div>
-                <Container>
+                <Container fixed>
                   <Padding>
                     <ItemInfo {...nft} isDetailView />
                   </Padding>
                 </Container>
 
-                <Container>
+                <Container fixed>
                   <Padding>
                     <Menu>
                       {TABS.map((tab, index) => {
@@ -295,7 +295,7 @@ export const ObjktDisplay = () => {
             </div>
           </>
           :
-          <Container>
+          <Container fixed>
             <Padding>
               <div>
                 <p style={{

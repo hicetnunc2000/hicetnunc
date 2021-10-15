@@ -45,7 +45,7 @@ export const Burn = (props) => {
     <>
       {!progress ?
         <div>
-          <Container>
+          <Container fixed>
             <Padding>
               <p>
                 You own {totalOwned} editions of OBJKT#{props.id}. How many would
@@ -53,7 +53,7 @@ export const Burn = (props) => {
               </p>
             </Padding>
           </Container>
-          <Container>
+          <Container fixed>
             <Padding>
               <Input
                 type="number"
@@ -66,7 +66,7 @@ export const Burn = (props) => {
             </Padding>
           </Container>
 
-          <Container>
+          <Container fixed>
             <Padding>
               <p style={{ fontSize: '14px' }}>
                 Burning will transfer the OBJKTs from your possession to a burn
@@ -82,7 +82,7 @@ export const Burn = (props) => {
             </Padding>
           </Container>
 
-          <Container>
+          <Container fixed>
             <Padding>
               <Button onClick={handleSubmit} fit>
                 <Purchase>burn</Purchase>
@@ -93,10 +93,10 @@ export const Burn = (props) => {
         :
         <div>
           <p tyle={{
-          position: 'absolute',
-          left: '50%',
-          top: '35%',
-      }}> {message}</p>
+            position: 'absolute',
+            left: '50%',
+            top: '35%',
+          }}> {message}</p>
           {progress && <Loading />}
         </div>
       }
