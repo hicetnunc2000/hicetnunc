@@ -99,46 +99,54 @@ export const Header = () => {
 
           <div className={styles.right}>
 
-            <Button onClick={() => handleRoute('/')}>
-              <Primary>home</Primary>
-            </Button>
+            <div className={styles.largeNav}>
+              <Button onClick={() => handleRoute('/')}>
+                <Primary>home</Primary>
+              </Button>
 
-            <Button onClick={() => handleRoute('/galleries')}>
-              <Primary>galleries</Primary>
-            </Button>
+              <Button onClick={() => handleRoute('/galleries')}>
+                <Primary>galleries</Primary>
+              </Button>
 
-            <Button onClick={() => handleRoute('/sync')}>
-              <Primary>manage assets</Primary>
-            </Button>
-
-            {context.acc?.address ?
-              <Button onClick={() => handleRoute('/config')}>
+              <Button onClick={() => handleRoute('/sync')}>
                 <Primary>profile</Primary>
               </Button>
-              :
-              null
-            }
 
-            <Button onClick={handleSyncUnsync} secondary>
-              <Primary>{button}</Primary>
-            </Button>
+              {context.acc?.address ?
+                <Button onClick={() => handleRoute('/config')}>
+                  <Primary>edit</Primary>
+                </Button>
+                :
+                null
+              }
 
-            {context.acc?.address ?
-              <Button onClick={() => handleRoute('/mint')}>
-                <Purchase>
-                  mint
-                </Purchase>
+              <Button onClick={handleSyncUnsync} secondary>
+                <Primary>{button}</Primary>
               </Button>
-              :
-              null
-            }
 
-            {/* <Button onClick={context.toogleNavbar} secondary>
-              <VisuallyHidden>
-                {`${context.collapsed ? 'show' : 'hide'} menu`}
-              </VisuallyHidden>
-              <Menu isOpen={!context.collapsed} />
-            </Button> */}
+              {context.acc?.address ?
+                <Button onClick={() => handleRoute('/mint')}>
+                  <Purchase>
+                    mint
+                  </Purchase>
+                </Button>
+                :
+                null
+              }
+            </div>
+
+            <div className={styles.mobileNav}>
+              <Button onClick={handleSyncUnsync} secondary>
+                <Primary>{button}</Primary>
+              </Button>
+
+              <Button onClick={context.toogleNavbar} secondary>
+                <VisuallyHidden>
+                  {`${context.collapsed ? 'show' : 'hide'} menu`}
+                </VisuallyHidden>
+                <Menu isOpen={!context.collapsed} />
+              </Button>
+            </div>
           </div>
         </div>
       </header>
@@ -163,7 +171,7 @@ export const Header = () => {
                     <li>
                       <Button onClick={() => handleRoute('/mint')}>
                         <Primary>
-                          OBJKT<span style={{ fontSize: '16px' }}> (mint)</span>
+                          mint
                         </Primary>
                       </Button>
                     </li>
@@ -174,13 +182,13 @@ export const Header = () => {
                     </li> */}
                     <li>
                       <Button onClick={() => handleRoute('/sync')}>
-                        <Primary>manage assets</Primary>
+                        <Primary>profile</Primary>
                       </Button>
                     </li>
                     {context.acc?.address ?
                       <li>
                         <Button onClick={() => handleRoute('/config')}>
-                          <Primary>edit profile</Primary>
+                          <Primary>edit</Primary>
                         </Button>
                       </li>
                       :

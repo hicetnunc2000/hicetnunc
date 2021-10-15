@@ -1,16 +1,35 @@
+@import '../../styles/variables.scss';
+
 .grid {
-  display: flex;
-  margin-left: -5px;
   width: auto;
+  display: flex;
+  margin-left: #{-$mobile-padding};
 }
 
 .column {
-  padding-left: 5px;
+  padding-left: #{$mobile-padding};
   background-clip: padding-box;
 
   & > * {
     position: relative;
     display: block;
-    margin-bottom: 5px;
+    margin-bottom: #{$mobile-padding};
   }
 }
+
+// .grid {
+//   display: flex;
+//   margin-left: -5px;
+//   width: auto;
+// }
+
+// .column {
+//   padding-left: 5px;
+//   background-clip: padding-box;
+
+//   & > * {
+//     position: relative;
+//     display: block;
+//     margin-bottom: 5px;
+//   }
+// }

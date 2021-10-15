@@ -1,0 +1,30 @@
+@import '../../styles/layout.scss';
+@import '../../styles/variables.scss';
+
+.tag {
+    display: inline-flex;
+    color: var(--text-color);
+    border-radius: 4px;
+    padding: 4px 8px;
+    margin-right: 6px;
+    margin-bottom: 6px;
+    text-transform: lowercase;
+    font-size: 16px;
+    font-weight: bold;
+  }
+
+.searchBar {
+  /* padding: 0 1.25rem; */
+}
+
+.infiniteScrollContainer {
+  width: 100%;
+  display: block;
+  
+  @include respond-to('desktop') {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      column-gap: #{$mobile-padding};
+      row-gap: #{$mobile-padding};
+  }
+}

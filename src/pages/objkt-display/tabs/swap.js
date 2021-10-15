@@ -47,8 +47,8 @@ export const Swap = ({ total_amount, owners, creator, royalties, token_info, add
       console.log(acc.address, royalties, parseFloat(price) * 1000000, id, creator.address, parseFloat(amount))
 
       if (currency === 'tez') {
-      swapv2(acc.address, royalties, parseFloat(price) * 1000000, id, creator.address, parseFloat(amount))
-      //swap(parseFloat(amount), id, parseFloat(price) * 1000000)  
+        swapv2(acc.address, royalties, parseFloat(price) * 1000000, id, creator.address, parseFloat(amount))
+          //swap(parseFloat(amount), id, parseFloat(price) * 1000000)  
           .then((e) => {
             // when taquito returns a success/fail message
             //setProgress(false)
@@ -86,7 +86,7 @@ export const Swap = ({ total_amount, owners, creator, royalties, token_info, add
       {
         !progress ?
           <div>
-            <Container>
+            <Container fixed>
               <Padding>
                 <Input
                   type="number"
@@ -95,7 +95,7 @@ export const Swap = ({ total_amount, owners, creator, royalties, token_info, add
                   defaultValue={amount}
                   /* max={total_amount - sales} */
                   onChange={(e) => setAmount(e.target.value)}
-                  onWheel={(e) => e.target.blur()} 
+                  onWheel={(e) => e.target.blur()}
                   disabled={progress}
                 />
                 <div style={{ width: '100%', display: 'flex' }}>
@@ -107,7 +107,7 @@ export const Swap = ({ total_amount, owners, creator, royalties, token_info, add
                       min={0}
                       max={10000}
                       onChange={(e) => checkPrice(e.target.value)}
-                      onWheel={(e) => e.target.blur()} 
+                      onWheel={(e) => e.target.blur()}
                       disabled={progress}
                     />
                   </div>
@@ -124,7 +124,7 @@ export const Swap = ({ total_amount, owners, creator, royalties, token_info, add
               </Padding>
             </Container>
 
-            <Container>
+            <Container fixed>
               <Padding>
                 <p>
                   swaps which carry values are charged with a 2.5% fee for platform
@@ -134,7 +134,7 @@ export const Swap = ({ total_amount, owners, creator, royalties, token_info, add
             </Container>
           </div>
           :
-          <Container>
+          <Container fixed>
             <Padding>
               <div>
                 <p>{message}</p>

@@ -10,7 +10,8 @@ import { HeroHeading } from '../../components/hero-heading'
 import { FeedItem } from '../../components/feed-item'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { renderMediaType } from '../../components/media-types'
-import './style.css'
+// import './style.css'
+import styles from './styles.module.scss'
 import { last } from 'lodash'
 
 const axios = require('axios')
@@ -509,6 +510,8 @@ async function fetchHdao(offset) {
   return result
 }
 
+let tagSelected = false
+
 const getRestrictedAddresses = async () =>
   await axios
     .get(
@@ -561,10 +564,13 @@ export class Search extends Component {
 
     let arr = await getRestrictedAddresses()
 
+    tagSelected = true
+
     this.setState({ select: e })
     if (reset) {
       this.state.feed = []
       this.state.offset = 0
+      tagSelected = false
     }
 
     if (e === '1D') {
@@ -575,7 +581,7 @@ export class Search extends Component {
       list = _.uniqBy(list, 'id')
 
       this.setState({
-        feed: list
+        feed: list, tagSelected: true, tagLabel: '1D'
       })
     }
 
@@ -586,7 +592,7 @@ export class Search extends Component {
       list = _.uniqBy(list, 'id')
 
       this.setState({
-        feed: list
+        feed: list, tagSelected: true, tagLabel: '1W'
       })
     }
 
@@ -594,18 +600,19 @@ export class Search extends Component {
       let res = await fetchFeed(Number(this.state.search) + 1 - this.state.offset)
       res = res.filter(e => !arr.includes(e.creator_id))
       this.setState({
-        feed: [...this.state.feed, ...(res)]
+        feed: [...this.state.feed, ...(res)],
+        tagSelected: true, tagLabel: 'num'
       })
     }
 
     if (e === '○ hDAO') {
       let res = await fetchHdao(this.state.offset)
       res = res.filter(e => !arr.includes(e.creator_id))
-      this.setState({ feed: [...this.state.feed, ...(await fetchHdao(this.state.offset))], hdao: true })
+      this.setState({ feed: [...this.state.feed, ...(await fetchHdao(this.state.offset))], hdao: true, tagSelected: true, tagLabel: 'hDAO' })
     }
 
     if (e === 'music') {
-      this.setState({ feed: _.uniqBy([...this.state.feed, ...(await fetchMusic(this.state.offset))], 'creator_id') })
+      this.setState({ feed: _.uniqBy([...this.state.feed, ...(await fetchMusic(this.state.offset))], 'creator_id'), tagSelected: true, tagLabel: 'music' })
     }
 
     if (e === 'video') {
@@ -615,25 +622,25 @@ export class Search extends Component {
     if (e === 'glb') {
       let res = await fetchGLB(this.state.offset)
       res = res.filter(e => !arr.includes(e.creator_id))
-      this.setState({ feed: _.uniqBy([...this.state.feed, ...(await fetchGLB(this.state.offset))], 'creator_id') })
+      this.setState({ feed: _.uniqBy([...this.state.feed, ...(await fetchGLB(this.state.offset))], 'creator_id'), tagSelected: true, tagLabel: 'glb' })
     }
 
     if (e === 'interactive') {
       let res = await fetchInteractive(this.state.offset)
       res = res.filter(e => !arr.includes(e.creator_id))
-      this.setState({ feed: _.uniqBy([...this.state.feed, ...(res)], 'creator_id') })
+      this.setState({ feed: _.uniqBy([...this.state.feed, ...(res)], 'creator_id'), tagSelected: true, tagLabel: 'interactive' })
     }
 
     if (e == 'random') {
       let res = await fetchRandomObjkts()
       res = res.filter(e => !arr.includes(e.creator_id))
-      this.setState({ feed: [...this.state.feed, ...(res)] })
+      this.setState({ feed: [...this.state.feed, ...(res)], tagSelected: true, tagLabel: 'random' })
     }
 
     if (e == 'gif') {
       let res = await fetchGifs(this.state.offset)
       res = res.filter(e => !arr.includes(e.creator_id))
-      this.setState({ feed: _.uniqBy([...this.state.feed, ...(await fetchGifs(this.state.offset))], 'creator_id') })
+      this.setState({ feed: _.uniqBy([...this.state.feed, ...(await fetchGifs(this.state.offset))], 'creator_id'), tagSelected: true, tagLabel: 'gif' })
     }
 
     if (e == 'illustration') {
@@ -643,14 +650,14 @@ export class Search extends Component {
     if (e == 'tag') {
       let res = await fetchTag(this.state.search, this.state.feed[this.state.feed.length - 1].id)
       res = res.filter(e => !arr.includes(e.creator_id))
-      this.setState({ feed: _.uniqBy([...this.state.feed, ...(res)], 'creator_id') })
+      this.setState({ feed: _.uniqBy([...this.state.feed, ...(res)], 'creator_id'), tagSelected: true, tagLabel: 'tag' })
     }
 
     if (e == 'latest sales') {
       let tokens = await fetchSales(this.state.offset)
       tokens = tokens.map(e => e.token)
       tokens = tokens.filter(e => !arr.includes(e.creator_id))
-      this.setState({ feed: _.uniqBy([...this.state.feed, ...tokens], 'id') })
+      this.setState({ feed: _.uniqBy([...this.state.feed, ...tokens], 'id'), tagSelected: true, tagLabel: 'latest sales' })
     }
 
     if (this.state.select == 'latest mints') {
@@ -666,7 +673,7 @@ export class Search extends Component {
     let result = await fetchFeed(id)
     let restricted = await getRestrictedAddresses()
     result = result.filter(e => !restricted.includes(e.creator_id))
-    this.setState({ feed: _.uniqBy([...this.state.feed, ...result], 'creator_id') })
+    this.setState({ feed: _.uniqBy([...this.state.feed, ...result], 'creator_id'), tagSelected: true, tagLabel: 'latest' })
 
   }
 
@@ -700,61 +707,73 @@ export class Search extends Component {
     return (
       <Page>
         <Container>
-          <div className='search-bar'>
-            <Input
-              type="text"
-              name="search"
-              onMouseEnter={() => this.hoverState(true)}
-              onMouseLeave={() => this.hoverState(false)}
-              onChange={e => this.search(e.target.value)}
-              label="search"
-              placeholder="search for objkt id, artists, tags"
-            />
-            {
-              <div style={{ marginTop: '15px' }}>
-                {this.state.tags.map(e => <a className='tag' href='#' onClick={() => {
-                  this.update(e.value, true)
-                }}>{e.value} </a>)}
-              </div>
-            }
-            {
-              (this.state.subjkt.length > 0) && (this.state.search !== "") ?
-                <div style={{ maxHeight: '200px', overflow: 'scroll' }}>
-                  {
-                    this.state.subjkt.map(e => <div style={{ marginTop: '10px' }}><a href={`/${e.name}`}>{e.name}</a> {e.metadata.description}</div>)
-                  }
+          <Padding>
+            <div className={styles.searchBar}>
+              <Input
+                type="text"
+                name="search"
+                onMouseEnter={() => this.hoverState(true)}
+                onMouseLeave={() => this.hoverState(false)}
+                onChange={e => this.search(e.target.value)}
+                label="search"
+                placeholder="search for objkt id, artists, tags"
+              />
+              {
+                <div style={{ marginTop: '15px' }}>
+                  {this.state.tags.map(e => <a className='tag' href='#' onClick={() => {
+                    this.update(e.value, true)
+                  }}>{e.value} </a>)}
                 </div>
-                :
-                undefined
-            }
-          </div>
+              }
+              {
+                (this.state.subjkt.length > 0) && (this.state.search !== "") ?
+                  <div style={{ maxHeight: '200px', overflow: 'scroll' }}>
+                    {
+                      this.state.subjkt.map(e => <div style={{ marginTop: '10px' }}><a href={`/${e.name}`}>{e.name}</a> {e.metadata.description}</div>)
+                    }
+                  </div>
+                  :
+                  undefined
+              }
+            </div>
+          </Padding>
         </Container>
         <Container>
           <HeroHeading>
-            <h1>dropped↓</h1>
+            {
+              (this.state.subjkt.length > 0) && (this.state.search !== "") ?
+                <h1>results↓</h1>
+                :
+                (this.state.tagSelected) ?
+                  <h1>{this.state.tagLabel}↓</h1>
+                  :
+                  <h1>here and now↓</h1>
+            }
           </HeroHeading>
         </Container>
         <Container xlarge>
-          {
-            this.state.feed.length > 0 ?
-              <InfiniteScroll
-                dataLength={this.state.feed.length}
-                next={this.loadMore}
-                hasMore={this.state.hasMore}
-                loader={undefined}
-                endMessage={undefined}
-              >
-                <Container>
-                  <div className='infinite-scroll-container'>
-                    {this.state.feed.map((item, index) => (
-                      <FeedItem key={`${item.id}-${index}`} {...item} />
-                    ))}
-                  </div>
-                </Container>
-              </InfiniteScroll>
-              :
-              undefined
-          }
+          <Padding>
+            {
+              this.state.feed.length > 0 ?
+                <InfiniteScroll
+                  dataLength={this.state.feed.length}
+                  next={this.loadMore}
+                  hasMore={this.state.hasMore}
+                  loader={undefined}
+                  endMessage={undefined}
+                >
+                  <Container>
+                    <div className={styles.infiniteScrollContainer}>
+                      {this.state.feed.map((item, index) => (
+                        <FeedItem key={`${item.id}-${index}`} {...item} />
+                      ))}
+                    </div>
+                  </Container>
+                </InfiniteScroll>
+                :
+                undefined
+            }
+          </Padding>
         </Container>
       </Page>
     )

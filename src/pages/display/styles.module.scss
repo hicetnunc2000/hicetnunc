@@ -3,12 +3,21 @@
 @import '../../styles/variables.scss';
 
 .profile {
-  display: flex;
+  margin-top: 20px;
+  
+  @include respond-to('desktop') {
+    display: flex;
+  }
 
   .info {
     display: flex;
     flex-direction: column;
-    margin-left: 20px;
+    margin-top: 20px;
+    
+    @include respond-to('desktop') {
+      margin-left: 20px;
+      margin-top: 0;
+    }
 
     p {
       margin-bottom: 8px;

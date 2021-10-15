@@ -25,7 +25,7 @@ export const Collectors = ({ owners, swaps, token_holders, restricted }) => {
   return (
     <>
       {swaps.length > 0 && (
-        <Container>
+        <Container fixed>
           <Padding>
             <OwnerSwaps
               swaps={swaps}
@@ -40,15 +40,15 @@ export const Collectors = ({ owners, swaps, token_holders, restricted }) => {
       )}
 
       {/* {filtered.length === 0 ? undefined : ( */}
-        <Container>
-          <Padding>
-            <OwnerList 
-              owners={token_holders} 
-              acc={acc}
-              swaps={swaps} 
-            />
-          </Padding>
-        </Container>
+      <Container fixed>
+        <Padding>
+          <OwnerList
+            owners={token_holders}
+            acc={acc}
+            swaps={swaps}
+          />
+        </Padding>
+      </Container>
       {/* )} */}
     </>
   )

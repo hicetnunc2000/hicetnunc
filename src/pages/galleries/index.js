@@ -6,6 +6,7 @@ import { renderMediaType } from '../../components/media-types'
 import { PATH } from '../../constants'
 import { ResponsiveMasonry } from '../../components/responsive-masonry'
 import { BottomBanner } from '../../components/bottom-banner'
+import { HeroHeading } from '../../components/hero-heading'
 import styles from './styles.module.scss'
 
 const _ = require('lodash')
@@ -24,7 +25,7 @@ async function fetchObjkts(ids) {
         title
         hdao_balance
       }
-    }`, "Objkts", { "_in" : ids })
+    }`, "Objkts", { "_in": ids })
   return data.hic_et_nunc_token
 }
 
@@ -54,13 +55,13 @@ export const Galleries = () => {
       .then((e) => e.json())
       .then(async (galleries) => {
         console.log(galleries)
-         let res = await fetchObjkts(galleries.map(e => e.id))
+        let res = await fetchObjkts(galleries.map(e => e.id))
 
-         let merged = _.merge(_.keyBy(galleries, 'id'), _.merge(_.keyBy(res, 'id')))
+        let merged = _.merge(_.keyBy(galleries, 'id'), _.merge(_.keyBy(res, 'id')))
 
-         let values = _.values(merged)
+        let values = _.values(merged)
 
-         setData(values.reverse())
+        setData(values.reverse())
 
       })
 
@@ -71,7 +72,11 @@ export const Galleries = () => {
 
   return (
     <Page title="Galleries">
-      <Container xlarge>
+      <Container>
+        <HeroHeading>
+          <h1>galleries↓</h1>
+        </HeroHeading>
+
         <Padding>
           <ResponsiveMasonry>
             {data.map((e) => {

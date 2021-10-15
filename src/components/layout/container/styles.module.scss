@@ -11,15 +11,21 @@
     width: 100%;
   }
 
-  &.large {
+  &.fixed {
     @include respond-to('desktop') {
-      width: 100%;
+      width: 50%;
     }
   }
 
-  &.xlarge {
-    @include respond-to('desktop') {
-      width: 100%;
-    }
-  }
+  // &.large {
+  //   @include respond-to('desktop') {
+  //     width: 100%;
+  //   }
+  // }
+
+  // &.xlarge {
+  //   @include respond-to('desktop') {
+  //     width: 100%;
+  //   }
+  // }
 }
