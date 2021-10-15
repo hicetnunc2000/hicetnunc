@@ -9,3 +9,17 @@
     font-size: 16px;
     font-weight: bold;
   }
+
+
+
+.search-bar {
+  /* padding: 0 1.25rem; */
+}
+
+.infinite-scroll-container {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  column-gap: 1.25rem;
+  row-gap: 1.25rem;
+}

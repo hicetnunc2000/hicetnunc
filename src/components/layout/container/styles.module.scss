@@ -8,18 +8,18 @@
   word-break: break-word;
 
   @include respond-to('desktop') {
-    width: 50%;
+    width: 100%;
   }
 
   &.large {
     @include respond-to('desktop') {
-      width: 55%;
+      width: 100%;
     }
   }
 
   &.xlarge {
     @include respond-to('desktop') {
-      width: 80%;
+      width: 100%;
     }
   }
 }

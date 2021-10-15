@@ -6,6 +6,7 @@ import { PATH } from '../../constants'
 import { Loading } from '../../components/loading'
 import { Button, Primary } from '../../components/button'
 import { Input } from '../../components/input'
+import { HeroHeading } from '../../components/hero-heading'
 import { FeedItem } from '../../components/feed-item'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { renderMediaType } from '../../components/media-types'
@@ -699,15 +700,15 @@ export class Search extends Component {
     return (
       <Page>
         <Container>
-          <Padding>
+          <div className='search-bar'>
             <Input
               type="text"
               name="search"
               onMouseEnter={() => this.hoverState(true)}
               onMouseLeave={() => this.hoverState(false)}
               onChange={e => this.search(e.target.value)}
-              label="objkt id, artists, tags"
-              placeholder="objkt id, artists, tags"
+              label="search"
+              placeholder="search for objkt id, artists, tags"
             />
             {
               <div style={{ marginTop: '15px' }}>
@@ -726,7 +727,12 @@ export class Search extends Component {
                 :
                 undefined
             }
-          </Padding>
+          </div>
+        </Container>
+        <Container>
+          <HeroHeading>
+            <h1>dropped↓</h1>
+          </HeroHeading>
         </Container>
         <Container xlarge>
           {
@@ -739,11 +745,11 @@ export class Search extends Component {
                 endMessage={undefined}
               >
                 <Container>
-                  <Padding>
+                  <div className='infinite-scroll-container'>
                     {this.state.feed.map((item, index) => (
                       <FeedItem key={`${item.id}-${index}`} {...item} />
                     ))}
-                  </Padding>
+                  </div>
                 </Container>
               </InfiniteScroll>
               :

@@ -322,7 +322,7 @@ export const Feeds = ({ type }) => {
                 ))}
               </Padding>
             </Container>
-          </InfiniteScroll> 
+          </InfiniteScroll>
         </Container>
         :
         <Container>

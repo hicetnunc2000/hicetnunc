@@ -60,6 +60,14 @@ export const Secondary = ({ children = null, selected }) => {
   return <div className={classes}>{children}</div>
 }
 
+export const Pill = ({ children = null, selected }) => {
+  const classes = classnames({
+    [styles.pill]: true,
+    [styles.selected]: selected,
+  })
+  return <div className={classes}>{children}</div>
+}
+
 export const Purchase = ({ children = null, selected }) => {
   const classes = classnames({
     [styles.purchase]: true,

@@ -63,3 +63,7 @@
   transition: border-color #{$theme-duration} ease-out,
     color #{$theme-duration} ease-out;
 }
+
+.pill {
+  border: 1px solid rgba(255, 255, 255, 0.5);
+}
