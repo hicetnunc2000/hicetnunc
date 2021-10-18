@@ -535,10 +535,11 @@ export class Search extends Component {
       { id: 3, value: 'music' },
       { id: 4, value: 'interactive' }, // algorithimc?
       { id: 5, value: 'gif' },
-      { id: 6, value: 'recent sales' },
-      { id: 7, value: '1D' },
-      { id: 8, value: '1W' },
-      { id: 9, value: '1M' }
+      { id: 6, value: 'new OBJKTs' },
+      { id: 7, value: 'recent sales' },
+      { id: 8, value: '1D' },
+      { id: 9, value: '1W' },
+      { id: 10, value: '1M' }
     ],
     select: [],
     mouse: false,
@@ -547,8 +548,12 @@ export class Search extends Component {
   }
 
   componentWillMount = async () => {
-    this.setState({ select: 'latest mints' })
-    this.latest(999999)
+    this.setState({ select: '○ hDAO' })
+    let arr = await getRestrictedAddresses()
+    let res = await fetchHdao(this.state.offset)
+    res = res.filter(e => !arr.includes(e.creator_id))
+    this.setState({ feed: [...this.state.feed, ...(res)], hdao: true })
+    //this.latest(999999)
   }
 
   handleChange = (e) => {
@@ -613,7 +618,7 @@ export class Search extends Component {
     if (e === '○ hDAO') {
       let res = await fetchHdao(this.state.offset)
       res = res.filter(e => !arr.includes(e.creator_id))
-      this.setState({ feed: [...this.state.feed, ...(await fetchHdao(this.state.offset))], hdao: true })
+      this.setState({ feed: _.uniqBy([...this.state.feed, ...(await fetchHdao(this.state.offset))], 'id'), hdao: true })
     }
 
     if (e === 'music') {
@@ -665,8 +670,8 @@ export class Search extends Component {
       this.setState({ feed: _.uniqBy([...this.state.feed, ...tokens], 'id') })
     }
 
-    if (this.state.select == 'latest mints') {
-      this.latest(Math.min.apply(Math, this.state.feed.map(e => e.id)))
+    if (this.state.select == 'new OBJKTs') {
+      this.latest()
     }
 
     // new listings
@@ -675,13 +680,18 @@ export class Search extends Component {
 
   }
 
-  latest = async (id) => {
-
-    let result = await fetchFeed(id)
+  latest = async () => {
+    let result = []
+    if (this.state.flag) {
+      result = await fetchFeed(Math.min.apply(Math, this.state.feed.map(e => e.id)))
+    } else {
+      result = await fetchFeed(999999)
+    }
+    console.log(result)
     let restricted = await getRestrictedAddresses()
+    result = _.uniqBy([...this.state.feed, ...result], 'creator_id')
     result = result.filter(e => !restricted.includes(e.creator_id))
-    this.setState({ feed: _.uniqBy([...this.state.feed, ...result], 'creator_id') })
-
+    this.setState({ feed: [...result], flag : true })
   }
 
 
