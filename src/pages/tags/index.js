@@ -12,6 +12,7 @@ import { PATH } from '../../constants'
 import styles from './styles.module.scss'
 
 const axios = require('axios')
+const _ = require('lodash')
 
 async function fetchGraphQL(operationsDoc, operationName, variables) {
   const result = await fetch(
@@ -34,6 +35,7 @@ async function fetchTag(tag) {
       id
       artifact_uri
       display_uri
+      creator_id
       mime
       creator {
         address
@@ -51,6 +53,14 @@ async function fetchTag(tag) {
     return undefined
   }
 }
+
+const getRestrictedAddresses = async () =>
+  await axios
+    .get(
+      'https://raw.githubusercontent.com/hicetnunc2000/hicetnunc-reports/main/filters/w.json'
+    )
+    .then((res) => res.data)
+
 export const Tags = () => {
   const { id } = useParams()
   const [error, setError] = useState(false)
@@ -58,17 +68,20 @@ export const Tags = () => {
   const [feed, setFeed] = useState([])
   const [count, setCount] = useState(0)
   const [hasMore, setHasMore] = useState(true)
+  const [restricted, setRestricted] = useState([])
 
   const loadMore = () => {
     console.log(items.slice(count + 25, count + 50))
-    setFeed([...feed, ...items.slice(count + 15, count + 30)])
+    setFeed(_.uniqBy([...feed, ...items.slice(count + 15, count + 30)].filter(e => !restricted.includes(e.creator_id)), 'creator_id'))
     setCount(count + 15)
   }
 
   useEffect(async () => {
     let arr = await fetchTag(id)
-    setItems(arr)
-    setFeed(arr.slice(0, 15))
+    let res = await getRestrictedAddresses()
+    setRestricted(res)
+    setItems(_.uniqBy(arr.filter(e => !res.includes(e.creator_id)), 'creator_id'))
+    setFeed(items.slice(0, 15))
   }, [])
 
   return (
@@ -83,7 +96,7 @@ export const Tags = () => {
           <div className={styles.container}>
             <Container xlarge>
               <ResponsiveMasonry>
-                {items.map((nft, index) => {
+                {feed.map((nft, index) => {
                   return (
                     <Button
                       key={`${nft.id}-${index}`}

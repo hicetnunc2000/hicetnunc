@@ -14,7 +14,7 @@ import InfiniteScroll from 'react-infinite-scroll-component'
 import styles from './styles.module.scss'
 import { flattenDeep } from 'lodash'
 import axios from 'axios'
-
+const _ = require('lodash')
 async function fetchObjkts(ids) {
   const { errors, data } = await fetchGraphQL(`
     query Objkts($_in: [bigint!] = "") {
@@ -103,7 +103,7 @@ export const GalleryDetail = () => {
 
   const loadMore = () => {
     setFeed([...feed, ...items.slice(offset, offset + 15)])
-    context.feed = [...context.feed, ...items.slice(offset, offset + 15)]
+    context.feed = _.uniqBy([...context.feed, ...items.slice(offset, offset + 15)], 'id')
     setOffset(offset + 15)
     if (feed.length == items.lenght) setHasMore(false)
   }

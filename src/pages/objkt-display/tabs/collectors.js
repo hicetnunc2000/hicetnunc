@@ -6,7 +6,7 @@ import { OwnerSwaps } from '../../../components/owner-swaps'
 
 const _ = require('lodash')
 
-export const Collectors = ({ owners, swaps, token_holders, restricted }) => {
+export const Collectors = ({ owners, swaps, token_holders, restricted, ban }) => {
   const { syncTaquito, collect, acc, getAccount, cancel, cancelv1 } =
     useContext(HicetnuncContext)
 
@@ -22,6 +22,7 @@ export const Collectors = ({ owners, swaps, token_holders, restricted }) => {
       collect(swap_id, price)
     }
   }
+
   return (
     <>
       {swaps.length > 0 && (
@@ -34,6 +35,7 @@ export const Collectors = ({ owners, swaps, token_holders, restricted }) => {
               cancel={cancel}
               cancelv1={cancelv1}
               restricted={restricted}
+              ban={ban}
             />
           </Padding>
         </Container>

@@ -124,10 +124,16 @@ export const ObjktDisplay = () => {
   const [nft, setNFT] = useState()
   const [error, setError] = useState(false)
   const [restricted, setRestricted] = useState(false)
+  const [ban, setBans] = useState([])
 
   const address = context.acc?.address
   const proxy = context.getProxy()
-
+  const getRestrictedAddresses = async () =>
+  await axios
+    .get(
+      'https://raw.githubusercontent.com/hicetnunc2000/hicetnunc-reports/main/filters/w.json'
+    )
+    .then((res) => res.data)
   useEffect(async () => {
     let objkt = await fetchObjkt(id)
 
@@ -138,6 +144,7 @@ export const ObjktDisplay = () => {
       objkt.restricted = true
       setNFT(objkt)
     } else {
+      objkt.ban = await getRestrictedAddresses()
       objkt.restricted = false
       setNFT(objkt)
     }
