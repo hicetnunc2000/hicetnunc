@@ -90,7 +90,7 @@ export const Swap = ({ total_amount, owners, creator, royalties, token_info, add
               <Padding>
                 <Input
                   type="number"
-                  placeholder="OBJKT amount"
+                  placeholder="OBJKT quantity"
                   min={1}
                   defaultValue={amount}
                   /* max={total_amount - sales} */

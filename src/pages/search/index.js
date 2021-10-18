@@ -533,11 +533,12 @@ export class Search extends Component {
       { id: 1, value: 'random' },
       { id: 2, value: 'glb' },
       { id: 3, value: 'music' },
-      { id: 4, value: 'interactive' },
+      { id: 4, value: 'interactive' }, // algorithimc?
       { id: 5, value: 'gif' },
-      { id: 6, value: 'latest sales' },
+      { id: 6, value: 'recent sales' },
       { id: 7, value: '1D' },
-      { id: 8, value: '1W' }
+      { id: 8, value: '1W' },
+      { id: 9, value: '1M' }
     ],
     select: [],
     mouse: false,
@@ -579,6 +580,18 @@ export class Search extends Component {
     }
 
     if (e === '1W') {
+      let list = await fetchDay(new Date((new Date()).getTime() - 60 * 60 * 24 * 7 * 1000).toISOString(), this.state.offset)
+      list = list.map(e => e.token)
+      list = [...this.state.feed, ...(list)]
+      list = _.uniqBy(list, 'id')
+
+      this.setState({
+        feed: list
+      })
+    }
+
+
+    if (e === '1M') {
       let list = await fetchDay(new Date((new Date()).getTime() - 60 * 60 * 24 * 30 * 1000).toISOString(), this.state.offset)
       list = list.map(e => e.token)
       list = [...this.state.feed, ...(list)]
@@ -645,7 +658,7 @@ export class Search extends Component {
       this.setState({ feed: _.uniqBy([...this.state.feed, ...(res)], 'creator_id') })
     }
 
-    if (e == 'latest sales') {
+    if (e == 'recent sales') {
       let tokens = await fetchSales(this.state.offset)
       tokens = tokens.map(e => e.token)
       tokens = tokens.filter(e => !arr.includes(e.creator_id))
@@ -655,6 +668,8 @@ export class Search extends Component {
     if (this.state.select == 'latest mints') {
       this.latest(Math.min.apply(Math, this.state.feed.map(e => e.id)))
     }
+
+    // new listings
 
     this.setState({ reset: false })
 
@@ -676,6 +691,7 @@ export class Search extends Component {
     this.setState({ subjkt: await fetchSubjkts(this.state.search) })
 
     if ((this.state.subjkt[0]?.hdao_balance > 30000000) || (isFloat(Number(this.state.search)))) {
+      console.log(isFloat(Number(this.state.search)))
       this.setState({ feed: await fetchCreations(this.state.subjkt[0].address, this.state.offset), select: 'creations' })
     } else if (!isNaN(this.state.search)) {
       this.setState({ feed: await fetchFeed(Number(this.state.search) + 1), select: 'num' })

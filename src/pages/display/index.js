@@ -540,6 +540,7 @@ export default class Display extends Component {
       // console.log(swaps)
       let combinedCollection = await this.combineCollection(collection, swaps)
       this.sortCollection(combinedCollection)
+      console.log(combinedCollection)
       this.setState({ collection: combinedCollection })
       this.setState({ marketV1: await fetchV1Swaps(this.state.wallet) })
     } else {
