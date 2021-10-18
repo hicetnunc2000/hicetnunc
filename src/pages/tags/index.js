@@ -29,9 +29,9 @@ async function fetchGraphQL(operationsDoc, operationName, variables) {
   return await result.json();
 }
 
-async function fetchTag(tag) {
+async function fetchTag(tag, offset) {
   const { errors, data } = await fetchGraphQL(`query ObjktsByTag($tag: String = "3d", $lastId: bigint = 99999999) {
-    hic_et_nunc_token(where: {token_tags: {tag: {tag: {_eq: $tag}}}, id: {_lt: $lastId}, supply: {_gt: "0"}}, order_by: {id: desc}) {
+    hic_et_nunc_token(where: {token_tags: {tag: {tag: {_eq: ${tag}}}}, id: {_lt: $lastId}, supply: {_gt: "0"}}, order_by: {id: desc}, limit : 35, offset : ${offset}) {
       id
       artifact_uri
       display_uri
@@ -44,7 +44,7 @@ async function fetchTag(tag) {
     }
   }`,
     'ObjktsByTag',
-    { tag: tag }
+    {}
   )
 
   try {
@@ -69,19 +69,21 @@ export const Tags = () => {
   const [count, setCount] = useState(0)
   const [hasMore, setHasMore] = useState(true)
   const [restricted, setRestricted] = useState([])
+  const [offset, setOffset] = useState(0)
 
-  const loadMore = () => {
-    console.log(items.slice(count + 25, count + 50))
-    setFeed(_.uniqBy([...feed, ...items.slice(count + 15, count + 30)].filter(e => !restricted.includes(e.creator_id)), 'creator_id'))
+  const loadMore = async () => {
+    setOffset(offset + 35)
+    let arr = await fetchTag(id, offset + 35)
+    setFeed(_.uniqBy([...feed, ...arr].filter(e => !restricted.includes(e.creator_id)), 'creator_id'))
     setCount(count + 15)
   }
 
   useEffect(async () => {
-    let arr = await fetchTag(id)
+    let arr = await fetchTag(id, offset)
     let res = await getRestrictedAddresses()
     setRestricted(res)
-    setItems(_.uniqBy(arr.filter(e => !res.includes(e.creator_id)), 'creator_id'))
-    setFeed(items.slice(0, 15))
+    console.log(arr)
+    setFeed(_.uniqBy(arr.filter(e => !res.includes(e.creator_id)), 'creator_id'))
   }, [])
 
   return (
