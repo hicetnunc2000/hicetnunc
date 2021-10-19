@@ -365,6 +365,7 @@ export default class Display extends Component {
           subjkt: window.location.pathname.split('/')[1]
         })
         let resTz = await fetchTz(this.state.wallet)
+        console.log(resTz)
         this.setState({ hdao: Math.floor(resTz[0].hdao_balance / 1000000) })
       } else {
         this.props.history.push('/')
@@ -386,7 +387,7 @@ export default class Display extends Component {
       })
       this.onReady()
     }
-
+    console.log(await fetchBalance(this.state.wallet))
     this.setState({ claim: await fetchBalance(this.state.wallet) })
     //.reduce((a, b) => a + b, 0)
   }
