@@ -618,7 +618,7 @@ export class Search extends Component {
     if (e === '○ hDAO') {
       let res = await fetchHdao(this.state.offset)
       res = res.filter(e => !arr.includes(e.creator_id))
-      this.setState({ feed: _.uniqBy([...this.state.feed, ...(await fetchHdao(this.state.offset))], 'id'), hdao: true })
+      this.setState({ feed: _.uniqBy(_.uniqBy([...this.state.feed, ...(await fetchHdao(this.state.offset))], 'id'), 'creator_id'), hdao: true })
     }
 
     if (e === 'music') {
