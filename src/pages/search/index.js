@@ -548,11 +548,12 @@ export class Search extends Component {
   }
 
   componentWillMount = async () => {
-    this.setState({ select: '○ hDAO' })
     let arr = await getRestrictedAddresses()
-    let res = await fetchHdao(this.state.offset)
-    res = res.filter(e => !arr.includes(e.creator_id))
-    this.setState({ feed: _.uniqBy([...this.state.feed, ...(res)], 'creator_id'), hdao: true })
+    this.setState({ select: 'recent sales' })
+    let tokens = await fetchSales(this.state.offset)
+    tokens = tokens.map(e => e.token)
+    tokens = tokens.filter(e => !arr.includes(e.creator_id))
+    this.setState({ feed: _.uniqBy([...this.state.feed, ...tokens], 'id') })
     //this.latest(999999)
   }
 
