@@ -552,7 +552,7 @@ export class Search extends Component {
     let arr = await getRestrictedAddresses()
     let res = await fetchHdao(this.state.offset)
     res = res.filter(e => !arr.includes(e.creator_id))
-    this.setState({ feed: [...this.state.feed, ...(res)], hdao: true })
+    this.setState({ feed: _.uniqBy([...this.state.feed, ...(res)], 'creator_id'), hdao: true })
     //this.latest(999999)
   }
 
