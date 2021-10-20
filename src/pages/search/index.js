@@ -534,7 +534,7 @@ export class Search extends Component {
       { id: 1, value: 'random' },
       { id: 2, value: 'glb' },
       { id: 3, value: 'music' },
-      { id: 4, value: 'interactive' }, // algorithimc?
+      { id: 4, value: 'html/svg' }, // algorithimc?
       { id: 5, value: 'gif' },
       { id: 6, value: 'new OBJKTs' },
       { id: 7, value: 'recent sales' },
@@ -637,7 +637,7 @@ export class Search extends Component {
       this.setState({ feed: _.uniqBy([...this.state.feed, ...(await fetchGLB(this.state.offset))], 'creator_id') })
     }
 
-    if (e === 'interactive') {
+    if (e === 'html/svg') {
       let res = await fetchInteractive(this.state.offset)
       res = res.filter(e => !arr.includes(e.creator_id))
       this.setState({ feed: _.uniqBy([...this.state.feed, ...(res)], 'creator_id') })
