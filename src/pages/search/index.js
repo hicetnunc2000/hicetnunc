@@ -381,7 +381,7 @@ async function fetchDay(day, offset) {
 async function fetchSales(offset) {
   const { errors, data } = await fetchGraphQL(`
   query sales {
-    hic_et_nunc_trade(order_by: {timestamp: desc}, limit : 15, offset : ${offset}) {
+    hic_et_nunc_trade(order_by: {timestamp: desc}, limit : 15, offset : ${offset}, where: {swap: {price: {_gte: "200000"}}}) {
       timestamp
       swap {
         price
@@ -391,6 +391,7 @@ async function fetchSales(offset) {
         display_uri
         id
         mime
+        creator_id
         creator {
           name
           address
@@ -553,7 +554,7 @@ export class Search extends Component {
     let tokens = await fetchSales(this.state.offset)
     tokens = tokens.map(e => e.token)
     tokens = tokens.filter(e => !arr.includes(e.creator_id))
-    this.setState({ feed: _.uniqBy([...this.state.feed, ...tokens], 'id') })
+    this.setState({ feed: _.uniqBy(_.uniqBy([...this.state.feed, ...tokens], 'id'), 'creator_id') })
     //this.latest(999999)
   }
 
@@ -668,7 +669,7 @@ export class Search extends Component {
       let tokens = await fetchSales(this.state.offset)
       tokens = tokens.map(e => e.token)
       tokens = tokens.filter(e => !arr.includes(e.creator_id))
-      this.setState({ feed: _.uniqBy([...this.state.feed, ...tokens], 'id') })
+      this.setState({ feed: _.uniqBy(_.uniqBy([...this.state.feed, ...tokens], 'id'), 'creator_id') })
     }
 
     if (this.state.select == 'new OBJKTs') {
