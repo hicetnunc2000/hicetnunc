@@ -665,7 +665,7 @@ export default class Display extends Component {
                   this.state.claim.length == 0 ?
                     <p>{this.state.hdao} ○</p>
                     :
-                    <a href='#' onClick={() => this.context.batch_claim(this.state.claim)}>
+                    <a onClick={() => this.context.batch_claim(this.state.claim)}>
                       <Primary>{this.state.hdao + parseInt(this.state.claim.map(e => e.hdao_balance).reduce((a, b) => a + b, 0) / 1000000)} ○</Primary>
                     </a>
                 }
