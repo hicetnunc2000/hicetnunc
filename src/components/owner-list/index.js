@@ -4,7 +4,6 @@ import { walletPreview } from '../../utils/string'
 import styles from './styles.module.scss'
 
 export const OwnerList = ({ owners, creator_id, acc, swaps, cancelv1 }) => {
-  console.log(swaps)
   owners = owners.filter(e => e.holder_id !== 'tz1burnburnburnburnburnburnburjAYjjX' && e.holder_id !== 'KT1HbQepzV1nVGg8QVznG7z4RcHseD5kwqBn')
   return (
 
