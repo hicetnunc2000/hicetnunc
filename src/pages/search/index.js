@@ -381,7 +381,7 @@ async function fetchDay(day, offset) {
 async function fetchSales(offset) {
   const { errors, data } = await fetchGraphQL(`
   query sales {
-    hic_et_nunc_trade(order_by: {timestamp: desc}, limit : 15, offset : ${offset}, where: {swap: {price: {_gte: "200000"}}}) {
+    hic_et_nunc_trade(order_by: {timestamp: desc}, limit : 15, offset : ${offset}, where: {swap: {price: {_gte: "500000"}}}) {
       timestamp
       swap {
         price
