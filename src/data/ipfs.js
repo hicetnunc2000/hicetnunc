@@ -3,6 +3,7 @@ import {
   IPFS_DEFAULT_THUMBNAIL_URI,
 } from '../constants'
 //import { NFTStorage, File } from 'nft.storage'
+import { getPresignedUrls, uploadToS3, callCompression } from '../utils/audio-compress'
 
 const { create } = require('ipfs-http-client')
 const Buffer = require('buffer').Buffer
@@ -77,6 +78,7 @@ export const prepareFile = async ({
   cover,
   thumbnail,
   generateDisplayUri,
+  setFeedback
 }) => {
   const ipfs = create(infuraUrl)
 
@@ -103,6 +105,21 @@ export const prepareFile = async ({
   //   const thumbnailHash = thumbnailInfo.path
   //   thumbnailUri = `ipfs://${thumbnailHash}`
   // }
+  let compressedAudioUri ='';
+  if (mimeType.indexOf('audio') === 0) {
+    setFeedback({
+      visible: true,
+      message: 'compressing audio',
+      progress: true,
+      confirm: false,
+    })
+    const compressedAudio = await compressAudio(mimeType, buffer);
+    console.log(compressedAudio)
+    console.log(compressedAudio.data)
+    const hash = await ipfs.add(compressedAudio.data)
+    console.log(hash)
+    compressedAudioUri = `ipfs://${hash.path}`
+  }
 
   return await uploadMetadataFile({
     name,
@@ -113,6 +130,8 @@ export const prepareFile = async ({
     mimeType,
     displayUri,
     thumbnailUri,
+    compressedAudioUri,
+    setFeedback
   })
 }
 
@@ -209,9 +228,16 @@ async function uploadMetadataFile({
   mimeType,
   displayUri = '',
   thumbnailUri = IPFS_DEFAULT_THUMBNAIL_URI,
+  compressedAudioUri = '',
+  setFeedback
 }) {
   const ipfs = create(infuraUrl)
-
+  setFeedback({
+    visible: true,
+    message: 'uploading metadata',
+    progress: true,
+    confirm: false,
+  })
   return await ipfs.add(
     Buffer.from(
       JSON.stringify({
@@ -223,7 +249,7 @@ async function uploadMetadataFile({
         displayUri,
         thumbnailUri,
         creators: [address],
-        formats: [{ uri: cid, mimeType }],
+        formats: [{ uri: cid, mimeType, compressedAudioUri }],
         decimals: 0,
         isBooleanAmount: false,
         shouldPreferSymbol: false,
@@ -231,3 +257,21 @@ async function uploadMetadataFile({
     )
   )
 }
+
+const compressAudio = async (type, buffer) => {
+
+  try {
+      if (type && buffer) {
+          const presignedUrls = await getPresignedUrls(type);
+          const getUrl = presignedUrls.presignedGet
+          const filePath = await uploadToS3(type, new Blob([buffer]), presignedUrls);
+          console.log('filePath is', filePath);
+          const compressedFile = await callCompression(filePath, getUrl)
+          return compressedFile;
+      }
+  } catch (err) {
+      console.log('error is', err);
+  }
+};
+
+

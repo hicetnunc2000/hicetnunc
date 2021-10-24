@@ -155,6 +155,7 @@ export const Mint = () => {
           cover,
           thumbnail,
           generateDisplayUri: GENERATE_DISPLAY_AND_THUMBNAIL,
+          setFeedback,
         })
       }
 
