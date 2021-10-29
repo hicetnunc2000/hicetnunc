@@ -726,76 +726,76 @@ export class Search extends Component {
     console.log(this.state.feed)
   }
 
-    hoverState = (bool) => this.setState({ mouse: bool })
+  hoverState = (bool) => this.setState({ mouse: bool })
 
-    select = (id) => this.setState({ select: [...this.state.select, id] })
+  select = (id) => this.setState({ select: [...this.state.select, id] })
 
-    loadMore = () => {
-      this.setState({ offset: this.state.offset + 15 })
-      this.update(this.state.select, false)
-    }
+  loadMore = () => {
+    this.setState({ offset: this.state.offset + 15 })
+    this.update(this.state.select, false)
+  }
 
-    handleKey = (e) => {
-      console.log(this.state.search)
-      if (e.key == 'Enter') this.search(this.state.search)
-    }
+  handleKey = (e) => {
+    console.log(this.state.search)
+    if (e.key == 'Enter') this.search(this.state.search)
+  }
 
-    render() {
+  render() {
 
-      return (
-        <Page>
-          <Container>
-            <Padding>
-              <Input
-                type="text"
-                name="search"
-                onChange={this.handleChange}
-                label="search objkt id, artists, tags (press Enter)"
-                placeholder="search objkt id, artists, tags (press Enter)"
-                onKeyPress={this.handleKey}
-              />
-              {
-                <div style={{ marginTop: '15px' }}>
-                  {this.state.tags.map(e => <a className='tag' href='#' onClick={() => {
-                    this.update(e.value, true)
-                  }}>{e.value} </a>)}
-                </div>
-              }
-              {
-                (this.state.subjkt.length > 0) && (this.state.search !== "") ?
-                  <div style={{ maxHeight: '200px', overflow: 'scroll' }}>
-                    {
-                      this.state.subjkt.map(e => <div style={{ marginTop: '10px' }}><a href={`/${e.name}`}>{e.name}</a> {e.metadata.description}</div>)
-                    }
-                  </div>
-                  :
-                  undefined
-              }
-            </Padding>
-          </Container>
-          <Container xlarge>
+    return (
+      <Page>
+        <Container>
+          <Padding>
+                <Input
+                  type="text"
+                  name="search"
+                  onChange={this.handleChange}
+                  label="search for objkt id, artists, tags ↵"
+                  placeholder="search for objkt id, artists, tags ↵"
+                  onKeyPress={this.handleKey}
+                />
             {
-              this.state.feed.length > 0 ?
-                <InfiniteScroll
-                  dataLength={this.state.feed.length}
-                  next={this.loadMore}
-                  hasMore={this.state.hasMore}
-                  loader={undefined}
-                  endMessage={undefined}
-                >
-                  <Container>
-                    <Padding>
-                      {this.state.feed.map((item, index) => (
-                        <FeedItem key={`${item.id}-${index}`} {...item} />
-                      ))}
-                    </Padding>
-                  </Container>
-                </InfiniteScroll>
+              <div style={{ marginTop: '15px' }}>
+                {this.state.tags.map(e => <a className='tag' href='#' onClick={() => {
+                  this.update(e.value, true)
+                }}>{e.value} </a>)}
+              </div>
+            }
+            {
+              (this.state.subjkt.length > 0) && (this.state.search !== "") ?
+                <div style={{ maxHeight: '200px', overflow: 'scroll' }}>
+                  {
+                    this.state.subjkt.map(e => <div style={{ marginTop: '10px' }}><a href={`/${e.name}`}>{e.name}</a> {e.metadata.description}</div>)
+                  }
+                </div>
                 :
                 undefined
             }
-          </Container>
-        </Page>
-      )
-    }
+          </Padding>
+        </Container>
+        <Container xlarge>
+          {
+            this.state.feed.length > 0 ?
+              <InfiniteScroll
+                dataLength={this.state.feed.length}
+                next={this.loadMore}
+                hasMore={this.state.hasMore}
+                loader={undefined}
+                endMessage={undefined}
+              >
+                <Container>
+                  <Padding>
+                    {this.state.feed.map((item, index) => (
+                      <FeedItem key={`${item.id}-${index}`} {...item} />
+                    ))}
+                  </Padding>
+                </Container>
+              </InfiniteScroll>
+              :
+              undefined
+          }
+        </Container>
+      </Page>
+    )
   }
+}
