@@ -14,7 +14,8 @@ export const Input = ({
   onWheel = () => null,
   disabled,
   value,
-  pattern
+  pattern,
+  onKeyPress
 }) => (
   <div className={styles.container}>
     <label>
@@ -28,9 +29,9 @@ export const Input = ({
         defaultValue={value}
         onChange={onChange}
         onBlur={onBlur}
-        disabled={disabled}
         pattern={pattern}
         onWheel={onWheel}
+        onKeyPress={onKeyPress}
       />
       <p>{label}</p>
     </label>
