@@ -418,7 +418,7 @@ async function fetchSubjkts(subjkt) {
   //console.log(subjkt)
   const { errors, data } = await fetchGraphQL(`
   query subjktsQuery {
-    hic_et_nunc_holder(where: { name: {_like: "%${subjkt}%"}}, order_by: {hdao_balance: desc}) {
+    hic_et_nunc_holder(where: { name: {_ilike: "%${subjkt}%"}}, order_by: {hdao_balance: desc}) {
       address
       name
       hdao_balance
@@ -747,6 +747,7 @@ export class Search extends Component {
         <Container>
           <Padding>
                 <Input
+                style={{ left : '5px' }}
                   type="text"
                   name="search"
                   onChange={this.handleChange}
