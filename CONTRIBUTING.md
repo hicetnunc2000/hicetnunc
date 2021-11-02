@@ -27,8 +27,6 @@ export const MyComponent = () => {
 There are some auxiliary components that aren't doing much besides aiding with the layout. A good example of that is the `/src/pages/objkt-display` where you have `<Container/>` and `<Padding />`. These components are similar to what `reactstrap` provides, but we're trying to minimize our bundle size, so we're reducing on dependencies.
 
 ## Learning Resources
-[Hic Et Nunc NFTs](https://leonnicholls.medium.com/hic-et-nunc-nfts-61743765b2ac?source=user_profile---------6----------------------------)
-
 [Hicdex: the Hic Et Nunc indexer](https://leonnicholls.medium.com/hicdex-the-hic-et-nunc-indexer-bd45f27a228f)
 
 [Hic Et Nunc Metadata](https://leonnicholls.medium.com/hic-et-nunc-metadata-40e594530e31)
