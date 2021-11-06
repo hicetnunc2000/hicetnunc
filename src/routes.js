@@ -35,11 +35,6 @@ export const routes = [
   },
   {
     exact: false,
-    path: '/tz/:id/:collection?',
-    component: Display,
-  },
-  {
-    exact: false,
     path: '/kt/:id',
     component: CollabDisplay,
   },
@@ -104,7 +99,7 @@ export const routes = [
   },
   {
     exact: false,
-    path: '/:id/:collection?',
+    path: ['/tz/:id/:collection?', '/:id/:collection?'],
     component: Display,
   },
 ]
