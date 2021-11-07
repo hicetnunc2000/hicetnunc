@@ -365,18 +365,13 @@ export default class Display extends Component {
       }
 
       await GetUserMetadata(this.state.wallet).then((data) => {
-        const {
-          dns,
-          github,
-          discord,
-          twitter,
-          tzprofile
-        } = data.data
-        if (data.data.dns) this.setState({ dns })
-        if (data.data.github) this.setState({ github })
-        if (data.data.discord) this.setState({ discord })
-        if (data.data.twitter) this.setState({ twitter })
-        if (data.data.tzprofile) this.setState({ tzprofile })
+        this.setState({
+          discord: data.data.discord,
+          dns: data.data.dns,
+          github: data.data.github,
+          twitter: data.data.twitter,
+          tzprofile: data.data.tzprofile
+        })
       })
       this.onReady()
     }
@@ -453,22 +448,10 @@ export default class Display extends Component {
       return objkts
     })
 
-    this.setState({ marketV1: v1Swaps, loading: false })
-    this.setState({ objkts: this.state.creations, loading: false, items: [] })
+    this.setState({ marketV1: v1Swaps, objkts: this.state.creations, loading: false, items: [] })
 
-    if (forSaleType !== null) {
-      if (forSaleType == 0) {
-        this.setState({
-          objkts: await this.filterCreationsForSalePrimary(this.state.objkts)
-        })
-      } else if (forSaleType == 1) {
-        this.setState({
-          objkts: await this.filterCreationsForSaleSecondary(this.state.objkts)
-        })
-      }
-    } else {
-      console.log("forSaleType is null")
-    }
+    if (forSaleType === 0) this.setState({ objkts: await this.filterCreationsForSalePrimary(this.state.objkts) })
+    if (forSaleType === 1) this.setState({ objkts: await this.filterCreationsForSaleSecondary(this.state.objkts) })
 
     this.setState({ items: this.state.objkts.slice(0, 15), offset: 15 })
   }
