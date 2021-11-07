@@ -67,7 +67,8 @@ export class Config extends Component {
     identicon: '',
     subjktUri: '', // uploads image
     cid: undefined,
-    toogled: false
+    toogled: false,
+    vote: ls.get('hDAO_config'),
   }
 
   componentWillMount = async () => {
@@ -145,7 +146,7 @@ export class Config extends Component {
 
   hDAO_config = () => {
     // convert float to 10^6
-    ls.set('hDAO_config', this.state.vote)
+    ls.set('hDAO_config', (this.state.vote || '').toString())
   }
 
   toogle = () => this.setState({ toogled: !this.state.toogled })
@@ -253,7 +254,8 @@ export class Config extends Component {
                   onChange={this.handleChange}
                   placeholder="hDAO Curation"
                   label="hDAO Curation"
-                  value={undefined}
+                  type="number"
+                  value={this.state.vote}
                 />
 
                 <Button onClick={this.hDAO_config}>
