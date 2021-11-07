@@ -607,15 +607,9 @@ export default class Display extends Component {
               <Identicon address={this.state.wallet} logo={this.state.identicon} />
 
               <div className={styles.info}>
-                {this.state.alias && !this.state.subjkt ? (
-                  <p>
-                    <strong>{this.state.alias}</strong>
-                  </p>
-                ) : (
-                  <p>
-                    <strong>{this.state.subjkt}</strong>
-                  </p>
-                )}
+                <p>
+                  <strong>{this.state.subjkt}</strong>
+                </p>
                 {this.state.description && <p>{this.state.description}</p>}
                 <Button href={`https://tzkt.io/${this.state.wallet}`}>
                   <Primary>{walletPreview(this.state.wallet)}</Primary>
