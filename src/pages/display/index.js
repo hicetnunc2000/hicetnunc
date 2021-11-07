@@ -600,7 +600,7 @@ export default class Display extends Component {
 
   render() {
     return (
-      <Page title={this.state.alias}>
+      <Page title={this.state.subjkt}>
         <Container>
           <Padding>
             <div className={styles.profile}>
