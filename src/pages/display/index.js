@@ -1011,12 +1011,10 @@ export default class Display extends Component {
               >
                 <ResponsiveMasonry>
                   {this.state.items.map((nft) => {
-                    // console.log('swaps ' + JSON.stringify(nft))
                     return (
-                      <div className={styles.cardContainer}>
+                      <div className={styles.cardContainer} key={nft.id}>
                         <Button
                           style={{ positon: 'relative' }}
-                          key={nft.id}
                           to={`${PATH.OBJKT}/${nft.id}`}>
                           <div className={styles.container}>
                             {renderMediaType({
@@ -1158,10 +1156,9 @@ export default class Display extends Component {
                   {this.state.items.map((nft) => {
                     //console.log('nft: ' + JSON.stringify(nft))
                     return (
-                      <div className={styles.cardContainer}>
+                      <div className={styles.cardContainer} key={nft.token.id}>
                         <Button
                           style={{ position: 'relative' }}
-                          key={nft.token.id}
                           to={`${PATH.OBJKT}/${nft.token.id}`}>
                           <div className={styles.container}>
                             {renderMediaType({
