@@ -302,10 +302,12 @@ export default class Display extends Component {
     collectionType: 'notForSale',
     hdao: 0,
     claim: [],
+    description: null,
     discord: null,
     discordLinkCopied: null,
     dns: null,
     github: null,
+    identicon: null,
     twitter: null,
     tzprofile: null,
   }
@@ -335,7 +337,7 @@ export default class Display extends Component {
           this.setState({ hdao: Math.floor(res[0].hdao_balance / 1000000), subjkt: res[0].name })
 
           const meta = await axios.get('https://cloudflare-ipfs.com/ipfs/' + res[0].metadata_file.split('//')[1]).then(res => res.data)
-          if (meta.description) this.setState({ description: meta.description, identicon: meta.identicon })
+          this.setState({ description: meta.description, identicon: meta.identicon })
         }
       } catch (e) {
         console.log("error " + e)
@@ -346,10 +348,8 @@ export default class Display extends Component {
       // console.log(decodeURI(window.location.pathname.split('/')[1]))
       console.log(res)
       if (res[0].metadata_file) {
-        let meta = await axios.get('https://cloudflare-ipfs.com/ipfs/' + res[0].metadata_file.split('//')[1]).then(res => res.data)
-        console.log(meta)
-        if (meta.description) this.setState({ description: meta.description })
-        if (meta.identicon) this.setState({ identicon: meta.identicon })
+        const meta = await axios.get('https://cloudflare-ipfs.com/ipfs/' + res[0].metadata_file.split('//')[1]).then(res => res.data)
+        this.setState({ description: meta.description, identicon: meta.identicon })
       }
       if (res.length >= 1) {
         this.setState({
