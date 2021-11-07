@@ -596,26 +596,10 @@ export default class Display extends Component {
 
   // called if there's no redirect
   onReady = async () => {
-
-    // based on route, define initial state
-    if (this.state.subjkt !== '') {
-      // if alias route
-      if (window.location.pathname.split('/')[2] === 'creations') {
-        this.creations()
-      } else if (window.location.pathname.split('/')[2] === 'collection') {
-        this.collectionFull()
-      } else {
-        this.creations()
-      }
+    if (window.location.pathname.split('/').pop() === 'collection') {
+      this.collectionFull()
     } else {
-      // if tz wallet route
-      if (window.location.pathname.split('/')[3] === 'creations') {
-        this.creations()
-      } else if (window.location.pathname.split('/')[3] === 'collection') {
-        this.collectionFull()
-      } else {
-        this.creations()
-      }
+      this.creations()
     }
   }
 
