@@ -301,48 +301,41 @@ export default class Display extends Component {
     collectionState: false,
     collectionType: 'notForSale',
     hdao: 0,
-    claim: []
+    claim: [],
+    discord: null,
+    discordLinkCopied: null,
+    dns: null,
+    github: null,
+    twitter: null,
+    tzprofile: null,
   }
 
   componentWillMount = async () => {
 
     const id = window.location.pathname.split('/')[1]
-    // console.log(window.location.pathname.split('/'))
 
     if (id === 'tz') {
 
       const wallet = window.location.pathname.split('/')[2]
+      this.setState({ wallet: wallet, walletPreview: walletPreview(wallet) })
 
-      this.setState({
-        wallet,
-        walletPreview: walletPreview(wallet),
-      })
-      //let res = await fetchSubjkts(decodeURI(window.location.pathname.split('/')[1]))
-      // console.log(decodeURI(window.location.pathname.split('/')[1]))
       await GetUserMetadata(wallet).then((data) => {
-        const {
-          twitter,
-          tzprofile,
-          discord,
-          github,
-          dns,
-        } = data.data
-
-        if (data.data.twitter) this.setState({ twitter })
-        if (data.data.tzprofile) this.setState({ tzprofile })
-        if (data.data.discord) this.setState({ discord, copied: false })
-        if (data.data.github) this.setState({ github })
-        if (data.data.dns) this.setState({ dns })
+        this.setState({
+          discord: data.data.discord,
+          dns: data.data.dns,
+          github: data.data.github,
+          twitter: data.data.twitter,
+          tzprofile: data.data.tzprofile
+        })
       })
+
       let res = await fetchTz(wallet)
       try {
         if (res[0]) {
-          let meta = await axios.get('https://cloudflare-ipfs.com/ipfs/' + res[0].metadata_file.split('//')[1]).then(res => res.data)
+          this.setState({ hdao: Math.floor(res[0].hdao_balance / 1000000), subjkt: res[0].name })
 
-          if (meta.description) this.setState({ description: meta.description })
-          if (meta.identicon) this.setState({ identicon: meta.identicon })
-          if (res[0]) this.setState({ subjkt: res[0].name })
-          if (res[0]) this.setState({ hdao: Math.floor(res[0].hdao_balance / 1000000) })
+          const meta = await axios.get('https://cloudflare-ipfs.com/ipfs/' + res[0].metadata_file.split('//')[1]).then(res => res.data)
+          if (meta.description) this.setState({ description: meta.description, identicon: meta.identicon })
         }
       } catch (e) {
         console.log("error " + e)
@@ -616,9 +609,9 @@ export default class Display extends Component {
     const missingSize = handleSize - 6;
     const spaces = ' '.repeat(Math.ceil(Math.abs(missingSize / 2)));
     if (missingSize < 0) {
-      return `${this.state.copied ? 'Copied' : `${spaces}${this.state.discord}${spaces}`}`;
+      return `${this.state.discordLinkCopied ? 'Copied' : `${spaces}${this.state.discord}${spaces}`}`;
     } else {
-      return `${this.state.copied ? `${spaces}Copied${spaces}` : `${this.state.discord}`}`;
+      return `${this.state.discordLinkCopied ? `${spaces}Copied${spaces}` : `${this.state.discord}`}`;
     }
   }
 
@@ -760,8 +753,8 @@ export default class Display extends Component {
                   )}
                   {this.state.discord && (
                     <Button onClick={() => {
-                      this.setState({ copied: true })
-                      setTimeout(() => this.setState({ copied: false }), 1000)
+                      this.setState({ discordLinkCopied: true })
+                      setTimeout(() => this.setState({ discordLinkCopied: false }), 1000)
                       navigator.clipboard.writeText(this.state.discord)
                     }}>
                       <Primary>
