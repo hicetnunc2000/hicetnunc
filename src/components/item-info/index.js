@@ -91,10 +91,14 @@ export const ItemInfo = ({
     }
 
     // the issuer path depends on whether it's a collab address (KT) or individual (tz)
-    const { ISSUER, COLLAB } = PATH
-    const creatorAddress = creator.address
-    const isCollab = creatorAddress.substring(0, 2) === 'KT'
-    const issuerPath = isCollab ? COLLAB : ISSUER
+    // 1x1: This doesn't work for this version of the code - later collab code is required
+
+    // const { ISSUER, COLLAB } = PATH
+    // const creatorAddress = creator.address
+    // const isCollab = creatorAddress.substring(0, 2) === 'KT'
+    // const issuerPath = isCollab ? COLLAB : ISSUER
+    
+    const creatorDisplay = creator.name ? encodeURI(creator.name) : walletPreview(creator.address)
 
     return (
       <>
@@ -102,23 +106,9 @@ export const ItemInfo = ({
         <div className={styles.container}>
           <div className={styles.edition}>
             <div className={styles.inline}>
-              {/* <p className={styles.issuer}>{isCollab ? 'Collaboration:' : 'Issuer:'}&nbsp;</p> */}
-              {isCollab && (
-                <CollabIssuerInfo address={ creatorAddress } />
-              )}
-              {!isCollab && (
-                <Button
-                  to={
-                    `/tz/${creator.address}`
-                  }
-                >
-                  {creator.name ? (
-                    <Primary>{encodeURI(creator.name)}</Primary>
-                  ) : (
-                    <Primary>{walletPreview(creator.address)}</Primary>
-                  )}
-                </Button>
-              )}
+              <Button to={`/tz/${creator.address}`}>
+                <Primary>{creatorDisplay}</Primary>
+              </Button>
             </div>
             {!feed && (
               <div>
