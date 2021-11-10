@@ -418,7 +418,7 @@ async function fetchSubjkts(subjkt) {
   //console.log(subjkt)
   const { errors, data } = await fetchGraphQL(`
   query subjktsQuery {
-    hic_et_nunc_holder(where: { name: {_like: "%${subjkt}%"}}, order_by: {hdao_balance: desc}) {
+    hic_et_nunc_holder(where: { name: {_ilike: "%${subjkt}%"}}, order_by: {hdao_balance: desc}) {
       address
       name
       hdao_balance
@@ -540,7 +540,8 @@ export class Search extends Component {
       { id: 7, value: 'recent sales' },
       { id: 8, value: '1D' },
       { id: 9, value: '1W' },
-      { id: 10, value: '1M' }
+      { id: 10, value: '1M' },
+      { id: 11, value: 'ATH' }
     ],
     select: [],
     mouse: false,
@@ -561,7 +562,7 @@ export class Search extends Component {
   handleChange = (e) => {
     this.setState({ [e.target.name]: e.target.value })
 
-    if (this.state.search.length >= 1) this.search()
+    //if (this.state.search.length >= 1) this.search()
   }
 
   update = async (e, reset) => {
@@ -579,6 +580,7 @@ export class Search extends Component {
       let list = await fetchDay(new Date((new Date()).getTime() - 60 * 60 * 24 * 1000).toISOString(), this.state.offset)
       list = list.map(e => e.token)
       list = [...this.state.feed, ...(list)]
+      list = list.filter(e => !arr.includes(e.creator.address))
       list = _.uniqBy(list, 'id')
 
       this.setState({
@@ -590,6 +592,8 @@ export class Search extends Component {
       let list = await fetchDay(new Date((new Date()).getTime() - 60 * 60 * 24 * 7 * 1000).toISOString(), this.state.offset)
       list = list.map(e => e.token)
       list = [...this.state.feed, ...(list)]
+      list = list.filter(e => !arr.includes(e.creator.address))
+
       list = _.uniqBy(list, 'id')
 
       this.setState({
@@ -602,8 +606,21 @@ export class Search extends Component {
       let list = await fetchDay(new Date((new Date()).getTime() - 60 * 60 * 24 * 30 * 1000).toISOString(), this.state.offset)
       list = list.map(e => e.token)
       list = [...this.state.feed, ...(list)]
+      list = list.filter(e => !arr.includes(e.creator.address))
+
       list = _.uniqBy(list, 'id')
 
+      this.setState({
+        feed: list
+      })
+    }
+
+    if (e === 'ATH') {
+      let list = await fetchDay(new Date('2021-05-01').toISOString(), this.state.offset)
+      list = list.map(e => e.token)
+      list = [...this.state.feed, ...(list)]
+      list = _.uniqBy(list, 'id')
+      console.log('ath', list)
       this.setState({
         feed: list
       })
@@ -693,24 +710,25 @@ export class Search extends Component {
     let restricted = await getRestrictedAddresses()
     result = _.uniqBy([...this.state.feed, ...result], 'creator_id')
     result = result.filter(e => !restricted.includes(e.creator_id))
-    this.setState({ feed: [...result], flag : true })
+    this.setState({ feed: [...result], flag: true })
   }
 
 
   search = async (e) => {
 
+    console.log(e)
+
     this.setState({ items: [], feed: [], search: e })
     this.setState({ subjkt: await fetchSubjkts(this.state.search) })
 
-    if ((this.state.subjkt[0]?.hdao_balance > 30000000) || (isFloat(Number(this.state.search)))) {
-      console.log(isFloat(Number(this.state.search)))
-      this.setState({ feed: await fetchCreations(this.state.subjkt[0].address, this.state.offset), select: 'creations' })
-    } else if (!isNaN(this.state.search)) {
+    if (!isNaN(this.state.search)) {
       this.setState({ feed: await fetchFeed(Number(this.state.search) + 1), select: 'num' })
     } else {
       this.setState({ feed: _.uniqBy(await fetchTag(this.state.search.toLowerCase(), 9999999), 'creator_id'), select: 'tag' })
     }
 
+
+    console.log(this.state.feed)
   }
 
   hoverState = (bool) => this.setState({ mouse: bool })
@@ -722,21 +740,25 @@ export class Search extends Component {
     this.update(this.state.select, false)
   }
 
+  handleKey = (e) => {
+    console.log(this.state.search)
+    if (e.key == 'Enter') this.search(this.state.search)
+  }
+
   render() {
 
     return (
       <Page>
         <Container>
           <Padding>
-            <Input
-              type="text"
-              name="search"
-              onMouseEnter={() => this.hoverState(true)}
-              onMouseLeave={() => this.hoverState(false)}
-              onChange={e => this.search(e.target.value)}
-              label="objkt id, artists, tags"
-              placeholder="objkt id, artists, tags"
-            />
+                <Input
+                  type="text"
+                  name="search"
+                  onChange={this.handleChange}
+                  label="search ↵"
+                  placeholder="search ↵"
+                  onKeyPress={this.handleKey}
+                />
             {
               <div style={{ marginTop: '15px' }}>
                 {this.state.tags.map(e => <a className='tag' href='#' onClick={() => {
