@@ -301,48 +301,43 @@ export default class Display extends Component {
     collectionState: false,
     collectionType: 'notForSale',
     hdao: 0,
-    claim: []
+    claim: [],
+    description: null,
+    discord: null,
+    discordLinkCopied: null,
+    dns: null,
+    github: null,
+    identicon: null,
+    twitter: null,
+    tzprofile: null,
   }
 
   componentWillMount = async () => {
 
     const id = window.location.pathname.split('/')[1]
-    // console.log(window.location.pathname.split('/'))
 
     if (id === 'tz') {
 
       const wallet = window.location.pathname.split('/')[2]
+      this.setState({ wallet: wallet, walletPreview: walletPreview(wallet) })
 
-      this.setState({
-        wallet,
-        walletPreview: walletPreview(wallet),
-      })
-      //let res = await fetchSubjkts(decodeURI(window.location.pathname.split('/')[1]))
-      // console.log(decodeURI(window.location.pathname.split('/')[1]))
       await GetUserMetadata(wallet).then((data) => {
-        const {
-          twitter,
-          tzprofile,
-          discord,
-          github,
-          dns,
-        } = data.data
-
-        if (data.data.twitter) this.setState({ twitter })
-        if (data.data.tzprofile) this.setState({ tzprofile })
-        if (data.data.discord) this.setState({ discord, copied: false })
-        if (data.data.github) this.setState({ github })
-        if (data.data.dns) this.setState({ dns })
+        this.setState({
+          discord: data.data.discord,
+          dns: data.data.dns,
+          github: data.data.github,
+          twitter: data.data.twitter,
+          tzprofile: data.data.tzprofile
+        })
       })
+
       let res = await fetchTz(wallet)
       try {
         if (res[0]) {
-          let meta = await axios.get('https://cloudflare-ipfs.com/ipfs/' + res[0].metadata_file.split('//')[1]).then(res => res.data)
+          this.setState({ hdao: Math.floor(res[0].hdao_balance / 1000000), subjkt: res[0].name })
 
-          if (meta.description) this.setState({ description: meta.description })
-          if (meta.identicon) this.setState({ identicon: meta.identicon })
-          if (res[0]) this.setState({ subjkt: res[0].name })
-          if (res[0]) this.setState({ hdao: Math.floor(res[0].hdao_balance / 1000000) })
+          const meta = await axios.get('https://cloudflare-ipfs.com/ipfs/' + res[0].metadata_file.split('//')[1]).then(res => res.data)
+          this.setState({ description: meta.description, identicon: meta.identicon })
         }
       } catch (e) {
         console.log("error " + e)
@@ -353,10 +348,8 @@ export default class Display extends Component {
       // console.log(decodeURI(window.location.pathname.split('/')[1]))
       console.log(res)
       if (res[0].metadata_file) {
-        let meta = await axios.get('https://cloudflare-ipfs.com/ipfs/' + res[0].metadata_file.split('//')[1]).then(res => res.data)
-        console.log(meta)
-        if (meta.description) this.setState({ description: meta.description })
-        if (meta.identicon) this.setState({ identicon: meta.identicon })
+        const meta = await axios.get('https://cloudflare-ipfs.com/ipfs/' + res[0].metadata_file.split('//')[1]).then(res => res.data)
+        this.setState({ description: meta.description, identicon: meta.identicon })
       }
       if (res.length >= 1) {
         this.setState({
@@ -372,18 +365,13 @@ export default class Display extends Component {
       }
 
       await GetUserMetadata(this.state.wallet).then((data) => {
-        const {
-          dns,
-          github,
-          discord,
-          twitter,
-          tzprofile
-        } = data.data
-        if (data.data.dns) this.setState({ dns })
-        if (data.data.github) this.setState({ github })
-        if (data.data.discord) this.setState({ discord })
-        if (data.data.twitter) this.setState({ twitter })
-        if (data.data.tzprofile) this.setState({ tzprofile })
+        this.setState({
+          discord: data.data.discord,
+          dns: data.data.dns,
+          github: data.data.github,
+          twitter: data.data.twitter,
+          tzprofile: data.data.tzprofile
+        })
       })
       this.onReady()
     }
@@ -460,22 +448,10 @@ export default class Display extends Component {
       return objkts
     })
 
-    this.setState({ marketV1: v1Swaps, loading: false })
-    this.setState({ objkts: this.state.creations, loading: false, items: [] })
+    this.setState({ marketV1: v1Swaps, objkts: this.state.creations, loading: false, items: [] })
 
-    if (forSaleType !== null) {
-      if (forSaleType == 0) {
-        this.setState({
-          objkts: await this.filterCreationsForSalePrimary(this.state.objkts)
-        })
-      } else if (forSaleType == 1) {
-        this.setState({
-          objkts: await this.filterCreationsForSaleSecondary(this.state.objkts)
-        })
-      }
-    } else {
-      console.log("forSaleType is null")
-    }
+    if (forSaleType === 0) this.setState({ objkts: await this.filterCreationsForSalePrimary(this.state.objkts) })
+    if (forSaleType === 1) this.setState({ objkts: await this.filterCreationsForSaleSecondary(this.state.objkts) })
 
     this.setState({ items: this.state.objkts.slice(0, 15), offset: 15 })
   }
@@ -596,26 +572,10 @@ export default class Display extends Component {
 
   // called if there's no redirect
   onReady = async () => {
-
-    // based on route, define initial state
-    if (this.state.subjkt !== '') {
-      // if alias route
-      if (window.location.pathname.split('/')[2] === 'creations') {
-        this.creations()
-      } else if (window.location.pathname.split('/')[2] === 'collection') {
-        this.collectionFull()
-      } else {
-        this.creations()
-      }
+    if (window.location.pathname.split('/').pop() === 'collection') {
+      this.collectionFull()
     } else {
-      // if tz wallet route
-      if (window.location.pathname.split('/')[3] === 'creations') {
-        this.creations()
-      } else if (window.location.pathname.split('/')[3] === 'collection') {
-        this.collectionFull()
-      } else {
-        this.creations()
-      }
+      this.creations()
     }
   }
 
@@ -632,9 +592,9 @@ export default class Display extends Component {
     const missingSize = handleSize - 6;
     const spaces = ' '.repeat(Math.ceil(Math.abs(missingSize / 2)));
     if (missingSize < 0) {
-      return `${this.state.copied ? 'Copied' : `${spaces}${this.state.discord}${spaces}`}`;
+      return `${this.state.discordLinkCopied ? 'Copied' : `${spaces}${this.state.discord}${spaces}`}`;
     } else {
-      return `${this.state.copied ? `${spaces}Copied${spaces}` : `${this.state.discord}`}`;
+      return `${this.state.discordLinkCopied ? `${spaces}Copied${spaces}` : `${this.state.discord}`}`;
     }
   }
 
@@ -776,8 +736,8 @@ export default class Display extends Component {
                   )}
                   {this.state.discord && (
                     <Button onClick={() => {
-                      this.setState({ copied: true })
-                      setTimeout(() => this.setState({ copied: false }), 1000)
+                      this.setState({ discordLinkCopied: true })
+                      setTimeout(() => this.setState({ discordLinkCopied: false }), 1000)
                       navigator.clipboard.writeText(this.state.discord)
                     }}>
                       <Primary>

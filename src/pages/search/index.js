@@ -752,6 +752,7 @@ export class Search extends Component {
         <Container>
           <Padding>
                 <Input
+                style={{ left : '5px' }}
                   type="text"
                   name="search"
                   onChange={this.handleChange}
