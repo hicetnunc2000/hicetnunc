@@ -10,7 +10,7 @@
     ]
   },
   "footer": {
-    "mint": "This is an experimental dApp, use it at your own risk.",
+    "mint": "This is still an experimental dApp, use it at your own risk.",
     "warning": "use it consciously. visit artists profiles. be careful with copy minters."
   },
   "home": {
@@ -31,7 +31,8 @@
   },
   "manage": {
     "creations": "creations",
-    "collection": "collection"
+    "collection": "collection",
+    "collabs": "collabs"
   },
   "about": {
     "title": "hic et nunc",
