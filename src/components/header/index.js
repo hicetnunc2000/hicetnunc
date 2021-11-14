@@ -13,13 +13,6 @@ import { VisuallyHidden } from '../visually-hidden'
 import styles from './styles.module.scss'
 import { getItem, setItem } from '../../utils/storage'
 
-/* import { BeaconWallet } from '@taquito/beacon-wallet'
-
-const wallet = new BeaconWallet({
-  name: 'hicetnunc.xyz',
-  preferredNetwork: 'mainnet',
-}) */
-
 export const Header = () => {
   const history = useHistory()
   const context = useContext(HicetnuncContext)
@@ -44,8 +37,6 @@ export const Header = () => {
     }
   }
 
-  //const activeAccount = await wallet.client.getActiveAccount()
-  //console.log(activeAccount)
   const handleRoute = (path) => {
     context.setMenu(true)
     history.push(path)
@@ -132,11 +123,11 @@ export const Header = () => {
                         </Primary>
                       </Button>
                     </li>
-{/*                     <li>
+                    <li>
                       <Button onClick={() => handleRoute('/collaborate')}>
                         <Primary>collaborate</Primary>
                       </Button>
-                    </li> */}
+                    </li>
                     <li>
                       <Button onClick={() => handleRoute('/sync')}>
                         <Primary>manage assets</Primary>

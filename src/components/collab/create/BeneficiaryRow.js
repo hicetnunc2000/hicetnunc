@@ -7,16 +7,22 @@ import classNames from "classnames"
 import { CloseIcon } from ".."
 import { GetUserMetadata } from "../../../data/api"
 
-export const BenefactorRow = ({
-    benefactor, onUpdate, onAdd, onRemove, onPasteMulti, onSelectPercentage, minimalView
+export const BeneficiaryRow = ({
+    beneficiary,
+    onUpdate,
+    onAdd,
+    onRemove,
+    onPasteMulti,
+    onSelectPercentage,
+    minimalView
 }) => {
 
     const [meta, setMeta] = useState()
-    const [address, setAddress] = useState(benefactor.address)
-    const [shares, setShares] = useState(benefactor.shares)
+    const [address, setAddress] = useState(beneficiary.address)
+    const [shares, setShares] = useState(beneficiary.shares)
 
     useEffect(() => {
-        const { address, shares } = benefactor
+        const { address, shares } = beneficiary
         
         if (!meta && address) {
             GetUserMetadata(address)
@@ -29,7 +35,7 @@ export const BenefactorRow = ({
 
         setAddress(address)
         setShares(shares)
-    }, [benefactor])
+    }, [beneficiary, meta])
 
     const _update = (field, value) => {
 
@@ -40,12 +46,12 @@ export const BenefactorRow = ({
             // send to parent to do the multi-split function
             onPasteMulti(value);
         } else {
-            const updatedBenefactor = {
-                ...benefactor,
+            const updatedBeneficiary = {
+                ...beneficiary,
                 [field]: isNaN(value) ? value : Number(value),
             }
 
-            onUpdate(updatedBenefactor)
+            onUpdate(updatedBeneficiary)
         }
     }
 
@@ -54,26 +60,26 @@ export const BenefactorRow = ({
 
     const _onKeyDown = (event) => {
         if (event.keyCode === 13 && onAdd) {
-            onAdd(benefactor)
+            onAdd(beneficiary)
         }
     }
 
     // If the user has chosen from the popular projects list
-    // the benefactor data will contain the name of the project
+    // the beneficiary data will contain the name of the project
     // otherwise just show "address" and the KT or tz hint if not populated
 
-    const benefactorName = meta ? meta.alias : null
-    const placeholderText = benefactorName || `address ${!address ? `(tz... or KT...)` : ''}`
-
+    const beneficiaryName = meta ? meta.alias : null
+    const placeholderText = beneficiaryName || `address ${!address ? `(tz... or KT...)` : ''}`
+    
     /**
      * In some situations we may want to show less UI information
-     * eg. when adding benefactors, you don't need the whole
-     * benefactor UI open, so just show addresses and shares
+     * eg. when adding beneficiarys, you don't need the whole
+     * beneficiary UI open, so just show addresses and shares
      */
     return minimalView ? (
         <tr className={styles.row}>
             <td className={styles.addressCell}>{address}</td>
-            <td className={styles.sharesCell}>{benefactor.share}%</td>
+            <td className={styles.sharesCell}>{beneficiary.share}%</td>
         </tr>
     ) : (
         <tr className={styles.row}>
