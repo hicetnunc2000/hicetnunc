@@ -33,10 +33,26 @@ timestamp
 display_uri
 description
 artifact_uri
+is_signed
 metadata
 creator {
   address
   name
+  is_split
+  shares {
+    administrator
+    shareholder {
+      holder_type
+      holder_id
+      holder {
+        name
+        address
+      }
+    }
+  }
+}
+token_signatures {
+  holder_id
 }
 thumbnail_uri
 title

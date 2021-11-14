@@ -809,6 +809,11 @@ export default class Display extends Component {
                   collection
                 </Primary>
               </Button>
+              <Button onClick={this.collabs}>
+                <Primary selected={this.state.collabsState}>
+                  collabs
+                </Primary>
+              </Button>
               <div className={styles.filter}>
                 <Button onClick={() => this.setState({
                   filter: !this.state.filter

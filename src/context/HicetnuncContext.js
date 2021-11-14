@@ -3,21 +3,22 @@ import React, { createContext, Component } from 'react'
 import { withRouter } from 'react-router'
 import {
   BeaconWallet,
-  BeaconWalletNotInitialized,
+  // BeaconWalletNotInitialized,
 } from '@taquito/beacon-wallet'
-import { TezosToolkit, OpKind, MichelsonMap } from '@taquito/taquito'
-import { Parser, Expr } from "@taquito/michel-codec";
-import { Schema } from "@taquito/michelson-encoder";
+import { TezosToolkit, OpKind, MichelCodecPacker } from '@taquito/taquito'
+import { packParticipantMap } from '../components/collab/functions';
 import { setItem } from '../utils/storage'
-import { KeyStoreUtils } from 'conseiljs-softsigner'
-import { PermissionScope } from '@airgap/beacon-sdk'
-import { UnitValue } from '@taquito/michelson-encoder'
-import { contentType } from 'mime-types';
-
 const { NetworkType } = require('@airgap/beacon-sdk')
 var ls = require('local-storage')
 const axios = require('axios')
 const eztz = require('eztz-lib')
+
+// import { Parser, Expr } from "@taquito/michel-codec";
+// import { Schema } from "@taquito/michelson-encoder";
+// import { KeyStoreUtils } from 'conseiljs-softsigner'
+// import { PermissionScope } from '@airgap/beacon-sdk'
+// import { UnitValue } from '@taquito/michelson-encoder'
+// import { contentType } from 'mime-types';
 
 export const HicetnuncContext = createContext()
 
@@ -35,6 +36,7 @@ const createProxySchema = `
 //const Tezos = new TezosToolkit('https://mainnet.smartpy.io')
 //const Tezos = new TezosToolkit('eu01-node.teztools.net-lb')
 const Tezos = new TezosToolkit('https://mainnet.api.tez.ie')
+const Packer = new MichelCodecPacker();
 //const Tezos = new TezosToolkit('https://api.tez.ie/rpc/mainnet')
 // storage fee adjustment
 
@@ -94,6 +96,10 @@ class HicetnuncContextProviderClass extends Component {
       objkts: 'KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton',
       hDAO_curation: 'KT1TybhR7XraG75JFYKSrh7KnxukMBT5dor6',
       hDAO_marketplace: 'KT1QPvv7sWVaT9PcPiC4fN9BgfX8NB2d5WzL',
+
+      // Collab additions
+      proxyFactoryAddress: 'KT1DoyD6kr8yLK8mRBFusyKYJUk2ZxNHKP1N',
+      signingContractAddress: 'KT1BcLnWRziLDNJNRn3phAANKrEBiXhytsMY',
 
       lastId : undefined,
       setId : (id) => this.setState({ lastId : id }),
@@ -283,6 +289,16 @@ class HicetnuncContextProviderClass extends Component {
 
       client: null,
 
+       // Signed in collab address (if applicable)
+      // We will retrieve from local storage
+      proxyAddress: ls.get('collab_address'),
+      proxyName: ls.get('collab_name'),
+
+      // This will be set after creating a new collab
+      // but we don't want to auto-sign in
+      originatedContract: undefined,
+      originationOpHash: undefined,
+
       setClient: (client) => {
         this.setState({
           client: client,
@@ -438,6 +454,16 @@ class HicetnuncContextProviderClass extends Component {
                   )
                   .send()
               )
+      },
+
+      sign: async (objkt_id) => {
+        await Tezos.wallet
+          .at(this.state.signingContractAddress)
+          .then(c => c.methods
+            .sign(objkt_id)
+            .send({ amount: 0, storageLimit: 310 })
+          )
+          .then((op) => console.log(op))
       },
 
       claim_hDAO: async (hDAO_amount, objkt_id) => {
@@ -718,8 +744,6 @@ class HicetnuncContextProviderClass extends Component {
       
       hDAO_vote: ls.get('hDAO_vote'),
 
-      proxyFactoryAddress: 'KT1DoyD6kr8yLK8mRBFusyKYJUk2ZxNHKP1N',
-
       mockProxy: async () => {
 
         this.state.setFeedback({
@@ -731,41 +755,93 @@ class HicetnuncContextProviderClass extends Component {
 
         setTimeout(() => {
           const result = {
-            opHash: 'opQ2gLDiqHCqhQTKK5h9vCnL3c3izFeB11SQRuFzUricptKH6pJ',
+            opHash: 'oo28JbSrWr7NMy95qdba56m85TcA2poJCgteB5DWUEMrZvC1B38', // current one
           }
 
-          axios
-            .get(`https://api.tzkt.io/v1/operations/originations/${result.opHash}`)
-            .then(({ data }) => {
-              const { originatedContract } = data[0]
+          this.setState({
+            originationOpHash: result.opHash
+          })
 
-              // We can either sign in now, or force a button to do so
-              // this.state.setProxyAddress(originatedContract.address)
+          this.state.setFeedback({
+            visible: false,
+          })
+        }, 2000)
+      },
+
+      findOriginatedContractFromOpHash: async (hash) => {
+
+        this.state.setFeedback({
+          visible: true,
+          message: 'Checking network for collab contract',
+          progress: true,
+          confirm: false,
+        })
+
+        axios
+          .get(`https://api.tzkt.io/v1/operations/originations/${hash}`)
+          .then(response => {
+
+            const { data } = response;
+
+            console.log("response from originations call", data[0]);
+
+            if (data[0]) {
+              console.log('There is correct data', data[0])
+
+              // Send the originated contract to the UI via context
+              const { originatedContract } = data[0]
 
               this.setState({
                 originatedContract,
-              })
+                originationOpHash: undefined,
+              }) // save hash
+
+              console.log("Saved state originatedContract", originatedContract);
 
               // We have got our contract address
               this.state.setFeedback({
+                visible: true,
                 message: 'Collaborative contract created successfully',
                 progress: true,
                 confirm: false,
               })
 
-              // Hide after a second
               setTimeout(() => {
                 this.state.setFeedback({
                   visible: false,
                 })
               }, 2000)
-            })
-        }, 2000)
 
+            } else {
+              console.log('missing data')
+
+              // We have got our contract address
+              this.state.setFeedback({
+                message: 'Sorry, there was possibly an error creating the collaborative contract - please check tzkt.io for your wallet address',
+                progress: true,
+                confirm: true,
+              })
+            }
+
+            // Hide after 2 seconds
+            setTimeout(() => {
+              this.state.setFeedback({
+                visible: false,
+              })
+            }, 2000)
+          })
       },
 
-      originateProxy: async (administratorAddress, participantData) => {
-      
+      originateProxy: async participantData => {
+
+        console.log("originateProxy", participantData)
+
+        // Clear any existing calls
+        this.setState({
+          originationOpHash: undefined,
+          originatedProxy: undefined,
+        })
+
         // Show progress during creation
         this.state.setFeedback({
           visible: true,
@@ -774,20 +850,11 @@ class HicetnuncContextProviderClass extends Component {
           confirm: false,
         })
 
-        // packing participants data:
-        // (TODO: move to separate func)
-        const participantMap = MichelsonMap.fromLiteral(participantData);
+        const packDataParams = packParticipantMap(participantData);
+        console.log("packDataParams", packDataParams);
 
-        const parser = new Parser();
-        const michelsonType = parser.parseData(createProxySchema);
-        const schema = new Schema(michelsonType);
-        const data = schema.Encode(participantMap);
-
-        // Is it okay to make it blocking?:
-        const { packed } = await Tezos.rpc.packData({
-          data,
-          type: michelsonType,
-        });
+        // Pack hex data for origination call
+        const { packed } = await Packer.packData(packDataParams);
 
         // Blockchain ops
         await Tezos.wallet
@@ -799,34 +866,12 @@ class HicetnuncContextProviderClass extends Component {
           )
           .then(result => {
 
-            // TODO: this is a bit too nested for my liking
-            
-            // Keep the operation hash for further queries if required (do we need this?)
-            this.setState({ op: result.opHash })
+            console.log("Result of originate call", result)
 
-            // Query tzkt.io to get the originated contract address
-            axios
-              .get(`https://api.tzkt.io/v1/operations/originations/${result.opHash}`)
-              .then(response => {
-
-                // Send the originated contract to the UI via context
-                const { originatedContract } = response
-                this.setState({ originatedContract }) // save hash
-
-                // We have got our contract address
-                this.state.setFeedback({
-                  message: 'Collaborative contract created successfully',
-                  progress: true,
-                  confirm: false,
-                })
-
-                // Hide after a second
-                setTimeout(() => {
-                  this.state.setFeedback({
-                    visible: false,
-                  })
-                }, 1000)
-              })
+            // Set the operation hash to trigger the countdown that checks for the originated contract
+            this.setState({
+              originationOpHash: result.opHash
+            })
           })
           .catch(e => {
             this.state.setFeedback({
