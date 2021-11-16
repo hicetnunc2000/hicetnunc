@@ -183,6 +183,11 @@ async function fetchV1Swaps(address) {
   if (errors) {
     console.error(errors)
   }
+
+  if (!data) {
+    return
+  }
+
   const result = data.hic_et_nunc_swap
   // console.log('swapresultv1 ' + JSON.stringify(result))
   return result
