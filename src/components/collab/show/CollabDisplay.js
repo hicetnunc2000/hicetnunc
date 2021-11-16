@@ -25,7 +25,6 @@ export const CollabDisplay = () => {
     const [contractInfo, setContractInfo] = useState()
     const [showBeneficiaries, setShowBeneficiaries] = useState(false)
     const [logo, setLogo] = useState()
-    const history = useHistory()
 
     const chunkSize = 20
     const [items, setItems] = useState([])
@@ -50,8 +49,6 @@ export const CollabDisplay = () => {
 
         const key = name ? 'subjkt' : 'address'
         const value = name || id
-
-        console.log({ queryToUse, key, value })
 
         fetchGraphQL(queryToUse, 'GetCollabCreations', {
             [key]: value,
@@ -183,6 +180,11 @@ export const CollabDisplay = () => {
 
             {/* <div>Tab selection here</div> */}
 
+            {!loading && items.length === 0 && (
+                <Container>
+                    <p>This collab has no OBJKT creations to display</p>
+                </Container>
+            )}
 
             {!loading && (
                 <Container xlarge>
