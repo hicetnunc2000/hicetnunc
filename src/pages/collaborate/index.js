@@ -6,6 +6,7 @@ import { CreateCollaboration } from './tabs'
 import { Menu } from '../../components/menu'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
 import { CollabContractsOverview } from './tabs/manage'
+import { useParams } from 'react-router'
 
 const TABS = [
     { title: 'manage', component: CollabContractsOverview },
@@ -18,6 +19,13 @@ const Collaborate = () => {
 
     // We watch for this being created so we can change from create to manage
     const { originationOpHash } = useContext(HicetnuncContext)
+
+    const { action } = useParams();
+
+    useEffect(() => {
+        const tabIndex = TABS.findIndex(t => t.title === action)
+        setTabIndex(Math.max(tabIndex, 0))
+    }, [action])
 
     // If an address is created, update the tab
     useEffect(() => {

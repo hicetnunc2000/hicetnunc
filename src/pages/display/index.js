@@ -613,7 +613,7 @@ export default class Display extends Component {
     const slug = window.location.pathname.split('/')[this.state.subjkt !== '' ? 2 : 3];
 
     // Make sure it's in the allowed tabs. If not, default to creations
-    let tabFunc = ['creations', 'collection', 'collabs'].indexOf(slug) > -1 ? slug : 'creations';
+    let tabFunc = (['creations', 'collection', 'collabs'].find(s => s === slug)) || 'creations';
 
     // Strangely named function for collection
     if (slug === 'collection') {

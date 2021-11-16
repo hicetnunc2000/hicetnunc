@@ -70,7 +70,7 @@ export const routes = [
   },
   {
     exact: false,
-    path: '/collaborate',
+    path: '/collaborate/:action?',
     component: Collaborate,
   },
   {
