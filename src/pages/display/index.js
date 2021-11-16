@@ -548,9 +548,6 @@ export default class Display extends Component {
   }
 
   collabs = async () => {
-
-    console.log("Loading collabs")
-
     let list = await getRestrictedAddresses()
 
     if (!list.includes(this.state.wallet)) {
@@ -569,7 +566,6 @@ export default class Display extends Component {
 
   updateLocation = (slug) => {
     const { subjkt, wallet } = this.state
-    console.log("updateLocation", subjkt, wallet, slug)
     this.props.history.push(`/${subjkt === '' ? wallet : subjkt}/${slug}`)
   }
 
@@ -640,6 +636,8 @@ export default class Display extends Component {
       return `${this.state.copied ? `${spaces}Copied${spaces}` : `${this.state.discord}`}`;
     }
   }
+
+  // const isCollab = this.state.wallet
 
   render() {
     return (
@@ -794,40 +792,40 @@ export default class Display extends Component {
           </Padding>
         </Container>
 
-        <Container>
-          <Padding>
-            <p>
-            </p>
-            <div className={styles.menu}>
-              <Button onClick={this.creations}>
-                <Primary selected={this.state.creationsState}>
-                  creations
-                </Primary>
-              </Button>
-              <Button onClick={this.collectionFull}>
-                <Primary selected={this.state.collectionState}>
-                  collection
-                </Primary>
-              </Button>
-              <Button onClick={this.collabs}>
-                <Primary selected={this.state.collabsState}>
-                  collabs
-                </Primary>
-              </Button>
-              <div className={styles.filter}>
-                <Button onClick={() => this.setState({
-                  filter: !this.state.filter
-                })}>
-                  <Primary>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-filter">
-                      <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
-                    </svg>
+        {this.state.wallet.substr(0, 2) !== 'KT' && (
+          <Container>
+            <Padding>
+              <div className={styles.menu}>
+                <Button onClick={this.creations}>
+                  <Primary selected={this.state.creationsState}>
+                    creations
                   </Primary>
                 </Button>
+                <Button onClick={this.collectionFull}>
+                  <Primary selected={this.state.collectionState}>
+                    collection
+                  </Primary>
+                </Button>
+                <Button onClick={this.collabs}>
+                  <Primary selected={this.state.collabsState}>
+                    collabs
+                  </Primary>
+                </Button>
+                <div className={styles.filter}>
+                  <Button onClick={() => this.setState({
+                    filter: !this.state.filter
+                  })}>
+                    <Primary>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="feather feather-filter">
+                        <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+                      </svg>
+                    </Primary>
+                  </Button>
+                </div>
               </div>
-            </div>
-          </Padding>
-        </Container>
+            </Padding>
+          </Container>
+        )}
 
         {this.state.loading && (
           <Container>

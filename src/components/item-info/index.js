@@ -115,21 +115,26 @@ export const ItemInfo = ({
         <div style={{ height: '30px' }}></div>
         <div className={styles.container}>
           <div className={styles.edition}>
-            <div className={styles.inline}>
-              {isCollab && (
-                <CollabIssuerInfo creator={creator} />
-              )}
 
-              {!isCollab && (
-                <Button to={`/tz/${creator.address}`}>
-                  {creator.name ? (
-                    <Primary>{encodeURI(creator.name)}</Primary>
-                  ) : (
-                    <Primary>{walletPreview(creator.address)}</Primary>
-                  )}
-                </Button>
-              )}
+            <div className={collabStyles.relative}>
+              <div className={styles.inline}>
+
+                {isCollab && (
+                  <CollabIssuerInfo creator={creator} />
+                )}
+
+                {!isCollab && (
+                  <Button to={`/${PATH.ISSUER}/${creator.address}`}>
+                    {creator.name ? (
+                      <Primary>{encodeURI(creator.name)}</Primary>
+                    ) : (
+                      <Primary>{walletPreview(creator.address)}</Primary>
+                    )}
+                  </Button>
+                )}
+              </div>
             </div>
+
             {!feed && (
               <div>
                 <p>
@@ -143,6 +148,7 @@ export const ItemInfo = ({
               </div>
             )}
           </div>
+
           {feed && (
             <div className={styles.objktContainer}>
               <Button to={`${PATH.OBJKT}/${id}`} disabled={isDetailView}>
@@ -161,32 +167,34 @@ export const ItemInfo = ({
 
         {isDetailView && !restricted && (
           <div className={styles.spread}>
-            <p style={{ paddingBottom: '7.5px' }}>OBJKT#{id}</p>
-            {isCollab && (
-              <div className={collabStyles.relative}>
-                <span>{verifiedSymbol}</span>
-                <Button onClick={() => setShowSignStatus(!showSignStatus)}>
-                  <Primary>
-                    <strong>{verifiedStatus}</strong>
-                  </Primary>
-                </Button>
-                {showSignStatus && (
-                  <div className={collabStyles.collabInfo}>
-                    <div className={signStatusStyles}>
-                      <SigningSummary
-                        coreParticipants={coreParticipants}
-                        signatures={token_signatures}
-                      />
-                      <Button onClick={() => setShowSignStatus(false)}>
-                        <Secondary>
-                          close
-                        </Secondary>
-                      </Button>
+            <div>
+              <p style={{ paddingBottom: '7.5px' }}>OBJKT#{id}</p>
+              {isCollab && (
+                <div className={collabStyles.relative}>
+                  <span>{verifiedSymbol}</span>
+                  <Button onClick={() => setShowSignStatus(!showSignStatus)}>
+                    <Primary>
+                      <strong>{verifiedStatus}</strong>
+                    </Primary>
+                  </Button>
+                  {showSignStatus && (
+                    <div className={collabStyles.collabInfo}>
+                      <div className={signStatusStyles}>
+                        <SigningSummary
+                          coreParticipants={coreParticipants}
+                          signatures={token_signatures}
+                        />
+                        <Button onClick={() => setShowSignStatus(false)}>
+                          <Secondary>
+                            close
+                          </Secondary>
+                        </Button>
+                      </div>
                     </div>
-                  </div>
-                )}
-              </div>
-            )}
+                  )}
+                </div>
+              )}
+            </div>
             <Button onClick={() => handleCollect()}>
               <Purchase>{message}</Purchase>
             </Button>

@@ -91,6 +91,7 @@ trades(order_by: {timestamp: asc}) {
   swap {
     price
   }
+  
   seller {
     address
     name
@@ -107,12 +108,13 @@ trades(order_by: {timestamp: asc}) {
 
 async function fetchObjkt(id) {
 
-  const { errors, data } = await fetchGraphQL(query_objkt, 'objkt', {
-    id: id
-  })
+  const { errors, data } = await fetchGraphQL(query_objkt, 'objkt', { id })
   if (errors) {
     console.error(errors)
   }
+
+  console.log(errors, data)
+
   const result = data.hic_et_nunc_token_by_pk
   console.log(result)
   return result
@@ -145,11 +147,11 @@ export const ObjktDisplay = () => {
   const address = context.acc?.address
   const proxy = context.getProxy()
   const getRestrictedAddresses = async () =>
-  await axios
-    .get(
-      'https://raw.githubusercontent.com/hicetnunc2000/hicetnunc-reports/main/filters/w.json'
-    )
-    .then((res) => res.data)
+    await axios
+      .get(
+        'https://raw.githubusercontent.com/hicetnunc2000/hicetnunc-reports/main/filters/w.json'
+      )
+      .then((res) => res.data)
   useEffect(async () => {
     let objkt = await fetchObjkt(id)
 

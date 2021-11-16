@@ -35,6 +35,9 @@ export const CollabParticipantInfo = ({ collabData, expanded = false }) => {
 
     const displayName = name || address
 
+    // TODO: Sort out better path naming in constants file for /kt vs. /collab
+    const path = name ? `/collab/${name}` : `${PATH.COLLAB}/${address}`
+
     return (
         <li className={listStyle} key={address}>
             <div className={styles.fullWidth}>
@@ -44,7 +47,7 @@ export const CollabParticipantInfo = ({ collabData, expanded = false }) => {
                         <Fragment>
                             <h3>
                                 <strong>
-                                    <Link to={`${PATH.COLLAB}/${address}`}>{displayName}</Link>
+                                    <Link to={path}>{displayName}</Link>
                                 </strong>
                             </h3>
                         </Fragment>
