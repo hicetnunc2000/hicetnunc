@@ -326,18 +326,20 @@ class HicetnuncContextProviderClass extends Component {
           .catch((error) => console.log(error))
       },
 
-      proxyAddress: null,
-
       // This will be set after creating a new collab
       // but we don't want to auto-sign in
       originatedContract: null,
 
-      setProxyAddress: (proxyAddress) => {
+      setProxyAddress: (proxyAddress, proxyName) => {
         // setting proxy updates objkt contract as well:
         this.setState({
-          proxyAddress: proxyAddress,
-          // objkt: proxyAddress || 'KT1Hkg5qeNhfwpKW4fXvq7HGZB9z2EnmCCA9'
+          proxyAddress,
+          proxyName,
         });
+
+        // Store in local storage too for retrieval later
+        ls.set('collab_address', proxyAddress)
+        ls.set('collab_name', proxyName)
       },
 
       // Do we need this? proxyAddress will push to UI via context
@@ -559,9 +561,10 @@ class HicetnuncContextProviderClass extends Component {
       },
 
       registry: async (alias, metadata) => {
-        console.log(metadata)
+        // console.log(metadata)
         const subjktAddressOrProxy = this.state.proxyAddress || this.state.subjkt
-        return await Tezos.wallet.at(this.state.subjkt).then((c) =>
+
+        return await Tezos.wallet.at(subjktAddressOrProxy).then((c) =>
           c.methods
             .registry(
               ('ipfs://' + metadata.path)
