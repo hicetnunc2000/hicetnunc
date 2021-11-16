@@ -752,6 +752,7 @@ export class Search extends Component {
         <Container>
           <Padding>
                 <Input
+                style={{ left : '5px' }}
                   type="text"
                   name="search"
                   onChange={this.handleChange}
@@ -761,7 +762,7 @@ export class Search extends Component {
                 />
             {
               <div style={{ marginTop: '15px' }}>
-                {this.state.tags.map(e => <a className='tag' href='#' onClick={() => {
+                {this.state.tags.map((e,i) => <a className='tag' href='#' key={`tag-${i}`} onClick={() => {
                   this.update(e.value, true)
                 }}>{e.value} </a>)}
               </div>
