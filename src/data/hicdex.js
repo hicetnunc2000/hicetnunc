@@ -105,7 +105,7 @@ hic_et_nunc_shareholder(where: {holder_id: {_eq: $address}, holder_type: {_eq: "
     contract {
       address
       name
-      tokens {
+      tokens(where: {supply: {_gt: "0"}}) {
         id
         is_signed
         artifact_uri
