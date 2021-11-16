@@ -11,13 +11,14 @@ export const CollabIssuerInfo = ({ creator }) => {
     const [showCollabSummary, setShowCollabSummary] = useState(false)
 
     const coreParticipants = creator.shares[0].shareholder.filter(h => h.holder_type === CollaboratorType.CORE_PARTICIPANT)
+    const path = name ? `/collab/${name}` : `${PATH.COLLAB}/${address}`
 
     return (
         <div>
-            <a className={styles.issuerBtn} href={`${PATH.COLLAB}/${address}`} onMouseOver={() => setShowCollabSummary(true)} onMouseOut={() => setShowCollabSummary(false)}>
+            <a className={styles.issuerBtn} href={path} onMouseOver={() => setShowCollabSummary(true)} onMouseOut={() => setShowCollabSummary(false)}>
                 <Primary>{name !== "" ? name : walletPreview(address)}</Primary>
             </a>
-            
+
             {showCollabSummary && (
                 <div className={styles.collabInfo}>
                     <ParticipantList title={false} participants={coreParticipants} />

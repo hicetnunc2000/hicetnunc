@@ -1,4 +1,4 @@
-import { Redirect, useParams } from 'react-router'
+import { Redirect, useHistory, useParams } from 'react-router'
 import { useEffect, useState, useContext } from 'react'
 import { PATH } from '../../../constants'
 import { Loading } from '../../loading'
@@ -9,26 +9,23 @@ import { Button, Primary } from '../../button'
 import styles from '../../../pages/display/styles.module.scss'
 import { walletPreview } from '../../../utils/string'
 import { Identicon } from '../../identicons'
-import { fetchGraphQL, getCollabCreations } from '../../../data/hicdex'
+import { fetchGraphQL, fetchUserMetadataFile, getCollabCreationsByAddress, getCollabCreationsBySubjkt } from '../../../data/hicdex'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import collabStyles from '../styles.module.scss'
 import classNames from 'classnames'
 import { CollaboratorType, TabIndex } from '../constants'
 import { ParticipantList } from '../manage/ParticipantList'
+import axios from 'axios'
 // import QRCode from 'react-qr-code'
 
 export const CollabDisplay = () => {
 
-    console.log("CollabDisplay loaded")
-
     // Local state
-    const [tabIndex, setTabIndex] = useState(TabIndex.CREATIONS)
     const [creations, setCreations] = useState([])
     const [contractInfo, setContractInfo] = useState()
     const [showBeneficiaries, setShowBeneficiaries] = useState(false)
-    // const [collaborators, setCollaborators] = useState([])
-    // const [displayName, setDisplayName] = useState()
-    // const [address, setAddress] = useState()
+    const [logo, setLogo] = useState()
+    const history = useHistory()
 
     const chunkSize = 20
     const [items, setItems] = useState([])
@@ -36,13 +33,29 @@ export const CollabDisplay = () => {
     const [loading, setLoading] = useState(true)
 
     // The route passes the contract address in as parameter "id"
-    const { id, tab } = useParams()
+    const { id, name } = useParams()
 
+    // one of the two will be supplied
+
+    // contract id route - ie. /kt/:id 
     useEffect(() => {
-        fetchGraphQL(getCollabCreations, 'GetCollabCreations', {
-            address: id,
+        if (!id && !name) {
+            return
+        }
+
+        // The query will depend on what has been supplied
+        const queryToUse = name ?
+            getCollabCreationsBySubjkt :
+            getCollabCreationsByAddress
+
+        const key = name ? 'subjkt' : 'address'
+        const value = name || id
+
+        console.log({ queryToUse, key, value })
+
+        fetchGraphQL(queryToUse, 'GetCollabCreations', {
+            [key]: value,
         }).then(({ data, errors }) => {
-            // console.log("CollabDisplay", data)
             if (data) {
                 setCreations(data.hic_et_nunc_token)
                 setContractInfo(data.hic_et_nunc_splitcontract[0])
@@ -50,7 +63,7 @@ export const CollabDisplay = () => {
 
             setLoading(false)
         })
-    }, [id])
+    }, [id, name])
 
     useEffect(() => {
         if (items.length === 0 && creations.length > 0) {
@@ -64,6 +77,27 @@ export const CollabDisplay = () => {
         }
     }, [offset])
 
+    useEffect(() => {
+        if (!contractInfo) {
+            return;
+        }
+
+        const fetchMeta = async () => {
+            const res = await fetchUserMetadataFile(contractInfo.contract.name)
+            const metadataFile = res[0] ? res[0].metadata_file : false;
+
+            if (metadataFile) {
+                axios.get(`https://cloudflare-ipfs.com/ipfs/${metadataFile.split('//')[1]}`)
+                    .then(({ data }) => {
+                        setLogo(data.identicon)
+                    })
+            }
+        }
+
+        fetchMeta().catch(error => console.log("Error retrieving meta file", error));
+
+    }, [contractInfo])
+
     const headerClass = classNames(
         styles.profile,
         collabStyles.mb4,
@@ -72,12 +106,10 @@ export const CollabDisplay = () => {
     )
 
     const infoPanelClass = classNames(collabStyles.flex, collabStyles.flexBetween)
-
-    const displayName = contractInfo ? (contractInfo.contract.name || contractInfo.contract.address) : ''
+    const displayName = contractInfo?.contract.name || contractInfo?.contract.address || ''
     const address = contractInfo?.contract.address
     const description = contractInfo?.contract.description
     const descriptionClass = classNames(collabStyles.pt1, collabStyles.muted)
-    const logo = null // TODO: where does this come from?
 
     // Core participants
     const coreParticipants = contractInfo?.shareholder
@@ -148,7 +180,7 @@ export const CollabDisplay = () => {
                 </Container>
             )}
 
-                                
+
             {/* <div>Tab selection here</div> */}
 
 

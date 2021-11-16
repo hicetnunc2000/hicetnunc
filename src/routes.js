@@ -45,6 +45,11 @@ export const routes = [
   },
   {
     exact: false,
+    path: '/collab/:name',
+    component: CollabDisplay,
+  },
+  {
+    exact: false,
     path: '/about',
     component: About,
   },

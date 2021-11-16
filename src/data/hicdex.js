@@ -21,7 +21,7 @@ hic_et_nunc_splitcontract(where: {administrator: {_eq: $address}}) {
 }
 }`
 
-export const getCollabCreations = `query GetCollabCreations($address: String!) {
+export const getCollabCreationsByAddress = `query GetCollabCreations($address: String!) {
 hic_et_nunc_token(where: {creator: {is_split: {_eq: true}, address: {_eq: $address}}, supply: {_gt: 0}}, order_by: {id: desc}) {
   id
   artifact_uri
@@ -55,6 +55,49 @@ hic_et_nunc_splitcontract(where: {contract_id: {_eq: $address}}) {
   }
 }
 }`
+
+export const getCollabCreationsBySubjkt = `query GetCollabCreations($subjkt: String!) {
+  hic_et_nunc_token(where: {creator: {is_split: {_eq: true}, name: {_eq: $subjkt}}, supply: {_gt: 0}}, order_by: {id: desc}) {
+    id
+    artifact_uri
+    display_uri
+    thumbnail_uri
+    timestamp
+    mime
+    title
+    description
+    supply
+    token_tags {
+      tag {
+        tag
+      }
+    }
+  }
+  
+  hic_et_nunc_splitcontract(where: {contract: {name: {_eq: $subjkt}}}) {
+    administrator
+    shareholder {
+      holder {
+        address
+        name
+      }
+      holder_type
+    }
+    contract {
+      name
+      description
+      address
+    }
+  }
+}`
+
+export const getUserMetadataFile = `
+query subjktsQuery($subjkt: String!) {
+  hic_et_nunc_holder(where: { name: {_eq: $subjkt}}) {
+    metadata_file
+  }
+}
+`
 
 export const getCollabTokensForAddress = `query GetCollabTokens($address: String!) {
 hic_et_nunc_shareholder(where: {holder_id: {_eq: $address}, holder_type: {_eq: "core_participant"}}) {
@@ -129,26 +172,36 @@ hic_et_nunc_holder(where: {address: {_eq: $address}}) {
 }
 }`
 
-export async function fetchGraphQL(operationsDoc, operationName, variables) {
-const result = await fetch(
-  process.env.REACT_APP_GRAPHQL_API,
-  {
-    method: "POST",
-    body: JSON.stringify({
-      query: operationsDoc,
-      variables: variables,
-      operationName: operationName
-    })
+export async function fetchUserMetadataFile(subjkt) {
+  const { errors, data } = await fetchGraphQL(getUserMetadataFile, 'subjktsQuery', { subjkt })
+
+  if (errors) {
+    console.error(errors)
   }
-);
 
-console.log(JSON.stringify({
-  query: operationsDoc,
-  variables: variables,
-  operationName: operationName
-}))
+  return data.hic_et_nunc_holder
+}
 
-return await result.json()
+export async function fetchGraphQL(operationsDoc, operationName, variables) {
+  const result = await fetch(
+    process.env.REACT_APP_GRAPHQL_API,
+    {
+      method: "POST",
+      body: JSON.stringify({
+        query: operationsDoc,
+        variables: variables,
+        operationName: operationName
+      })
+    }
+  );
+
+  console.log(JSON.stringify({
+    query: operationsDoc,
+    variables: variables,
+    operationName: operationName
+  }))
+
+  return await result.json()
 }
 
 
