@@ -60,7 +60,7 @@ const Packer = new MichelCodecPacker();
 
 function modifyFeeAndLimit(op) {
   const { fee, gas_limit, storage_limit, ...rest } = op;
-  
+
   if (op.parameters && (op.parameters.entrypoint === "swap") || (op.parameters.entrypoint === "mint_OBJKT") || (op.parameters.entrypoint === "collect")) {
     rest.storage_limit = 310
   }
@@ -203,6 +203,45 @@ class HicetnuncContextProviderClass extends Component {
           },
         ]
 
+        let batch = await Tezos.wallet.batch(list);
+        return await batch.send()
+      },
+
+      reswapv2: async (swap) => {
+        let xtz_per_objkt = document.getElementById("new_price").value
+        if (typeof (xtz_per_objkt) == 'undefined' || !xtz_per_objkt) return;
+        if (parseFloat(xtz_per_objkt) == NaN) return;
+        if (parseFloat(xtz_per_objkt) <= 0.0) return;
+
+        let objkt_id = swap.token.id
+        let creator = swap.token.creator_id
+        let from = swap.creator_id
+        let price = parseFloat(xtz_per_objkt) * 1000000
+
+        let objkts = await Tezos.wallet.at(this.state.objkts)
+        await Tezos.wallet.at(this.state.v2).then(c => console.log(c.parameterSchema.ExtractSignatures()))
+        let marketplace = await Tezos.wallet.at(this.state.v2)
+        let list = []
+        // cancel current swap
+        list.push({
+          kind: OpKind.TRANSACTION,
+          ...marketplace.methods.cancel_swap(parseFloat(swap.id)).toTransferParams({ amount: 0, mutez: true, storageLimit: 310 })
+        })
+        // swap with new price
+        list.push(
+          {
+            kind: OpKind.TRANSACTION,
+            ...objkts.methods.update_operators([{ add_operator: { operator: this.state.v2, token_id: parseFloat(objkt_id), owner: from } }])
+              .toTransferParams({ amount: 0, mutez: true, storageLimit: 100 })
+          }
+        )
+        list.push(
+          {
+            kind: OpKind.TRANSACTION,
+            ...marketplace.methods.swap(creator, parseFloat(swap.amount_left), parseFloat(objkt_id), parseFloat(swap.royalties), price).toTransferParams({ amount: 0, mutez: true, storageLimit: 250 })
+          }
+        )
+        console.log(list)
         let batch = await Tezos.wallet.batch(list);
         return await batch.send()
       },
@@ -695,7 +734,7 @@ class HicetnuncContextProviderClass extends Component {
         })
       },
 
-      /* 
+      /*
             airgap/thanos interop methods
       */
       operationRequest: async (obj) => {
