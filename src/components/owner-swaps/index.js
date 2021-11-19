@@ -8,7 +8,7 @@ const sortByPrice = (a, b) => {
   return Number(a.xtz_per_objkt) - Number(b.xtz_per_objkt)
 }
 
-export const OwnerSwaps = ({ swaps, handleCollect, cancel, proxyAdminAddress, restricted, ban, cancelv1 }) => {
+export const OwnerSwaps = ({ swaps, handleCollect, cancel, proxyAdminAddress, restricted, ban, cancelv1, reswapv2 }) => {
 
   console.log("SWAPS", proxyAdminAddress);
 
@@ -75,16 +75,24 @@ export const OwnerSwaps = ({ swaps, handleCollect, cancel, proxyAdminAddress, re
             <div className={styles.buttons}>
               {!restricted && (
                 !ban.includes(swap.creator_id) && (
-                  <Button onClick={() => handleCollect(swap.id, swap.price)}>
-                    <Purchase>
-                      collect for {parseFloat(swap.price / 1000000)} tez
-                    </Purchase>
-                  </Button>
-                ))}
+                <Button onClick={() => handleCollect(swap.id, swap.price)}>
+                  <Purchase>
+                    collect for {parseFloat(swap.price / 1000000)} tez
+                  </Purchase>
+                </Button>
+              ))}
               {showCancel && (
-                  <Button onClick={() => cancel(swap.id)}>
-                    <Purchase>cancel</Purchase>
-                  </Button>
+                  <>
+                    <div className={styles.break}></div>
+                    <input id="new_price" type="text" size="12" placeholder="New price"></input>
+                    <Button onClick={() => reswapv2(swap)}>
+                      <Purchase>reswap</Purchase>
+                    </Button>
+
+                    <Button onClick={() => cancel(swap.id)}>
+                      <Purchase>cancel</Purchase>
+                    </Button>
+                  </>
                 )}
             </div>
           </div>
