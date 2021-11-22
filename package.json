@@ -24,7 +24,7 @@
     "fetch": "^1.1.0",
     "fflate": "^0.7.0",
     "filereader": "^0.10.3",
-    "framer-motion": "^4.1.16",
+    "framer-motion": "^5.3.1",
     "ipfs-api": "^26.1.2",
     "ipfs-http-client": "^53.0.1",
     "local-storage": "^2.0.0",
