@@ -1,13 +1,18 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Button, Primary, Purchase } from '../button'
 import { walletPreview } from '../../utils/string'
 import styles from './styles.module.scss'
+import { HicetnuncContext } from '../../context/HicetnuncContext'
 
 const sortByPrice = (a, b) => {
   return Number(a.xtz_per_objkt) - Number(b.xtz_per_objkt)
 }
 
-export const OwnerSwaps = ({ swaps, handleCollect, acc, proxyAddress, cancel, restricted, ban, cancelv1 }) => {
+export const OwnerSwaps = ({ swaps, handleCollect, cancel, proxyAdminAddress, restricted, ban, cancelv1 }) => {
+
+  console.log("SWAPS", proxyAdminAddress);
+
+  const { acc, proxyAddress } = useContext(HicetnuncContext)
 
   let v2 = swaps.filter(e => parseInt(e.contract_version) === 2 && parseInt(e.status) === 0 && e.is_valid)
 
@@ -50,7 +55,7 @@ export const OwnerSwaps = ({ swaps, handleCollect, acc, proxyAddress, cancel, re
       }
       {v2.sort(sortByPrice).map((swap, index) => {
 
-        const showCancel = (swap.creator.address === acc?.address) || (proxyAddress === acc?.address && swap.creator.address === proxyAddress)
+        const showCancel = (swap.creator.address === acc?.address) || (proxyAdminAddress === acc?.address && swap.creator.address === proxyAddress)
 
         return (
           <div key={`${swap.id}-${index}`} className={styles.swap}>

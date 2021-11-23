@@ -22,7 +22,7 @@ hic_et_nunc_splitcontract(where: {administrator: {_eq: $address}}) {
 }`
 
 export const getCollabCreationsByAddress = `query GetCollabCreations($address: String!) {
-hic_et_nunc_token(where: {creator: {is_split: {_eq: true}, address: {_eq: $address}}, supply: {_gt: 0}}, order_by: {id: desc}) {
+hic_et_nunc_token(where: {creator: {is_split: {_eq: true}, address: {_eq: $address}}, supply: {_gt: "0"}}, order_by: {id: desc}) {
   id
   artifact_uri
   display_uri
