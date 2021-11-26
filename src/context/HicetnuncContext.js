@@ -101,8 +101,8 @@ class HicetnuncContextProviderClass extends Component {
       proxyFactoryAddress: 'KT1DoyD6kr8yLK8mRBFusyKYJUk2ZxNHKP1N',
       signingContractAddress: 'KT1BcLnWRziLDNJNRn3phAANKrEBiXhytsMY',
 
-      lastId : undefined,
-      setId : (id) => this.setState({ lastId : id }),
+      lastId: undefined,
+      setId: (id) => this.setState({ lastId: id }),
 
       subjktInfo: {},
       setSubjktInfo: (subjkt) => this.setState({ subjktInfo: subjkt }),
@@ -254,10 +254,10 @@ class HicetnuncContextProviderClass extends Component {
       setFeedback: (props) =>
         this.setState({ feedback: { ...this.state.feedback, ...props } }),
 
-      progress : undefined,
-      setProgress : (bool) => this.setState({ progress : bool }),
+      progress: undefined,
+      setProgress: (bool) => this.setState({ progress: bool }),
       message: undefined,
-      setMessage : (str) => this.setState({ message : str }),
+      setMessage: (str) => this.setState({ message: str }),
       // --------------------
       // feedback component end
       // --------------------
@@ -289,7 +289,7 @@ class HicetnuncContextProviderClass extends Component {
 
       client: null,
 
-       // Signed in collab address (if applicable)
+      // Signed in collab address (if applicable)
       // We will retrieve from local storage
       proxyAddress: ls.get('collab_address'),
       proxyName: ls.get('collab_name'),
@@ -445,17 +445,17 @@ class HicetnuncContextProviderClass extends Component {
 
       curate: async (objkt_id) => {
         await Tezos.wallet
-              .at(this.state.v1)
-              .then((c) =>
-                c.methods
-                  .curate(
-                    ls.get('hDAO_config') != null
-                      ? parseInt(ls.get('hDAO_config'))
-                      : 1,
-                    objkt_id
-                  )
-                  .send()
+          .at(this.state.v1)
+          .then((c) =>
+            c.methods
+              .curate(
+                ls.get('hDAO_config') != null
+                  ? parseInt(ls.get('hDAO_config'))
+                  : 1,
+                objkt_id
               )
+              .send()
+          )
       },
 
       sign: async (objkt_id) => {
@@ -492,13 +492,28 @@ class HicetnuncContextProviderClass extends Component {
         return await batch.send()
       },
 
+      transfer: async (txs) => {
+        const { proxyAddress } = this.state;
+
+        await Tezos.wallet
+          .at(proxyAddress)
+          .then(async (c) => c.methods.transfer([
+                {
+                  from_: proxyAddress,
+                  txs,
+                },
+              ])
+              .send()
+          )
+      },
+
       burn: async (objkt_id, amount) => {
         var tz = await wallet.client.getActiveAccount()
         const objktsOrProxy = this.state.proxyAddress || this.state.objkts;
         const addressFrom = this.state.proxyAddress || tz.address;
 
         console.log("Using", objktsOrProxy, "for burn");
-        
+
         await Tezos.wallet
           .at(objktsOrProxy)
           .then(async (c) =>
@@ -718,11 +733,11 @@ class HicetnuncContextProviderClass extends Component {
 
       collapsed: true,
 
-      feed : [],
+      feed: [],
 
-      offset : 0,
+      offset: 0,
 
-      setFeed : (arr) => this.setState({ feed : arr }),
+      setFeed: (arr) => this.setState({ feed: arr }),
 
       toogleNavbar: () => {
         this.setState({ collapsed: !this.state.collapsed })
@@ -748,7 +763,7 @@ class HicetnuncContextProviderClass extends Component {
           title: title,
         })
       },
-      
+
       hDAO_vote: ls.get('hDAO_vote'),
 
       mockProxy: async () => {

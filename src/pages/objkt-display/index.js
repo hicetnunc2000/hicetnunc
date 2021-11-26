@@ -12,6 +12,7 @@ import { Menu } from '../../components/menu'
 import { Info, Collectors, Swap, Burn, History } from './tabs'
 import styles from './styles.module.scss'
 import './style.css'
+import { Transfer } from '../../components/collab/show/Transfer'
 
 const axios = require('axios')
 
@@ -21,6 +22,7 @@ const TABS = [
   { title: 'history', component: History },
   { title: 'swap', component: Swap, private: true, restricted: true }, // private tab (users only see if they are the creators or own a copy)
   { title: 'burn', component: Burn, private: true }, // private tab (users only see if they are the creators or own a copy)
+  { title: 'transfer', component: Transfer, private: true }, // private tab (users only see if they are the creators or own a copy)
 ]
 
 const query_objkt = `
