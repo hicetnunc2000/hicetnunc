@@ -6,7 +6,7 @@ import { OwnerSwaps } from '../../../components/owner-swaps'
 
 const _ = require('lodash')
 
-export const Collectors = ({ owners, swaps, token_holders, restricted, ban }) => {
+export const Collectors = ({ creator, swaps, token_holders, restricted, ban }) => {
   const { syncTaquito, collect, acc, getAccount, cancel, cancelv1 } =
     useContext(HicetnuncContext)
 
@@ -23,6 +23,8 @@ export const Collectors = ({ owners, swaps, token_holders, restricted, ban }) =>
     }
   }
 
+  const proxyAdminAddress = creator.is_split ? creator.shares[0].administrator : null
+
   return (
     <>
       {swaps.length > 0 && (
@@ -32,6 +34,7 @@ export const Collectors = ({ owners, swaps, token_holders, restricted, ban }) =>
               swaps={swaps}
               handleCollect={handleCollect}
               acc={acc}
+              proxyAdminAddress={proxyAdminAddress}
               cancel={cancel}
               cancelv1={cancelv1}
               restricted={restricted}

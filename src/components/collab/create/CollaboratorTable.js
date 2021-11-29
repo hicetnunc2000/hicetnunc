@@ -11,7 +11,11 @@ export const CollaboratorTable = ({ collaborators, setCollaborators, availableSh
 
     // Add collaborator
     const addCollaborator = () => {
-        setCollaborators([...collaborators, { ...collaboratorTemplate }])
+        setCollaborators([
+            ...collaborators, {
+                ...collaboratorTemplate
+            }
+        ])
 
         // If we are in minimal view, go back to full editing mode
         if (minimalView) {
@@ -29,8 +33,15 @@ export const CollaboratorTable = ({ collaborators, setCollaborators, availableSh
     // Update collaborator data
     const onUpdate = (index, collabData) => {
         const updatedCollabs = [...collaborators]
-        updatedCollabs[index] = collabData
-        setCollaborators([...updatedCollabs])
+
+        if (updatedCollabs.length > 1 && updatedCollabs.some((collaborator, i) => collaborator.address === collabData.address && i !== index)) {
+            console.log("Address exists")
+        } else {
+            updatedCollabs[index] = collabData
+        }
+
+        // Remove duplicates
+        setCollaborators(updatedCollabs)
     }
 
     // Handle multiline input - this will set an array of address
@@ -39,7 +50,7 @@ export const CollaboratorTable = ({ collaborators, setCollaborators, availableSh
         if (multilineInput.length) {
             const currentAddresses = collaborators.filter(c => c.address).map(c => c.address)
             const lines = multilineInput.replace(/\r/g, '').split(/\n/)
-            const newAddresses = lines.map(l => extractAddress(l)).filter(a => a)
+            const newAddresses = lines.map(l => extractAddress(l)).filter(a => !!a && currentAddresses.indexOf(a) === -1)
 
             // Combine with existing
             const allAddresses = currentAddresses.concat(newAddresses)
@@ -64,7 +75,7 @@ export const CollaboratorTable = ({ collaborators, setCollaborators, availableSh
                 setCollaborators([{ ...collaboratorTemplate }])
             }
         }
-        
+
     }, [multilineInput, collaborators, setCollaborators, autoSplit, setAutoSplit])
 
     const lastCollab = collaborators[collaborators.length - 1]

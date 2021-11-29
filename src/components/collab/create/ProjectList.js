@@ -4,14 +4,14 @@ import { Secondary } from '../../button'
 import styles from '../styles.module.scss'
 import { ossProjects } from '../constants'
 
-export const ProjectList = ({ benefactors, onSelect }) => {
+export const ProjectList = ({ beneficiaries, onSelect }) => {
     const [showList, setShowList] = useState(false)
 
-    const benefactorAddresses = benefactors.map(b => b.address)
-    const validBenefactors = benefactors.filter(b => b.address && b.shares)
-    const unselectedProjects = ossProjects.filter(project => benefactorAddresses.indexOf(project.address) === -1)
+    const beneficiaryAddresses = beneficiaries.map(b => b.address)
+    const validBeneficiaries = beneficiaries.filter(b => b.address && b.shares)
+    const unselectedProjects = ossProjects.filter(project => beneficiaryAddresses.indexOf(project.address) === -1)
     const btnClass = classNames(styles.btn, {
-        [styles.muted]: showList || unselectedProjects.length < ossProjects.length || validBenefactors.length > 0,
+        [styles.muted]: showList || unselectedProjects.length < ossProjects.length || validBeneficiaries.length > 0,
         [styles.absolute] : showList,
     })
 
