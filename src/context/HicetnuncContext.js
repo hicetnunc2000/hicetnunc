@@ -124,7 +124,11 @@ class HicetnuncContextProviderClass extends Component {
           {
             kind: OpKind.TRANSACTION,
             ...marketplace.methods.collect(swap_id).toTransferParams({ amount: 0, mutez: true, storageLimit: 250 })
-          }
+          },
+          {
+            kind: OpKind.TRANSACTION,
+            ...hDAO.methods.update_operators([{ remove_operator: { operator: this.state.hDAO_marketplace, token_id: parseFloat(0), owner: from } }]).toTransferParams({ amount: 0, mutez: true, storageLimit: 150 })
+          },
         ]
 
         let batch = await Tezos.wallet.batch(list);
@@ -145,6 +149,10 @@ class HicetnuncContextProviderClass extends Component {
           {
             kind: OpKind.TRANSACTION,
             ...marketplace.methods.swap(this.state.hDAO_marketplace, creator, parseFloat(objkt_amount), parseFloat(objkt_id), parseFloat(royalties), parseFloat(0), parseFloat(token_per_objkt)).toTransferParams({ amount: 0, mutez: true, storageLimit: 300 })
+          },
+          {
+            kind: OpKind.TRANSACTION,
+            ...objkts.methods.update_operators([{ remove_operator: { operator: this.state.hDAO_marketplace, token_id: parseFloat(objkt_id), owner: from } }]).toTransferParams({ amount: 0, mutez: true, storageLimit: 175 })
           }
         ]
 
@@ -187,7 +195,12 @@ class HicetnuncContextProviderClass extends Component {
           {
             kind: OpKind.TRANSACTION,
             ...marketplace.methods.swap(creator, parseFloat(objkt_amount), parseFloat(objkt_id), parseFloat(royalties), parseFloat(xtz_per_objkt)).toTransferParams({ amount: 0, mutez: true, storageLimit: 300 })
-          }
+          },
+          {
+            kind: OpKind.TRANSACTION,
+            ...objkts.methods.update_operators([{ remove_operator: { operator: this.state.v2, token_id: parseFloat(objkt_id), owner: ownerAddress } }])
+              .toTransferParams({ amount: 0, mutez: true, storageLimit: 175 })
+          },
         ]
 
         let batch = await Tezos.wallet.batch(list);
