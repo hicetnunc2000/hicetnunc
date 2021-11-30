@@ -197,7 +197,9 @@ export function injectCSPMetaTagIntoHTML(html) {
       https://*.coinmarketcap.com
       https://api.openweathermap.org
       https://hicetnunc.xyz
-      https://*.hicetnunc.xyz;
+      https://*.hicetnunc.xyz
+      https://*.hicetnunc.art
+      https://*.teztools.io;
     manifest-src
       'self';
     base-uri
