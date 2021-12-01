@@ -124,7 +124,7 @@ export const ItemInfo = ({
                 )}
 
                 {!isCollab && (
-                  <Button to={`/${PATH.ISSUER}/${creator.address}`}>
+                  <Button to={`${PATH.ISSUER}/${creator.address}`}>
                     {creator.name ? (
                       <Primary>{encodeURI(creator.name)}</Primary>
                     ) : (
