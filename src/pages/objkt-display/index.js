@@ -165,6 +165,8 @@ export const ObjktDisplay = () => {
     } else {
       objkt.ban = await getRestrictedAddresses()
       objkt.restricted = false
+      // filter swaps from banned account
+      if (objkt.swaps && objkt.ban) objkt.swaps = objkt.swaps.filter(s => (s.status > 0 || !objkt.ban.includes(s.creator_id)))
       setNFT(objkt)
     }
     setLoading(false)
