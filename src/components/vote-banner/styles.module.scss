@@ -19,6 +19,11 @@
     height: 100%;
 
     a {
+        color: var(--background-color);
+        text-decoration: underline;
+    }
+
+    .content__button {
         padding: 0.25rem 1rem;
         color: var(--text-color);
         background-color: var(--background-color);
