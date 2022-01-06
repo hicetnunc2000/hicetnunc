@@ -6,6 +6,7 @@ import { Header } from './components/header'
 import { Loading as Preloading } from './components/loading'
 import { FeedbackComponent } from './components/feedback'
 import { routes } from './routes'
+import { VoteBanner } from './components/vote-banner'
 
 const App = () => {
   const [loading, setLoading] = useState(true)
