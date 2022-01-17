@@ -342,7 +342,7 @@ export default class Display extends Component {
       let res = await fetchSubjkts(decodeURI(window.location.pathname.split('/')[1]))
       // console.log(decodeURI(window.location.pathname.split('/')[1]))
       console.log(res)
-      if (res[0].metadata_file) {
+      if (res[0]?.metadata_file) {
         let meta = await axios.get('https://cloudflare-ipfs.com/ipfs/' + res[0].metadata_file.split('//')[1]).then(res => res.data)
         console.log(meta)
         if (meta.description) this.setState({ description: meta.description })
