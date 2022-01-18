@@ -3,7 +3,7 @@
 
 .input {
   background: none;
-  letter-spacing: $letter-spacing;
+  letter-spacing: 0.015em;
   color: var(--text-color);
 }
 
@@ -53,7 +53,7 @@
 }
 
 .borderBottom {
-  padding-bottom: 1em;
+  // padding-bottom: 1em;
   border-bottom: 1px solid var(--border-color);
 }
 
@@ -109,13 +109,21 @@
   border: 1px dashed var(--border-color);
 }
 
-@for $i from 1 through 3 {
+@for $i from 1 through 4 {
   .mt#{$i} {
     margin-top: #{$i}em;
   }
 
   .mb#{$i} {
     margin-bottom: #{$i}em;
+  }
+
+  .pt#{$i} {
+    padding-top: #{$i}em;
+  }
+
+  .pb#{$i} {
+    padding-bottom: #{$i}em;
   }
 }
 
@@ -125,12 +133,10 @@
 }
 
 .list {
-  // margin-top: 1em;
   list-style: none;
 }
 
 .list li {
-  // height: 1.5em;
   margin-bottom: 6px;
   padding-left: 1em;
 }
@@ -146,6 +152,10 @@
 .flexBetween {
   display: flex;
   justify-content: space-between;
+}
+
+.alignStart {
+  align-items: flex-start;
 }
 
 .tipSelect button {
@@ -192,6 +202,23 @@
   opacity: 0.5;
 }
 
+.border {
+  border: 1px solid var(--border-color);
+  padding: 12px;
+}
+
+.borderBottom {
+  border-bottom: 1px solid var(--border-color);
+}
+
+.pb {
+  padding-bottom: 12px;
+}
+
+.mb {
+  margin-bottom: 12px;
+}
+
 .secondary {
   padding: 2px 6px;
   color: var(--text-color);
@@ -213,9 +240,9 @@
   vertical-align: middle;
   transition: color #{$theme-duration} ease-out;
 
-  + p {
-    letter-spacing: 0;
-  }
+  // + p {
+  //   letter-spacing: 0;
+  // }
 
   &::placeholder {
     color: var(--text-color);
@@ -241,14 +268,91 @@
   position: relative;
 }
 
+.absolute {
+  position: absolute;
+}
+
 .collabInfo {
   position: absolute;
-  top: 100%;
+  z-index: 100;
+  padding: 12px;
   left: 0;
+  top: 24px;
+  left: 0;
+  min-width: 370px;
+  background-color: rgba(var(--background-color-rgb), 0.9);
+  border: 1px solid var(--border-color);
 }
 
 .descriptive {
   margin-bottom: 2em;
   line-height: 1.5;
   color: #999;
+}
+
+.collabTable {
+  th {
+    text-align: left;
+    width: 25%;
+    vertical-align: top;
+    padding: 0.25em;
+    border: none;
+  }
+
+  td {
+    padding: 0.25em;
+    width: 75%;
+    vertical-align: top;
+  }
+}
+
+.infoLabel {
+  display: inline-block;
+  min-width: 180px;
+  opacity: 0.75;
+}
+
+.fullWidth {
+  width: 100%;
+}
+
+.qr {
+  background: white;
+  padding: 5px;
+}
+
+.row input[type="text"] {
+  margin-bottom: 0 !important;
+}
+
+.upload_container {
+  margin-bottom: 10px;
+
+  label {
+    display: block;
+    width: 100%;
+    padding: 6px;
+    border: 2px dashed var(--text-color);
+    text-align: center;
+    cursor: pointer;
+
+    input {
+      display: none;
+      width: 100%;
+    }
+  }
+
+  .allowed {
+    display: inline-flex;
+    font-size: 12px;
+    padding-top: 6px;
+    text-transform: lowercase;
+    opacity: 0.5;
+
+    & > * {
+      &.selected {
+        font-weight: bold;
+      }
+    }
+  }
 }
