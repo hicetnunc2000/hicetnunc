@@ -9,10 +9,10 @@ import { Page, Container, Padding } from '../../components/layout'
 import { renderMediaType } from '../../components/media-types'
 import { ItemInfo } from '../../components/item-info'
 import { Menu } from '../../components/menu'
-import { BottomBanner } from '../../components/bottom-banner'
 import { Info, Collectors, Swap, Burn, History } from './tabs'
 import styles from './styles.module.scss'
 import './style.css'
+import { Transfer } from '../../components/collab/show/Transfer'
 
 const axios = require('axios')
 
@@ -22,6 +22,7 @@ const TABS = [
   { title: 'history', component: History },
   { title: 'swap', component: Swap, private: true, restricted: true }, // private tab (users only see if they are the creators or own a copy)
   { title: 'burn', component: Burn, private: true }, // private tab (users only see if they are the creators or own a copy)
+  { title: 'transfer', component: Transfer, private: true }, // private tab (users only see if they are the creators or own a copy)
 ]
 
 const query_objkt = `
@@ -33,10 +34,26 @@ timestamp
 display_uri
 description
 artifact_uri
+is_signed
 metadata
 creator {
   address
   name
+  is_split
+  shares {
+    administrator
+    shareholder {
+      holder_type
+      holder_id
+      holder {
+        name
+        address
+      }
+    }
+  }
+}
+token_signatures {
+  holder_id
 }
 thumbnail_uri
 title
@@ -75,6 +92,7 @@ trades(order_by: {timestamp: asc}) {
   swap {
     price
   }
+  
   seller {
     address
     name
@@ -91,12 +109,13 @@ trades(order_by: {timestamp: asc}) {
 
 async function fetchObjkt(id) {
 
-  const { errors, data } = await fetchGraphQL(query_objkt, 'objkt', {
-    id: id
-  })
+  const { errors, data } = await fetchGraphQL(query_objkt, 'objkt', { id })
   if (errors) {
     console.error(errors)
   }
+
+  console.log(errors, data)
+
   const result = data.hic_et_nunc_token_by_pk
   console.log(result)
   return result
@@ -129,11 +148,11 @@ export const ObjktDisplay = () => {
   const address = context.acc?.address
   const proxy = context.getProxy()
   const getRestrictedAddresses = async () =>
-  await axios
-    .get(
-      'https://raw.githubusercontent.com/hicetnunc2000/hicetnunc-reports/main/filters/w.json'
-    )
-    .then((res) => res.data)
+    await axios
+      .get(
+        'https://raw.githubusercontent.com/hicetnunc2000/hicetnunc-reports/main/filters/w.json'
+      )
+      .then((res) => res.data)
   useEffect(async () => {
     let objkt = await fetchObjkt(id)
 
@@ -146,6 +165,8 @@ export const ObjktDisplay = () => {
     } else {
       objkt.ban = await getRestrictedAddresses()
       objkt.restricted = false
+      // filter swaps from banned account
+      if (objkt.swaps && objkt.ban) objkt.swaps = objkt.swaps.filter(s => (s.status > 0 || !objkt.ban.includes(s.creator_id)))
       setNFT(objkt)
     }
     setLoading(false)

@@ -31,7 +31,8 @@
   },
   "manage": {
     "creations": "creations",
-    "collection": "collection"
+    "collection": "collection",
+    "collabs": "collabs"
   },
   "about": {
     "title": "hic et nunc",

@@ -67,13 +67,20 @@ export class Config extends Component {
     identicon: '',
     subjktUri: '', // uploads image
     cid: undefined,
+    selectedFile: undefined,
     toogled: false
   }
 
   componentWillMount = async () => {
     await this.context.syncTaquito()
-    this.setState({ address: this.context.acc.address })
-    let res = await fetchTz(this.context.acc.address)
+
+    const { acc, proxyAddress } = this.context
+
+    // Maybe use proxy address here
+    const address = proxyAddress || acc.address
+
+    this.setState({ address })
+    let res = await fetchTz(address)
 
     this.context.subjktInfo = res[0]
     console.log(this.context.subjktInfo)
@@ -148,7 +155,7 @@ export class Config extends Component {
     ls.set('hDAO_config', this.state.vote)
   }
 
-  toogle = () => this.setState({ toogled: !this.state.toogled })
+  toggle = () => this.setState({ toogled: !this.state.toogled })
   /*     
 
    signature studies
@@ -237,7 +244,7 @@ export class Config extends Component {
 
         <Container>
           <Padding>
-            <div onClick={this.toogle}>
+            <div onClick={this.toggle}>
               <Primary>
                 + advanced
               </Primary>

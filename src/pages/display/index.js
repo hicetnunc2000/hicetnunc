@@ -12,6 +12,7 @@ import { VisuallyHidden } from '../../components/visually-hidden'
 import { GetUserMetadata } from '../../data/api'
 import { ResponsiveMasonry } from '../../components/responsive-masonry'
 import InfiniteScroll from 'react-infinite-scroll-component'
+import { CollabsTab } from '../../components/collab/show/CollabsTab'
 import styles from './styles.module.scss'
 
 const axios = require('axios')
@@ -175,25 +176,6 @@ query querySwaps($address: String!) {
 }
 `
 
-async function hDAOClaim(address) {
-  const { errors, data } = await fetchGraphQL(`
-  query hdaoClaim {
-    hic_et_nunc_token(where: {creator_id : {_eq : ${address}}, supply: {_gt: 0}, hdao_balance :{_gt : 0}}) {
-      id
-      hdao_balance
-    }
-  }
-  `, 'hDAOClaim',
-    {})
-
-  if (errors) {
-    console.log(errors)
-  }
-
-  const result = data.hic_et_nunc_token
-  return result
-}
-
 async function fetchV1Swaps(address) {
   const { errors, data } = await fetchGraphQL(query_v1_swaps, 'querySwaps', {
     address: address
@@ -201,6 +183,11 @@ async function fetchV1Swaps(address) {
   if (errors) {
     console.error(errors)
   }
+
+  if (!data) {
+    return
+  }
+
   const result = data.hic_et_nunc_swap
   // console.log('swapresultv1 ' + JSON.stringify(result))
   return result
@@ -293,13 +280,16 @@ export default class Display extends Component {
     objkts: [],
     creations: [],
     collection: [],
+    collabs: [],
     forSale: [],
     notForSale: [],
     marketV1: [],
     items: [],
     creationsState: true,
     collectionState: false,
+    collabsState: false,
     collectionType: 'notForSale',
+    showUnverifiedCollabObjkts: false,
     hdao: 0,
     claim: []
   }
@@ -352,7 +342,7 @@ export default class Display extends Component {
       let res = await fetchSubjkts(decodeURI(window.location.pathname.split('/')[1]))
       // console.log(decodeURI(window.location.pathname.split('/')[1]))
       console.log(res)
-      if (res[0].metadata_file) {
+      if (res[0]?.metadata_file) {
         let meta = await axios.get('https://cloudflare-ipfs.com/ipfs/' + res[0].metadata_file.split('//')[1]).then(res => res.data)
         console.log(meta)
         if (meta.description) this.setState({ description: meta.description })
@@ -406,6 +396,7 @@ export default class Display extends Component {
     this.setState({
       creationsState: true,
       collectionState: false,
+      collabsState: false,
       collectionType: 'notForSale'
     })
 
@@ -527,7 +518,8 @@ export default class Display extends Component {
 
     this.setState({
       creationsState: false,
-      collectionState: true
+      collectionState: true,
+      collabsState: false,
     })
 
     this.setState({ collectionType: 'notForSale' })
@@ -558,6 +550,28 @@ export default class Display extends Component {
       // if tz/wallethash route
       this.props.history.push(`/tz/${this.state.wallet}/collection`)
     }
+  }
+
+  collabs = async () => {
+    let list = await getRestrictedAddresses()
+
+    if (!list.includes(this.state.wallet)) {
+
+      this.setState({
+        objkts: [],
+        loading: true,
+        creationsState: false,
+        collectionState: false,
+        collabsState: true,
+      })
+    }
+
+    this.updateLocation('collabs')
+  }
+
+  updateLocation = (slug) => {
+    const { subjkt, wallet } = this.state
+    this.props.history.push(`/${subjkt === '' ? wallet : subjkt}/${slug}`)
   }
 
   collectionForSale = async () => {
@@ -596,27 +610,17 @@ export default class Display extends Component {
 
   // called if there's no redirect
   onReady = async () => {
+    const slug = window.location.pathname.split('/')[this.state.subjkt !== '' ? 2 : 3];
 
-    // based on route, define initial state
-    if (this.state.subjkt !== '') {
-      // if alias route
-      if (window.location.pathname.split('/')[2] === 'creations') {
-        this.creations()
-      } else if (window.location.pathname.split('/')[2] === 'collection') {
-        this.collectionFull()
-      } else {
-        this.creations()
-      }
-    } else {
-      // if tz wallet route
-      if (window.location.pathname.split('/')[3] === 'creations') {
-        this.creations()
-      } else if (window.location.pathname.split('/')[3] === 'collection') {
-        this.collectionFull()
-      } else {
-        this.creations()
-      }
+    // Make sure it's in the allowed tabs. If not, default to creations
+    let tabFunc = (['creations', 'collection', 'collabs'].find(s => s === slug)) || 'creations';
+
+    // Strangely named function for collection
+    if (slug === 'collection') {
+      tabFunc = 'collectionFull'
     }
+
+    this[tabFunc]()
   }
 
   loadMore = () => {
@@ -637,6 +641,8 @@ export default class Display extends Component {
       return `${this.state.copied ? `${spaces}Copied${spaces}` : `${this.state.discord}`}`;
     }
   }
+
+  // const isCollab = this.state.wallet
 
   render() {
     return (
@@ -671,26 +677,7 @@ export default class Display extends Component {
                 }
 
                 <div>
-                  {/* 
-                  {this.state.telegram && (
-                    <Button href={`https://t.me/${this.state.telegram}`}>
-                      <VisuallyHidden>{`https://t.me/${this.state.telegram}`}</VisuallyHidden>
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="16"
-                        height="16"
-                        fill="currentColor"
-                        viewBox="0 0 16 16"
-                        style={{
-                          fill: 'var(--text-color)',
-                          stroke: 'transparent',
-                          marginRight: '10px',
-                        }}
-                      >
-                        <path d="M9.78,18.65L10.06,14.42L17.74,7.5C18.08,7.19 17.67,7.04 17.22,7.31L7.74,13.3L3.64,12C2.76,11.75 2.75,11.14 3.84,10.7L19.81,4.54C20.54,4.21 21.24,4.72 20.96,5.84L18.24,18.65C18.05,19.56 17.5,19.78 16.74,19.36L12.6,16.3L10.61,18.23C10.38,18.46 10.19,18.65 9.78,18.65Z"></path>
-                      </svg>
-                    </Button>
-                  )} */}
+
                   {this.state.twitter && (
                     <Button href={`https://twitter.com/${this.state.twitter}`}>
                       <VisuallyHidden>{`https://twitter.com/${this.state.twitter}`}</VisuallyHidden>
@@ -710,48 +697,7 @@ export default class Display extends Component {
                       </svg>
                     </Button>
                   )}
-                  {/* {this.state.instagram && (
-                    <Button
-                      href={`https://instagram.com/${this.state.instagram}`}
-                    >
-                      <VisuallyHidden>{`https://instagram.com/${this.state.instagram}`}</VisuallyHidden>
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="16"
-                        height="16"
-                        fill="currentColor"
-                        viewBox="0 0 16 16"
-                        style={{
-                          fill: 'var(--text-color)',
-                          stroke: 'transparent',
-                          marginRight: '10px',
-                        }}
-                      >
-                        <path d="M8 0C5.829 0 5.556.01 4.703.048 3.85.088 3.269.222 2.76.42a3.917 3.917 0 0 0-1.417.923A3.927 3.927 0 0 0 .42 2.76C.222 3.268.087 3.85.048 4.7.01 5.555 0 5.827 0 8.001c0 2.172.01 2.444.048 3.297.04.852.174 1.433.372 1.942.205.526.478.972.923 1.417.444.445.89.719 1.416.923.51.198 1.09.333 1.942.372C5.555 15.99 5.827 16 8 16s2.444-.01 3.298-.048c.851-.04 1.434-.174 1.943-.372a3.916 3.916 0 0 0 1.416-.923c.445-.445.718-.891.923-1.417.197-.509.332-1.09.372-1.942C15.99 10.445 16 10.173 16 8s-.01-2.445-.048-3.299c-.04-.851-.175-1.433-.372-1.941a3.926 3.926 0 0 0-.923-1.417A3.911 3.911 0 0 0 13.24.42c-.51-.198-1.092-.333-1.943-.372C10.443.01 10.172 0 7.998 0h.003zm-.717 1.442h.718c2.136 0 2.389.007 3.232.046.78.035 1.204.166 1.486.275.373.145.64.319.92.599.28.28.453.546.598.92.11.281.24.705.275 1.485.039.843.047 1.096.047 3.231s-.008 2.389-.047 3.232c-.035.78-.166 1.203-.275 1.485a2.47 2.47 0 0 1-.599.919c-.28.28-.546.453-.92.598-.28.11-.704.24-1.485.276-.843.038-1.096.047-3.232.047s-2.39-.009-3.233-.047c-.78-.036-1.203-.166-1.485-.276a2.478 2.478 0 0 1-.92-.598 2.48 2.48 0 0 1-.6-.92c-.109-.281-.24-.705-.275-1.485-.038-.843-.046-1.096-.046-3.233 0-2.136.008-2.388.046-3.231.036-.78.166-1.204.276-1.486.145-.373.319-.64.599-.92.28-.28.546-.453.92-.598.282-.11.705-.24 1.485-.276.738-.034 1.024-.044 2.515-.045v.002zm4.988 1.328a.96.96 0 1 0 0 1.92.96.96 0 0 0 0-1.92zm-4.27 1.122a4.109 4.109 0 1 0 0 8.217 4.109 4.109 0 0 0 0-8.217zm0 1.441a2.667 2.667 0 1 1 0 5.334 2.667 2.667 0 0 1 0-5.334z" />
-                      </svg>
-                    </Button>
-                  )}
-                  {this.state.reddit && (
-                    <Button href={`https://reddit.com/${this.state.reddit}`}>
-                      <VisuallyHidden>{`https://reddit.com/${this.state.reddit}`}</VisuallyHidden>
-                      <svg
-                        height="16"
-                        viewBox="0 0 512 512"
-                        width="16"
-                        xmlns="http://www.w3.org/2000/svg"
-                        style={{
-                          fill: 'var(--text-color)',
-                          stroke: 'transparent',
-                          marginRight: '10px',
-                        }}
-                      >
-                        <path d="m309.605469 343.347656c-11.46875 11.46875-36.042969 15.5625-53.554688 15.5625-17.5625 0-42.085937-4.09375-53.554687-15.5625-2.714844-2.714844-7.066406-2.714844-9.777344 0-2.714844 2.714844-2.714844 7.066406 0 9.777344 18.175781 18.175781 53.09375 19.609375 63.332031 19.609375s45.105469-1.433594 63.335938-19.609375c2.660156-2.714844 2.660156-7.066406 0-9.777344-2.714844-2.714844-7.066407-2.714844-9.78125 0zm0 0" />
-                        <path d="m224 282.675781c0-14.695312-11.980469-26.675781-26.675781-26.675781-14.691407 0-26.675781 11.980469-26.675781 26.675781 0 14.691407 11.984374 26.675781 26.675781 26.675781 14.695312 0 26.675781-11.980468 26.675781-26.675781zm0 0" />
-                        <path d="m256 0c-141.363281 0-256 114.636719-256 256s114.636719 256 256 256 256-114.636719 256-256-114.636719-256-256-256zm148.53125 290.148438c.5625 3.6875.871094 7.425781.871094 11.214843 0 57.445313-66.867188 103.988281-149.351563 103.988281s-149.351562-46.542968-149.351562-103.988281c0-3.839843.308593-7.628906.871093-11.316406-13.003906-5.835937-22.066406-18.890625-22.066406-34.046875 0-20.582031 16.691406-37.324219 37.324219-37.324219 10.035156 0 19.097656 3.941407 25.804687 10.394531 25.90625-18.6875 61.75-30.621093 101.632813-31.644531 0-.511719 18.636719-89.292969 18.636719-89.292969.359375-1.738281 1.382812-3.226562 2.867187-4.195312 1.484375-.972656 3.277344-1.28125 5.019531-.921875l62.054688 13.207031c4.351562-8.804687 13.308594-14.898437 23.804688-14.898437 14.746093 0 26.675781 11.929687 26.675781 26.675781s-11.929688 26.675781-26.675781 26.675781c-14.285157 0-25.855469-11.265625-26.519532-25.394531l-55.554687-11.828125-16.996094 80.027344c39.167969 1.378906 74.34375 13.257812 99.839844 31.691406 6.707031-6.5 15.820312-10.496094 25.90625-10.496094 20.636719 0 37.324219 16.691407 37.324219 37.324219 0 15.257812-9.164063 28.3125-22.117188 34.148438zm0 0" />
-                        <path d="m314.675781 256c-14.695312 0-26.675781 11.980469-26.675781 26.675781 0 14.691407 11.980469 26.675781 26.675781 26.675781 14.691407 0 26.675781-11.984374 26.675781-26.675781 0-14.695312-11.980468-26.675781-26.675781-26.675781zm0 0" />
-                      </svg>
-                    </Button>
-                  )} */}
+
                   {this.state.tzprofile && (
                     <Button href={`https://tzprofiles.com/view/${this.state.tzprofile}`}>
                       <VisuallyHidden>{`https://tzprofiles.com/view/${this.state.tzprofile}`}</VisuallyHidden>
@@ -774,6 +720,7 @@ export default class Display extends Component {
                       </svg>
                     </Button>
                   )}
+
                   {this.state.discord && (
                     <Button onClick={() => {
                       this.setState({ copied: true })
@@ -850,35 +797,40 @@ export default class Display extends Component {
           </Padding>
         </Container>
 
-        <Container>
-          <Padding>
-            <p>
-            </p>
-            <div className={styles.menu}>
-              <Button onClick={this.creations}>
-                <Primary selected={this.state.creationsState}>
-                  creations
-                </Primary>
-              </Button>
-              <Button onClick={this.collectionFull}>
-                <Primary selected={this.state.collectionState}>
-                  collection
-                </Primary>
-              </Button>
-              <div className={styles.filter}>
-                <Button onClick={() => this.setState({
-                  filter: !this.state.filter
-                })}>
-                  <Primary>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-filter">
-                      <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
-                    </svg>
+        {this.state.wallet.substr(0, 2) !== 'KT' && (
+          <Container>
+            <Padding>
+              <div className={styles.menu}>
+                <Button onClick={this.creations}>
+                  <Primary selected={this.state.creationsState}>
+                    creations
                   </Primary>
                 </Button>
+                <Button onClick={this.collectionFull}>
+                  <Primary selected={this.state.collectionState}>
+                    collection
+                  </Primary>
+                </Button>
+                <Button onClick={this.collabs}>
+                  <Primary selected={this.state.collabsState}>
+                    collabs
+                  </Primary>
+                </Button>
+                <div className={styles.filter}>
+                  <Button onClick={() => this.setState({
+                    filter: !this.state.filter
+                  })}>
+                    <Primary>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="feather feather-filter">
+                        <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+                      </svg>
+                    </Primary>
+                  </Button>
+                </div>
               </div>
-            </div>
-          </Padding>
-        </Container>
+            </Padding>
+          </Container>
+        )}
 
         {this.state.loading && (
           <Container>
@@ -1027,23 +979,6 @@ export default class Display extends Component {
                             })}
                           </div>
                         </Button>
-                        {/* <div className={styles.cardContainer}>
-                        <div className={styles.card}>
-                          <div className={styles.cardText}>
-                            <div>OBJKT#{nft.id}</div>
-                            <div className={styles.cardTitle}>{nft.title}</div>
-                          </div>
-                          <div className={styles.cardCollect}>
-                            <Button onClick={() => this.context.collect(nft.swaps[0].id, nft.swaps[0].price)}>
-                              <Purchase>
-                                <div className={styles.cardCollectPrice}>
-                                  {nft.swaps && nft.swaps.length > 0 ? 'collect for ' + nft.swaps[0].price / 1000000 + ' tez' : 'not for sale'}
-                                </div>
-                              </Purchase>
-                            </Button>
-                          </div>
-                        </div>
-                      </div> */}
                       </div>
                     )
                   })}
@@ -1051,6 +986,11 @@ export default class Display extends Component {
               </InfiniteScroll>
             </Container>
           </div>
+        )}
+
+        {/* TODO - someone really needs to clean up the other tabs :) */}
+        {this.state.collabsState && (
+          <CollabsTab wallet={this.state.wallet} filter={this.state.filter} />
         )}
 
         {!this.state.loading && this.state.collectionState && (
@@ -1172,22 +1112,6 @@ export default class Display extends Component {
                             })}
                           </div>
                         </Button>
-                        {/*                       <div className={styles.card}>
-                        <div className={styles.cardText}>
-                          <div>OBJKT#{nft.token.id}</div>
-                          <div>{nft.token.title}</div>
-                          <div>{nft.token.creator.name}</div>
-                        </div>
-                        <div className={styles.cardCollect}>
-                          <Button onClick={() => this.context.collect(nft.id, nft.price)}>
-                            <Purchase>
-                              <div className={styles.cardCollectPrice}>
-                                {nft.price ? 'collect for ' + nft.price / 1000000 : 'not for sale'}
-                              </div>
-                            </Purchase>
-                          </Button>
-                        </div>
-                      </div> */}
                       </div>
                     )
                   })}
@@ -1196,6 +1120,8 @@ export default class Display extends Component {
             </Container>
           </div>
         )}
+
+
         {/*       <BottomBanner>
         API is down due to heavy server load — We're working to fix the issue — please be patient with us. <a href="https://discord.gg/mNNSpxpDce" target="_blank">Join the discord</a> for updates.
       </BottomBanner> */}
