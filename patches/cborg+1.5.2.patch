@@ -1,0 +1,72 @@
+diff --git a/node_modules/cborg/cjs/lib/0uint.js b/node_modules/cborg/cjs/lib/0uint.js
+index cda2986..0469ffc 100644
+--- a/node_modules/cborg/cjs/lib/0uint.js
++++ b/node_modules/cborg/cjs/lib/0uint.js
+@@ -4,13 +4,14 @@ Object.defineProperty(exports, '__esModule', { value: true });
+ 
+ var token = require('./token.js');
+ var common = require('./common.js');
++var bigint = require('big-integer');
+ 
+ const uintBoundaries = [
+   24,
+   256,
+   65536,
+   4294967296,
+-  BigInt('18446744073709551616')
++  bigint('18446744073709551616')
+ ];
+ function readUint8(data, offset, options) {
+   common.assertEnoughData(data, offset, 1);
+@@ -40,7 +41,7 @@ function readUint64(data, offset, options) {
+   common.assertEnoughData(data, offset, 8);
+   const hi = data[offset] * 16777216 + (data[offset + 1] << 16) + (data[offset + 2] << 8) + data[offset + 3];
+   const lo = data[offset + 4] * 16777216 + (data[offset + 5] << 16) + (data[offset + 6] << 8) + data[offset + 7];
+-  const value = (BigInt(hi) << BigInt(32)) + BigInt(lo);
++  const value = (bigint(hi) << bigint(32)) + bigint(lo);
+   if (options.strict === true && value < uintBoundaries[3]) {
+     throw new Error(`${ common.decodeErrPrefix } integer encoded in more bytes than necessary (strict decode)`);
+   }
+@@ -106,8 +107,8 @@ function encodeUintValue(buf, major, uint) {
+         0,
+         0
+       ];
+-      let lo = Number(buint & BigInt(4294967295));
+-      let hi = Number(buint >> BigInt(32) & BigInt(4294967295));
++      let lo = Number(buint & bigint(4294967295));
++      let hi = Number(buint >> bigint(32) & bigint(4294967295));
+       set[8] = lo & 255;
+       lo = lo >> 8;
+       set[7] = lo & 255;
+diff --git a/node_modules/cborg/cjs/lib/1negint.js b/node_modules/cborg/cjs/lib/1negint.js
+index f456e92..36af4cd 100644
+--- a/node_modules/cborg/cjs/lib/1negint.js
++++ b/node_modules/cborg/cjs/lib/1negint.js
+@@ -5,6 +5,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
+ var token = require('./token.js');
+ var _0uint = require('./0uint.js');
+ var common = require('./common.js');
++var bigint = require('big-integer');
+ 
+ function decodeNegint8(data, pos, _minor, options) {
+   return new token.Token(token.Type.negint, -1 - _0uint.readUint8(data, pos + 1, options), 2);
+@@ -15,8 +16,8 @@ function decodeNegint16(data, pos, _minor, options) {
+ function decodeNegint32(data, pos, _minor, options) {
+   return new token.Token(token.Type.negint, -1 - _0uint.readUint32(data, pos + 1, options), 5);
+ }
+-const neg1b = BigInt(-1);
+-const pos1b = BigInt(1);
++const neg1b = bigint(-1);
++const pos1b = bigint(1);
+ function decodeNegint64(data, pos, _minor, options) {
+   const int = _0uint.readUint64(data, pos + 1, options);
+   if (typeof int !== 'bigint') {
+@@ -28,7 +29,7 @@ function decodeNegint64(data, pos, _minor, options) {
+   if (options.allowBigInt !== true) {
+     throw new Error(`${ common.decodeErrPrefix } integers outside of the safe integer range are not supported`);
+   }
+-  return new token.Token(token.Type.negint, neg1b - BigInt(int), 9);
++  return new token.Token(token.Type.negint, neg1b - bigint(int), 9);
+ }
+ function encodeNegint(buf, token) {
+   const negint = token.value;
