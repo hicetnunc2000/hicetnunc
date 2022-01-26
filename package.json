@@ -51,6 +51,7 @@
     "web-encoding": "1.1.5"
   },
   "scripts": {
+    "postinstall": "npx patch-package", 
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
