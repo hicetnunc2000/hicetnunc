@@ -12,6 +12,7 @@ import { walletPreview } from '../../utils/string'
 import { VisuallyHidden } from '../visually-hidden'
 import styles from './styles.module.scss'
 import { getItem, setItem } from '../../utils/storage'
+import { Link } from 'react-router-dom'
 
 /* import { BeaconWallet } from '@taquito/beacon-wallet'
 
@@ -48,7 +49,7 @@ export const Header = () => {
   //console.log(activeAccount)
   const handleRoute = (path) => {
     context.setMenu(true)
-    history.push(path)
+    history.push('#'+ path)
   }
 
   const handleSyncUnsync = () => {
@@ -121,8 +122,8 @@ export const Header = () => {
                       </Button>
                     </li>
                     <li>
-                      <Button onClick={() => handleRoute('/galleries')}>
-                        <Primary>galleries</Primary>
+                      <Button>
+                        <Primary><Link to='galleries'>galleries</Link></Primary>
                       </Button>
                     </li>
                     <li>
