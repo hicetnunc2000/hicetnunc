@@ -22,6 +22,7 @@ const App = () => {
 
   // 1st time loading the site ???
   useEffect(() => {
+    console.log(window.location.pathname)
     getInitialData().then(() => {
       setLoading(false)
     })
