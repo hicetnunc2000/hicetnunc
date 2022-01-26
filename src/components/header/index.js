@@ -48,10 +48,11 @@ export const Header = () => {
 
   //const activeAccount = await wallet.client.getActiveAccount()
   //console.log(activeAccount)
-  const handleRoute = (path) => {
+  const handleRoute = (path, data) => {
     context.setMenu(true)
-    history.push(path)
+    history.push(path, data)
   }
+
 
   const handleSyncUnsync = () => {
     if (context.acc?.address && !context.collapsed) {
@@ -132,8 +133,13 @@ export const Header = () => {
                       </Button>
                     </li>
                     <li>
-                      <Button onClick={() => handleRoute('/sync')}>
+                      <Button onClick={() => handleRoute('/sync', 'tz')}>
                         <Primary>manage assets</Primary>
+                      </Button>
+                    </li>
+                    <li>
+                      <Button onClick={() => handleRoute('/sync', 'friends')}>
+                        <Primary>friends</Primary>
                       </Button>
                     </li>
                     {context.acc?.address ?

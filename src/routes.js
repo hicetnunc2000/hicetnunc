@@ -11,6 +11,7 @@ import { GalleryDetail } from './pages/gallery-detail'
 import { Config } from './pages/config'
 import { Search } from './pages/search'
 import { Tags } from './pages/tags'
+import { Friends } from './pages/friends'
 
 export const routes = [
   {
@@ -32,6 +33,11 @@ export const routes = [
     exact: false,
     path: '/latest',
     component: Latest,
+  },
+  {
+    exact: false,
+    path: '/friends/:id',
+    component: Friends,
   },
   {
     exact: false,
@@ -106,6 +112,11 @@ export const routes = [
     exact: false,
     path: '/tags/:id',
     component: Tags,
+  },
+  {
+    exact: false,
+    path: '/friends/:id',
+    component: Friends,
   },
   {
     exact: false,
