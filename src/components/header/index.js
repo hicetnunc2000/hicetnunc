@@ -23,7 +23,7 @@ const wallet = new BeaconWallet({
 export const Header = () => {
   const history = useHistory()
   const context = useContext(HicetnuncContext)
-
+  const style = {fontSize : '30px'}
   useEffect(() => {
     context.setAccount()
     context.setTheme(getItem('theme') || setItem('theme', 'dark'))
@@ -59,6 +59,10 @@ export const Header = () => {
       // connect wallet
       context.syncTaquito()
     }
+  }
+
+  const menu = () => {
+    context.toogleNavbar()
   }
 
   return (
@@ -116,49 +120,49 @@ export const Header = () => {
                 <nav className={styles.content}>
                   <ul>
                     <li>
-                      <Button onClick={() => handleRoute('/')}>
-                        <Primary>home</Primary>
+                      <Button>
+                        <Primary><a style={style} href='#/' onClick={menu}>home</a></Primary>
                       </Button>
                     </li>
                     <li>
-                      <Button onClick={() => handleRoute('/galleries')}>
-                        <Primary>galleries</Primary>
+                      <Button>
+                        <Primary><a style={style} href='#/galleries' onClick={menu}>galleries</a></Primary>
                       </Button>
                     </li>
                     <li>
-                      <Button onClick={() => handleRoute('/mint')}>
+                      <Button>
                         <Primary>
-                          OBJKT<span style={{ fontSize: '16px' }}> (mint)</span>
+                          <a style={style} onClick={menu} href='#/mint'>OBJKT<span style={{ fontSize: '16px' }}> (mint)</span></a>
                         </Primary>
                       </Button>
                     </li>
-{/*                     <li>
+                    {/*                     <li>
                       <Button onClick={() => handleRoute('/collaborate')}>
                         <Primary>collaborate</Primary>
                       </Button>
                     </li> */}
                     <li>
-                      <Button onClick={() => handleRoute('/sync')}>
-                        <Primary>manage assets</Primary>
+                      <Button>
+                        <Primary><a style={style} onClick={menu} href='#/sync'>manage assets</a></Primary>
                       </Button>
                     </li>
-                    { context.acc?.address ?
+                    {context.acc?.address ?
                       <li>
-                        <Button onClick={() => handleRoute('/config')}>
-                          <Primary>edit profile</Primary>
+                        <Button>
+                          <Primary><a style={style} onClick={menu} href='#/config'>edit profile</a></Primary>
                         </Button>
                       </li>
                       :
                       null
                     }
                     <li>
-                      <Button onClick={() => handleRoute('/about')}>
-                        <Primary>about</Primary>
+                      <Button>
+                        <Primary><a style={style} onClick={menu} href='#/about'>about</a></Primary>
                       </Button>
                     </li>
                     <li>
-                      <Button onClick={() => handleRoute('/faq')}>
-                        <Primary>faq</Primary>
+                      <Button>
+                        <Primary><a style={style} onClick={menu} href='#/faq'>faq</a></Primary>
                       </Button>
                     </li>
                   </ul>
