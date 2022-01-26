@@ -118,7 +118,7 @@ export const Header = () => {
                   <ul>
                     <li>
                       <Button>
-                        <Primary><a style={style} href={'/'}>home</a></Primary>
+                        <Primary><a style={style} href='/'>home</a></Primary>
                       </Button>
                     </li>
                     <li>
@@ -127,9 +127,9 @@ export const Header = () => {
                       </Button>
                     </li>
                     <li>
-                      <Button onClick={() => handleRoute('/mint')}>
+                      <Button>
                         <Primary>
-                          <a style={style} href={'/mint'}>OBJKT<span style={{ fontSize: '16px' }}> (mint)</span></a>
+                          <a style={style} href='/mint'>OBJKT<span style={{ fontSize: '16px' }}> (mint)</span></a>
                         </Primary>
                       </Button>
                     </li>
