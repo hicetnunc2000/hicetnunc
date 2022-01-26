@@ -36,13 +36,13 @@ const App = () => {
     <HicetnuncContextProvider>
       <Header />
       <FeedbackComponent />
-      <HashRouter>
+      <BrowserRouter>
         <Switch>
           {routes.map(({ exact, path, component: Comp }) => (
             <Route path={path} exact={exact} key={path} component={Comp} />
           ))}
         </Switch>
-      </HashRouter>
+      </BrowserRouter>
     </HicetnuncContextProvider>
   )
 }
