@@ -6,7 +6,7 @@ export const VoteBanner = () => {
         <div className={styles.vote__banner}>
             <div className={styles.content}>
                 <h1>
-                    Take part in the decision for the next Hicetnunc! Voting starts Jan 26<sup>th</sup> through Jan 30<sup>th</sup> 00:00 UTC <a href="https://community.hicetnunc.xyz/t/info-sheet-for-the-naming-vote-on-henvoite-for-the-platform/462">Learn more</a>
+                SYNQ or TEIA - vote until Jan30<sup>th</sup> (final round) <a className={styles.desktop__link} href="https://community.hicetnunc.xyz/t/info-sheet-for-the-naming-vote-on-henvoite-for-the-platform/462">Learn more</a>
                 </h1>
                 <a href="https://vote.hencommunity.quest/" className={styles.content__button}>
                     Vote Now

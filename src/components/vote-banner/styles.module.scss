@@ -3,12 +3,20 @@
     height: 60px;
     padding: 0 2rem;
 
-    color: var(--background-color);
-    background-color: var(--text-color);
+    color: #000;
+    background-color: #ffb703;
 
     @media (max-width: 768px) {
         padding: 0 1rem;
         font-size: 12px;
+    }
+}
+
+.desktop__link {
+    display: none;
+
+    @media (min-width: 769px) {
+        display: inline-block;
     }
 }
 
@@ -19,7 +27,7 @@
     height: 100%;
 
     a {
-        color: var(--background-color);
+        color: #000;
         text-decoration: underline;
     }
 
@@ -27,8 +35,8 @@
         text-decoration: none;
 
         padding: 0.25rem 1rem;
-        color: var(--text-color);
-        background-color: var(--background-color);
+        color: #fff;
+        background-color: #000;
 
         @media (max-width: 768px) {
             min-width: fit-content;
