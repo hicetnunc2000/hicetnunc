@@ -62,7 +62,7 @@ const getRestrictedAddresses = async () =>
     .then((res) => res.data)
 
 export const Tags = () => {
-  const { id } = useParams()
+  const [id, setId] = useState(undefined)
   const [error, setError] = useState(false)
   const [items, setItems] = useState([])
   const [feed, setFeed] = useState([])
@@ -79,7 +79,7 @@ export const Tags = () => {
   }
 
   useEffect(async () => {
-    let arr = await fetchTag(id, offset)
+    let arr = await fetchTag(window.location.hash.split('/')[2], offset)
     let res = await getRestrictedAddresses()
     setRestricted(res)
     console.log(arr)

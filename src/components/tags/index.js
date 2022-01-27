@@ -31,7 +31,7 @@ export const Tags = ({ token_tags, preview }) => {
             return (
               <a
                 key={`tag${tag.tag.tag}${index}`}
-                href={`${PATH.TAGS}/${encodeURI(tag.tag.tag)}`}
+                href={`#/tags/${encodeURI(tag.tag.tag)}`}
               >
                 <div className={styles.tag}>{tag.tag.tag}</div>
               </a>
