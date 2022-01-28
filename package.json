@@ -15,6 +15,7 @@
     "base-x": "^3.0.8",
     "big-integer": "^1.6.48",
     "buffer": "^6.0.3",
+    "chokidar": "^3.5.2",
     "classnames": "^2.3.1",
     "compressorjs": "^1.0.7",
     "conseiljs-softsigner": "^5.0.4-1",
