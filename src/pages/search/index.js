@@ -147,6 +147,29 @@ async function getLastId() {
 function rnd(min, max) {
   return Math.floor(Math.random() * (max - min + 1) + min)
 }
+//application/pdf
+async function fetchVideo(offset) {
+  const { errors, data } = await fetchGraphQL(`
+  query Videos {
+    hic_et_nunc_token(where : { mime : {_in : ["video/mp4"] }, supply : { _neq : 0 }}, limit : 15, offset : ${offset}, order_by: {id: desc}) {
+      id
+      artifact_uri
+      display_uri
+      mime
+      creator_id
+      creator {
+        address
+        name
+      }
+    }
+  }
+  `, 'Videos', {})
+  try {
+    return data.hic_et_nunc_token
+  } catch (e) {
+    return undefined
+  }
+}
 
 async function fetchGLB(offset) {
   const { errors, data } = await fetchGraphQL(`
@@ -532,9 +555,11 @@ export class Search extends Component {
     tags: [
       { id: 0, value: '○ hDAO' },
       { id: 1, value: 'random' },
-      { id: 2, value: 'glb' },
+      { id: 2, value: '3D' },
       { id: 3, value: 'music' },
+      { id: 12, value: 'video' },
       { id: 4, value: 'html/svg' }, // algorithimc?
+      //{ id: 13, value: 'pdf' },
       { id: 5, value: 'gif' },
       { id: 6, value: 'new OBJKTs' },
       { id: 7, value: 'recent sales' },
@@ -620,18 +645,14 @@ export class Search extends Component {
       list = list.map(e => e.token)
       list = [...this.state.feed, ...(list)]
       list = _.uniqBy(list, 'id')
-      console.log('ath', list)
-      this.setState({
-        feed: list
-      })
+
+      this.setState({ feed: list })
     }
 
     if (e === 'num') {
       let res = await fetchFeed(Number(this.state.search) + 1 - this.state.offset)
       res = res.filter(e => !arr.includes(e.creator_id))
-      this.setState({
-        feed: [...this.state.feed, ...(res)]
-      })
+      this.setState({ feed: [...this.state.feed, ...(res)] })
     }
 
     if (e === '○ hDAO') {
@@ -645,13 +666,15 @@ export class Search extends Component {
     }
 
     if (e === 'video') {
-
+      let res = await fetchVideo(this.state.offset)
+      res = res.filter(e => !arr.includes(e.creator_id))
+      this.setState({ feed: _.uniqBy([...this.state.feed, ...(res)], 'creator_id') })
     }
 
-    if (e === 'glb') {
+    if (e === '3D') {
       let res = await fetchGLB(this.state.offset)
       res = res.filter(e => !arr.includes(e.creator_id))
-      this.setState({ feed: _.uniqBy([...this.state.feed, ...(await fetchGLB(this.state.offset))], 'creator_id') })
+      this.setState({ feed: _.uniqBy([...this.state.feed, ...(res)], 'creator_id') })
     }
 
     if (e === 'html/svg') {
@@ -751,14 +774,14 @@ export class Search extends Component {
       <Page>
         <Container>
           <Padding>
-                <Input
-                  type="text"
-                  name="search"
-                  onChange={this.handleChange}
-                  label="search ↵"
-                  placeholder="search ↵"
-                  onKeyPress={this.handleKey}
-                />
+            <Input
+              type="text"
+              name="search"
+              onChange={this.handleChange}
+              label="search ↵"
+              placeholder="search ↵"
+              onKeyPress={this.handleKey}
+            />
             {
               <div style={{ marginTop: '15px' }}>
                 {this.state.tags.map(e => <a className='tag' href='#' onClick={() => {
