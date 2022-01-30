@@ -670,7 +670,7 @@ export class Search extends Component {
 
     if (e === 'video') {
       let res = await fetchVideo(this.state.offset)
-      res = res.filter(e => !arr.inclues(e.creator_id))
+      res = res.filter(e => !arr.includes(e.creator_id))
       this.setState({ feed: _.uniqBy([...this.state.feed, ...(res)], 'creator_id') })
     }
 
