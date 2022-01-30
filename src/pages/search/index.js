@@ -509,6 +509,29 @@ async function fetchHdao(offset) {
   return result
 }
 
+async function fetchVideo(offset) {
+  const { errors, data } = await fetchGraphQL(`
+  query Videos {
+    hic_et_nunc_token(where : { mime : {_in : ["video/mp4"] }, supply : { _neq : 0 }}, limit : 15, offset : ${offset}, order_by: {id: desc}) {
+      id
+      artifact_uri
+      display_uri
+      mime
+      creator_id
+      creator {
+        address
+        name
+      }
+    }
+  }
+  `, 'Videos', {})
+  try {
+    return data.hic_et_nunc_token
+  } catch (e) {
+    return undefined
+  }
+}
+
 const getRestrictedAddresses = async () =>
   await axios
     .get(
@@ -534,6 +557,7 @@ export class Search extends Component {
       { id: 1, value: 'random' },
       { id: 2, value: 'glb' },
       { id: 3, value: 'music' },
+      { id: 12, value: 'video' },
       { id: 4, value: 'html/svg' }, // algorithimc?
       { id: 5, value: 'gif' },
       { id: 6, value: 'new OBJKTs' },
@@ -645,13 +669,15 @@ export class Search extends Component {
     }
 
     if (e === 'video') {
-
+      let res = await fetchVideo(this.state.offset)
+      res = res.filter(e => !arr.inclues(e.creator_id))
+      this.setState({ feed: _.uniqBy([...this.state.feed, ...(res)], 'creator_id') })
     }
 
     if (e === 'glb') {
       let res = await fetchGLB(this.state.offset)
       res = res.filter(e => !arr.includes(e.creator_id))
-      this.setState({ feed: _.uniqBy([...this.state.feed, ...(await fetchGLB(this.state.offset))], 'creator_id') })
+      this.setState({ feed: _.uniqBy([...this.state.feed, ...(res)], 'creator_id') })
     }
 
     if (e === 'html/svg') {
