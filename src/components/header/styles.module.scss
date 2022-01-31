@@ -2,13 +2,13 @@
 @import '../../styles/layout.scss';
 
 .outer__container {
-  position: fixed;
-  width: 100%;
 
-  z-index: 1000;
 }
 
 .container {
+  position: fixed;
+  width: 100%;
+  z-index: 1000;
   height: 60px;
   padding: 0 #{$mobile-padding};
   background-color: var(--background-color);
@@ -75,7 +75,7 @@
 
 .menu {
   position: fixed;
-  top: 120px;
+  top: 60px;
   left: 0;
   right: 0;
   bottom: 0;
