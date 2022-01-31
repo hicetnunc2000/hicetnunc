@@ -71,12 +71,7 @@ export const Header = () => {
             <div className={styles.logo}>
               {/* HIC LOGO */}
               {true && (
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 655.77 130.78" fill={'var(--text-color)'}>
-                  <path d="M692.67,605.27H649.28V518.54H605.81v86.6H562.38V474.63H692.67Z" transform="translate(-212.13 -474.5)"/>
-                  <path d="M212.13,474.5H255v43.08h44V474.67h43.65V605.2H299.18V562.34H255.61V605H212.13Z" transform="translate(-212.13 -474.5)"/>
-                  <path d="M737.25,605V474.68H867.9v43.15H781.33v43.84h86.44V605Z" transform="translate(-212.13 -474.5)"/>
-                  <path d="M517.53,517.75H387.1v-43H517.53Z" transform="translate(-212.13 -474.5)"/><path d="M517.63,562.36v42.89H387.08V562.36Z" transform="translate(-212.13 -474.5)"/>
-                </svg>
+                <h1>teia</h1>
               )}
               {/* PRIDE LOGO */}
               {false && <img src="/hen-pride.gif" alt="pride 2021" />}
