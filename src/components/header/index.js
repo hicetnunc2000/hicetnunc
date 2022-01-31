@@ -4,7 +4,7 @@ import { useHistory } from 'react-router'
 import { motion, AnimatePresence } from 'framer-motion'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
 import { Footer } from '../footer'
-import { VoteBanner } from '../vote-banner'
+// import { VoteBanner } from '../vote-banner'
 import { Container, Padding } from '../layout'
 import { Button, Primary } from '../button'
 import { fadeIn } from '../../utils/motion'
@@ -63,8 +63,8 @@ export const Header = () => {
   }
 
   return (
-    <div className={styles.outer__container}>
-      <VoteBanner />
+    <>
+      {/* <VoteBanner /> */}
       <header className={styles.container}>
         <div className={styles.content}>
           <Button onClick={() => handleRoute('/')}>
@@ -167,6 +167,6 @@ export const Header = () => {
           </motion.div>
         )}
       </AnimatePresence>
-    </div>
+    </>
   )
 }
