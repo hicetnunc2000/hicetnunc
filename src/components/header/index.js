@@ -28,6 +28,7 @@ export const Header = () => {
   useEffect(() => {
     context.setAccount()
     context.setTheme(getItem('theme') || setItem('theme', 'dark'))
+    context.setLogo()
   }, [])
 
   // we assume user isn't connected
@@ -71,7 +72,7 @@ export const Header = () => {
             <div className={styles.logo}>
               {/* HIC LOGO */}
               {true && (
-                <h1>teia</h1>
+                <img src={`/logos/${context.theme}/${context.logo}`} alt="teia"></img>
               )}
               {/* PRIDE LOGO */}
               {false && <img src="/hen-pride.gif" alt="pride 2021" />}
