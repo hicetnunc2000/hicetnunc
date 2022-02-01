@@ -74,7 +74,7 @@ const wallet = new PatchedBeaconWallet({
 }) */
 
 const wallet = new BeaconWallet({
-  name: 'hicetnunc.art',
+  name: 'teia.art',
   preferredNetwork: 'mainnet',
 })
 
