@@ -8,6 +8,7 @@ import {
 import { TezosToolkit, OpKind, MichelCodecPacker } from '@taquito/taquito'
 import { packParticipantMap } from '../components/collab/functions';
 import { setItem } from '../utils/storage'
+import { getLogoList } from '../constants';
 const { NetworkType } = require('@airgap/beacon-sdk')
 var ls = require('local-storage')
 const axios = require('axios')
@@ -266,6 +267,11 @@ class HicetnuncContextProviderClass extends Component {
       fullscreen: false,
       setFullscreen: (fullscreen) => this.setState({ fullscreen }),
 
+      logo: '',
+      setLogo: () => {
+        const logo_list = getLogoList()
+        this.setState({ logo: logo_list[0] })
+      },
       // theme, DO NO CHANGE!
       theme: 'light',
       setTheme: (theme) => {
