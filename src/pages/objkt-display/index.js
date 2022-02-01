@@ -20,7 +20,7 @@ const TABS = [
   { title: 'info', component: Info }, // public tab
   { title: 'listings', component: Collectors }, // public tab
   { title: 'history', component: History },
-  { title: 'comments', component: Comments },
+  //{ title: 'comments', component: Comments },
   { title: 'swap', component: Swap, private: true, restricted: true }, // private tab (users only see if they are the creators or own a copy)
   { title: 'burn', component: Burn, private: true }, // private tab (users only see if they are the creators or own a copy)
 ]
