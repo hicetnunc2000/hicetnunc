@@ -16,6 +16,7 @@ export const getBanBlockList = () => banBlockList
 
 let logoList = []
 export const setLogoList = (data) => {
+  // Shuffles the list daily
   let logos = data.logos;
   let currentIndex = logos.length, temporaryValue, randomIndex;
   const date = new Date(Date.now());
