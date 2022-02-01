@@ -669,24 +669,24 @@ class HicetnuncContextProviderClass extends Component {
         //const signedPayload = await wallet.client.requestSignPayload(payload);
 
         //const { signature } = signedPayload;
-        const ipfs = await IPFS.create({ repo : 'reports' + Math.random() })
+        //const ipfs = await IPFS.create({ repo : 'reports' + Math.random() })
         //const ipfs = create('https://cloudflare-ipfs.com:5001')
-        const orbitdb = await OrbitDB.createInstance(ipfs)
-        const options = {
+        //const orbitdb = await OrbitDB.createInstance(ipfs)
+        //const options = {
           // Give write access to ourselves
-          accessController: {
-            write: [orbitdb.identity.id]
-          },
-          overwrite: true
-        }
+        //  accessController: {
+        //    write: [orbitdb.identity.id]
+        //  },
+        //  overwrite: true
+        //}
 
-        const db = await orbitdb.keyvalue('reports', options)
-        console.log(db.address.toString())
+        //const db = await orbitdb.keyvalue('reports', options)
+        //console.log(db.address.toString())
         //await db.put('data', [this.state.wallet], { pin: true })
         //const value = db.get('data')
         //console.log(value)
-        await db.put('reports', { data : [2]})
-        console.log(await db.get('reports'))
+        //await db.put('reports', { data : [2]})
+        //console.log(await db.get('reports'))
         //await orbitdb.open('/orbitdb/zdpuB3ZDaEp4bMSPfHcWroKGN7567aVQWQKA9ccFaC1t4QyzF/reports')
 
       },
