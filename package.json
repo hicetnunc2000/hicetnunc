@@ -35,7 +35,6 @@
     "mime-types": "^2.1.30",
     "node-fetch": "^2.6.1",
     "node-sass": "^6.0.0",
-    "orbit-db": "^0.28.1",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-helmet": "^6.1.0",
