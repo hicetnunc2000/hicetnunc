@@ -13,13 +13,18 @@ import { KeyStoreUtils } from 'conseiljs-softsigner'
 import { PermissionScope } from '@airgap/beacon-sdk'
 import { UnitValue } from '@taquito/michelson-encoder'
 import { contentType } from 'mime-types';
-
+import { char2Bytes } from '@taquito/utils';
+import { RequestSignPayloadInput, SigningType } from '@airgap/beacon-sdk'
+const { create } = require('ipfs-http-client')
+const IPFS = require('ipfs')
+const OrbitDB = require('orbit-db')
 const { NetworkType } = require('@airgap/beacon-sdk')
 var ls = require('local-storage')
 const axios = require('axios')
 const eztz = require('eztz-lib')
 
 export const HicetnuncContext = createContext()
+const infuraUrl = 'https://ipfs.infura.io:5001'
 
 // TODO: move this schema into separate place?
 const createProxySchema = `
@@ -95,8 +100,8 @@ class HicetnuncContextProviderClass extends Component {
       hDAO_curation: 'KT1TybhR7XraG75JFYKSrh7KnxukMBT5dor6',
       hDAO_marketplace: 'KT1QPvv7sWVaT9PcPiC4fN9BgfX8NB2d5WzL',
 
-      lastId : undefined,
-      setId : (id) => this.setState({ lastId : id }),
+      lastId: undefined,
+      setId: (id) => this.setState({ lastId: id }),
 
       subjktInfo: {},
       setSubjktInfo: (subjkt) => this.setState({ subjktInfo: subjkt }),
@@ -248,10 +253,10 @@ class HicetnuncContextProviderClass extends Component {
       setFeedback: (props) =>
         this.setState({ feedback: { ...this.state.feedback, ...props } }),
 
-      progress : undefined,
-      setProgress : (bool) => this.setState({ progress : bool }),
+      progress: undefined,
+      setProgress: (bool) => this.setState({ progress: bool }),
       message: undefined,
-      setMessage : (str) => this.setState({ message : str }),
+      setMessage: (str) => this.setState({ message: str }),
       // --------------------
       // feedback component end
       // --------------------
@@ -427,17 +432,17 @@ class HicetnuncContextProviderClass extends Component {
 
       curate: async (objkt_id) => {
         await Tezos.wallet
-              .at(this.state.v1)
-              .then((c) =>
-                c.methods
-                  .curate(
-                    ls.get('hDAO_config') != null
-                      ? parseInt(ls.get('hDAO_config'))
-                      : 1,
-                    objkt_id
-                  )
-                  .send()
+          .at(this.state.v1)
+          .then((c) =>
+            c.methods
+              .curate(
+                ls.get('hDAO_config') != null
+                  ? parseInt(ls.get('hDAO_config'))
+                  : 1,
+                objkt_id
               )
+              .send()
+          )
       },
 
       claim_hDAO: async (hDAO_amount, objkt_id) => {
@@ -486,7 +491,7 @@ class HicetnuncContextProviderClass extends Component {
               .send()
           )
 
-          this.state.setProgress(false)
+        this.state.setProgress(false)
       },
 
       cancelv1: async (swap_id) => {
@@ -654,15 +659,36 @@ class HicetnuncContextProviderClass extends Component {
         return new Promise((res) => setTimeout(res, delay))
       },
 
-      signPayload: async (obj) => {
-        await wallet.client
-          .requestSignPayload({
-            payload: obj.payload,
-          })
-          .then(async (response) => {
-            return response.signature
-          })
-          .catch((signPayloadError) => console.error(signPayloadError))
+      signPayload: async (input) => {
+
+        const payload = {
+          signingType: SigningType.RAW,
+          payload: char2Bytes(JSON.stringify({ issuer : this.state.wallet, target : input }))
+        };
+
+        //const signedPayload = await wallet.client.requestSignPayload(payload);
+
+        //const { signature } = signedPayload;
+        const ipfs = await IPFS.create({ repo : 'reports' + Math.random() })
+        //const ipfs = create('https://cloudflare-ipfs.com:5001')
+        const orbitdb = await OrbitDB.createInstance(ipfs)
+        const options = {
+          // Give write access to ourselves
+          accessController: {
+            write: [orbitdb.identity.id]
+          },
+          overwrite: true
+        }
+
+        const db = await orbitdb.keyvalue('reports', options)
+        console.log(db.address.toString())
+        //await db.put('data', [this.state.wallet], { pin: true })
+        //const value = db.get('data')
+        //console.log(value)
+        await db.put('reports', { data : [2]})
+        console.log(await db.get('reports'))
+        //await orbitdb.open('/orbitdb/zdpuB3ZDaEp4bMSPfHcWroKGN7567aVQWQKA9ccFaC1t4QyzF/reports')
+
       },
 
       balance: 0,
@@ -685,11 +711,11 @@ class HicetnuncContextProviderClass extends Component {
 
       collapsed: true,
 
-      feed : [],
+      feed: [],
 
-      offset : 0,
+      offset: 0,
 
-      setFeed : (arr) => this.setState({ feed : arr }),
+      setFeed: (arr) => this.setState({ feed: arr }),
 
       toogleNavbar: () => {
         this.setState({ collapsed: !this.state.collapsed })
@@ -715,7 +741,7 @@ class HicetnuncContextProviderClass extends Component {
           title: title,
         })
       },
-      
+
       hDAO_vote: ls.get('hDAO_vote'),
 
       proxyFactoryAddress: 'KT1DoyD6kr8yLK8mRBFusyKYJUk2ZxNHKP1N',
@@ -765,7 +791,7 @@ class HicetnuncContextProviderClass extends Component {
       },
 
       originateProxy: async (administratorAddress, participantData) => {
-      
+
         // Show progress during creation
         this.state.setFeedback({
           visible: true,
@@ -800,7 +826,7 @@ class HicetnuncContextProviderClass extends Component {
           .then(result => {
 
             // TODO: this is a bit too nested for my liking
-            
+
             // Keep the operation hash for further queries if required (do we need this?)
             this.setState({ op: result.opHash })
 

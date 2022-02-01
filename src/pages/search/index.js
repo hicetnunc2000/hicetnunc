@@ -796,7 +796,7 @@ export class Search extends Component {
               (this.state.subjkt.length > 0) && (this.state.search !== "") ?
                 <div style={{ maxHeight: '200px', overflow: 'scroll' }}>
                   {
-                    this.state.subjkt.map(e => <div style={{ marginTop: '10px' }}><a href={`/${e.name}`}>{e.name}</a> {e.metadata.description}</div>)
+                    this.state.subjkt.map(e => <div style={{ marginTop: '10px' }}><a href={`#/${e.name}`}>{e.name}</a> {e.metadata.description}</div>)
                   }
                 </div>
                 :

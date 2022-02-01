@@ -20,9 +20,7 @@ import { GalleryDetail } from './pages/gallery-detail'
 const App = () => {
   const [loading, setLoading] = useState(true)
 
-  // 1st time loading the site ???
   useEffect(() => {
-    console.log(window.location.pathname)
     getInitialData().then(() => {
       setLoading(false)
     })

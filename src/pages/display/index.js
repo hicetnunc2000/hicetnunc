@@ -16,6 +16,7 @@ import styles from './styles.module.scss'
 
 const axios = require('axios')
 const fetch = require('node-fetch')
+const _ = require('lodash')
 
 const sortByTokenId = (a, b) => {
   return b.id - a.id
@@ -548,7 +549,7 @@ export default class Display extends Component {
       this.setState({ restricted: true, loading: false })
     }
 
-    this.setState({ objkts: this.state.collection, loading: false, items: [] })
+    this.setState({ objkts: _.uniqBy(this.state.collection, 'token.id'), loading: false, items: [] })
     this.setState({ items: this.state.objkts.slice(0, 15), offset: 15 })
 
     if (this.state.subjkt !== '') {

@@ -69,11 +69,11 @@ export const Header = () => {
     <>
       <header className={styles.container}>
         <div className={styles.content}>
-          <a href='/'>
-            <div className={styles.logo}>
+          <a href='/' style={{textDecoration : 'none', fontSize: '45px'}}>
+            <div>
               {/* HIC LOGO */}
-              {true && (
-                <svg viewBox="0 0 196.87 53.23" fill={'var(--text-color)'}>
+              {true && 
+              /* (<svg viewBox="0 0 196.87 53.23" fill={'var(--text-color)'}>
                   <path
                     d="M228.9,79.31H211.51a2.26,2.26,0,0,1-.35-.34.75.75,0,0,1-.16-.42c0-11.42,0-22.85,0-34.43H193.24v35H175.41V26.27H228.9Z"
                     transform="translate(-32.03 -26.27)"
@@ -90,8 +90,9 @@ export const Header = () => {
                     d="M103.71,61.71h53.38V78.84c-4.05.69-38.16.91-53.38.31Z"
                     transform="translate(-32.03 -26.27)"
                   />
-                </svg>
-              )}
+                </svg>) */
+              (<div style={{marginTop : '-2.5px'}}>○</div>)
+              }
               {/* PRIDE LOGO */}
               {false && <img src="/hen-pride.gif" alt="pride 2021" />}
             </div>

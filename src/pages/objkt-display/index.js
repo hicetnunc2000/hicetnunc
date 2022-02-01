@@ -10,7 +10,7 @@ import { renderMediaType } from '../../components/media-types'
 import { ItemInfo } from '../../components/item-info'
 import { Menu } from '../../components/menu'
 import { BottomBanner } from '../../components/bottom-banner'
-import { Info, Collectors, Swap, Burn, History } from './tabs'
+import { Info, Collectors, Swap, Burn, History, Comments } from './tabs'
 import styles from './styles.module.scss'
 import './style.css'
 
@@ -20,6 +20,7 @@ const TABS = [
   { title: 'info', component: Info }, // public tab
   { title: 'listings', component: Collectors }, // public tab
   { title: 'history', component: History },
+  { title: 'comments', component: Comments },
   { title: 'swap', component: Swap, private: true, restricted: true }, // private tab (users only see if they are the creators or own a copy)
   { title: 'burn', component: Burn, private: true }, // private tab (users only see if they are the creators or own a copy)
 ]
