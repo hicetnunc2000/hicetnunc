@@ -270,7 +270,7 @@ class HicetnuncContextProviderClass extends Component {
       logo: '',
       setLogo: () => {
         const logo_list = getLogoList()
-        this.setState({ logo: logo_list[0] })
+        this.setState({ logo: logo_list[Math.floor(Math.random() * logo_list.length)] })
       },
       // theme, DO NO CHANGE!
       theme: 'light',
