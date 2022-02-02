@@ -14,6 +14,31 @@ let banBlockList = []
 export const setBanBlockList = (data) => (banBlockList = data)
 export const getBanBlockList = () => banBlockList
 
+let logoList = []
+export const setLogoList = (data) => {
+  // Shuffles the list daily
+  let logos = data.logos;
+  let currentIndex = logos.length, temporaryValue, randomIndex;
+  const date = new Date(Date.now());
+  let day = (Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()) - Date.UTC(date.getFullYear(), 0, 0)) / 24 / 60 / 60 / 1000;
+  let random = function() {
+    var x = Math.sin(day++) * 10000;
+    return x - Math.floor(x);
+  };
+
+  while (0 !== currentIndex) {
+    randomIndex = Math.floor(random() * currentIndex);
+    currentIndex -= 1;
+    //swap
+    temporaryValue = logos[currentIndex];
+    logos[currentIndex] = logos[randomIndex];
+    logos[randomIndex] = temporaryValue;
+  }
+
+  logoList = logos
+}
+export const getLogoList = () => logoList
+
 export const PATH = {
   FEED: '/',
   ISSUER: '/tz',

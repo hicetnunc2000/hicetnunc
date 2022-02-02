@@ -53,13 +53,13 @@ export class About extends Component {
             <div className={styles.buttons}>
               <p>Join or contact hic et nunc on</p>
               &nbsp;
-              <Button href="https://discord.com/invite/hvrEdcxbDK">
+              <Button href="https://discord.gg/7pZrPCcgnG">
                 <Primary>
                   <strong>discord</strong>
                 </Primary>
               </Button>
               <p>,</p>&nbsp;
-              <Button href="https://twitter.com/hicetnunc_art">
+              <Button href="https://twitter.com/hen_community">
                 <Primary>
                   <strong>twitter</strong>
                 </Primary>
@@ -110,7 +110,7 @@ export class About extends Component {
           </Padding>
         </Container>
 {/*         <BottomBanner>
-        Collecting has been temporarily disabled. Follow <a href="https://twitter.com/hicetnunc_art" target="_blank">@hicetnunc_art</a> or <a href="https://discord.com/invite/hvrEdcxbDK" target="_blank">join the discord</a> for updates.
+        Collecting has been temporarily disabled. Follow <a href="https://twitter.com/hen_community" target="_blank">@hicetnunc_art</a> or <a href="https://discord.gg/7pZrPCcgnG" target="_blank">join the discord</a> for updates.
         </BottomBanner> */}
       </Page>
     )
