@@ -148,7 +148,7 @@ export const GetTags = async ({ tag, counter }) => {
  */
 const GetUserClaims = async (walletAddr) => {
   return await axios.post('https://indexer.tzprofiles.com/v1/graphql', {
-    query: `query MyQuery { tzprofiles_by_pk(account: \"${walletAddr}\") { valid_claims } }`,
+    query: `query MyQuery { tzprofiles_by_pk(account: "${walletAddr}") { valid_claims } }`,
     variables: null,
     operationName: 'MyQuery',
   })

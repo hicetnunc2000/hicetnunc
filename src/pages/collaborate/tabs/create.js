@@ -45,7 +45,7 @@ export const CreateCollaboration = () => {
         if (validCollaborators.length === 0) {
             setCollaborators([])
         }
-    }, [editCollaborators, showBeneficiariesUI])
+    }, [editCollaborators, showBeneficiariesUI]) // eslint-disable-line react-hooks/exhaustive-deps
 
     // When the user clicks a percentage button in the beneficiaries UI
     const _calculateShares = (index, percentage) => {

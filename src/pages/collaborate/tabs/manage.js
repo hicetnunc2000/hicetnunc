@@ -1,11 +1,8 @@
-import React, { useState, useContext, useEffect, Fragment } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import { HicetnuncContext } from '../../../context/HicetnuncContext'
 import { Container, Padding } from '../../../components/layout'
 import styles from '../../../components/collab/styles.module.scss'
 import { fetchGraphQL, getCollabsForAddress } from '../../../data/hicdex'
-import { CollabParticipantInfo } from '../../../components/collab/manage/CollabParticipantInfo'
-import { Button, Purchase, Secondary } from '../../../components/button'
-import classNames from 'classnames'
 // import { Input } from '../../../components/input'
 import { CountdownTimer } from '../../../components/collab/manage/CountdownTimer'
 import { CollabList } from '../../../components/collab/manage/CollabList'
@@ -34,7 +31,7 @@ export const CollabContractsOverview = ({ showAdminOnly = false }) => {
             setTimerEndDate(timerDate)
         }
 
-    }, [originationOpHash, timerEndDate])
+    }, [originationOpHash, timerEndDate]) // eslint-disable-line react-hooks/exhaustive-deps
 
     useEffect(() => {
         if (!acc) {
@@ -47,7 +44,7 @@ export const CollabContractsOverview = ({ showAdminOnly = false }) => {
         // On boot, see what addresses the synced address can manage 
         fetchGraphQL(getCollabsForAddress, 'GetCollabs', {
             address: acc.address,
-        }).then(({ data, errors }) => {
+        }).then(({ data }) => {
 
             setLoadingCollabs(false)
 
@@ -62,7 +59,7 @@ export const CollabContractsOverview = ({ showAdminOnly = false }) => {
                 setCollabs(availableCollabs)
             }
         })
-    }, [acc, originatedContract])
+    }, [acc, originatedContract]) // eslint-disable-line react-hooks/exhaustive-deps
 
     const _onTimerComplete = () => {
         findOriginatedContractFromOpHash(originationOpHash)

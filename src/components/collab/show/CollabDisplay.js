@@ -1,5 +1,5 @@
-import { Redirect, useHistory, useParams } from 'react-router'
-import { useEffect, useState, useContext } from 'react'
+import { Redirect, useParams } from 'react-router'
+import { useEffect, useState } from 'react'
 import { PATH } from '../../../constants'
 import { Loading } from '../../loading'
 import { renderMediaType } from '../../media-types'
@@ -13,7 +13,7 @@ import { fetchGraphQL, fetchUserMetadataFile, getCollabCreationsByAddress, getCo
 import InfiniteScroll from 'react-infinite-scroll-component'
 import collabStyles from '../styles.module.scss'
 import classNames from 'classnames'
-import { CollaboratorType, TabIndex } from '../constants'
+import { CollaboratorType } from '../constants'
 import { ParticipantList } from '../manage/ParticipantList'
 import axios from 'axios'
 // import QRCode from 'react-qr-code'
@@ -23,7 +23,7 @@ export const CollabDisplay = () => {
     // Local state
     const [creations, setCreations] = useState([])
     const [contractInfo, setContractInfo] = useState()
-    const [showBeneficiaries, setShowBeneficiaries] = useState(false)
+    const [showBeneficiaries] = useState(false)
     const [logo, setLogo] = useState()
 
     const chunkSize = 20
@@ -66,13 +66,13 @@ export const CollabDisplay = () => {
         if (items.length === 0 && creations.length > 0) {
             setItems(creations.slice(0, chunkSize))
         }
-    }, [creations])
+    }, [creations]) // eslint-disable-line react-hooks/exhaustive-deps
 
     useEffect(() => {
         if (!loading) {
             setItems(creations.slice(0, offset))
         }
-    }, [offset])
+    }, [offset]) // eslint-disable-line react-hooks/exhaustive-deps
 
     useEffect(() => {
         if (!contractInfo) {

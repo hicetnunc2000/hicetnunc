@@ -1,23 +1,13 @@
 import React, { Component } from 'react'
 import { Page, Container, Padding } from '../../components/layout'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
-import { ResponsiveMasonry } from '../../components/responsive-masonry'
-import { PATH } from '../../constants'
-import { Loading } from '../../components/loading'
-import { Button, Primary } from '../../components/button'
 import { Input } from '../../components/input'
 import { FeedItem } from '../../components/feed-item'
 import InfiniteScroll from 'react-infinite-scroll-component'
-import { renderMediaType } from '../../components/media-types'
 import './style.css'
-import { last } from 'lodash'
 
 const axios = require('axios')
-const ls = require('local-storage')
 const _ = require('lodash')
-
-const isFloat = (n) => Number(n) === n && n % 1 !== 0
-
 
 async function fetchFeed(lastId) {
   const { errors, data } = await fetchGraphQL(`
@@ -45,71 +35,6 @@ query LatestFeed {
   return result
 }
 
-const query_creations = `
-query creatorGallery($address: String!) {
-  hic_et_nunc_token(where: {creator: {address: {_eq: $address}}, supply: {_gt: 0}}, order_by: {id: desc}, limit : 15, offset : $offset ) {
-    id
-    artifact_uri
-    display_uri
-    thumbnail_uri
-    timestamp
-    mime
-    title
-    description
-    supply
-    token_tags {
-      tag {
-        tag
-      }
-    }
-  }
-}
-`
-
-const query_tag = `
-query ObjktsByTag {
-  hic_et_nunc_token(where: {supply : { _neq : 0 }, token_tags: {tag: {tag: {_eq: $tag}}}, id: {_lt: $lastId}}, limit : 15, order_by: {id: desc}) {
-    id
-    artifact_uri
-    display_uri
-    mime
-    token_tags {
-      tag {
-        tag
-      }
-    }
-    creator {
-      address
-      name
-    }
-  }
-}`
-
-async function fetchID(id) {
-  const { errors, data } = await fetchGraphQL(`
-  query objktId {
-    hic_et_nunc_token(where : { id : { _eq : $id }}) {
-      id
-      artifact_uri
-      display_uri
-      mime
-      creator {
-        address
-        name
-      }
-    }
-  }
-  `, 'objktId', {
-    id: id
-  })
-
-  try {
-    return data.hic_et_nunc_token
-  } catch (e) {
-    return undefined
-  }
-}
-
 async function fetchObjkts(ids) {
   const { errors, data } = await fetchGraphQL(`
     query Objkts($ids: [bigint!] = "") {
@@ -135,7 +60,7 @@ async function fetchObjkts(ids) {
 }
 
 async function getLastId() {
-  const { errors, data } = await fetchGraphQL(`
+  const { data } = await fetchGraphQL(`
     query LastId {
       hic_et_nunc_token(limit: 1, order_by: {id: desc}) {
         id
@@ -149,7 +74,7 @@ function rnd(min, max) {
 }
 
 async function fetchGLB(offset) {
-  const { errors, data } = await fetchGraphQL(`
+  const { data } = await fetchGraphQL(`
   query GLBObjkts {
     hic_et_nunc_token(where : { mime : {_in : ["model/gltf-binary"] }, supply : { _neq : 0 }}, limit : 15, offset : ${offset}, order_by: {id: desc}) {
       id
@@ -173,7 +98,7 @@ async function fetchGLB(offset) {
 }
 
 async function fetchInteractive(offset) {
-  const { errors, data } = await fetchGraphQL(`
+  const { data } = await fetchGraphQL(`
     query InteractiveObjkts {
       hic_et_nunc_token(where: { mime: {_in : [ "application/x-directory", "image/svg+xml" ]}, supply : { _neq : 0 } }, limit : 30, offset : ${offset}, order_by: {id: desc}) {
         id
@@ -197,7 +122,7 @@ async function fetchInteractive(offset) {
 }
 
 async function fetchGifs(offset) {
-  const { errors, data } = await fetchGraphQL(`
+  const { data } = await fetchGraphQL(`
     query Gifs ($offset: Int = 0) {
       hic_et_nunc_token(where: { mime: {_in : [ "image/gif" ]}, supply : { _neq : 0 }}, order_by: {id: desc}, limit: 15, offset: ${offset}) {
         id
@@ -221,7 +146,7 @@ async function fetchGifs(offset) {
 }
 
 async function fetchMusic(offset) {
-  const { errors, data } = await fetchGraphQL(`
+  const { data } = await fetchGraphQL(`
   query AudioObjkts {
     hic_et_nunc_token(where: {mime: {_in: ["audio/ogg", "audio/wav", "audio/mpeg"]}, supply : { _neq : 0 }}, limit : 15, offset : ${offset}, order_by: {id: desc}) {
       id
@@ -245,84 +170,6 @@ async function fetchMusic(offset) {
   }
 }
 
-async function fetchTitle(title, offset) {
-  const { errors, data } = await fetchGraphQL(`
-  query queryTitles {
-    hic_et_nunc_token(where: {title: {_like: "%${title}%"}}) {
-      id
-      artifact_uri
-      display_uri
-      mime
-      creator {
-        address
-        name
-      }
-    }
-  }
-  `, 'queryTitles', {})
-
-  try {
-    return data.hic_et_nunc_token
-  } catch (e) {
-    return undefined
-  }
-}
-
-async function fetchCreations(addr, offset) {
-  const { errors, data } = await fetchGraphQL(`
-query creatorGallery {
-  hic_et_nunc_token(where: {creator: {address: {_eq: ${addr}}}, supply: {_gt: 0}}, order_by: {id: desc}, limit : 15, offset : ${offset} ) {
-    id
-    artifact_uri
-    display_uri
-    thumbnail_uri
-    timestamp
-    mime
-    title
-    description
-    supply
-    token_tags {
-      tag {
-        tag
-      }
-    }
-  }
-}
-`,
-    'creatorGallery',
-    {}
-  )
-  if (errors) {
-    console.error(errors)
-  }
-  const result = data.hic_et_nunc_token
-  /* console.log({ result }) */
-  return result
-}
-
-async function fetchDescription(description, offset) {
-  const { errors, data } = await fetchGraphQL(`
-  query queryDescriptions {
-    hic_et_nunc_token(where: {description: {_like: "%${description}%"}}) {
-      id
-      artifact_uri
-      display_uri
-      mime
-      creator {
-        address
-        name
-      }
-    }
-  }
-  `, 'queryDescriptions', {})
-
-  try {
-    return data.hic_et_nunc_token
-  } catch (e) {
-    return undefined
-  }
-}
-
 async function fetchRandomObjkts() {
   const firstId = 196
   const lastId = await getLastId()
@@ -332,7 +179,7 @@ async function fetchRandomObjkts() {
     uniqueIds.add(rnd(firstId, lastId))
   }
 
-  const { errors, data } = await fetchObjkts(Array.from(uniqueIds));
+  const { errors } = await fetchObjkts(Array.from(uniqueIds));
 
   let objkts = await fetchObjkts(Array.from(uniqueIds));
 
@@ -340,7 +187,6 @@ async function fetchRandomObjkts() {
     console.error(errors);
   }
 
-  const result = data
   return objkts.hic_et_nunc_token
 }
 
@@ -524,7 +370,6 @@ export class Search extends Component {
     items: [],
     feed: [],
     search: '',
-    select: '',
     prev: '',
     reset: false,
     flag: false,
@@ -635,8 +480,8 @@ export class Search extends Component {
     }
 
     if (e === '○ hDAO') {
-      let res = await fetchHdao(this.state.offset)
-      res = res.filter(e => !arr.includes(e.creator_id))
+      //let res = await fetchHdao(this.state.offset)
+      //res = res.filter(e => !arr.includes(e.creator_id))
       this.setState({ feed: _.uniqBy(_.uniqBy([...this.state.feed, ...(await fetchHdao(this.state.offset))], 'id'), 'creator_id'), hdao: true })
     }
 
@@ -649,8 +494,8 @@ export class Search extends Component {
     }
 
     if (e === 'glb') {
-      let res = await fetchGLB(this.state.offset)
-      res = res.filter(e => !arr.includes(e.creator_id))
+      //let res = await fetchGLB(this.state.offset)
+      //res = res.filter(e => !arr.includes(e.creator_id))
       this.setState({ feed: _.uniqBy([...this.state.feed, ...(await fetchGLB(this.state.offset))], 'creator_id') })
     }
 
@@ -660,36 +505,36 @@ export class Search extends Component {
       this.setState({ feed: _.uniqBy([...this.state.feed, ...(res)], 'creator_id') })
     }
 
-    if (e == 'random') {
+    if (e === 'random') {
       let res = await fetchRandomObjkts()
       res = res.filter(e => !arr.includes(e.creator_id))
       this.setState({ feed: [...this.state.feed, ...(res)] })
     }
 
-    if (e == 'gif') {
-      let res = await fetchGifs(this.state.offset)
-      res = res.filter(e => !arr.includes(e.creator_id))
+    if (e === 'gif') {
+      //let res = await fetchGifs(this.state.offset)
+      //res = res.filter(e => !arr.includes(e.creator_id))
       this.setState({ feed: _.uniqBy([...this.state.feed, ...(await fetchGifs(this.state.offset))], 'creator_id') })
     }
 
-    if (e == 'illustration') {
+    if (e === 'illustration') {
       console.log(await fetchTag('illustration'))
     }
 
-    if (e == 'tag') {
+    if (e === 'tag') {
       let res = await fetchTag(this.state.search, this.state.feed[this.state.feed.length - 1].id)
       res = res.filter(e => !arr.includes(e.creator_id))
       this.setState({ feed: _.uniqBy([...this.state.feed, ...(res)], 'creator_id') })
     }
 
-    if (e == 'recent sales') {
+    if (e === 'recent sales') {
       let tokens = await fetchSales(this.state.offset)
       tokens = tokens.map(e => e.token)
       tokens = tokens.filter(e => !arr.includes(e.creator_id))
       this.setState({ feed: _.uniqBy(_.uniqBy([...this.state.feed, ...tokens], 'id'), 'creator_id') })
     }
 
-    if (this.state.select == 'new OBJKTs') {
+    if (this.state.select === 'new OBJKTs') {
       this.latest()
     }
 
@@ -742,7 +587,7 @@ export class Search extends Component {
 
   handleKey = (e) => {
     console.log(this.state.search)
-    if (e.key == 'Enter') this.search(this.state.search)
+    if (e.key === 'Enter') this.search(this.state.search)
   }
 
   render() {
@@ -761,7 +606,7 @@ export class Search extends Component {
                 />
             {
               <div style={{ marginTop: '15px' }}>
-                {this.state.tags.map(e => <a className='tag' href='#' onClick={() => {
+                {this.state.tags.map(e => <a className='tag' href='#' onClick={() => { // eslint-disable-line jsx-a11y/anchor-is-valid
                   this.update(e.value, true)
                 }}>{e.value} </a>)}
               </div>

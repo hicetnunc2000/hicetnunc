@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react'
 import { HicetnuncContext } from '../../../context/HicetnuncContext'
 import { Container, Padding } from '../../../components/layout'
-import { Button, Curate, Purchase } from '../../../components/button'
+import { Button, Purchase } from '../../../components/button'
 import { Input } from '../../../components/input'
 import { Loading } from '../../../components/loading'
 
@@ -9,7 +9,7 @@ export const Burn = (props) => {
   console.log("BURN", props)
   
   const { token_holders, id } = props
-  const { burn, acc, proxyAddress, address, message, setMessage, setProgress, progress } = useContext(HicetnuncContext)
+  const { burn, acc, proxyAddress, message, setMessage, setProgress, progress } = useContext(HicetnuncContext)
   const [amount, setAmount] = useState('')
 
   let totalOwned = 0

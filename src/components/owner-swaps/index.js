@@ -25,7 +25,7 @@ export const OwnerSwaps = ({ swaps, handleCollect, cancel, proxyAdminAddress, re
           <div>
             {v1.map((e, index) => {
               if (acc) {
-                if (acc.address == e.creator_id) {
+                if (acc.address === e.creator_id) {
                   return (
                     <div>
                       <div key={`${e.id}-${index}`} className={styles.swap}>

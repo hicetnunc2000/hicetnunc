@@ -4,11 +4,11 @@ import { HicetnuncContext } from '../../../context/HicetnuncContext'
 import { Container, Padding } from '../../../components/layout'
 import { Loading } from '../../../components/loading'
 import { Input } from '../../../components/input'
-import { Button, Curate, Purchase } from '../../../components/button'
-import { stubFalse } from 'lodash'
+import { Button, Purchase } from '../../../components/button'
+
 export const Swap = ({ total_amount, owners, creator, royalties, token_info, address, restricted }) => {
   const { id } = useParams()
-  const { swap, swapv2, acc, swap_hDAO, progress, setProgress, message, setMessage } = useContext(HicetnuncContext)
+  const { swapv2, acc, swap_hDAO, progress, setProgress, message, setMessage } = useContext(HicetnuncContext)
   const [amount, setAmount] = useState()
   const [price, setPrice] = useState()
   //const [progress, setProgress] = useState(false)

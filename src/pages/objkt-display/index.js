@@ -141,9 +141,8 @@ export const ObjktDisplay = () => {
   const [loading, setLoading] = useState(true)
   const [tabIndex, setTabIndex] = useState(0)
   const [nft, setNFT] = useState()
-  const [error, setError] = useState(false)
+  const [error] = useState(false)
   const [restricted, setRestricted] = useState(false)
-  const [ban, setBans] = useState([])
 
   const address = context.acc?.address
   const proxy = context.getProxy()
@@ -250,13 +249,13 @@ export const ObjktDisplay = () => {
               }}
               className="objkt-display">
               <div className={
-                nft.mime == 'application/x-directory' || nft.mime == 'image/svg+xml' ? 'objktview-zipembed objktview ' + styles.objktview :
+                nft.mime === 'application/x-directory' || nft.mime === 'image/svg+xml' ? 'objktview-zipembed objktview ' + styles.objktview :
                   [(
-                    nft.mime == 'video/mp4' ||
-                      nft.mime == 'video/ogv' ||
-                      nft.mime == 'video/quicktime' ||
-                      nft.mime == 'video/webm' ||
-                      nft.mime == 'application/pdf' ? 'no-fullscreen' : 'objktview ' + styles.objktview
+                    nft.mime === 'video/mp4' ||
+                      nft.mime === 'video/ogv' ||
+                      nft.mime === 'video/quicktime' ||
+                      nft.mime === 'video/webm' ||
+                      nft.mime === 'application/pdf' ? 'no-fullscreen' : 'objktview ' + styles.objktview
                   )]
               }>
                 {renderMediaType({

@@ -14,7 +14,7 @@ export const CollabParticipant = ({ collabData }) => {
             GetUserMetadata(address)
             .then(({ data }) => setDisplayName(data.alias || address))
         }
-    }, [collabData.address, displayName])
+    }, [collabData.address, displayName]) // eslint-disable-line react-hooks/exhaustive-deps
 
     return displayName && (
         <Link className={styles.link} to={`${PATH.ISSUER}/${address}`}>{displayName}</Link>

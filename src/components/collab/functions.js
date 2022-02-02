@@ -2,8 +2,6 @@ import { createProxySchema } from "./constants";
 import { Parser } from "@taquito/michel-codec";
 import { Schema } from "@taquito/michelson-encoder";
 import { MichelsonMap } from '@taquito/taquito'
-import axios from "axios"
-import { getUserMetadataFile } from "../../data/hicdex";
 
 export const packParticipantMap = (participantData) => {
   const participantMap = MichelsonMap.fromLiteral(participantData);

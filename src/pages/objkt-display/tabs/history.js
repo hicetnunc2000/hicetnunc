@@ -1,7 +1,6 @@
-import React, { useContext, useState } from 'react'
+import React from 'react'
 import { Container, Padding } from '../../../components/layout'
 import { Primary } from '../../../components/button'
-import { HicetnuncContext } from '../../../context/HicetnuncContext'
 import { walletPreview } from '../../../utils/string'
 import styles from '../styles.module.scss'
 
