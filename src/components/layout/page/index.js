@@ -4,7 +4,7 @@ import classnames from 'classnames'
 import { VisuallyHidden } from '../../visually-hidden'
 import styles from './styles.module.scss'
 
-export const Page = ({ title = 'teia', children = null, large }) => {
+export const Page = ({ title = '', children = null, large }) => {
   const classes = classnames({
     [styles.container]: true,
     [styles.large]: large,
