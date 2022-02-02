@@ -26,7 +26,7 @@ export class About extends Component {
       <Page title="about" large>
         <Container>
           <Padding>
-            <strong>hic et nunc</strong>
+            <strong>teia</strong>
           </Padding>
         </Container>
 
@@ -51,7 +51,7 @@ export class About extends Component {
         <Container>
           <Padding>
             <div className={styles.buttons}>
-              <p>Join or contact hic et nunc on</p>
+              <p>Join or contact teia on</p>
               &nbsp;
               <Button href="https://discord.gg/7pZrPCcgnG">
                 <Primary>
@@ -59,7 +59,7 @@ export class About extends Component {
                 </Primary>
               </Button>
               <p>,</p>&nbsp;
-              <Button href="https://twitter.com/hen_community">
+              <Button href="https://twitter.com/TeiaCommunity">
                 <Primary>
                   <strong>twitter</strong>
                 </Primary>
