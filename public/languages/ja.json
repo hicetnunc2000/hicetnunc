@@ -9,7 +9,7 @@
         "route": "/mint"
       },
       { "primary": "作品管理", "route": "/sync" },
-      { "primary": "hic et nunc について", "route": "/about" }
+      { "primary": "teia について", "route": "/about" }
     ]
   },
   "footer": {
@@ -36,7 +36,7 @@
     "collection": "コレクション"
   },
   "about": {
-    "title": "hic et nunc",
+    "title": "teia",
     "paragraphs": [
       "この分散型アプリケーションは、テゾスブロックチェーン上で稼働する分散型デジタル資産を管理するための公開スマートコントラクトインフラストラクチャです。",
       "IPFS OBJKT資産は、パーミッションレスにミント(生成)や取引ができます。 この実験は、暗号技術を応用した経済のオルタナティブを模索することを意図して設計されました。",
