@@ -110,7 +110,7 @@ export class About extends Component {
           </Padding>
         </Container>
 {/*         <BottomBanner>
-        Collecting has been temporarily disabled. Follow <a href="https://twitter.com/hen_community" target="_blank">@hicetnunc_art</a> or <a href="https://discord.gg/7pZrPCcgnG" target="_blank">join the discord</a> for updates.
+        Collecting has been temporarily disabled. Follow <a href="https://twitter.com/TeiaCommunity" target="_blank">@hicetnunc_art</a> or <a href="https://discord.gg/7pZrPCcgnG" target="_blank">join the discord</a> for updates.
         </BottomBanner> */}
       </Page>
     )
