@@ -15,13 +15,9 @@ import { UnitValue } from '@taquito/michelson-encoder'
 import { contentType } from 'mime-types';
 import { char2Bytes } from '@taquito/utils';
 import { RequestSignPayloadInput, SigningType } from '@airgap/beacon-sdk'
-const { create } = require('ipfs-http-client')
-const IPFS = require('ipfs')
-const OrbitDB = require('orbit-db')
 const { NetworkType } = require('@airgap/beacon-sdk')
 var ls = require('local-storage')
 const axios = require('axios')
-const eztz = require('eztz-lib')
 
 export const HicetnuncContext = createContext()
 const infuraUrl = 'https://ipfs.infura.io:5001'
