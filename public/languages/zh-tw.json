@@ -6,7 +6,7 @@
       { "primary": "random", "route": "/random" },
       { "primary": "OBJKTs", "route": "/mint" },
       { "primary": "作品管理", "route": "/sync" },
-      { "primary": "關於hic et nunc", "route": "/about" }
+      { "primary": "關於teia", "route": "/about" }
     ]
   },
   "footer": {
@@ -34,7 +34,7 @@
     "collection": "藝術收集"
   },
   "about": {
-    "title": "hic et nunc",
+    "title": "teia",
     "paragraphs": [
       "目前的去中心化應用程序允許其用戶管理去中心化數位資產，作為Tezos區塊鏈上的公共智能合約基礎設施。",
       "IPFS OBJKTs 這種實驗的設計意圖是想像另一種加密經濟。",
