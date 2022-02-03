@@ -72,7 +72,7 @@ export const Header = () => {
             <div className={styles.logo}>
               {/* HIC LOGO */}
               {true && (
-                <img src={`/logos/${context.theme}/${context.logo}`} alt="teia"></img>
+                <img src={`https://teia.art/logos/${context.theme}/${context.logo}`} alt="teia"></img>
               )}
               {/* PRIDE LOGO */}
               {false && <img src="/hen-pride.gif" alt="pride 2021" />}

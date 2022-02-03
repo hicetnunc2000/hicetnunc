@@ -4,7 +4,7 @@ import classnames from 'classnames'
 import { VisuallyHidden } from '../../visually-hidden'
 import styles from './styles.module.scss'
 
-export const Page = ({ title = 'hic et nunc', children = null, large }) => {
+export const Page = ({ title = '', children = null, large }) => {
   const classes = classnames({
     [styles.container]: true,
     [styles.large]: large,
@@ -13,9 +13,9 @@ export const Page = ({ title = 'hic et nunc', children = null, large }) => {
     <main className={classes}>
       <Helmet>
         {title !== '' ? (
-          <title>{title} - hic et nunc</title>
+          <title>{title} - teia</title>
         ) : (
-          <title>hic et nunc</title>
+          <title>teia</title>
         )}
       </Helmet>
       <VisuallyHidden as="h1">{title}</VisuallyHidden>
