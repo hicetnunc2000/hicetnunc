@@ -1,13 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react'
 import Compressor from 'compressorjs'
-import { BottomBanner } from '../../components/bottom-banner'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
 import { Page, Container, Padding } from '../../components/layout'
 import { Input, Textarea } from '../../components/input'
 import { Button, Curate, Primary, Purchase } from '../../components/button'
 import { Upload } from '../../components/upload'
 import { Preview } from '../../components/preview'
-import { prepareFile, prepareFile100MB, prepareDirectory } from '../../data/ipfs'
+import { prepareFile, prepareDirectory } from '../../data/ipfs'
 import { prepareFilesFromZIP } from '../../utils/html'
 import {
   ALLOWED_MIMETYPES,
@@ -41,7 +40,7 @@ const thumbnailOptions = {
 const GENERATE_DISPLAY_AND_THUMBNAIL = true
 
 export const Mint = () => {
-  const { mint, acc, setAccount, proxyAddress, proxyName, setFeedback, syncTaquito } =
+  const { mint, acc, setAccount, proxyAddress, setFeedback, syncTaquito } =
     useContext(HicetnuncContext)
 
   // const history = useHistory()
@@ -75,12 +74,12 @@ export const Mint = () => {
     })
 
     updateName()
-  }, [acc])
+  }, [acc]) // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     updateName()
     setSelectCollab(false)
-  }, [proxyAddress])
+  }, [proxyAddress]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const updateName = () => {
     const currentAddress = proxyAddress || acc?.address

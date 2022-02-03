@@ -24,7 +24,7 @@ export const CountdownTimer = ({ endDate, onComplete }) => {
         if (timeLeft <= 0) {
             onComplete()
         }
-    }, [timeLeft])
+    }, [timeLeft]) // eslint-disable-line react-hooks/exhaustive-deps
 
     return timeLeft > 0 ? `${timeLeft}s` : 'checking...'
 }

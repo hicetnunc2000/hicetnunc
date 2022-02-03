@@ -1,11 +1,10 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { Button } from '../../button'
 import { Container } from '../../layout'
 import { renderMediaType } from "../../media-types";
 import { ResponsiveMasonry } from "../../responsive-masonry";
 import { PATH } from "../../../constants";
-import { HicetnuncContext } from "../../../context/HicetnuncContext";
 import { fetchGraphQL, getCollabTokensForAddress } from "../../../data/hicdex";
 import collabStyles from '../styles.module.scss'
 import classNames from "classnames";

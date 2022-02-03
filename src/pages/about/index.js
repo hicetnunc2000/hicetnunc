@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import { Page, Container, Padding } from '../../components/layout'
 import { Button, Primary } from '../../components/button'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
-import { BottomBanner } from '../../components/bottom-banner'
 import { getLanguage } from '../../constants'
 import styles from './styles.module.scss'
 

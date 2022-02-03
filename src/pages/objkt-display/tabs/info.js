@@ -1,11 +1,10 @@
 import React from 'react'
 import { Container, Padding } from '../../../components/layout'
-import { Button, Primary, Purchase } from '../../../components/button'
 import { Tags } from '../../../components/tags'
 import '../style.css'
 
 export const Info = (token_info) => {
-  const { title, description, metadata, token_tags, mime, artifact_uri, royalties, timestamp } = token_info
+  const { title, description, metadata, token_tags, mime, artifact_uri } = token_info
   console.log(token_info)
   // cloudflare isn't useful in this case. they don't allow video streaming...
   // const CLOUDFLARE = 'https://cloudflare-ipfs.com/ipfs/'

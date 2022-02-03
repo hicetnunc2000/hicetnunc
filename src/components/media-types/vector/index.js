@@ -6,7 +6,6 @@ import './index.css'
 
 export const VectorComponent = ({
   artifactUri,
-  displayUri,
   previewUri,
   creator,
   objkt,
@@ -65,7 +64,7 @@ export const VectorComponent = ({
           src={path}
           sandbox="allow-scripts"
           scrolling="no"
-          onLoad={'javascript:(function(o){o.style.height=o.contentWindow.document.body.scrollHeight+"px";}(this));'}
+          onLoad={'javascript:(function(o){o.style.height=o.contentWindow.document.body.scrollHeight+"px";}(this));'} // eslint-disable-line no-script-url
         />
       </div>
     )

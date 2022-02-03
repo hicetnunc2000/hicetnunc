@@ -1,14 +1,14 @@
 import React from 'react'
-import { Button, Primary, Purchase } from '../button'
+import { Button, Primary } from '../button'
 import { walletPreview } from '../../utils/string'
 import styles from './styles.module.scss'
 
-export const OwnerList = ({ owners, creator_id, acc, swaps, cancelv1 }) => {
+export const OwnerList = ({ owners }) => {
   owners = owners.filter(e => e.holder_id !== 'tz1burnburnburnburnburnburnburjAYjjX' && e.holder_id !== 'KT1HbQepzV1nVGg8QVznG7z4RcHseD5kwqBn')
   return (
 
     <div className={styles.container}>
-      {owners.map(({ quantity, holder_id, holder, creator_id }, index) => (
+      {owners.map(({ quantity, holder_id, holder }, index) => (
 
 
         <div key={`${holder_id}-${index}`} className={styles.owner}>

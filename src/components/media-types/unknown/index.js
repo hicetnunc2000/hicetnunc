@@ -1,6 +1,5 @@
-import React, { useState } from 'react'
+import React from 'react'
 import styles from './styles.module.scss'
-const axios = require('axios')
 
 export const UnknownComponent = ({ mimeType }) => {
 /*   const [queue, updateQueue] = useState()

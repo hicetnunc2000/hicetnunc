@@ -1,13 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react'
-import { BottomBanner } from '../../components/bottom-banner'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { useParams } from 'react-router'
 import { Button } from '../../components/button'
 import { ResponsiveMasonry } from '../../components/responsive-masonry'
-import { Loading } from '../../components/loading'
 import { renderMediaType } from '../../components/media-types'
-import { Page, Container, Padding } from '../../components/layout'
+import { Page, Container } from '../../components/layout'
 import { PATH } from '../../constants'
 import styles from './styles.module.scss'
 
@@ -30,7 +28,7 @@ async function fetchGraphQL(operationsDoc, operationName, variables) {
 }
 
 async function fetchTag(tag, offset) {
-  const { errors, data } = await fetchGraphQL(`query ObjktsByTag($tag: String = "3d", $lastId: bigint = 99999999) {
+  const { data } = await fetchGraphQL(`query ObjktsByTag($tag: String = "3d", $lastId: bigint = 99999999) {
     hic_et_nunc_token(where: {token_tags: {tag: {tag: {_eq: ${tag}}}}, id: {_lt: $lastId}, supply: {_gt: "0"}}, order_by: {id: desc}, limit : 35, offset : ${offset}) {
       id
       artifact_uri
@@ -63,11 +61,9 @@ const getRestrictedAddresses = async () =>
 
 export const Tags = () => {
   const { id } = useParams()
-  const [error, setError] = useState(false)
-  const [items, setItems] = useState([])
   const [feed, setFeed] = useState([])
   const [count, setCount] = useState(0)
-  const [hasMore, setHasMore] = useState(true)
+  const [hasMore] = useState(true)
   const [restricted, setRestricted] = useState([])
   const [offset, setOffset] = useState(0)
 

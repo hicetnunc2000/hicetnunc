@@ -1,8 +1,7 @@
 import React, { Component } from 'react'
-import { Button, Primary, Secondary, Purchase } from '../../components/button'
+import { Button, Primary, Secondary } from '../../components/button'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
 import { Page, Container, Padding } from '../../components/layout'
-import { BottomBanner } from '../../components/bottom-banner'
 import { Loading } from '../../components/loading'
 import { renderMediaType } from '../../components/media-types'
 import { Identicon } from '../../components/identicons'
@@ -17,10 +16,6 @@ import styles from './styles.module.scss'
 
 const axios = require('axios')
 const fetch = require('node-fetch')
-
-const sortByTokenId = (a, b) => {
-  return b.id - a.id
-}
 
 const getRestrictedAddresses = async () =>
   await axios
@@ -447,7 +442,7 @@ export default class Display extends Component {
     this.setState({ collectionType: 'forSale' })
 
     let v1Swaps = this.state.marketV1.filter(item => {
-      const objkts = item.token.creator.address == this.state.wallet
+      const objkts = item.token.creator.address === this.state.wallet
       return objkts
     })
 
@@ -455,11 +450,11 @@ export default class Display extends Component {
     this.setState({ objkts: this.state.creations, loading: false, items: [] })
 
     if (forSaleType !== null) {
-      if (forSaleType == 0) {
+      if (forSaleType === 0) {
         this.setState({
           objkts: await this.filterCreationsForSalePrimary(this.state.objkts)
         })
-      } else if (forSaleType == 1) {
+      } else if (forSaleType === 1) {
         this.setState({
           objkts: await this.filterCreationsForSaleSecondary(this.state.objkts)
         })
@@ -474,7 +469,7 @@ export default class Display extends Component {
   filterCreationsForSalePrimary = async () => {
     let objkts = this.state.creations.filter(item => {
       const swaps = item.swaps.filter(swaps => {
-        return swaps.status == 0 && swaps.contract_version == 2 && swaps.creator_id == this.state.wallet
+        return swaps.status === 0 && swaps.contract_version === 2 && swaps.creator_id === this.state.wallet
       })
       return swaps && swaps.length > 0
     });
@@ -485,7 +480,7 @@ export default class Display extends Component {
   filterCreationsForSaleSecondary = async () => {
     let objkts = this.state.creations.filter(item => {
       const swaps = item.swaps.filter(swaps => {
-        return swaps.status == 0 && swaps.creator_id !== this.state.wallet
+        return swaps.status === 0 && swaps.creator_id !== this.state.wallet
       })
       return swaps && swaps.length > 0
     });
@@ -602,7 +597,7 @@ export default class Display extends Component {
   }
 
   filterCollectionForSale = async () => {
-    let objktsForSale = this.state.collection.filter(item => item.creator_id == this.state.wallet)
+    let objktsForSale = this.state.collection.filter(item => item.creator_id === this.state.wallet)
     return objktsForSale
   }
 
@@ -668,10 +663,10 @@ export default class Display extends Component {
                 </Button>
 
                 {
-                  this.state.claim.length == 0 ?
+                  this.state.claim.length === 0 ?
                     <p>{this.state.hdao} ○</p>
                     :
-                    <a onClick={() => this.context.batch_claim(this.state.claim)}>
+                    <a onClick={() => this.context.batch_claim(this.state.claim)} /* eslint-disable-line */> 
                       <Primary>{this.state.hdao + parseInt(this.state.claim.map(e => e.hdao_balance).reduce((a, b) => a + b, 0) / 1000000)} ○</Primary>
                     </a>
                 }
@@ -891,9 +886,9 @@ export default class Display extends Component {
               </Padding>
             </Container>
             <Container xlarge>
-              {this.state.collectionType == 'forSale' ?
+              {this.state.collectionType === 'forSale' ?
                 <>
-                  {this.context.acc != null && this.context.acc.address == this.state.wallet ?
+                  {this.context.acc != null && this.context.acc.address === this.state.wallet ?
                     <>
                       {Object.keys(this.state.marketV1).length !== 0 && (
                         <>
@@ -1023,9 +1018,9 @@ export default class Display extends Component {
             </Container>
             <Container xlarge>
 
-              {this.state.collectionType == 'forSale' ?
+              {this.state.collectionType === 'forSale' ?
                 <>
-                  {this.context.acc != null && this.context.acc.address == this.state.wallet ?
+                  {this.context.acc != null && this.context.acc.address === this.state.wallet ?
                     <>
                       {Object.keys(this.state.marketV1).length !== 0 && (
                         <>

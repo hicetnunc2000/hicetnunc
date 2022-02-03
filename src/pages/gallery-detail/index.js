@@ -3,20 +3,16 @@ import { AnimatePresence } from 'framer-motion'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
 import { useParams } from 'react-router'
 import { Page, Container, Padding } from '../../components/layout'
-import { Loading } from '../../components/loading'
 import { Button, Primary } from '../../components/button'
-import { Item } from './item'
 import { ItemModal } from './item-modal'
-import { Artist } from './artist'
 import { ResponsiveMasonry } from '../../components/responsive-masonry'
 import { renderMediaType } from '../../components/media-types'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import styles from './styles.module.scss'
-import { flattenDeep } from 'lodash'
 import axios from 'axios'
 const _ = require('lodash')
 async function fetchObjkts(ids) {
-  const { errors, data } = await fetchGraphQL(`
+  const { data } = await fetchGraphQL(`
     query Objkts($_in: [bigint!] = "") {
       hic_et_nunc_token(where: { id: {_in: $_in}}) {
         artifact_uri
@@ -77,7 +73,7 @@ export const GalleryDetail = () => {
             .then(async (data) => {
               let res = []
 
-              if (id == 'thefen') {
+              if (id === 'thefen') {
                 res = await axios.get('https://raw.githubusercontent.com/joanielemercier/The_fen/main/thefen.json').then(res => res.data.data.map(e => e.objkt))
                 res = res.reduce((a, b) => [...a, ...b], [])
                 res = await(fetchObjkts(res))
@@ -99,13 +95,13 @@ export const GalleryDetail = () => {
     return () => {
       document.body.style = {}
     }
-  }, [id])
+  }, [id]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const loadMore = () => {
     setFeed([...feed, ...items.slice(offset, offset + 15)])
     context.feed = _.uniqBy([...context.feed, ...items.slice(offset, offset + 15)], 'id')
     setOffset(offset + 15)
-    if (feed.length == items.lenght) setHasMore(false)
+    if (feed.length === items.lenght) setHasMore(false)
   }
 
   return (

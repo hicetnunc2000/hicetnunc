@@ -1,6 +1,6 @@
 import { useContext } from 'react'
 import { HicetnuncContext } from '../../../context/HicetnuncContext'
-import { Button, Primary, Purchase } from '../../button'
+import { Button, Purchase } from '../../button'
 import styles from '../styles.module.scss'
 
 export const SigningUI = ({ id, hasSigned }) => {
