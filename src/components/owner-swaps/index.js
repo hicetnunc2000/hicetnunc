@@ -36,7 +36,7 @@ export const OwnerSwaps = ({ swaps, handleCollect, cancel, proxyAdminAddress, re
                           </Button>
                         </div>
                         <div className={styles.buttons}>
-                          <Button onClick={() => cancelv1(e.id)}>
+                          <Button onClick={() => cancelv1(e.id)} full={true}>
                             <Purchase>cancel</Purchase>
                           </Button>
                         </div>
@@ -98,6 +98,7 @@ export const OwnerSwaps = ({ swaps, handleCollect, cancel, proxyAdminAddress, re
           </div>
         )
       })}
+      <div className={styles.border} />
     </div>
   )
 }

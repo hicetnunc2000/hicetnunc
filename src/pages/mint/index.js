@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import Compressor from 'compressorjs'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
 import { Page, Container, Padding } from '../../components/layout'
@@ -61,7 +61,7 @@ export const Mint = () => {
 
   // On mount, see if there are available collab contracts
   useEffect(() => {
-    // On boot, see what addresses the synced address can manage 
+    // On boot, see what addresses the synced address can manage
     fetchGraphQL(getCollabsForAddress, 'GetCollabs', {
       address: acc?.address,
     }).then(({ data, errors }) => {

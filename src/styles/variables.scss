@@ -1,10 +1,38 @@
 :root {
   --background-color: #ffffff;
-  --background-color-rgb: 255, 255, 255;
   --text-color: #000000;
   --border-color: rgba(0, 0, 0, 0.1);
   --shadow-color: rgba(0, 0, 0, 0.2);
+  --secondary-color: rgba(0, 0, 0, 0.5);
+
+  --gray-0: #FFFFFF;
+  --gray-5: #F2F2F2;
+  --gray-10: #E6E6E6;
+  --gray-15: #D9D9D9;
+  --gray-20: #CCCCCC;
+  --gray-30: #B3B3B3;
+  --gray-40: #999999;
+  --gray-50: #808080;
+  --gray-60: #666666;
+  --gray-70: #4D4D4D;
+  --gray-80: #333333;
+  --gray-90: #191919;
+  --gray-100: #000000;
 }
+
+$font-h1: 33.18px;
+$font-h2: 27.65px;
+$font-h3: 23.04px;
+$font-large: 19.2px;
+$font-body: 16px;
+$font-small: 13.33px;
+
+$font-h1-mobile: 25.63px;
+$font-h2-mobile: 22.78px;
+$font-h3-mobile: 20.25px;
+$font-large-mobile: 18px;
+$font-body-mobile: 16px;
+$font-small-mobile: 14.22px;
 
 $theme-duration: 0.5s;
 $mobile-padding: 1.25rem;

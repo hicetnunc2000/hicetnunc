@@ -4,7 +4,6 @@ import { useHistory } from 'react-router'
 import { motion, AnimatePresence } from 'framer-motion'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
 import { Footer } from '../footer'
-// import { VoteBanner } from '../vote-banner'
 import { Container, Padding } from '../layout'
 import { Button, Primary } from '../button'
 import { fadeIn } from '../../utils/motion'
@@ -66,7 +65,6 @@ export const Header = () => {
 
   return (
     <>
-      {/* <VoteBanner /> */}
       <header className={styles.container}>
         <div className={styles.content}>
           <Button onClick={() => handleRoute('/')}>
@@ -111,8 +109,8 @@ export const Header = () => {
                 <nav className={styles.content}>
                   <ul>
                     <li>
-                      <Button onClick={() => handleRoute('/explore')}>
-                        <Primary>explore</Primary>
+                      <Button onClick={() => handleRoute('/search')}>
+                        <Primary>search</Primary>
                       </Button>
                     </li>
                     <li>

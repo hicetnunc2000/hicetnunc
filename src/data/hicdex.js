@@ -73,7 +73,7 @@ export const getCollabCreationsBySubjkt = `query GetCollabCreations($subjkt: Str
       }
     }
   }
-  
+
   hic_et_nunc_splitcontract(where: {contract: {name: {_eq: $subjkt}}}) {
     administrator
     shareholder {

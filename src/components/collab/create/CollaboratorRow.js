@@ -86,7 +86,6 @@ export const CollaboratorRow = ({ collaborator, onUpdate, onAdd, onRemove, onPas
 
     const collaboratorName = meta ? meta.alias : null
     const placeholderText = collaboratorName || `address ${!address ? `(tz... or KT...)` : ''}`
-
     /**
      * In some situations we may want to show less UI information
      * eg. when adding benefactors, you don't need the whole

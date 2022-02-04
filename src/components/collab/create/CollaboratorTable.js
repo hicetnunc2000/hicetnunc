@@ -75,7 +75,6 @@ export const CollaboratorTable = ({ collaborators, setCollaborators, availableSh
                 setCollaborators([{ ...collaboratorTemplate }])
             }
         }
-
     }, [multilineInput, collaborators, setCollaborators, autoSplit, setAutoSplit])
 
     const lastCollab = collaborators[collaborators.length - 1]

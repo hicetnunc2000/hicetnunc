@@ -48,6 +48,7 @@ export const HTMLComponent = (props) => {
   const unpacking = useRef(false)
   const [validHTML, setValidHTML] = useState(null)
   const [validationError, setValidationError] = useState(null)
+  const [contentRef, setContentRef] = useState(null)
 
   const unpackZipFiles = async () => {
     unpacking.current = true

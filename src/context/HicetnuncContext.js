@@ -61,7 +61,6 @@ const Packer = new MichelCodecPacker();
 
 function modifyFeeAndLimit(op) {
   const { fee, gas_limit, storage_limit, ...rest } = op;
-
   if (op.parameters && (op.parameters.entrypoint === "swap") || (op.parameters.entrypoint === "mint_OBJKT") || (op.parameters.entrypoint === "collect")) {
     rest.storage_limit = 310
   }

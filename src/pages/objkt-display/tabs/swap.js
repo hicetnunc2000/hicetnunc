@@ -5,6 +5,7 @@ import { Container, Padding } from '../../../components/layout'
 import { Loading } from '../../../components/loading'
 import { Input } from '../../../components/input'
 import { Button, Purchase } from '../../../components/button'
+import { stubFalse } from 'lodash'
 
 export const Swap = ({ total_amount, owners, creator, royalties, token_info, address, restricted }) => {
   const { id } = useParams()
@@ -48,7 +49,7 @@ export const Swap = ({ total_amount, owners, creator, royalties, token_info, add
 
       if (currency === 'tez') {
       swapv2(acc.address, royalties, parseFloat(price) * 1000000, id, creator.address, parseFloat(amount))
-      //swap(parseFloat(amount), id, parseFloat(price) * 1000000)  
+      //swap(parseFloat(amount), id, parseFloat(price) * 1000000)
           .then((e) => {
             // when taquito returns a success/fail message
             //setProgress(false)
@@ -95,7 +96,7 @@ export const Swap = ({ total_amount, owners, creator, royalties, token_info, add
                   defaultValue={amount}
                   /* max={total_amount - sales} */
                   onChange={(e) => setAmount(e.target.value)}
-                  onWheel={(e) => e.target.blur()} 
+                  onWheel={(e) => e.target.blur()}
                   disabled={progress}
                 />
                 <div style={{ width: '100%', display: 'flex' }}>
@@ -107,7 +108,7 @@ export const Swap = ({ total_amount, owners, creator, royalties, token_info, add
                       min={0}
                       max={10000}
                       onChange={(e) => checkPrice(e.target.value)}
-                      onWheel={(e) => e.target.blur()} 
+                      onWheel={(e) => e.target.blur()}
                       disabled={progress}
                     />
                   </div>

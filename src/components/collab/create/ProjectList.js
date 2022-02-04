@@ -29,7 +29,7 @@ export const ProjectList = ({ beneficiaries, onSelect }) => {
             </button>
 
             {showList && (
-                <ul className={styles.list}> 
+                <ul className={styles.list}>
                     {unselectedProjects.map(project => {
                         const { name, address } = project
 

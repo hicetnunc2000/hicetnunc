@@ -1,2 +1,56 @@
-//@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Thai&display=swap'); 
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400&display=swap');
+@import './variables.scss';
+@import './mixins.scss';
+
+@font-face {
+  font-family: 'basier_circle_monoregular';
+  src: url('fonts/basiercirclemono-regular-webfont.eot');
+  src: url('fonts/basiercirclemono-regular-webfont.eot?#iefix') format('embedded-opentype'),
+       url('fonts/basiercirclemono-regular-webfont.woff2') format('woff2'),
+       url('fonts/basiercirclemono-regular-webfont.woff') format('woff'),
+       url('fonts/basiercirclemono-regular-webfont.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+	font-family: 'iosevka-extended';
+	font-display: swap;
+	font-weight: 400;
+	font-stretch: expanded;
+	font-style: normal;
+	src:  url('fonts/iosevka-extended.woff2') format('woff2'),
+        url('fonts/iosevka-extended.ttf') format('truetype');
+}
+
+h1 {
+  font-size: $font-h1-mobile;
+
+  @include respond-to('desktop') {
+    font-size: $font-h1;
+  }
+}
+
+h2 {
+  font-size: $font-h2-mobile;
+
+  @include respond-to('desktop') {
+    font-size: $font-h2;
+  }
+}
+
+h3 {
+  font-size: $font-h3-mobile;
+
+  @include respond-to('desktop') {
+    font-size: $font-h3;
+  }
+}
+
+body {
+  font-size: $font-body-mobile;
+
+  @include respond-to('desktop') {
+    font-size: $font-body;
+  }
+}
+

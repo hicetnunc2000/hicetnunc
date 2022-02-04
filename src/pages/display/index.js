@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
-import { Button, Primary, Secondary } from '../../components/button'
+import { Button, Primary, Secondary, Purchase } from '../../components/button'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
 import { Page, Container, Padding } from '../../components/layout'
+import { BottomBanner } from '../../components/bottom-banner'
 import { Loading } from '../../components/loading'
 import { renderMediaType } from '../../components/media-types'
 import { Identicon } from '../../components/identicons'
@@ -16,6 +17,10 @@ import styles from './styles.module.scss'
 
 const axios = require('axios')
 const fetch = require('node-fetch')
+
+const sortByTokenId = (a, b) => {
+  return b.id - a.id
+}
 
 const getRestrictedAddresses = async () =>
   await axios
@@ -297,7 +302,6 @@ export default class Display extends Component {
     if (id === 'tz') {
 
       const wallet = window.location.pathname.split('/')[2]
-
       this.setState({
         wallet,
         walletPreview: walletPreview(wallet),
@@ -349,8 +353,8 @@ export default class Display extends Component {
           walletPreview: walletPreview(res[0].address),
           subjkt: window.location.pathname.split('/')[1]
         })
+
         let resTz = await fetchTz(this.state.wallet)
-        console.log(resTz)
         this.setState({ hdao: Math.floor(resTz[0].hdao_balance / 1000000) })
       } else {
         this.props.history.push('/')
@@ -666,7 +670,7 @@ export default class Display extends Component {
                   this.state.claim.length === 0 ?
                     <p>{this.state.hdao} ○</p>
                     :
-                    <a onClick={() => this.context.batch_claim(this.state.claim)} /* eslint-disable-line */> 
+                    <a onClick={() => this.context.batch_claim(this.state.claim)} /* eslint-disable-line */>
                       <Primary>{this.state.hdao + parseInt(this.state.claim.map(e => e.hdao_balance).reduce((a, b) => a + b, 0) / 1000000)} ○</Primary>
                     </a>
                 }
@@ -692,7 +696,6 @@ export default class Display extends Component {
                       </svg>
                     </Button>
                   )}
-
                   {this.state.tzprofile && (
                     <Button href={`https://tzprofiles.com/view/${this.state.tzprofile}`}>
                       <VisuallyHidden>{`https://tzprofiles.com/view/${this.state.tzprofile}`}</VisuallyHidden>
@@ -715,7 +718,6 @@ export default class Display extends Component {
                       </svg>
                     </Button>
                   )}
-
                   {this.state.discord && (
                     <Button onClick={() => {
                       this.setState({ copied: true })

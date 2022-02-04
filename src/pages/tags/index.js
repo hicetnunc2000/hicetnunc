@@ -4,8 +4,9 @@ import InfiniteScroll from 'react-infinite-scroll-component'
 import { useParams } from 'react-router'
 import { Button } from '../../components/button'
 import { ResponsiveMasonry } from '../../components/responsive-masonry'
+import { Loading } from '../../components/loading'
 import { renderMediaType } from '../../components/media-types'
-import { Page, Container } from '../../components/layout'
+import { Page, Container, Padding } from '../../components/layout'
 import { PATH } from '../../constants'
 import styles from './styles.module.scss'
 
@@ -42,7 +43,7 @@ async function fetchTag(tag, offset) {
     }
   }`,
     'ObjktsByTag',
-    {}
+    { tag: tag }
   )
 
   try {

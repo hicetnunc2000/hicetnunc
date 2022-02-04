@@ -80,7 +80,7 @@ export const GalleryDetail = () => {
                 res = res.filter(e => ![34413, 35798, 41628].includes(e.id))
               } else {
                 res = await fetchObjkts(data.data[0].objkt)
-              } 
+              }
 
               setItems(res)
               setCollection(data)

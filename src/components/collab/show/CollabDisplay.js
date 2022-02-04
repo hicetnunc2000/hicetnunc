@@ -36,7 +36,7 @@ export const CollabDisplay = () => {
 
     // one of the two will be supplied
 
-    // contract id route - ie. /kt/:id 
+    // contract id route - ie. /kt/:id
     useEffect(() => {
         if (!id && !name) {
             return

@@ -156,10 +156,10 @@ export class Config extends Component {
   }
 
   toggle = () => this.setState({ toogled: !this.state.toogled })
-  /*     
+  /*
 
    signature studies
-   
+
    const bytes =
          '05' +
          char2Bytes(
@@ -175,8 +175,8 @@ export class Config extends Component {
          sourceAddress: this.context.addr,
        }
        console.log(payload)
-       this.context.sign(payload) 
-       
+       this.context.sign(payload)
+
   */
 
   sign = () => {
