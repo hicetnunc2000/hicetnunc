@@ -12,18 +12,11 @@
 
     .issuer {
       display: flex;
-      align-items: stretch;
-    }
-
-    .break {
-      flex-basis: 100%;
-      height: 0;
-      margin-bottom:10px;
+      align-items: center;
     }
 
     .buttons {
       display: flex;
-      flex-wrap: wrap;
       align-items: center;
       justify-content: flex-end;
 

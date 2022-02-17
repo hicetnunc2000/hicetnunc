@@ -6,20 +6,14 @@ import { Input } from '../../../components/input'
 import { Loading } from '../../../components/loading'
 
 export const Burn = (props) => {
-  console.log("BURN", props)
-  
-  const { token_holders, id } = props
-  const { burn, acc, proxyAddress, address, message, setMessage, setProgress, progress } = useContext(HicetnuncContext)
+  const { burn, address, message, setMessage, setProgress, progress } = useContext(HicetnuncContext)
   const [amount, setAmount] = useState('')
 
   let totalOwned = 0
 
-  const proxyAdminAddress = props.creator.is_split ? props.creator.shares[0].administrator : null
-
-  const found = token_holders.find(
-    (e) => e.holder_id === acc?.address || (e.holder_id === proxyAddress && acc?.address === proxyAdminAddress)
+  const found = props.token_holders.find(
+    (e) => e.holder_id === address?.address
   )
-
   if (found) {
     totalOwned = found.quantity
   }
@@ -43,7 +37,7 @@ export const Burn = (props) => {
     if (r) {
       setProgress(true)
       setMessage('burning OBJKT')
-      burn(id, amount)
+      burn(props.id, amount)
     }
   }
 
@@ -100,7 +94,7 @@ export const Burn = (props) => {
         <div>
           <p tyle={{
           position: 'absolute',
-          left: '46%',
+          left: '50%',
           top: '35%',
       }}> {message}</p>
           {progress && <Loading />}

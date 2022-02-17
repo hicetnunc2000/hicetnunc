@@ -1,29 +1,35 @@
 import { useEffect, useState } from "react"
-import { Button, Secondary } from "../../../components/button"
-import { } from '../../media-types/'
+import { Button, Secondary } from "../../button"
+import { TipSelector } from './TipSelector'
 import styles from '../styles.module.scss'
 import inputStyles from '../../../components/input/styles.module.scss'
-import { CloseIcon } from '../'
 import classNames from "classnames"
+import { CloseIcon } from ".."
 import { GetUserMetadata } from "../../../data/api"
 
-export const CollaboratorRow = ({ collaborator, onUpdate, onAdd, onRemove, onPasteMulti, minimalView, onEdit }) => {
+export const BenefactorRow = ({
+    benefactor, onUpdate, onAdd, onRemove, onPasteMulti, onSelectPercentage, minimalView
+}) => {
 
     const [meta, setMeta] = useState()
-    const [address, setAddress] = useState(collaborator.address)
-    const [shares, setShares] = useState(collaborator.shares)
+    const [address, setAddress] = useState(benefactor.address)
+    const [shares, setShares] = useState(benefactor.shares)
 
     useEffect(() => {
-        const { address, shares } = collaborator
-
+        const { address, shares } = benefactor
+        
         if (!meta && address) {
             GetUserMetadata(address)
             .then(({ data }) => setMeta(data))
         }
 
+        if (meta && !address) {
+            setMeta()
+        }
+
         setAddress(address)
         setShares(shares)
-    }, [collaborator, meta])
+    }, [benefactor])
 
     const _update = (field, value) => {
 
@@ -34,12 +40,12 @@ export const CollaboratorRow = ({ collaborator, onUpdate, onAdd, onRemove, onPas
             // send to parent to do the multi-split function
             onPasteMulti(value);
         } else {
-            const updatedCollaborator = {
-                ...collaborator,
+            const updatedBenefactor = {
+                ...benefactor,
                 [field]: isNaN(value) ? value : Number(value),
             }
 
-            onUpdate(updatedCollaborator)
+            onUpdate(updatedBenefactor)
         }
     }
 
@@ -48,25 +54,26 @@ export const CollaboratorRow = ({ collaborator, onUpdate, onAdd, onRemove, onPas
 
     const _onKeyDown = (event) => {
         if (event.keyCode === 13 && onAdd) {
-            onAdd(collaborator)
+            onAdd(benefactor)
         }
     }
 
-    const collaboratorName = meta ? meta.alias : null
-    const placeholderText = collaboratorName || `address ${!address ? `(tz... or KT...)` : ''}`
-    
+    // If the user has chosen from the popular projects list
+    // the benefactor data will contain the name of the project
+    // otherwise just show "address" and the KT or tz hint if not populated
+
+    const benefactorName = meta ? meta.alias : null
+    const placeholderText = benefactorName || `address ${!address ? `(tz... or KT...)` : ''}`
+
     /**
      * In some situations we may want to show less UI information
      * eg. when adding benefactors, you don't need the whole
-     * collaborator UI open, so just show addresses and shares
+     * benefactor UI open, so just show addresses and shares
      */
     return minimalView ? (
-        <tr className={styles.row} onClick={onEdit}>
-            <td className={styles.cellWithPadding}>
-                { collaboratorName && <p>{collaboratorName}</p> }
-                <span>{address}</span>
-            </td>
-            <td className={styles.cellWithPadding}>{collaborator.shares} shares</td>
+        <tr className={styles.row}>
+            <td className={styles.addressCell}>{address}</td>
+            <td className={styles.sharesCell}>{benefactor.share}%</td>
         </tr>
     ) : (
         <tr className={styles.row}>
@@ -75,13 +82,13 @@ export const CollaboratorRow = ({ collaborator, onUpdate, onAdd, onRemove, onPas
                     <label>
                         <textarea
                             rows={1}
-                            className={styles.textInput}
-                            onChange={event => _update('address', event.target.value)}
-                            placeholder={placeholderText}
                             value={address || ''}
-                            autoFocus={!address}
+                            className={styles.textInput}
+                            placeholder="address (tz... or KT...)"
+                            autoFocus={!address || address === ''}
+                            onChange={event => _update('address', event.target.value)}
                         />
-                        <p>{ placeholderText }</p>
+                        <p>{placeholderText}</p>
                     </label>
                 </div>
             </td>
@@ -91,29 +98,27 @@ export const CollaboratorRow = ({ collaborator, onUpdate, onAdd, onRemove, onPas
                     <label>
                         <input
                             type="number"
-                            onChange={event => _update('shares', event.target.value)}
-                            onKeyDown={_onKeyDown}
-                            placeholder="shares"
                             label="shares"
+                            placeholder="shares"
                             value={shares || ''}
-                            autoFocus={address && !shares}
+                            onKeyDown={_onKeyDown}
+                            autoFocus={Boolean(address)}
+                            onChange={event => _update('shares', event.target.value)}
                         />
                         <p>shares</p>
                     </label>
+                    {!shares && onSelectPercentage && <TipSelector onSelect={onSelectPercentage} />}
                 </div>
             </td>
 
-            {/* If there is an onRemove or onAdd function passed in, show a button to call the function */}
+            <td className={styles.actionCell}>
+                <Button onClick={onRemove}>
+                    <Secondary>
+                        <CloseIcon />
+                    </Secondary>
+                </Button>
+            </td>
 
-            {onRemove && (
-                <td className={styles.actionCell}>
-                    <Button onClick={onRemove}>
-                        <Secondary>
-                            <CloseIcon />
-                        </Secondary>
-                    </Button>
-                </td>
-            )}
         </tr>
     )
 }

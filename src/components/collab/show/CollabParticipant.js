@@ -6,17 +6,14 @@ import styles from '../styles.module.scss'
 
 export const CollabParticipant = ({ collabData }) => {
 
-    const { name, address } = collabData
-    const [displayName, setDisplayName] = useState(name)
+    const [meta, setMeta] = useState({})
 
     useEffect(() => {
-        if (!displayName) {
-            GetUserMetadata(address)
-            .then(({ data }) => setDisplayName(data.alias || address))
-        }
-    }, [collabData.address, displayName])
+        GetUserMetadata(collabData.address)
+        .then(({ data }) => setMeta(data))
+    }, [collabData.address])
 
-    return displayName && (
-        <Link className={styles.link} to={`${PATH.ISSUER}/${address}`}>{displayName}</Link>
+    return (
+        <Link className={styles.link} to={`${PATH.ISSUER}/${collabData.address}`}>{meta.alias || collabData.address}</Link>
     )
 }

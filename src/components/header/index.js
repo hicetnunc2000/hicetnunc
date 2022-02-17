@@ -4,7 +4,6 @@ import { useHistory } from 'react-router'
 import { motion, AnimatePresence } from 'framer-motion'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
 import { Footer } from '../footer'
-// import { VoteBanner } from '../vote-banner'
 import { Container, Padding } from '../layout'
 import { Button, Primary } from '../button'
 import { fadeIn } from '../../utils/motion'
@@ -13,7 +12,8 @@ import { walletPreview } from '../../utils/string'
 import { VisuallyHidden } from '../visually-hidden'
 import styles from './styles.module.scss'
 import { getItem, setItem } from '../../utils/storage'
-
+// import { Link } from 'react-router-dom'
+import { EventBanner } from '../event-banner'
 /* import { BeaconWallet } from '@taquito/beacon-wallet'
 
 const wallet = new BeaconWallet({
@@ -24,11 +24,10 @@ const wallet = new BeaconWallet({
 export const Header = () => {
   const history = useHistory()
   const context = useContext(HicetnuncContext)
-
+  const style = {fontSize : '30px'}
   useEffect(() => {
     context.setAccount()
     context.setTheme(getItem('theme') || setItem('theme', 'dark'))
-    context.setLogo()
   }, [])
 
   // we assume user isn't connected
@@ -38,7 +37,7 @@ export const Header = () => {
   if (context.acc?.address) {
     // is menu closed?
     if (context.collapsed) {
-      const proxyAddress = context.proxyAddress ? ` (${context.proxyName || walletPreview(context.proxyAddress)})` : ''
+      const proxyAddress = context.proxyAddress ? ' (' + context.proxyAddress + ')' : ''
       button = walletPreview(context.acc.address) + proxyAddress
     } else {
       // menu is open
@@ -64,32 +63,19 @@ export const Header = () => {
   }
 
   return (
-    <>
-      {/* <VoteBanner /> */}
+    <div className={styles.outer__container}>
+      <EventBanner />
       <header className={styles.container}>
         <div className={styles.content}>
           <Button onClick={() => handleRoute('/')}>
             <div className={styles.logo}>
               {/* HIC LOGO */}
-              {true && (
-                <img src={`https://teia.art/logos/${context.theme}/${context.logo}`} alt="teia"></img>
-              )}
-              {/* PRIDE LOGO */}
-              {false && <img src="/hen-pride.gif" alt="pride 2021" />}
             </div>
           </Button>
 
           <div className={styles.right}>
-            {!context.collapsed && context.proxyAddress && (
-              <div className={styles.mr}>
-                <Button onClick={() => context.setProxyAddress(null)} secondary>
-                  <Primary>exit collab</Primary>
-                </Button>
-              </div>
-            )}
-
             <Button onClick={handleSyncUnsync} secondary>
-              <Primary>{button}</Primary> {/* Main address display here */}
+              <Primary>{button}</Primary>
             </Button>
 
             <Button onClick={context.toogleNavbar} secondary>
@@ -110,49 +96,49 @@ export const Header = () => {
                 <nav className={styles.content}>
                   <ul>
                     <li>
-                      <Button onClick={() => handleRoute('/explore')}>
-                        <Primary>explore</Primary>
+                      <Button>
+                        <Primary><a style={style} href='/'>home</a></Primary>
                       </Button>
                     </li>
                     <li>
-                      <Button onClick={() => handleRoute('/galleries')}>
-                        <Primary>galleries</Primary>
+                      <Button>
+                        <Primary><a style={style} href='/galleries'>galleries</a></Primary>
                       </Button>
                     </li>
                     <li>
-                      <Button onClick={() => handleRoute('/mint')}>
+                      <Button>
                         <Primary>
-                          OBJKT<span style={{ fontSize: '16px' }}> (mint)</span>
+                          <a style={style} href='/mint'>OBJKT<span style={{ fontSize: '16px' }}> (mint)</span></a>
                         </Primary>
                       </Button>
                     </li>
-                    <li>
+{/*                     <li>
                       <Button onClick={() => handleRoute('/collaborate')}>
                         <Primary>collaborate</Primary>
                       </Button>
-                    </li>
+                    </li> */}
                     <li>
-                      <Button onClick={() => handleRoute('/sync')}>
-                        <Primary>manage assets</Primary>
+                      <Button>
+                        <Primary><a style={style} href='/sync'>manage assets</a></Primary>
                       </Button>
                     </li>
-                    {context.acc?.address ?
+                    { context.acc?.address ?
                       <li>
-                        <Button onClick={() => handleRoute('/config')}>
-                          <Primary>edit profile</Primary>
+                        <Button>
+                          <Primary><a style={style} href='/config'>edit profile</a></Primary>
                         </Button>
                       </li>
                       :
                       null
                     }
                     <li>
-                      <Button onClick={() => handleRoute('/about')}>
-                        <Primary>about</Primary>
+                      <Button>
+                        <Primary><a style={style} href='/about'>about</a></Primary>
                       </Button>
                     </li>
                     <li>
-                      <Button onClick={() => handleRoute('/faq')}>
-                        <Primary>faq</Primary>
+                      <Button>
+                        <Primary><a style={style} href='faq'>faq</a></Primary>
                       </Button>
                     </li>
                   </ul>
@@ -163,6 +149,6 @@ export const Header = () => {
           </motion.div>
         )}
       </AnimatePresence>
-    </>
+    </div>
   )
 }

@@ -2,38 +2,33 @@ import React, { useContext, useEffect, useState } from 'react'
 import { Page, Container, Padding } from '../../components/layout'
 import { Button, Primary } from '../../components/button'
 import { CollabDisplay } from '../../components/collab/show/CollabDisplay'
-import { CreateCollaboration } from './tabs'
+import { SelectProxyContract, CreateCollaboration } from './tabs'
 import { Menu } from '../../components/menu'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
-import { CollabContractsOverview } from './tabs/manage'
-import { useParams } from 'react-router'
 
 const TABS = [
-    { title: 'manage', component: CollabContractsOverview },
-    { title: 'create', component: CreateCollaboration },
+    { title: 'create collaboration', component: CreateCollaboration },
+    { title: 'use collaboration', component: SelectProxyContract },
 ]
 
 const Collaborate = () => {
     const [tabIndex, setTabIndex] = useState(0)
     const Tab = TABS[tabIndex].component
 
-    // We watch for this being created so we can change from create to manage
-    const { originationOpHash } = useContext(HicetnuncContext)
-
-    const { action } = useParams();
-
-    useEffect(() => {
-        const tabIndex = TABS.findIndex(t => t.title === action)
-        setTabIndex(Math.max(tabIndex, 0))
-    }, [action])
+    const { proxyAddress, originatedContract } = useContext(HicetnuncContext)
 
     // If an address is created, update the tab
     useEffect(() => {
-        console.log({originationOpHash})
-        if (originationOpHash) {
-            setTabIndex(0)
+        if (originatedContract) {
+            setTabIndex(1)
         }
-    }, [originationOpHash])
+    }, [proxyAddress, originatedContract])
+
+    // TODO: button to free from proxy contract? (that just makes field empty)
+    // TODO: create new smart contract form with separate page?
+    // TODO: add/remove tokens to contract?
+    // TODO: validate proxy address?
+    // TODO: any way to find all contracts that controlled by user pk?
 
     return (
         <Page title="proxy">

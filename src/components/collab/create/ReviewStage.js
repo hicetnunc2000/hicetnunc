@@ -6,21 +6,23 @@ import { Button, Curate } from '../../../components/button'
 import { HicetnuncContext } from '../../../context/HicetnuncContext'
 import { Fragment } from "react"
 
-export const ReviewStage = ({ collaborators, beneficiaries, onEdit }) => {
+export const ReviewStage = ({ collaborators, benefactors, onEdit }) => {
 
-    const totalShares = groupShareTotal(collaborators) + groupShareTotal(beneficiaries)
+    const totalShares = groupShareTotal(collaborators) + groupShareTotal(benefactors)
 
     const cNum = collaborators.length
-    const bNum = beneficiaries.length
+    const bNum = benefactors.length
 
     // Proxy contract creation function
-    const { originateProxy } = useContext(HicetnuncContext) // use mockProxy instead for fake return data
-    // const { mockProxy } = useContext(HicetnuncContext) // use mockProxy instead for fake return data
+    const { originateProxy } = useContext(HicetnuncContext)
 
     const originateContract = async () => {
+        // TODO: need some UI to select admin contract
+        // now using first address as a administrator
+        const administratorAddress = collaborators[0]['address']
+
         // shares should be object where keys are addresses and
         // values are natural numbers (it is not required to have 100% in the sum)
-        // admin will be the signed in address that creates it
         let participantData = {}
 
         const validCollaborators = collaborators
@@ -30,14 +32,14 @@ export const ReviewStage = ({ collaborators, beneficiaries, onEdit }) => {
                 role: 'collaborator',
             }));
 
-        const validBeneficiaries = beneficiaries
+        const validBenefactors = benefactors
             .filter(b => b.shares)
-            .map(beneficiary => ({
-                ...beneficiary,
+            .map(benefactor => ({
+                ...benefactor,
                 role: 'benefactor',
             }));
 
-        const allParticipants = validCollaborators.concat(validBeneficiaries);
+        const allParticipants = validCollaborators.concat(validBenefactors);
 
         Object.values(allParticipants).forEach(
             participant => participantData[participant.address] = {
@@ -46,9 +48,10 @@ export const ReviewStage = ({ collaborators, beneficiaries, onEdit }) => {
             }
         )
 
+        console.log('ReviewStage::originateContract - participantData', participantData)
+
         // Call the core blockchain function to create the contract
-        // await mockProxy(participantData)
-        await originateProxy(participantData)
+        await originateProxy(administratorAddress, participantData)
     }
 
     return (
@@ -93,9 +96,10 @@ export const ReviewStage = ({ collaborators, beneficiaries, onEdit }) => {
                     <p className={styles.muted}>No core collaborators</p>
                 )}
 
-                {beneficiaries.length > 0 && (
+
+                {benefactors.length > 0 && (
                     <Fragment>
-                        <h2 className={styles.mt3}>beneficiaries</h2>
+                        <h2 className={styles.mt3}>benefactors</h2>
                         <table className={styles.reviewTable}>
                             <thead>
                                 <tr>
@@ -105,7 +109,7 @@ export const ReviewStage = ({ collaborators, beneficiaries, onEdit }) => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {beneficiaries.map((collaborator) => {
+                                {benefactors.map((collaborator) => {
                                     const { address, shares, name } = collaborator
                                     const percentage = (shares / totalShares * 100).toFixed(2)
                                     return (

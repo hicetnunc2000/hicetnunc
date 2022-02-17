@@ -15,8 +15,7 @@ export const Input = ({
   disabled,
   value,
   pattern,
-  onKeyPress,
-  autoFocus = false,
+  onKeyPress
 }) => (
   <div className={styles.container}>
     <label>
@@ -33,7 +32,6 @@ export const Input = ({
         pattern={pattern}
         onWheel={onWheel}
         onKeyPress={onKeyPress}
-        autoFocus={autoFocus}
       />
       <p>{label}</p>
     </label>
