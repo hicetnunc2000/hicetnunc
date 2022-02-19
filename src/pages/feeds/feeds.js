@@ -226,7 +226,7 @@ export const Feeds = ({ type }) => {
             .then((result) => {
               const next = items.concat(result)
               setItems(next)
-    
+
               // if original returns less than 10, then there's no more data coming from API
               if (result.length < 10) {
                 setHasMore(false)

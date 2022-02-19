@@ -6,14 +6,17 @@ import styles from '../styles.module.scss'
 
 export const CollabParticipant = ({ collabData }) => {
 
-    const [meta, setMeta] = useState({})
+    const { name, address } = collabData
+    const [displayName, setDisplayName] = useState(name)
 
     useEffect(() => {
-        GetUserMetadata(collabData.address)
-        .then(({ data }) => setMeta(data))
-    }, [collabData.address])
+        if (!displayName) {
+            GetUserMetadata(address)
+            .then(({ data }) => setDisplayName(data.alias || address))
+        }
+    }, [collabData.address, displayName]) // eslint-disable-line react-hooks/exhaustive-deps
 
-    return (
-        <Link className={styles.link} to={`${PATH.ISSUER}/${collabData.address}`}>{meta.alias || collabData.address}</Link>
+    return displayName && (
+        <Link className={styles.link} to={`${PATH.ISSUER}/${address}`}>{displayName}</Link>
     )
 }

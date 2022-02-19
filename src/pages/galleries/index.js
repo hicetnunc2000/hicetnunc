@@ -40,11 +40,7 @@ async function fetchGraphQL(operationsDoc, operationName, variables) {
   return await result.json()
 }
 
-const sortByThumbnailTokenId = (a, b) => {
-  const ia = parseInt(a.thumbnail)
-  const ib = parseInt(b.thumbnail)
-  return ia < ib ? 1 : -1
-}
+
 export const Galleries = () => {
   const [data, setData] = useState([])
 
@@ -75,7 +71,6 @@ export const Galleries = () => {
         <Padding>
           <ResponsiveMasonry>
             {data.map((e) => {
-              const { token_info } = e
               console.log(e)
               return (
                 <Button key={e.uid} to={`${PATH.GALLERY}/${e.uid}`}>

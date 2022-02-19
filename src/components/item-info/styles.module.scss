@@ -5,6 +5,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  padding: 0 1em;
   padding-top: 20px;
   padding-bottom: 20px;
   word-break: normal;
@@ -15,6 +16,31 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-direction: column;
+
+  padding: 0 1em;
+
+  width: 100%;
+
+  @include respond-to('desktop') {
+    flex-direction: row;
+
+  }
+}
+
+.spread__inner {
+  display: flex;
+  flex-direction: row;
+
+  align-items: center;
+  justify-content: space-between;
+
+  width: 100%;
+
+  @include respond-to('desktop') {
+    width: initial;
+    justify-content: left;
+  }
 }
 
 .objktContainer {
@@ -40,6 +66,14 @@
   }
 }
 
+.edition__title {
+  display: none;
+
+  @include respond-to('desktop') {
+    display: contents;
+  }
+}
+
 .hdaoButton {
   padding-left: 20px;
 }
@@ -55,6 +89,8 @@
 }
 
 span[data-tooltip].top {
+  margin-left: 0.5em;
+
   &:before,
   &:after {
     transform: translate(-50%, 10px);

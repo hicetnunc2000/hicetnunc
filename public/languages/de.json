@@ -6,7 +6,7 @@
       { "primary": "random", "route": "/random" },
       { "primary": "OBJKTs", "route": "/mint" },
       { "primary": "Sammlung verwalten", "route": "/sync" },
-      { "primary": "Über hicetnunc", "route": "/about" }
+      { "primary": "Über teia", "route": "/about" }
     ]
   },
   "footer": {
@@ -33,7 +33,7 @@
     "collection": "Sammlung"
   },
   "about": {
-    "title": "hic et nunc",
+    "title": "teia",
     "paragraphs": [
       "Diese dezentralisierte Anwendung ermöglicht den Nutzern, dezentralisierte digitale Objekte zu verwalten. Alle Transaktionen werden mittels öffentlicher smart contracts auf der Tezos Blockchain durchgeführt.",
       "IPFS OBJKTs können ohne Genehmigung geminted und gehandelt werden. Dieses Webseite wurde als Experiment entwickelt um die Möglichkeiten neuer Crypto-Ökonomien zu erforschen.",
@@ -66,7 +66,7 @@
       "amount": "OBJKT Anzahl",
       "price": "Preis pro OBJKT (in tez)",
       "cta": "swap it",
-      "warning": "Bei swaps mit einem Wert > 0 behält hicetnunc 2.5% Gebühren zum Betrieb der Plattform ein."
+      "warning": "Bei swaps mit einem Wert > 0 behält teia 2.5% Gebühren zum Betrieb der Plattform ein."
     },
     "cancel": {
       "title": "Du bist im Begriff, den swap abzubrechen",

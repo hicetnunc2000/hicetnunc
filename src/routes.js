@@ -2,7 +2,7 @@ import Sync from './pages/sync'
 import { About } from './pages/about'
 import { FAQ } from './pages/faq'
 import Display from './pages/display'
-import { Latest, Hdao, Random, Featured } from './pages/feeds'
+import { Latest, Hdao, Random } from './pages/feeds'
 import { Mint } from './pages/mint'
 import { ObjktDisplay } from './pages/objkt-display'
 import { Collaborate, CollabDisplay } from './pages/collaborate'
@@ -11,6 +11,7 @@ import { GalleryDetail } from './pages/gallery-detail'
 import { Config } from './pages/config'
 import { Search } from './pages/search'
 import { Tags } from './pages/tags'
+import { Friends } from './pages/friends'
 
 export const routes = [
   {
@@ -35,12 +36,22 @@ export const routes = [
   },
   {
     exact: false,
+    path: '/friends/:id',
+    component: Friends,
+  },
+  {
+    exact: false,
     path: '/tz/:id/:collection?',
     component: Display,
   },
   {
     exact: false,
     path: '/kt/:id',
+    component: CollabDisplay,
+  },
+  {
+    exact: false,
+    path: '/collab/:name',
     component: CollabDisplay,
   },
   {
@@ -65,7 +76,7 @@ export const routes = [
   },
   {
     exact: false,
-    path: '/collaborate',
+    path: '/collaborate/:action?',
     component: Collaborate,
   },
   {
@@ -101,6 +112,11 @@ export const routes = [
     exact: false,
     path: '/tags/:id',
     component: Tags,
+  },
+  {
+    exact: false,
+    path: '/friends/:id',
+    component: Friends,
   },
   {
     exact: false,

@@ -1,4 +1,45 @@
-.buttons {
-  display: flex;
-  flex-wrap: wrap;
+@import '../../styles/mixins.scss';
+
+.faq__container li::before {
+  content: "-";
+  position: absolute;
+  margin-left: -1em;
+}
+
+.faq__container {
+  margin: 0 20px;
+  list-style-type: none;
+
+  li {
+    margin-top: 0.8em;
+  }
+
+  margin-bottom: 20px;
+
+  @include respond-to('desktop') {
+    margin-bottom: 30px;
+  }
+}
+
+.faq__container:last-of-type {
+  margin-top: 20px;
+
+  @include respond-to('desktop') {
+    margin-top: 30px;
+  }
+}
+
+.faq__title {
+  font-size: 1.8em;
+  font-weight: bold;
+
+  margin-bottom: 0.2em;
+}
+
+.faq__outer__container {
+  margin: 0 20px;
+
+  @include respond-to('desktop') {
+    margin: 0;
+  }
 }

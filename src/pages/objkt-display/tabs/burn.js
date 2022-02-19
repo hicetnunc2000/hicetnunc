@@ -1,19 +1,25 @@
 import React, { useState, useContext } from 'react'
 import { HicetnuncContext } from '../../../context/HicetnuncContext'
 import { Container, Padding } from '../../../components/layout'
-import { Button, Curate, Purchase } from '../../../components/button'
+import { Button, Purchase } from '../../../components/button'
 import { Input } from '../../../components/input'
 import { Loading } from '../../../components/loading'
 
 export const Burn = (props) => {
-  const { burn, address, message, setMessage, setProgress, progress } = useContext(HicetnuncContext)
+  console.log("BURN", props)
+
+  const { token_holders, id } = props
+  const { burn, acc, proxyAddress, message, setMessage, setProgress, progress } = useContext(HicetnuncContext)
   const [amount, setAmount] = useState('')
 
   let totalOwned = 0
 
-  const found = props.token_holders.find(
-    (e) => e.holder_id === address?.address
+  const proxyAdminAddress = props.creator.is_split ? props.creator.shares[0].administrator : null
+
+  const found = token_holders.find(
+    (e) => e.holder_id === acc?.address || (e.holder_id === proxyAddress && acc?.address === proxyAdminAddress)
   )
+
   if (found) {
     totalOwned = found.quantity
   }
@@ -37,7 +43,7 @@ export const Burn = (props) => {
     if (r) {
       setProgress(true)
       setMessage('burning OBJKT')
-      burn(props.id, amount)
+      burn(id, amount)
     }
   }
 

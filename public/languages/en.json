@@ -10,7 +10,7 @@
     ]
   },
   "footer": {
-    "mint": "This is an experimental dApp, use it at your own risk.",
+    "mint": "This is an experimental dApp, provided by the Teia Community for the Teia Community. It is a fork of the original Hic et Nunc created by Rafael Lima. Use it at your own risk.",
     "warning": "use it consciously. visit artists profiles. be careful with copy minters."
   },
   "home": {
@@ -31,10 +31,11 @@
   },
   "manage": {
     "creations": "creations",
-    "collection": "collection"
+    "collection": "collection",
+    "collabs": "collabs"
   },
   "about": {
-    "title": "hic et nunc",
+    "title": "teia",
     "paragraphs": [
       "The present decentralized application allows its users to manage decentralized digital assets, serving as a public smart contract infrastructure on Tezos Blockchain.",
       "IPFS OBJKTs can be minted and traded by permissionless means. such experiment was designed intending to imagine alternative crypto economies.",

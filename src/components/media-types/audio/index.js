@@ -48,7 +48,7 @@ export const AudioComponent = ({
     return (
       <div>
         <div>
-          <img style={{ height: '50vh', display : 'block', margin: '0 auto' }} src={displayUri} /><br />
+          <img style={{ height: '50vh', display : 'block', margin: '0 auto' }} alt="" src={displayUri} /><br />
           <audio style={{ display: 'block', margin: '0 auto' }} src={preview ? previewUri : artifactUri} controls />
         </div>
         {/*         {true && <audio src={preview ? previewUri : artifactUri} controls />}
@@ -66,7 +66,7 @@ export const AudioComponent = ({
       <>
         <div >
           <span>
-            <img style={{ width: '100%' }} src={displayUri} /><br />
+            <img style={{ width: '100%' }} src={displayUri} alt="" /><br />
             <audio style={{ width: '100%' }} src={preview ? previewUri : artifactUri} controls />
           </span>
           {/*         {true && <audio src={preview ? previewUri : artifactUri} controls />}

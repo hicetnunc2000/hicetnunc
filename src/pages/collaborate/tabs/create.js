@@ -1,62 +1,66 @@
-import { useState, useEffect, Fragment } from 'react'
-import { groupShareTotal } from '../../../components/collab/functions'
+import { useState, useEffect, Fragment, useContext } from 'react'
+import { groupShareTotal, validAddress } from '../../../components/collab/functions'
+import { HicetnuncContext } from '../../../context/HicetnuncContext'
 import { Container, Padding } from '../../../components/layout'
-import { CollaboratorTable, BenefactorsUI } from '../../../components/collab'
+import { CollaboratorTable, BeneficiariesUI } from '../../../components/collab'
 import { AddCollaboratorsButton } from '../../../components/collab/create/AddCollaboratorsButton'
 import { ReviewStage } from '../../../components/collab/create/ReviewStage'
 import styles from '../styles.module.scss'
 import classNames from 'classnames'
-import { mockData } from '../../../components/collab/constants'
+import { Button, Secondary } from '../../../components/button'
 
 export const CreateCollaboration = () => {
 
-    // Core collaborators and benefactors
+    const { acc } = useContext(HicetnuncContext)
+
+    // Core collaborators and beneficiaries
     const [editCollaborators, setEditCollaborators] = useState(true)
-    const [collaborators, setCollaborators] = useState(mockData)
-    const [benefactors, setBenefactors] = useState([])
+    const [collaborators, setCollaborators] = useState([])
+    const [beneficiaries, setBeneficiaries] = useState([])
 
     // For adding people not directly involved with the creation
-    const [showBenefactorsUI, setShowBenefactorsUI] = useState(false);
+    const [showBeneficiariesUI, setShowBeneficiariesUI] = useState(false);
 
     // For adding people not directly involved with the creation
     const [showReview, setShowReview] = useState(false);
 
     // Grand total of share allocation
-    const totalShares = groupShareTotal(collaborators) + groupShareTotal(benefactors)
+    const totalShares = groupShareTotal(collaborators) + groupShareTotal(beneficiaries)
 
     // Check for completed entries - must have a share allocation and address
-    const validCollaborators = collaborators.filter(c => c.shares && c.address)
+    const validCollaborators = collaborators.filter(c => !!c.shares && validAddress(c.address))
 
     useEffect(() => {
-        if (benefactors.length === 0) {
-            setShowBenefactorsUI(false)
+        if (beneficiaries.length === 0) {
+            setShowBeneficiariesUI(false)
         }
-    }, [showReview, benefactors.length])
+    }, [showReview, beneficiaries.length])
 
+    // Show the beneficiaries UI if we are done editing core collaborators
     useEffect(() => {
-        if (!editCollaborators && !showBenefactorsUI) {
-            setShowBenefactorsUI(true)
+        if (!editCollaborators && !showBeneficiariesUI) {
+            setShowBeneficiariesUI(true)
         }
 
         if (validCollaborators.length === 0) {
             setCollaborators([])
         }
-    }, [editCollaborators, showBenefactorsUI])
+    }, [editCollaborators, showBeneficiariesUI]) // eslint-disable-line react-hooks/exhaustive-deps
 
-    // When the user clicks a percentage button in the benefactors UI
+    // When the user clicks a percentage button in the beneficiaries UI
     const _calculateShares = (index, percentage) => {
-        const benefactor = benefactors[index]
-        const updatedBenefactors = [...benefactors]
+        const benefactor = beneficiaries[index]
+        const updatedBeneficiaries = [...beneficiaries]
 
-        console.log("_calculateShares", index, percentage);
+        console.log("_calculateShares", index, percentage)
 
-        updatedBenefactors[index] = {
+        updatedBeneficiaries[index] = {
             ...benefactor,
             shares: Math.ceil(totalShares * percentage / 100),
         }
 
         // Now what's left?
-        const remaining = totalShares - groupShareTotal(updatedBenefactors)
+        const remaining = totalShares - groupShareTotal(updatedBeneficiaries)
 
         // Redistribute to collaborators
         const updatedCollaborators = collaborators.map(collaborator => {
@@ -69,217 +73,83 @@ export const CreateCollaboration = () => {
             }
         })
 
-        setBenefactors(updatedBenefactors)
+        setBeneficiaries(updatedBeneficiaries)
         setCollaborators(updatedCollaborators)
     }
 
-    const totalParticipants = validCollaborators.length + benefactors.length
-
+    const totalParticipants = validCollaborators.length + beneficiaries.length
     const notesClass = classNames(styles.mb2, styles.muted)
-    const minimalView = !editCollaborators && (showBenefactorsUI || showReview)
+    const minimalView = !editCollaborators && (showBeneficiariesUI || showReview)
     const showCollaboratorsTable = editCollaborators || validCollaborators.length > 0
+
+    if (!acc) {
+        return (
+            <Container>
+                <Padding>Please sync your wallet to create a collaboration</Padding>
+            </Container>
+        )
+    }
 
     return showReview ? (
         <ReviewStage
-            collaborators={collaborators}
-            benefactors={benefactors}
+            collaborators={validCollaborators}
+            beneficiaries={beneficiaries}
             onEdit={() => setShowReview(false)}
         />
-    ) :
-        (
-            <Container>
-                <Padding>
-                    <h1 className={validCollaborators.length === 0 ? styles.mb1 : styles.mb2}>
-                        <strong>core collaborators</strong>
-                    </h1>
+    ) : (
+        <Container>
+            <Padding>
+                <h1 className={showCollaboratorsTable ? styles.mb1 : styles.mb2}>
+                    <strong>core collaborators</strong>
+                </h1>
 
-                    {validCollaborators.length === 0 && showCollaboratorsTable && (
-                        <Fragment>
-                            <p className={notesClass}>Note: shares don’t have to add up to 100% - splits are calculated as proportions of the total shares.</p>
-                            <p className={notesClass}>You can paste multiple addresses to get an auto split</p>
-                        </Fragment>
-                    )}
+                {showCollaboratorsTable && (
+                    <Fragment>
+                        <p className={notesClass}>Note: shares don’t have to add up to 100% - splits are calculated as proportions of the total shares.</p>
+                        <p className={notesClass}>You can paste multiple addresses to get an auto split</p>
+                    </Fragment>
+                )}
 
-                    {showCollaboratorsTable && (
-                        <CollaboratorTable
-                            collaborators={collaborators}
-                            setCollaborators={setCollaborators}
-                            minimalView={minimalView}
-                            onEdit={() => setEditCollaborators(true)}
-                        />
-                    )}
+                {showCollaboratorsTable && (
+                    <CollaboratorTable
+                        collaborators={editCollaborators ? collaborators : validCollaborators}
+                        setCollaborators={setCollaborators}
+                        minimalView={minimalView}
+                        onEdit={() => setEditCollaborators(true)}
+                    />
+                )}
 
-                    {!showCollaboratorsTable && (
-                        <p className={styles.muted}>No core collaborators</p>
-                    )}
+                {!showCollaboratorsTable && (
+                    <p className={styles.muted}>
+                        <Button onClick={() => setEditCollaborators(true)}>
+                            <Secondary>No core collaborators - click to add</Secondary>
+                        </Button>
+                    </p>
+                )}
 
-                    {!minimalView && (
-                        <AddCollaboratorsButton
-                            threshold={0}
-                            collaborators={collaborators}
-                            onClick={() => setEditCollaborators(false)}
-                        />
-                    )}
+                {!minimalView && (
+                    <AddCollaboratorsButton
+                        threshold={0}
+                        collaborators={collaborators}
+                        onClick={() => setEditCollaborators(false)}
+                    />
+                )}
 
-                    {showBenefactorsUI && (
-                        <BenefactorsUI
-                            totalParticipants={totalParticipants}
-                            totalShares={totalShares}
-                            benefactors={benefactors}
-                            setBenefactors={setBenefactors}
-                            minimalView={showReview}
-                            onComplete={() => setShowReview(true)}
-                            onSelectPercentage={(index, percentage) => _calculateShares(index, percentage)}
-                        />
-                    )}
+                {showBeneficiariesUI && (
+                    <BeneficiariesUI
+                        totalParticipants={totalParticipants}
+                        totalShares={totalShares}
+                        beneficiaries={beneficiaries}
+                        setBeneficiaries={setBeneficiaries}
+                        minimalView={showReview}
+                        onComplete={() => setShowReview(true)}
+                        onSelectPercentage={(index, percentage) => _calculateShares(index, percentage)}
+                    />
+                )}
 
-                </Padding>
+            </Padding>
 
-            </Container>
+        </Container>
 
-        )
+    )
 }
-
-
-/*
-
-
-    // Add / remove collabs
-    // const addCollaborator = () => {
-    //     if (totalAllocated < 100) {
-    //         setCollaborators([...collaborators, { ...template }])
-    //     }
-    // }
-
-    // const removeCollaborator = (index) => {
-    //     const updatedCollaborators = [...collaborators]
-    //     updatedCollaborators.splice(index, 1)
-    //     setCollaborators(updatedCollaborators)
-    // }
-
-    // Add / remove benefactors
-    // const addBenefactor = () => {
-    //     setBenefactors([
-    //         ...collaborators,
-    //         { ...collaboratorTemplate }
-    //     ])
-    // }
-
-    // const removeBenefactor = (index) => {
-    //     const updatedBenefactors = [...benefactors]
-    //     updatedBenefactors.splice(index, 1)
-    //     setBenefactors(updatedBenefactors)
-    // }
-
-    // const _extractAddress = (input) => {
-    //     const tzPattern = /^.*(tz[\w\d]{34}).*$/i
-    //     let matches = tzPattern.exec(input.trim())
-
-    //     // Check for contract patterns
-    //     if (!matches) {
-    //         const ktPattern = /^.*(kt[\w\d]{34}).*$/i
-    //         matches = ktPattern.exec(input.trim())
-    //     }
-
-    //     if (!matches) {
-    //         return false
-    //     }
-
-    //     return matches[1];
-    // }
-
-    // const calculateSplits = () => {
-    //     if (!collaborators.length) {
-    //         return false;
-    //     }
-
-    //     let updatedCollaborators;
-
-    //     if (autoSplit) {
-    //         const royaltiesPerCollaborator = availablePercentage / validCollaborators.length
-
-    //         // Even split
-    //         updatedCollaborators = [...collaborators].map(collaborator => ({
-    //             address: collaborator.address,
-    //             percentage: royaltiesPerCollaborator,
-    //             share: royaltiesPerCollaborator,
-    //         }))
-
-    //     } else {
-
-    //         // Map the percentages to the available amounts
-    //         updatedCollaborators = collaborators.map(collaborator => ({
-    //             ...collaborator,
-    //             share: collaborator.shares / 100 * availablePercentage,
-    //         }))
-    //     }
-
-    //     setCollaborators(updatedCollaborators)
-    // }
-
-    // const parseCollabAddresses = (input) => {
-    //     const updatedAddresses = [...addresses]
-    //     const lines = input.replace(/\r/g, '').split(/\n/)
-    //     const newAddresses = lines.map(l => extractAddress(l)).filter(a => a)
-
-    //     // Add new addresses
-    //     const combinedAddresses = updatedAddresses.concat(newAddresses)
-
-    //     // If we have addresses, create the collab
-    //     setAddresses(combinedAddresses)
-    // }
-
-    // When the addresses update in autosplit mode
-    // useEffect(() => {
-    //     const royaltiesPerCollaborator = 100 / addresses.length
-
-    //     const collaborators = addresses.map(address => ({
-    //         address,
-    //         percentage: royaltiesPerCollaborator,
-    //         share: royaltiesPerCollaborator,
-    //     }))
-
-    //     setCollaborators(collaborators)
-    //     setMultiCollabInput('')
-    // }, [addresses])
-
-    // useEffect(() => {
-    //     if (multiCollabInput.length) {
-    //         parseCollabAddresses(multiCollabInput)
-    //     }
-    // }, [multiCollabInput])
-
-    // useEffect(() => {
-    //     if (collaborators.length === 0) {
-    //         if (!autoSplit) {
-    //             setCollaborators([{ ...collaboratorTemplate }])
-    //         }
-    //     }
-
-    //     if (validCollaborators.length === 0 && collaborators.length === 1) {
-    //         setCollaborators([])
-    //     } else {
-    //         calculateSplits()
-    //     }
-    // }, [autoSplit, availablePercentage])
-
-    // const onUpdate = (index, collabData) => {
-    //     const updatedCollabs = [...collaborators]
-
-    //     updatedCollabs[index] = {
-    //         ...collabData,
-    //         share: collabData.shares / 100 * availablePercentage,
-    //     }
-
-    //     setCollaborators([...updatedCollabs])
-    // }
-
-
-
-    // const [tips, setTips] = useState([])
-    // const [autoSplit, setAutoSplit] = useState(false)
-    // const [multiCollabInput, setMultiCollabInput] = useState('')
-    // const [multiBenefactorInput, setMultiBenefactorInput] = useState('')
-    // const [addresses, setAddresses] = useState([])
-
-    */

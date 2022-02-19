@@ -1,3 +1,4 @@
+@import '../../styles/mixins.scss';
 @import '../../styles/variables.scss';
 
 .container {
@@ -5,14 +6,28 @@
   flex-direction: column;
   color: var(--text-color);
 
+  margin: 0 1em;
+
   .swap {
     display: flex;
+    flex-direction: column;
+
     justify-content: space-between;
-    margin-bottom: 10px;
+    margin-bottom: 30px;
+
+    @include respond-to('desktop') {
+      flex-direction: row;
+      margin-bottom: 10px;
+    }
 
     .issuer {
       display: flex;
       align-items: center;
+      justify-content: space-between;
+
+      @include respond-to('desktop') {
+        justify-content: initial;
+      }
     }
 
     .buttons {
@@ -21,8 +36,23 @@
       justify-content: flex-end;
 
       & > * {
-        margin-left: 10px;
+        margin-top: 1em;
+
+        @include respond-to('desktop') {
+          margin-top: 0;
+        }
       }
     }
+  }
+}
+
+.border {
+  width: 100%;
+  border-bottom: 1px solid var(--gray-20);
+
+  padding-top: 1em;
+
+  @include respond-to('desktop') {
+    width: 45%;
   }
 }
