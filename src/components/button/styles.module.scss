@@ -31,7 +31,7 @@
   &.selected {
     font-weight: bold;
 
-    margin-bottom: -1px;
+    margin-bottom: -7px;
     border-bottom: 1px solid var(--text-color);
     padding: 6px 0;
   }
@@ -72,8 +72,6 @@
 }
 
 .purchase:hover {
-  color: var(--gray-100);
-  background-color: var(--gray-5);
   border-right: 2px solid var(--gray-50);
   border-bottom: 2px solid var(--gray-50);
 }
@@ -104,11 +102,13 @@
 }
 
 .dark {
+  color: var(--gray-80);
   background-color: var(--gray-15);
-  border-right: 2px solid var(--gray-100);
-  border-bottom: 2px solid var(--gray-100);
+  border-right: 2px solid var(--gray-80);
+  border-bottom: 2px solid var(--gray-80);
 }
 
 .dark:hover {
-  background-color: var(--gray-15);
+  border-right: 2px solid var(--gray-50);
+  border-bottom: 2px solid var(--gray-50);
 }

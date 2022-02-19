@@ -83,7 +83,7 @@
   font-size: $font-small-mobile;
   margin-bottom: 8px;
 
-  color: var(--secondary-color);
+  color: var(--gray-60);
 
   @include respond-to('desktop') {
     display: flex;
