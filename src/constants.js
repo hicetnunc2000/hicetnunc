@@ -86,3 +86,5 @@ export const MAX_ROYALTIES = 25 // Limited by contract
 
 export const IPFS_DEFAULT_THUMBNAIL_URI =
   'ipfs://QmNrhZHUaEqxhyLfqoq1mtHSipkWHeT31LNHb1QEbDHgnc'
+
+  export const BURN_ADDRESS = 'tz1burnburnburnburnburnburnburjAYjjX'

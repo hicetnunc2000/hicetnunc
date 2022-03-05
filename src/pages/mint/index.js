@@ -1,5 +1,7 @@
 import React, { useContext, useState } from 'react'
 import Compressor from 'compressorjs'
+import ipfsHash from 'ipfs-only-hash'
+import _ from 'lodash'
 import { BottomBanner } from '../../components/bottom-banner'
 import { HicetnuncContext } from '../../context/HicetnuncContext'
 import { Page, Container, Padding } from '../../components/layout'
@@ -19,7 +21,10 @@ import {
   MAX_EDITIONS,
   MIN_ROYALTIES,
   MAX_ROYALTIES,
+  BURN_ADDRESS
 } from '../../constants'
+import { fetchGraphQL } from '../../data/hicdex'
+
 
 const coverOptions = {
   quality: 0.85,
@@ -32,6 +37,22 @@ const thumbnailOptions = {
   maxWidth: 350,
   maxHeight: 350,
 }
+
+
+const uriQuery = `query uriQuery($address: String!, $ids: [String!] = "") {
+  hic_et_nunc_token(order_by: {id: desc}, where: {artifact_uri: {_in: $ids}, creator_id: {_eq: $address}}) {
+    id
+    creator {
+      address
+      name
+    }
+    token_holders(where: {quantity: {_gt: "0"}}, order_by: {id: asc}) {
+      holder {
+        address
+      }
+    }
+  }
+}`;
 
 // @crzypathwork change to "true" to activate displayUri and thumbnailUri
 const GENERATE_DISPLAY_AND_THUMBNAIL = true
@@ -162,8 +183,55 @@ export const Mint = () => {
     }
   }
 
-  const handlePreview = () => {
-    setStep(1)
+  const isDoubleMint = async () => {
+    const rawLeaves = false
+    const hashv0 = await ipfsHash.of(file.buffer, { cidVersion:0, rawLeaves })
+    const hashv1 = await ipfsHash.of(file.buffer, { cidVersion:1, rawLeaves })
+    console.log(`Current CIDv0: ${hashv0}`)
+    console.log(`Current CIDv1: ${hashv1}`)
+
+    const uri0 = `ipfs://${hashv0}`
+    const uri1 = `ipfs://${hashv1}`
+    const { errors, data } = await fetchGraphQL(uriQuery, 'uriQuery',  {"address": getProxy() || acc.address,"ids":[uri0, uri1]})
+
+    if (errors) {
+      setFeedback({
+        visible: true,
+        message: `GraphQL Error: ${JSON.stringify(errors)}`,
+        progress: false,
+        confirm: true,
+        confirmCallback: () => {
+          setFeedback({ visible: false })
+        },
+      })
+      return true
+    } else if (data) {
+      const areAllTokensBurned = (data.hic_et_nunc_token || []).every((token) => _.get(token, 'token_holders.0.holder.address') === BURN_ADDRESS);
+
+      if (areAllTokensBurned) {
+        return false
+      }
+
+      setFeedback({
+        visible: true,
+        message: `Duplicate mint detected: #${data.hic_et_nunc_token[0].id} is already minted`,
+        progress: false,
+        confirm: true,
+        confirmCallback: () => {
+          setFeedback({ visible: false })
+        },
+      })
+
+      return true
+    }
+
+    return false;
+  }
+
+  const handlePreview = async () => {
+    if (!await isDoubleMint()) {
+      setStep(1)
+    }
   }
 
   const handleFileUpload = async (props) => {
