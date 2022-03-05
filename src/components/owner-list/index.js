@@ -1,10 +1,12 @@
 import React from 'react'
 import { Button, Primary, Purchase } from '../button'
+import { BURN_ADDRESS } from '../../constants'
+
 import { walletPreview } from '../../utils/string'
 import styles from './styles.module.scss'
 
 export const OwnerList = ({ owners, creator_id, acc, swaps, cancelv1 }) => {
-  owners = owners.filter(e => e.holder_id !== 'tz1burnburnburnburnburnburnburjAYjjX' && e.holder_id !== 'KT1HbQepzV1nVGg8QVznG7z4RcHseD5kwqBn')
+  owners = owners.filter(e => e.holder_id !== BURN_ADDRESS && e.holder_id !== 'KT1HbQepzV1nVGg8QVznG7z4RcHseD5kwqBn')
   return (
 
     <div className={styles.container}>

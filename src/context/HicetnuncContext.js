@@ -13,6 +13,8 @@ import { KeyStoreUtils } from 'conseiljs-softsigner'
 import { PermissionScope } from '@airgap/beacon-sdk'
 import { UnitValue } from '@taquito/michelson-encoder'
 import { contentType } from 'mime-types';
+import { BURN_ADDRESS } from '../constants'
+
 
 const { NetworkType } = require('@airgap/beacon-sdk')
 var ls = require('local-storage')
@@ -58,7 +60,7 @@ const Tezos = new TezosToolkit('https://mainnet.api.tez.ie')
 
 function modifyFeeAndLimit(op) {
   const { fee, gas_limit, storage_limit, ...rest } = op;
-  
+
   if (op.parameters && (op.parameters.entrypoint === "swap") || (op.parameters.entrypoint === "mint_OBJKT") || (op.parameters.entrypoint === "collect")) {
     rest.storage_limit = 310
   }
@@ -489,7 +491,7 @@ class HicetnuncContextProviderClass extends Component {
                   from_: tz.address,
                   txs: [
                     {
-                      to_: 'tz1burnburnburnburnburnburnburjAYjjX',
+                      to_: BURN_ADDRESS,
                       token_id: parseInt(objkt_id),
                       amount: parseInt(amount),
                     },
@@ -647,7 +649,7 @@ class HicetnuncContextProviderClass extends Component {
         })
       },
 
-      /* 
+      /*
             airgap/thanos interop methods
       */
       operationRequest: async (obj) => {
@@ -728,7 +730,7 @@ class HicetnuncContextProviderClass extends Component {
           title: title,
         })
       },
-      
+
       hDAO_vote: ls.get('hDAO_vote'),
 
       proxyFactoryAddress: 'KT1DoyD6kr8yLK8mRBFusyKYJUk2ZxNHKP1N',
@@ -778,7 +780,7 @@ class HicetnuncContextProviderClass extends Component {
       },
 
       originateProxy: async (administratorAddress, participantData) => {
-      
+
         // Show progress during creation
         this.state.setFeedback({
           visible: true,
@@ -813,7 +815,7 @@ class HicetnuncContextProviderClass extends Component {
           .then(result => {
 
             // TODO: this is a bit too nested for my liking
-            
+
             // Keep the operation hash for further queries if required (do we need this?)
             this.setState({ op: result.opHash })
 
