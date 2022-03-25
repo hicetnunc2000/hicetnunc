@@ -76,7 +76,7 @@
     ]
   },
   "devDependencies": {
-    "prettier": "^2.3.0"
+    "prettier": "^2.6.1"
   },
   "module": "commonjs",
   "homepage": "."
