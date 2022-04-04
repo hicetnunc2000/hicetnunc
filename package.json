@@ -18,7 +18,7 @@
     "classnames": "^2.3.1",
     "compressorjs": "^1.0.7",
     "conseiljs-softsigner": "^5.0.4-1",
-    "d3": "^7.1.1",
+    "d3": "^7.4.2",
     "eztz": "^1.1.2",
     "eztz-lib": "^0.1.2",
     "fetch": "^1.1.0",
