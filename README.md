@@ -18,7 +18,7 @@ docker run -it -p 3000:3000 hicetnunc:1.0
 docker container rm --force hicetnunc
 ```
 
-disclaimer: no forks or alternative services are associated with the present project nor endorsed in this development context.
+disclaimer: no forks or alternative services are associated nor endorsed with the project in the present development context.
 
 check the issues for contributing
 
