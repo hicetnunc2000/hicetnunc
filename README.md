@@ -1,6 +1,6 @@
 # hicetnunc UI
 
-```this repository is deprecated.```
+this repository is deprecated.
 
 hicetnunc UI is intended to experiment/integrate different smart contracts designs.
 
