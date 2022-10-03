@@ -22,7 +22,7 @@
     "eztz": "^1.1.2",
     "eztz-lib": "^0.1.2",
     "fetch": "^1.1.0",
-    "fflate": "^0.7.3",
+    "fflate": "^0.7.4",
     "filereader": "^0.10.3",
     "framer-motion": "^4.1.16",
     "ipfs-api": "^26.1.2",
