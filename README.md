@@ -26,6 +26,4 @@ check the issues for contributing
 
 `MIT license`
 
-# Contributing
-
-Please read our CONTRIBUTING.md
+disclaimer: no forks or alternative services are endorsed or have any relationship to the present project unless stated otherwise.
