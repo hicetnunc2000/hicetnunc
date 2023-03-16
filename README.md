@@ -26,4 +26,4 @@ check the issues for contributing
 
 `MIT license`
 
-disclaimer: no forks or alternative services are endorsed or have any relation to the present project unless stated otherwise.
+disclaimer: no forks or alternative services are endorsed or have any association to the present project unless stated otherwise.
